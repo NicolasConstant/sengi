@@ -1,0 +1,2 @@
+# Mamoth
+Mastodon client
