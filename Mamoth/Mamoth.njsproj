@@ -36,7 +36,6 @@
   <ItemGroup>
     <Content Include=".angular-cli.json" />
     <Content Include="e2e\tsconfig.e2e.json" />
-    <Content Include="index.html" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -55,7 +54,6 @@
     <Compile Include="karma.conf.js" />
     <Compile Include="main.js" />
     <Compile Include="protractor.conf.js" />
-    <Compile Include="renderer.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="e2e\" />
