@@ -1,0 +1,6 @@
+#mam-left-bar {
+  width: 50px;
+  height: calc(100%);
+  background: green;
+  outline: 1px dotted red;
+}

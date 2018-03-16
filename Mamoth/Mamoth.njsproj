@@ -41,6 +41,10 @@
     <Content Include="README.md" />
     <Content Include="src\app\app.component.css" />
     <Content Include="src\app\app.component.html" />
+    <Content Include="src\app\components\left-side-bar\left-side-bar.component.css" />
+    <Content Include="src\app\components\left-side-bar\left-side-bar.component.html" />
+    <Content Include="src\app\components\streams-main-display\streams-main-display.component.css" />
+    <Content Include="src\app\components\streams-main-display\streams-main-display.component.html" />
     <Content Include="src\assets\.gitkeep" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
@@ -59,6 +63,10 @@
     <Folder Include="e2e\" />
     <Folder Include="src\" />
     <Folder Include="src\app\" />
+    <Folder Include="src\app\components\left-side-bar\" />
+    <Folder Include="src\app\components\" />
+    <Folder Include="src\app\components\streams-main-display\" />
+    <Folder Include="src\app\services\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\environments\" />
   </ItemGroup>
@@ -68,6 +76,10 @@
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
+    <TypeScriptCompile Include="src\app\components\left-side-bar\left-side-bar.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\components\left-side-bar\left-side-bar.component.ts" />
+    <TypeScriptCompile Include="src\app\components\streams-main-display\streams-main-display.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\components\streams-main-display\streams-main-display.component.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />
