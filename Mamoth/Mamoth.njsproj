@@ -72,6 +72,7 @@
     <Folder Include="src\app\components\streams-main-display\" />
     <Folder Include="src\app\components\streams-selection-footer\" />
     <Folder Include="src\app\components\stream\" />
+    <Folder Include="src\app\models\" />
     <Folder Include="src\app\services\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\environments\" />
@@ -90,6 +91,9 @@
     <TypeScriptCompile Include="src\app\components\streams-selection-footer\streams-selection-footer.component.ts" />
     <TypeScriptCompile Include="src\app\components\stream\stream.component.spec.ts" />
     <TypeScriptCompile Include="src\app\components\stream\stream.component.ts" />
+    <TypeScriptCompile Include="src\app\models\account.models.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />

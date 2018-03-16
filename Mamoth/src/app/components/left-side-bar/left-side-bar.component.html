@@ -1,4 +1,18 @@
 <div id="mam-left-bar">
+  <div id="mam-create-toot">
+    <a href title="write toot!" (click)="createNewToot()">Toot!</a>
+  </div>
+
+  <div *ngFor="let account of accounts" class="mam-account-selector">
+    <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a>
+  </div>
+
+  <div id="mam-account-add">
+    <a href title="add new account" (click)="addNewAccount()">+</a>
+  </div>
+
+
+
 
 
 </div>
