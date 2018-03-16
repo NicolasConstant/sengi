@@ -49,6 +49,8 @@
     <Content Include="src\app\components\streams-selection-footer\streams-selection-footer.component.html" />
     <Content Include="src\app\components\stream\stream.component.css" />
     <Content Include="src\app\components\stream\stream.component.html" />
+    <Content Include="src\app\components\toot\toot.component.css" />
+    <Content Include="src\app\components\toot\toot.component.html" />
     <Content Include="src\assets\.gitkeep" />
     <Content Include="src\favicon.ico" />
     <Content Include="src\index.html" />
@@ -72,6 +74,7 @@
     <Folder Include="src\app\components\streams-main-display\" />
     <Folder Include="src\app\components\streams-selection-footer\" />
     <Folder Include="src\app\components\stream\" />
+    <Folder Include="src\app\components\toot\" />
     <Folder Include="src\app\models\" />
     <Folder Include="src\app\services\" />
     <Folder Include="src\assets\" />
@@ -91,9 +94,12 @@
     <TypeScriptCompile Include="src\app\components\streams-selection-footer\streams-selection-footer.component.ts" />
     <TypeScriptCompile Include="src\app\components\stream\stream.component.spec.ts" />
     <TypeScriptCompile Include="src\app\components\stream\stream.component.ts" />
+    <TypeScriptCompile Include="src\app\components\toot\toot.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\components\toot\toot.component.ts" />
     <TypeScriptCompile Include="src\app\models\account.models.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\app\models\stream.models.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />

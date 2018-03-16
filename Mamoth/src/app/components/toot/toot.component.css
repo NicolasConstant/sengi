@@ -1,0 +1,32 @@
+#mam-toot {
+  border: solid white;
+  border-width: 0 0 1px 0;
+  margin: 0;
+  padding: 0;
+}
+
+#mam-toot-avatar {
+  margin: 5px 0 0 5px;
+  width: 50px;
+  height: 50px;
+  float: left;
+
+}
+
+  #mam-toot-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin: 0;
+  }
+
+
+#mam-toot-content {
+  /*width: calc(100% - 50px);*/
+  margin: 5px 5px 5px 60px ;
+}
+
+#mam-toot-content p {
+  margin: 0;
+  font-size: 0.85em;
+}

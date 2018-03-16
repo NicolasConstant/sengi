@@ -1,3 +1,10 @@
 <div id="mam-stream-column">
-  stream works!
+  <div id="mam-stream-header">
+    <a href title="return to top" (click)="goToTop()"><h1>{{ stream.streamName.toUpperCase() }}</h1></a>
+  </div>
+  <div id="mam-stream-toots">
+    <div *ngFor="let toot of toots">
+      <app-toot [toot]="toot"></app-toot>
+    </div>
+  </div>
 </div>

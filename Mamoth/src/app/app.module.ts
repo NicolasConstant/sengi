@@ -8,6 +8,7 @@ import { LeftSideBarComponent } from './components/left-side-bar/left-side-bar.c
 import { StreamsMainDisplayComponent } from './components/streams-main-display/streams-main-display.component';
 import { StreamComponent } from './components/stream/stream.component';
 import { StreamsSelectionFooterComponent } from './components/streams-selection-footer/streams-selection-footer.component';
+import { TootComponent } from './components/toot/toot.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { StreamsSelectionFooterComponent } from './components/streams-selection-
     LeftSideBarComponent,
     StreamsMainDisplayComponent,
     StreamComponent,
-    StreamsSelectionFooterComponent
+    StreamsSelectionFooterComponent,
+    TootComponent
   ],
   imports: [
     BrowserModule, 
