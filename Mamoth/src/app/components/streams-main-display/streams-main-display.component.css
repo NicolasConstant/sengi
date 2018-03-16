@@ -1,6 +1,8 @@
 #mam-main-display {
   width: calc(100%);
   height: calc(100%);
+  overflow-x: auto;
+
   background: blue;
   outline: 1px dotted red;
 }

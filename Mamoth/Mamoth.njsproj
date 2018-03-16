@@ -45,6 +45,8 @@
     <Content Include="src\app\components\left-side-bar\left-side-bar.component.html" />
     <Content Include="src\app\components\streams-main-display\streams-main-display.component.css" />
     <Content Include="src\app\components\streams-main-display\streams-main-display.component.html" />
+    <Content Include="src\app\components\streams-selection-footer\streams-selection-footer.component.css" />
+    <Content Include="src\app\components\streams-selection-footer\streams-selection-footer.component.html" />
     <Content Include="src\app\components\stream\stream.component.css" />
     <Content Include="src\app\components\stream\stream.component.html" />
     <Content Include="src\assets\.gitkeep" />
@@ -68,6 +70,7 @@
     <Folder Include="src\app\components\left-side-bar\" />
     <Folder Include="src\app\components\" />
     <Folder Include="src\app\components\streams-main-display\" />
+    <Folder Include="src\app\components\streams-selection-footer\" />
     <Folder Include="src\app\components\stream\" />
     <Folder Include="src\app\services\" />
     <Folder Include="src\assets\" />
@@ -83,6 +86,8 @@
     <TypeScriptCompile Include="src\app\components\left-side-bar\left-side-bar.component.ts" />
     <TypeScriptCompile Include="src\app\components\streams-main-display\streams-main-display.component.spec.ts" />
     <TypeScriptCompile Include="src\app\components\streams-main-display\streams-main-display.component.ts" />
+    <TypeScriptCompile Include="src\app\components\streams-selection-footer\streams-selection-footer.component.spec.ts" />
+    <TypeScriptCompile Include="src\app\components\streams-selection-footer\streams-selection-footer.component.ts" />
     <TypeScriptCompile Include="src\app\components\stream\stream.component.spec.ts" />
     <TypeScriptCompile Include="src\app\components\stream\stream.component.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />

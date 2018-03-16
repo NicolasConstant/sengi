@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LeftSideBarComponent } from './components/left-side-bar/left-side-bar.component';
 import { StreamsMainDisplayComponent } from './components/streams-main-display/streams-main-display.component';
 import { StreamComponent } from './components/stream/stream.component';
+import { StreamsSelectionFooterComponent } from './components/streams-selection-footer/streams-selection-footer.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { StreamComponent } from './components/stream/stream.component';
     AppComponent,
     LeftSideBarComponent,
     StreamsMainDisplayComponent,
-    StreamComponent
+    StreamComponent,
+    StreamsSelectionFooterComponent
   ],
   imports: [
     BrowserModule, 

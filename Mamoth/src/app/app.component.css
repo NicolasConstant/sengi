@@ -9,3 +9,11 @@ app-streams-main-display {
   bottom: 0;
   left: 50px;
 }
+
+app-streams-selection-footer {
+  position: absolute;
+  height: 30px;
+  right: 0;
+  bottom: 0;
+  left: 50px;
+}
