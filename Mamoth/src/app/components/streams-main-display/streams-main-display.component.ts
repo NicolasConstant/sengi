@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Stream } from 'stream';
 
 @Component({
   selector: 'app-streams-main-display',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./streams-main-display.component.css']
 })
 export class StreamsMainDisplayComponent implements OnInit {
+  streams: Stream[] = [];
 
   constructor() { }
 
   ngOnInit() {
+    for (let i = 0; i < 3; i++) {
+      this.streams.push(new Stream());
+    }
   }
 
 }

@@ -1,8 +1,19 @@
 #mam-main-display {
   width: calc(100%);
-  height: calc(100%);
+  height: calc(100%); 
   overflow-x: auto;
+  overflow-y: hidden;
 
   background: blue;
   /*outline: 1px dotted red;*/
+}
+
+
+.mam-stream-column {
+  height: calc(100%);
+  display: inline-block;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: normal;
+  margin-left: 5px;
 }

@@ -6,8 +6,11 @@ app-streams-main-display {
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
+  bottom: 30px;
   left: 50px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 app-streams-selection-footer {
