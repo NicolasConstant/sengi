@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
 import { TokenData } from "../../services/models/mastodon.interfaces";
+import { AccountsService } from "../../services/accounts.service";
 
 @Component({
   selector: "app-register-new-account",
@@ -14,7 +15,8 @@ export class RegisterNewAccountComponent implements OnInit {
   result: string;
 
   constructor(
-    private readonly authService: AuthService) { }
+    private readonly authService: AuthService,
+    private readonly accountsService: AccountsService) { }
 
   ngOnInit() {
   }
@@ -23,6 +25,9 @@ export class RegisterNewAccountComponent implements OnInit {
     this.authService.getToken(this.mastodonNode, this.email, this.password)
       .then((res: TokenData) => {
         this.result = res.access_token;
+
+        this.accountsService.addNewAccount(this.mastodonNode, this.email, res);
+
       })
       .catch(err => {
         this.result = err;

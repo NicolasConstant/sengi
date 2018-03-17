@@ -14,6 +14,7 @@ import { StreamsSelectionFooterComponent } from "./components/streams-selection-
 import { TootComponent } from "./components/toot/toot.component";
 import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
+import { AccountsService } from "./services/accounts.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -39,7 +40,7 @@ const routes: Routes = [
     NgxElectronModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [AuthService],
+  providers: [AuthService, AccountsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
