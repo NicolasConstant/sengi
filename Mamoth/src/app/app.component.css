@@ -2,7 +2,7 @@ app-left-side-bar {
   
 }
 
-app-streams-main-display {
+#display-zone {
   position: absolute;
   top: 0;
   right: 0;
