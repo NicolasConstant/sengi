@@ -109,6 +109,7 @@
     <TypeScriptCompile Include="src\app\models\stream.models.ts" />
     <TypeScriptCompile Include="src\app\services\auth.service.ts" />
     <TypeScriptCompile Include="src\app\services\models\api.settings.ts" />
+    <TypeScriptCompile Include="src\app\services\models\mastodon.interfaces.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />

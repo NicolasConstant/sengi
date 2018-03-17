@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { AuthService } from "../../services/auth.service";
+import { TokenData } from "../../services/models/mastodon.interfaces";
 
 @Component({
   selector: "app-register-new-account",
@@ -20,8 +21,8 @@ export class RegisterNewAccountComponent implements OnInit {
 
   onSubmit(): boolean {
     this.authService.getToken(this.mastodonNode, this.email, this.password)
-      .then((res: string) => {
-        this.result = res;
+      .then((res: TokenData) => {
+        this.result = res.access_token;
       })
       .catch(err => {
         this.result = err;

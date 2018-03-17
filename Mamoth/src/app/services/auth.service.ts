@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Response, RequestOptions } from "@angular/http";
 import { ApiRoutes } from "./models/api.settings";
+import { TokenData } from "./models/mastodon.interfaces";
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,7 @@ export class AuthService {
   }
 
   getToken(
-    mastodonNode: string, email: string, password: string): Promise<string> {
+    mastodonNode: string, email: string, password: string): Promise<TokenData> {
 
     //TODO retrieve those via API
     const clientId = localStorage.getItem("client_id");
@@ -34,7 +35,7 @@ export class AuthService {
       .then((res: Response) => {
         const result = res.json();
         console.warn(result);
-        return result;
+        return result as TokenData;
       });
   }
 
