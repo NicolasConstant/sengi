@@ -1,6 +1,18 @@
+
+<form (ngSubmit)="onSubmit()">
+  <label>Mastodon Node Address</label>
+  <input type="text" class="form-control" [(ngModel)]="mastodonNode" name="mastodonNode" /><br />
+  <label>Email</label>
+  <input type="text" class="form-control" [(ngModel)]="email" name="email" /><br />
+  <label>Password</label>
+  <input type="password" class="form-control" [(ngModel)]="password" name="password" /><br/>
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
 <p>
-  register-new-account works!
-
-  <a href title="close" [routerLink]="['/home']">close</a>
-
+  Result:<br/>
+  {{ result }}
 </p>
+
+
+<a href title="close" [routerLink]="['/home']">close</a>

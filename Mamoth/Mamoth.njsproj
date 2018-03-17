@@ -81,6 +81,7 @@
     <Folder Include="src\app\models\" />
     <Folder Include="src\app\pages\" />
     <Folder Include="src\app\services\" />
+    <Folder Include="src\app\services\models\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\environments\" />
   </ItemGroup>
@@ -106,6 +107,8 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\app\models\stream.models.ts" />
+    <TypeScriptCompile Include="src\app\services\auth.service.ts" />
+    <TypeScriptCompile Include="src\app\services\models\api.settings.ts" />
     <TypeScriptCompile Include="src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="src\environments\environment.ts" />
     <TypeScriptCompile Include="src\main.ts" />
