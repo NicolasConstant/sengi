@@ -18,17 +18,16 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private readonly accountsService: AccountsService) { }
 
   ngOnInit() {
-    this.accountsService.init.then(() => {
-      this.sub = this.accountsService.accountsSubject.subscribe((accounts: LocalAccount[]) => {
-        this.accounts.length = 0;
+    this.sub = this.accountsService.accountsSubject.subscribe((accounts: LocalAccount[]) => {
+      this.accounts.length = 0;
 
-        for (let acc of accounts) {
-          const acc1 = new AccountWrapper();
-          acc1.username = acc.mastodonAccount.username;
-          acc1.avatar = acc.mastodonAccount.avatar;
-          this.accounts.push(acc1);
-        }
-      });
+      for (let acc of accounts) {
+        const accWrapper = new AccountWrapper();
+        console.warn(acc);
+        accWrapper.username = `${acc.mastodonAccount.username}@${acc.mastodonInstance.replace("https://", "")}`;
+        accWrapper.avatar = acc.mastodonAccount.avatar;
+        this.accounts.push(accWrapper);
+      }
     });
 
     //const acc1 = new AccountWrapper();

@@ -1,6 +1,6 @@
 <div id="mam-main-display">
   <div *ngFor="let s of streams" class="mam-stream-column">
-    <app-stream></app-stream>
+    <app-stream [stream]="s"></app-stream>
   </div>
 
 </div>

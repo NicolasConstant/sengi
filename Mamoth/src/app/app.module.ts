@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
-import { NgModule } from "@angular/core";
+import { NgModule, APP_INITIALIZER } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { NgxElectronModule } from "ngx-electron";
@@ -15,6 +15,7 @@ import { TootComponent } from "./components/toot/toot.component";
 import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
+import { StreamsService } from "./services/streams.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -40,7 +41,11 @@ const routes: Routes = [
     NgxElectronModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [AuthService, AccountsService],
+  providers: [AuthService, AccountsService, StreamsService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+function settingsServiceFactory(service: AccountsService) {
+  return () => service.load();
+}

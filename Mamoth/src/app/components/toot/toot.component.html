@@ -2,7 +2,6 @@
   <div id="mam-toot-avatar">
     <img src="{{ toot.account.avatar }}" />
   </div>
-  <div id="mam-toot-content">
-    <p>{{ toot.content }}</p>
+  <div id="mam-toot-content" innerHTML="{{toot.content}}">
   </div>
 </div>

@@ -10,13 +10,16 @@ export class AccountsService {
   private localAccountKey = "localAccounts";
   private apiRoutes = new ApiRoutes();
 
-  accountsSubject: Subject<LocalAccount[]>;
-  init: Promise<any>; //TODO load this service before any UI action
+  accountsSubject: BehaviorSubject<LocalAccount[]>;
 
-  constructor(private readonly httpService: Http) {
-    this.init = this.getAllLocalAccount().then((accounts) => {
-      this.accountsSubject = new BehaviorSubject<LocalAccount[]>(accounts);
-    });
+  constructor(private readonly httpService: Http) {}
+
+  load(): Promise<boolean> {
+    return this.getAllLocalAccount()
+      .then((accounts) => {
+        this.accountsSubject = new BehaviorSubject<LocalAccount[]>(accounts);
+        return true;
+      });
   }
 
   addNewAccount(mastodonInstance: string, email: string, token: TokenData) {

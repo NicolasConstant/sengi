@@ -1,10 +1,75 @@
+import { Http, Headers, Response } from "@angular/http";
+import { BehaviorSubject } from "rxjs";
+
 import { AccountWrapper } from "./account.models";
+import { LocalAccount } from "../services/accounts.service";
+import { ApiRoutes } from "../services/models/api.settings";
+import { Account, Status } from "../services/models/mastodon.interfaces";
 
 export class Stream {
-  streamName: string;
+  private apiRoutes = new ApiRoutes();
+
+  statuses = new BehaviorSubject<TootWrapper[]>([]);
+  
+  constructor(
+    private readonly httpService: Http,
+    public streamName: string,
+    private readonly type: StreamTypeEnum,
+    private readonly account: LocalAccount) {
+
+    this.retrieveToots(); //TODO change this for WebSockets
+  }
+
+  private retrieveToots(): void {
+    const route = this.getTimelineRoute();
+
+    const header = new Headers();
+    header.append("Authorization", `Bearer ${this.account.tokenData.access_token}`);
+
+    this.httpService.get(this.account.mastodonInstance + route, { headers: header }).toPromise()
+      .then((res: Response) => {
+        const statuses = (res.json() as Status[])
+          .map((status: Status) => {
+            return new TootWrapper(status);
+          });
+        
+        this.statuses.next(statuses);
+      });
+
+  }
+
+  private getTimelineRoute(): string {
+    switch (this.type) {
+      case StreamTypeEnum.Home:
+        return this.apiRoutes.getHomeTimeline;
+      case StreamTypeEnum.Local:
+        return this.apiRoutes.getPublicTimeline + `?Local=true`;
+      case StreamTypeEnum.Public:
+        return this.apiRoutes.getPublicTimeline + `?Local=false`;
+    }
+  }
+
 }
 
+export enum StreamTypeEnum {
+  Home,
+  Public,
+  Local
+}
+  
+
 export class TootWrapper {
-  account: AccountWrapper;
+  constructor(status: Status) {
+    console.warn(status);
+
+    this.account = new AccountWrapper();
+    this.account.username = status.account.username;
+    this.account.display_name = status.account.display_name;
+    this.account.avatar = status.account.avatar;
+
+    this.content = status.content;
+  }
+
+  account: AccountWrapper; //TODO change to Account
   content: string;
 }
