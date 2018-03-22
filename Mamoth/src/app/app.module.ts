@@ -16,6 +16,7 @@ import { RegisterNewAccountComponent } from "./pages/register-new-account/regist
 import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
+import { StreamingService } from "./services/streaming.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -41,7 +42,7 @@ const routes: Routes = [
     NgxElectronModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [AuthService, AccountsService, StreamsService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

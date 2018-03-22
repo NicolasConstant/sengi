@@ -5,6 +5,7 @@ import { AccountWrapper } from "./account.models";
 import { LocalAccount } from "../services/accounts.service";
 import { ApiRoutes } from "../services/models/api.settings";
 import { Account, Status } from "../services/models/mastodon.interfaces";
+import { StreamingService, StreamingWrapper } from "../services/streaming.service";
 
 export class Stream {
   private apiRoutes = new ApiRoutes();
@@ -20,7 +21,13 @@ export class Stream {
     this.retrieveToots(); //TODO change this for WebSockets
   }
 
+  private test: StreamingWrapper;
   private retrieveToots(): void {
+    //TEST
+    const service = new StreamingService();
+    this.test = service.getStreaming(this.account.mastodonInstance, this.account.tokenData.access_token);
+    //END TEST
+    
     const route = this.getTimelineRoute();
 
     const header = new Headers();
@@ -60,8 +67,6 @@ export enum StreamTypeEnum {
 
 export class TootWrapper {
   constructor(status: Status) {
-    console.warn(status);
-
     this.account = new AccountWrapper();
     this.account.username = status.account.username;
     this.account.display_name = status.account.display_name;
