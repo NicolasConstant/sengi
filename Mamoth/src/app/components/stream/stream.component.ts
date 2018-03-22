@@ -12,8 +12,6 @@ export class StreamComponent implements OnInit {
 
   @Input()
   set stream(stream: Stream) {
-    console.warn(stream);
-
     this._stream = stream;
     this._stream.statuses.subscribe((toots: TootWrapper[]) => {
       for (let t of toots) {

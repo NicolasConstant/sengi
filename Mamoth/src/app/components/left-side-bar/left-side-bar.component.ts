@@ -23,7 +23,6 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
       for (let acc of accounts) {
         const accWrapper = new AccountWrapper();
-        console.warn(acc);
         accWrapper.username = `${acc.mastodonAccount.username}@${acc.mastodonInstance.replace("https://", "")}`;
         accWrapper.avatar = acc.mastodonAccount.avatar;
         this.accounts.push(accWrapper);

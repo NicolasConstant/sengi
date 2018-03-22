@@ -34,7 +34,6 @@ export class AuthService {
     return this.httpService.post(url, formData, options).toPromise()
       .then((res: Response) => {
         const result = res.json();
-        console.warn(result);
         return result as TokenData;
       });
   }
