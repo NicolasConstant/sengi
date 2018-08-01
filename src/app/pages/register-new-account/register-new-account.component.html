@@ -1,18 +1,25 @@
+<div class="col-xs-12 col-sm-6">
+  <br/>
+  <a class="btn btn-info btn-sm" href title="close" [routerLink]="['/home']" role="button" style="float: right;">close</a>
+  <h3>Add new account</h3>
+  <form (ngSubmit)="onSubmit()">
+    <label>Mastodon Node Address</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="mastodonNode" name="mastodonNode" />
+    <br />
+    <label>Email</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="email" name="email" />
+    <br />
+    <label>Password</label>
+    <input type="password" class="form-control form-control-sm" [(ngModel)]="password" name="password" />
+    <br/>
+    <button type="submit" class="btn btn-success btn-sm">Submit</button>
+  </form>
 
-<form (ngSubmit)="onSubmit()">
-  <label>Mastodon Node Address</label>
-  <input type="text" class="form-control" [(ngModel)]="mastodonNode" name="mastodonNode" /><br />
-  <label>Email</label>
-  <input type="text" class="form-control" [(ngModel)]="email" name="email" /><br />
-  <label>Password</label>
-  <input type="password" class="form-control" [(ngModel)]="password" name="password" /><br/>
-  <button type="submit" class="btn btn-success">Submit</button>
-</form>
-
-<p>
-  Result:<br/>
-  {{ result }}
-</p>
+  <p>
+    <br/>
+    <br/> Result:
+    <br/> {{ result }}
+  </p>
 
 
-<a href title="close" [routerLink]="['/home']">close</a>
+</div>
