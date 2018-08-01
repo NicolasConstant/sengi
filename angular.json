@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sengis": {
+    "sengi": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -48,18 +48,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sengis:build"
+            "browserTarget": "sengi:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sengis:build:production"
+              "browserTarget": "sengi:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sengis:build"
+            "browserTarget": "sengi:build"
           }
         },
         "test": {
@@ -93,7 +93,7 @@
         }
       }
     },
-    "sengis-e2e": {
+    "sengi-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
@@ -102,7 +102,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "sengis:serve"
+            "devServerTarget": "sengi:serve"
           }
         },
         "lint": {
@@ -119,7 +119,7 @@
       }
     }
   },
-  "defaultProject": "sengis",
+  "defaultProject": "sengi",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

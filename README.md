@@ -1,5 +1,5 @@
-# Sengis
-Sengis is a dekstop mastodon client.
+# Intro
+Sengi is a dekstop mastodon client.
 
 ## License
 
