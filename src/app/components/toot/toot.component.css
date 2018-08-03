@@ -1,4 +1,4 @@
-#mam-toot {
+#toot {
   border: solid #06070b;
   border-width: 0 0 1px 0;
   margin: 0;
@@ -8,7 +8,7 @@
   overflow: hidden;
 }
 
-#mam-toot-avatar {
+#toot-avatar {
   margin: 10px 0 0 10px;
   /* margin: 0; */
   width: 50px;
@@ -17,20 +17,33 @@
 
 }
 
-  #mam-toot-avatar img {
-    width: 50px;
-    height: 50px;
-    border-radius: 4px; 
-    margin: 0;
-  }
+#toot-avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px; 
+  margin: 0;
+}
 
+#toot-fullname {
+  color: white;
+}
 
-#mam-toot-content {
+/* #toot-username {
+  color: grey;
+} */
+
+#toot-profile-link {
+  color: #353e64;
+  margin: 7px 0 0 70px;
+  display: block;
+}
+
+#toot-content {
   /*width: calc(100% - 50px);*/
   margin: 10px 10px 10px 70px ;
 }
 
-#mam-toot-content p {
+#toot-content p {
   margin: 0;
   font-size: 0.85em;
 }

@@ -26,10 +26,10 @@ html, body {
 /* .ellipsis {
 } */
 
-#mam-toot-content p {
+#toot-content p {
   margin-bottom: 0 !important; 
 }
 
-#mam-toot-content a {
+#toot-content a {
   color: #bec3d8;
 }
