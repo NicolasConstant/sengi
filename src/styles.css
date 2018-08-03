@@ -5,11 +5,31 @@ html, body {
   padding: 0;
   margin: 0;
 
-  font-family: sans-serif;
-
+  font-family: 'Roboto', sans-serif;
+  /* font-family: "mastodon-font-sans-serif",sans-serif; */
+  font-size: 15px; 
+  
   /* color: whitesmoke; */
   color: #c9cbd4;
   color: #a8acbc;
+  color: #e8eaf3;
   background-color: #0f111a;
   background-color: #0f111a;
+  background-color: #0a0c12;
+
+  background-color: #141824;
+}
+ 
+.invisible {
+  display: none;
+} 
+/* .ellipsis {
+} */
+
+#mam-toot-content p {
+  margin-bottom: 0 !important; 
+}
+
+#mam-toot-content a {
+  color: #bec3d8;
 }

@@ -11,9 +11,10 @@
 
 .mam-stream-column {
   height: calc(100%);
+  width: 320px;
   display: inline-block;
   overflow-x: hidden;
   overflow-y: hidden;
   white-space: normal;
-  margin-left: 5px;
+  margin-left: 7px;
 }

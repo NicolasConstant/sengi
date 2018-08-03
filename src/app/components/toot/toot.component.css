@@ -1,12 +1,16 @@
 #mam-toot {
-  border: solid white;
+  border: solid #06070b;
   border-width: 0 0 1px 0;
   margin: 0;
   padding: 0;
+  width: calc(100%);
+  min-height: 70px;
+  overflow: hidden;
 }
 
 #mam-toot-avatar {
-  margin: 5px 0 0 5px;
+  margin: 10px 0 0 10px;
+  /* margin: 0; */
   width: 50px;
   height: 50px;
   float: left;
@@ -16,17 +20,22 @@
   #mam-toot-avatar img {
     width: 50px;
     height: 50px;
-    border-radius: 5px;
+    border-radius: 4px; 
     margin: 0;
   }
 
 
 #mam-toot-content {
   /*width: calc(100% - 50px);*/
-  margin: 5px 5px 5px 60px ;
+  margin: 10px 10px 10px 70px ;
 }
 
 #mam-toot-content p {
   margin: 0;
   font-size: 0.85em;
 }
+
+/* ::ng-deep .invisible {
+  display: inline;
+  color: red;
+} */

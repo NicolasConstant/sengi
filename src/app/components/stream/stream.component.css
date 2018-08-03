@@ -1,8 +1,9 @@
 #mam-stream-column {
-  width: 300px;
+  width: 320px; /*320*/
   height: calc(100%);
 
-  background-color: aqua;
+  background-color: #090b10;
+  background-color: #0f111a;
 
 }
 
@@ -12,7 +13,7 @@
 
   background-color: black;
   
-  border-bottom: 1px solid whitesmoke;
+  border-bottom: 1px solid black;
 }
 
   #mam-stream-header h1 {
@@ -26,6 +27,7 @@
 
 #mam-stream-toots {
   height: calc(100% - 30px);
+  width: 320px;
   overflow: auto;
 
 }
