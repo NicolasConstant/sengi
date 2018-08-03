@@ -22,6 +22,8 @@ export class RegisterNewAccountComponent implements OnInit {
   }
 
   onSubmit(): boolean {
+    
+
     let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
     
     console.log(fullHandle[0]);
@@ -29,6 +31,17 @@ export class RegisterNewAccountComponent implements OnInit {
 
     this.result = fullHandle[0] + '*' + fullHandle[1];
 
+    //register app 
+
+    //redirect to oauth
+
+
+
+
+
+
+
+    window.location.href = "https://google.com";
     //register app 
 
     //ask for getting token
@@ -43,6 +56,8 @@ export class RegisterNewAccountComponent implements OnInit {
     //   .catch(err => {
     //     this.result = err;
     //   });
+
+    
 
     return false;
   }
