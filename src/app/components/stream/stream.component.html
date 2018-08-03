@@ -2,7 +2,7 @@
   <div id="mam-stream-header">
     <a href title="return to top" (click)="goToTop()"><h1>{{ stream.streamName.toUpperCase() }}</h1></a>
   </div>
-  <div id="mam-stream-toots">
+  <div id="mam-stream-toots" data-simplebar>
     <div *ngFor="let toot of toots">
       <app-toot [toot]="toot"></app-toot>
     </div>

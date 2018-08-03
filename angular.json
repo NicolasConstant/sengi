@@ -21,10 +21,13 @@
               "src/favicon.ico"
             ],
             "styles": [
+              "./node_modules/simplebar/dist/simplebar.min.css",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/simplebar/dist/simplebar.min.js"
+            ]
           },
           "configurations": {
             "production": {

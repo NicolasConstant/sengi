@@ -29,6 +29,7 @@
     "core-js": "^2.5.4",
     "ngx-electron": "^1.0.4",
     "rxjs": "^6.0.0",
+    "simplebar": "^3.0.0-beta.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

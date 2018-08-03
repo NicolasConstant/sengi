@@ -26,7 +26,10 @@ export class StreamComponent implements OnInit {
 
   toots: TootWrapper[] = [];
 
-  constructor() { }
+  constructor(){
+    // var simplebar = new SimpleBar(document.querySelector('#mam-stream-toots'), { autoHide: true });
+  }
+
 
   ngOnInit() {
     //Stubs

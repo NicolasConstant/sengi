@@ -15,7 +15,7 @@
 
   #mam-create-toot a {
     font-size: 0.8em;
-    color: white;
+    /* color: white; */
     text-decoration: none;
     margin: 0 0 0 10px;
   }
@@ -43,9 +43,13 @@
   /* background-color: black; */
 }
 
-#mam-account-add a {
+a {
   font-size: 2em;
-  color: white;
+  color: #595c67;
   text-decoration: none;
   margin: 10px 0 0 15px;
+}
+
+a:hover {
+  color: #8f93a2;
 }
