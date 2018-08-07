@@ -1,7 +1,11 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { Store, Select } from '@ngxs/store';
+
 import { AuthService } from "../../services/auth.service";
 import { TokenData } from "../../services/models/mastodon.interfaces";
 import { AccountsService } from "../../services/accounts.service";
+import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from "../../stores/registered-apps.state";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-register-new-account",
@@ -13,35 +17,55 @@ export class RegisterNewAccountComponent implements OnInit {
   // @Input() email: string;
   // @Input() password: string;
   result: string;
+  
+  //@Select() registeredApps$: Observable<RegisteredAppsStateModel>;
+  registeredApps$: Observable<RegisteredAppsStateModel>;
 
   constructor(
     private readonly authService: AuthService,
-    private readonly accountsService: AccountsService) { }
+    private readonly accountsService: AccountsService,
+    private readonly store: Store) { 
+
+      this.registeredApps$ = this.store.select(state => state.registeredapps.registeredApps);
+
+    }
 
   ngOnInit() {
+    this.registeredApps$.subscribe(x => { 
+      console.error('registeredApps$')
+      console.warn(x);
+    });
+
   }
 
   onSubmit(): boolean {
+
+    this.store
+      .dispatch(new AddRegisteredApp({ name: 'test', id: 15, client_id: 'dsqdqs', client_secret: 'dsqdqs', redirect_uri: 'dsqdqs' }))
+      .subscribe(res => {
+        console.error('dispatch');
+        console.warn(res);
+      });
+
     
 
-    let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
+
     
-    console.log(fullHandle[0]);
-    console.log(fullHandle[1]);
 
-    this.result = fullHandle[0] + '*' + fullHandle[1];
+    // let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
+    
+    // console.log(fullHandle[0]);
+    // console.log(fullHandle[1]);
 
-    //register app 
+    // this.result = fullHandle[0] + '*' + fullHandle[1];
 
-    //redirect to oauth
-
-
-
+    // window.location.href = "https://google.com";
 
 
 
 
-    window.location.href = "https://google.com";
+
+
     //register app 
 
     //ask for getting token

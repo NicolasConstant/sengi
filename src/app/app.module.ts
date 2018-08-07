@@ -6,6 +6,9 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { NgxElectronModule } from "ngx-electron";
 
+import { NgxsModule } from '@ngxs/store';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
@@ -17,6 +20,7 @@ import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
+import { RegisteredAppsState } from "./stores/registered-apps.state";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -40,7 +44,12 @@ const routes: Routes = [
     HttpModule,
     FormsModule,
     NgxElectronModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+
+    NgxsModule.forRoot([
+      RegisteredAppsState
+    ]),
+    NgxsStoragePluginModule.forRoot()
   ],
   providers: [AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
