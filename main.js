@@ -8,7 +8,7 @@ const url = require('url')
   
   function createWindow () {
     // Create the browser window.
-    win = new BrowserWindow({ width: 395, height: 800, title: "Sengi"})
+    win = new BrowserWindow({ width: 395, height: 800, title: "Sengi", backgroundColor: '#FFF'})
     win.setMenu(null);
 
     // and load the index.html of the app.
