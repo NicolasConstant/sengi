@@ -4,7 +4,7 @@ import { Store, Select } from '@ngxs/store';
 import { AuthService } from "../../services/auth.service";
 import { TokenData } from "../../services/models/mastodon.interfaces";
 import { AccountsService } from "../../services/accounts.service";
-import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from "../../stores/registered-apps.state";
+import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from "../../states/registered-apps.state";
 import { Observable } from "rxjs";
 
 @Component({

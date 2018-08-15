@@ -19,9 +19,13 @@ export class RegisteredAppsState {
     @Action(AddRegisteredApp)
     AddRegisteredApp(ctx: StateContext<RegisteredAppsStateModel>, action: AddRegisteredApp) {
         const state = ctx.getState();
-        ctx.setState({
+        ctx.patchState({
             registeredApps: [...state.registeredApps, action.app]
         });
+
+        // ctx.setState({
+        //     registeredApps: [...state.registeredApps, action.app]
+        // });
     }
 }
 

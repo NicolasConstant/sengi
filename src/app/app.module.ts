@@ -20,7 +20,7 @@ import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
-import { RegisteredAppsState } from "./stores/registered-apps.state";
+import { RegisteredAppsState } from "./states/registered-apps.state";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
