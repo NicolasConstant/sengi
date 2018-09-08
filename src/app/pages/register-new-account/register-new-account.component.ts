@@ -46,7 +46,7 @@ export class RegisterNewAccountComponent implements OnInit {
           localStorage.removeItem('tempAuth');
 
           //TODO review all this
-          this.accountsService.addNewAccount(appDataWrapper.instance, appDataWrapper.username, tokenData);
+          // this.accountsService.addNewAccount(appDataWrapper.instance, appDataWrapper.username, tokenData);
 
         });
 
