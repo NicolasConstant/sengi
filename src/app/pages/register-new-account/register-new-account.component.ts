@@ -1,13 +1,14 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Store, Select } from '@ngxs/store';
+import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs";
 
 import { AuthService } from "../../services/auth.service";
 import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
 import { AccountsService } from "../../services/accounts.service";
 import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from "../../states/registered-apps.state";
-import { Observable } from "rxjs";
-import { AppService } from "../../services/app.service";
-import { ActivatedRoute } from "@angular/router";
+
+
 
 @Component({
   selector: "app-register-new-account",
@@ -20,7 +21,6 @@ export class RegisterNewAccountComponent implements OnInit {
   registeredApps$: Observable<RegisteredAppsStateModel>;
 
   constructor(
-    private readonly appService: AppService,
     private readonly authService: AuthService,
     private readonly accountsService: AccountsService,
     private readonly store: Store,
@@ -78,7 +78,7 @@ export class RegisterNewAccountComponent implements OnInit {
     }
     const redirect_uri = localUrl + '/register';
 
-    this.appService.createNewApplication(instance, redirect_uri)
+    this.authService.createNewApplication(instance, redirect_uri)
       .then((appData: AppData) => {
 
         const appDataTemp = new AppDataWrapper(username, instance, appData);

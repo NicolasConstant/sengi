@@ -22,7 +22,6 @@ import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
-import { AppService } from "./services/app.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -54,7 +53,7 @@ const routes: Routes = [
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AppService, AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
