@@ -18,21 +18,14 @@ body {
 html, body {
     width: 100%;
     height: 100%;
-    padding: 0;
-    margin: 0;
+    // padding: 0;
+    // margin: 0;
   
     font-family: 'Roboto', sans-serif;
-    /* font-family: "mastodon-font-sans-serif",sans-serif; */
-    font-size: 15px; 
+    font-size: $default-font-size; 
     
-    /* color: whitesmoke; */
-    color: #c9cbd4;
-    color: #a8acbc;
-    color: #e8eaf3;
-    background-color: #0f111a;
-    background-color: #0f111a;
-    background-color: #0a0c12;  
-    background-color: #141824;
+    color: $font-color-primary; 
+    background-color: $color-primary;
   }
    
   .invisible {
