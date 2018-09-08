@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
@@ -21,6 +22,7 @@ import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
+import { AppService } from "./services/app.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -42,6 +44,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     NgxElectronModule,
     RouterModule.forRoot(routes),
@@ -51,7 +54,7 @@ const routes: Routes = [
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AppService, AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

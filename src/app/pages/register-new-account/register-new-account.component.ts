@@ -2,10 +2,12 @@ import { Component, OnInit, Input } from "@angular/core";
 import { Store, Select } from '@ngxs/store';
 
 import { AuthService } from "../../services/auth.service";
-import { TokenData } from "../../services/models/mastodon.interfaces";
+import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
 import { AccountsService } from "../../services/accounts.service";
 import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from "../../states/registered-apps.state";
 import { Observable } from "rxjs";
+import { AppService } from "../../services/app.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-register-new-account",
@@ -14,75 +16,84 @@ import { Observable } from "rxjs";
 })
 export class RegisterNewAccountComponent implements OnInit {
   @Input() mastodonFullHandle: string;
-  // @Input() email: string;
-  // @Input() password: string;
   result: string;
-  
-  //@Select() registeredApps$: Observable<RegisteredAppsStateModel>;
   registeredApps$: Observable<RegisteredAppsStateModel>;
 
   constructor(
+    private readonly appService: AppService,
     private readonly authService: AuthService,
     private readonly accountsService: AccountsService,
-    private readonly store: Store) { 
+    private readonly store: Store,
+    private readonly activatedRoute: ActivatedRoute) {
 
-      this.registeredApps$ = this.store.select(state => state.registeredapps.registeredApps);
+    this.registeredApps$ = this.store.select(state => state.registeredapps.registeredApps);
 
-    }
+    this.activatedRoute.queryParams.subscribe(params => {
+      const code = params['code'];
+      if (!code) return;
 
-  ngOnInit() {
-    this.registeredApps$.subscribe(x => { 
-      console.error('registeredApps$')
-      console.warn(x);
+      console.warn(`got a code! ${code}`);
+      const appDataWrapper = <AppDataWrapper>JSON.parse(localStorage.getItem('tempAuth'));
+
+      console.error('got appDataWrapper from local storage');
+      console.error(appDataWrapper);
+
+      this.authService.getToken(appDataWrapper.instance, appDataWrapper.appData.client_id, appDataWrapper.appData.client_secret, code, appDataWrapper.appData.redirect_uri)
+        .then(tokenData => {
+          console.warn('Got token data!');
+          console.warn(tokenData);
+
+          localStorage.removeItem('tempAuth');
+
+          //TODO review all this
+          this.accountsService.addNewAccount(appDataWrapper.instance, appDataWrapper.username, tokenData);
+
+        });
+
     });
 
   }
 
+  ngOnInit() {
+    this.registeredApps$.subscribe(x => {
+      console.error('registeredApps$')
+      console.warn(x);
+    });
+
+
+
+  }
+
   onSubmit(): boolean {
+    let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
 
-    this.store
-      .dispatch(new AddRegisteredApp({ name: 'test', id: 15, client_id: 'dsqdqs', client_secret: 'dsqdqs', redirect_uri: 'dsqdqs' }))
-      .subscribe(res => {
-        console.error('dispatch');
-        console.warn(res);
+    const username = fullHandle[0];
+    const instance = fullHandle[1];
+    console.log(`username ${username} instance ${instance}`);
+
+    let localUrl = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+
+    if (localUrl === 'file://') {
+      localUrl = 'http://localhost:4200';
+    }
+    const redirect_uri = localUrl + '/register';
+
+    this.appService.createNewApplication(instance, redirect_uri)
+      .then((appData: AppData) => {
+
+        const appDataTemp = new AppDataWrapper(username, instance, appData);
+        localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
+
+        let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${appData.client_id}`;
+
+        window.location.href = instanceUrl;
       });
-
-    
-
-
-    
-
-    // let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
-    
-    // console.log(fullHandle[0]);
-    // console.log(fullHandle[1]);
-
-    // this.result = fullHandle[0] + '*' + fullHandle[1];
-
-    // window.location.href = "https://google.com";
-
-
-
-
-
-
-    //register app 
-
-    //ask for getting token
-
-    // this.authService.getToken(this.mastodonNode, this.email, this.password)
-    //   .then((res: TokenData) => {
-    //     this.result = res.access_token;
-
-    //     this.accountsService.addNewAccount(this.mastodonNode, this.email, res);
-
-    //   })
-    //   .catch(err => {
-    //     this.result = err;
-    //   });
-
-    
-
     return false;
+  }
+}
+
+class AppDataWrapper {
+  constructor(public username: string, public instance: string, public appData: AppData) {
+
   }
 }

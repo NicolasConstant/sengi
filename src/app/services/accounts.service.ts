@@ -65,7 +65,7 @@ export class AccountsService {
     const header = new Headers();
     header.append("Authorization", `Bearer ${localAccount.tokenData.access_token}`);
 
-    return this.httpService.get(localAccount.mastodonInstance + this.apiRoutes.getCurrentAccount, { headers: header }).toPromise()
+    return this.httpService.get('https://' + localAccount.mastodonInstance + this.apiRoutes.getCurrentAccount, { headers: header }).toPromise()
       .then((res: Response) => {
         const mastodonAccount = res.json() as Account;
         localAccount.mastodonAccount = mastodonAccount;

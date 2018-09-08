@@ -19,7 +19,7 @@ const url = require('url')
     }))
 
     // Open the DevTools.
-    //win.webContents.openDevTools()
+    win.webContents.openDevTools()
 
     //open external links to browser 
     win.webContents.on('new-window', function(event, url){
