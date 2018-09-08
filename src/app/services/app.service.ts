@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions } from '@angular/http';
+import { map } from "rxjs/operators";
+
 import { ApiRoutes } from './models/api.settings';
+import { TokenData } from './models/mastodon.interfaces';
 
 @Injectable()
 export class AppService {
@@ -9,7 +12,7 @@ export class AppService {
     constructor(private readonly httpService: Http) {
     }
 
-    createNewApplication(mastodonUrl: string): Promise<> {
+    createNewApplication(mastodonUrl: string): Promise<any> {
         const url = mastodonUrl + this.apiRoutes.createApp;
 
         const options = new RequestOptions();
@@ -28,10 +31,9 @@ export class AppService {
                 }))
             .toPromise()
 
-
-            .then((res: Response) => {
-                const result = res.json();
-                return result as TokenData;
-            });
+            // .then((res: Response) => {
+            //     const result = res.json(); 
+            //     return result as TokenData;
+            // });
     }
 }

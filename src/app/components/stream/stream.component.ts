@@ -5,7 +5,7 @@ import { AccountWrapper } from "../../models/account.models";
 @Component({
   selector: "app-stream",
   templateUrl: "./stream.component.html",
-  styleUrls: ["./stream.component.css"]
+  styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
   private _stream: Stream;

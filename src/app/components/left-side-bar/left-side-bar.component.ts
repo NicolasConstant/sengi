@@ -7,7 +7,7 @@ import { AccountsService, LocalAccount } from "../../services/accounts.service";
 @Component({
   selector: "app-left-side-bar",
   templateUrl: "./left-side-bar.component.html",
-  styleUrls: ["./left-side-bar.component.css"]
+  styleUrls: ["./left-side-bar.component.scss"]
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
   accounts: AccountWrapper[] = [];
