@@ -6,9 +6,7 @@ import { Observable } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
 import { AccountsService } from "../../services/accounts.service";
-import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from "../../states/registered-apps.state";
-
-
+import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
 
 @Component({
   selector: "app-register-new-account",
@@ -18,7 +16,9 @@ import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel } from 
 export class RegisterNewAccountComponent implements OnInit {
   @Input() mastodonFullHandle: string;
   result: string;
-  registeredApps$: Observable<RegisteredAppsStateModel>;
+  // registeredApps$: Observable<RegisteredAppsStateModel>;
+
+  private authStorageKey: string = 'tempAuth';
 
   constructor(
     private readonly authService: AuthService,
@@ -26,24 +26,25 @@ export class RegisterNewAccountComponent implements OnInit {
     private readonly store: Store,
     private readonly activatedRoute: ActivatedRoute) {
 
-    this.registeredApps$ = this.store.select(state => state.registeredapps.registeredApps);
+    // this.registeredApps$ = this.store.select(state => state.registeredapps.registeredApps);
 
     this.activatedRoute.queryParams.subscribe(params => {
       const code = params['code'];
       if (!code) return;
 
-      console.warn(`got a code! ${code}`);
-      const appDataWrapper = <AppDataWrapper>JSON.parse(localStorage.getItem('tempAuth'));
+      const appDataWrapper = <CurrentAuthProcess>JSON.parse(localStorage.getItem(this.authStorageKey));
+      if(!appDataWrapper) return;
 
-      console.error('got appDataWrapper from local storage');
-      console.error(appDataWrapper);
+      const appInfo = this.getAllSavedApps().filter(x => x.instance === appDataWrapper.instance)[0];
+      console.warn('appInfo');
+      console.warn(appInfo);
 
-      this.authService.getToken(appDataWrapper.instance, appDataWrapper.appData.client_id, appDataWrapper.appData.client_secret, code, appDataWrapper.appData.redirect_uri)
+      this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
         .then(tokenData => {
           console.warn('Got token data!');
           console.warn(tokenData);
 
-          localStorage.removeItem('tempAuth');
+          localStorage.removeItem(this.authStorageKey);
 
           //TODO review all this
           // this.accountsService.addNewAccount(appDataWrapper.instance, appDataWrapper.username, tokenData);
@@ -55,10 +56,10 @@ export class RegisterNewAccountComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.registeredApps$.subscribe(x => {
-      console.error('registeredApps$')
-      console.warn(x);
-    });
+    // this.registeredApps$.subscribe(x => {
+    //   console.error('registeredApps$')
+    //   console.warn(x);
+    // });
   }
 
   onSubmit(): boolean {
@@ -66,16 +67,29 @@ export class RegisterNewAccountComponent implements OnInit {
 
     const username = fullHandle[0];
     const instance = fullHandle[1];
-   
-    const redirect_uri = this.getLocalHostname() + '/register';
 
-    this.authService.createNewApplication(instance, 'Sengi', redirect_uri,  'read write follow', 'https://github.com/NicolasConstant/sengi')
-      .then((appData: AppData) => {
-        this.processAndRedirectToAuthPage(username, instance, appData);
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    const alreadyRegisteredApps = this.getAllSavedApps();
+    const instanceApps = alreadyRegisteredApps.filter(x => x.instance === instance);
+
+    if (instanceApps.length !== 0) {
+      console.log('instance already registered');
+      const appData = instanceApps[0].app;
+      this.redirectToInstanceAuthPage(username, instance, appData);
+
+    } else {
+      console.log('instance not registered');
+      const redirect_uri = this.getLocalHostname() + '/register';
+      this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://github.com/NicolasConstant/sengi')
+        .then((appData: AppData) => {
+          this.saveNewApp(instance, appData)
+            .then(() => {
+              this.redirectToInstanceAuthPage(username, instance, appData);
+            });
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
     return false;
   }
 
@@ -90,8 +104,23 @@ export class RegisterNewAccountComponent implements OnInit {
     return localHostname;
   }
 
-  private processAndRedirectToAuthPage(username: string, instance: string,  app: AppData){
-    const appDataTemp = new AppDataWrapper(username, instance, app);
+  private getAllSavedApps(): AppInfo[] {
+    const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;
+    return snapshot.apps;
+  }
+
+  private saveNewApp(instance: string, app: AppData): Promise<any> {
+    const appInfo = new AppInfo();
+    appInfo.instance = instance;
+    appInfo.app = app;
+
+    return this.store.dispatch([
+      new AddRegisteredApp(appInfo)
+    ]).toPromise();
+  }
+
+  private redirectToInstanceAuthPage(username: string, instance: string, app: AppData) {
+    const appDataTemp = new CurrentAuthProcess(username, instance);
     localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
 
     let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
@@ -100,8 +129,6 @@ export class RegisterNewAccountComponent implements OnInit {
   }
 }
 
-class AppDataWrapper {
-  constructor(public username: string, public instance: string, public appData: AppData) {
-
-  }
+class CurrentAuthProcess {
+  constructor(public username: string, public instance: string) { }
 }

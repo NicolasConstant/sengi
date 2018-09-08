@@ -1,4 +1,5 @@
 import { State, Action, StateContext } from '@ngxs/store';
+import { AppData } from '../services/models/mastodon.interfaces';
 ​
 export class AddRegisteredApp {
     static readonly type = '[RegisteredApps] Add app';
@@ -6,13 +7,13 @@ export class AddRegisteredApp {
 }
 
 export interface RegisteredAppsStateModel {
-    registeredApps: AppInfo[];
+    apps: AppInfo[];
 }
 
 @State<RegisteredAppsStateModel>({
   name: 'registeredapps',
   defaults: {
-      registeredApps: []
+      apps: []
   }
 })
 export class RegisteredAppsState {    
@@ -20,7 +21,7 @@ export class RegisteredAppsState {
     AddRegisteredApp(ctx: StateContext<RegisteredAppsStateModel>, action: AddRegisteredApp) {
         const state = ctx.getState();
         ctx.patchState({
-            registeredApps: [...state.registeredApps, action.app]
+            apps: [...state.apps, action.app]
         });
 
         // ctx.setState({
@@ -30,9 +31,6 @@ export class RegisteredAppsState {
 }
 
 export class AppInfo {
-    id: number;
-    name: string;
-    redirect_uri: string;
-    client_id: string;
-    client_secret: string;
+    instance: string;
+    app: AppData;
 }
