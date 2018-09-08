@@ -17,15 +17,15 @@ export class AuthService {
     return this.httpClient.post<TokenData>(url, null).toPromise();
   }
 
-  createNewApplication(instance: string, redirectUrl: string): Promise<AppData> {
-    const url = 'https://' + instance + this.apiRoutes.createApp;    
+  createNewApplication(instance: string, appName: string, redirectUrl: string, scopes: string, website: string): Promise<AppData> {
+    const url = 'https://' + instance + this.apiRoutes.createApp;
     const formData = new FormData();
 
-    formData.append('client_name', 'Sengi');
+    formData.append('client_name', appName);
     formData.append('redirect_uris', redirectUrl);
-    formData.append('scopes', 'read write follow');
-    formData.append('website', 'https://github.com/NicolasConstant/sengi');
+    formData.append('scopes', scopes);
+    formData.append('website', website);
 
     return this.httpClient.post<AppData>(url, formData).toPromise();
-}
+  }
 }

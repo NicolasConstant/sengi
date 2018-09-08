@@ -59,9 +59,6 @@ export class RegisterNewAccountComponent implements OnInit {
       console.error('registeredApps$')
       console.warn(x);
     });
-
-
-
   }
 
   onSubmit(): boolean {
@@ -69,26 +66,37 @@ export class RegisterNewAccountComponent implements OnInit {
 
     const username = fullHandle[0];
     const instance = fullHandle[1];
-    console.log(`username ${username} instance ${instance}`);
+   
+    const redirect_uri = this.getLocalHostname() + '/register';
 
-    let localUrl = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
-
-    if (localUrl === 'file://') {
-      localUrl = 'http://localhost:4200';
-    }
-    const redirect_uri = localUrl + '/register';
-
-    this.authService.createNewApplication(instance, redirect_uri)
+    this.authService.createNewApplication(instance, 'Sengi', redirect_uri,  'read write follow', 'https://github.com/NicolasConstant/sengi')
       .then((appData: AppData) => {
-
-        const appDataTemp = new AppDataWrapper(username, instance, appData);
-        localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
-
-        let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${appData.client_id}`;
-
-        window.location.href = instanceUrl;
+        this.processAndRedirectToAuthPage(username, instance, appData);
+      })
+      .catch(err => {
+        console.error(err);
       });
     return false;
+  }
+
+  private getLocalHostname(): string {
+    let localHostname = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+
+    //Electron hack
+    if (localHostname === 'file://') {
+      localHostname = 'http://localhost:4200';
+    }
+
+    return localHostname;
+  }
+
+  private processAndRedirectToAuthPage(username: string, instance: string,  app: AppData){
+    const appDataTemp = new AppDataWrapper(username, instance, app);
+    localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
+
+    let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
+
+    window.location.href = instanceUrl;
   }
 }
 
