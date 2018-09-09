@@ -1,4 +1,4 @@
-const { app, server, BrowserWindow, shell } = require('electron');
+const { app, Menu, server, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const url = require('url');
 const http = require('http');
@@ -12,22 +12,38 @@ function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({ width: 395, height: 800, title: "Sengi", backgroundColor: '#FFF' });
 
-
     var server = http.createServer(requestHandler).listen(9527);
-
-    // win.loadURL("http://localhost:4200");
     win.loadURL('http://localhost:9527');
-    win.setMenu(null);
 
-    // and load the index.html of the app.
-    // win.loadURL(url.format({
-    //   pathname: path.join(__dirname, 'dist/index.html'),
-    //   protocol: 'file:',
-    //   slashes: true
-    // }))
+
+    const template = [
+        {
+            label: 'View',
+            submenu: [
+                { role: 'reload' },
+                { role: 'forcereload' },
+                { type: 'separator' },
+                { role: 'close' }
+
+            ]
+        },
+        {
+            role: 'help',
+            submenu: [
+                { role: 'toggledevtools' },
+                {
+                    label: 'Open GitHub project',
+                    click() { require('electron').shell.openExternal('https://github.com/NicolasConstant/sengi') }
+                }
+            ]
+        }
+    ]
+
+    const menu = Menu.buildFromTemplate(template);
+    win.setMenu(menu);
 
     // Open the DevTools.
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
 
     //open external links to browser 
     win.webContents.on('new-window', function (event, url) {
@@ -50,12 +66,13 @@ function requestHandler(req, res) {
         root = __dirname + '/dist',
         page404 = root + '/404.html';
 
-    if (file.includes('register')) file = '/index.html';
+    if (file.includes('register') || file.includes('home')) file = '/index.html';
 
     getFile((root + file), res, page404);
 };
 
 function getFile(filePath, res, page404) {
+    console.warn(`filePath: ${filePath}`)
     fs.exists(filePath, function (exists) {
         if (exists) {
             fs.readFile(filePath, function (err, contents) {
