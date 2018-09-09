@@ -26,20 +26,27 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
   }
 
+  private currentLoading: number;
   ngOnInit() {
     this.accounts$.subscribe((accounts: AccountInfo[]) => {
+      console.warn(' this.accounts$.subscribe(');
       console.warn(accounts);
+     
 
       if (accounts) {
-        this.accounts.length = 0;
-
         for (let acc of accounts) {
+
+          const accWrapper = new AccountWrapper();
+          accWrapper.username = `${acc.username}@${acc.instance}`;
+          this.accounts.push(accWrapper);
+
           this.accountsService.retrieveAccountDetails(acc)
             .then((result: Account) => {
-              const accWrapper = new AccountWrapper();
-              accWrapper.username = `${acc.username}@${acc.instance}`;
-              accWrapper.avatar = result.avatar;
-              this.accounts.push(accWrapper);
+              console.error(result);
+              const accounts = this.accounts.filter(x => result.url.includes(acc.username) && result.url.includes(acc.instance));
+              for (const account of accounts) {
+                account.avatar = result.avatar;
+              }              
             });
         }
       }
