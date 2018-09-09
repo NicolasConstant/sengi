@@ -22,6 +22,7 @@ import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
+import { AccountsState } from "./states/accounts.state";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -49,7 +50,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
 
     NgxsModule.forRoot([
-      RegisteredAppsState
+      RegisteredAppsState,
+      AccountsState
     ]),
     NgxsStoragePluginModule.forRoot()
   ],

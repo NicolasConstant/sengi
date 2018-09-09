@@ -8,15 +8,16 @@ const url = require('url')
   
   function createWindow () {
     // Create the browser window.
-    win = new BrowserWindow({ width: 395, height: 800, title: "Sengi", backgroundColor: '#FFF'})
+    win = new BrowserWindow({ width: 395, height: 800, title: "Sengi", backgroundColor: '#FFF'});
+    win.loadURL("http://localhost:4200");
     win.setMenu(null);
 
     // and load the index.html of the app.
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, 'dist/index.html'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    // win.loadURL(url.format({
+    //   pathname: path.join(__dirname, 'dist/index.html'),
+    //   protocol: 'file:',
+    //   slashes: true
+    // }))
 
     // Open the DevTools.
     win.webContents.openDevTools()

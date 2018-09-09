@@ -1,8 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription, BehaviorSubject } from "rxjs";
+import { Subscription, BehaviorSubject, Observable } from "rxjs";
+import { Store } from "@ngxs/store";
 
+import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
-import { AccountsService, LocalAccount } from "../../services/accounts.service";
+import { AccountsService } from "../../services/accounts.service";
+import { AccountsStateModel, AccountInfo } from "../../states/accounts.state";
+
 
 @Component({
   selector: "app-left-side-bar",
@@ -11,35 +15,35 @@ import { AccountsService, LocalAccount } from "../../services/accounts.service";
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
   accounts: AccountWrapper[] = [];
+  accounts$: Observable<AccountInfo[]>;
 
   private sub: Subscription;
 
   constructor(
-    private readonly accountsService: AccountsService) { }
+    private readonly accountsService: AccountsService,
+    private readonly store: Store) {
+
+    this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+  }
 
   ngOnInit() {
-    this.sub = this.accountsService.accountsSubject.subscribe((accounts: LocalAccount[]) => {
-      this.accounts.length = 0;
+    this.accounts$.subscribe((accounts: AccountInfo[]) => {
+      console.warn(accounts);
 
-      for (let acc of accounts) {
-        const accWrapper = new AccountWrapper();
-        accWrapper.username = `${acc.mastodonAccount.username}@${acc.mastodonInstance.replace("https://", "")}`;
-        accWrapper.avatar = acc.mastodonAccount.avatar;
-        this.accounts.push(accWrapper);
+      if (accounts) {
+        this.accounts.length = 0;
+
+        for (let acc of accounts) {
+          this.accountsService.retrieveAccountDetails(acc)
+            .then((result: Account) => {
+              const accWrapper = new AccountWrapper();
+              accWrapper.username = `${acc.username}@${acc.instance}`;
+              accWrapper.avatar = result.avatar;
+              this.accounts.push(accWrapper);
+            });
+        }
       }
     });
-
-    //const acc1 = new AccountWrapper();
-    //acc1.username = "@mastodon.social@Gargron";
-    //acc1.avatar = "https://files.mastodon.social/accounts/avatars/000/000/001/original/4df197532c6b768c.png";
-    //this.accounts.push(acc1);
-
-    //const acc2 = new AccountWrapper();
-    //acc2.username = "@mastodon.art@DearMsDearn";
-    //acc2.avatar = "https://curate.mastodon.art/gallery/accounts/avatars/000/015/092/original/3a112863f2dd22a27764179912dc8984.gif";
-    //this.accounts.push(acc2);
-
-
   }
 
   ngOnDestroy(): void {

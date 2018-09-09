@@ -1,6 +1,6 @@
 import { State, Action, StateContext } from '@ngxs/store';
 import { AppData } from '../services/models/mastodon.interfaces';
-​
+
 export class AddRegisteredApp {
     static readonly type = '[RegisteredApps] Add app';
     constructor(public app: AppInfo) { }
@@ -11,12 +11,12 @@ export interface RegisteredAppsStateModel {
 }
 
 @State<RegisteredAppsStateModel>({
-  name: 'registeredapps',
-  defaults: {
-      apps: []
-  }
+    name: 'registeredapps',
+    defaults: {
+        apps: []
+    }
 })
-export class RegisteredAppsState {    
+export class RegisteredAppsState {
     @Action(AddRegisteredApp)
     AddRegisteredApp(ctx: StateContext<RegisteredAppsStateModel>, action: AddRegisteredApp) {
         const state = ctx.getState();

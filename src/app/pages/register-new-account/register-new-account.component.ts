@@ -7,6 +7,7 @@ import { AuthService } from "../../services/auth.service";
 import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
 import { AccountsService } from "../../services/accounts.service";
 import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
+import { AccountInfo, AddAccount } from "../../states/accounts.state";
 
 @Component({
   selector: "app-register-new-account",
@@ -40,15 +41,16 @@ export class RegisterNewAccountComponent implements OnInit {
       console.warn(appInfo);
 
       this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
-        .then(tokenData => {
-          console.warn('Got token data!');
-          console.warn(tokenData);
+        .then((tokenData: TokenData) => {
+          const accountInfo = new AccountInfo();
+          accountInfo.username = appDataWrapper.username;
+          accountInfo.instance = appDataWrapper.instance;
+          accountInfo.token= tokenData;
 
-          localStorage.removeItem(this.authStorageKey);
-
-          //TODO review all this
-          // this.accountsService.addNewAccount(appDataWrapper.instance, appDataWrapper.username, tokenData);
-
+          this.store.dispatch([new AddAccount(accountInfo)])
+            .subscribe(() => {
+              localStorage.removeItem(this.authStorageKey);
+            });
         });
 
     });

@@ -2,7 +2,7 @@ import { Http, Headers, Response } from "@angular/http";
 import { BehaviorSubject } from "rxjs";
 
 import { AccountWrapper } from "./account.models";
-import { LocalAccount } from "../services/accounts.service";
+// import { LocalAccount } from "../services/accounts.service";
 import { ApiRoutes } from "../services/models/api.settings";
 import { Account, Status } from "../services/models/mastodon.interfaces";
 import { StreamingService, StreamingWrapper } from "../services/streaming.service";
@@ -15,8 +15,7 @@ export class Stream {
   constructor(
     private readonly httpService: Http,
     public streamName: string,
-    private readonly type: StreamTypeEnum,
-    private readonly account: LocalAccount) {
+    private readonly type: StreamTypeEnum) {
 
     this.retrieveToots(); //TODO change this for WebSockets
   }
@@ -31,17 +30,17 @@ export class Stream {
     const route = this.getTimelineRoute();
 
     const header = new Headers();
-    header.append("Authorization", `Bearer ${this.account.tokenData.access_token}`);
+    // header.append("Authorization", `Bearer ${this.account.tokenData.access_token}`);
 
-    this.httpService.get(this.account.mastodonInstance + route, { headers: header }).toPromise()
-      .then((res: Response) => {
-        const statuses = (res.json() as Status[])
-          .map((status: Status) => {
-            return new TootWrapper(status);
-          });
+    // this.httpService.get(this.account.mastodonInstance + route, { headers: header }).toPromise()
+    //   .then((res: Response) => {
+    //     const statuses = (res.json() as Status[])
+    //       .map((status: Status) => {
+    //         return new TootWrapper(status);
+    //       });
         
-        this.statuses.next(statuses);
-      });
+    //     this.statuses.next(statuses);
+    //   });
 
   }
 
