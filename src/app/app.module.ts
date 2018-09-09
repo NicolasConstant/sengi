@@ -23,6 +23,7 @@ import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
 import { AccountsState } from "./states/accounts.state";
+import { AccountIconComponent } from './components/left-side-bar/presentation/account-icon/account-icon.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -39,7 +40,8 @@ const routes: Routes = [
     StreamComponent,
     StreamsSelectionFooterComponent,
     TootComponent,
-    RegisterNewAccountComponent
+    RegisterNewAccountComponent,
+    AccountIconComponent
   ],
   imports: [
     BrowserModule,

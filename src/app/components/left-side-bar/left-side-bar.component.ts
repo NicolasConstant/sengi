@@ -49,11 +49,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
-
-  toogleAccount(accountId: number): boolean {
-    return false;
-  }
-
+  
   addNewAccount(): boolean {
     return false;
   }

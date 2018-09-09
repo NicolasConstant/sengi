@@ -1,0 +1,21 @@
+.account-icon {
+    display: inline-block;
+    width: 50px;
+    padding-top: 4px;
+    // margin-left: 5px;
+    margin: 0 0 5px 5px;
+  
+    &__avatar {
+        border-radius: 50%;
+        width: 40px;
+    }
+
+    // & a {
+    //     margin-left: 4px;
+    //     /*margin-top: 4px;*/
+    // }
+    // & img {
+    //     width: 40px;
+    //     border-radius: 50%;
+    // }
+}
