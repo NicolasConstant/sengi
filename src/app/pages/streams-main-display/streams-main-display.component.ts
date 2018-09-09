@@ -7,7 +7,7 @@ import { StreamsService } from "../../services/streams.service";
 @Component({
   selector: "app-streams-main-display",
   templateUrl: "./streams-main-display.component.html",
-  styleUrls: ["./streams-main-display.component.css"]
+  styleUrls: ["./streams-main-display.component.scss"]
 })
 export class StreamsMainDisplayComponent implements OnInit {
   streams: Stream[] = [];

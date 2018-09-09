@@ -22,9 +22,13 @@
             ],
             "styles": [
               "./node_modules/simplebar/dist/simplebar.min.css",
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "src/sass/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules/bootstrap/scss"
+              ]
+            },
             "scripts": [
               "./node_modules/simplebar/dist/simplebar.min.js"
             ]
@@ -127,7 +131,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "css"
+      "styleext": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"

@@ -1,0 +1,43 @@
+@import './variables';
+@import './mixins';
+
+@import "bootstrap";
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+body {   
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    // padding: 0;
+    // margin: 0;
+  
+    font-family: 'Roboto', sans-serif;
+    font-size: $default-font-size; 
+    
+    color: $font-color-primary; 
+    background-color: $color-primary;
+  }
+   
+  .invisible {
+    display: none;
+  } 
+  /* .ellipsis {
+  } */
+  
+  #toot-content p {
+    margin-bottom: 0 !important; 
+  }
+  
+  #toot-content a {
+    color: #bec3d8;
+  }

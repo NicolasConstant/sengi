@@ -3,9 +3,13 @@
     <a href title="write toot!" (click)="createNewToot()">Toot!</a>
   </div>
 
-  <div *ngFor="let account of accounts" class="mam-account-selector">
-    <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a>
+  <div *ngFor="let account of accounts" >
+    <app-account-icon [account]="account" ></app-account-icon>
+
+    <!-- <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a> -->
   </div>
+
+
 
   <div id="mam-account-add">
     <a href title="add new account" [routerLink]="['/register']">+</a>

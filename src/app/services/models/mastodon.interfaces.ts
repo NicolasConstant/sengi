@@ -1,3 +1,12 @@
+export interface AppData {
+  client_id: string;
+  client_secret: string;
+  id: string;
+  name: string;
+  redirect_uri: string;
+  website: string;
+}
+
 export interface TokenData {
   access_token: string;
   token_type: string;

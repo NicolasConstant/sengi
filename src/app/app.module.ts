@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
@@ -21,6 +22,8 @@ import { AccountsService } from "./services/accounts.service";
 import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
+import { AccountsState } from "./states/accounts.state";
+import { AccountIconComponent } from './components/left-side-bar/presentation/account-icon/account-icon.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -37,17 +40,20 @@ const routes: Routes = [
     StreamComponent,
     StreamsSelectionFooterComponent,
     TootComponent,
-    RegisterNewAccountComponent
+    RegisterNewAccountComponent,
+    AccountIconComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     NgxElectronModule,
     RouterModule.forRoot(routes),
 
     NgxsModule.forRoot([
-      RegisteredAppsState
+      RegisteredAppsState,
+      AccountsState
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
