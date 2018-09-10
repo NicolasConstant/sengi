@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ColumnElement, ColumnTypeEnum, AddColumn } from '../../../states/panels.state';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-columns-editor',
@@ -10,7 +12,7 @@ export class ColumnsEditorComponent implements OnInit {
 
   availableColumns: ColumnElement[] = [];
 
-  constructor() { }
+  constructor(private readonly store: Store) { }
 
   ngOnInit() {
     this.availableColumns.length = 0;
@@ -21,25 +23,11 @@ export class ColumnsEditorComponent implements OnInit {
   }
 
   addColumn(column: ColumnElement): boolean {
+    console.warn('addColumn');
     console.warn(column);
+    if (column) {
+      this.store.dispatch([new AddColumn(column)]);
+    }
     return false;
   }
-
-}
-
-export class ColumnElement {
-  constructor(public type: ColumnTypeEnum, public name: string, public username: string) {
-    
-  }
-}
-
-export enum ColumnTypeEnum {
-  unknown = 0,
-  global = 1,
-  local = 2,
-  personnal = 3,
-  favorites = 4,
-  activity = 5,
-  list = 6,
-  directmessages = 7, 
 }

@@ -19,7 +19,7 @@ export interface AccountsStateModel {
 })
 export class AccountsState {
     @Action(AddAccount)
-    AddRegisteredApp(ctx: StateContext<AccountsStateModel>, action: AddAccount) {
+    AddAccount(ctx: StateContext<AccountsStateModel>, action: AddAccount) {
         const state = ctx.getState();
         ctx.patchState({
             accounts: [...state.accounts, action.account]
