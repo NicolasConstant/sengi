@@ -1,0 +1,26 @@
+@import "variables";
+
+.column-editor {
+    padding: 10px;
+    font-size: $small-font-size;
+}
+
+.add-column__link {
+    display: block;
+    // width: calc(100% - 20px);
+    width: 100%;
+    // height: 30px;
+    padding: 5px 10px;
+    border: solid 1px gray;
+
+    background-color: lightblue;
+    color: #000;
+
+    &:not(:last-child){
+        margin-bottom: 5px;
+    }
+
+    &:hover {
+        background-color: darken(lightblue, 20);
+    }
+}

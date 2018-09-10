@@ -24,6 +24,10 @@ import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
 import { AccountsState } from "./states/accounts.state";
 import { AccountIconComponent } from './components/left-side-bar/presentation/account-icon/account-icon.component';
+import { NavigationService } from "./services/navigation.service";
+import { FloatingColumnComponent } from './components/floating-column/floating-column.component';
+import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
+import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -41,7 +45,10 @@ const routes: Routes = [
     StreamsSelectionFooterComponent,
     TootComponent,
     RegisterNewAccountComponent,
-    AccountIconComponent
+    AccountIconComponent,
+    FloatingColumnComponent,
+    ColumnsEditorComponent,
+    MessageEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +64,7 @@ const routes: Routes = [
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AuthService, NavigationService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

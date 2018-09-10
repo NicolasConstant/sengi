@@ -1,0 +1,17 @@
+<div class="column-editor">
+  <p>adding columns from: {{ username }} </p>
+
+  <a class="add-column__link" href *ngFor="let col of availableColumns" (click)="addColumn(col)">
+      {{ col.name }}
+  </a>
+  <!-- <a class="add-column__link" href>
+    Global Timeline
+  </a>
+  <a class="add-column__link" href>
+    Personnal Timeline
+  </a>
+  <a class="add-column__link" href>
+    Lists, Favs, Activitires, etc
+  </a> -->
+
+</div>

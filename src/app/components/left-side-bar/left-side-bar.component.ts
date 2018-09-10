@@ -6,6 +6,7 @@ import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
 import { AccountsService } from "../../services/accounts.service";
 import { AccountsStateModel, AccountInfo } from "../../states/accounts.state";
+import { NavigationService } from "../../services/navigation.service";
 
 
 @Component({
@@ -21,6 +22,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   private sub: Subscription;
 
   constructor(
+    private readonly navigationService: NavigationService,
     private readonly accountsService: AccountsService,
     private readonly store: Store) {
 
@@ -59,8 +61,9 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
   onOpenMenuNotify(username: string) {
     console.warn(`onOpenMenuNotify username ${username}`);
+    this.navigationService.openColumnEditor(username);
   }
-  
+
   createNewToot(): boolean {
     return false;
   }

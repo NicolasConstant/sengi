@@ -1,7 +1,3 @@
-app-left-side-bar {
-  
-}
-
 #display-zone {
   position: absolute;
   top: 0;
@@ -12,6 +8,14 @@ app-left-side-bar {
   overflow-x: auto;
   white-space: nowrap;
 }
+
+#floating-column {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 9999;
+}
+
 
 app-streams-selection-footer {
   position: absolute;
