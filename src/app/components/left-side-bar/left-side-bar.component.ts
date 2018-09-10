@@ -17,6 +17,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   accounts: AccountWrapper[] = [];
   accounts$: Observable<AccountInfo[]>;
 
+  private loadedAccounts: { [index: string]: AccountInfo } = {};
   private sub: Subscription;
 
   constructor(
@@ -29,24 +30,19 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   private currentLoading: number;
   ngOnInit() {
     this.accounts$.subscribe((accounts: AccountInfo[]) => {
-      console.warn(' this.accounts$.subscribe(');
-      console.warn(accounts);
-     
-
       if (accounts) {
-        for (let acc of accounts) {
+        this.loadedAccounts = {};
+        this.accounts.length = 0;
 
+        for (let acc of accounts) {
           const accWrapper = new AccountWrapper();
           accWrapper.username = `${acc.username}@${acc.instance}`;
           this.accounts.push(accWrapper);
+          this.loadedAccounts[accWrapper.username] = acc;
 
           this.accountsService.retrieveAccountDetails(acc)
             .then((result: Account) => {
-              console.error(result);
-              const accounts = this.accounts.filter(x => result.url.includes(acc.username) && result.url.includes(acc.instance));
-              for (const account of accounts) {
-                account.avatar = result.avatar;
-              }              
+              accWrapper.avatar = result.avatar;
             });
         }
       }
@@ -56,11 +52,15 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
-  
-  addNewAccount(): boolean {
-    return false;
+
+  onToogleAccountNotify(username: string) {
+    console.warn(`onToogleAccountNotify username ${username}`);
   }
 
+  onOpenMenuNotify(username: string) {
+    console.warn(`onOpenMenuNotify username ${username}`);
+  }
+  
   createNewToot(): boolean {
     return false;
   }

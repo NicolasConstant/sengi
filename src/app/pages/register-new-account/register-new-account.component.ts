@@ -43,8 +43,8 @@ export class RegisterNewAccountComponent implements OnInit {
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
                     const accountInfo = new AccountInfo();
-                    accountInfo.username = appDataWrapper.username;
-                    accountInfo.instance = appDataWrapper.instance;
+                    accountInfo.username = appDataWrapper.username.toLowerCase();
+                    accountInfo.instance = appDataWrapper.instance.toLowerCase();
                     accountInfo.token = tokenData;
 
                     this.store.dispatch([new AddAccount(accountInfo)])
