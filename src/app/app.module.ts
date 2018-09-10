@@ -19,7 +19,6 @@ import { TootComponent } from "./components/toot/toot.component";
 import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
-import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
 import { AccountsState } from "./states/accounts.state";
@@ -66,7 +65,7 @@ const routes: Routes = [
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AuthService, NavigationService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AuthService, NavigationService, AccountsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

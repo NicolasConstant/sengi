@@ -1,7 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { Stream } from "../../models/stream.models";
-import { StreamsService } from "../../services/streams.service";
+import { Observable, Subscription } from "rxjs";
+import { ColumnElement } from "../../states/panels.state";
+import { Store } from "@ngxs/store";
+import { Http } from "@angular/http";
 
 
 @Component({
@@ -9,24 +12,44 @@ import { StreamsService } from "../../services/streams.service";
   templateUrl: "./streams-main-display.component.html",
   styleUrls: ["./streams-main-display.component.scss"]
 })
-export class StreamsMainDisplayComponent implements OnInit {
+export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
+
   streams: Stream[] = [];
 
-  constructor(private readonly streamService: StreamsService) {
-    
-
+  private columns$: Observable<ColumnElement[]>;
+  private columnsStateSub: Subscription;
+  
+  constructor(
+    private readonly http: Http,
+    private readonly store: Store) {
+    this.columns$ = this.store.select(state => state.columnsstatemodel.columns);
   }
 
   ngOnInit() {
-    this.streamService.streamsSubject.subscribe((streams: Stream[]) => {
-      for (let s of streams) {
-        this.streams.push(s);
+
+    this.columnsStateSub = this.columns$.subscribe((columns: ColumnElement[]) => {
+      this.streams.length = 0;
+      for (const column of columns) {
+        const newStream = new Stream(this.http, column.name, column.type);
+        this.streams.push(newStream);
       }
+
+
     });
+
+    // this.streamService.streamsSubject.subscribe((streams: Stream[]) => {
+    //   for (let s of streams) {
+    //     this.streams.push(s);
+    //   }
+    // });
 
     //for (let i = 0; i < 3; i++) {
     //  this.streams.push(new Stream());
     //}
+  }
+
+  ngOnDestroy(): void {
+    this.columnsStateSub.unsubscribe();
   }
 
 }

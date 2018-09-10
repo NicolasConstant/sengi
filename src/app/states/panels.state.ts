@@ -26,12 +26,12 @@ export class ColumnsState {
 }
 
 export class ColumnElement {
-    constructor(public type: ColumnTypeEnum, public name: string, public username: string) {
+    constructor(public type: StreamTypeEnum, public name: string, public username: string) {
       
     }
   }
   
-  export enum ColumnTypeEnum {
+  export enum StreamTypeEnum {
     unknown = 0,
     global = 1,
     local = 2,

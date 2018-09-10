@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ColumnElement, ColumnTypeEnum, AddColumn } from '../../../states/panels.state';
+import { ColumnElement, StreamTypeEnum, AddColumn } from '../../../states/panels.state';
 import { Store } from '@ngxs/store';
 
 @Component({
@@ -17,9 +17,9 @@ export class ColumnsEditorComponent implements OnInit {
   ngOnInit() {
     this.availableColumns.length = 0;
 
-    this.availableColumns.push(new ColumnElement(ColumnTypeEnum.global, 'Global Timeline', this.username));
-    this.availableColumns.push(new ColumnElement(ColumnTypeEnum.local, 'Local Timeline', this.username));
-    this.availableColumns.push(new ColumnElement(ColumnTypeEnum.personnal, 'Personnal Timeline', this.username));
+    this.availableColumns.push(new ColumnElement(StreamTypeEnum.global, 'Global Timeline', this.username));
+    this.availableColumns.push(new ColumnElement(StreamTypeEnum.local, 'Local Timeline', this.username));
+    this.availableColumns.push(new ColumnElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.username));
   }
 
   addColumn(column: ColumnElement): boolean {
