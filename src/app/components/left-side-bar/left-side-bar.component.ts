@@ -55,13 +55,13 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  onToogleAccountNotify(username: string) {
-    console.warn(`onToogleAccountNotify username ${username}`);
+  onToogleAccountNotify(acc: AccountWrapper) {
+    console.warn(`onToogleAccountNotify username ${acc.username}`);
   }
 
-  onOpenMenuNotify(username: string) {
-    console.warn(`onOpenMenuNotify username ${username}`);
-    this.navigationService.openColumnEditor(username);
+  onOpenMenuNotify(acc: AccountWrapper) {
+    console.warn(`onOpenMenuNotify username ${acc.username}`);
+    this.navigationService.openColumnEditor(acc);
   }
 
   createNewToot(): boolean {

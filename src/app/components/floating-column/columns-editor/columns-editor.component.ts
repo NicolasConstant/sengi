@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
 import { Store } from '@ngxs/store';
+import { AccountsStateModel, AccountInfo } from '../../../states/accounts.state';
+import { AccountWrapper } from '../../../models/account.models';
 
 @Component({
   selector: 'app-columns-editor',
@@ -8,7 +10,7 @@ import { Store } from '@ngxs/store';
   styleUrls: ['./columns-editor.component.scss']
 })
 export class ColumnsEditorComponent implements OnInit {
-  @Input() username: string;
+  @Input() account: AccountWrapper;
 
   availableStreams: StreamElement[] = [];
 
@@ -16,10 +18,9 @@ export class ColumnsEditorComponent implements OnInit {
 
   ngOnInit() {
     this.availableStreams.length = 0;
-
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.username));
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.username));
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.account.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.account.username));
   }
 
   addStream(stream: StreamElement): boolean {

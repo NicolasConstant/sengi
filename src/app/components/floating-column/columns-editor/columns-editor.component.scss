@@ -1,26 +1,43 @@
 @import "variables";
-
-.column-editor {
-    padding: 10px;
+.account-editor {
+    padding: 10px 10px 0 7px;
     font-size: $small-font-size;
+    &__title {
+        font-size: 13px;
+        text-transform: uppercase;
+        margin: 6px 0 12px 0;
+    }
+    &__display-avatar {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    &__avatar {
+        // display: block;
+        width: 75px;
+        border-radius: 50px;
+        transform: translateX(15px); // margin: auto;
+    }
 }
 
-.add-column__link {
-    display: block;
-    // width: calc(100% - 20px);
-    width: 100%;
-    // height: 30px;
-    padding: 5px 10px;
-    border: solid 1px gray;
-
-    background-color: lightblue;
-    color: #000;
-
-    &:not(:last-child){
-        margin-bottom: 5px;
+.add-column {
+    &__label {
+        // text-decoration: underline;
+        font-size: $small-font-size;
+        margin-left: 5px;
+        color: $font-color-secondary;
     }
-
-    &:hover {
-        background-color: darken(lightblue, 20);
+    &__link {
+        text-decoration: none;
+        display: block; // width: calc(100% - 20px);
+        width: 100%; // height: 30px;
+        padding: 5px 10px; // border: solid 1px black;
+        background-color: $color-primary;
+        color: #fff;
+        &:not(:last-child) {
+            margin-bottom: 5px;
+        }
+        &:hover {
+            background-color: lighten($color-primary, 15);
+        }
     }
 }

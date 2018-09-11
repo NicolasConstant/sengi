@@ -8,8 +8,8 @@ import { AccountWrapper } from '../../../../models/account.models';
 })
 export class AccountIconComponent implements OnInit {
   @Input() account: AccountWrapper;
-  @Output() toogleAccountNotify = new EventEmitter<string>();
-  @Output() openMenuNotify = new EventEmitter<string>();
+  @Output() toogleAccountNotify = new EventEmitter<AccountWrapper>();
+  @Output() openMenuNotify = new EventEmitter<AccountWrapper>();
 
   isSelected: boolean = false;
 
@@ -19,13 +19,13 @@ export class AccountIconComponent implements OnInit {
   }
 
   toogleAccount(): boolean {
-    this.toogleAccountNotify.emit(this.account.username);
+    this.toogleAccountNotify.emit(this.account);
     this.isSelected = !this.isSelected;
     return false;
   }
 
   openMenu(event): boolean {
-    this.openMenuNotify.emit(this.account.username);
+    this.openMenuNotify.emit(this.account);
     return false;    
   }
 }
