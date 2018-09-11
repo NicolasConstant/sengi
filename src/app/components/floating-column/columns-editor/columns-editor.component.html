@@ -1,8 +1,8 @@
 <div class="column-editor">
   <p>adding columns from: {{ username }} </p>
 
-  <a class="add-column__link" href *ngFor="let col of availableColumns" (click)="addColumn(col)">
-      {{ col.name }}
+  <a class="add-column__link" href *ngFor="let stream of availableStreams" (click)="addStream(stream)">
+      {{ stream.name }}
   </a>
   <!-- <a class="add-column__link" href>
     Global Timeline

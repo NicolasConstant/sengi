@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ColumnElement, StreamTypeEnum, AddColumn } from '../../../states/panels.state';
+import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
 import { Store } from '@ngxs/store';
 
 @Component({
@@ -10,23 +10,21 @@ import { Store } from '@ngxs/store';
 export class ColumnsEditorComponent implements OnInit {
   @Input() username: string;
 
-  availableColumns: ColumnElement[] = [];
+  availableStreams: StreamElement[] = [];
 
   constructor(private readonly store: Store) { }
 
   ngOnInit() {
-    this.availableColumns.length = 0;
+    this.availableStreams.length = 0;
 
-    this.availableColumns.push(new ColumnElement(StreamTypeEnum.global, 'Global Timeline', this.username));
-    this.availableColumns.push(new ColumnElement(StreamTypeEnum.local, 'Local Timeline', this.username));
-    this.availableColumns.push(new ColumnElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.username));
   }
 
-  addColumn(column: ColumnElement): boolean {
-    console.warn('addColumn');
-    console.warn(column);
-    if (column) {
-      this.store.dispatch([new AddColumn(column)]);
+  addStream(stream: StreamElement): boolean {
+    if (stream) {
+      this.store.dispatch([new AddStream(stream)]);
     }
     return false;
   }

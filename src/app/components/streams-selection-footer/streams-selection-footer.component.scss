@@ -10,16 +10,20 @@
 
 .stream-selection {
   display: inline-block;
-  width: 5px;
-  height: 22px;
-  background-color:$font-link-primary;
+  width: 9px;
+  padding: 4px 5px 0 5px;
+  height: 30px;
+  
+  &__column-reprensentation {
+    display: inline-block;
+    width: 5px;
+    height: 22px;
+    background-color:$font-link-primary;
 
-  &:not(:last-child) {
-    margin: 4px 5px 0 0;
+   
   }
 
-  &:hover {
+  &:hover  &__column-reprensentation{
     background-color:$font-link-primary-hover;
   }
-
 }

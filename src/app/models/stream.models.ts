@@ -6,7 +6,7 @@ import { AccountWrapper } from "./account.models";
 import { ApiRoutes } from "../services/models/api.settings";
 import { Account, Status } from "../services/models/mastodon.interfaces";
 import { StreamingService, StreamingWrapper } from "../services/streaming.service";
-import { StreamTypeEnum } from "../states/panels.state";
+import { StreamTypeEnum } from "../states/streams.state";
 
 export class Stream {
   private apiRoutes = new ApiRoutes();

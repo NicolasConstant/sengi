@@ -27,7 +27,7 @@ import { NavigationService } from "./services/navigation.service";
 import { FloatingColumnComponent } from './components/floating-column/floating-column.component';
 import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
 import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
-import { ColumnsState } from "./states/panels.state";
+import { StreamsState } from "./states/streams.state";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -61,7 +61,7 @@ const routes: Routes = [
     NgxsModule.forRoot([
       RegisteredAppsState,
       AccountsState,
-      ColumnsState
+      StreamsState
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
