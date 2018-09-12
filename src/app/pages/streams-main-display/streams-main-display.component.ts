@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, QueryList, ViewChildren, ElementRef } from "@angular/core";
 
 import { Stream } from "../../models/stream.models";
 import { Observable, Subscription } from "rxjs";
@@ -49,8 +49,17 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
         this.columnSelectedSub.unsubscribe();
     }
 
+    @ViewChildren('stream', { read: ElementRef }) public streamsElementRef: QueryList<ElementRef>;;
     private focusOnColumn(columnIndex: number): void {
         console.warn(`col selected: ${columnIndex}`);
+
+        if (columnIndex > -1) {
+            console.warn(this.streamsElementRef);
+
+            setTimeout(() => {
+                this.streamsElementRef.toArray()[columnIndex].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+            });
+        }
     }
 
 }

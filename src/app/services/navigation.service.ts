@@ -6,7 +6,7 @@ import { AccountWrapper } from '../models/account.models';
 export class NavigationService {
 
   openColumnEditorSubject = new BehaviorSubject<AccountWrapper>(null);
-  columnSelectedSubject = new BehaviorSubject<number>(null);
+  columnSelectedSubject = new BehaviorSubject<number>(-1);
 
   constructor() { }
 
