@@ -1,34 +1,31 @@
-#mam-stream-column {
-  width: 320px; /*320*/
+@import "variables";
+.stream-column {
+  width: $stream-column-width;
   height: calc(100%);
 
-  background-color: #090b10;
   background-color: #0f111a;
+  margin: 0 0 0 $stream-column-separator;
 
-  outline: 1px dotted greenyellow;
-}
-
-#mam-stream-header {
-  width: calc(100%);
-  height: 30px;
-
-  background-color: black;
+  &__stream-header {
+    width: calc(100%);
+    height: 30px;
   
-  border-bottom: 1px solid black;
+    background-color: black;
+    
+    border-bottom: 1px solid black;
+
+    & h1 {
+      color: whitesmoke;
+      font-size: 0.8em;
+      font-weight: normal;
+      margin: 0;
+      padding: 8px 0 0 10px;
+    }
+  }
 }
 
-  #mam-stream-header h1 {
-    color: whitesmoke;
-    font-size: 0.8em;
-    font-weight: normal;
-    margin: 0;
-    padding: 8px 0 0 10px;
-  }
-
-
-#mam-stream-toots {
+.stream-toots {
   height: calc(100% - 30px);
   width: 320px;
   overflow: auto;
-
 }
