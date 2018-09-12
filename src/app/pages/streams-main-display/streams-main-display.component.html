@@ -1,6 +1,5 @@
-<div id="mam-main-display" class="flexcroll">
-  <div *ngFor="let s of streams" class="mam-stream-column">
+<div class="main-display flexcroll">
+  <div class="main-display__stream-column" *ngFor="let s of streams">
     <app-stream [stream]="s"></app-stream>
   </div>
-
 </div>
