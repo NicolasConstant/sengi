@@ -1,22 +1,16 @@
-<div id="mam-left-bar">
-  <div id="mam-create-toot">
-    <a href title="write toot!" (click)="createNewToot()">Toot!</a>
-  </div>
+<div class="left-bar" >
+    <div id="create-toot">
+        <a class="create-toot__link left-bar-link" href title="write toot!" (click)="createNewToot()">Toot!</a>
+    </div>
 
-  <div *ngFor="let account of accounts" >
-    <app-account-icon [account]="account" ></app-account-icon>
+    <div *ngFor="let account of accounts">
+        <app-account-icon [account]="account" (toogleAccountNotify)="onToogleAccountNotify($event)" (openMenuNotify)="onOpenMenuNotify($event)">
+        </app-account-icon>
 
-    <!-- <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a> -->
-  </div>
+        <!-- <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a> -->
+    </div>
 
-
-
-  <div id="mam-account-add">
-    <a href title="add new account" [routerLink]="['/register']">+</a>
-  </div>
-
-
-
-
-
+    <div class="add-account">
+        <a class="add-account__link  left-bar-link" href title="add new account" [routerLink]="['/register']">+</a>
+    </div>
 </div>

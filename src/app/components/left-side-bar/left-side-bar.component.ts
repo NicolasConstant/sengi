@@ -6,6 +6,7 @@ import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
 import { AccountsService } from "../../services/accounts.service";
 import { AccountsStateModel, AccountInfo } from "../../states/accounts.state";
+import { NavigationService } from "../../services/navigation.service";
 
 
 @Component({
@@ -17,9 +18,11 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   accounts: AccountWrapper[] = [];
   accounts$: Observable<AccountInfo[]>;
 
+  private loadedAccounts: { [index: string]: AccountInfo } = {};
   private sub: Subscription;
 
   constructor(
+    private readonly navigationService: NavigationService,
     private readonly accountsService: AccountsService,
     private readonly store: Store) {
 
@@ -29,24 +32,19 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   private currentLoading: number;
   ngOnInit() {
     this.accounts$.subscribe((accounts: AccountInfo[]) => {
-      console.warn(' this.accounts$.subscribe(');
-      console.warn(accounts);
-     
-
       if (accounts) {
-        for (let acc of accounts) {
+        this.loadedAccounts = {};
+        this.accounts.length = 0;
 
+        for (let acc of accounts) {
           const accWrapper = new AccountWrapper();
           accWrapper.username = `${acc.username}@${acc.instance}`;
           this.accounts.push(accWrapper);
+          this.loadedAccounts[accWrapper.username] = acc;
 
           this.accountsService.retrieveAccountDetails(acc)
             .then((result: Account) => {
-              console.error(result);
-              const accounts = this.accounts.filter(x => result.url.includes(acc.username) && result.url.includes(acc.instance));
-              for (const account of accounts) {
-                account.avatar = result.avatar;
-              }              
+              accWrapper.avatar = result.avatar;
             });
         }
       }
@@ -56,9 +54,14 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
-  
-  addNewAccount(): boolean {
-    return false;
+
+  onToogleAccountNotify(acc: AccountWrapper) {
+    console.warn(`onToogleAccountNotify username ${acc.username}`);
+  }
+
+  onOpenMenuNotify(acc: AccountWrapper) {
+    console.warn(`onOpenMenuNotify username ${acc.username}`);
+    this.navigationService.openColumnEditor(acc);
   }
 
   createNewToot(): boolean {

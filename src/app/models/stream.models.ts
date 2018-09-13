@@ -6,6 +6,7 @@ import { AccountWrapper } from "./account.models";
 import { ApiRoutes } from "../services/models/api.settings";
 import { Account, Status } from "../services/models/mastodon.interfaces";
 import { StreamingService, StreamingWrapper } from "../services/streaming.service";
+import { StreamTypeEnum } from "../states/streams.state";
 
 export class Stream {
   private apiRoutes = new ApiRoutes();
@@ -36,7 +37,7 @@ export class Stream {
     //   .then((res: Response) => {
     //     const statuses = (res.json() as Status[])
     //       .map((status: Status) => {
-    //         return new TootWrapper(status);
+    //         return new TootWrapper(status); 
     //       });
         
     //     this.statuses.next(statuses);
@@ -46,22 +47,22 @@ export class Stream {
 
   private getTimelineRoute(): string {
     switch (this.type) {
-      case StreamTypeEnum.Home:
+      case StreamTypeEnum.personnal:
         return this.apiRoutes.getHomeTimeline;
-      case StreamTypeEnum.Local:
+      case StreamTypeEnum.local:
         return this.apiRoutes.getPublicTimeline + `?Local=true`;
-      case StreamTypeEnum.Public:
+      case StreamTypeEnum.global:
         return this.apiRoutes.getPublicTimeline + `?Local=false`;
     }
   }
 
 }
 
-export enum StreamTypeEnum {
-  Home,
-  Public,
-  Local
-}
+// export enum StreamTypeEnum {
+//   Home,
+//   Public,
+//   Local
+// }
   
 
 export class TootWrapper {

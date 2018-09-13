@@ -19,11 +19,15 @@ import { TootComponent } from "./components/toot/toot.component";
 import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
-import { StreamsService } from "./services/streams.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
 import { AccountsState } from "./states/accounts.state";
 import { AccountIconComponent } from './components/left-side-bar/presentation/account-icon/account-icon.component';
+import { NavigationService } from "./services/navigation.service";
+import { FloatingColumnComponent } from './components/floating-column/floating-column.component';
+import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
+import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
+import { StreamsState } from "./states/streams.state";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -41,7 +45,10 @@ const routes: Routes = [
     StreamsSelectionFooterComponent,
     TootComponent,
     RegisterNewAccountComponent,
-    AccountIconComponent
+    AccountIconComponent,
+    FloatingColumnComponent,
+    ColumnsEditorComponent,
+    MessageEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -53,11 +60,12 @@ const routes: Routes = [
 
     NgxsModule.forRoot([
       RegisteredAppsState,
-      AccountsState
+      AccountsState,
+      StreamsState
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AuthService, AccountsService, StreamsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AuthService, NavigationService, AccountsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

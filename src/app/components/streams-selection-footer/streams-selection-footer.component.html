@@ -1,3 +1,5 @@
-<div id="mam-streams-selection-footer">
-  
+<div class="streams-selection-footer">
+  <a class="stream-selection" *ngFor="let str of streams; let i=index" href (click)="onColumnSelection(i)" >
+    <span class="stream-selection__column-reprensentation"></span>
+  </a>
 </div>

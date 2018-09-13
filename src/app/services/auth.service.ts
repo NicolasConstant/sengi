@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 import { ApiRoutes } from './models/api.settings';
 import { AppData, TokenData } from "./models/mastodon.interfaces";
-import { HttpClient } from "@angular/common/http";
+
 
 @Injectable()
 export class AuthService {
@@ -9,6 +10,10 @@ export class AuthService {
 
     constructor(
         private readonly httpClient: HttpClient) {
+    }
+
+    getInstanceLoginUrl(instance: string, client_id: string, redirect_uri: string): string{
+        return `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${client_id}`;
     }
 
     getToken(instance: string, client_id: string, client_secret: string, code: string, redirect_uri: string): Promise<TokenData> {

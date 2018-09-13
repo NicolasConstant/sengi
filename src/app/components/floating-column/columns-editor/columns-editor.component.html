@@ -1,0 +1,23 @@
+<div class="account-editor">
+  <h3 class="account-editor__title">Manage Account</h3>
+
+  <div class="account-editor__display-avatar">
+    <img class="account-editor__avatar" src="{{account.avatar}}" title="{{ account.username }} " />
+  </div>
+
+  <h4 class="add-column__label">add column:</h4>
+
+  <a class="add-column__link" href *ngFor="let stream of availableStreams" (click)="addStream(stream)">
+    {{ stream.name }}
+  </a>
+  <!-- <a class="add-column__link" href>
+    Global Timeline
+  </a>
+  <a class="add-column__link" href>
+    Personnal Timeline
+  </a>
+  <a class="add-column__link" href>
+    Lists, Favs, Activitires, etc
+  </a> -->
+
+</div>

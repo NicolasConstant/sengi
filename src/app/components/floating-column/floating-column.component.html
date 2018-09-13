@@ -1,0 +1,9 @@
+<div class="floating-column">
+  <div class="floating-column__header">
+    <a class="close-button" href (click)="closePanel()" title="close">x</a>
+  </div> 
+
+  <app-columns-editor *ngIf="columnEditorIsOpen" [account]="userAccountUsed"></app-columns-editor>
+  <app-message-editor *ngIf="messageEditorIsOpen"></app-message-editor>
+
+</div>

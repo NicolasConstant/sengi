@@ -43,8 +43,8 @@ export class RegisterNewAccountComponent implements OnInit {
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
                     const accountInfo = new AccountInfo();
-                    accountInfo.username = appDataWrapper.username;
-                    accountInfo.instance = appDataWrapper.instance;
+                    accountInfo.username = appDataWrapper.username.toLowerCase();
+                    accountInfo.instance = appDataWrapper.instance.toLowerCase();
                     accountInfo.token = tokenData;
 
                     this.store.dispatch([new AddAccount(accountInfo)])
@@ -120,7 +120,8 @@ export class RegisterNewAccountComponent implements OnInit {
         const appDataTemp = new CurrentAuthProcess(username, instance);
         localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
 
-        let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
+        let instanceUrl = this.authService.getInstanceLoginUrl(instance, app.client_id, app.redirect_uri);
+        // let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
 
         window.location.href = instanceUrl;
     }

@@ -1,6 +1,29 @@
-#mam-streams-selection-footer {
-  width: calc(100%);
-  height: 30px;
+@import "variables";
 
-  background-color: #090b10;
+.streams-selection-footer {
+  width: calc(100%);
+  height: $stream-selector-height;
+  text-align: center;
+
+  background-color: $color-secondary;
+}
+
+.stream-selection {
+  display: inline-block;
+  width: 9px;
+  padding: 4px 5px 0 5px;
+  height: $stream-selector-height;
+  
+  &__column-reprensentation {
+    display: inline-block;
+    width: 5px;
+    height: $stream-selector-height - 8px;
+    background-color:$font-link-primary;
+
+   
+  }
+
+  &:hover  &__column-reprensentation{
+    background-color:$font-link-primary-hover;
+  }
 }

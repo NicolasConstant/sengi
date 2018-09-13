@@ -1,8 +1,8 @@
-<div id="mam-stream-column">
-  <div id="mam-stream-header">
+<div class="stream-column">
+  <div class="stream-column__stream-header">
     <a href title="return to top" (click)="goToTop()"><h1>{{ stream.streamName.toUpperCase() }}</h1></a>
   </div>
-  <div id="mam-stream-toots" data-simplebar>
+  <div class="stream-toots" data-simplebar>
     <div *ngFor="let toot of toots">
       <app-toot [toot]="toot"></app-toot>
     </div>

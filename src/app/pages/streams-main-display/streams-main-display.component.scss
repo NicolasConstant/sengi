@@ -1,53 +1,36 @@
-#mam-main-display {
-  width: calc(100%);
-  height: calc(100%); 
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  /* background: black; */
-  /*outline: 1px dotted red;*/
+@import "variables";
+.main-display {
+    width: calc(100%);
+    height: calc(100%);
+    overflow-x: auto;
+    overflow-y: hidden;
+    &__stream-column {
+        height: calc(100%);
+        width: $stream-column-width + $stream-column-separator;
+        display: inline-block;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        white-space: normal;
+        // margin: 0 0 0 $stream-column-separator;
+        margin: 0;
+    }
 }
 
-
-.mam-stream-column {
-  height: calc(100%);
-  width: 320px;
-  display: inline-block;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  white-space: normal;
-  margin-left: 7px;
-}
-
-
-.flexcroll{
-  scrollbar-face-color: #08090d;
-  scrollbar-shadow-color: #08090d;
-  scrollbar-highlight-color: #08090d;
-  scrollbar-3dlight-color: #08090d;
-  scrollbar-darkshadow-color: #08090d;
-  scrollbar-track-color: #08090d;
-  scrollbar-arrow-color: #08090d; 
-}
-
-/* Let's get this party started */
-.flexcroll::-webkit-scrollbar {
-  /* width: 16px !important; */
-  height: 7px;
-}
-
-/* Track */
-/* .flexcroll::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-} */
-
-/* Handle */
-.flexcroll::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 0px;
-  border-radius: 0px;
-  /* background: rgba(255,0,0,0.8);  */
-  background: #08090d; 
-  -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.5); 
+.flexcroll {
+    scrollbar-face-color: #08090d;
+    scrollbar-shadow-color: #08090d;
+    scrollbar-highlight-color: #08090d;
+    scrollbar-3dlight-color: #08090d;
+    scrollbar-darkshadow-color: #08090d;
+    scrollbar-track-color: #08090d;
+    scrollbar-arrow-color: #08090d;
+    &::-webkit-scrollbar {
+        height: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+        background: #08090d;
+        -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+    }
 }

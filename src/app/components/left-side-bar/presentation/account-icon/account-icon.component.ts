@@ -1,8 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AccountInfo } from '../../../../states/accounts.state';
-import { AccountsService } from '../../../../services/accounts.service';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { AccountWrapper } from '../../../../models/account.models';
-import { Account } from "../../../../services/models/mastodon.interfaces";
 
 @Component({
   selector: 'app-account-icon',
@@ -11,6 +8,10 @@ import { Account } from "../../../../services/models/mastodon.interfaces";
 })
 export class AccountIconComponent implements OnInit {
   @Input() account: AccountWrapper;
+  @Output() toogleAccountNotify = new EventEmitter<AccountWrapper>();
+  @Output() openMenuNotify = new EventEmitter<AccountWrapper>();
+
+  isSelected: boolean = false;
 
   constructor() { }
 
@@ -18,12 +19,13 @@ export class AccountIconComponent implements OnInit {
   }
 
   toogleAccount(): boolean {
-    console.warn(`click`);
+    this.toogleAccountNotify.emit(this.account);
+    this.isSelected = !this.isSelected;
     return false;
   }
 
   openMenu(event): boolean {
-    console.warn(`openMenu`);
+    this.openMenuNotify.emit(this.account);
     return false;    
   }
 }
