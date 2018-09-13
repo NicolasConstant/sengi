@@ -17,7 +17,6 @@ export class AccountsService {
 
   retrieveAccountDetails(account: AccountInfo): Promise<Account> {
     const headers = new HttpHeaders({'Authorization':`Bearer ${account.token.access_token}`});
-    // const headers = new HttpHeaders({'Bearer':`${account.token}`});
     return this.httpClient.get<Account>('https://' + account.instance + this.apiRoutes.getCurrentAccount, {headers: headers}).toPromise();
   }
 
