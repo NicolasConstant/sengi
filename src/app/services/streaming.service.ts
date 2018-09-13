@@ -6,8 +6,9 @@ export class StreamingService {
   constructor() { }
 
   //TODO restructure this to handle real domain objects
-  getStreaming(mastodonInstance: string, accessToken: string): StreamingWrapper {
-    return new StreamingWrapper(mastodonInstance.replace("https://", "wss://") + `/api/v1/streaming//?access_token=${accessToken}&stream=public`)
+  getStreaming(instance: string, accessToken: string): StreamingWrapper {
+    const route = `wss://${instance}/api/v1/streaming?access_token=${accessToken}&stream=public`
+    return new StreamingWrapper(route);
   }
 
 }

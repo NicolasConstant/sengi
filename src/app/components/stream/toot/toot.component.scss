@@ -1,0 +1,47 @@
+.toot {
+    border: solid #06070b;
+    border-width: 0 0 1px 0;
+    margin: 0;
+    padding: 0;
+    width: calc(100%);
+    min-height: 70px;
+    overflow: hidden;
+    &__avatar {
+        margin: 10px 0 0 10px;
+        /* margin: 0; */
+        width: 50px;
+        height: 50px;
+        float: left;
+    }
+    &__fullname {
+        color: white;
+    }
+    &__profile-link {
+        color: #353e64;
+        margin: 7px 0 0 70px;
+        display: block;
+    }
+    &__content {
+        /*width: calc(100% - 50px);*/
+        margin: 10px 10px 10px 70px;
+    }
+    &__content p {
+        margin: 0;
+        font-size: 0.85em;
+    }
+}
+
+// #toot-avatar img {
+//   width: 50px;
+//   height: 50px;
+//   border-radius: 2px; 
+//   margin: 0;
+// }
+/* #toot-username {
+  color: grey;
+} */
+
+/* ::ng-deep .invisible {
+  display: inline;
+  color: red;
+} */

@@ -38,10 +38,10 @@ export class Stream {
 
     private test: StreamingWrapper;
     private retrieveToots(): void {
-        // //TEST
-        // const service = new StreamingService();
-        // this.test = service.getStreaming(this.account.mastodonInstance, this.account.tokenData.access_token);
-        // //END TEST
+        //TEST
+        const service = new StreamingService();
+        this.test = service.getStreaming(this.account.instance, this.account.token.access_token);
+        //END TEST
 
         const route = `https://${this.account.instance}${this.getTimelineRoute()}`;
 

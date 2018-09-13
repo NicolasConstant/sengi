@@ -15,7 +15,6 @@ import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.c
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
 import { StreamComponent } from "./components/stream/stream.component";
 import { StreamsSelectionFooterComponent } from "./components/streams-selection-footer/streams-selection-footer.component";
-import { TootComponent } from "./components/toot/toot.component";
 import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
 import { AccountsService } from "./services/accounts.service";
@@ -28,6 +27,7 @@ import { FloatingColumnComponent } from './components/floating-column/floating-c
 import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
 import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
 import { StreamsState } from "./states/streams.state";
+import { TootComponent } from "./components/stream/toot/toot.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
