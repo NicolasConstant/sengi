@@ -120,7 +120,8 @@ export class RegisterNewAccountComponent implements OnInit {
         const appDataTemp = new CurrentAuthProcess(username, instance);
         localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
 
-        let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
+        let instanceUrl = this.authService.getInstanceLoginUrl(instance, app.client_id, app.redirect_uri);
+        // let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
 
         window.location.href = instanceUrl;
     }
