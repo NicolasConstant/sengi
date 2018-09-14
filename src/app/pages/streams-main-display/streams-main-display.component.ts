@@ -7,6 +7,7 @@ import { Store } from "@ngxs/store";
 import { Http } from "@angular/http";
 import { NavigationService } from "../../services/navigation.service";
 import { HttpClient } from "@angular/common/http";
+import { StreamingService } from "../../services/streaming.service";
 
 
 @Component({
@@ -23,6 +24,7 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
     private columnSelectedSub: Subscription;
 
     constructor(
+        private readonly streamingService: StreamingService,
         private readonly navigationService: NavigationService,
         private readonly httpClient: HttpClient,
         private readonly store: Store) {
@@ -34,7 +36,7 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
         this.streamsStateSub = this.streams$.subscribe((streams: StreamElement[]) => {
             this.streams.length = 0;
             for (const stream of streams) {
-                const newStream = new Stream(this.httpClient, this.store, stream.name, stream.type, stream.username);
+                const newStream = new Stream(this.streamingService, this.httpClient, this.store, stream.name, stream.type, stream.username);
                 this.streams.push(newStream);
             }
 

@@ -5,7 +5,7 @@ import { BehaviorSubject } from "rxjs";
 import { AccountWrapper } from "./account.models";
 import { ApiRoutes } from "../services/models/api.settings";
 import { Account, Status } from "../services/models/mastodon.interfaces";
-import { StreamingService, StreamingWrapper } from "../services/streaming.service";
+import { StreamingService, StreamingWrapper, StatusUpdate, EventEnum } from "../services/streaming.service";
 import { StreamTypeEnum } from "../states/streams.state";
 import { AccountInfo } from "../states/accounts.state";
 
@@ -13,10 +13,12 @@ import { AccountInfo } from "../states/accounts.state";
 export class Stream {
     private apiRoutes = new ApiRoutes();
     private account: AccountInfo;
+    private websocketStreaming: StreamingWrapper;
 
     statuses = new BehaviorSubject<TootWrapper[]>([]);
 
     constructor(
+        private readonly streamingService: StreamingService,
         private readonly httpClient: HttpClient,
         private readonly store: Store,
         public streamName: string,
@@ -29,6 +31,7 @@ export class Stream {
         this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
 
         this.retrieveToots(); //TODO change this for WebSockets
+        this.launchWebsocket();
     }
 
     private getRegisteredAccounts(): AccountInfo[] {
@@ -36,13 +39,8 @@ export class Stream {
         return regAccounts;
     }
 
-    private test: StreamingWrapper;
-    private retrieveToots(): void {
-        //TEST
-        const service = new StreamingService();
-        this.test = service.getStreaming(this.account.instance, this.account.token.access_token);
-        //END TEST
 
+    private retrieveToots(): void {
         const route = `https://${this.account.instance}${this.getTimelineRoute()}`;
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${this.account.token.access_token}` });
@@ -53,7 +51,34 @@ export class Stream {
                 });
 
                 this.statuses.next(statuses);
+
+
             });
+    }
+
+    private launchWebsocket(): void {
+        //Web socket
+        let streamRequest: string;
+        switch (this.type) {
+            case StreamTypeEnum.global:
+                streamRequest = 'public';
+                break;
+            case StreamTypeEnum.local:
+                streamRequest = 'public:local';
+                break;
+            case StreamTypeEnum.personnal:
+                streamRequest = 'user';
+                break;
+        }
+
+        this.websocketStreaming = this.streamingService.getStreaming(this.account.instance, this.account.token.access_token, streamRequest);
+        this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
+            if (update) {
+                if (update.type === EventEnum.update) {
+                    this.statuses.next([new TootWrapper(update.status)]);
+                }
+            }
+        });
 
     }
 

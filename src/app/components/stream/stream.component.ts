@@ -13,9 +13,9 @@ export class StreamComponent implements OnInit {
   @Input()
   set stream(stream: Stream) {
     this._stream = stream;
-    this._stream.statuses.subscribe((toots: TootWrapper[]) => {
-      for (let t of toots) {
-        this.toots.push(t);
+    this._stream.statuses.subscribe((results: TootWrapper[]) => {
+      for (let t of results) {
+        this.toots.unshift(t);
       }
     });
   }
