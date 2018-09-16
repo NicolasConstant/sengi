@@ -14,7 +14,7 @@ export class AppComponent implements OnInit, OnDestroy{
  
   title = 'app';
 
-  private floatingColumnActive: boolean;
+  floatingColumnActive: boolean;
   private columnEditorSub: Subscription;
 
   constructor(private readonly navigationService: NavigationService) {
