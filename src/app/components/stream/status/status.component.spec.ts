@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TootComponent } from './toot.component';
+import { StatusComponent } from './status.component';
 
-describe('TootComponent', () => {
-  let component: TootComponent;
-  let fixture: ComponentFixture<TootComponent>;
+describe('StatusComponent', () => {
+  let component: StatusComponent;
+  let fixture: ComponentFixture<StatusComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TootComponent ]
+      declarations: [ StatusComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TootComponent);
+    fixture = TestBed.createComponent(StatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

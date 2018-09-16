@@ -27,7 +27,7 @@ import { FloatingColumnComponent } from './components/floating-column/floating-c
 import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
 import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
 import { StreamsState } from "./states/streams.state";
-import { TootComponent } from "./components/stream/toot/toot.component";
+import { StatusComponent } from "./components/stream/status/status.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -43,7 +43,7 @@ const routes: Routes = [
     StreamsMainDisplayComponent,
     StreamComponent,
     StreamsSelectionFooterComponent,
-    TootComponent,
+    StatusComponent,
     RegisterNewAccountComponent,
     AccountIconComponent,
     FloatingColumnComponent,

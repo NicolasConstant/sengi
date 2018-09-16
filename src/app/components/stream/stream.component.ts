@@ -14,12 +14,12 @@ import { Status } from "../../services/models/mastodon.interfaces";
     styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
+    private _streamElement: StreamElement;
     private apiRoutes = new ApiRoutes();
     private account: AccountInfo;
     private websocketStreaming: StreamingWrapper;
-    private type: StreamTypeEnum;
-    statuses: TootWrapper[] = [];
-    private _streamElement: StreamElement;
+
+    statuses: Status[] = [];
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -29,7 +29,7 @@ export class StreamComponent implements OnInit {
         const user = splitedUserName[0];
         const instance = splitedUserName[1];
         this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
-        this.type = streamElement.type;
+        // this.type = streamElement.type;
 
         this.retrieveToots(); //TODO change this for WebSockets
         this.launchWebsocket();
@@ -39,14 +39,11 @@ export class StreamComponent implements OnInit {
         return this._streamElement;
     }
 
-    toots: TootWrapper[] = [];
-
     constructor(
         private readonly store: Store,
         private readonly streamingService: StreamingService,
         private readonly httpClient: HttpClient) {
     }
-
 
     ngOnInit() {
     }
@@ -56,7 +53,7 @@ export class StreamComponent implements OnInit {
     }
 
     private getTimelineRoute(): string {
-        switch (this.type) {
+        switch (this._streamElement.type) {
             case StreamTypeEnum.personnal:
                 return this.apiRoutes.getHomeTimeline;
             case StreamTypeEnum.local:
@@ -78,11 +75,7 @@ export class StreamComponent implements OnInit {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${this.account.token.access_token}` });
         this.httpClient.get<Status[]>(route, { headers: headers }).toPromise()
             .then((results: Status[]) => {
-                var statuses = results.map((status: Status) => {
-                    return new TootWrapper(status);
-                });
-
-                for (const s of statuses) {
+                for (const s of results) {
                     this.statuses.push(s);
                 }
             });
@@ -91,7 +84,7 @@ export class StreamComponent implements OnInit {
     private launchWebsocket(): void {
         //Web socket
         let streamRequest: string;
-        switch (this.type) {
+        switch (this._streamElement.type) {
             case StreamTypeEnum.global:
                 streamRequest = 'public';
                 break;
@@ -107,25 +100,9 @@ export class StreamComponent implements OnInit {
         this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
-                    this.statuses.unshift(new TootWrapper(update.status));
+                    this.statuses.unshift(update.status);
                 }
             }
         });
-
     }
-
-}
-
-export class TootWrapper {
-    constructor(status: Status) {
-        this.account = new AccountWrapper();
-        this.account.username = status.account.username;
-        this.account.display_name = status.account.display_name;
-        this.account.avatar = status.account.avatar;
-
-        this.content = status.content;
-    }
-
-    account: AccountWrapper; //TODO change to Account
-    content: string;
 }
