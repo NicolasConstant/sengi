@@ -57,12 +57,12 @@ export class MastodonService {
         return this.trimChar(this.trimChar(route, '?'), '&');
     }
 
-    private escapeRegExp = function(strToEscape) {
+    private escapeRegExp(strToEscape) {
         // Escape special characters for use in a regular expression
         return strToEscape.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     };
     
-    private trimChar = function(origString, charToTrim) {
+    private trimChar(origString, charToTrim) {
         charToTrim = this.escapeRegExp(charToTrim);
         var regEx = new RegExp("^[" + charToTrim + "]+|[" + charToTrim + "]+$", "g");
         return origString.replace(regEx, "");

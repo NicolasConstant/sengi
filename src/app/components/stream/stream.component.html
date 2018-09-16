@@ -2,9 +2,9 @@
   <div class="stream-column__stream-header">
     <a href title="return to top" (click)="goToTop()"><h1>{{ streamElement.name.toUpperCase() }}</h1></a>
   </div>
-  <div class="stream-toots" data-simplebar>
+  <div class="stream-toots flexcroll" #statusstream> <!-- data-simplebar  -->
     <div *ngFor="let status of statuses">
-      <app-status [status]="status"></app-status>
+      <app-status [status]="status" ></app-status>
     </div>
   </div>
 </div>

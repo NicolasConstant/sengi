@@ -29,3 +29,22 @@
   width: 320px;
   overflow: auto;
 }
+
+.flexcroll {
+    scrollbar-face-color: #08090d;
+    scrollbar-shadow-color: #08090d;
+    scrollbar-highlight-color: #08090d;
+    scrollbar-3dlight-color: #08090d;
+    scrollbar-darkshadow-color: #08090d;
+    scrollbar-track-color: #08090d;
+    scrollbar-arrow-color: #08090d;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+        background: #08090d;
+        -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+    }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, ElementRef, ViewChild } from "@angular/core";
 import { AccountWrapper } from "../../models/account.models";
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { StreamingService, StreamingWrapper, EventEnum, StatusUpdate } from "../../services/streaming.service";
@@ -45,7 +45,13 @@ export class StreamComponent implements OnInit {
     ngOnInit() {
     }
 
+    @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
+        const stream = this.statustream.nativeElement as HTMLElement;        
+        stream.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
         return false;
     }
 
@@ -68,9 +74,7 @@ export class StreamComponent implements OnInit {
         this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
-                    console.log(update.status);
                     if (!this.statuses.find(x => x.id == update.status.id)) {
-                        console.log('added');
                         this.statuses.unshift(update.status);
                     }
                 }
