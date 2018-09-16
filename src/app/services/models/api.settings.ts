@@ -47,4 +47,5 @@ export class ApiRoutes {
     getDirectTimeline = '/api/v1/timelines/direct';
     getTagTimeline = '/api/v1/timelines/tag/{0}';
     getListTimeline = '/api/v1/timelines/list/{0}';
+    getStreaming = '/api/v1/streaming?access_token={0}&stream={1}';
 }

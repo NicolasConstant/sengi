@@ -64,11 +64,15 @@ export class StreamComponent implements OnInit {
     }
 
     private launchWebsocket(): void {
-        this.websocketStreaming = this.streamingService.getStreaming(this.account.instance, this.account.token.access_token, this._streamElement.type);
+        this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement.type);
         this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
-                    this.statuses.unshift(update.status);
+                    console.log(update.status);
+                    if (!this.statuses.find(x => x.id == update.status.id)) {
+                        console.log('added');
+                        this.statuses.unshift(update.status);
+                    }
                 }
             }
         });
