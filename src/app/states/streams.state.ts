@@ -39,6 +39,7 @@ export class StreamElement {
     favorites = 4,
     activity = 5,
     list = 6,
-    directmessages = 7, 
-  }
+    directmessages = 7,
+    tag = 8,
+}
   

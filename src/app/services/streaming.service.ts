@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Status } from "./models/mastodon.interfaces";
 import { BehaviorSubject } from "rxjs";
 import { ApiRoutes } from "./models/api.settings";
+import { StreamTypeEnum } from "../states/streams.state";
 
 @Injectable()
 export class StreamingService {
@@ -9,12 +10,22 @@ export class StreamingService {
 
     constructor() { }
 
-    //TODO restructure this to handle real domain objects
-    getStreaming(instance: string, accessToken: string, streamRequest: string): StreamingWrapper {
-        const route = `wss://${instance}/api/v1/streaming?access_token=${accessToken}&stream=${streamRequest}`
+    getStreaming(instance: string, accessToken: string, streamType: StreamTypeEnum): StreamingWrapper {
+        const request = this.getRequest(streamType);
+        const route = `wss://${instance}/api/v1/streaming?access_token=${accessToken}&stream=${request}`
         return new StreamingWrapper(route);
     }
 
+    private getRequest(type: StreamTypeEnum): string {
+        switch (type) {
+            case StreamTypeEnum.global:
+                return 'public';
+            case StreamTypeEnum.local:
+                return 'public:local';
+            case StreamTypeEnum.personnal:
+                return 'user';
+        }
+    }
 }
 
 export class StreamingWrapper {
@@ -22,19 +33,37 @@ export class StreamingWrapper {
     eventSource: WebSocket;
 
     constructor(private readonly domain: string) {
-       this.start(domain);
+        this.start(domain);
     }
 
     private start(domain: string) {
         this.eventSource = new WebSocket(domain);
-        this.eventSource.onmessage = x => this.tootParsing(<WebSocketEvent>JSON.parse(x.data));
-        this.eventSource.onerror = x => console.error(x);
+        this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
+        this.eventSource.onerror = x => this.webSocketGotError(x);
         this.eventSource.onopen = x => console.log(x);
-        this.eventSource.onclose = x => { console.log(x); 
-            setTimeout(() => {this.start(domain)}, 3000);}
+        this.eventSource.onclose = x => this.webSocketClosed(domain, x);
     }
 
-    private tootParsing(event: WebSocketEvent) {
+    private errorClosing: boolean;
+    private webSocketGotError(x: Event) {
+        console.error(x);
+        this.errorClosing = true;
+        // this.eventSource.close();
+    }
+
+    private webSocketClosed(domain, x: Event) {
+        console.log(x);
+
+        if(this.errorClosing){
+            
+
+            this.errorClosing = false;
+        } else {
+            setTimeout(() => { this.start(domain) }, 3000);
+        }       
+    }
+
+    private statusParsing(event: WebSocketEvent) {
         const newUpdate = new StatusUpdate();
 
         switch (event.event) {
@@ -52,6 +81,8 @@ export class StreamingWrapper {
 
         this.statusUpdateSubjet.next(newUpdate);
     }
+
+
 }
 
 class WebSocketEvent {
