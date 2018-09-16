@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { TootWrapper } from "../../../models/stream.models";
+import { TootWrapper } from "../stream.component";
 
 @Component({
   selector: "app-toot",

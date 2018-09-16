@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, QueryList, ViewChildren, ElementRef } fro
 import { Observable, Subscription } from "rxjs";
 import { Select } from "@ngxs/store";
 
-import { Stream } from "../../models/stream.models";
 import { StreamElement } from "../../states/streams.state";
 import { NavigationService } from "../../services/navigation.service";
 
@@ -14,7 +13,6 @@ import { NavigationService } from "../../services/navigation.service";
 export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
-    streams: Stream[] = [];
     private columnSelectedSub: Subscription;
 
     constructor(
