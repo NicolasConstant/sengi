@@ -29,7 +29,6 @@ export class StreamComponent implements OnInit {
         const user = splitedUserName[0];
         const instance = splitedUserName[1];
         this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
-        // this.type = streamElement.type;
 
         this.retrieveToots(); //TODO change this for WebSockets
         this.launchWebsocket();
