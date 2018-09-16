@@ -24,7 +24,7 @@ export class AccountIconComponent implements OnInit {
     return false;
   }
 
-  openMenu(event): boolean {
+  openMenu(): boolean {
     this.openMenuNotify.emit(this.account);
     return false;    
   }

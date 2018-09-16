@@ -15,10 +15,8 @@ import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.c
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
 import { StreamComponent } from "./components/stream/stream.component";
 import { StreamsSelectionFooterComponent } from "./components/streams-selection-footer/streams-selection-footer.component";
-import { TootComponent } from "./components/toot/toot.component";
 import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
-import { AccountsService } from "./services/accounts.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
 import { AccountsState } from "./states/accounts.state";
@@ -28,6 +26,8 @@ import { FloatingColumnComponent } from './components/floating-column/floating-c
 import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
 import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
 import { StreamsState } from "./states/streams.state";
+import { StatusComponent } from "./components/stream/status/status.component";
+import { MastodonService } from "./services/mastodon.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -43,7 +43,7 @@ const routes: Routes = [
     StreamsMainDisplayComponent,
     StreamComponent,
     StreamsSelectionFooterComponent,
-    TootComponent,
+    StatusComponent,
     RegisterNewAccountComponent,
     AccountIconComponent,
     FloatingColumnComponent,
@@ -65,11 +65,7 @@ const routes: Routes = [
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AuthService, NavigationService, AccountsService, StreamingService, { provide: APP_INITIALIZER, useFactory: settingsServiceFactory, deps: [AccountsService], multi: true }],
+  providers: [AuthService, NavigationService, MastodonService, StreamingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-function settingsServiceFactory(service: AccountsService) {
-  return () => service.load();
-}

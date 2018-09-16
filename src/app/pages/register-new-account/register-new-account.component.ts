@@ -5,9 +5,9 @@ import { Observable } from "rxjs";
 
 import { AuthService } from "../../services/auth.service";
 import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
-import { AccountsService } from "../../services/accounts.service";
 import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
 import { AccountInfo, AddAccount } from "../../states/accounts.state";
+import { MastodonService } from "../../services/mastodon.service";
 
 @Component({
     selector: "app-register-new-account",
@@ -23,7 +23,6 @@ export class RegisterNewAccountComponent implements OnInit {
 
     constructor(
         private readonly authService: AuthService,
-        private readonly accountsService: AccountsService,
         private readonly store: Store,
         private readonly activatedRoute: ActivatedRoute) {
 

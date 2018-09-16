@@ -1,56 +1,84 @@
-import { Component, OnInit, Input } from "@angular/core";
-import { Stream, TootWrapper } from "../../models/stream.models";
+import { Component, OnInit, Input, ElementRef, ViewChild } from "@angular/core";
 import { AccountWrapper } from "../../models/account.models";
+import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
+import { StreamingService, StreamingWrapper, EventEnum, StatusUpdate } from "../../services/streaming.service";
+import { Store } from "@ngxs/store";
+import { AccountInfo } from "../../states/accounts.state";
+import { Status } from "../../services/models/mastodon.interfaces";
+import { MastodonService } from "../../services/mastodon.service";
 
 @Component({
-  selector: "app-stream",
-  templateUrl: "./stream.component.html",
-  styleUrls: ["./stream.component.scss"]
+    selector: "app-stream",
+    templateUrl: "./stream.component.html",
+    styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
-  private _stream: Stream;
+    private _streamElement: StreamElement;
+    private account: AccountInfo;
+    private websocketStreaming: StreamingWrapper;
 
-  @Input()
-  set stream(stream: Stream) {
-    this._stream = stream;
-    this._stream.statuses.subscribe((toots: TootWrapper[]) => {
-      for (let t of toots) {
-        this.toots.push(t);
-      }
-    });
-  }
+    statuses: Status[] = [];
 
-  get stream(): Stream {
-    return this._stream;
-  }
+    @Input()
+    set streamElement(streamElement: StreamElement) {
+        this._streamElement = streamElement;
 
-  toots: TootWrapper[] = [];
+        const splitedUserName = streamElement.username.split('@');
+        const user = splitedUserName[0];
+        const instance = splitedUserName[1];
+        this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
 
-  constructor(){
-    // var simplebar = new SimpleBar(document.querySelector('#mam-stream-toots'), { autoHide: true });
-  }
+        this.retrieveToots(); //TODO change this for WebSockets
+        this.launchWebsocket();
+    }
 
+    get streamElement(): StreamElement {
+        return this._streamElement;
+    }
 
-  ngOnInit() {
-    //Stubs
-    //const newStream = new Stream();
-    //newStream.streamName = "Stream Name";
-    //this.stream = newStream;
+    constructor(
+        private readonly store: Store,
+        private readonly streamingService: StreamingService,
+        private readonly mastodonService: MastodonService) {
+    }
 
-    //const acc1 = new AccountWrapper();
-    //acc1.username = "@mastodon.social@Gargron";
-    //acc1.avatar = "https://files.mastodon.social/accounts/avatars/000/000/001/original/4df197532c6b768c.png";
+    ngOnInit() {
+    }
 
-    //for (let i = 0; i < 20; i++) {
-    //  const newToot = new TootWrapper();
-    //  newToot.account = acc1;
-    //  newToot.content = "Lorem Elsass ipsum tristique semper elit jetz gehts los lacus habitant Hans sagittis baeckeoffe condimentum id, salu bredele ch'ai libero, ftomi! hop Pfourtz ! id munster auctor, Miss Dahlias rhoncus Yo dû. Salu bissame turpis ante amet non sed gal Spätzle Gal !";
-    //  this.toots.push(newToot);
-    //}
-  }
+    @ViewChild('statusstream') public statustream: ElementRef;
+    goToTop(): boolean {
+        const stream = this.statustream.nativeElement as HTMLElement;        
+        stream.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        return false;
+    }
 
-  goToTop(): boolean {
-    return false;
-  }
+    private getRegisteredAccounts(): AccountInfo[] {
+        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        return regAccounts;
+    }
 
+    private retrieveToots(): void {
+        this.mastodonService.getTimeline(this.account, this._streamElement.type)
+            .then((results: Status[]) => {
+                for (const s of results) {
+                    this.statuses.push(s);
+                }
+            });
+    }
+
+    private launchWebsocket(): void {
+        this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement.type);
+        this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
+            if (update) {
+                if (update.type === EventEnum.update) {
+                    if (!this.statuses.find(x => x.id == update.status.id)) {
+                        this.statuses.unshift(update.status);
+                    }
+                }
+            }
+        });
+    }
 }

@@ -26,9 +26,7 @@ export class StreamsSelectionFooterComponent implements OnInit {
   }
 
   onColumnSelection(index: number): boolean {
-    console.warn(`column selected: ${index}`);
     this.navigationService.columnSelected(index);
     return false;
   }
-
 }

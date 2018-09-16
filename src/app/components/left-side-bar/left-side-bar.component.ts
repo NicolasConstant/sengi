@@ -4,9 +4,9 @@ import { Store } from "@ngxs/store";
 
 import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
-import { AccountsService } from "../../services/accounts.service";
 import { AccountsStateModel, AccountInfo } from "../../states/accounts.state";
 import { NavigationService } from "../../services/navigation.service";
+import { MastodonService } from "../../services/mastodon.service";
 
 
 @Component({
@@ -23,7 +23,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly navigationService: NavigationService,
-    private readonly accountsService: AccountsService,
+    private readonly mastodonService: MastodonService,
     private readonly store: Store) {
 
     this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
@@ -42,7 +42,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
           this.accounts.push(accWrapper);
           this.loadedAccounts[accWrapper.username] = acc;
 
-          this.accountsService.retrieveAccountDetails(acc)
+          this.mastodonService.retrieveAccountDetails(acc)
             .then((result: Account) => {
               accWrapper.avatar = result.avatar;
             });
