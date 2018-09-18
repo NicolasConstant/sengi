@@ -18,6 +18,7 @@ export class StreamComponent implements OnInit {
     private websocketStreaming: StreamingWrapper;
 
     statuses: Status[] = [];
+    private bufferStream: Status[] = [];
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -69,10 +70,20 @@ export class StreamComponent implements OnInit {
         if (atBottom) {
             console.log('Bottom reached!!');
             this.streamPositionnedAtBottom = true;
-        } else if (atTop) {
-            console.log('Top reached!!');
-            this.streamPositionnedAtTop = true;
+        } else if (atTop) {            
+            this.scrolledToTop()
         }
+    }
+
+    private scrolledToTop() {
+        console.log('Top reached!!');
+        this.streamPositionnedAtTop = true;
+        
+        for (const status of this.bufferStream) {
+            this.statuses.unshift(status); //TODO check order of status 
+        }
+
+        this.bufferStream.length = 0;
     }
 
     private getRegisteredAccounts(): AccountInfo[] {
@@ -89,13 +100,19 @@ export class StreamComponent implements OnInit {
             });
     }
 
+    
+
     private launchWebsocket(): void {
         this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement.type);
         this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.id == update.status.id)) {
-                        this.statuses.unshift(update.status);
+                        if (this.streamPositionnedAtTop) {
+                            this.statuses.unshift(update.status);
+                        } else {
+                            this.bufferStream.unshift(update.status);
+                        }
                     }
                 }
             }
@@ -104,11 +121,13 @@ export class StreamComponent implements OnInit {
         });
     }
 
-    private checkAndCleanUpStream(): void {
+    private checkAndCleanUpStream(): void {        
         if (this.streamPositionnedAtTop && this.statuses.length > 60) {
-            console.log(`clean up start! ${this.statuses.length}`);
             this.statuses.length = 40;
-            console.log(`clean up ends! ${this.statuses.length}`);
+        }
+
+        if (this.bufferStream.length > 60) {
+            this.bufferStream.length = 40;
         }
     }
 }
