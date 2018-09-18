@@ -29,7 +29,7 @@ export class StreamComponent implements OnInit {
         const instance = splitedUserName[1];
         this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
 
-        this.retrieveToots(); //TODO change this for WebSockets
+        this.retrieveToots();
         this.launchWebsocket();
     }
 
@@ -48,6 +48,9 @@ export class StreamComponent implements OnInit {
 
     @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
+        if (this.statuses.length > 40) {
+            this.statuses.length = 40;
+        }
         const stream = this.statustream.nativeElement as HTMLElement;
         stream.scrollTo({
             top: 0,
@@ -57,33 +60,48 @@ export class StreamComponent implements OnInit {
     }
 
     private streamPositionnedAtTop: boolean = true;
-    private streamPositionnedAtBottom: boolean;
+    private isProcessingInfiniteScroll: boolean;
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+        console.warn(`atBottom: ${element.scrollHeight} === ${element.clientHeight} + ${element.scrollTop } `);
+        const atBottom = element.scrollHeight  <= element.clientHeight + element.scrollTop + 500;
         const atTop = element.scrollTop === 0;
 
         this.streamPositionnedAtTop = false;
-        this.streamPositionnedAtBottom = false;
-
-        if (atBottom) {
-            console.log('Bottom reached!!');
-            this.streamPositionnedAtBottom = true;
-        } else if (atTop) {            
-            this.scrolledToTop()
+        if (atBottom && !this.isProcessingInfiniteScroll) {
+            this.scrolledToBottom();
+        } else if (atTop) {
+            this.scrolledToTop();
         }
     }
 
     private scrolledToTop() {
-        console.log('Top reached!!');
         this.streamPositionnedAtTop = true;
-        
+
         for (const status of this.bufferStream) {
             this.statuses.unshift(status); //TODO check order of status 
         }
 
         this.bufferStream.length = 0;
+    }
+
+    private scrolledToBottom() {
+        this.isProcessingInfiniteScroll = true;
+
+        const lastStatus = this.statuses[this.statuses.length - 1];
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.id)
+            .then((status: Status[]) => {
+                for (const s of status) {
+                    this.statuses.push(s);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .then(() => {
+                this.isProcessingInfiniteScroll = false;
+            });
     }
 
     private getRegisteredAccounts(): AccountInfo[] {
@@ -99,8 +117,6 @@ export class StreamComponent implements OnInit {
                 }
             });
     }
-
-    
 
     private launchWebsocket(): void {
         this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement.type);
@@ -121,7 +137,7 @@ export class StreamComponent implements OnInit {
         });
     }
 
-    private checkAndCleanUpStream(): void {        
+    private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 60) {
             this.statuses.length = 40;
         }
