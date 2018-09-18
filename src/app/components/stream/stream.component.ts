@@ -49,6 +49,7 @@ export class StreamComponent implements OnInit {
 
     @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
+        this.loadBuffer();
         if (this.statuses.length > 40) {
             this.statuses.length = 40;
         }
@@ -79,13 +80,17 @@ export class StreamComponent implements OnInit {
     private scrolledToTop() {
         this.streamPositionnedAtTop = true;
 
+        this.loadBuffer();
+    }
+
+    private loadBuffer(){        
         if(this.bufferWasCleared) {
             this.statuses.length = 0;
             this.bufferWasCleared = false;
         }
 
         for (const status of this.bufferStream) {
-            this.statuses.unshift(status); //TODO check order of status 
+            this.statuses.unshift(status); 
         }
 
         this.bufferStream.length = 0;
