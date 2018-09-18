@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from "@angular/core";
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
 import { AccountWrapper } from "../../models/account.models";
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { StreamingService, StreamingWrapper, EventEnum, StatusUpdate } from "../../services/streaming.service";
@@ -47,12 +47,32 @@ export class StreamComponent implements OnInit {
 
     @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
-        const stream = this.statustream.nativeElement as HTMLElement;        
+        const stream = this.statustream.nativeElement as HTMLElement;
         stream.scrollTo({
             top: 0,
             behavior: 'smooth'
-          });
+        });
         return false;
+    }
+
+    private streamPositionnedAtTop: boolean = true;
+    private streamPositionnedAtBottom: boolean;
+
+    onScroll() {
+        var element = this.statustream.nativeElement as HTMLElement;
+        const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+        const atTop = element.scrollTop === 0;
+
+        this.streamPositionnedAtTop = false;
+        this.streamPositionnedAtBottom = false;
+
+        if (atBottom) {
+            console.log('Bottom reached!!');
+            this.streamPositionnedAtBottom = true;
+        } else if (atTop) {
+            console.log('Top reached!!');
+            this.streamPositionnedAtTop = true;
+        }
     }
 
     private getRegisteredAccounts(): AccountInfo[] {
@@ -79,6 +99,16 @@ export class StreamComponent implements OnInit {
                     }
                 }
             }
+
+            this.checkAndCleanUpStream();
         });
+    }
+
+    private checkAndCleanUpStream(): void {
+        if (this.streamPositionnedAtTop && this.statuses.length > 60) {
+            console.log(`clean up start! ${this.statuses.length}`);
+            this.statuses.length = 40;
+            console.log(`clean up ends! ${this.statuses.length}`);
+        }
     }
 }
