@@ -64,7 +64,6 @@ export class StreamComponent implements OnInit {
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
-        console.warn(`atBottom: ${element.scrollHeight} === ${element.clientHeight} + ${element.scrollTop } `);
         const atBottom = element.scrollHeight  <= element.clientHeight + element.scrollTop + 500;
         const atTop = element.scrollTop === 0;
 
