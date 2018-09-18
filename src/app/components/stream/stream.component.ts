@@ -19,6 +19,7 @@ export class StreamComponent implements OnInit {
 
     statuses: Status[] = [];
     private bufferStream: Status[] = [];
+    private bufferWasCleared: boolean;
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -78,6 +79,11 @@ export class StreamComponent implements OnInit {
     private scrolledToTop() {
         this.streamPositionnedAtTop = true;
 
+        if(this.bufferWasCleared) {
+            this.statuses.length = 0;
+            this.bufferWasCleared = false;
+        }
+
         for (const status of this.bufferStream) {
             this.statuses.unshift(status); //TODO check order of status 
         }
@@ -126,7 +132,7 @@ export class StreamComponent implements OnInit {
                         if (this.streamPositionnedAtTop) {
                             this.statuses.unshift(update.status);
                         } else {
-                            this.bufferStream.unshift(update.status);
+                            this.bufferStream.push(update.status);
                         }
                     }
                 }
@@ -136,13 +142,16 @@ export class StreamComponent implements OnInit {
         });
     }
 
+    
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 60) {
             this.statuses.length = 40;
         }
 
         if (this.bufferStream.length > 60) {
+            this.bufferWasCleared = true;
             this.bufferStream.length = 40;
+
         }
     }
 }
