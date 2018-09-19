@@ -4,6 +4,6 @@
         <span class="status__fullname" innerHTML="{{status.account.display_name}}"></span>       
         @<span id="status-username">{{status.account.acct}}</span>
     </a>
-    <div class="status__created-at" title="{{ status.created_at | date: 'long' }}">{{ getCompactRelativeTime(status.created_at) }}</div>
+    <div class="status__created-at" title="{{ status.created_at | date: 'full' }}">{{ getCompactRelativeTime(status.created_at) }}</div>
     <div class="status__content" innerHTML="{{status.content}}"></div>
 </div> 
