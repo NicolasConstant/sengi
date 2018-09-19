@@ -19,14 +19,17 @@ export class StatusComponent implements OnInit {
     getCompactRelativeTime(d: string): string {
         const date = (new Date(d)).getTime();
         const now = Date.now();
-        const timeDelta = (now - date) / (1000 * 60);
+        const timeDelta = (now - date) / (1000);
 
         if (timeDelta < 60) {
-            return `${timeDelta | 0}m`;
-        } else if (timeDelta < 60 * 24) {
-            return `${timeDelta / 60 | 0}h`;
-        } else if (timeDelta < 60 * 24 * 31) {
-            return `${timeDelta / (60 * 24) | 0}d`;
+            return `${timeDelta | 0}s`;
+        }
+        if (timeDelta < 60 * 60) {
+            return `${timeDelta / 60 | 0}m`;
+        } else if (timeDelta < 60 * 60 * 24) {
+            return `${timeDelta / (60 * 60)| 0}h`;
+        } else if (timeDelta < 60 * 60 * 24 * 31) {
+            return `${timeDelta / (60 * 60 * 24) | 0}d`;
         }
        
         return formatDate(date, 'MM/dd', this.locale);
