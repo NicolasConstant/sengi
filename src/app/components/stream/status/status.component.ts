@@ -1,18 +1,34 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Inject, LOCALE_ID } from "@angular/core";
 import { Status } from "../../../services/models/mastodon.interfaces";
+import { formatDate } from '@angular/common';
 
 
 @Component({
-  selector: "app-status",
-  templateUrl: "./status.component.html",
-  styleUrls: ["./status.component.scss"]
+    selector: "app-status",
+    templateUrl: "./status.component.html",
+    styleUrls: ["./status.component.scss"]
 })
 export class StatusComponent implements OnInit {
-  @Input() status: Status;
+    @Input() status: Status;
 
-  constructor() { }
+    constructor(@Inject(LOCALE_ID) private locale: string) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
+    getCompactRelativeTime(d: string): string {
+        const date = (new Date(d)).getTime();
+        const now = Date.now();
+        const timeDelta = (now - date) / (1000 * 60);
+
+        if (timeDelta < 60) {
+            return `${timeDelta | 0}m`;
+        } else if (timeDelta < 60 * 24) {
+            return `${timeDelta / 60 | 0}h`;
+        } else if (timeDelta < 60 * 24 * 31) {
+            return `${timeDelta / (60 * 24) | 0}d`;
+        }
+       
+        return formatDate(date, 'MM/dd', this.locale);
+    }
 }
