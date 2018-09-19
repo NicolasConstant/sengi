@@ -23,8 +23,7 @@ export class StatusComponent implements OnInit {
 
         if (timeDelta < 60) {
             return `${timeDelta | 0}s`;
-        }
-        if (timeDelta < 60 * 60) {
+        } else if (timeDelta < 60 * 60) {
             return `${timeDelta / 60 | 0}m`;
         } else if (timeDelta < 60 * 60 * 24) {
             return `${timeDelta / (60 * 60)| 0}h`;
