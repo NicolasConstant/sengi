@@ -18,6 +18,8 @@ export class StreamComponent implements OnInit {
     private websocketStreaming: StreamingWrapper;
 
     statuses: Status[] = [];
+    private bufferStream: Status[] = [];
+    private bufferWasCleared: boolean;
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -28,7 +30,7 @@ export class StreamComponent implements OnInit {
         const instance = splitedUserName[1];
         this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
 
-        this.retrieveToots(); //TODO change this for WebSockets
+        this.retrieveToots();
         this.launchWebsocket();
     }
 
@@ -47,6 +49,10 @@ export class StreamComponent implements OnInit {
 
     @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
+        this.loadBuffer();
+        if (this.statuses.length > 40) {
+            this.statuses.length = 40;
+        }
         const stream = this.statustream.nativeElement as HTMLElement;
         stream.scrollTo({
             top: 0,
@@ -56,23 +62,56 @@ export class StreamComponent implements OnInit {
     }
 
     private streamPositionnedAtTop: boolean = true;
-    private streamPositionnedAtBottom: boolean;
+    private isProcessingInfiniteScroll: boolean;
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+        const atBottom = element.scrollHeight  <= element.clientHeight + element.scrollTop + 500;
         const atTop = element.scrollTop === 0;
 
         this.streamPositionnedAtTop = false;
-        this.streamPositionnedAtBottom = false;
-
-        if (atBottom) {
-            console.log('Bottom reached!!');
-            this.streamPositionnedAtBottom = true;
+        if (atBottom && !this.isProcessingInfiniteScroll) {
+            this.scrolledToBottom();
         } else if (atTop) {
-            console.log('Top reached!!');
-            this.streamPositionnedAtTop = true;
+            this.scrolledToTop();
         }
+    }
+
+    private scrolledToTop() {
+        this.streamPositionnedAtTop = true;
+
+        this.loadBuffer();
+    }
+
+    private loadBuffer(){        
+        if(this.bufferWasCleared) {
+            this.statuses.length = 0;
+            this.bufferWasCleared = false;
+        }
+
+        for (const status of this.bufferStream) {
+            this.statuses.unshift(status); 
+        }
+
+        this.bufferStream.length = 0;
+    }
+
+    private scrolledToBottom() {
+        this.isProcessingInfiniteScroll = true;
+
+        const lastStatus = this.statuses[this.statuses.length - 1];
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.id)
+            .then((status: Status[]) => {
+                for (const s of status) {
+                    this.statuses.push(s);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .then(() => {
+                this.isProcessingInfiniteScroll = false;
+            });
     }
 
     private getRegisteredAccounts(): AccountInfo[] {
@@ -95,7 +134,11 @@ export class StreamComponent implements OnInit {
             if (update) {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.id == update.status.id)) {
-                        this.statuses.unshift(update.status);
+                        if (this.streamPositionnedAtTop) {
+                            this.statuses.unshift(update.status);
+                        } else {
+                            this.bufferStream.push(update.status);
+                        }
                     }
                 }
             }
@@ -104,11 +147,16 @@ export class StreamComponent implements OnInit {
         });
     }
 
+    
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 60) {
-            console.log(`clean up start! ${this.statuses.length}`);
             this.statuses.length = 40;
-            console.log(`clean up ends! ${this.statuses.length}`);
+        }
+
+        if (this.bufferStream.length > 60) {
+            this.bufferWasCleared = true;
+            this.bufferStream.length = 40;
+
         }
     }
 }

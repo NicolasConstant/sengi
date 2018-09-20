@@ -1,47 +1,56 @@
-.toot {
-    border: solid #06070b;
-    border-width: 0 0 1px 0;
+@import "variables";
+.status {
     margin: 0;
     padding: 0;
     width: calc(100%);
     min-height: 70px;
     overflow: hidden;
+    position: relative;
     &__avatar {
-        margin: 10px 0 0 10px;
+        position: absolute;
+        top: 10px;
+        left: 10px; // margin: 10px 0 0 10px;
         /* margin: 0; */
         width: 50px;
-        height: 50px;
-        float: left;
+        height: 50px; // float: left;
+        border-radius: 2px;
     }
     &__fullname {
-        color: white;
+        display: block;
+        color: $status-primary-color;
     }
     &__profile-link {
-        color: #353e64;
+        color: $status-secondary-color;
         margin: 7px 0 0 70px;
         display: block;
+        text-decoration: none;
+        overflow: hidden;
     }
     &__content {
         /*width: calc(100% - 50px);*/
-        margin: 10px 10px 10px 70px;
+        margin: 0px 10px 10px 70px;
     }
     &__content p {
         margin: 0;
         font-size: 0.85em;
     }
+    &__created-at {
+        color: $status-secondary-color;
+        position: absolute;
+        top: 5px;
+        right: 10px;
+    }
 }
 
-// #toot-avatar img {
-//   width: 50px;
-//   height: 50px;
-//   border-radius: 2px; 
-//   margin: 0;
-// }
-/* #toot-username {
-  color: grey;
-} */
-
-/* ::ng-deep .invisible {
-  display: inline;
-  color: red;
-} */
+//Mastodon styling
+:host ::ng-deep .status__content {
+    color: $status-primary-color;
+    & a,
+    .mention,
+    .ellipsis {
+        color: $status-links-color;
+    }
+    & .invisible {
+        display: none;
+    }
+}

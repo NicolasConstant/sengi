@@ -1,5 +1,9 @@
-<div class="toot">
-    <img class="toot__avatar" src="{{ status.account.avatar }}" />
-    <a href class="toot__profile-link"><span class="toot__fullname" innerHTML="{{status.account.display_name}}"></span> @<span id="toot-username" innerHTML="{{status.account.username}}"></span></a>
-    <div class="toot__content" innerHTML="{{status.content}}"></div>
-</div>
+<div class="status">
+    <a href class="status__profile-link" title="{{status.account.acct}}">
+        <img class="status__avatar" src="{{ status.account.avatar }}" />
+        <span class="status__fullname" innerHTML="{{status.account.display_name}}"></span>       
+        @<span id="status-username">{{status.account.acct}}</span>
+    </a>
+    <div class="status__created-at" title="{{ status.created_at | date: 'full' }}">{{ getCompactRelativeTime(status.created_at) }}</div>
+    <div class="status__content" innerHTML="{{status.content}}"></div>
+</div> 
