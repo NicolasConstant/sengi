@@ -8,7 +8,7 @@
         <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
         <span class="status__name">
             <span class="status__name--displayname" innerHTML="{{displayedStatus.account.display_name}}"></span><span
-                class="status__name--username">{{status.account.acct}}</span>
+                class="status__name--username">{{displayedStatus.account.acct}}</span>
         </span>
     </a>
     <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">{{
