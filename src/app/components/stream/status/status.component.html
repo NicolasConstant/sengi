@@ -15,6 +15,10 @@
         getCompactRelativeTime(status.created_at) }}</div>
     <div class="status__content" innerHTML="{{displayedStatus.content}}"></div>
 
+    <div *ngIf="hasAttachments" class="attachments">
+        <app-attachements [attachments]="displayedStatus.media_attachments"></app-attachements>
+    </div>
+
     <!-- <div class="status_galery">
         <p>
             status.reblog: {{status.reblog}} <br />

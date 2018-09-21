@@ -1,0 +1,11 @@
+.galery__image {
+    width: 100%;
+    max-height: 150px;
+    overflow: hidden;
+    border-radius: 2px;
+
+    &--1 {
+        width: 100%;
+        height: auto;
+    }
+}

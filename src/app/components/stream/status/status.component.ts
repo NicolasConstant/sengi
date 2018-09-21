@@ -12,6 +12,7 @@ import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
 export class StatusComponent implements OnInit {
     displayedStatus: Status;
     reblog: boolean;
+    hasAttachments: boolean;
 
     private _status: Status;
     @Input('status')
@@ -27,6 +28,10 @@ export class StatusComponent implements OnInit {
         
         if(!this.displayedStatus.account.display_name){
             this.displayedStatus.account.display_name = this.displayedStatus.account.username;
+        }
+
+        if(this.displayedStatus.media_attachments && this.displayedStatus.media_attachments.length > 0){
+            this.hasAttachments = true;
         }
 
         
