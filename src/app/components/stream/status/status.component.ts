@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Inject, LOCALE_ID } from "@angular/core";
 import { Status } from "../../../services/models/mastodon.interfaces";
 import { formatDate } from '@angular/common';
+import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
 
 
 @Component({
@@ -9,11 +10,35 @@ import { formatDate } from '@angular/common';
     styleUrls: ["./status.component.scss"]
 })
 export class StatusComponent implements OnInit {
-    @Input() status: Status;
+    displayedStatus: Status;
+    reblog: boolean;
+
+    private _status: Status;
+    @Input('status')
+    set status(value: Status) {
+        this._status = value;
+
+        if(this.status.reblog){
+            this.reblog = true;
+            this.displayedStatus = this._status.reblog;
+        } else {
+            this.displayedStatus = this._status;
+        }
+        
+        if(!this.displayedStatus.account.display_name){
+            this.displayedStatus.account.display_name = this.displayedStatus.account.username;
+        }
+
+        
+    }   
+    get status(): Status{
+        return this._status;
+    }
+   
 
     constructor(@Inject(LOCALE_ID) private locale: string) { }
 
-    ngOnInit() {
+    ngOnInit() {        
     }
 
     getCompactRelativeTime(d: string): string {
