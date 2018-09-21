@@ -1,4 +1,4 @@
-[![AppVeyor master](https://img.shields.io/appveyor/ci/NicolasConstant/sengi/master.svg?style=flat-square)](https://img.shields.io/appveyor/ci/NicolasConstant/sengi/master.svg) ![AppVeyor tests master](https://img.shields.io/appveyor/tests/nicolasconstant/sengi/master.svg?style=flat-square) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0)
+[![AppVeyor master](https://img.shields.io/appveyor/ci/NicolasConstant/sengi/master.svg?style=flat-square)](https://ci.appveyor.com/project/NicolasConstant/sengi) [![AppVeyor tests master](https://img.shields.io/appveyor/tests/nicolasconstant/sengi/master.svg?style=flat-square)](https://ci.appveyor.com/project/NicolasConstant/sengi/build/tests) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0)
  
 ## Introduction
 
