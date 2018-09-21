@@ -15,10 +15,28 @@
         height: 50px; // float: left;
         border-radius: 2px;
     }
-    &__fullname {
-        display: block;
-        color: $status-primary-color;
+    &__name{
+        display: inline-block;
+        width: calc(100% - 40px);
+        white-space: nowrap;
+        overflow: hidden;
+
+        // border: 1px dotted greenyellow;
+
+        &--displayname {
+            display: inline-block;
+            color: $status-primary-color;
+        }
+
+        &--username {
+            display: inline-block;
+            margin-left: 5px;
+            // position: relative;
+            // top: 1px;
+        }
     }
+
+    
     &__profile-link {
         color: $status-secondary-color;
         margin: 7px 0 0 70px;
@@ -37,8 +55,8 @@
     &__created-at {
         color: $status-secondary-color;
         position: absolute;
-        top: 5px;
-        right: 10px;
+        top: 7px;
+        right: 5px;
     }
 }
 
