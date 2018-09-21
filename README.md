@@ -12,7 +12,15 @@ Focus will be made on the following points:
 
 It will be released as a **browser webapp** and also packaged as an **cross-platform desktop application** (Mac, Windows, and Linux).
 
-## Fediverse accounts
+## State of development
+
+Sengi is at a very early development stage, a lot has to be done before a first pre-release. 
+
+## Screens
+
+soon™
+
+## Contact
 
   * [Official Sengi Account](https://mastodon.social/@sengi_app)
 
