@@ -12,7 +12,7 @@ export class AccountIconComponent implements OnInit {
   @Output() openMenuNotify = new EventEmitter<AccountWrapper>();
 
   isSelected: boolean = false;
-
+  
   constructor() { }
 
   ngOnInit() {   

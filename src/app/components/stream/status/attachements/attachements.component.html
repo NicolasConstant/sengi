@@ -1,0 +1,48 @@
+<div class="galery" *ngIf="isImage">
+    <div class="galery__image">
+
+        <a *ngIf="attachments.length === 1" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
+            target="_blank">
+            <img class="galery__image--1" src="{{ attachments[0].url }}" />
+        </a>
+
+        <a *ngIf="attachments.length === 2" class="galery__image--link-2" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[0].url }}" />
+        </a>
+        <a *ngIf="attachments.length === 2" class="galery__image--link-2" href="{{ attachments[1].url }}" title="{{ attachments[1].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[1].url }}" />
+        </a>
+
+        <a *ngIf="attachments.length === 3" class="galery__image--link-3-1" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[0].url }}" />
+        </a>
+        <a *ngIf="attachments.length === 3" class="galery__image--link-3-2" href="{{ attachments[1].url }}" title="{{ attachments[1].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[1].url }}" />
+        </a>
+        <a *ngIf="attachments.length === 3" class="galery__image--link-3-2" href="{{ attachments[2].url }}" title="{{ attachments[2].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[2].url }}" />
+        </a>
+
+        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[0].url }}" />
+        </a>
+        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[1].url }}" title="{{ attachments[1].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[1].url }}" />
+        </a>
+        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[2].url }}" title="{{ attachments[2].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[2].url }}" />
+        </a>
+        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[3].url }}" title="{{ attachments[3].text_url }}"
+            target="_blank">
+            <img src="{{ attachments[3].url }}" />
+        </a>
+    </div>
+</div>

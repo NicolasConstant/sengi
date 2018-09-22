@@ -111,7 +111,7 @@ export interface Status {
   account: Account;
   in_reply_to_id: string;
   in_reply_to_account_id: string;
-  reblog: string;
+  reblog: Status;
   content: string;
   created_at: string;
   reblogs_count: string;
@@ -121,7 +121,7 @@ export interface Status {
   sensitive: string;
   spoiler_text: string;
   visibility: string;
-  media_attachments: string;
+  media_attachments: Attachment[];
   mentions: string;
   tags: string;
   application: Application;

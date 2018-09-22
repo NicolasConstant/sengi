@@ -28,6 +28,7 @@ import { MessageEditorComponent } from './components/floating-column/message-edi
 import { StreamsState } from "./states/streams.state";
 import { StatusComponent } from "./components/stream/status/status.component";
 import { MastodonService } from "./services/mastodon.service";
+import { AttachementsComponent } from './components/stream/status/attachements/attachements.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -48,7 +49,8 @@ const routes: Routes = [
     AccountIconComponent,
     FloatingColumnComponent,
     ColumnsEditorComponent,
-    MessageEditorComponent
+    MessageEditorComponent,
+    AttachementsComponent
   ],
   imports: [
     BrowserModule,
