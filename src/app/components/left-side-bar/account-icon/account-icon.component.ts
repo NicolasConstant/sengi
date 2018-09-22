@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { AccountWrapper } from '../../../../models/account.models';
+import { AccountWrapper } from '../../../models/account.models';
 
 @Component({
   selector: 'app-account-icon',
