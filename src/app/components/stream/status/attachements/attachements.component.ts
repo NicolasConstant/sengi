@@ -7,9 +7,9 @@ import { Attachment } from '../../../../services/models/mastodon.interfaces';
     styleUrls: ['./attachements.component.scss']
 })
 export class AttachementsComponent implements OnInit {
-    private _attachments: Attachment[];
+    private _attachments: Attachment[]; 
     isImage: boolean;
-    imageUrl: string;
+    imageUrls: string[];
 
     @Input('attachments')
     set attachments(value: Attachment[]) {
@@ -17,7 +17,7 @@ export class AttachementsComponent implements OnInit {
 
         if(this._attachments[0].type === 'image'){
             this.isImage = true;
-            this.imageUrl = this._attachments[0].url;
+            // this.imageUrls = this._attachments.map(x => x.url);
         }
     }
     get attachments(): Attachment[] {
