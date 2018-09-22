@@ -1,9 +1,8 @@
 <div class="left-bar">
-    <a class="left-bar-button left-bar-button--status left-bar-link" href title="write new message" (click)="createNewToot()">
-        <!-- <span class="ion ion-md-paper-plane" style="font-size: 32px;"></span> -->
+    <a class="left-bar-button left-bar-button--status left-bar-link" href title="write new message" (click)="createNewStatus()">
         <span class="ion ion-md-send" style="font-size: 32px;"></span>
     </a>
-    <a class="left-bar-button left-bar-button--search left-bar-link" href title="search" (click)="createNewToot()">
+    <a class="left-bar-button left-bar-button--search left-bar-link" href title="search" (click)="openSearch()">
         <span class="ion ion-md-search" style="font-size: 32px;"></span>
     </a>
 
@@ -14,11 +13,11 @@
         <!-- <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a> -->
     </div>
 
-    <a class="left-bar-button left-bar-button--add  left-bar-link" href title="add new account" [routerLink]="['/register']">
+    <a class="left-bar-button left-bar-button--add  left-bar-link" href title="add new account" (click)="addNewAccount()">
         <span class="ion ion-md-add" style="font-size:26px;"></span>
     </a>
 
-    <a class="left-bar-button left-bar-button--cog left-bar-link" href title="settings" (click)="createNewToot()">
+    <a class="left-bar-button left-bar-button--cog left-bar-link" href title="settings" (click)="openSettings()">
         <span class="ion ion-md-cog" style="font-size: 32px;"></span>
     </a>
 </div>

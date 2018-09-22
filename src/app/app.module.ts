@@ -23,12 +23,15 @@ import { AccountsState } from "./states/accounts.state";
 import { AccountIconComponent } from './components/left-side-bar/account-icon/account-icon.component';
 import { NavigationService } from "./services/navigation.service";
 import { FloatingColumnComponent } from './components/floating-column/floating-column.component';
-import { ColumnsEditorComponent } from './components/floating-column/columns-editor/columns-editor.component';
-import { MessageEditorComponent } from './components/floating-column/message-editor/message-editor.component';
 import { StreamsState } from "./states/streams.state";
 import { StatusComponent } from "./components/stream/status/status.component";
 import { MastodonService } from "./services/mastodon.service";
 import { AttachementsComponent } from './components/stream/status/attachements/attachements.component';
+import { SettingsComponent } from './components/floating-column/settings/settings.component';
+import { AddNewAccountComponent } from './components/floating-column/add-new-account/add-new-account.component';
+import { SearchComponent } from './components/floating-column/search/search.component';
+import { AddNewStatusComponent } from "./components/floating-column/add-new-status/add-new-status.component";
+import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -48,9 +51,12 @@ const routes: Routes = [
     RegisterNewAccountComponent,
     AccountIconComponent,
     FloatingColumnComponent,
-    ColumnsEditorComponent,
-    MessageEditorComponent,
-    AttachementsComponent
+    ManageAccountComponent,
+    AddNewStatusComponent,
+    AttachementsComponent,
+    SettingsComponent,
+    AddNewAccountComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

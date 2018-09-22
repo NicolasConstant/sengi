@@ -5,11 +5,11 @@ import { AccountsStateModel, AccountInfo } from '../../../states/accounts.state'
 import { AccountWrapper } from '../../../models/account.models';
 
 @Component({
-  selector: 'app-columns-editor',
-  templateUrl: './columns-editor.component.html',
-  styleUrls: ['./columns-editor.component.scss']
+  selector: 'app-manage-account',
+  templateUrl: './manage-account.component.html',
+  styleUrls: ['./manage-account.component.scss']
 })
-export class ColumnsEditorComponent implements OnInit {
+export class ManageAccountComponent implements OnInit {
   @Input() account: AccountWrapper;
 
   availableStreams: StreamElement[] = [];
