@@ -1,12 +1,13 @@
 @import "variables";
+@import "panel";
 .account-editor {
-    padding: 10px 10px 0 7px;
-    font-size: $small-font-size;
-    &__title {
-        font-size: 13px;
-        text-transform: uppercase;
-        margin: 6px 0 12px 0;
-    }
+    // padding: 10px 10px 0 7px;
+    // font-size: $small-font-size;
+    // &__title {
+    //     font-size: 13px;
+    //     text-transform: uppercase;
+    //     margin: 6px 0 12px 0;
+    // }
     &__display-avatar {
         text-align: center;
         margin-bottom: 30px;

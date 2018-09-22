@@ -34,3 +34,7 @@ export class AuthService {
         return this.httpClient.post<AppData>(url, formData).toPromise();
     }
 }
+
+export class CurrentAuthProcess {
+    constructor(public username: string, public instance: string) { }
+}
