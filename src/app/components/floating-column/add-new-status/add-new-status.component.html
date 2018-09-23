@@ -1,6 +1,19 @@
 <div class="panel">
     <h3 class="panel__title">new message</h3>
 
+    <form (ngSubmit)="onSubmit()">
+        <!-- <label>Please provide your account:</label> -->
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="titleHandle" name="titleHandle" autocomplete="off" placeholder="Title (optional)" />
+        <!-- <textarea rows="4" cols="50"> -->
+        <textarea class="form-control form-control-sm" style="min-width: 100%" rows="5"  placeholder="What's in your mind?"></textarea>
+        <select class="form-control form-control-sm form-control--privacy" id="privacyHandle">
+            <option>Public</option>
+            <option>Unlisted</option>
+            <option>Follows-only</option>
+            <option>DM</option>
+          </select>
+          <button type="submit" class="btn btn-sm btn-custom-primary">TOOT!</button>
+    </form>
 
 
 </div>

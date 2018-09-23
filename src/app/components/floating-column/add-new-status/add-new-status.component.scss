@@ -1,2 +1,35 @@
 @import "variables";
 @import "panel";
+@import "buttons";
+
+$btn-send-status-width: 60px;
+
+.form-control { 
+    margin-bottom: 5px;
+
+    &--privacy{
+        display: inline-block; 
+        width: calc(100% - 5px - #{$btn-send-status-width});
+    }
+}
+
+.btn-custom-primary {
+    display: inline-block;
+    width: $btn-send-status-width;
+    position: relative;
+    top: -1px;
+    left: 5px;
+    // background-color: orange;
+    // border-color: orange;
+    // color: black;
+    font-weight: 500;
+
+    // &:hover {
+
+    // }
+
+    // &:focus {
+    //     border-color: darkblue;
+    // }
+}
+
