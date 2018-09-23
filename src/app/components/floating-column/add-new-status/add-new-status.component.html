@@ -5,7 +5,7 @@
         <!-- <label>Please provide your account:</label> -->
         <input type="text" class="form-control form-control-sm" [(ngModel)]="titleHandle" name="titleHandle" autocomplete="off" placeholder="Title (optional)" />
         <!-- <textarea rows="4" cols="50"> -->
-        <textarea class="form-control form-control-sm" style="min-width: 100%" rows="5"  placeholder="What's in your mind?"></textarea>
+        <textarea class="form-control form-control-sm" style="min-width: 100%" rows="5" [(ngModel)]="statusHandle"  placeholder="What's in your mind?"></textarea>
         <select class="form-control form-control-sm form-control--privacy" id="privacyHandle">
             <option>Public</option>
             <option>Unlisted</option>
