@@ -21,7 +21,6 @@
               "src/favicon.ico"
             ],
             "styles": [            
-              "./node_modules/ionicons/dist/scss/ionicons.scss",
               "src/sass/styles.scss"
             ],
             "stylePreprocessorOptions": {

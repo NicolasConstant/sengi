@@ -2,7 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { NgxElectronModule } from "ngx-electron";
@@ -74,6 +74,7 @@ const routes: Routes = [
     NgxsStoragePluginModule.forRoot()
   ],
   providers: [AuthService, NavigationService, MastodonService, StreamingService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
