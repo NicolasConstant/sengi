@@ -33,8 +33,6 @@ export class RegisterNewAccountComponent implements OnInit {
             if (!appDataWrapper) return;
 
             const appInfo = this.getAllSavedApps().filter(x => x.instance === appDataWrapper.instance)[0];
-            console.warn('appInfo');
-            console.warn(appInfo);
 
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {

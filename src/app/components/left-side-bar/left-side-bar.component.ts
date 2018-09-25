@@ -4,7 +4,7 @@ import { Store } from "@ngxs/store";
 
 import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
-import { AccountsStateModel, AccountInfo } from "../../states/accounts.state";
+import { AccountsStateModel, AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { MastodonService } from "../../services/mastodon.service";
 
@@ -16,9 +16,9 @@ import { MastodonService } from "../../services/mastodon.service";
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
     accounts: AccountWrapper[] = [];
-    accounts$: Observable<AccountInfo[]>;
+    private accounts$: Observable<AccountInfo[]>;
 
-    private loadedAccounts: { [index: string]: AccountInfo } = {};
+    // private loadedAccounts: { [index: string]: AccountInfo } = {};
     private sub: Subscription;
 
     constructor(
@@ -33,19 +33,26 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
-                this.loadedAccounts = {};
-                this.accounts.length = 0;
 
                 for (let acc of accounts) {
-                    const accWrapper = new AccountWrapper();
-                    accWrapper.username = `${acc.username}@${acc.instance}`;
-                    this.accounts.push(accWrapper);
-                    this.loadedAccounts[accWrapper.username] = acc;
+                    const previousAcc = this.accounts.find(x => x.info.id === acc.id)
+                    if (previousAcc) {
+                        previousAcc.info.isSelected = acc.isSelected;
+                    } else {
+                        const accWrapper = new AccountWrapper();
+                        accWrapper.info = acc;
 
-                    this.mastodonService.retrieveAccountDetails(acc)
-                        .then((result: Account) => {
-                            accWrapper.avatar = result.avatar;
-                        });
+                        this.accounts.push(accWrapper);
+
+                        this.mastodonService.retrieveAccountDetails(acc)
+                            .then((result: Account) => {
+                                accWrapper.avatar = result.avatar;
+                            });
+                    }
+
+                    //TODO: see when deleted
+
+
                 }
             }
         });
@@ -56,11 +63,12 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
-        console.warn(`onToogleAccountNotify username ${acc.username}`);
+        console.warn(`onToogleAccountNotify username ${acc.info.username}`);
+        this.store.dispatch([new SelectAccount(acc.info)]);
     }
 
     onOpenMenuNotify(acc: AccountWrapper) {
-        console.warn(`onOpenMenuNotify username ${acc.username}`);
+        console.warn(`onOpenMenuNotify username ${acc.info.username}`);
         this.navigationService.openColumnEditor(acc);
     }
 
@@ -73,7 +81,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.navigationService.openPanel(LeftPanelType.Search);
         return false;
     }
-    
+
     addNewAccount(): boolean {
         this.navigationService.openPanel(LeftPanelType.AddNewAccount);
         return false;

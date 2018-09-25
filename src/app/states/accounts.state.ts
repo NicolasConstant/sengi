@@ -24,9 +24,12 @@ export interface AccountsStateModel {
 export class AccountsState {
     @Action(AddAccount)
     AddAccount(ctx: StateContext<AccountsStateModel>, action: AddAccount) {
+        const newAcc = action.account;
+        newAcc.id = `${newAcc.username}@${newAcc.instance}`;
+
         const state = ctx.getState();
         ctx.patchState({
-            accounts: [...state.accounts, action.account]
+            accounts: [...state.accounts, newAcc]
         });
     }
 
@@ -35,22 +38,26 @@ export class AccountsState {
         const state = ctx.getState();
         const multiSelection = action.multiselection;
         const selectedAccount = action.account;
-        const accounts = [...state.accounts];
+        const copyAccounts = [...state.accounts];
         if(!multiSelection) {
-            accounts.forEach(x => x.isSelected = false);
+            copyAccounts
+                .filter(x => x.id !== selectedAccount.id)
+                .forEach(x => x.isSelected = false);
         }
-        const acc = accounts.find(x => x.username === selectedAccount.username && x.instance === selectedAccount.instance);
+        const acc = copyAccounts.find(x => x.id === selectedAccount.id);
         acc.isSelected = !acc.isSelected;
 
         ctx.patchState({
-            accounts: accounts
+            accounts: copyAccounts
         });
     }
 }
 
 export class AccountInfo { 
+    id: string;
+    order: number;
     username: string;
     instance: string;
     token: TokenData;
-    isSelected: boolean;
+    isSelected: boolean;    
 }

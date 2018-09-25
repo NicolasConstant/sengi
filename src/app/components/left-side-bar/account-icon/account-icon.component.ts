@@ -11,8 +11,6 @@ export class AccountIconComponent implements OnInit {
   @Output() toogleAccountNotify = new EventEmitter<AccountWrapper>();
   @Output() openMenuNotify = new EventEmitter<AccountWrapper>();
 
-  isSelected: boolean = false;
-  
   constructor() { }
 
   ngOnInit() {   
@@ -20,7 +18,6 @@ export class AccountIconComponent implements OnInit {
 
   toogleAccount(): boolean {
     this.toogleAccountNotify.emit(this.account);
-    this.isSelected = !this.isSelected;
     return false;
   }
 

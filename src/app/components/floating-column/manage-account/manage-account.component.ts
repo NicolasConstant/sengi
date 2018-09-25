@@ -18,9 +18,9 @@ export class ManageAccountComponent implements OnInit {
 
   ngOnInit() {
     this.availableStreams.length = 0;
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.account.username));
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.username));
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.account.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.account.info.id));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.info.id));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.account.info.id));
   }
 
   addStream(stream: StreamElement): boolean {
