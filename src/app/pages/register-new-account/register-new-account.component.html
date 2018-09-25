@@ -1,22 +1,32 @@
-<div class="col-xs-12 col-sm-6">
-  <br/>
-  <a class="btn btn-info btn-sm" href title="close" [routerLink]="['/home']" role="button" style="float: right;">close</a>
-  <h3>Add new account</h3>
-  <br/>
-  <!-- <form (ngSubmit)="onSubmit()">
-    <label>Mastodon account</label>
-    <input type="text" class="form-control form-control-sm" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle" placeholder="@nickname@mastodon.social"/>
-    <br/>
-    <button type="submit" class="btn btn-success btn-sm">Submit</button>
-  </form> -->
+<div class="registering-account">
+    <div *ngIf="!hasError" class="registering-account__waiting">
+        <p>loading...</p>
+    </div>
+    <div *ngIf="hasError" class="registering-account__error">
+        <h3>Oooops!</h3>
+        <p>
+            {{ errorMessage }}
+        </p> 
 
-  <!-- <p>
-    <br/>
-    <br/> Result:
-    <br/> {{ result }}
-  </p> -->
-
-  {{ result }}
-
-
+        <a class="btn btn-info btn-sm" href title="close" [routerLink]="['/home']" role="button" style="float: right;">Quit</a>
+    </div>
 </div>
+
+
+<!-- 
+<div class="col-xs-12 col-sm-6">
+    <br />
+    <h3>Adding new account...</h3>
+    <h4>please wait</h4>
+
+
+
+    <a class="btn btn-info btn-sm" href title="close" [routerLink]="['/home']" role="button" style="float: right;">close</a>
+
+    <br />
+   
+
+    {{ result }}
+
+
+</div> -->

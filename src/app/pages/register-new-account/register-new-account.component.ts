@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Store, Select } from '@ngxs/store';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 
 import { AuthService, CurrentAuthProcess } from "../../services/auth.service";
@@ -16,21 +16,32 @@ import { MastodonService } from "../../services/mastodon.service";
 })
 export class RegisterNewAccountComponent implements OnInit {
     @Input() mastodonFullHandle: string;
-    result: string;
+
+    hasError: boolean;
+    errorMessage: string;
 
     private authStorageKey: string = 'tempAuth';
 
     constructor(
         private readonly authService: AuthService,
         private readonly store: Store,
-        private readonly activatedRoute: ActivatedRoute) {
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly router: Router) {
 
         this.activatedRoute.queryParams.subscribe(params => {
+            this.hasError = false;
+
             const code = params['code'];
-            if (!code) return;
+            if (!code) {
+                this.displayError(RegistrationErrorTypes.CodeNotFound);
+                return;
+            }
 
             const appDataWrapper = <CurrentAuthProcess>JSON.parse(localStorage.getItem(this.authStorageKey));
-            if (!appDataWrapper) return;
+            if (!appDataWrapper) {
+                this.displayError(RegistrationErrorTypes.AuthProcessNotFound);
+                return;
+            }
 
             const appInfo = this.getAllSavedApps().filter(x => x.instance === appDataWrapper.instance)[0];
 
@@ -44,6 +55,7 @@ export class RegisterNewAccountComponent implements OnInit {
                     this.store.dispatch([new AddAccount(accountInfo)])
                         .subscribe(() => {
                             localStorage.removeItem(this.authStorageKey);
+                            this.router.navigate(['/home']);
                         });
                 });
         });
@@ -52,8 +64,25 @@ export class RegisterNewAccountComponent implements OnInit {
     ngOnInit() {
     }
 
+    private displayError(type: RegistrationErrorTypes) {
+        this.hasError = true;
+        switch (type) {
+            case RegistrationErrorTypes.AuthProcessNotFound:
+                this.errorMessage = 'Something when wrong in the authentication process. Please retry.'
+                break;
+            case RegistrationErrorTypes.CodeNotFound:
+                this.errorMessage = 'No authentication code returned. Please retry.'
+                break;
+        }
+    }
+
     private getAllSavedApps(): AppInfo[] {
         const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;
         return snapshot.apps;
     }
+}
+
+enum RegistrationErrorTypes {
+    CodeNotFound,
+    AuthProcessNotFound
 }
