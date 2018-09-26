@@ -67,4 +67,9 @@ export class AddNewStatusComponent implements OnInit {
         var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         return regAccounts;
     }
+
+    onCtrlEnter(): boolean {
+        this.onSubmit();
+        return false;
+    }
 }

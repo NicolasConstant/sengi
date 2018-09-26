@@ -6,8 +6,8 @@
         <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off"
             placeholder="Title (optional)" />
         <!-- <textarea rows="4" cols="50"> -->
-        <textarea [(ngModel)]="status" name="status" class="form-control form-control-sm" style="min-width: 100%" rows="5"
-            required placeholder="What's in your mind?"></textarea>
+        <textarea [(ngModel)]="status" name="status" class="form-control form-control-sm" style="min-width: 100%" rows="5" required placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
+
         <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy" [(ngModel)]="selectedPrivacy">
             <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
         </select>
