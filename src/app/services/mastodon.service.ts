@@ -67,4 +67,24 @@ export class MastodonService {
         var regEx = new RegExp("^[" + charToTrim + "]+|[" + charToTrim + "]+$", "g");
         return origString.replace(regEx, "");
     };
+
+
+    postNewStatus(account: AccountInfo, status:string): Promise<Status>{
+        const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
+
+        const formData = new FormData();
+
+        formData.append('status', status);
+        // formData.append('in_reply_to_id', in_reply_to_id);
+        // formData.append('media_ids', media_ids);
+        // formData.append('sensitive', sensitive);
+        // formData.append('sensitive', sensitive);
+        // formData.append('spoiler_text', spoiler_text);
+        formData.append('visibility', 'direct');
+        // formData.append('language', '');
+        
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+
+        return this.httpClient.post<Status>(url, formData, { headers: headers }).toPromise();
+    }
 }
