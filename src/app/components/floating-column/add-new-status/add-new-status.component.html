@@ -3,16 +3,15 @@
 
     <form (ngSubmit)="onSubmit()">
         <!-- <label>Please provide your account:</label> -->
-        <input [(ngModel)]="titleHandle" type="text" class="form-control form-control-sm" name="titleHandle" autocomplete="off" placeholder="Title (optional)" />
+        <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off"
+            placeholder="Title (optional)" />
         <!-- <textarea rows="4" cols="50"> -->
-        <textarea [(ngModel)]="statusHandle" name="statusHandle" class="form-control form-control-sm" style="min-width: 100%" rows="5" required  placeholder="What's in your mind?"></textarea>
-        <select class="form-control form-control-sm form-control--privacy" id="privacyHandle">
-            <option>Public</option>
-            <option>Unlisted</option>
-            <option>Follows-only</option>
-            <option>DM</option>
-          </select>
-          <button type="submit" class="btn btn-sm btn-custom-primary">TOOT!</button>
+        <textarea [(ngModel)]="status" name="status" class="form-control form-control-sm" style="min-width: 100%" rows="5"
+            required placeholder="What's in your mind?"></textarea>
+        <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy" [(ngModel)]="selectedPrivacy">
+            <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
+        </select>
+        <button type="submit" class="btn btn-sm btn-custom-primary">TOOT!</button>
     </form>
 
 

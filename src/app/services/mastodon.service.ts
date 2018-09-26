@@ -61,7 +61,7 @@ export class MastodonService {
         // Escape special characters for use in a regular expression
         return strToEscape.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     };
-    
+
     private trimChar(origString, charToTrim) {
         charToTrim = this.escapeRegExp(charToTrim);
         var regEx = new RegExp("^[" + charToTrim + "]+|[" + charToTrim + "]+$", "g");
@@ -69,22 +69,53 @@ export class MastodonService {
     };
 
 
-    postNewStatus(account: AccountInfo, status:string): Promise<Status>{
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
         const formData = new FormData();
 
         formData.append('status', status);
-        // formData.append('in_reply_to_id', in_reply_to_id);
+
         // formData.append('media_ids', media_ids);
-        // formData.append('sensitive', sensitive);
-        // formData.append('sensitive', sensitive);
-        // formData.append('spoiler_text', spoiler_text);
-        formData.append('visibility', 'direct');
         // formData.append('language', '');
-        
+
+        if (in_reply_to_id) {
+            formData.append('in_reply_to_id', in_reply_to_id);
+        }
+
+        if (spoiler) {
+            formData.append('sensitive', 'true');
+            formData.append('spoiler_text', spoiler);
+        }
+
+        switch (visibility) {
+            case VisibilityEnum.Public:
+                formData.append('visibility', 'public');
+                break;
+            case VisibilityEnum.Unlisted:
+                formData.append('visibility', 'unlisted');
+                break;
+            case VisibilityEnum.Private:
+                formData.append('visibility', 'private');
+                break;
+            case VisibilityEnum.Direct:
+                formData.append('visibility', 'direct');
+                break;
+            default:
+                formData.append('visibility', 'private');
+                break;
+        }
+
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
 
         return this.httpClient.post<Status>(url, formData, { headers: headers }).toPromise();
     }
+}
+
+export enum VisibilityEnum {
+    Unknown = 0,
+    Public = 1,
+    Unlisted = 2,
+    Private = 3,
+    Direct = 4
 }

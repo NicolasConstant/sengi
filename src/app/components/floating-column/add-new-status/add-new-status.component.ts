@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { AccountInfo } from '../../../states/accounts.state';
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonService, VisibilityEnum } from '../../../services/mastodon.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
 import { FormsModule } from '@angular/forms';
 
@@ -11,9 +11,12 @@ import { FormsModule } from '@angular/forms';
     styleUrls: ['./add-new-status.component.scss']
 })
 export class AddNewStatusComponent implements OnInit {
-    @Input() titleHandle: string;  
-    @Input() statusHandle: string;       
-    
+    @Input() title: string;
+    @Input() status: string;
+
+    selectedPrivacy = 'Public';
+    privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
+
     constructor(private readonly store: Store,
         private readonly mastodonService: MastodonService) { }
 
@@ -25,12 +28,35 @@ export class AddNewStatusComponent implements OnInit {
         const selectedAccounts = accounts.filter(x => x.isSelected);
 
         console.warn(`selectedAccounts ${selectedAccounts.length}`);
-        console.warn(`statusHandle ${this.statusHandle}`);
+        console.warn(`statusHandle ${this.status}`);
+
+        let visibility: VisibilityEnum = VisibilityEnum.Unknown;
+        switch (this.selectedPrivacy) {
+            case 'Public':
+                visibility = VisibilityEnum.Public;
+                break;
+            case 'Unlisted':
+                visibility = VisibilityEnum.Unlisted;
+                break;
+            case 'Follows-only':
+                visibility = VisibilityEnum.Private;
+                break;
+            case 'DM':
+                visibility = VisibilityEnum.Direct;
+                break;
+        }
+
+        let spoiler = this.title;
+        if(spoiler === '') {
+            spoiler = null;
+        }
 
         for (const acc of selectedAccounts) {
-            this.mastodonService.postNewStatus(acc, this.statusHandle)
+            this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler)
                 .then((res: Status) => {
                     console.log(res);
+                    this.title = '';
+                    this.status = '';
                 });
         }
 
