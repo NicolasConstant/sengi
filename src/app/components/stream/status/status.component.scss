@@ -1,26 +1,22 @@
 @import "variables";
+$avatar-column-space: 70px;
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;
     font-size: 12px;
     color: $status-secondary-color;
-
     &__profile-link {
-        color: $status-secondary-color;
-        // margin: 7px 0 0 70px;
+        color: $status-secondary-color; // margin: 7px 0 0 70px;
         // display: block;
-        text-decoration: none;
-        // overflow: hidden;
-
+        text-decoration: none; // overflow: hidden;
         &:hover {
             color: lighten($status-secondary-color, 20);
         }
     }
-
-    &__avatar{
+    &__avatar {
         position: absolute;
         top: 50px;
-        left: 20px; 
+        left: 20px;
         width: 30px;
         height: 30px;
         border-radius: 2px;
@@ -43,15 +39,14 @@
         width: 50px;
         height: 50px; // float: left;
         border-radius: 2px;
-
-        &--boosted{
+        &--boosted {
             position: absolute;
             top: 10px;
-            left: 10px; 
+            left: 10px;
             width: 40px;
             height: 40px;
             border-radius: 2px;
-        }       
+        }
     }
     &__name {
         display: inline-block;
@@ -70,18 +65,18 @@
     }
     &__profile-link {
         color: $status-secondary-color;
-        margin: 7px 0 0 70px;
+        margin: 7px 0 0 $avatar-column-space;
         display: block;
         text-decoration: none;
         overflow: hidden;
-
         &:hover {
             color: lighten($status-secondary-color, 20);
         }
     }
     &__content {
         /*width: calc(100% - 50px);*/
-        margin: 0px 10px 10px 70px;
+        word-wrap: break-word;
+        margin: 0px 10px 10px $avatar-column-space;
     }
     &__content p {
         margin: 0;
@@ -108,7 +103,22 @@
     }
 }
 
-.attachments{
+.attachments {
     width: calc(100% - 80px);
-    margin: 0px 10px 10px 70px;
+    margin: 0px 10px 10px $avatar-column-space;
+}
+
+.action-bar {
+    // outline: 1px solid greenyellow; // height: 20px;
+    margin: 0px 10px 10px $avatar-column-space;
+    font-size: 24px;
+    &__link {
+        color: $status-secondary-color;
+        &:hover {
+            color: $status-links-color;
+        }
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+    }
 }
