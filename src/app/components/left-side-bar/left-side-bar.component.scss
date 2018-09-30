@@ -1,20 +1,57 @@
 @import "variables";
+$width-button: 50px;
+$height-button: 40px;
 .left-bar {
-    width: 50px;
+    width: $width-button;
     height: calc(100%);
     background: $color-secondary;
+    position: relative;    
 }
 
-.create-toot {
-    width: 50px;
-    &__link {
-        font-size: 0.8em;
-        margin: 0 0 0 10px;
+.left-bar-link {
+    color: $font-link-primary;
+    text-decoration: none;
+    &:hover {
+        color: $font-link-primary-hover;
+    }
+}
+
+.left-bar-button {
+    font-size: 32px;
+    display: block;
+    width: $width-button;
+    height: $height-button;
+    transition: all .2s;
+    // outline: 1px dotted greenyellow;
+    &--status {
+        padding: 5px 0 0 10px;
+    }
+    &--search {
+        padding: 0 0 0 9px;
+    }
+    &--add {
+        padding: 0 0 0 12px;
+        font-size: 26px;
+    }
+    &--cog {
+        padding: 2px 0 0 9px;
+        position: absolute;
+        bottom: 7px;
+        opacity: .2;        
+        transition: all .3s;
+        filter: alpha(opacity=20);
+        
+        // color:  darken($font-link-primary, 30);
+
+        &:hover{
+            filter: alpha(opacity=100);
+            opacity: 1;
+        }
     }
 }
 
 .add-account {
-    width: 50px;
+    width: $width-button;
     height: 30px;
     padding-top: 7px;
     &__link {
@@ -25,10 +62,3 @@
     }
 }
 
-.left-bar-link {
-    color: $font-link-primary;
-    text-decoration: none;
-    &:hover {
-        color: $font-link-primary-hover;
-    }
-}

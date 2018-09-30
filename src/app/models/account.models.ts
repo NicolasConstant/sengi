@@ -1,12 +1,14 @@
-import { Account } from "../services/models/mastodon.interfaces";
+import { AccountInfo } from "../states/accounts.state";
 
 
 export class AccountWrapper {
   constructor() {
   }
 
-  id: number;
-  username: string;
-  display_name: string;
+//   id: number;
+//   username: string;
+//   display_name: string;
+
+  info: AccountInfo;
   avatar: string;
 }

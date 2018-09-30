@@ -5,11 +5,11 @@ import { AccountsStateModel, AccountInfo } from '../../../states/accounts.state'
 import { AccountWrapper } from '../../../models/account.models';
 
 @Component({
-  selector: 'app-columns-editor',
-  templateUrl: './columns-editor.component.html',
-  styleUrls: ['./columns-editor.component.scss']
+  selector: 'app-manage-account',
+  templateUrl: './manage-account.component.html',
+  styleUrls: ['./manage-account.component.scss']
 })
-export class ColumnsEditorComponent implements OnInit {
+export class ManageAccountComponent implements OnInit {
   @Input() account: AccountWrapper;
 
   availableStreams: StreamElement[] = [];
@@ -18,9 +18,9 @@ export class ColumnsEditorComponent implements OnInit {
 
   ngOnInit() {
     this.availableStreams.length = 0;
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.account.username));
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.username));
-    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.account.username));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Global Timeline', this.account.info.id));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.info.id));
+    this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Personnal Timeline', this.account.info.id));
   }
 
   addStream(stream: StreamElement): boolean {

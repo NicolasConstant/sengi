@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Store, Select } from '@ngxs/store';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 
-import { AuthService } from "../../services/auth.service";
+import { AuthService, CurrentAuthProcess } from "../../services/auth.service";
 import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
 import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
 import { AccountInfo, AddAccount } from "../../states/accounts.state";
@@ -16,28 +16,34 @@ import { MastodonService } from "../../services/mastodon.service";
 })
 export class RegisterNewAccountComponent implements OnInit {
     @Input() mastodonFullHandle: string;
-    result: string;
-    // registeredApps$: Observable<RegisteredAppsStateModel>;
+
+    hasError: boolean;
+    errorMessage: string;
 
     private authStorageKey: string = 'tempAuth';
 
     constructor(
         private readonly authService: AuthService,
         private readonly store: Store,
-        private readonly activatedRoute: ActivatedRoute) {
-
-        // this.registeredApps$ = this.store.select(state => state.registeredapps.registeredApps);
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly router: Router) {
 
         this.activatedRoute.queryParams.subscribe(params => {
+            this.hasError = false;
+
             const code = params['code'];
-            if (!code) return;
+            if (!code) {
+                this.displayError(RegistrationErrorTypes.CodeNotFound);
+                return;
+            }
 
             const appDataWrapper = <CurrentAuthProcess>JSON.parse(localStorage.getItem(this.authStorageKey));
-            if (!appDataWrapper) return;
+            if (!appDataWrapper) {
+                this.displayError(RegistrationErrorTypes.AuthProcessNotFound);
+                return;
+            }
 
             const appInfo = this.getAllSavedApps().filter(x => x.instance === appDataWrapper.instance)[0];
-            console.warn('appInfo');
-            console.warn(appInfo);
 
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
@@ -49,83 +55,34 @@ export class RegisterNewAccountComponent implements OnInit {
                     this.store.dispatch([new AddAccount(accountInfo)])
                         .subscribe(() => {
                             localStorage.removeItem(this.authStorageKey);
+                            this.router.navigate(['/home']);
                         });
                 });
-
         });
-
     }
 
     ngOnInit() {
-        // this.registeredApps$.subscribe(x => {
-        //   console.error('registeredApps$')
-        //   console.warn(x);
-        // });
     }
 
-    onSubmit(): boolean {
-        let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
-
-        const username = fullHandle[0];
-        const instance = fullHandle[1];
-
-        this.checkAndCreateApplication(instance)
-            .then((appData: AppData) => {
-                this.redirectToInstanceAuthPage(username, instance, appData);
-            });
-
-        return false;
-    }
-
-    private checkAndCreateApplication(instance: string): Promise<AppData> {
-        const alreadyRegisteredApps = this.getAllSavedApps();
-        const instanceApps = alreadyRegisteredApps.filter(x => x.instance === instance);
-
-        if (instanceApps.length !== 0) {
-            console.log('instance already registered');
-            return Promise.resolve(instanceApps[0].app);
-        } else {
-            console.log('instance not registered');
-            const redirect_uri = this.getLocalHostname() + '/register';
-            return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://github.com/NicolasConstant/sengi')
-                .then((appData: AppData) => {
-                    return this.saveNewApp(instance, appData)
-                        .then(() => { return appData; });
-                })
+    private displayError(type: RegistrationErrorTypes) {
+        this.hasError = true;
+        switch (type) {
+            case RegistrationErrorTypes.AuthProcessNotFound:
+                this.errorMessage = 'Something when wrong in the authentication process. Please retry.'
+                break;
+            case RegistrationErrorTypes.CodeNotFound:
+                this.errorMessage = 'No authentication code returned. Please retry.'
+                break;
         }
-    }
-
-    private getLocalHostname(): string {
-        let localHostname = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
-        return localHostname;
     }
 
     private getAllSavedApps(): AppInfo[] {
         const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;
         return snapshot.apps;
     }
-
-    private saveNewApp(instance: string, app: AppData): Promise<any> {
-        const appInfo = new AppInfo();
-        appInfo.instance = instance;
-        appInfo.app = app;
-
-        return this.store.dispatch([
-            new AddRegisteredApp(appInfo)
-        ]).toPromise();
-    }
-
-    private redirectToInstanceAuthPage(username: string, instance: string, app: AppData) {
-        const appDataTemp = new CurrentAuthProcess(username, instance);
-        localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
-
-        let instanceUrl = this.authService.getInstanceLoginUrl(instance, app.client_id, app.redirect_uri);
-        // let instanceUrl = `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(app.redirect_uri)}&client_id=${app.client_id}`;
-
-        window.location.href = instanceUrl;
-    }
 }
 
-class CurrentAuthProcess {
-    constructor(public username: string, public instance: string) { }
+enum RegistrationErrorTypes {
+    CodeNotFound,
+    AuthProcessNotFound
 }

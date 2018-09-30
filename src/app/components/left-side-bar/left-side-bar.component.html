@@ -1,16 +1,21 @@
-<div class="left-bar" >
-    <div id="create-toot">
-        <a class="create-toot__link left-bar-link" href title="write toot!" (click)="createNewToot()">Toot!</a>
-    </div>
+<div class="left-bar">
+    <a class="left-bar-button left-bar-button--status left-bar-link" href title="write new message" (click)="createNewStatus()">
+        <ion-icon name="md-send"></ion-icon>
+    </a>
+    <a class="left-bar-button left-bar-button--search left-bar-link" href title="search" (click)="openSearch()">
+        <ion-icon name="md-search"></ion-icon>
+    </a>
 
     <div *ngFor="let account of accounts">
         <app-account-icon [account]="account" (toogleAccountNotify)="onToogleAccountNotify($event)" (openMenuNotify)="onOpenMenuNotify($event)">
         </app-account-icon>
-
-        <!-- <a href title="{{ account.username }}" (click)="toogleAccount(account.id)"><img src="{{ account.avatar }}" /></a> -->
     </div>
 
-    <div class="add-account">
-        <a class="add-account__link  left-bar-link" href title="add new account" [routerLink]="['/register']">+</a>
-    </div>
+    <a class="left-bar-button left-bar-button--add  left-bar-link" href title="add new account" (click)="addNewAccount()">
+        <ion-icon name="md-add"></ion-icon>
+    </a>
+
+    <a class="left-bar-button left-bar-button--cog left-bar-link" href title="settings" (click)="openSettings()">
+        <ion-icon name="md-cog"></ion-icon>
+    </a>
 </div>

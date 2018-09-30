@@ -20,8 +20,7 @@
               "src/assets",
               "src/favicon.ico"
             ],
-            "styles": [
-              "./node_modules/simplebar/dist/simplebar.min.css",
+            "styles": [            
               "src/sass/styles.scss"
             ],
             "stylePreprocessorOptions": {
@@ -30,9 +29,7 @@
                 "./node_modules/bootstrap/scss"                
               ]
             },
-            "scripts": [
-              "./node_modules/simplebar/dist/simplebar.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

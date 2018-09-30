@@ -25,7 +25,7 @@ export class StreamComponent implements OnInit {
     set streamElement(streamElement: StreamElement) {
         this._streamElement = streamElement;
 
-        const splitedUserName = streamElement.username.split('@');
+        const splitedUserName = streamElement.accountId.split('@');
         const user = splitedUserName[0];
         const instance = splitedUserName[1];
         this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);

@@ -1,0 +1,33 @@
+@import "variables";
+
+.btn-custom-primary {
+    background-color: $btn-primary-color;
+    border-color: $btn-primary-color;
+    color: $btn-primary-font-color;
+    font-size: 14px;
+    &:hover,
+    &:focus,
+    &:active,
+    &:active {
+        background-color: $btn-primary-color-hover;
+        border-color: $btn-primary-color-hover;
+        box-shadow: none;
+    } // &:focus {
+    //     background-color: $btn-primary-color-hover;
+    //     border-color: $btn-primary-color-hover;
+    //     outline: none;
+    // }
+    // &:active {
+    //     background-color: $btn-primary-color-hover;
+    //     border-color: $btn-primary-color-hover;
+    //     outline: none;
+    // }
+    // &:active:focus {
+    //     background-color: $btn-primary-color-hover;
+    //     border-color: $btn-primary-color-hover;
+    //     outline: none;
+    // }
+    // &:visited {
+    //     outline: none;
+    // }
+}

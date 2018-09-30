@@ -26,7 +26,7 @@ export class StreamsState {
 }
 
 export class StreamElement {
-    constructor(public type: StreamTypeEnum, public name: string, public username: string) {
+    constructor(public type: StreamTypeEnum, public name: string, public accountId: string) {
       
     }
   }
