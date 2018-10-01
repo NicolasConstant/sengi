@@ -30,6 +30,7 @@ export class ApiRoutes {
     getReports = '/api/v1/reports';
     reportUser = '/api/v1/reports';
     search = '/api/v1/search';
+    searchV2 = '/api/v2/search';
     getStatus = '/api/v1/statuses/{0}';
     getStatusContext = '/api/v1/statuses/{0}/context';
     getStatusCard = '/api/v1/statuses/{0}/card';
