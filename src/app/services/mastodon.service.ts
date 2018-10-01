@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status } from "./models/mastodon.interfaces";
+import { Account, Status, Results } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 
@@ -68,7 +68,6 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-
     postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
@@ -109,6 +108,12 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
 
         return this.httpClient.post<Status>(url, formData, { headers: headers }).toPromise();
+    }
+
+    search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results>{
+        const route = `https://${account.instance}${this.apiRoutes.search}?q=${query}&resolve=${resolve}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
     }
 }
 
