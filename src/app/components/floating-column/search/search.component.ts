@@ -44,11 +44,18 @@ export class SearchComponent implements OnInit {
         if (enabledAccounts.length > 0) {
             const candid_oneAccount = enabledAccounts[0];
             this.mastodonService.search(candid_oneAccount, data)
-                .then((results: Results)=> {
-                    console.warn(results);
-                    this.accounts = results.accounts;
-                    this.statuses = results.statuses;
-                    this.hashtags = results.hashtags;
+                .then((results: Results) => {
+                    if (results) {
+                        console.warn(results);
+                        this.accounts = results.accounts;
+                        //this.statuses = results.statuses;
+                        this.hashtags = results.hashtags;
+
+                        //TODO: Pleroma return more than mastodon, will have to handle that
+                        if (this.accounts.length > 5) {
+                            this.accounts.length = 5;
+                        }
+                    }
                 })
                 .catch((err) => console.error(err));
         }
