@@ -18,6 +18,8 @@ export class SearchComponent implements OnInit {
     statuses: Status[] = [];
     hashtags: string[] = [];
 
+    isLoading: boolean;
+
     constructor(
         private readonly store: Store,
         private readonly mastodonService: MastodonService) { }
@@ -35,6 +37,7 @@ export class SearchComponent implements OnInit {
         this.accounts.length = 0;
         this.statuses.length = 0;
         this.hashtags.length = 0;
+        this.isLoading = true;
 
         console.warn(`search: ${data}`);
 
@@ -57,7 +60,8 @@ export class SearchComponent implements OnInit {
                         }
                     }
                 })
-                .catch((err) => console.error(err));
+                .catch((err) => console.error(err))
+                .then(() => { this.isLoading = false; });
         }
     }
 
