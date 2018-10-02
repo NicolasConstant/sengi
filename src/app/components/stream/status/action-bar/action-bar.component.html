@@ -1,0 +1,14 @@
+<div class="action-bar">
+    <a href class="action-bar__link" title="Reply" (click)="reply()">
+        <ion-icon name="ios-undo"></ion-icon>
+    </a>
+    <a href class="action-bar__link" title="Boost" [class.boosted]="isBoosted" (click)="boost()">
+        <ion-icon name="md-swap"></ion-icon>
+    </a>
+    <a href class="action-bar__link" title="Favourite" [class.favorited]="isFavorited" (click)="favorite()">
+        <ion-icon name="md-star"></ion-icon>
+    </a>
+    <a href class="action-bar__link" title="More" (click)="more()">
+        <ion-icon name="ios-more"></ion-icon>
+    </a>
+</div>

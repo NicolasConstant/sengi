@@ -1,0 +1,33 @@
+@import "variables";
+.action-bar {
+    // outline: 1px solid greenyellow; // height: 20px;
+    margin: 5px 10px 5px $avatar-column-space;
+    padding: 0;
+    font-size: 24px;
+    height: 30px;
+    &__link {
+        color: $status-secondary-color;
+        &:hover {
+            color: $status-links-color;
+        }
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+    }
+}
+
+.boosted {
+    color: $boost-color;
+    
+    &:hover {
+        color: darken($boost-color, 10);        
+    }
+}
+
+.favorited {
+    color: $favorite-color;
+
+    &:hover {
+        color: darken($favorite-color, 10);
+    }
+}

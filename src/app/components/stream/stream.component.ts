@@ -17,7 +17,7 @@ export class StreamComponent implements OnInit {
     private account: AccountInfo;
     private websocketStreaming: StreamingWrapper;
 
-    statuses: Status[] = [];
+    statuses: StatusWrapper[] = [];
     private bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
 
@@ -90,7 +90,8 @@ export class StreamComponent implements OnInit {
         }
 
         for (const status of this.bufferStream) {
-            this.statuses.unshift(status); 
+            const wrapper = new StatusWrapper(status, this.account);
+            this.statuses.unshift(wrapper); 
         }
 
         this.bufferStream.length = 0;
@@ -100,10 +101,11 @@ export class StreamComponent implements OnInit {
         this.isProcessingInfiniteScroll = true;
 
         const lastStatus = this.statuses[this.statuses.length - 1];
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.id)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id)
             .then((status: Status[]) => {
                 for (const s of status) {
-                    this.statuses.push(s);
+                    const wrapper = new StatusWrapper(s, this.account);
+                    this.statuses.push(wrapper);
                 }
             })
             .catch(err => {
@@ -123,7 +125,8 @@ export class StreamComponent implements OnInit {
         this.mastodonService.getTimeline(this.account, this._streamElement.type)
             .then((results: Status[]) => {
                 for (const s of results) {
-                    this.statuses.push(s);
+                    const wrapper = new StatusWrapper(s, this.account);
+                    this.statuses.push(wrapper);
                 }
             });
     }
@@ -133,9 +136,10 @@ export class StreamComponent implements OnInit {
         this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
-                    if (!this.statuses.find(x => x.id == update.status.id)) {
+                    if (!this.statuses.find(x => x.status.id == update.status.id)) {
                         if (this.streamPositionnedAtTop) {
-                            this.statuses.unshift(update.status);
+                            const wrapper = new StatusWrapper(update.status, this.account);
+                            this.statuses.unshift(wrapper);
                         } else {
                             this.bufferStream.push(update.status);
                         }
@@ -159,4 +163,11 @@ export class StreamComponent implements OnInit {
 
         }
     }
+}
+
+export class StatusWrapper {
+    constructor(
+        public status: Status,
+        public provider: AccountInfo
+    ) {}    
 }

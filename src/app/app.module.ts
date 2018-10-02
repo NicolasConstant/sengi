@@ -32,6 +32,7 @@ import { AddNewAccountComponent } from './components/floating-column/add-new-acc
 import { SearchComponent } from './components/floating-column/search/search.component';
 import { AddNewStatusComponent } from "./components/floating-column/add-new-status/add-new-status.component";
 import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
+import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -56,7 +57,8 @@ const routes: Routes = [
     AttachementsComponent,
     SettingsComponent,
     AddNewAccountComponent,
-    SearchComponent
+    SearchComponent,
+    ActionBarComponent
   ],
   imports: [
     BrowserModule,
