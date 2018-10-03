@@ -14,6 +14,15 @@
             margin-right: 15px;
         }
     }
+
+    &__lock {
+        color: $status-secondary-color;
+        width: 24px;
+
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+    }
 }
 
 .boosted {
