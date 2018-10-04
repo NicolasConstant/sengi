@@ -116,15 +116,16 @@ export interface Status {
   created_at: string;
   reblogs_count: string;
   favourites_count: string;
-  reblogged: string;
-  favourited: string;
-  sensitive: string;
+  reblogged: boolean;
+  favourited: boolean;
+  sensitive: boolean;
   spoiler_text: string;
   visibility: string;
   media_attachments: Attachment[];
   mentions: string;
   tags: string;
   application: Application;
+  emojis: any[];
 }
 export interface Tag {
   name: string;

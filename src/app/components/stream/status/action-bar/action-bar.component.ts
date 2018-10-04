@@ -26,6 +26,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private isProviderSelected: boolean;
     private selectedAccounts: AccountInfo[];
 
+    private favoriteStatePerAccountId: { [id: string]: boolean; } = {};
+    private bootedStatePerAccountId: { [id: string]: boolean; } = {};
+
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
 
@@ -40,8 +43,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         // const selectedAccounts = this.getSelectedAccounts();
         // this.checkStatus(selectedAccounts);
 
+        const status = this.statusWrapper.status;
+        const account = this.statusWrapper.provider;
+        this.favoriteStatePerAccountId[account.id] = status.favourited;
+        this.bootedStatePerAccountId[account.id] = status.reblogged;
+
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
-            console.warn('selectedAccounts');
             this.checkStatus(accounts);
         });
     }
@@ -67,6 +74,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         } else {
             this.isLocked = false;
         }
+
+        this.checkIfFavorited();
+        this.checkIfBoosted();
     }
 
     reply(): boolean {
@@ -93,20 +103,22 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
             pipeline
                 .then((status: Status) => {
-                    if(this.isBoosted) {
+                    if (this.isBoosted) {
                         return this.mastodonService.unreblog(account, status);
                     } else {
                         return this.mastodonService.reblog(account, status);
                     }
                 })
-                .then(() => {
-                    this.isBoosted = !this.isBoosted;
+                .then((boostedStatus: Status) => {
+                    this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
+                    this.checkIfBoosted();
+                    // this.isBoosted = !this.isBoosted;
                 })
                 .catch(err => {
                     console.error(err);
                 });
         });
-        
+
         return false;
     }
 
@@ -129,20 +141,41 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
             pipeline
                 .then((status: Status) => {
-                    if(this.isFavorited) {
+                    if (this.isFavorited) {
                         return this.mastodonService.unfavorite(account, status);
                     } else {
                         return this.mastodonService.favorite(account, status);
                     }
                 })
-                .then(() => {
-                    this.isFavorited = !this.isFavorited;
+                .then((favoritedStatus: Status) => {
+                    this.favoriteStatePerAccountId[account.id] = favoritedStatus.favourited;
+                    this.checkIfFavorited();
+                    // this.isFavorited = !this.isFavorited;
                 })
                 .catch(err => {
                     console.error(err);
                 });
-        });        
+        });
         return false;
+    }
+
+    private checkIfBoosted() {
+        const selectedAccount = <AccountInfo>this.selectedAccounts[0];
+        if (selectedAccount) {
+            this.isBoosted = this.bootedStatePerAccountId[selectedAccount.id];
+        } else {
+            this.isBoosted = false;
+        }
+    }
+
+    private checkIfFavorited() {
+        const selectedAccount = <AccountInfo>this.selectedAccounts[0];
+
+        if (selectedAccount) {
+            this.isFavorited = this.favoriteStatePerAccountId[selectedAccount.id];
+        } else {
+            this.isFavorited = false;
+        }
     }
 
     more(): boolean {
