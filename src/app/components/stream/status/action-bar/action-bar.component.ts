@@ -5,6 +5,7 @@ import { StatusWrapper } from '../../stream.component';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Observable, Subscription } from 'rxjs';
+import { Status, Results } from '../../../../services/models/mastodon.interfaces';
 // import { map } from "rxjs/operators";
 
 @Component({
@@ -49,7 +50,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
     }
 
-    private checkStatus(accounts: AccountInfo[]): void {        
+    private checkStatus(accounts: AccountInfo[]): void {
         const status = this.statusWrapper.status;
         const provider = this.statusWrapper.provider;
         this.selectedAccounts = accounts.filter(x => x.isSelected);
@@ -74,17 +75,73 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
+        this.selectedAccounts.forEach((account: AccountInfo) => {
+            const isProvider = this.statusWrapper.provider.id === account.id;
 
+            let pipeline: Promise<Status> = Promise.resolve(this.statusWrapper.status);
 
+            if (!isProvider) {
+                pipeline = pipeline.then((foreignStatus: Status) => {
+                    const statusUrl = foreignStatus.url;
+                    return this.mastodonService.search(account, statusUrl)
+                        .then((results: Results) => {
+                            //TODO check and type errors
+                            return results.statuses[0];
+                        });
+                });
+            }
 
-        console.warn('boost');
-        this.isBoosted = !this.isBoosted;
+            pipeline
+                .then((status: Status) => {
+                    if(this.isBoosted) {
+                        return this.mastodonService.unreblog(account, status);
+                    } else {
+                        return this.mastodonService.reblog(account, status);
+                    }
+                })
+                .then(() => {
+                    this.isBoosted = !this.isBoosted;
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+        
         return false;
     }
 
     favorite(): boolean {
-        console.warn('favorite');
-        this.isFavorited = !this.isFavorited;
+        this.selectedAccounts.forEach((account: AccountInfo) => {
+            const isProvider = this.statusWrapper.provider.id === account.id;
+
+            let pipeline: Promise<Status> = Promise.resolve(this.statusWrapper.status);
+
+            if (!isProvider) {
+                pipeline = pipeline.then((foreignStatus: Status) => {
+                    const statusUrl = foreignStatus.url;
+                    return this.mastodonService.search(account, statusUrl)
+                        .then((results: Results) => {
+                            //TODO check and type errors
+                            return results.statuses[0];
+                        });
+                });
+            }
+
+            pipeline
+                .then((status: Status) => {
+                    if(this.isFavorited) {
+                        return this.mastodonService.unfavorite(account, status);
+                    } else {
+                        return this.mastodonService.favorite(account, status);
+                    }
+                })
+                .then(() => {
+                    this.isFavorited = !this.isFavorited;
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });        
         return false;
     }
 
