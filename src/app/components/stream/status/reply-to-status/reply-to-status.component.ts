@@ -56,7 +56,7 @@ export class ReplyToStatusComponent implements OnInit {
         let spoiler =  this.statusReplyingTo.spoiler_text;
 
         for (const acc of selectedAccounts) {
-            this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler)
+            this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, this.statusReplyingTo.id)
                 .then((res: Status) => {
                     console.log(res);
                     this.status = '';
