@@ -32,6 +32,7 @@ import { AddNewAccountComponent } from './components/floating-column/add-new-acc
 import { SearchComponent } from './components/floating-column/search/search.component';
 import { AddNewStatusComponent } from "./components/floating-column/add-new-status/add-new-status.component";
 import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
+import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 import { WaitingAnimationComponent } from './components/waiting-animation/waiting-animation.component';
 
 const routes: Routes = [
@@ -58,6 +59,7 @@ const routes: Routes = [
     SettingsComponent,
     AddNewAccountComponent,
     SearchComponent,
+    ActionBarComponent,
     WaitingAnimationComponent
   ],
   imports: [

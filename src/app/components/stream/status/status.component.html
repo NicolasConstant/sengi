@@ -1,5 +1,6 @@
 <div class="reblog" *ngIf="reblog">
-    <a class="reblog__profile-link" href>{{ status.account.display_name }} <img *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
+    <a class="reblog__profile-link" href>{{ status.account.display_name }} <img *ngIf="reblog" class="reblog__avatar"
+            src="{{ status.account.avatar }}" /></a> boosted
 </div>
 <div class="status">
 
@@ -15,21 +16,7 @@
         getCompactRelativeTime(status.created_at) }}</div>
     <div class="status__content" innerHTML="{{displayedStatus.content}}"></div>
 
-    <div *ngIf="hasAttachments" class="attachments">
-        <app-attachements [attachments]="displayedStatus.media_attachments"></app-attachements>
-    </div>
+    <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
 
-    <div class="action-bar">
-        <a href class="action-bar__link"><ion-icon name="ios-undo"></ion-icon></a>
-        <a href class="action-bar__link"><ion-icon name="md-star"></ion-icon></a>
-        <a href class="action-bar__link"><ion-icon name="md-swap"></ion-icon></a>
-        <a href class="action-bar__link"><ion-icon name="ios-more"></ion-icon></a>
-    </div>
-
-    <!-- <div class="status_galery">
-        <p>
-            status.reblog: {{status.reblog}} <br />
-            status.media_attachments: {{status.media_attachments}}
-        </p>
-    </div> -->
+    <app-action-bar [statusWrapper]="statusWrapper"></app-action-bar>
 </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Inject, LOCALE_ID } from "@angular/core";
 import { Status } from "../../../services/models/mastodon.interfaces";
 import { formatDate } from '@angular/common';
 import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
+import { StatusWrapper } from "../stream.component";
 
 
 @Component({
@@ -14,16 +15,18 @@ export class StatusComponent implements OnInit {
     reblog: boolean;
     hasAttachments: boolean;
 
-    private _status: Status;
-    @Input('status')
-    set status(value: Status) {
-        this._status = value;
+    private _statusWrapper: StatusWrapper;
+    status: Status;
+    @Input('statusWrapper')
+    set statusWrapper(value: StatusWrapper) {
+        this._statusWrapper = value;
+        this.status = value.status;
 
         if(this.status.reblog){
             this.reblog = true;
-            this.displayedStatus = this._status.reblog;
+            this.displayedStatus = this.status.reblog;
         } else {
-            this.displayedStatus = this._status;
+            this.displayedStatus = this.status;
         }
         
         if(!this.displayedStatus.account.display_name){
@@ -36,8 +39,8 @@ export class StatusComponent implements OnInit {
 
         
     }   
-    get status(): Status{
-        return this._status;
+    get statusWrapper(): StatusWrapper{
+        return this._statusWrapper;
     }
    
 
