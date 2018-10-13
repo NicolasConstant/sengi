@@ -17,7 +17,8 @@ export class AddNewStatusComponent implements OnInit {
     selectedPrivacy = 'Public';
     privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
 
-    constructor(private readonly store: Store,
+    constructor(
+        private readonly store: Store,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
