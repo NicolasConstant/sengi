@@ -34,6 +34,7 @@ import { AddNewStatusComponent } from "./components/floating-column/add-new-stat
 import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
 import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 import { WaitingAnimationComponent } from './components/waiting-animation/waiting-animation.component';
+import { ReplyToStatusComponent } from './components/stream/status/reply-to-status/reply-to-status.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -60,7 +61,8 @@ const routes: Routes = [
     AddNewAccountComponent,
     SearchComponent,
     ActionBarComponent,
-    WaitingAnimationComponent
+    WaitingAnimationComponent,
+    ReplyToStatusComponent
   ],
   imports: [
     BrowserModule,

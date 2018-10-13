@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { StatusWrapper } from '../../stream.component';
@@ -16,6 +16,7 @@ import { Status, Results } from '../../../../services/models/mastodon.interfaces
 export class ActionBarComponent implements OnInit, OnDestroy {
 
     @Input() statusWrapper: StatusWrapper;
+    @Output() replyEvent = new EventEmitter();
 
     isFavorited: boolean;
     isBoosted: boolean;
@@ -80,7 +81,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     reply(): boolean {
-        console.warn('reply');
+        this.replyEvent.emit();
         return false;
     }
 

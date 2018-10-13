@@ -14,6 +14,7 @@ export class StatusComponent implements OnInit {
     displayedStatus: Status;
     reblog: boolean;
     hasAttachments: boolean;
+    replyingToStatus: boolean;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -65,5 +66,10 @@ export class StatusComponent implements OnInit {
         }
        
         return formatDate(date, 'MM/dd', this.locale);
+    }
+
+    openReply(): boolean{
+        this.replyingToStatus = !this.replyingToStatus;
+        return false;
     }
 }
