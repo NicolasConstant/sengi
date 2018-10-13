@@ -20,5 +20,5 @@
 
     <app-action-bar [statusWrapper]="statusWrapper" (replyEvent)="openReply()"></app-action-bar>
 
-    <app-reply-to-status *ngIf="replyingToStatus" ></app-reply-to-status>
+    <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()"></app-reply-to-status>
 </div>

@@ -72,4 +72,9 @@ export class StatusComponent implements OnInit {
         this.replyingToStatus = !this.replyingToStatus;
         return false;
     }
+
+    closeReply(): boolean {
+        this.replyingToStatus = false;
+        return false;
+    }
 }

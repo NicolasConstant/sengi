@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
 
 import { StatusWrapper } from '../../stream.component';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { Observable, Subscription } from 'rxjs';
 import { Status, Results } from '../../../../services/models/mastodon.interfaces';
 // import { map } from "rxjs/operators";
 
