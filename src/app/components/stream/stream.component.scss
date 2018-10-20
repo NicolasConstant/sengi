@@ -2,7 +2,7 @@
 .stream-column {
     width: $stream-column-width;
     height: calc(100%);
-    background-color: #0f111a;
+    background-color: $column-color;
     margin: 0 0 0 $stream-column-separator;
     &__stream-header {
         width: calc(100%);

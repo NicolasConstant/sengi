@@ -18,5 +18,7 @@
 
     <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
 
-    <app-action-bar [statusWrapper]="statusWrapper"></app-action-bar>
+    <app-action-bar [statusWrapper]="statusWrapper" (replyEvent)="openReply()"></app-action-bar>
+
+    <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()"></app-reply-to-status>
 </div>

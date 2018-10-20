@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, LOCALE_ID } from "@angular/core";
+import { Component, OnInit, Input, Inject, LOCALE_ID, ElementRef } from "@angular/core";
 import { Status } from "../../../services/models/mastodon.interfaces";
 import { formatDate } from '@angular/common';
 import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
@@ -14,6 +14,7 @@ export class StatusComponent implements OnInit {
     displayedStatus: Status;
     reblog: boolean;
     hasAttachments: boolean;
+    replyingToStatus: boolean;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -44,7 +45,8 @@ export class StatusComponent implements OnInit {
     }
    
 
-    constructor(@Inject(LOCALE_ID) private locale: string) { }
+    constructor(
+        @Inject(LOCALE_ID) private locale: string) { }
 
     ngOnInit() {        
     }
@@ -65,5 +67,16 @@ export class StatusComponent implements OnInit {
         }
        
         return formatDate(date, 'MM/dd', this.locale);
+    }
+
+    openReply(): boolean{
+        this.replyingToStatus = !this.replyingToStatus;
+        
+        return false;
+    }
+
+    closeReply(): boolean {
+        this.replyingToStatus = false;
+        return false;
     }
 }
