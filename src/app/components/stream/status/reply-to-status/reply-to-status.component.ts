@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { MastodonService, VisibilityEnum } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
@@ -14,6 +14,7 @@ export class ReplyToStatusComponent implements OnInit {
     @Input() status: string = '';
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
+    @ViewChild('reply') replyElement: ElementRef;
 
     private statusReplyingTo: Status;
 
@@ -31,6 +32,10 @@ export class ReplyToStatusComponent implements OnInit {
         for (const mention of this.statusReplyingTo.mentions) {
             this.status += `@${mention.acct} `;
         }
+
+        setTimeout(() => { 
+            this.replyElement.nativeElement.focus();
+        }, 0);
     }
 
     onSubmit(): boolean {
@@ -53,7 +58,7 @@ export class ReplyToStatusComponent implements OnInit {
                 break;
         }
 
-        let spoiler =  this.statusReplyingTo.spoiler_text;
+        let spoiler = this.statusReplyingTo.spoiler_text;
 
         for (const acc of selectedAccounts) {
             this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, this.statusReplyingTo.id)

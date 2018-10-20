@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { AccountInfo } from '../../../states/accounts.state';
 import { MastodonService, VisibilityEnum } from '../../../services/mastodon.service';
@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class AddNewStatusComponent implements OnInit {
     @Input() title: string;
     @Input() status: string;
+    @ViewChild('reply') replyElement: ElementRef;
 
     selectedPrivacy = 'Public';
     privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
@@ -22,6 +23,9 @@ export class AddNewStatusComponent implements OnInit {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        setTimeout(() => { 
+            this.replyElement.nativeElement.focus();
+        }, 0);
     }
 
     onSubmit(): boolean {
