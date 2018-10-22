@@ -1,17 +1,6 @@
 <div class="stream-column">
-    <div class="stream-overlay">
-        <div class="stream-overlay__header">
-            <a href class="overlay-close">CLOSE</a>
-            <a href class="overlay-previous">PREV</a>
-            <a href class="overlay-next">NEXT</a>
-        </div>
-        <div class="stream-overlay__title">
-            Account
-        </div>
-        <app-user-profile></app-user-profile>
-        <app-hashtag></app-hashtag>
-        <app-thread></app-thread>
-    </div>
+
+    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
         <a href title="return to top" (click)="goToTop()">

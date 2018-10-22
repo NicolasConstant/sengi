@@ -38,6 +38,7 @@ import { ReplyToStatusComponent } from './components/stream/status/reply-to-stat
 import { UserProfileComponent } from './components/stream/user-profile/user-profile.component';
 import { ThreadComponent } from './components/stream/thread/thread.component';
 import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
+import { StreamOverlayComponent } from './components/stream/stream-overlay/stream-overlay.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -68,7 +69,8 @@ const routes: Routes = [
     ReplyToStatusComponent,
     UserProfileComponent,
     ThreadComponent,
-    HashtagComponent
+    HashtagComponent,
+    StreamOverlayComponent
   ],
   imports: [
     BrowserModule,
