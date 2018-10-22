@@ -10,7 +10,7 @@
     <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
         <!-- data-simplebar  -->
         <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
-            <app-status [statusWrapper]="statusWrapper"></app-status>
+            <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)"></app-status>
         </div>
-    </div>
+    </div> 
 </div>

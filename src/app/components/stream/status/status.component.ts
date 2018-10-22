@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, LOCALE_ID, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, Output, Inject, LOCALE_ID, ElementRef, EventEmitter } from "@angular/core";
 import { Status } from "../../../services/models/mastodon.interfaces";
 import { formatDate } from '@angular/common';
 import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
@@ -15,6 +15,10 @@ export class StatusComponent implements OnInit {
     reblog: boolean;
     hasAttachments: boolean;
     replyingToStatus: boolean;
+
+    @Output() browseAccount = new EventEmitter<Account>();
+    @Output() browseHashtag = new EventEmitter<string>();
+    @Output() browseThread = new EventEmitter<string>();
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -49,6 +53,11 @@ export class StatusComponent implements OnInit {
         @Inject(LOCALE_ID) private locale: string) { }
 
     ngOnInit() {        
+    }
+
+    openAccount(account: Account): boolean{
+        this.browseAccount.next(account);
+        return false;
     }
 
     getCompactRelativeTime(d: string): string {
