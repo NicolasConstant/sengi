@@ -35,6 +35,9 @@ import { ManageAccountComponent } from "./components/floating-column/manage-acco
 import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 import { WaitingAnimationComponent } from './components/waiting-animation/waiting-animation.component';
 import { ReplyToStatusComponent } from './components/stream/status/reply-to-status/reply-to-status.component';
+import { UserProfileComponent } from './components/stream/user-profile/user-profile.component';
+import { ThreadComponent } from './components/stream/thread/thread.component';
+import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -62,7 +65,10 @@ const routes: Routes = [
     SearchComponent,
     ActionBarComponent,
     WaitingAnimationComponent,
-    ReplyToStatusComponent
+    ReplyToStatusComponent,
+    UserProfileComponent,
+    ThreadComponent,
+    HashtagComponent
   ],
   imports: [
     BrowserModule,
