@@ -65,6 +65,11 @@ export class StreamComponent implements OnInit {
         console.warn(thread);
     }
 
+    closeOverlay(): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayActive = false;
+    }
+
     @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
         this.loadBuffer();

@@ -1,6 +1,6 @@
 <div class="stream-column">
 
-    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive"></app-stream-overlay>
+    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
         <a href title="return to top" (click)="goToTop()">

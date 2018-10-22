@@ -1,15 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-stream-overlay',
-  templateUrl: './stream-overlay.component.html',
-  styleUrls: ['./stream-overlay.component.scss']
+    selector: 'app-stream-overlay',
+    templateUrl: './stream-overlay.component.html',
+    styleUrls: ['./stream-overlay.component.scss']
 })
 export class StreamOverlayComponent implements OnInit {
 
-  constructor() { }
+    @Output() closeOverlay = new EventEmitter();
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+    close(): boolean {
+        this.closeOverlay.next();
+        return false;
+    }
 
 }
