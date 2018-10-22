@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, Inject, LOCALE_ID, ElementRef, EventEmitter } from "@angular/core";
-import { Status } from "../../../services/models/mastodon.interfaces";
+import { Status, Account} from "../../../services/models/mastodon.interfaces";
 import { formatDate } from '@angular/common';
 import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
 import { StatusWrapper } from "../stream.component";
