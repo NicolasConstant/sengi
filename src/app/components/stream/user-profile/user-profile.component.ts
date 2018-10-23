@@ -1,15 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Account } from "../../../services/models/mastodon.interfaces";
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss']
+    selector: 'app-user-profile',
+    templateUrl: './user-profile.component.html',
+    styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+    account: Account;
+    hasNote: boolean;
 
-  constructor() { }
+    @Input('currentAccount')
+    set currentAccount(account: Account) {
+        this.account = account;
+        this.hasNote = account && account.note && account.note !== '<p></p>';
+        console.warn('currentAccount');
+        console.warn(account);
+    }
 
-  ngOnInit() {
-  }
+    constructor() { }
+
+    ngOnInit() {
+    }
 
 }

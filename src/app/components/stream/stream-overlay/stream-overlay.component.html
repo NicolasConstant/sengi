@@ -4,10 +4,10 @@
         <a href class="overlay-previous">PREV</a>
         <a href class="overlay-next">NEXT</a>
     </div>
-    <div class="stream-overlay__title">
+    <!-- <div class="stream-overlay__title">
         Account
-    </div>
-    <app-user-profile></app-user-profile>
-    <app-hashtag></app-hashtag>
-    <app-thread></app-thread>
+    </div> -->
+    <app-user-profile *ngIf="browseAccount" [currentAccount]="browseAccount"></app-user-profile>
+    <app-hashtag  *ngIf="browseHashtag"></app-hashtag>
+    <app-thread  *ngIf="browseThread"></app-thread>
 </div>
