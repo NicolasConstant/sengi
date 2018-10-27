@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, Output, Inject, LOCALE_ID, ElementRef, EventEmitter } from "@angular/core";
-import { Status, Account} from "../../../services/models/mastodon.interfaces";
+import { Component, OnInit, Input, Output, Inject, LOCALE_ID, ElementRef, EventEmitter, Pipe, PipeTransform, ViewChild, Renderer2 } from "@angular/core";
+import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { formatDate } from '@angular/common';
 import { stateNameErrorMessage } from "@ngxs/store/src/decorators/state";
 import { StatusWrapper } from "../stream.component";
 
+import { DomSanitizer } from '@angular/platform-browser'
 
 @Component({
     selector: "app-status",
@@ -20,6 +21,8 @@ export class StatusComponent implements OnInit {
     @Output() browseHashtag = new EventEmitter<string>();
     @Output() browseThread = new EventEmitter<string>();
 
+    @ViewChild('content') contentElement: ElementRef;
+
     private _statusWrapper: StatusWrapper;
     status: Status;
     @Input('statusWrapper')
@@ -27,35 +30,60 @@ export class StatusComponent implements OnInit {
         this._statusWrapper = value;
         this.status = value.status;
 
-        if(this.status.reblog){
+        //TEST
+        this.status.content += '<br/><br/><a href class="test">TEST</a>';
+
+
+        if (this.status.reblog) {
             this.reblog = true;
             this.displayedStatus = this.status.reblog;
         } else {
             this.displayedStatus = this.status;
         }
-        
-        if(!this.displayedStatus.account.display_name){
+
+        if (!this.displayedStatus.account.display_name) {
             this.displayedStatus.account.display_name = this.displayedStatus.account.username;
         }
 
-        if(this.displayedStatus.media_attachments && this.displayedStatus.media_attachments.length > 0){
+        if (this.displayedStatus.media_attachments && this.displayedStatus.media_attachments.length > 0) {
             this.hasAttachments = true;
         }
 
-        
-    }   
-    get statusWrapper(): StatusWrapper{
+
+    }
+    get statusWrapper(): StatusWrapper {
         return this._statusWrapper;
     }
-   
+
 
     constructor(
+        private renderer: Renderer2,
         @Inject(LOCALE_ID) private locale: string) { }
 
-    ngOnInit() {        
+    ngOnInit() {
     }
 
-    openAccount(account: Account): boolean{
+    ngAfterViewInit() {
+        //this.contentElement.nativeElement.querySelector('my-element').addEventListener('click',this.test.bind(this)); 
+
+        let el = this.contentElement.nativeElement.querySelector('.test');
+        console.log(this.contentElement.nativeElement);
+        console.log(el);
+        if(el)
+        this.renderer.listen(el, 'click', (el2) => {
+            console.log(el2);
+            console.warn('YOOOOO');
+            return false;
+        });
+
+
+        // setTimeout(() => {
+        //     this.contentElement.nativeElement.querySelector('a.test')[0].onclick(this.test());
+        // }, 100);
+
+    }
+
+    openAccount(account: Account): boolean {
         this.browseAccount.next(account);
         return false;
     }
@@ -70,22 +98,27 @@ export class StatusComponent implements OnInit {
         } else if (timeDelta < 60 * 60) {
             return `${timeDelta / 60 | 0}m`;
         } else if (timeDelta < 60 * 60 * 24) {
-            return `${timeDelta / (60 * 60)| 0}h`;
+            return `${timeDelta / (60 * 60) | 0}h`;
         } else if (timeDelta < 60 * 60 * 24 * 31) {
             return `${timeDelta / (60 * 60 * 24) | 0}d`;
         }
-       
+
         return formatDate(date, 'MM/dd', this.locale);
     }
 
-    openReply(): boolean{
+    openReply(): boolean {
         this.replyingToStatus = !this.replyingToStatus;
-        
+
         return false;
     }
 
     closeReply(): boolean {
         this.replyingToStatus = false;
+        return false;
+    }
+
+    test(): boolean {
+        console.warn('heeeeyaaa!');
         return false;
     }
 }

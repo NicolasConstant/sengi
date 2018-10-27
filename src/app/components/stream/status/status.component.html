@@ -14,7 +14,7 @@
     </a>
     <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">{{
         getCompactRelativeTime(status.created_at) }}</div>
-    <div class="status__content" innerHTML="{{displayedStatus.content}}"></div>
+    <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div>
 
     <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
 
