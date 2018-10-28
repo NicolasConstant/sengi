@@ -4,28 +4,33 @@ $font-link-primary: #595c67;
 $font-link-primary-hover: #8f93a2;
 $color-primary: #141824;
 $color-secondary: #090b10;
+
+$column-color: #0f111a;
+$column-header-background-color: black;
+
+
+
 $default-font-size: 15px;
 $small-font-size: 12px;
-
-$btn-primary-color: #515a62;
-$btn-primary-color: #254d6f;
+// $btn-primary-color: #515a62;
+// $btn-primary-color: #254d6f;
 $btn-primary-color: #444f74;
 $btn-primary-color-hover: darken($btn-primary-color, 10);
 $btn-primary-font-color: white;
-
 // TEST 1
 $status-primary-color: #fff;
-$status-secondary-color: #353e64;
+// $status-secondary-color: #353e64;
 $status-secondary-color: #4e5572;
 $status-links-color: #d9e1e8;
 // $status-primary-color : #8f93a2;
 // $status-primary-color :   lighten(#8f93a2, 30);
 // $status-links-color : #b2ccd6;
-
+$boost-color : #5098eb;
+$favorite-color: #ffc16f;
 // Block dispositions
 $stream-selector-height: 30px;
 $stream-column-separator: 7px;
 $stream-column-width: 320px;
-
+$avatar-column-space: 70px;
 //Bootstrap cuistomization
-$enable-rounded : false;
+$enable-rounded: false;

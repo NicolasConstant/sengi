@@ -1,19 +1,22 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { AccountInfo } from '../../../states/accounts.state';
-import { MastodonService, VisibilityEnum } from '../../../services/mastodon.service';
-import { Status } from '../../../services/models/mastodon.interfaces';
-import { FormsModule } from '@angular/forms';
+import { MastodonService, VisibilityEnum } from '../../../../services/mastodon.service';
+import { AccountInfo } from '../../../../states/accounts.state';
+import { StatusWrapper } from '../../stream.component';
+import { Status } from '../../../../services/models/mastodon.interfaces';
 
 @Component({
-    selector: 'app-add-new-status',
-    templateUrl: './add-new-status.component.html',
-    styleUrls: ['./add-new-status.component.scss']
+    selector: 'app-reply-to-status',
+    templateUrl: './reply-to-status.component.html',
+    styleUrls: ['./reply-to-status.component.scss']
 })
-export class AddNewStatusComponent implements OnInit {
-    @Input() title: string;
-    @Input() status: string;
+export class ReplyToStatusComponent implements OnInit {
+    @Input() status: string = '';
+    @Input() statusReplyingToWrapper: StatusWrapper;
+    @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
+
+    private statusReplyingTo: Status;
 
     selectedPrivacy = 'Public';
     privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
@@ -23,6 +26,13 @@ export class AddNewStatusComponent implements OnInit {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        this.statusReplyingTo = this.statusReplyingToWrapper.status;
+
+        this.status += `@${this.statusReplyingTo.account.acct} `;
+        for (const mention of this.statusReplyingTo.mentions) {
+            this.status += `@${mention.acct} `;
+        }
+
         setTimeout(() => { 
             this.replyElement.nativeElement.focus();
         }, 0);
@@ -31,9 +41,6 @@ export class AddNewStatusComponent implements OnInit {
     onSubmit(): boolean {
         const accounts = this.getRegisteredAccounts();
         const selectedAccounts = accounts.filter(x => x.isSelected);
-
-        console.warn(`selectedAccounts ${selectedAccounts.length}`);
-        console.warn(`statusHandle ${this.status}`);
 
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
         switch (this.selectedPrivacy) {
@@ -51,17 +58,14 @@ export class AddNewStatusComponent implements OnInit {
                 break;
         }
 
-        let spoiler = this.title;
-        if(spoiler === '') {
-            spoiler = null;
-        }
+        let spoiler = this.statusReplyingTo.spoiler_text;
 
         for (const acc of selectedAccounts) {
-            this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler)
+            this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, this.statusReplyingTo.id)
                 .then((res: Status) => {
                     console.log(res);
-                    this.title = '';
                     this.status = '';
+                    this.onClose.emit();
                 });
         }
 

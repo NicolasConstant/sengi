@@ -1,0 +1,24 @@
+@import "variables";
+
+.content {
+    cursor: pointer;
+}
+
+//Mastodon styling
+:host ::ng-deep .content {
+    // font-size: 14px;
+    color: $status-primary-color;
+    & a,
+    .mention,
+    .ellipsis {
+        color: $status-links-color;
+    }
+    & .invisible {
+        display: none;
+    }
+    & p {
+        margin: 0px;
+        //font-size: .9em;
+        // font-size: 14px;
+    }
+}
