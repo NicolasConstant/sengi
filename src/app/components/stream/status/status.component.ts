@@ -56,32 +56,22 @@ export class StatusComponent implements OnInit {
     }
 
 
-    constructor(
-        private renderer: Renderer2,
-        @Inject(LOCALE_ID) private locale: string) { }
+    constructor(@Inject(LOCALE_ID) private locale: string) { }
 
     ngOnInit() {
     }
 
-    ngAfterViewInit() {
-        //this.contentElement.nativeElement.querySelector('my-element').addEventListener('click',this.test.bind(this)); 
-
-        let el = this.contentElement.nativeElement.querySelector('.test');
-        console.log(this.contentElement.nativeElement);
-        console.log(el);
-        if(el)
-        this.renderer.listen(el, 'click', (el2) => {
-            console.log(el2);
-            console.warn('YOOOOO');
-            return false;
-        });
-
-
-        // setTimeout(() => {
-        //     this.contentElement.nativeElement.querySelector('a.test')[0].onclick(this.test());
-        // }, 100);
-
-    }
+    // ngAfterViewInit() {
+    //     let el = this.contentElement.nativeElement.querySelector('.test');
+    //     console.log(this.contentElement.nativeElement);
+    //     console.log(el);
+    //     if (el)
+    //         this.renderer.listen(el, 'click', (el2) => {
+    //             console.log(el2);
+    //             console.warn('YOOOOO');
+    //             return false;
+    //         });
+    // }
 
     openAccount(account: Account): boolean {
         this.browseAccount.next(account);
