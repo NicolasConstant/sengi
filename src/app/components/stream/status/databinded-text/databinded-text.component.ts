@@ -9,7 +9,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 export class DatabindedTextComponent implements OnInit {
     private accounts: string[] = [];
     private hashtags: string[] = [];
-    // private links: string[] = [];
+    private links: string[] = [];
 
     processedText: string;
 
@@ -26,35 +26,79 @@ export class DatabindedTextComponent implements OnInit {
         let linksSections = value.split('<a ');
 
         for (let section of linksSections) {
+            console.log(section);
+
             if (!section.includes('href')) {
                 this.processedText += section;
                 continue;
             }
 
-            if (section.includes('class="mention hashtag"')) {
-                let extractedLinkAndNext = section.split('</a>');
-                let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
-
-                this.processedText += ` <a href class="${extractedHashtag}">#${extractedHashtag}</a>`;
-                if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
-                this.hashtags.push(extractedHashtag);
-
-            } else if (section.includes('class="u-url mention"')) {
-                let extractedAccountAndNext = section.split('</a></span>');
-
-                let extractedAccountName = extractedAccountAndNext[0].split('@<span>')[1].replace('<span>', '').replace('</span>', '');
-                let extractedAccountLink = extractedAccountAndNext[0].split('" class="u-url mention"')[0].replace('href="https://', '').replace(' ', '').replace('@', '').split('/');
-                let extractedAccount = `@${extractedAccountLink[1]}@${extractedAccountLink[0]}`;
-
-                let classname = this.getClassName(extractedAccount);
-                this.processedText += ` <a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
-
-                if (extractedAccountAndNext[1]) this.processedText += extractedAccountAndNext[1];
-                this.accounts.push(extractedAccount);
+            if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#')) {
+                console.log('process hashtag');
+                this.processHashtag(section);
+            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"')) {
+                console.log('process mention');
+                this.processUser(section);
             } else {
-                this.processedText += `<a class="link" ${section}`;
+                console.log('process link');
+                console.log(section);
+                this.processLink(section);
             }
         }
+    }
+
+    private processHashtag(section: string) {
+        let extractedLinkAndNext = section.split('</a>');
+        let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
+
+        this.processedText += ` <a href class="${extractedHashtag}">#${extractedHashtag}</a>`;
+        if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
+        this.hashtags.push(extractedHashtag);
+    }
+
+    private processUser(section: string) {
+        let mentionClass = 'class="mention"';
+        if (section.includes('class="u-url mention"'))
+            mentionClass = 'class="u-url mention"';
+
+        let extractedAccountAndNext = section.split('</a></span>');
+
+        let extractedAccountName = extractedAccountAndNext[0].split('@<span>')[1].replace('<span>', '').replace('</span>', '');
+
+        let extractedAccountLink = extractedAccountAndNext[0].split('href="https://')[1].split('"')[0].replace(' ', '').replace('@', '').split('/');
+        let extractedAccount = `@${extractedAccountLink[1]}@${extractedAccountLink[0]}`;
+
+        let classname = this.getClassNameForAccount(extractedAccount);
+        this.processedText += ` <a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
+
+        if (extractedAccountAndNext[1]) this.processedText += extractedAccountAndNext[1];
+        this.accounts.push(extractedAccount);
+    }
+
+    private processLink(section: string) {
+        let extractedLinkAndNext = section.split('</a>')
+        let extractedUrl = extractedLinkAndNext[0].split('"')[1];
+
+        console.warn(extractedLinkAndNext[0]);
+        console.warn(extractedLinkAndNext[0].split('<span class="ellipsis">'));
+
+        let extractedName = '';
+        try {
+            extractedName = extractedLinkAndNext[0].split('<span class="ellipsis">')[1].split('</span>')[0];
+        } catch (err){
+            try {
+            extractedName = extractedLinkAndNext[0].split('<span class="invisible">https://</span><span class="">')[1].split('</span>')[0];
+            }
+            catch(err){
+                extractedName = extractedLinkAndNext[0].split('rel="nofollow noopener" target="_blank">')[1].split('</span>')[0];               
+            }
+        } 
+
+        this.links.push(extractedUrl);
+        let classname = this.getClassNameForLink(extractedUrl);
+
+        this.processedText += `<a href class="${classname}" title="open link">${extractedName}</a>`;
+        if (extractedLinkAndNext.length > 1) this.processedText += extractedLinkAndNext[1];
     }
 
 
@@ -78,7 +122,7 @@ export class DatabindedTextComponent implements OnInit {
         }
 
         for (const account of this.accounts) {
-            let classname = this.getClassName(account);
+            let classname = this.getClassNameForAccount(account);
             let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
 
             this.renderer.listen(el, 'click', (event) => {
@@ -90,21 +134,29 @@ export class DatabindedTextComponent implements OnInit {
             });
         }
 
-        // let allLinksEl = this.contentElement.nativeElement.querySelectorAll(`.link`);
-        // for (const link of allLinksEl) {
-        //     this.renderer.listen(link, 'click', (event) => {
-        //         //event.preventDefault();
-        //         event.stopImmediatePropagation();
-        //         return false;
-        //     });
-        // } 
+        for (const link of this.links) {
+            let classname = this.getClassNameForLink(link);
+            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
+            this.renderer.listen(el, 'click', (event) => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                window.open(link, '_blank');
+                return false;
+            });
+        }
     }
 
-    private getClassName(value: string): string {
+    private getClassNameForAccount(value: string): string {
         let res = value;
-        while(res.includes('.')) res = res.replace('.', '-');
-        while(res.includes('@')) res = res.replace('@', '-');
-        return res;
+        while (res.includes('.')) res = res.replace('.', '-');
+        while (res.includes('@')) res = res.replace('@', '-');
+        return `account-${res}`;
+    }
+
+    private getClassNameForLink(value: string): string {
+        let res = value.replace(/[.,\/#?!@$%\^&\*;:{}=\-_`~()]/g, "");
+        return `link-${res}`;
     }
 
     private selectAccount(account: string) {
