@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, Renderer2, ViewChild, ElementRef } from '@angular/core';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
     selector: 'app-databinded-text',
