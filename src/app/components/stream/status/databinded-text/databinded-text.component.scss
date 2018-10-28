@@ -1,5 +1,9 @@
 @import "variables";
 
+.content {
+    cursor: pointer;
+}
+
 //Mastodon styling
 :host ::ng-deep .content {
     // font-size: 14px;

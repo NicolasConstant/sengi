@@ -21,7 +21,7 @@ export class StatusComponent implements OnInit {
     @Output() browseHashtag = new EventEmitter<string>();
     @Output() browseThread = new EventEmitter<string>();
 
-    @ViewChild('content') contentElement: ElementRef;
+
 
     private _statusWrapper: StatusWrapper;
     status: Status;

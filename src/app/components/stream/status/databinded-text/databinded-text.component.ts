@@ -9,6 +9,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 export class DatabindedTextComponent implements OnInit {
     private accounts: string[] = [];
     private hashtags: string[] = [];
+    // private links: string[] = [];
 
     processedText: string;
 
@@ -45,13 +46,13 @@ export class DatabindedTextComponent implements OnInit {
                 let extractedAccountLink = extractedAccountAndNext[0].split('" class="u-url mention"')[0].replace('href="https://', '').replace(' ', '').replace('@', '').split('/');
                 let extractedAccount = `@${extractedAccountLink[1]}@${extractedAccountLink[0]}`;
 
-                let classname = this.getClassNameFromAccount(extractedAccount);
+                let classname = this.getClassName(extractedAccount);
                 this.processedText += ` <a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
 
                 if (extractedAccountAndNext[1]) this.processedText += extractedAccountAndNext[1];
                 this.accounts.push(extractedAccount);
             } else {
-                this.processedText += `<a ${section}`;
+                this.processedText += `<a class="link" ${section}`;
             }
         }
     }
@@ -67,37 +68,43 @@ export class DatabindedTextComponent implements OnInit {
         for (const hashtag of this.hashtags) {
             let el = this.contentElement.nativeElement.querySelector(`.${hashtag}`);
 
-            this.renderer.listen(el, 'click', (el2) => {
+            this.renderer.listen(el, 'click', (event) => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
                 this.selectHashtag(hashtag);
                 return false;
             });
         }
 
         for (const account of this.accounts) {
-            let classname = this.getClassNameFromAccount(account);
+            let classname = this.getClassName(account);
             let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
 
-            this.renderer.listen(el, 'click', (el2) => {
+            this.renderer.listen(el, 'click', (event) => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
                 this.selectAccount(account);
                 return false;
             });
         }
 
-
-
-        // let el = this.contentElement.nativeElement.querySelector('.test');
-        // console.log(this.contentElement.nativeElement);
-        // console.log(el);
-        // if (el)
-        //     this.renderer.listen(el, 'click', (el2) => {
-        //         console.log(el2);
-        //         console.warn('YOOOOO');
+        // let allLinksEl = this.contentElement.nativeElement.querySelectorAll(`.link`);
+        // for (const link of allLinksEl) {
+        //     this.renderer.listen(link, 'click', (event) => {
+        //         //event.preventDefault();
+        //         event.stopImmediatePropagation();
         //         return false;
         //     });
+        // } 
     }
 
-    private getClassNameFromAccount(value: string) {
-        return value.replace('.', '-').replace('@', '-').replace('@', '-');
+    private getClassName(value: string): string {
+        let res = value;
+        while(res.includes('.')) res = res.replace('.', '-');
+        while(res.includes('@')) res = res.replace('@', '-');
+        return res;
     }
 
     private selectAccount(account: string) {
@@ -111,6 +118,7 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private selectText() {
+        console.warn(`selectText`);
         this.textSelected.next();
     }
 
