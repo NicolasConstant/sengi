@@ -117,7 +117,7 @@ export class DatabindedTextComponent implements OnInit {
         this.hashtagSelected.next(hashtag);
     }
 
-    private selectText() {
+    selectText() {
         console.warn(`selectText`);
         this.textSelected.next();
     }
