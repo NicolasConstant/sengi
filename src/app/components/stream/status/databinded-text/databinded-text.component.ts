@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
@@ -12,62 +12,48 @@ export class DatabindedTextComponent implements OnInit {
 
     processedText: string;
 
+    @ViewChild('content') contentElement: ElementRef;
+
     @Output() accountSelected = new EventEmitter<string>();
     @Output() hashtagSelected = new EventEmitter<string>();
     @Output() textSelected = new EventEmitter();
 
     @Input('text')
     set text(value: string) {
-        
+        this.processedText = '';
+
         let linksSections = value.split('<a ');
 
-        console.warn(linksSections);
-
-
-        this.processedText = '';
         for (let section of linksSections) {
             if (!section.includes('href')) {
                 this.processedText += section;
-                console.log('continue');
                 continue;
             }
 
             if (section.includes('class="mention hashtag"')) {
-               
                 let extractedLinkAndNext = section.split('</a>');
                 let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
 
                 this.processedText += ` <a href class="${extractedHashtag}">#${extractedHashtag}</a>`;
-                if(extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
+                if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
                 this.hashtags.push(extractedHashtag);
 
             } else if (section.includes('class="u-url mention"')) {
-                console.log('user');
-                console.log(section);
                 let extractedAccountAndNext = section.split('</a></span>');
-
-                console.log(extractedAccountAndNext[0].split('@<span>'));
 
                 let extractedAccountName = extractedAccountAndNext[0].split('@<span>')[1].replace('<span>', '').replace('</span>', '');
                 let extractedAccountLink = extractedAccountAndNext[0].split('" class="u-url mention"')[0].replace('href="https://', '').replace(' ', '').replace('@', '').split('/');
                 let extractedAccount = `@${extractedAccountLink[1]}@${extractedAccountLink[0]}`;
 
-                this.processedText += ` <a href class="${extractedAccountName}" title="${extractedAccount}">@${extractedAccountName}</a>`;
+                let classname = this.getClassNameFromAccount(extractedAccount);
+                this.processedText += ` <a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
 
-                if(extractedAccountAndNext[1]) this.processedText += extractedAccountAndNext[1];
+                if (extractedAccountAndNext[1]) this.processedText += extractedAccountAndNext[1];
                 this.accounts.push(extractedAccount);
-
-                console.error(extractedAccountName);
-                console.error(extractedAccount);
-
             } else {
                 this.processedText += `<a ${section}`;
             }
         }
-
-
-
-        // this.processedText = value;
     }
 
 
@@ -78,6 +64,27 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     ngAfterViewInit() {
+        for (const hashtag of this.hashtags) {
+            let el = this.contentElement.nativeElement.querySelector(`.${hashtag}`);
+
+            this.renderer.listen(el, 'click', (el2) => {
+                this.selectHashtag(hashtag);
+                return false;
+            });
+        }
+
+        for (const account of this.accounts) {
+            let classname = this.getClassNameFromAccount(account);
+            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
+
+            this.renderer.listen(el, 'click', (el2) => {
+                this.selectAccount(account);
+                return false;
+            });
+        }
+
+
+
         // let el = this.contentElement.nativeElement.querySelector('.test');
         // console.log(this.contentElement.nativeElement);
         // console.log(el);
@@ -89,17 +96,21 @@ export class DatabindedTextComponent implements OnInit {
         //     });
     }
 
-    selectAccount(account: string) {
-        console.warn(`select @${account}`);
+    private getClassNameFromAccount(value: string) {
+        return value.replace('.', '-').replace('@', '-').replace('@', '-');
+    }
+
+    private selectAccount(account: string) {
+        console.warn(`select ${account}`);
         this.accountSelected.next(account);
     }
 
-    selectHashtag(hashtag: string) {
-        console.warn(`select #${hashtag}`);
+    private selectHashtag(hashtag: string) {
+        console.warn(`select ${hashtag}`);
         this.hashtagSelected.next(hashtag);
     }
 
-    selectText() {
+    private selectText() {
         this.textSelected.next();
     }
 
