@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StreamOverlayComponent } from './stream-overlay.component';
 
-describe('StreamOverlayComponent', () => {
+xdescribe('StreamOverlayComponent', () => {
   let component: StreamOverlayComponent;
   let fixture: ComponentFixture<StreamOverlayComponent>;
 

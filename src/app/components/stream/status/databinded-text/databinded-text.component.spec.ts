@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatabindedTextComponent } from './databinded-text.component';
 
-describe('DatabindedTextComponent', () => {
+xdescribe('DatabindedTextComponent', () => {
   let component: DatabindedTextComponent;
   let fixture: ComponentFixture<DatabindedTextComponent>;
 
