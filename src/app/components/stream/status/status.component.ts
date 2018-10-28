@@ -31,7 +31,7 @@ export class StatusComponent implements OnInit {
         this.status = value.status;
 
         //TEST
-        this.status.content += '<br/><br/><a href class="test">TEST</a>';
+        //this.status.content += '<br/><br/><a href class="test">TEST</a>';
 
 
         if (this.status.reblog) {

@@ -14,7 +14,10 @@
     </a>
     <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">{{
         getCompactRelativeTime(status.created_at) }}</div>
-    <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div>
+    <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
+
+    <app-databinded-text class="status__content" [text]="displayedStatus.content"></app-databinded-text>
+
 
     <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
 

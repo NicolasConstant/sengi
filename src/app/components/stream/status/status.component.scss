@@ -77,6 +77,7 @@
         /*width: calc(100% - 50px);*/
         word-wrap: break-word;
         margin: 0 10px 0 $avatar-column-space;
+        display: block;        
     }
     // &__content p {
     //     margin: 0 !important;
@@ -87,28 +88,6 @@
         position: absolute;
         top: 7px;
         right: 5px;
-    }
-}
-
-// .attachments {
-
-// }
-
-//Mastodon styling
-:host ::ng-deep .status__content {
-    color: $status-primary-color;
-    & a,
-    .mention,
-    .ellipsis {
-        color: $status-links-color;
-    }
-    & .invisible {
-        display: none;
-    }
-    & p {
-        margin: 0px;
-        //font-size: .9em;
-        // font-size: 14px;
     }
 }
 

@@ -39,6 +39,7 @@ import { UserProfileComponent } from './components/stream/user-profile/user-prof
 import { ThreadComponent } from './components/stream/thread/thread.component';
 import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
 import { StreamOverlayComponent } from './components/stream/stream-overlay/stream-overlay.component';
+import { DatabindedTextComponent } from './components/stream/status/databinded-text/databinded-text.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -70,7 +71,8 @@ const routes: Routes = [
     UserProfileComponent,
     ThreadComponent,
     HashtagComponent,
-    StreamOverlayComponent
+    StreamOverlayComponent,
+    DatabindedTextComponent
   ],
   imports: [
     BrowserModule,
