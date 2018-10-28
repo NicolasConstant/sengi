@@ -9,6 +9,7 @@
     "serve": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
+    "test-nowatch": "ng test --watch=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "ng build && electron .",
