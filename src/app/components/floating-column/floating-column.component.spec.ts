@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FloatingColumnComponent } from './floating-column.component';
 
-describe('FloatingColumnComponent', () => {
+xdescribe('FloatingColumnComponent', () => {
   let component: FloatingColumnComponent;
   let fixture: ComponentFixture<FloatingColumnComponent>;
 
