@@ -1,5 +1,5 @@
 @import "variables";
-$avatar-column-space: 70px;
+
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;
@@ -76,12 +76,13 @@ $avatar-column-space: 70px;
     &__content {
         /*width: calc(100% - 50px);*/
         word-wrap: break-word;
-        margin: 0px 10px 10px $avatar-column-space;
+        margin: 0 10px 0 $avatar-column-space;
+        display: block;        
     }
-    &__content p {
-        margin: 0;
-        font-size: 0.85em;
-    }
+    // &__content p {
+    //     margin: 0 !important;
+    //     font-size: 0.85em;
+    // }
     &__created-at {
         color: $status-secondary-color;
         position: absolute;
@@ -90,35 +91,8 @@ $avatar-column-space: 70px;
     }
 }
 
-//Mastodon styling
-:host ::ng-deep .status__content {
-    color: $status-primary-color;
-    & a,
-    .mention,
-    .ellipsis {
-        color: $status-links-color;
-    }
-    & .invisible {
-        display: none;
-    }
-}
-
 .attachments {
-    width: calc(100% - 80px);
-    margin: 0px 10px 10px $avatar-column-space;
-}
-
-.action-bar {
-    // outline: 1px solid greenyellow; // height: 20px;
-    margin: 0px 10px 10px $avatar-column-space;
-    font-size: 24px;
-    &__link {
-        color: $status-secondary-color;
-        &:hover {
-            color: $status-links-color;
-        }
-        &:not(:last-child) {
-            margin-right: 15px;
-        }
-    }
+    display: block;
+    // width: calc(100% - 80px);
+    margin: 10px 10px 0 $avatar-column-space;
 }

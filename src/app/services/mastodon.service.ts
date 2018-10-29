@@ -5,10 +5,11 @@ import { ApiRoutes } from './models/api.settings';
 import { Account, Status, Results } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
+import { stat } from 'fs';
 
 @Injectable()
 export class MastodonService {
-
+   
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -114,6 +115,30 @@ export class MastodonService {
         const route = `https://${account.instance}${this.apiRoutes.search}?q=${query}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
+    }
+
+    reblog(account: AccountInfo, status: Status): Promise<Status> {
+        const route = `https://${account.instance}${this.apiRoutes.reblogStatus}`.replace('{0}', status.id);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
+    }
+
+    unreblog(account: AccountInfo, status: Status): Promise<Status>  {
+        const route = `https://${account.instance}${this.apiRoutes.unreblogStatus}`.replace('{0}', status.id);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
+    }
+
+    favorite(account: AccountInfo, status: Status): any {
+        const route = `https://${account.instance}${this.apiRoutes.favouritingStatus}`.replace('{0}', status.id);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
+    }
+    
+    unfavorite(account: AccountInfo, status: Status): any {
+        const route = `https://${account.instance}${this.apiRoutes.unfavouritingStatus}`.replace('{0}', status.id);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
 }
 

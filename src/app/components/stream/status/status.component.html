@@ -1,9 +1,10 @@
 <div class="reblog" *ngIf="reblog">
-    <a class="reblog__profile-link" href>{{ status.account.display_name }} <img *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
+    <a class="reblog__profile-link" href (click)="openAccount(status.account)">{{ status.account.display_name }} <img *ngIf="reblog" class="reblog__avatar"
+            src="{{ status.account.avatar }}" /></a> boosted
 </div>
 <div class="status">
 
-    <a href class="status__profile-link" title="{{displayedStatus.account.acct}}">
+    <a href class="status__profile-link" title="{{displayedStatus.account.acct}}" (click)="openAccount(displayedStatus.account)">
         <img [class.status__avatar--boosted]="reblog" class="status__avatar" src="{{ displayedStatus.account.avatar }}" />
         <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
         <span class="status__name">
@@ -13,23 +14,14 @@
     </a>
     <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">{{
         getCompactRelativeTime(status.created_at) }}</div>
-    <div class="status__content" innerHTML="{{displayedStatus.content}}"></div>
+    <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
-    <div *ngIf="hasAttachments" class="attachments">
-        <app-attachements [attachments]="displayedStatus.media_attachments"></app-attachements>
-    </div>
+    <app-databinded-text class="status__content" [text]="displayedStatus.content"></app-databinded-text>
 
-    <div class="action-bar">
-        <a href class="action-bar__link"><ion-icon name="ios-undo"></ion-icon></a>
-        <a href class="action-bar__link"><ion-icon name="md-star"></ion-icon></a>
-        <a href class="action-bar__link"><ion-icon name="md-swap"></ion-icon></a>
-        <a href class="action-bar__link"><ion-icon name="ios-more"></ion-icon></a>
-    </div>
 
-    <!-- <div class="status_galery">
-        <p>
-            status.reblog: {{status.reblog}} <br />
-            status.media_attachments: {{status.media_attachments}}
-        </p>
-    </div> -->
+    <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
+
+    <app-action-bar [statusWrapper]="statusWrapper" (replyEvent)="openReply()"></app-action-bar>
+
+    <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()"></app-reply-to-status>
 </div>

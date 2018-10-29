@@ -1,0 +1,8 @@
+<form (ngSubmit)="onSubmit()">
+    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm" rows="5" required placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
+
+    <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy" [(ngModel)]="selectedPrivacy">
+        <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
+    </select>
+    <button type="submit" class="btn btn-sm btn-custom-primary">REPLY!</button>
+</form>

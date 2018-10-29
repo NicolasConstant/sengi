@@ -1,11 +1,17 @@
 <div class="stream-column">
-  <div class="stream-column__stream-header">
-    <a href title="return to top" (click)="goToTop()"><h1>{{ streamElement.name.toUpperCase() }}</h1></a>
-  </div>
-  <div class="stream-toots flexcroll" #statusstream  (scroll)="onScroll()"> <!-- data-simplebar  -->
-    <div class="stream-toots__status" *ngFor="let status of statuses">
-      <app-status [status]="status" ></app-status>
+
+    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" 
+        (closeOverlay)="closeOverlay()" [browseAccount]="overlayAccountToBrowse"></app-stream-overlay>
+
+    <div class="stream-column__stream-header">
+        <a href title="return to top" (click)="goToTop()">
+            <h1>{{ streamElement.name.toUpperCase() }}</h1>
+        </a>
     </div>
-  </div>
+    <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
+        <!-- data-simplebar  -->
+        <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
+            <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)"></app-status>
+        </div>
+    </div> 
 </div>
- 
