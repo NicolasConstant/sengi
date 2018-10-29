@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddNewAccountComponent } from './add-new-account.component';
+import { ThreadComponent } from './thread.component';
 
-xdescribe('AddNewAccountComponent', () => {
-  let component: AddNewAccountComponent;
-  let fixture: ComponentFixture<AddNewAccountComponent>;
+xdescribe('ThreadComponent', () => {
+  let component: ThreadComponent;
+  let fixture: ComponentFixture<ThreadComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddNewAccountComponent ]
+      declarations: [ ThreadComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddNewAccountComponent);
+    fixture = TestBed.createComponent(ThreadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

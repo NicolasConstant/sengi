@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddNewAccountComponent } from './add-new-account.component';
+import { HashtagComponent } from './hashtag.component';
 
-xdescribe('AddNewAccountComponent', () => {
-  let component: AddNewAccountComponent;
-  let fixture: ComponentFixture<AddNewAccountComponent>;
+xdescribe('HashtagComponent', () => {
+  let component: HashtagComponent;
+  let fixture: ComponentFixture<HashtagComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddNewAccountComponent ]
+      declarations: [ HashtagComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddNewAccountComponent);
+    fixture = TestBed.createComponent(HashtagComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

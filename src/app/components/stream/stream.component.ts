@@ -21,6 +21,9 @@ export class StreamComponent implements OnInit {
     private bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
 
+    overlayActive: boolean;
+    overlayAccountToBrowse: Account;
+
     @Input()
     set streamElement(streamElement: StreamElement) {
         this._streamElement = streamElement;
@@ -45,6 +48,26 @@ export class StreamComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    browseAccount(account: Account): void {
+        this.overlayAccountToBrowse = account;
+        this.overlayActive = true;
+    }
+
+    browseHashtag(hashtag: any): void {
+        console.warn('browseHashtag');
+        console.warn(hashtag);
+    }
+
+    browseThread(thread: any): void {
+        console.warn('browseThread');
+        console.warn(thread);
+    }
+
+    closeOverlay(): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayActive = false;
     }
 
     @ViewChild('statusstream') public statustream: ElementRef;
@@ -150,7 +173,6 @@ export class StreamComponent implements OnInit {
             this.checkAndCleanUpStream();
         });
     }
-
     
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 60) {

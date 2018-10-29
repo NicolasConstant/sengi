@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddNewAccountComponent } from './add-new-account.component';
+import { StreamOverlayComponent } from './stream-overlay.component';
 
-xdescribe('AddNewAccountComponent', () => {
-  let component: AddNewAccountComponent;
-  let fixture: ComponentFixture<AddNewAccountComponent>;
+xdescribe('StreamOverlayComponent', () => {
+  let component: StreamOverlayComponent;
+  let fixture: ComponentFixture<StreamOverlayComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddNewAccountComponent ]
+      declarations: [ StreamOverlayComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddNewAccountComponent);
+    fixture = TestBed.createComponent(StreamOverlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
