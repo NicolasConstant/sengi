@@ -75,4 +75,13 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla3');
         expect(component.processedText).toContain('bla4');
     });
+
+    it('should parse link - GNU social', () => {
+        const sample = `bla1 <a href="https://www.lemonde.fr/planete.html?xtor=RSS-3208" rel="nofollow noopener" class="" target="_blank">https://social.bitcast.info/url/819438</a>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<a href class="link-httpswwwlemondefrplanetehtmlxtorRSS3208" title="open link">https://social.bitcast.info/url/819438</a>');
+        expect(component.processedText).toContain('bla1');
+    });
+  
 });

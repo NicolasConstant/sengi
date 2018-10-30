@@ -21,27 +21,39 @@ export class DatabindedTextComponent implements OnInit {
     @Input('text')
     set text(value: string) {
         this.processedText = '';
-
         let linksSections = value.split('<a ');
 
         for (let section of linksSections) {
-            console.log(section);
-
             if (!section.includes('href')) {
                 this.processedText += section;
                 continue;
             }
 
             if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#')) {
-                console.log('process hashtag');
-                this.processHashtag(section);
+                try {
+                    this.processHashtag(section);
+                }
+                catch (err) {
+                    console.warn('process hashtag');
+                    console.warn(value);
+                }
+
             } else if (section.includes('class="u-url mention"') || section.includes('class="mention"')) {
-                console.log('process mention');
-                this.processUser(section);
+                try {
+                    this.processUser(section);
+                }
+                catch (err) {
+                    console.warn('process mention');
+                    console.warn(value);
+                }
             } else {
-                console.log('process link');
-                console.log(section);
-                this.processLink(section);
+                try {
+                    this.processLink(section);
+                }
+                catch (err) {
+                    console.warn('process link');
+                    console.warn(value);
+                }
             }
         }
     }
@@ -78,20 +90,17 @@ export class DatabindedTextComponent implements OnInit {
         let extractedLinkAndNext = section.split('</a>')
         let extractedUrl = extractedLinkAndNext[0].split('"')[1];
 
-        console.warn(extractedLinkAndNext[0]);
-        console.warn(extractedLinkAndNext[0].split('<span class="ellipsis">'));
-
         let extractedName = '';
         try {
             extractedName = extractedLinkAndNext[0].split('<span class="ellipsis">')[1].split('</span>')[0];
-        } catch (err){
+        } catch (err) {
             try {
-            extractedName = extractedLinkAndNext[0].split('<span class="invisible">https://</span><span class="">')[1].split('</span>')[0];
+                extractedName = extractedLinkAndNext[0].split('<span class="invisible">https://</span><span class="">')[1].split('</span>')[0];
             }
-            catch(err){
-                extractedName = extractedLinkAndNext[0].split('rel="nofollow noopener" target="_blank">')[1].split('</span>')[0];               
+            catch (err) {
+                extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
             }
-        } 
+        }
 
         this.links.push(extractedUrl);
         let classname = this.getClassNameForLink(extractedUrl);
