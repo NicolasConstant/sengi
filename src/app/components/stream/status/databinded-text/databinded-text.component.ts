@@ -163,7 +163,7 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private getClassNameForLink(value: string): string {
-        let res = value.replace(/[.,\/#?!@$%\^&\*;:{}=\-_`~()]/g, "");
+        let res = value.replace(/[.,\/#?!@$%\^&\*;:{}=\+-_`~()]/g, "");
         return `link-${res}`;
     }
 
