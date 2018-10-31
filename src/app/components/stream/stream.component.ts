@@ -22,7 +22,7 @@ export class StreamComponent implements OnInit {
     private bufferWasCleared: boolean;
 
     overlayActive: boolean;
-    overlayAccountToBrowse: Account;
+    overlayAccountToBrowse: string;
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -50,17 +50,17 @@ export class StreamComponent implements OnInit {
     ngOnInit() {
     }
 
-    browseAccount(account: Account): void {
+    browseAccount(account: string): void {
         this.overlayAccountToBrowse = account;
         this.overlayActive = true;
     }
 
-    browseHashtag(hashtag: any): void {
+    browseHashtag(hashtag: string): void {
         console.warn('browseHashtag');
         console.warn(hashtag);
     }
 
-    browseThread(thread: any): void {
+    browseThread(thread: string): void {
         console.warn('browseThread');
         console.warn(thread);
     }

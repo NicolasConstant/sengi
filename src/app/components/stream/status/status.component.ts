@@ -17,11 +17,9 @@ export class StatusComponent implements OnInit {
     hasAttachments: boolean;
     replyingToStatus: boolean;
 
-    @Output() browseAccount = new EventEmitter<Account>();
+    @Output() browseAccount = new EventEmitter<string>();
     @Output() browseHashtag = new EventEmitter<string>();
     @Output() browseThread = new EventEmitter<string>();
-
-
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -74,7 +72,11 @@ export class StatusComponent implements OnInit {
     // }
 
     openAccount(account: Account): boolean {
-        this.browseAccount.next(account);
+        let accountName = account.acct; 
+        if(!accountName.includes('@'))
+        accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
+
+        this.browseAccount.next(accountName);
         return false;
     }
 
@@ -114,10 +116,12 @@ export class StatusComponent implements OnInit {
 
     accountSelected(accountName: string): void {
         console.warn(`status comp: accountSelected ${accountName}`);
+        this.browseAccount.next(accountName);
     }
 
     hashtagSelected(hashtag: string): void {
         console.warn(`status comp: hashtagSelected ${hashtag}`);
+        this.browseHashtag.next(hashtag);
     }
 
     textSelected(): void {
