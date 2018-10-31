@@ -59,6 +59,14 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
     });
 
+    it('should parse link - dual section', () => {
+        const sample = `<p>Test.<br><a href="https://peertube.fr/videos/watch/69bb6e90-ec0f-49a3-9e28-41792f4a7c5f" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="ellipsis">peertube.fr/videos/watch/69bb6</span><span class="invisible">e90-ec0f-49a3-9e28-41792f4a7c5f</span></a></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p>Test.<br><a href class="link-httpspeertubefrvideoswatch69bb6e90ec0f49a39e2841792f4a7c5f" title="open link">peertube.fr/videos/watch/69bb6</a></p>');
+    });
+  
+
     it('should parse combined hashtag, mention and link', () => {
         const hashtag = 'programmers';
         const hashtagUrl = 'https://test.social/tags/programmers';
@@ -83,5 +91,7 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('<a href class="link-httpswwwlemondefrplanetehtmlxtorRSS3208" title="open link">https://social.bitcast.info/url/819438</a>');
         expect(component.processedText).toContain('bla1');
     });
-  
+
+
+   
 });
