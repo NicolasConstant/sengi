@@ -71,7 +71,7 @@ export class StreamOverlayComponent implements OnInit {
             return;
         }
 
-        this.mastodonService.search(selectedAccounts[0], accountName)
+        this.mastodonService.search(selectedAccounts[0], accountName, true)
             .then((result: Results) => {
                 this.account = result.accounts[0];
             });

@@ -117,6 +117,12 @@ export class MastodonService {
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
     }
 
+    searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]>{
+        const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Account[]>(route, { headers: headers }).toPromise()
+    }
+
     reblog(account: AccountInfo, status: Status): Promise<Status> {
         const route = `https://${account.instance}${this.apiRoutes.reblogStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
