@@ -107,8 +107,20 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    test(): boolean {
-        console.warn('heeeeyaaa!');
-        return false;
+    // test(): boolean {
+    //     console.warn('heeeeyaaa!');
+    //     return false;
+    // }
+
+    accountSelected(accountName: string): void {
+        console.warn(`status comp: accountSelected ${accountName}`);
+    }
+
+    hashtagSelected(hashtag: string): void {
+        console.warn(`status comp: hashtagSelected ${hashtag}`);
+    }
+
+    textSelected(): void {
+        console.warn(`status comp: textSelected`);
     }
 }

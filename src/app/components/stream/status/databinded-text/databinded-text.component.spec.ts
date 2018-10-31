@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatabindedTextComponent } from './databinded-text.component';
 import { By } from '@angular/platform-browser';
+import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
 describe('DatabindedTextComponent', () => {
     let component: DatabindedTextComponent;
@@ -64,8 +65,7 @@ describe('DatabindedTextComponent', () => {
 
         component.text = sample;
         expect(component.processedText).toContain('<p>Test.<br><a href class="link-httpspeertubefrvideoswatch69bb6e90ec0f49a39e2841792f4a7c5f" title="open link">peertube.fr/videos/watch/69bb6</a></p>');
-    });
-  
+    });  
 
     it('should parse combined hashtag, mention and link', () => {
         const hashtag = 'programmers';
@@ -84,7 +84,7 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla4');
     });
 
-    it('should parse link - GNU social', () => {
+    it('should parse link - GNU social in Mastodon', () => {
         const sample = `bla1 <a href="https://www.lemonde.fr/planete.html?xtor=RSS-3208" rel="nofollow noopener" class="" target="_blank">https://social.bitcast.info/url/819438</a>`;
 
         component.text = sample;
@@ -92,6 +92,11 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla1');
     });
 
+    it('shoult parse mention - Pleroma in Mastodon', () => {
+        const sample = `<div><span><a class="mention status-link" href="https://pleroma.site/users/kaniini" rel="noopener" target="_blank" title="kaniini@pleroma.site">@<span>kaniini</span></a></span> <span><a class="mention status-link" href="https://mastodon.social/@Gargron" rel="noopener" target="_blank" title="Gargron@mastodon.social">@<span>Gargron</span></a></span> bla1?</div>`;
 
+        component.text = sample;
+        expect(component.processedText).toContain('<div><span> <a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span> <a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
+    });
    
 });

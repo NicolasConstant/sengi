@@ -38,7 +38,7 @@ export class DatabindedTextComponent implements OnInit {
                     console.warn(value);
                 }
 
-            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"')) {
+            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"')) {
                 try {
                     this.processUser(section);
                 }
@@ -68,16 +68,20 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private processUser(section: string) {
-        let mentionClass = 'class="mention"';
-        if (section.includes('class="u-url mention"'))
-            mentionClass = 'class="u-url mention"';
+        // let mentionClass = 'class="mention"';
+        // if (section.includes('class="u-url mention"'))
+        //     mentionClass = 'class="u-url mention"';
 
         let extractedAccountAndNext = section.split('</a></span>');
 
         let extractedAccountName = extractedAccountAndNext[0].split('@<span>')[1].replace('<span>', '').replace('</span>', '');
 
         let extractedAccountLink = extractedAccountAndNext[0].split('href="https://')[1].split('"')[0].replace(' ', '').replace('@', '').split('/');
-        let extractedAccount = `@${extractedAccountLink[1]}@${extractedAccountLink[0]}`;
+
+        let domain = extractedAccountLink[0];
+        let username = extractedAccountLink[extractedAccountLink.length - 1];
+
+        let extractedAccount = `@${username}@${domain}`;
 
         let classname = this.getClassNameForAccount(extractedAccount);
         this.processedText += ` <a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
@@ -163,22 +167,19 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private getClassNameForLink(value: string): string {
-        let res = value.replace(/[.,\/#?!@$%\^&\*;:{}=\+-_`~()]/g, "");
+        let res = value.replace(/[.,\/#?!@$%+\^&\*;:{}=\-_`~()]/g, "");
         return `link-${res}`;
     }
 
     private selectAccount(account: string) {
-        console.warn(`select ${account}`);
         this.accountSelected.next(account);
     }
 
     private selectHashtag(hashtag: string) {
-        console.warn(`select ${hashtag}`);
         this.hashtagSelected.next(hashtag);
     }
 
     selectText() {
-        console.warn(`selectText`);
         this.textSelected.next();
     }
 
