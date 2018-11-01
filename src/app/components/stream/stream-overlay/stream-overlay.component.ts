@@ -9,6 +9,9 @@ import { ToolsService } from '../../../services/tools.service';
     styleUrls: ['./stream-overlay.component.scss']
 })
 export class StreamOverlayComponent implements OnInit {
+    canRefresh: boolean;
+    canGoForward: boolean;
+
     account: Account;
     private accountName: string;
 
@@ -16,6 +19,7 @@ export class StreamOverlayComponent implements OnInit {
     private hashtag: string;
 
     error: string;
+    isLoading: boolean;
 
     @Output() closeOverlay = new EventEmitter();
 
@@ -62,8 +66,20 @@ export class StreamOverlayComponent implements OnInit {
         this.closeOverlay.next();
         return false;
     }
+    
+    next(): boolean {
+        return false;
+    }
 
-    loadAccount(accountName: string): void {
+    previous(): boolean {
+        return false;
+    }
+
+    refresh(): boolean {
+        return false;
+    }
+
+    private loadAccount(accountName: string): void {
         let selectedAccounts = this.toolsService.getSelectedAccounts();
         
         if (selectedAccounts.length === 0) {
@@ -71,9 +87,16 @@ export class StreamOverlayComponent implements OnInit {
             return;
         }
 
+        this.isLoading = true;
         this.mastodonService.search(selectedAccounts[0], accountName, true)
             .then((result: Results) => {
                 this.account = result.accounts[0];
+            })
+            .catch((err) => {
+                this.error = 'Error when retieving account';
+            })
+            .then(()=>{
+                this.isLoading = false;
             });
     }
 }

@@ -1,12 +1,16 @@
 <div class="stream-overlay">
     <div class="stream-overlay__header">
-        <a href class="overlay-close" (click)="close()">CLOSE</a>
-        <a href class="overlay-previous">PREV</a>
-        <a href class="overlay-next">NEXT</a>
+        <a href class="overlay-close" (click)="close()">CLOSE</a>          
+        <a href class="overlay-previous" (click)="previous()">PREV</a>
+        <a href class="overlay-refresh" [class.not-active]="!canRefresh" (click)="refresh()">REFRESH</a>      
+        <a href class="overlay-next" [class.not-active]="!canGoForward" (click)="next()">NEXT</a>
     </div>
     <!-- <div class="stream-overlay__title">
         Account
     </div> -->
+    
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+
     <app-user-profile *ngIf="account" [currentAccount]="account"></app-user-profile>
     <app-hashtag  *ngIf="browseHashtag"></app-hashtag>
     <app-thread  *ngIf="browseThread"></app-thread>
