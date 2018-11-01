@@ -1,23 +1,30 @@
 @import "variables";
 .profile-header {
+    background-size: cover;
     position: relative;
-    height: 140px;
+    // height: 140px;
     overflow: hidden; // background-color: black;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid black;  
+
     & h2 {
         font-size: $default-font-size;        
     }
-    &__header {
-        position: absolute;
-        // width: calc(100%);
-
-        width: calc(100%);
-        height: auto;
-
-        float: left;
-        display: block;
-        opacity: 0.3;        
+    &__inner{
+        height: 160px;
+        background-color: rgba(0, 0, 0, .45);
     }
+
+    // &__header {
+    //     position: absolute;
+    //     // width: calc(100%);
+
+    //     width: calc(100%);
+    //     height: auto;
+
+    //     float: left;
+    //     display: block;
+    //     opacity: 0.3;        
+    // }
     &__avatar {
         position: absolute;
         top: 15px;
@@ -28,21 +35,20 @@
     }
     &__display-name {
         position: absolute;
-        top: 45px;
-        left: 115px;
-        // font-weight: bold;
+        top: 105px;
+        left: 15px;
         color: white;
     }
     &__fullhandle {
         position: absolute;
-        top: 105px;
+        top: 130px;
         left: 15px;
         color: white;
     }
 }
 
 .profile-description {
-    padding: 5px 10px 0 10px;
+    padding: 10px 10px 15px 10px;
     font-size: 13px;
     border-bottom: 1px solid black;
 }
