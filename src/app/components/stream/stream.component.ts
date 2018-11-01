@@ -23,6 +23,7 @@ export class StreamComponent implements OnInit {
 
     overlayActive: boolean;
     overlayAccountToBrowse: string;
+    overlayHashtagToBrowse: string;
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -52,12 +53,15 @@ export class StreamComponent implements OnInit {
 
     browseAccount(account: string): void {
         this.overlayAccountToBrowse = account;
-        this.overlayActive = true;
+        this.overlayHashtagToBrowse = null;
+        this.overlayActive = true;        
     }
 
     browseHashtag(hashtag: string): void {
-        console.warn('browseHashtag');
-        console.warn(hashtag);
+        console.warn(`browseHashtag ${hashtag}`);
+        this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = hashtag;
+        this.overlayActive = true;  
     }
 
     browseThread(thread: string): void {

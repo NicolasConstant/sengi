@@ -1,5 +1,7 @@
 <div class="profile flexcroll">
-    <div class="profile-header" [ngStyle]="{'background-image':'url('+account.header+')'}">
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+
+    <div *ngIf="account" class="profile-header" [ngStyle]="{'background-image':'url('+account.header+')'}">
         <div class="profile-header__inner">
             <!-- <img class="profile-header__header" src="{{account.header}}" alt="header" /> -->
             <img class="profile-header__avatar" src="{{account.avatar}}" alt="header" />
@@ -7,7 +9,7 @@
             <h2 class="profile-header__fullhandle">@{{account.acct}}</h2>
         </div>
     </div>
-    <div class="profile-description" *ngIf="hasNote">
+    <div *ngIf="account && hasNote" class="profile-description">
         <app-databinded-text class="status__content" [textIsSelectable]="false" [text]="account.note" (accountSelected)="accountSelected($event)"
             (hashtagSelected)="hashtagSelected($event)"></app-databinded-text>
         <!-- <p innerHTML="{{account.note}}"></p> -->

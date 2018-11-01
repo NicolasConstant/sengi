@@ -12,11 +12,10 @@ export class StreamOverlayComponent implements OnInit {
     canRefresh: boolean;
     canGoForward: boolean;
 
-    account: Account;
-    private accountName: string;
-
+    // account: Account;
+    accountName: string;
     private thread: string;
-    private hashtag: string;
+    hashtag: string;
 
     error: string;
     isLoading: boolean;
@@ -24,42 +23,30 @@ export class StreamOverlayComponent implements OnInit {
     @Output() closeOverlay = new EventEmitter();
 
     @Input('browseAccount')
-    set browseAccount(accountName: string) {
-        
-        this.loadAccount(accountName);
-
-        // let selectedAccounts = this.toolsService.getSelectedAccounts();
-        // if(selectedAccounts.length === 0)
-        //     this.error = 'no user selected';
-
-
-        // this.account = account;
+    set browseAccount(accountName: string) {     
+        // console.warn(`browseAccount ${accountName}`);
+        this.accountName = accountName;
+        // if(accountName) this.loadAccount(accountName);
     }
-    // get browseAccount(): string{
-    //     return this.account;
-    // }
 
     @Input('browseThread')
     set browseThread(thread: string) {
+        // console.warn(`browseThread ${thread}`);
         this.thread = thread;
-    }
-    get browseThread(): string {
-        return this.thread;
     }
 
     @Input('browseHashtag')
     set browseHashtag(hashtag: string) {
+        // console.warn(`browseHashtag ${hashtag}`);
         this.hashtag = hashtag;
-    }
-    get browseHashtag(): string {
-        return this.hashtag;
-    }
+    }   
 
     constructor(
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        console.warn('ngOnInit stream-overlay');
     }
 
     close(): boolean {
@@ -80,32 +67,10 @@ export class StreamOverlayComponent implements OnInit {
     }
 
     accountSelected(accountName: string): void {
-        this.loadAccount(accountName);
+        this.accountName = accountName;
+        // this.loadAccount(accountName);
     }
 
     hashtagSelected(hashtag: string): void {
-    }
-
-    private loadAccount(accountName: string): void {
-        this.account = null;
-        this.accountName = accountName;
-        let selectedAccounts = this.toolsService.getSelectedAccounts();
-        
-        if (selectedAccounts.length === 0) {
-            this.error = 'no user selected';
-            return;
-        }
-
-        this.isLoading = true;
-        this.mastodonService.search(selectedAccounts[0], accountName, true)
-            .then((result: Results) => {
-                this.account = result.accounts[0];
-            })
-            .catch((err) => {
-                this.error = 'Error when retieving account';
-            })
-            .then(()=>{
-                this.isLoading = false;
-            });
-    }
+    }   
 }
