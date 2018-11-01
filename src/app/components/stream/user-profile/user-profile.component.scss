@@ -1,56 +1,56 @@
 @import "variables";
 @import "commons";
+.profile {
+    overflow: auto;
+    height: calc(100% - 30px);
 
-.profile-header {
-    background-size: cover;
-    position: relative;
-    // height: 140px;
-    overflow: hidden; // background-color: black;
-    border-bottom: 1px solid black;  
-
-    & h2 {
-        font-size: $default-font-size;        
+    &-header {
+        background-size: cover;
+        position: relative; // height: 140px;
+        overflow: hidden; // background-color: black;
+        border-bottom: 1px solid black;
+        & h2 {
+            font-size: $default-font-size;
+        }
+        &__inner {
+            height: 160px;
+            background-color: rgba(0, 0, 0, .45);
+        }
+        
+        // &__header {
+        //     position: absolute;
+        //     // width: calc(100%);
+        //     width: calc(100%);
+        //     height: auto;
+        //     float: left;
+        //     display: block;
+        //     opacity: 0.3;        
+        // }
+        &__avatar {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 80px;
+            border-radius: 50%; // border: 1px solid black;
+            // background-color: black;
+        }
+        &__display-name {
+            position: absolute;
+            top: 105px;
+            left: 15px;
+            color: white;
+        }
+        &__fullhandle {
+            position: absolute;
+            top: 130px;
+            left: 15px;
+            color: white;
+        }
     }
-    &__inner{
-        height: 160px;
-        background-color: rgba(0, 0, 0, .45);
-    }
 
-    // &__header {
-    //     position: absolute;
-    //     // width: calc(100%);
-
-    //     width: calc(100%);
-    //     height: auto;
-
-    //     float: left;
-    //     display: block;
-    //     opacity: 0.3;        
-    // }
-    &__avatar {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        width: 80px;
-        border-radius: 50%; // border: 1px solid black;
-        // background-color: black;
+    &-description {
+        padding: 10px 10px 15px 10px;
+        font-size: 13px;
+        border-bottom: 1px solid black;
     }
-    &__display-name {
-        position: absolute;
-        top: 105px;
-        left: 15px;
-        color: white;
-    }
-    &__fullhandle {
-        position: absolute;
-        top: 130px;
-        left: 15px;
-        color: white;
-    }
-}
-
-.profile-description {
-    padding: 10px 10px 15px 10px;
-    font-size: 13px;
-    border-bottom: 1px solid black;
 }
