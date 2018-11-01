@@ -25,7 +25,7 @@ export class StreamOverlayComponent implements OnInit {
 
     @Input('browseAccount')
     set browseAccount(accountName: string) {
-        this.accountName = accountName;
+        
         this.loadAccount(accountName);
 
         // let selectedAccounts = this.toolsService.getSelectedAccounts();
@@ -79,7 +79,16 @@ export class StreamOverlayComponent implements OnInit {
         return false;
     }
 
+    accountSelected(accountName: string): void {
+        this.loadAccount(accountName);
+    }
+
+    hashtagSelected(hashtag: string): void {
+    }
+
     private loadAccount(accountName: string): void {
+        this.account = null;
+        this.accountName = accountName;
         let selectedAccounts = this.toolsService.getSelectedAccounts();
         
         if (selectedAccounts.length === 0) {

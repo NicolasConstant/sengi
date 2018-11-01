@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Account } from "../../../services/models/mastodon.interfaces";
 
 @Component({
@@ -9,6 +9,9 @@ import { Account } from "../../../services/models/mastodon.interfaces";
 export class UserProfileComponent implements OnInit {
     account: Account;
     hasNote: boolean;
+
+    @Output() browseAccount = new EventEmitter<string>();
+    @Output() browseHashtag = new EventEmitter<string>();
 
     @Input('currentAccount')
     set currentAccount(account: Account) {
@@ -23,4 +26,11 @@ export class UserProfileComponent implements OnInit {
     ngOnInit() {
     }
 
+    accountSelected(accountName: string): void {
+        this.browseAccount.next(accountName);
+    }
+
+    hashtagSelected(hashtag: string): void {
+        this.browseHashtag.next(hashtag);
+    }
 }

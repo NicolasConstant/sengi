@@ -11,7 +11,7 @@
     
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
-    <app-user-profile *ngIf="account" [currentAccount]="account"></app-user-profile>
+    <app-user-profile *ngIf="account" [currentAccount]="account" (browseAccount)="accountSelected($event)" (browseHashtag)="hashtagSelected($event)"></app-user-profile>
     <app-hashtag  *ngIf="browseHashtag"></app-hashtag>
     <app-thread  *ngIf="browseThread"></app-thread>
 </div>

@@ -18,6 +18,8 @@ export class DatabindedTextComponent implements OnInit {
     @Output() hashtagSelected = new EventEmitter<string>();
     @Output() textSelected = new EventEmitter();
 
+    @Input() textIsSelectable: boolean = true;
+
     @Input('text')
     set text(value: string) {
         this.processedText = '';

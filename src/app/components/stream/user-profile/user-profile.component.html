@@ -5,5 +5,6 @@
     <h2 class="profile-header__fullhandle">@{{account.acct}}</h2>
 </div>
 <div class="profile-description" *ngIf="hasNote">
-    <p innerHTML="{{account.note}}"></p>
+    <app-databinded-text class="status__content" [textIsSelectable]="false" [text]="account.note" (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)" ></app-databinded-text>
+    <!-- <p innerHTML="{{account.note}}"></p> -->
 </div>
