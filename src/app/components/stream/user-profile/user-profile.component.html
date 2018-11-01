@@ -11,3 +11,10 @@
         (hashtagSelected)="hashtagSelected($event)"></app-databinded-text>
     <!-- <p innerHTML="{{account.note}}"></p> -->
 </div>
+<div class="profile-statuses">
+    <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
+
+    <div *ngFor="let statusWrapper of statuses">
+        <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)"></app-status>
+    </div>
+</div>
