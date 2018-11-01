@@ -36,7 +36,7 @@ describe('DatabindedTextComponent', () => {
         const url = 'https://test.social/tags/programmers';
         const sample = `<p>bla1 <a href="${url}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="programmers">#programmers</a>');
+        expect(component.processedText).toContain('<a href class="hashtag-programmers">#programmers</a>');
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
     });
@@ -75,7 +75,7 @@ describe('DatabindedTextComponent', () => {
         const linkUrl = 'mydomain.co/test';
         const sample = `<p>bla1 <a href="${hashtagUrl}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2 <span class="h-card"><a href="${mentionUrl}" class="u-url mention" rel="nofollow noopener" target="_blank">@<span>${mention}</span></a></span> bla3 <a href="https://${linkUrl}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${linkUrl}</span><span class="invisible"></span></a> bla4</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="programmers">#programmers</a>');
+        expect(component.processedText).toContain('<a href class="hashtag-programmers">#programmers</a>');
         expect(component.processedText).toContain('<a href class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social">@sengi_app</a>');
         expect(component.processedText).toContain('<a href class="link-httpsmydomaincotest" title="open link">mydomain.co/test</a>');
         expect(component.processedText).toContain('bla1');
@@ -97,6 +97,5 @@ describe('DatabindedTextComponent', () => {
 
         component.text = sample;
         expect(component.processedText).toContain('<div><span> <a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span> <a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
-    });
-   
+    });   
 });

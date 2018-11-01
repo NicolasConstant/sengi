@@ -64,7 +64,8 @@ export class DatabindedTextComponent implements OnInit {
         let extractedLinkAndNext = section.split('</a>');
         let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
 
-        this.processedText += ` <a href class="${extractedHashtag}">#${extractedHashtag}</a>`;
+        let classname = this.getClassNameForHastag(extractedHashtag);
+        this.processedText += ` <a href class="${classname}">#${extractedHashtag}</a>`;
         if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
         this.hashtags.push(extractedHashtag);
     }
@@ -124,7 +125,8 @@ export class DatabindedTextComponent implements OnInit {
 
     ngAfterViewInit() {
         for (const hashtag of this.hashtags) {
-            let el = this.contentElement.nativeElement.querySelector(`.${hashtag}`);
+            let classname = this.getClassNameForHastag(hashtag);
+            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
 
             this.renderer.listen(el, 'click', (event) => {
                 event.preventDefault();
@@ -159,6 +161,11 @@ export class DatabindedTextComponent implements OnInit {
                 return false;
             });
         }
+    }
+
+    private getClassNameForHastag(value: string): string {
+        let res = value.replace(/[.,\/#?!@$%+\^&\*;:{}=\-_`~()]/g, "");
+        return `hashtag-${res}`;
     }
 
     private getClassNameForAccount(value: string): string {
