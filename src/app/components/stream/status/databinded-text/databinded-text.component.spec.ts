@@ -67,6 +67,13 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('<p>Test.<br><a href class="link-httpspeertubefrvideoswatch69bb6e90ec0f49a39e2841792f4a7c5f" title="open link">peertube.fr/videos/watch/69bb6</a></p>');
     });  
 
+    it('should parse link with special character', () => {
+        const sample = `<p>Magnitude: 2.5 Depth: 3.4 km<br>Details: 2018/09/27 06:50:17 34.968N 120.685W<br>Location: 10 km (6 mi) W of Guadalupe, CA<br>Map: <a href="https://www.google.com/maps/place/34°58'4%20N+120°41'6%20W/@34.968,-120.685,10z" rel="noopener" target="_blank" class="status-link" title="https://www.google.com/maps/place/34%C2%B058'4%20N+120%C2%B041'6%20W/@34.968,-120.685,10z"><span class="invisible">https://www.</span><span class="ellipsis">google.com/maps/place/34°58'4%</span><span class="invisible">20N+120°41'6%20W/@34.968,-120.685,10z</span></a><br><a href="https://mastodon.cloud/tags/earthquake" class="mention hashtag status-link" rel="noopener" target="_blank">#<span>EarthQuake</span></a> <a href="https://mastodon.cloud/tags/quake" class="mention hashtag status-link" rel="noopener" target="_blank">#<span>Quake</span></a> <a href="https://mastodon.cloud/tags/california" class="mention hashtag status-link" rel="noopener" target="_blank">#<span>California</span></a></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<a href class="link-httpswwwgooglecommapsplace3458420N12041620W3496812068510z" title="open link">google.com/maps/place/34°58\'4%</a>');
+    });
+
     it('should parse combined hashtag, mention and link', () => {
         const hashtag = 'programmers';
         const hashtagUrl = 'https://test.social/tags/programmers';
@@ -92,10 +99,12 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla1');
     });
 
-    it('shoult parse mention - Pleroma in Mastodon', () => {
+    it('should parse mention - Pleroma in Mastodon', () => {
         const sample = `<div><span><a class="mention status-link" href="https://pleroma.site/users/kaniini" rel="noopener" target="_blank" title="kaniini@pleroma.site">@<span>kaniini</span></a></span> <span><a class="mention status-link" href="https://mastodon.social/@Gargron" rel="noopener" target="_blank" title="Gargron@mastodon.social">@<span>Gargron</span></a></span> bla1?</div>`;
 
         component.text = sample;
         expect(component.processedText).toContain('<div><span> <a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span> <a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
     });   
+
+    
 });
