@@ -28,7 +28,7 @@ export class UserProfileComponent implements OnInit {
     //set currentAccount(account: Account) {
     set currentAccount(accountName: string) {
         this.statuses.length = 0;
-        this.isLoading = true;        
+        this.isLoading = true;
 
         this.loadAccount(accountName)
             .then((account: Account) => {
@@ -36,9 +36,10 @@ export class UserProfileComponent implements OnInit {
                 return this.getStatuses(this.account);
             })
             .catch(err => {
-                this.error = 'Error when retieving account';
+                this.error = 'Error when retrieving account';
                 this.isLoading = false;
                 this.statusLoading = false;
+                console.warn(this.error);
             });
 
         // this.account = account;
@@ -70,21 +71,17 @@ export class UserProfileComponent implements OnInit {
 
         if (selectedAccounts.length === 0) {
             this.error = 'no user selected';
-            return;
+            console.error(this.error);
+            return Promise.resolve(null);
         }
 
         this.isLoading = true;
         return this.mastodonService.search(selectedAccounts[0], accountName, true)
             .then((result: Results) => {
+                console.warn(result);
                 this.isLoading = false;
                 return result.accounts[0];
             });
-        // .catch((err) => {
-        //     this.error = 'Error when retieving account';
-        // })
-        // .then(()=>{
-        //     this.isLoading = false;
-        // });
     }
 
     private getStatuses(account: Account): Promise<void> {

@@ -39,11 +39,12 @@ export class StreamingWrapper {
         this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
         this.eventSource.onerror = x => this.webSocketGotError(x);
         this.eventSource.onopen = x => console.log(x);
-        this.eventSource.onclose = x => this.webSocketClosed(route, x);
+        this.eventSource.onclose = x => this.webSocketClosed(route, x);        
     }
 
     private errorClosing: boolean;
     private webSocketGotError(x: Event) {
+        console.log(x);
         this.errorClosing = true;
     }
 
@@ -52,7 +53,36 @@ export class StreamingWrapper {
         console.log(x);
 
         if (this.errorClosing) {
-            this.mastodonService.getTimeline(this.accountInfo, this.streamType, null, this.since_id)
+
+            this.pullNewStatuses(domain);
+
+            // this.mastodonService.getTimeline(this.accountInfo, this.streamType, null, this.since_id)
+            //     .then((status: Status[]) => {
+            //         // status = status.sort((n1, n2) => {  return (<number>n1.id) < (<number>n2.id); });
+            //         status = status.sort((a, b) => a.id.localeCompare(b.id));
+            //         for (const s of status) {
+            //             const update = new StatusUpdate();
+            //             update.status = s;
+            //             update.type = EventEnum.update;
+            //             this.since_id = update.status.id;
+            //             this.statusUpdateSubjet.next(update);
+            //         }
+            //     })
+            //     .catch(err => {
+            //         console.error(err);
+            //     })
+            //     .then(() => {
+            //         setTimeout(() => { this.start(domain) }, 20 * 1000);
+            //     });
+
+            this.errorClosing = false;
+        } else {
+            setTimeout(() => { this.start(domain) }, 5000);
+        }
+    }
+
+    private pullNewStatuses(domain){
+        this.mastodonService.getTimeline(this.accountInfo, this.streamType, null, this.since_id)
                 .then((status: Status[]) => {
                     // status = status.sort((n1, n2) => {  return (<number>n1.id) < (<number>n2.id); });
                     status = status.sort((a, b) => a.id.localeCompare(b.id));
@@ -68,13 +98,9 @@ export class StreamingWrapper {
                     console.error(err);
                 })
                 .then(() => {
-                    setTimeout(() => { this.start(domain) }, 20 * 1000);
+                    // setTimeout(() => { this.start(domain) }, 20 * 1000);
+                    setTimeout(() => { this.pullNewStatuses(domain) }, 15 * 1000);
                 });
-
-            this.errorClosing = false;
-        } else {
-            setTimeout(() => { this.start(domain) }, 5000);
-        }
     }
 
     private statusParsing(event: WebSocketEvent) {
