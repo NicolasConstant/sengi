@@ -1,48 +1,52 @@
 @import "variables";
-.profile-header {
-    position: relative;
-    height: 140px;
-    overflow: hidden; // background-color: black;
-    border-bottom: 1px solid black;
-    & h2 {
-        font-size: $default-font-size;        
-    }
-    &__header {
-        position: absolute;
-        // width: calc(100%);
+@import "commons";
+.profile {
+    overflow: auto;
+    height: calc(100% - 30px);
 
-        width: calc(100%);
-        height: auto;
+    &-header {
+        background-size: cover;
+        position: relative; // height: 140px;
+        overflow: hidden; // background-color: black;
+        border-bottom: 1px solid black;
+        & h2 {
+            font-size: $default-font-size;
+        }
+        &__inner {
+            overflow: auto;
+            height: 160px;
+            background-color: rgba(0, 0, 0, .45);
+        }
+        &__avatar {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 80px;
+            border-radius: 50%;
+        }
+        &__display-name {
+            position: absolute;
+            top: 105px;
+            left: 15px;
+            color: white;
+        }
+        &__fullhandle a {
+            position: absolute;
+            top: 130px;
+            left: 15px;
+            color: white;
+        }
+    }
 
-        float: left;
-        display: block;
-        opacity: 0.3;        
+    &-description {
+        padding: 10px 10px 15px 10px;
+        font-size: 13px;
+        border-bottom: 1px solid black;
     }
-    &__avatar {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        width: 80px;
-        border-radius: 50%; // border: 1px solid black;
-        // background-color: black;
-    }
-    &__display-name {
-        position: absolute;
-        top: 45px;
-        left: 115px;
-        // font-weight: bold;
-        color: white;
-    }
-    &__fullhandle {
-        position: absolute;
-        top: 105px;
-        left: 15px;
-        color: white;
-    }
-}
 
-.profile-description {
-    padding: 5px 10px 0 10px;
-    font-size: 13px;
-    border-bottom: 1px solid black;
+    &-no-toots {
+        text-align: center;
+        margin: 15px;
+        border: 2px solid whitesmoke;
+    }
 }

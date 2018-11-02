@@ -46,7 +46,7 @@ export class SearchComponent implements OnInit {
         //First candid implementation
         if (enabledAccounts.length > 0) {
             const candid_oneAccount = enabledAccounts[0];
-            this.mastodonService.search(candid_oneAccount, data)
+            this.mastodonService.search(candid_oneAccount, data, true)
                 .then((results: Results) => {
                     if (results) {
                         console.warn(results);

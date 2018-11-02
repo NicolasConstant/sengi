@@ -17,11 +17,9 @@ export class StatusComponent implements OnInit {
     hasAttachments: boolean;
     replyingToStatus: boolean;
 
-    @Output() browseAccount = new EventEmitter<Account>();
+    @Output() browseAccount = new EventEmitter<string>();
     @Output() browseHashtag = new EventEmitter<string>();
     @Output() browseThread = new EventEmitter<string>();
-
-
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -74,27 +72,31 @@ export class StatusComponent implements OnInit {
     // }
 
     openAccount(account: Account): boolean {
-        this.browseAccount.next(account);
+        let accountName = account.acct; 
+        if(!accountName.includes('@'))
+        accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
+
+        this.browseAccount.next(accountName);
         return false;
     }
 
-    getCompactRelativeTime(d: string): string {
-        const date = (new Date(d)).getTime();
-        const now = Date.now();
-        const timeDelta = (now - date) / (1000);
+    // getCompactRelativeTime(d: string): string {
+    //     const date = (new Date(d)).getTime();
+    //     const now = Date.now();
+    //     const timeDelta = (now - date) / (1000);
 
-        if (timeDelta < 60) {
-            return `${timeDelta | 0}s`;
-        } else if (timeDelta < 60 * 60) {
-            return `${timeDelta / 60 | 0}m`;
-        } else if (timeDelta < 60 * 60 * 24) {
-            return `${timeDelta / (60 * 60) | 0}h`;
-        } else if (timeDelta < 60 * 60 * 24 * 31) {
-            return `${timeDelta / (60 * 60 * 24) | 0}d`;
-        }
+    //     if (timeDelta < 60) {
+    //         return `${timeDelta | 0}s`;
+    //     } else if (timeDelta < 60 * 60) {
+    //         return `${timeDelta / 60 | 0}m`;
+    //     } else if (timeDelta < 60 * 60 * 24) {
+    //         return `${timeDelta / (60 * 60) | 0}h`;
+    //     } else if (timeDelta < 60 * 60 * 24 * 31) {
+    //         return `${timeDelta / (60 * 60 * 24) | 0}d`;
+    //     }
 
-        return formatDate(date, 'MM/dd', this.locale);
-    }
+    //     return formatDate(date, 'MM/dd', this.locale);
+    // }
 
     openReply(): boolean {
         this.replyingToStatus = !this.replyingToStatus;
@@ -107,8 +109,22 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    test(): boolean {
-        console.warn('heeeeyaaa!');
-        return false;
+    // test(): boolean {
+    //     console.warn('heeeeyaaa!');
+    //     return false;
+    // }
+
+    accountSelected(accountName: string): void {
+        console.warn(`status comp: accountSelected ${accountName}`);
+        this.browseAccount.next(accountName);
+    }
+
+    hashtagSelected(hashtag: string): void {
+        console.warn(`status comp: hashtagSelected ${hashtag}`);
+        this.browseHashtag.next(hashtag);
+    }
+
+    textSelected(): void {
+        console.warn(`status comp: textSelected`);
     }
 }
