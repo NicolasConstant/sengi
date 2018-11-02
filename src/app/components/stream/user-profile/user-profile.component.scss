@@ -29,7 +29,7 @@
             left: 15px;
             color: white;
         }
-        &__fullhandle {
+        &__fullhandle a {
             position: absolute;
             top: 130px;
             left: 15px;
@@ -41,5 +41,11 @@
         padding: 10px 10px 15px 10px;
         font-size: 13px;
         border-bottom: 1px solid black;
+    }
+
+    &-no-toots {
+        text-align: center;
+        margin: 15px;
+        border: 2px solid whitesmoke;
     }
 }
