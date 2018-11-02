@@ -40,7 +40,7 @@ export class DatabindedTextComponent implements OnInit {
                     console.warn(value);
                 }
 
-            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"')) {
+            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"') || section.includes('class="h-card mention status-link"')) {
                 try {
                     this.processUser(section);
                 }
@@ -71,25 +71,34 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private processUser(section: string) {
-        // let mentionClass = 'class="mention"';
-        // if (section.includes('class="u-url mention"'))
-        //     mentionClass = 'class="u-url mention"';
+        let extractedAccountAndNext: string[];
+        let extractedAccountName: string;
 
-        let extractedAccountAndNext = section.split('</a></span>');
-
-        let extractedAccountName = extractedAccountAndNext[0].split('@<span>')[1].replace('<span>', '').replace('</span>', '');
+        if (!section.includes('@<span>')) { //GNU social
+            extractedAccountAndNext = section.split('</a>');
+            extractedAccountName = extractedAccountAndNext[0].split('>')[1];
+        } else {
+            extractedAccountAndNext = section.split('</a></span>');
+            extractedAccountName = extractedAccountAndNext[0].split('@<span>')[1].replace('<span>', '').replace('</span>', '');
+        }
 
         let extractedAccountLink = extractedAccountAndNext[0].split('href="https://')[1].split('"')[0].replace(' ', '').replace('@', '').split('/');
 
         let domain = extractedAccountLink[0];
-        let username = extractedAccountLink[extractedAccountLink.length - 1];
+        //let username = extractedAccountLink[extractedAccountLink.length - 1];
 
-        let extractedAccount = `@${username}@${domain}`;
+        let extractedAccount = `@${extractedAccountName}@${domain}`;
 
         let classname = this.getClassNameForAccount(extractedAccount);
-        this.processedText += ` <a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
+        this.processedText += `<a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
 
-        if (extractedAccountAndNext[1]) this.processedText += extractedAccountAndNext[1];
+        if (extractedAccountAndNext[1]) 
+            this.processedText += extractedAccountAndNext[1];
+
+        //GNU Social clean up
+        if(this.processedText.includes('@<a')) 
+            this.processedText = this.processedText.replace('@<a', '<a');
+
         this.accounts.push(extractedAccount);
     }
 
