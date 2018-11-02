@@ -9,68 +9,147 @@ import { ToolsService } from '../../../services/tools.service';
     styleUrls: ['./stream-overlay.component.scss']
 })
 export class StreamOverlayComponent implements OnInit {
+    private previousElements: OverlayBrowsing[] = [];
+    private nextElements: OverlayBrowsing[] = [];
+    private currentElement: OverlayBrowsing;
+
     canRefresh: boolean;
     canGoForward: boolean;
 
-    // account: Account;
     accountName: string;
-    private thread: string;
+    thread: string;
     hashtag: string;
-
-    error: string;
-    isLoading: boolean;
 
     @Output() closeOverlay = new EventEmitter();
 
     @Input('browseAccount')
-    set browseAccount(accountName: string) {     
-        // console.warn(`browseAccount ${accountName}`);
-        this.accountName = accountName;
-        // if(accountName) this.loadAccount(accountName);
+    set browseAccount(accountName: string) {
+        this.accountSelected(accountName);
+        // this.accountName = accountName;
     }
 
     @Input('browseThread')
     set browseThread(thread: string) {
-        // console.warn(`browseThread ${thread}`);
-        this.thread = thread;
+        // this.thread = thread;
     }
 
     @Input('browseHashtag')
     set browseHashtag(hashtag: string) {
-        // console.warn(`browseHashtag ${hashtag}`);
-        this.hashtag = hashtag;
-    }   
+        this.hashtagSelected(hashtag);
+        // this.hashtag = hashtag;
+    }
 
-    constructor(
-        private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+    constructor() { }
 
     ngOnInit() {
-        console.warn('ngOnInit stream-overlay');
     }
 
     close(): boolean {
         this.closeOverlay.next();
         return false;
     }
-    
+
     next(): boolean {
+        console.log('next');
+
+        if (this.nextElements.length === 0) {
+            return false;
+        }
+
+        if (this.currentElement) {
+            this.previousElements.push(this.currentElement);
+        }
+
+        const nextElement = this.nextElements.pop();
+        this.loadElement(nextElement);
+
         return false;
     }
 
     previous(): boolean {
+        console.log('previous');
+
+        if (this.previousElements.length === 0) {
+            this.closeOverlay.next();
+            return false;
+        }
+
+        if (this.currentElement) {
+            this.nextElements.push(this.currentElement);
+        }
+
+        const previousElement = this.previousElements.pop();
+        this.loadElement(previousElement);
+
+        this.canGoForward = true;
         return false;
     }
 
     refresh(): boolean {
+        console.log('refresh');
         return false;
     }
 
     accountSelected(accountName: string): void {
-        this.accountName = accountName;
-        // this.loadAccount(accountName);
+        if(!accountName) return;
+
+        console.log('accountSelected');
+        this.nextElements.length = 0;
+        if (this.currentElement) {
+            this.previousElements.push(this.currentElement);
+        }
+        const newElement = new OverlayBrowsing(null, accountName, null);
+        this.loadElement(newElement);
+        this.canGoForward = false;
     }
 
     hashtagSelected(hashtag: string): void {
-    }   
+        if(!hashtag) return;
+
+        console.log('hashtagSelected');
+        this.nextElements.length = 0;
+        if (this.currentElement) {
+            this.previousElements.push(this.currentElement);
+        }
+        const newElement = new OverlayBrowsing(hashtag, null, null);
+        this.loadElement(newElement);
+        this.canGoForward = false;
+    }
+
+    private loadElement(element: OverlayBrowsing) {
+        this.currentElement = element;
+
+        this.accountName = this.currentElement.account;
+        this.hashtag = this.currentElement.hashtag;
+        this.thread = this.currentElement.thread;
+    }
+}
+
+class OverlayBrowsing {
+    constructor(
+        public readonly hashtag: string,
+        public readonly account: string,
+        public readonly thread: string) {
+
+        console.warn(`OverlayBrowsing: ${hashtag} ${account} ${thread}`);
+
+        if (hashtag) {
+            this.type = OverlayEnum.hashtag;
+        } else if (account) {
+            this.type = OverlayEnum.account;
+        } else if (thread) {
+            this.type = OverlayEnum.thread;
+        } else {
+            throw Error('NotImplemented');
+        }
+    }
+
+    type: OverlayEnum;
+}
+
+enum OverlayEnum {
+    unknown = 0,
+    hashtag = 1,
+    account = 2,
+    thread = 3
 }

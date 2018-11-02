@@ -27,6 +27,9 @@ export class UserProfileComponent implements OnInit {
     @Input('currentAccount')
     //set currentAccount(account: Account) {
     set currentAccount(accountName: string) {
+        this.statuses.length = 0;
+        this.isLoading = true;
+        this.statusLoading = true;        
 
         this.loadAccount(accountName)
             .then((account: Account) => {

@@ -18,7 +18,7 @@
         <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
 
         <div *ngFor="let statusWrapper of statuses">
-            <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)"></app-status>
+            <app-status [statusWrapper]="statusWrapper" (browseAccount)="accountSelected($event)"></app-status>
         </div>
     </div>
 </div>
