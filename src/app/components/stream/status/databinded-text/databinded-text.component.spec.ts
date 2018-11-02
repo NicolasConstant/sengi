@@ -99,7 +99,7 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla1');
     });
 
-    it('should parse mention - GNU social in Mastodon', () => {
+    it('should parse mention - Pleroma in Mastodon', () => {
         const sample = `<div>bla1 <br> @<a href="https://instance.club/user/1" class="h-card mention status-link" rel="noopener" target="_blank" title="https://instance.club/user/1">user</a>&nbsp;</div>`;
 
         component.text = sample;
@@ -107,12 +107,10 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla1');     
     })
 
-    it('should parse mention - Pleroma in Mastodon', () => {
+    it('should parse mention - Pleroma in Mastodon - 2', () => {
         const sample = `<div><span><a class="mention status-link" href="https://pleroma.site/users/kaniini" rel="noopener" target="_blank" title="kaniini@pleroma.site">@<span>kaniini</span></a></span> <span><a class="mention status-link" href="https://mastodon.social/@Gargron" rel="noopener" target="_blank" title="Gargron@mastodon.social">@<span>Gargron</span></a></span> bla1?</div>`;
 
         component.text = sample;
         expect(component.processedText).toContain('<div><span><a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span><a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
-    });   
-
-    
+    });       
 });

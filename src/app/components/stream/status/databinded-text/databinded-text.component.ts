@@ -40,7 +40,7 @@ export class DatabindedTextComponent implements OnInit {
                     console.warn(value);
                 }
 
-            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"') || section.includes('class="h-card mention status-link"')) {
+            } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"') || section.includes('class="h-card mention')) {
                 try {
                     this.processUser(section);
                 }
