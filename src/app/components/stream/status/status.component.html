@@ -13,7 +13,7 @@
         </span>
     </a>
     <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">{{
-        getCompactRelativeTime(status.created_at) }}</div>
+        status.created_at | mastodontime }}</div>
     <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
     <app-databinded-text class="status__content" [text]="displayedStatus.content" (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)" (textSelected)="textSelected()"></app-databinded-text>

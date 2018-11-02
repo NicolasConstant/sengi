@@ -40,6 +40,7 @@ import { ThreadComponent } from './components/stream/thread/thread.component';
 import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
 import { StreamOverlayComponent } from './components/stream/stream-overlay/stream-overlay.component';
 import { DatabindedTextComponent } from './components/stream/status/databinded-text/databinded-text.component';
+import { MastodonTimePipe } from './pipes/mastodon-time.pipe';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -72,7 +73,8 @@ const routes: Routes = [
     ThreadComponent,
     HashtagComponent,
     StreamOverlayComponent,
-    DatabindedTextComponent
+    DatabindedTextComponent,
+    MastodonTimePipe
   ],
   imports: [
     BrowserModule,
