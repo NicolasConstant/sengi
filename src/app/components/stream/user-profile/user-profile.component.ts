@@ -76,11 +76,10 @@ export class UserProfileComponent implements OnInit {
         }
 
         this.isLoading = true;
-        return this.mastodonService.search(selectedAccounts[0], accountName, true)
-            .then((result: Results) => {
-                console.warn(result);
+        return this.toolsService.findAccount(selectedAccounts[0], accountName)
+            .then((result) => {
                 this.isLoading = false;
-                return result.accounts[0];
+                return result;
             });
     }
 
