@@ -128,7 +128,7 @@ export class StreamComponent implements OnInit {
         this.isProcessingInfiniteScroll = true;
 
         const lastStatus = this.statuses[this.statuses.length - 1];
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, 20, this._streamElement.tag, this._streamElement.list)
             .then((status: Status[]) => {
                 for (const s of status) {
                     const wrapper = new StatusWrapper(s, this.account);
