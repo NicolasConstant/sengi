@@ -28,6 +28,8 @@ export class ToolsService {
                 console.warn(`accountName ${accountName}`);
                 console.warn(result);
 
+                if(accountName[0] === '@') accountName = accountName.substr(1);
+
                 const foundAccount = result.accounts.filter(
                     x => x.acct.toLowerCase() === accountName.toLowerCase()
                     || x.acct.toLowerCase() === accountName.toLowerCase().split('@')[0]
