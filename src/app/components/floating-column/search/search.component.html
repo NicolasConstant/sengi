@@ -19,14 +19,18 @@
         </a>
     </div>
 
-    <div *ngIf="statuses.length > 0" class="search-results">
-        <h3 class="search-results__title">Statuses</h3>
-    </div>
-
     <div *ngIf="hashtags.length > 0" class="search-results">
         <h3 class="search-results__title">Hashtags</h3>
         <a (click)="addHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag" title="add hashtag column">
             #{{ hashtag }}
         </a>
+    </div>   
+
+    <div *ngIf="statuses.length > 0" class="search-results">
+        <h3 class="search-results__title">Statuses</h3>
+
+        <div class="search-results__status" *ngFor="let statusWrapper of statuses">
+            <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-status>
+        </div>
     </div>
 </div>

@@ -59,6 +59,13 @@ $button-background-color-hover: lighten($color-primary, 20);
             border-bottom: 1px solid $separator-color;
         }
     }
+
+    &__status {
+        border-top: 1px solid $separator-color;
+        &:last-of-type {
+            border-bottom: 1px solid $separator-color;
+        }
+    }
 }
 
 .account {

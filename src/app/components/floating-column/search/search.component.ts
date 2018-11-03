@@ -4,6 +4,8 @@ import { Store } from '@ngxs/store';
 import { MastodonService } from '../../../services/mastodon.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account, Status } from '../../../services/models/mastodon.interfaces';
+import { ToolsService } from '../../../services/tools.service';
+import { StatusWrapper } from '../../stream/stream.component';
 
 
 @Component({
@@ -15,13 +17,14 @@ export class SearchComponent implements OnInit {
     @Input() searchHandle: string;
 
     accounts: Account[] = [];
-    statuses: Status[] = [];
+    statuses: StatusWrapper[] = [];
     hashtags: string[] = [];
 
     isLoading: boolean;
 
     constructor(
         private readonly store: Store,
+        private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
@@ -46,8 +49,7 @@ export class SearchComponent implements OnInit {
 
         console.warn(`search: ${data}`);
 
-        const enabledAccounts = this.getRegisteredAccounts().filter(x => x.isSelected);
-
+        const enabledAccounts = this.toolsService.getSelectedAccounts();
         //First candid implementation
         if (enabledAccounts.length > 0) {
             const candid_oneAccount = enabledAccounts[0];
@@ -57,6 +59,13 @@ export class SearchComponent implements OnInit {
                         console.warn(results);
                         this.accounts = results.accounts.slice(0, 5);
                         this.hashtags = results.hashtags;
+
+                        for (let status of results.statuses) {
+                            const statusWrapper = new StatusWrapper(status, candid_oneAccount);
+                            this.statuses.push(statusWrapper);    
+                        }
+                        
+
                     }
                 })
                 .catch((err) => console.error(err))
