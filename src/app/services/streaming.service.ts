@@ -10,7 +10,7 @@ import { stat } from "fs";
 @Injectable()
 export class StreamingService {
 
-    public readonly nbStatusPerIteration :number = 30;
+    public readonly nbStatusPerIteration :number = 20;
 
     constructor(
         private readonly mastodonService: MastodonService) { }
