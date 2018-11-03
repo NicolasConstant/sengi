@@ -19,13 +19,13 @@ export class MastodonService {
         return this.httpClient.get<Account>('https://' + account.instance + this.apiRoutes.getCurrentAccount, { headers: headers }).toPromise();
     }
 
-    getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20): Promise<Status[]> {
-        const route = `https://${account.instance}${this.getTimelineRoute(type, max_id, since_id, limit)}`;
+    getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20, tag: string = null, list: string = null): Promise<Status[]> {
+        const route = `https://${account.instance}${this.getTimelineRoute(type, max_id, since_id, limit, tag, list)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise()
     }
 
-    private getTimelineRoute(type: StreamTypeEnum, max_id: string, since_id: string, limit: number): string {
+    private getTimelineRoute(type: StreamTypeEnum, max_id: string, since_id: string, limit: number, tag: string, list: string): string {
         let route: string;
         switch (type) {
             case StreamTypeEnum.personnal:
@@ -41,10 +41,10 @@ export class MastodonService {
                 route = this.apiRoutes.getDirectTimeline;
                 break;
             case StreamTypeEnum.tag:
-                route = this.apiRoutes.getTagTimeline.replace('{0}', 'TODO');
+                route = this.apiRoutes.getTagTimeline.replace('{0}', tag);
                 break;
             case StreamTypeEnum.list:
-                route = this.apiRoutes.getListTimeline.replace('{0}', 'TODO');
+                route = this.apiRoutes.getListTimeline.replace('{0}', list);
                 break;
             default:
                 throw new Error('StreamTypeEnum not supported');

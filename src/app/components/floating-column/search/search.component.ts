@@ -6,6 +6,7 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account, Status } from '../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../stream/stream.component';
+import { StreamElement, StreamTypeEnum, AddStream } from './../../../states/streams.state';
 
 
 @Component({
@@ -38,9 +39,16 @@ export class SearchComponent implements OnInit {
 
     addHashtag(hashtag: string): boolean {
         console.warn(hashtag);
+
+        if (hashtag) {
+            const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.lastAccountUsed.id, hashtag, null);
+            this.store.dispatch([new AddStream(newStream)]);
+        }
+
         return false;
     }
 
+    private lastAccountUsed: AccountInfo;
     private search(data: string) {
         this.accounts.length = 0;
         this.statuses.length = 0;
@@ -52,8 +60,8 @@ export class SearchComponent implements OnInit {
         const enabledAccounts = this.toolsService.getSelectedAccounts();
         //First candid implementation
         if (enabledAccounts.length > 0) {
-            const candid_oneAccount = enabledAccounts[0];
-            this.mastodonService.search(candid_oneAccount, data, true)
+            this.lastAccountUsed = enabledAccounts[0];
+            this.mastodonService.search(this.lastAccountUsed, data, true)
                 .then((results: Results) => {
                     if (results) {
                         console.warn(results);
@@ -61,10 +69,10 @@ export class SearchComponent implements OnInit {
                         this.hashtags = results.hashtags;
 
                         for (let status of results.statuses) {
-                            const statusWrapper = new StatusWrapper(status, candid_oneAccount);
-                            this.statuses.push(statusWrapper);    
+                            const statusWrapper = new StatusWrapper(status, this.lastAccountUsed);
+                            this.statuses.push(statusWrapper);
                         }
-                        
+
 
                     }
                 })

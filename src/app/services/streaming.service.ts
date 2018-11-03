@@ -44,37 +44,13 @@ export class StreamingWrapper {
 
     private errorClosing: boolean;
     private webSocketGotError(x: Event) {
-        console.log(x);
         this.errorClosing = true;
     }
 
     private since_id: string;
     private webSocketClosed(domain, x: Event) {
-        console.log(x);
-
         if (this.errorClosing) {
-
             this.pullNewStatuses(domain);
-
-            // this.mastodonService.getTimeline(this.accountInfo, this.streamType, null, this.since_id)
-            //     .then((status: Status[]) => {
-            //         // status = status.sort((n1, n2) => {  return (<number>n1.id) < (<number>n2.id); });
-            //         status = status.sort((a, b) => a.id.localeCompare(b.id));
-            //         for (const s of status) {
-            //             const update = new StatusUpdate();
-            //             update.status = s;
-            //             update.type = EventEnum.update;
-            //             this.since_id = update.status.id;
-            //             this.statusUpdateSubjet.next(update);
-            //         }
-            //     })
-            //     .catch(err => {
-            //         console.error(err);
-            //     })
-            //     .then(() => {
-            //         setTimeout(() => { this.start(domain) }, 20 * 1000);
-            //     });
-
             this.errorClosing = false;
         } else {
             setTimeout(() => { this.start(domain) }, 5000);

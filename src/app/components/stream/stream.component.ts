@@ -149,7 +149,7 @@ export class StreamComponent implements OnInit {
     }
 
     private retrieveToots(): void {
-        this.mastodonService.getTimeline(this.account, this._streamElement.type)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, 20, this._streamElement.tag, this._streamElement.list)
             .then((results: Status[]) => {
                 for (const s of results) {
                     const wrapper = new StatusWrapper(s, this.account);
