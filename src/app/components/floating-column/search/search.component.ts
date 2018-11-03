@@ -33,6 +33,11 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
+    addHashtag(hashtag: string): boolean {
+        console.warn(hashtag);
+        return false;
+    }
+
     private search(data: string) {
         this.accounts.length = 0;
         this.statuses.length = 0;
@@ -50,14 +55,8 @@ export class SearchComponent implements OnInit {
                 .then((results: Results) => {
                     if (results) {
                         console.warn(results);
-                        this.accounts = results.accounts;
-                        //this.statuses = results.statuses;
+                        this.accounts = results.accounts.slice(0, 5);
                         this.hashtags = results.hashtags;
-
-                        //TODO: Pleroma return more than mastodon, will have to handle that
-                        if (this.accounts.length > 5) {
-                            this.accounts.length = 5;
-                        }
                     }
                 })
                 .catch((err) => console.error(err))

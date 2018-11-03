@@ -2,10 +2,12 @@
 @import "mixins";
 @import "panel";
 @import "commons";
-
 $separator-color:$color-primary;
 $button-size: 30px;
-
+$button-color: darken(white, 30);
+$button-color-hover: white;
+$button-background-color: $color-primary;
+$button-background-color-hover: lighten($color-primary, 20);
 .form-section {
     overflow: auto;
     width: 100%;
@@ -22,77 +24,81 @@ $button-size: 30px;
     border: none;
     outline: none;
     cursor: pointer;
-    background-color: $color-primary;
-    color: darken(white, 30);
-    // font-weight: bold;
-
+    background-color: $button-background-color;
+    color: $button-color;
     transition: all .2s;
-
     &:hover {
-        background-color: lighten($color-primary, 20);
-        color: white;
-        // transform: scale(1.2);
+        background-color: $button-background-color-hover;
+        color: $button-color-hover;
     }
 }
 
 .search-results {
     // outline: 1px solid greenyellow;
-    margin-top: 10px;
-
-    // &:first-of-type{
+    margin-top: 10px; // &:first-of-type{
     //     margin-top: 10px;
     // }
-
     &__title {
         text-transform: uppercase;
         font-size: 13px;
     }
-
     &__hashtag {
+        border-radius: 2px;
         display: block;
         padding: 5px;
         color: white;
-        
-        border-top: 1px solid $separator-color;        
-        &:last-of-type{
-            border-bottom: 1px solid $separator-color;
-        }        
-    }
+        text-decoration: none;
 
-   
+        transition: all .3s;        
+        &:hover {
+            background-color: $button-background-color-hover;
+        }
+
+        border-top: 1px solid $separator-color;
+        &:last-of-type {
+            border-bottom: 1px solid $separator-color;
+        }
+    }
 }
 
 .account {
-    display: block;     
-    color: white;   
+    display: block;
+    color: white;
 
-    &:hover {
-        text-decoration: none;
-    }
+    border-radius: 2px;
+    transition: all .3s;    
 
-    &:hover &__name {
-        text-decoration: underline;
-    }
-
-    border-top: 1px solid $separator-color;        
-    &:last-of-type{
+   
+    // &:hover &__name {
+    //     text-decoration: underline;
+    // }
+    border-top: 1px solid $separator-color;
+    &:last-of-type {
         border-bottom: 1px solid $separator-color;
-    }  
-
+    }
     &__avatar {
         width: 40px;
         margin: 5px 10px 5px 5px;
         float: left;
         border-radius: 2px;
     }
-
     &__name {
-        margin: 7px 0 0 0;       
+        margin: 7px 0 0 0;
     }
-
     &__fullhandle {
         margin: 0 0 5px 0;
         color: $status-secondary-color;
+        transition: all .3s;
+        // &:hover {
+        //     color: white;
+        // }
+    }
+
+    &:hover, 
+    &:hover &__fullhandle {
+        color: white;
+        text-decoration: none;
+        background-color: $button-background-color-hover;
     }
 
     @include clearfix;
