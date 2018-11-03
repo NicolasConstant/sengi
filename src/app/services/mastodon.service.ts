@@ -112,6 +112,7 @@ export class MastodonService {
     }
 
     search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results>{
+        if(query[0] === '#') query = query.substr(1);
         const route = `https://${account.instance}${this.apiRoutes.search}?q=${query}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
