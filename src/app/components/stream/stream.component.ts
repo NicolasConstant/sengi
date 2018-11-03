@@ -159,7 +159,7 @@ export class StreamComponent implements OnInit {
     }
 
     private launchWebsocket(): void {
-        this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement.type);
+        this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement);
         this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
@@ -186,7 +186,6 @@ export class StreamComponent implements OnInit {
         if (this.bufferStream.length > 60) {
             this.bufferWasCleared = true;
             this.bufferStream.length = 40;
-
         }
     }
 }
