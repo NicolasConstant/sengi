@@ -4,6 +4,36 @@
 @import "commons";
 
 $separator-color:$color-primary;
+$button-size: 30px;
+
+.form-section {
+    overflow: auto;
+    width: 100%;
+}
+
+.form-with-button {
+    width: calc(100% - #{$button-size});
+    float: left;
+}
+
+.form-button {
+    width: $button-size;
+    height: 29px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: $color-primary;
+    color: darken(white, 30);
+    // font-weight: bold;
+
+    transition: all .2s;
+
+    &:hover {
+        background-color: lighten($color-primary, 20);
+        color: white;
+        // transform: scale(1.2);
+    }
+}
 
 .search-results {
     // outline: 1px solid greenyellow;
