@@ -63,6 +63,7 @@ export class StreamOverlayComponent implements OnInit {
         const nextElement = this.nextElements.pop();
         this.loadElement(nextElement);
 
+        if(this.nextElements.length === 0) this.canGoForward = false;
         return false;
     }
 
