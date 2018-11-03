@@ -9,11 +9,14 @@ import { stat } from "fs";
 
 @Injectable()
 export class StreamingService {
+
+    public readonly nbStatusPerIteration :number = 30;
+
     constructor(
         private readonly mastodonService: MastodonService) { }
 
     getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
-        return new StreamingWrapper(this.mastodonService, accountInfo, stream);
+        return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
     }
 
 
@@ -27,7 +30,8 @@ export class StreamingWrapper {
     constructor(
         private readonly mastodonService: MastodonService,
         private readonly account: AccountInfo,
-        private readonly stream: StreamElement) {
+        private readonly stream: StreamElement,
+        private readonly nbStatusPerIteration: number) {
 
         const route = this.getRoute(account, stream);
         this.start(route);
@@ -57,7 +61,7 @@ export class StreamingWrapper {
     }
 
     private pullNewStatuses(domain) {
-        this.mastodonService.getTimeline(this.account, this.stream.type, null, this.since_id, 20, this.stream.tag, this.stream.list)
+        this.mastodonService.getTimeline(this.account, this.stream.type, null, this.since_id, this.nbStatusPerIteration, this.stream.tag, this.stream.list)
             .then((status: Status[]) => {
                 // status = status.sort((n1, n2) => {  return (<number>n1.id) < (<number>n2.id); });
                 status = status.sort((a, b) => a.id.localeCompare(b.id));

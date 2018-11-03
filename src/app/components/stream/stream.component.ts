@@ -77,8 +77,8 @@ export class StreamComponent implements OnInit {
     @ViewChild('statusstream') public statustream: ElementRef;
     goToTop(): boolean {
         this.loadBuffer();
-        if (this.statuses.length > 40) {
-            this.statuses.length = 40;
+        if (this.statuses.length > 2 * this.streamingService.nbStatusPerIteration) {
+            this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
         }
         const stream = this.statustream.nativeElement as HTMLElement;
         stream.scrollTo({
@@ -128,7 +128,7 @@ export class StreamComponent implements OnInit {
         this.isProcessingInfiniteScroll = true;
 
         const lastStatus = this.statuses[this.statuses.length - 1];
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, 20, this._streamElement.tag, this._streamElement.list)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
             .then((status: Status[]) => {
                 for (const s of status) {
                     const wrapper = new StatusWrapper(s, this.account);
@@ -149,7 +149,7 @@ export class StreamComponent implements OnInit {
     }
 
     private retrieveToots(): void {
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, 20, this._streamElement.tag, this._streamElement.list)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
             .then((results: Status[]) => {
                 for (const s of results) {
                     const wrapper = new StatusWrapper(s, this.account);
@@ -179,13 +179,13 @@ export class StreamComponent implements OnInit {
     }
     
     private checkAndCleanUpStream(): void {
-        if (this.streamPositionnedAtTop && this.statuses.length > 60) {
-            this.statuses.length = 40;
+        if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
+            this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
         }
 
-        if (this.bufferStream.length > 60) {
+        if (this.bufferStream.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.bufferWasCleared = true;
-            this.bufferStream.length = 40;
+            this.bufferStream.length = 2 * this.streamingService.nbStatusPerIteration;
         }
     }
 }
