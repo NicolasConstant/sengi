@@ -1,4 +1,4 @@
-<div class="profile flexcroll">
+<div class="profile">
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
     <div *ngIf="account" class="profile-header" [ngStyle]="{'background-image':'url('+account.header+')'}">
@@ -9,20 +9,23 @@
             <h2 class="profile-header__fullhandle"><a href="{{account.url}}" target="_blank">@{{account.acct}}</a></h2>
         </div>
     </div>
-    <div *ngIf="account && hasNote" class="profile-description">
-        <app-databinded-text class="status__content" [textIsSelectable]="false" [text]="account.note" (accountSelected)="accountSelected($event)"
-            (hashtagSelected)="hashtagSelected($event)"></app-databinded-text>
-        <!-- <p innerHTML="{{account.note}}"></p> -->
-    </div>
-    <div class="profile-statuses">
-        <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
 
-        <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
-            no toots found
+    <div class="profile-sub-header flexcroll">
+        <div *ngIf="account && hasNote" class="profile-description">
+            <app-databinded-text class="status__content" [textIsSelectable]="false" [text]="account.note"
+                (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"></app-databinded-text>
+            <!-- <p innerHTML="{{account.note}}"></p> -->
         </div>
+        <div class="profile-statuses">
+            <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
 
-        <div *ngFor="let statusWrapper of statuses">
-            <app-status [statusWrapper]="statusWrapper" (browseAccount)="accountSelected($event)"></app-status>
+            <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
+                no toots found
+            </div>
+
+            <div *ngFor="let statusWrapper of statuses">
+                <app-status [statusWrapper]="statusWrapper" (browseAccount)="accountSelected($event)"></app-status> 
+            </div>
         </div>
     </div>
 </div>

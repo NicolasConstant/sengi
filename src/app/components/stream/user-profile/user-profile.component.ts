@@ -33,20 +33,15 @@ export class UserProfileComponent implements OnInit {
         this.loadAccount(accountName)
             .then((account: Account) => {
                 this.account = account;
+                this.hasNote = account && account.note && account.note !== '<p></p>';
                 return this.getStatuses(this.account);
             })
             .catch(err => {
                 this.error = 'Error when retrieving account';
                 this.isLoading = false;
                 this.statusLoading = false;
-                console.warn(this.error);
+                console.error(this.error);
             });
-
-        // this.account = account;
-        // this.hasNote = account && account.note && account.note !== '<p></p>';
-        // console.warn('currentAccount');
-        // console.warn(account);
-        // this.getStatuses(account);
     }
 
     constructor(

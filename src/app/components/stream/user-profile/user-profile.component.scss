@@ -1,7 +1,10 @@
 @import "variables";
 @import "commons";
+
+$header-height: 160px;
+
 .profile {
-    overflow: auto;
+    // overflow: auto;
     height: calc(100% - 30px);
 
     &-header {
@@ -14,7 +17,7 @@
         }
         &__inner {
             overflow: auto;
-            height: 160px;
+            height: $header-height;
             background-color: rgba(0, 0, 0, .45);
         }
         &__avatar {
@@ -36,6 +39,14 @@
             left: 15px;
             color: white;
         }
+    }
+
+    &-sub-header {
+        overflow: auto;
+        height: calc(100% - #{$header-height});
+        // height: calc(20% - 190px);
+        // height: 150px;
+        // border: 1px solid greenyellow;
     }
 
     &-description {
