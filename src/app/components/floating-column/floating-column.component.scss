@@ -3,7 +3,7 @@
 
 .floating-column {
     width: calc(100%);
-    max-width: 330px;
+    width: 330px;
     
     background-color: $color-secondary;
     overflow: hidden;
@@ -13,12 +13,26 @@
     bottom: $stream-selector-height;
     padding: 0;
 
-    &__header {
+    // &__header {
         
-        // @include clearfix;
-    }
+    // }
 }
 
+.stream-overlay {
+    // margin-left: 5px;
+    // z-index: 50;
+    // opacity: 0.5;
+
+    position: absolute;
+    // left: 10px;
+
+    z-index: 50;
+    // width: $stream-column-width;
+    width: 330px;
+    height: calc(100%);
+    
+    outline: 1px 
+}
 
 .close-button {
     // display: inline-block;

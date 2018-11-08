@@ -8,6 +8,7 @@ import { AccountWrapper } from '../../models/account.models';
     styleUrls: ['./floating-column.component.scss']
 })
 export class FloatingColumnComponent implements OnInit {
+    overlayActive: boolean;
     userAccountUsed: AccountWrapper;
 
     openPanel: string;
@@ -45,6 +46,11 @@ export class FloatingColumnComponent implements OnInit {
 
     closePanel(): boolean {
         this.navigationService.closePanel();
+        return false;
+    }
+
+    closeOverlay(): boolean {
+        this.overlayActive = false;
         return false;
     }
 
