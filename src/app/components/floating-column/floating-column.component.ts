@@ -9,6 +9,9 @@ import { AccountWrapper } from '../../models/account.models';
 })
 export class FloatingColumnComponent implements OnInit {
     overlayActive: boolean;
+    overlayAccountToBrowse: string;
+    overlayHashtagToBrowse: string;
+
     userAccountUsed: AccountWrapper;
 
     openPanel: string;
@@ -47,6 +50,23 @@ export class FloatingColumnComponent implements OnInit {
     closePanel(): boolean {
         this.navigationService.closePanel();
         return false;
+    }
+
+    browseAccount(account: string): void {
+        this.overlayAccountToBrowse = account;
+        this.overlayHashtagToBrowse = null;
+        this.overlayActive = true;        
+    }
+
+    browseHashtag(hashtag: string): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = hashtag;
+        this.overlayActive = true;  
+    }
+
+    browseThread(thread: string): void {
+        console.warn('browseThread');
+        console.warn(thread);
     }
 
     closeOverlay(): boolean {

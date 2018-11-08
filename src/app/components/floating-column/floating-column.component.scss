@@ -1,9 +1,11 @@
 @import "variables";
 @import "mixins";
 
+$floating-column-size: 330px;
+
 .floating-column {
     width: calc(100%);
-    width: 330px;
+    width: $floating-column-size;
     
     background-color: $color-secondary;
     overflow: hidden;
@@ -19,19 +21,10 @@
 }
 
 .stream-overlay {
-    // margin-left: 5px;
-    // z-index: 50;
-    // opacity: 0.5;
-
     position: absolute;
-    // left: 10px;
-
     z-index: 50;
-    // width: $stream-column-width;
-    width: 330px;
+    width: $floating-column-size;
     height: calc(100%);
-    
-    outline: 1px 
 }
 
 .close-button {

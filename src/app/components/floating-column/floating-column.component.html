@@ -8,6 +8,6 @@
     <app-manage-account *ngIf="openPanel === 'manageAccount'" [account]="userAccountUsed"></app-manage-account>
     <app-add-new-status *ngIf="openPanel === 'createNewStatus'"></app-add-new-status>
     <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
-    <app-search *ngIf="openPanel === 'search'"></app-search>
+    <app-search *ngIf="openPanel === 'search'" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-search>
     <app-settings *ngIf="openPanel === 'settings'"></app-settings>
 </div>

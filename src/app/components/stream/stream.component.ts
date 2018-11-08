@@ -58,7 +58,6 @@ export class StreamComponent implements OnInit {
     }
 
     browseHashtag(hashtag: string): void {
-        console.warn(`browseHashtag ${hashtag}`);
         this.overlayAccountToBrowse = null;
         this.overlayHashtagToBrowse = hashtag;
         this.overlayActive = true;  

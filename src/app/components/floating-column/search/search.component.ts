@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { MastodonService } from '../../../services/mastodon.service';
@@ -23,6 +23,10 @@ export class SearchComponent implements OnInit {
 
     isLoading: boolean;
 
+    @Output() browseAccount = new EventEmitter<string>();
+    @Output() browseHashtag = new EventEmitter<string>();
+    @Output() browseThread = new EventEmitter<string>();
+
     constructor(
         private readonly store: Store,
         private readonly toolsService: ToolsService,
@@ -37,14 +41,27 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    addHashtag(hashtag: string): boolean {
-        console.warn(hashtag);
+    selectHashtag(hashtag: string): boolean {
+        if (hashtag) {
+            this.browseHashtag.next(hashtag);
+        }
+        return false;
+    }
 
+    addHashtag(hashtag: string): boolean {
         if (hashtag) {
             const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.lastAccountUsed.id, hashtag, null);
             this.store.dispatch([new AddStream(newStream)]);
         }
 
+        return false;
+    }
+
+    selectAccount(accountName: string): boolean {
+        console.warn(accountName);
+        if (accountName) {
+            this.browseAccount.next(accountName);
+        }
         return false;
     }
 
