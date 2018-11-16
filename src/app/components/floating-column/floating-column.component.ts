@@ -16,7 +16,6 @@ export class FloatingColumnComponent implements OnInit {
 
     openPanel: string;
 
-
     constructor(private readonly navigationService: NavigationService) { }
 
     ngOnInit() {

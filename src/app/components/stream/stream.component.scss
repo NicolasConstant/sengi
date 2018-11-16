@@ -22,15 +22,21 @@
     }
 }
 
-.stream-toots {
+.stream-statuses {
+    display: block;
     height: calc(100% - 30px);
     width: 320px;
-    overflow: auto;
-    &__status:not(:last-child) {
-        border: solid #06070b;
-        border-width: 0 0 1px 0;
-    }
 }
+
+// .stream-toots {
+//     height: calc(100% - 30px);
+//     width: 320px;
+//     overflow: auto;
+//     &__status:not(:last-child) {
+//         border: solid #06070b;
+//         border-width: 0 0 1px 0;
+//     }
+// }
 
 .stream-overlay {
     position: absolute;

@@ -41,6 +41,7 @@ import { HashtagComponent } from './components/stream/hashtag/hashtag.component'
 import { StreamOverlayComponent } from './components/stream/stream-overlay/stream-overlay.component';
 import { DatabindedTextComponent } from './components/stream/status/databinded-text/databinded-text.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { StreamStatusesComponent } from './components/stream/stream-statuses/stream-statuses.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -74,7 +75,8 @@ const routes: Routes = [
     HashtagComponent,
     StreamOverlayComponent,
     DatabindedTextComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    StreamStatusesComponent
   ],
   imports: [
     BrowserModule,
