@@ -15,7 +15,7 @@ export class StreamComponent implements OnInit {
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;
 
-    private goToTopSubject: Subject<void> = new Subject<void>();
+    goToTopSubject: Subject<void> = new Subject<void>();
 
     @Input() streamElement: StreamElement;
 

@@ -1,3 +1,5 @@
-<p>
-  hashtag works!
-</p>
+<div>
+<div>hashtag</div>
+
+<app-stream-statuses *ngIf="hashtagElement" class="stream-hastag" [streamElement]="hashtagElement" [goToTop]="goToTopSubject.asObservable()" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-stream-statuses>
+</div>

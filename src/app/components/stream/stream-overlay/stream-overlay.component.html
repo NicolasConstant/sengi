@@ -10,6 +10,6 @@
     </div> -->
     
     <app-user-profile *ngIf="accountName" [currentAccount]="accountName" (browseAccount)="accountSelected($event)" (browseHashtag)="hashtagSelected($event)"></app-user-profile>
-    <app-hashtag  *ngIf="browseHashtag"></app-hashtag>
+    <app-hashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement"></app-hashtag>
     <app-thread  *ngIf="browseThread"></app-thread>
 </div>
