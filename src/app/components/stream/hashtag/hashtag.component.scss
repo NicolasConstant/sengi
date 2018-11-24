@@ -1,0 +1,39 @@
+$hashtag-header-height: 40px;
+$inner-column-size: 320px;
+
+.hashtag-column{
+    height: calc(100%);
+    width: $inner-column-size;
+}
+
+.hashtag-header {
+    height: $hashtag-header-height;
+    border-bottom: 1px solid black;
+    position: relative;
+
+    &__gototop {
+        display: block;
+        width: calc(100%);
+        height: calc(100%);
+        color: white;
+    }
+
+    &__title {
+        font-size: 1em;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    &__add-column {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+    }
+}
+
+.hashtag-stream {
+    display: block;
+    height: calc(100% - #{$hashtag-header-height} - 30px);
+    width: $inner-column-size;
+    // outline: 1px greenyellow solid;
+}
