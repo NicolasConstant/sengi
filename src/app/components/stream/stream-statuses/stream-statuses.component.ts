@@ -16,6 +16,7 @@ import { StatusWrapper } from '../stream.component';
     styleUrls: ['./stream-statuses.component.scss']
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
+
     private _streamElement: StreamElement;
     private account: AccountInfo;
     private websocketStreaming: StreamingWrapper;
@@ -30,6 +31,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Input()
     set streamElement(streamElement: StreamElement) {
+        console.warn('new stream');
+        this.resetStream();
+
         this._streamElement = streamElement;
 
         const splitedUserName = streamElement.accountId.split('@');
@@ -62,6 +66,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(){
         if( this.goToTopSubscription)  this.goToTopSubscription.unsubscribe();
+    }
+
+    private resetStream() {
+        this.statuses.length = 0;
+        this.bufferStream.length = 0;
+        if(this.websocketStreaming) this.websocketStreaming.dispose();
     }
 
     private launchWebsocket(): void {

@@ -10,7 +10,7 @@ import { stat } from "fs";
 @Injectable()
 export class StreamingService {
 
-    public readonly nbStatusPerIteration :number = 20;
+    public readonly nbStatusPerIteration: number = 20;
 
     constructor(
         private readonly mastodonService: MastodonService) { }
@@ -26,6 +26,9 @@ export class StreamingWrapper {
     statusUpdateSubjet = new BehaviorSubject<StatusUpdate>(null);
     eventSource: WebSocket;
     private apiRoutes = new ApiRoutes();
+    private errorClosing: boolean;
+    private since_id: string;
+    private disposed: boolean;
 
     constructor(
         private readonly mastodonService: MastodonService,
@@ -37,6 +40,11 @@ export class StreamingWrapper {
         this.start(route);
     }
 
+    dispose(): any {
+        this.disposed = true;
+        this.eventSource.close();
+    }
+
     private start(route: string) {
         this.eventSource = new WebSocket(route);
         this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
@@ -45,17 +53,15 @@ export class StreamingWrapper {
         this.eventSource.onclose = x => this.webSocketClosed(route, x);
     }
 
-    private errorClosing: boolean;
     private webSocketGotError(x: Event) {
         this.errorClosing = true;
     }
 
-    private since_id: string;
     private webSocketClosed(domain, x: Event) {
         if (this.errorClosing) {
             this.pullNewStatuses(domain);
             this.errorClosing = false;
-        } else {
+        } else if (!this.disposed) {
             setTimeout(() => { this.start(domain) }, 5000);
         }
     }
@@ -78,7 +84,9 @@ export class StreamingWrapper {
             })
             .then(() => {
                 // setTimeout(() => { this.start(domain) }, 20 * 1000);
-                setTimeout(() => { this.pullNewStatuses(domain) }, 15 * 1000);
+                if (!this.disposed) {
+                    setTimeout(() => { this.pullNewStatuses(domain) }, 15 * 1000);
+                }
             });
     }
 
@@ -105,8 +113,8 @@ export class StreamingWrapper {
         const streamingRouteType = this.getStreamingRouteType(stream.type);
         let route = `wss://${account.instance}${this.apiRoutes.getStreaming}`.replace('{0}', account.token.access_token).replace('{1}', streamingRouteType);
 
-        if(stream.tag) route = `${route}&tag=${stream.tag}`;
-        if(stream.list) route = `${route}&tag=${stream.list}`;
+        if (stream.tag) route = `${route}&tag=${stream.tag}`;
+        if (stream.list) route = `${route}&tag=${stream.list}`;
 
         return route;
     }
