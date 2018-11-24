@@ -31,3 +31,16 @@
     //     outline: none;
     // }
 }
+
+.btn-custom-secondary {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: $button-background-color;
+    color: $button-color;
+    transition: all .2s;
+    &:hover {
+        background-color: $button-background-color-hover;
+        color: $button-color-hover;
+    }
+}

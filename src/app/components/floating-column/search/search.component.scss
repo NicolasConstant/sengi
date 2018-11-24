@@ -2,12 +2,8 @@
 @import "mixins";
 @import "panel";
 @import "commons";
-$separator-color:$color-primary;
-$button-size: 30px;
-$button-color: darken(white, 30);
-$button-color-hover: white;
-$button-background-color: $color-primary;
-$button-background-color-hover: lighten($color-primary, 20);
+
+
 .form-section {
     overflow: auto;
     width: 100%;

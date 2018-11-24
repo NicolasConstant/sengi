@@ -1,3 +1,6 @@
+@import "variables";
+@import "buttons";
+
 $hashtag-header-height: 40px;
 $inner-column-size: 320px;
 
@@ -16,6 +19,11 @@ $inner-column-size: 320px;
         width: calc(100%);
         height: calc(100%);
         color: white;
+        transition: all .2s;
+
+        // &:hover {
+        //     background-color: $btn-primary-color-hover;
+        // }
     }
 
     &__title {
@@ -26,8 +34,11 @@ $inner-column-size: 320px;
     }
     &__add-column {
         position: absolute;
-        top: 5px;
-        right: 10px;
+        top: 7px;
+        right: 7px;
+        padding: 0 10px 0 10px;
+        border: 1px solid black;
+        color: white;
     }
 }
 

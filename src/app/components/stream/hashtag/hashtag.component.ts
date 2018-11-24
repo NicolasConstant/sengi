@@ -33,4 +33,11 @@ export class HashtagComponent implements OnInit {
         return false;        
     }
 
+    selectAccount(account: string) {
+        this.browseAccount.next(account);
+    }
+
+    selectHashtag(hashtag: string) {
+        this.browseHashtag.next(hashtag);
+    }
 }
