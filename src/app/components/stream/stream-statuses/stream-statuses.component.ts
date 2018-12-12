@@ -25,9 +25,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
 
-    @Output() browseAccount = new EventEmitter<string>();
-    @Output() browseHashtag = new EventEmitter<string>();
-    @Output() browseThread = new EventEmitter<string>();
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -125,14 +125,16 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         }
     }
 
-    accountSelected(accountName: string): void {
-        console.warn(`status comp: accountSelected ${accountName}`);
-        this.browseAccount.next(accountName);
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
     }
 
-    hashtagSelected(hashtag: string): void {
-        console.warn(`status comp: hashtagSelected ${hashtag}`);
-        this.browseHashtag.next(hashtag);
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(statusUri: string): void {
+        this.browseThreadEvent.next(statusUri);
     }
 
     textSelected(): void {

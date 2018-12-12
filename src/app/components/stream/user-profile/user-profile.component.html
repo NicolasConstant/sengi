@@ -13,7 +13,8 @@
     <div class="profile-sub-header flexcroll">
         <div *ngIf="account && hasNote" class="profile-description">
             <app-databinded-text class="status__content" [textIsSelectable]="false" [text]="account.note"
-                (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"></app-databinded-text>
+                (accountSelected)="browseAccount($event)" 
+                (hashtagSelected)="browseHashtag($event)"></app-databinded-text>
             <!-- <p innerHTML="{{account.note}}"></p> -->
         </div>
         <div class="profile-statuses">
@@ -24,7 +25,9 @@
             </div>
 
             <div *ngFor="let statusWrapper of statuses">
-                <app-status [statusWrapper]="statusWrapper" (browseAccount)="accountSelected($event)"></app-status> 
+                <app-status [statusWrapper]="statusWrapper" 
+                    (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)"></app-status> 
             </div>
         </div>
     </div>

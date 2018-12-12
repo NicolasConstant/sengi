@@ -13,9 +13,9 @@ export class StatusComponent implements OnInit {
     hasAttachments: boolean;
     replyingToStatus: boolean;
 
-    @Output() browseAccount = new EventEmitter<string>();
-    @Output() browseHashtag = new EventEmitter<string>();
-    @Output() browseThread = new EventEmitter<string>();
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -53,7 +53,7 @@ export class StatusComponent implements OnInit {
         if(!accountName.includes('@'))
         accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
 
-        this.browseAccount.next(accountName);
+        this.browseAccountEvent.next(accountName);
         return false;
     }
 
@@ -69,16 +69,14 @@ export class StatusComponent implements OnInit {
     }
 
     accountSelected(accountName: string): void {
-        console.warn(`status comp: accountSelected ${accountName}`);
-        this.browseAccount.next(accountName);
+        this.browseAccountEvent.next(accountName);
     }
 
     hashtagSelected(hashtag: string): void {
-        console.warn(`status comp: hashtagSelected ${hashtag}`);
-        this.browseHashtag.next(hashtag);
+        this.browseHashtagEvent.next(hashtag);
     }
 
     textSelected(): void {
-        console.warn(`status comp: textSelected`);
+        this.browseThreadEvent.next(this._statusWrapper.status.uri);
     }
 }
