@@ -1,4 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Store } from '@ngxs/store';
+
+import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-hashtag',
@@ -6,19 +10,39 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
     styleUrls: ['./hashtag.component.scss']
 })
 export class HashtagComponent implements OnInit {
-    hashtag: string;    
-
     @Output() browseAccount = new EventEmitter<string>();
     @Output() browseHashtag = new EventEmitter<string>();
 
-    @Input('currentHashtag')
-    set currentAccount(hashtag: string) {
-        this.hashtag = hashtag;
-    }
+    @Input() hashtagElement: StreamElement;
 
-    constructor() { }
+    goToTopSubject: Subject<void> = new Subject<void>();
+
+    constructor(
+        private readonly store: Store) { }
 
     ngOnInit() {
     }
 
+    goToTop(): boolean {
+        this.goToTopSubject.next();
+        return false;
+    }
+
+    addColumn(event): boolean {
+        event.stopPropagation();
+
+        const hashtag = this.hashtagElement.tag;
+        const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.hashtagElement.accountId, hashtag, null);
+        this.store.dispatch([new AddStream(newStream)]);
+
+        return false;
+    }
+
+    selectAccount(account: string) {
+        this.browseAccount.next(account);
+    }
+
+    selectHashtag(hashtag: string) {
+        this.browseHashtag.next(hashtag);
+    }
 }

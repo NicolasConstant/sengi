@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Account, Results } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService } from '../../../services/tools.service';
+import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-stream-overlay',
@@ -18,7 +19,8 @@ export class StreamOverlayComponent implements OnInit {
 
     accountName: string;
     thread: string;
-    hashtag: string;
+    // hashtag: string;
+    hashtagElement: StreamElement;
 
     @Output() closeOverlay = new EventEmitter();
 
@@ -39,7 +41,7 @@ export class StreamOverlayComponent implements OnInit {
         // this.hashtag = hashtag;
     }
 
-    constructor() { }
+    constructor(private toolsService: ToolsService) { }
 
     ngOnInit() {
     }
@@ -63,6 +65,7 @@ export class StreamOverlayComponent implements OnInit {
         const nextElement = this.nextElements.pop();
         this.loadElement(nextElement);
 
+        if(this.nextElements.length === 0) this.canGoForward = false;
         return false;
     }
 
@@ -111,7 +114,10 @@ export class StreamOverlayComponent implements OnInit {
         if (this.currentElement) {
             this.previousElements.push(this.currentElement);
         }
-        const newElement = new OverlayBrowsing(hashtag, null, null);
+
+        const selectedAccount = this.toolsService.getSelectedAccounts()[0];
+        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null);
+        const newElement = new OverlayBrowsing(hashTagElement, null, null);
         this.loadElement(newElement);
         this.canGoForward = false;
     }
@@ -120,14 +126,14 @@ export class StreamOverlayComponent implements OnInit {
         this.currentElement = element;
 
         this.accountName = this.currentElement.account;
-        this.hashtag = this.currentElement.hashtag;
         this.thread = this.currentElement.thread;
+        this.hashtagElement = this.currentElement.hashtag;
     }
 }
 
 class OverlayBrowsing {
     constructor(
-        public readonly hashtag: string,
+        public readonly hashtag: StreamElement,
         public readonly account: string,
         public readonly thread: string) {
 

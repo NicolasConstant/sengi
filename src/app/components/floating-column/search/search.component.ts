@@ -1,9 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { MastodonService } from '../../../services/mastodon.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account, Status } from '../../../services/models/mastodon.interfaces';
+import { ToolsService } from '../../../services/tools.service';
+import { StatusWrapper } from '../../stream/stream.component';
+import { StreamElement, StreamTypeEnum, AddStream } from './../../../states/streams.state';
 
 
 @Component({
@@ -15,13 +18,18 @@ export class SearchComponent implements OnInit {
     @Input() searchHandle: string;
 
     accounts: Account[] = [];
-    statuses: Status[] = [];
+    statuses: StatusWrapper[] = [];
     hashtags: string[] = [];
 
     isLoading: boolean;
 
+    @Output() browseAccount = new EventEmitter<string>();
+    @Output() browseHashtag = new EventEmitter<string>();
+    @Output() browseThread = new EventEmitter<string>();
+
     constructor(
         private readonly store: Store,
+        private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
@@ -33,6 +41,31 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
+    selectHashtag(hashtag: string): boolean {
+        if (hashtag) {
+            this.browseHashtag.next(hashtag);
+        }
+        return false;
+    }
+
+    // addHashtag(hashtag: string): boolean {
+    //     if (hashtag) {
+    //         const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.lastAccountUsed.id, hashtag, null);
+    //         this.store.dispatch([new AddStream(newStream)]);
+    //     }
+
+    //     return false;
+    // }
+
+    selectAccount(accountName: string): boolean {
+        console.warn(accountName);
+        if (accountName) {
+            this.browseAccount.next(accountName);
+        }
+        return false;
+    }
+
+    private lastAccountUsed: AccountInfo;
     private search(data: string) {
         this.accounts.length = 0;
         this.statuses.length = 0;
@@ -41,23 +74,23 @@ export class SearchComponent implements OnInit {
 
         console.warn(`search: ${data}`);
 
-        const enabledAccounts = this.getRegisteredAccounts().filter(x => x.isSelected);
-
+        const enabledAccounts = this.toolsService.getSelectedAccounts();
         //First candid implementation
         if (enabledAccounts.length > 0) {
-            const candid_oneAccount = enabledAccounts[0];
-            this.mastodonService.search(candid_oneAccount, data, true)
+            this.lastAccountUsed = enabledAccounts[0];
+            this.mastodonService.search(this.lastAccountUsed, data, true)
                 .then((results: Results) => {
                     if (results) {
                         console.warn(results);
-                        this.accounts = results.accounts;
-                        //this.statuses = results.statuses;
+                        this.accounts = results.accounts.slice(0, 5);
                         this.hashtags = results.hashtags;
 
-                        //TODO: Pleroma return more than mastodon, will have to handle that
-                        if (this.accounts.length > 5) {
-                            this.accounts.length = 5;
+                        for (let status of results.statuses) {
+                            const statusWrapper = new StatusWrapper(status, this.lastAccountUsed);
+                            this.statuses.push(statusWrapper);
                         }
+
+
                     }
                 })
                 .catch((err) => console.error(err))

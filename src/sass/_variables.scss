@@ -34,3 +34,10 @@ $stream-column-width: 320px;
 $avatar-column-space: 70px;
 //Bootstrap cuistomization
 $enable-rounded: false;
+
+$separator-color:$color-primary;
+$button-size: 30px;
+$button-color: darken(white, 30);
+$button-color-hover: white;
+$button-background-color: $color-primary;
+$button-background-color-hover: lighten($color-primary, 20);
