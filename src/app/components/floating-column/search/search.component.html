@@ -21,7 +21,7 @@
 
     <div *ngIf="hashtags.length > 0" class="search-results">
         <h3 class="search-results__title">Hashtags</h3>
-        <a (click)="selectHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag" title="add hashtag column">
+        <a (click)="selectHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag" title="browse hashtag">
             #{{ hashtag }}
         </a>
     </div>   

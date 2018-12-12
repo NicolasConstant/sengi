@@ -48,14 +48,14 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    addHashtag(hashtag: string): boolean {
-        if (hashtag) {
-            const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.lastAccountUsed.id, hashtag, null);
-            this.store.dispatch([new AddStream(newStream)]);
-        }
+    // addHashtag(hashtag: string): boolean {
+    //     if (hashtag) {
+    //         const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.lastAccountUsed.id, hashtag, null);
+    //         this.store.dispatch([new AddStream(newStream)]);
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     selectAccount(accountName: string): boolean {
         console.warn(accountName);

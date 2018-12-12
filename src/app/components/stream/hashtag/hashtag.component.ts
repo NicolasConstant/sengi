@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Subject } from 'rxjs';
-import { StreamElement } from '../../../states/streams.state';
+import { Store } from '@ngxs/store';
 
+import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-hashtag',
@@ -16,21 +17,25 @@ export class HashtagComponent implements OnInit {
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
-    constructor() { }
+    constructor(
+        private readonly store: Store) { }
 
     ngOnInit() {
     }
 
-    goToTop(): boolean{
+    goToTop(): boolean {
         this.goToTopSubject.next();
         return false;
     }
 
     addColumn(event): boolean {
         event.stopPropagation();
-        console.log(`add column ${this.hashtagElement.tag}`)
 
-        return false;        
+        const hashtag = this.hashtagElement.tag;
+        const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.hashtagElement.accountId, hashtag, null);
+        this.store.dispatch([new AddStream(newStream)]);
+
+        return false;
     }
 
     selectAccount(account: string) {
