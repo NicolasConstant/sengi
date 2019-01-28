@@ -33,7 +33,7 @@ export class HashtagComponent implements OnInit {
         event.stopPropagation();
 
         const hashtag = this.hashtagElement.tag;
-        const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.hashtagElement.accountId, hashtag, null);
+        const newStream = new StreamElement(StreamTypeEnum.tag, `#${hashtag}`, this.hashtagElement.accountId, hashtag, null, this.hashtagElement.displayableFullName);
         this.store.dispatch([new AddStream(newStream)]);
 
         return false;

@@ -1,5 +1,5 @@
 <div class="streams-selection-footer">
-  <a class="stream-selection" *ngFor="let str of streams; let i=index" href (click)="onColumnSelection(i)" >
+  <a class="stream-selection" *ngFor="let str of streams; let i=index" href (click)="onColumnSelection(i)" title="open {{str.displayableFullName}}">
     <span class="stream-selection__column-reprensentation"></span>
   </a>
 </div>

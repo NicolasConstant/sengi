@@ -31,7 +31,8 @@ export class StreamElement {
         public name: string, 
         public accountId: string,
         public tag: string,
-        public list: string) {      
+        public list: string,
+        public displayableFullName: string) {      
     }
   }
   
