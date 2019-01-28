@@ -11,7 +11,7 @@ import { Status, Results, Context } from '../../../services/models/mastodon.inte
 })
 export class ThreadComponent implements OnInit {
     statuses: StatusWrapper[] = [];
-    private isLoading: boolean;
+    isLoading: boolean;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();

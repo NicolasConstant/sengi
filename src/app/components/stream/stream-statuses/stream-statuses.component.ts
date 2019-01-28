@@ -16,7 +16,7 @@ import { StatusWrapper } from '../stream.component';
     styleUrls: ['./stream-statuses.component.scss']
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
-    private isLoading = false; //TODO
+    isLoading = false; //TODO
 
     private _streamElement: StreamElement;
     private account: AccountInfo;
