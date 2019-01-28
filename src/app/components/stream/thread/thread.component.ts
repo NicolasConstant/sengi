@@ -18,7 +18,9 @@ export class ThreadComponent implements OnInit {
 
     @Input('currentThread')
     set currentThread(thread: string) {
-        this.getThread(thread);
+        if (thread) {
+            this.getThread(thread);
+        }
     }
 
     constructor(
@@ -35,12 +37,12 @@ export class ThreadComponent implements OnInit {
 
         this.mastodonService.search(currentAccount, thread, true)
             .then((result: Results) => {
-                if(result.statuses.length === 1){
+                if (result.statuses.length === 1) {
                     const retrievedStatus = result.statuses[0];
                     this.mastodonService.getStatusContext(currentAccount, retrievedStatus.id)
                         .then((context: Context) => {
-                            let contextStatuses = [ ...context.ancestors, retrievedStatus, ...context.descendants]
-                            
+                            let contextStatuses = [...context.ancestors, retrievedStatus, ...context.descendants]
+
                             for (const s of contextStatuses) {
                                 const wrapper = new StatusWrapper(s, currentAccount);
                                 this.statuses.push(wrapper);
@@ -50,10 +52,10 @@ export class ThreadComponent implements OnInit {
                     //TODO handle error
                     console.error('could not retrieve status');
                 }
-            });        
+            });
     }
 
-    onScroll(){
+    onScroll() {
         //Do nothing
     }
 
