@@ -11,6 +11,7 @@ import { Status, Results, Context } from '../../../services/models/mastodon.inte
 })
 export class ThreadComponent implements OnInit {
     statuses: StatusWrapper[] = [];
+    private isLoading: boolean;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -19,6 +20,7 @@ export class ThreadComponent implements OnInit {
     @Input('currentThread')
     set currentThread(thread: string) {
         if (thread) {
+            this.isLoading = true;
             this.getThread(thread);
         }
     }
@@ -41,6 +43,7 @@ export class ThreadComponent implements OnInit {
                     const retrievedStatus = result.statuses[0];
                     this.mastodonService.getStatusContext(currentAccount, retrievedStatus.id)
                         .then((context: Context) => {
+                            this.isLoading = false;
                             let contextStatuses = [...context.ancestors, retrievedStatus, ...context.descendants]
 
                             for (const s of contextStatuses) {
@@ -50,6 +53,7 @@ export class ThreadComponent implements OnInit {
                         });
                 } else {
                     //TODO handle error
+                    this.isLoading = false;
                     console.error('could not retrieve status');
                 }
             });
