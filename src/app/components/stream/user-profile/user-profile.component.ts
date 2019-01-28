@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit {
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     @Input('currentAccount')
     //set currentAccount(account: Account) {
@@ -57,6 +58,10 @@ export class UserProfileComponent implements OnInit {
 
     browseHashtag(hashtag: string): void {
         this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(statusUri: string): void {
+        this.browseThreadEvent.next(statusUri);
     }
 
     private loadAccount(accountName: string): Promise<Account> {

@@ -12,6 +12,7 @@ import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/stream
 export class HashtagComponent implements OnInit {
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     @Input() hashtagElement: StreamElement;
 
@@ -44,5 +45,9 @@ export class HashtagComponent implements OnInit {
 
     browseHashtag(hashtag: string) {
         this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(statusUri: string): void {
+        this.browseThreadEvent.next(statusUri);
     }
 }

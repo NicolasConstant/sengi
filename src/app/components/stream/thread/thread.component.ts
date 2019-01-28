@@ -56,4 +56,16 @@ export class ThreadComponent implements OnInit {
     onScroll(){
         //Do nothing
     }
+
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
+    }
+
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(statusUri: string): void {
+        this.browseThreadEvent.next(statusUri);
+    }
 }

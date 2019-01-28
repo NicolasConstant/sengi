@@ -8,9 +8,14 @@
     
     <app-user-profile *ngIf="accountName" [currentAccount]="accountName" 
         (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"></app-user-profile>
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-user-profile>
     <app-hashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" 
         (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"></app-hashtag>
-    <app-thread *ngIf="browseThread" [currentThread]="thread"></app-thread>
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-hashtag>
+    <app-thread *ngIf="browseThread" [currentThread]="thread"
+        (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-thread>
 </div>
