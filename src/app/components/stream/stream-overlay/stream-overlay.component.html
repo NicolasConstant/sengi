@@ -5,11 +5,17 @@
         <a href class="overlay-refresh" *ngIf="canRefresh" (click)="refresh()">REFRESH</a>      
         <a href class="overlay-next" *ngIf="canGoForward" (click)="next()">NEXT</a>
     </div>
-    <!-- <div class="stream-overlay__title">
-        Account
-    </div> -->
     
-    <app-user-profile *ngIf="accountName" [currentAccount]="accountName" (browseAccount)="accountSelected($event)" (browseHashtag)="hashtagSelected($event)"></app-user-profile>
-    <app-hashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" (browseAccount)="accountSelected($event)" (browseHashtag)="hashtagSelected($event)"></app-hashtag>
-    <app-thread  *ngIf="browseThread"></app-thread>
+    <app-user-profile *ngIf="accountName" [currentAccount]="accountName" 
+        (browseAccountEvent)="browseAccount($event)" 
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-user-profile>
+    <app-hashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" 
+        (browseAccountEvent)="browseAccount($event)" 
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-hashtag>
+    <app-thread *ngIf="browseThread" [currentThread]="thread"
+        (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-thread>
 </div>

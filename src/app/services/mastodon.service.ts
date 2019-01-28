@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 import { stat } from 'fs';
@@ -127,6 +127,14 @@ export class MastodonService {
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Status[]>(route+params, { headers: headers }).toPromise();
+    }
+
+    getStatusContext(account: AccountInfo, targetStatusId: string): Promise<Context>{
+        const params = this.apiRoutes.getStatusContext.replace('{0}', targetStatusId);
+        const route = `https://${account.instance}${params}`;
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Context>(route, { headers: headers }).toPromise();
     }
 
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]>{

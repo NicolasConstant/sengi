@@ -21,8 +21,9 @@ export class UserProfileComponent implements OnInit {
 
     private accountName: string;
 
-    @Output() browseAccount = new EventEmitter<string>();
-    @Output() browseHashtag = new EventEmitter<string>();
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     @Input('currentAccount')
     //set currentAccount(account: Account) {
@@ -51,12 +52,16 @@ export class UserProfileComponent implements OnInit {
     ngOnInit() {
     }
 
-    accountSelected(accountName: string): void {
-        this.browseAccount.next(accountName);
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
     }
 
-    hashtagSelected(hashtag: string): void {
-        this.browseHashtag.next(hashtag);
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(statusUri: string): void {
+        this.browseThreadEvent.next(statusUri);
     }
 
     private loadAccount(accountName: string): Promise<Account> {

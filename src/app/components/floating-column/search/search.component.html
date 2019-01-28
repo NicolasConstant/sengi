@@ -12,7 +12,7 @@
     <div *ngIf="accounts.length > 0" class="search-results">
         <h3 class="search-results__title">Accounts</h3>
         <a href *ngFor="let account of accounts" class="account" title="open account" 
-            (click)="selectAccount(account.acct)">
+            (click)="browseAccount(account.acct)">
             <img src="{{account.avatar}}" class="account__avatar" />
             <div class="account__name">{{ account.username }}</div>
             <div class="account__fullhandle">@{{ account.acct }}</div>
@@ -21,7 +21,7 @@
 
     <div *ngIf="hashtags.length > 0" class="search-results">
         <h3 class="search-results__title">Hashtags</h3>
-        <a (click)="selectHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag" title="browse hashtag">
+        <a (click)="browseHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag" title="browse hashtag">
             #{{ hashtag }}
         </a>
     </div>   
@@ -30,7 +30,9 @@
         <h3 class="search-results__title">Statuses</h3>
 
         <div class="search-results__status" *ngFor="let statusWrapper of statuses">
-            <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-status>
+            <app-status [statusWrapper]="statusWrapper" 
+                (browseAccountEvent)="browseAccount($event)" 
+                (browseHashtagEvent)="browseHashtag($event)"></app-status>
         </div>
     </div>
 </div>

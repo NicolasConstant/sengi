@@ -14,6 +14,7 @@ export class StreamComponent implements OnInit {
     overlayActive: boolean;
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;
+    overlayThreadToBrowse: string;
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
@@ -32,22 +33,28 @@ export class StreamComponent implements OnInit {
     browseAccount(account: string): void {
         this.overlayAccountToBrowse = account;
         this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = true;
     }
 
     browseHashtag(hashtag: string): void {
         this.overlayAccountToBrowse = null;
         this.overlayHashtagToBrowse = hashtag;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = true;
     }
 
-    browseThread(thread: string): void {
-        console.warn('browseThread');
-        console.warn(thread);
+    browseThread(statusUri: string): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = statusUri;
+        this.overlayActive = true;
     }
 
     closeOverlay(): void {
         this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = false;
     }
 }

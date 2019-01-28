@@ -23,12 +23,11 @@ export class SearchComponent implements OnInit {
 
     isLoading: boolean;
 
-    @Output() browseAccount = new EventEmitter<string>();
-    @Output() browseHashtag = new EventEmitter<string>();
-    @Output() browseThread = new EventEmitter<string>();
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     constructor(
-        private readonly store: Store,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
@@ -41,9 +40,9 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    selectHashtag(hashtag: string): boolean {
+    browseHashtag(hashtag: string): boolean {
         if (hashtag) {
-            this.browseHashtag.next(hashtag);
+            this.browseHashtagEvent.next(hashtag);
         }
         return false;
     }
@@ -57,10 +56,10 @@ export class SearchComponent implements OnInit {
     //     return false;
     // }
 
-    selectAccount(accountName: string): boolean {
+    browseAccount(accountName: string): boolean {
         console.warn(accountName);
         if (accountName) {
-            this.browseAccount.next(accountName);
+            this.browseAccountEvent.next(accountName);
         }
         return false;
     }
@@ -96,10 +95,5 @@ export class SearchComponent implements OnInit {
                 .catch((err) => console.error(err))
                 .then(() => { this.isLoading = false; });
         }
-    }
-
-    private getRegisteredAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-        return regAccounts;
     }
 }

@@ -10,6 +10,7 @@ import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
     styleUrls: ['./stream-overlay.component.scss']
 })
 export class StreamOverlayComponent implements OnInit {
+   
     private previousElements: OverlayBrowsing[] = [];
     private nextElements: OverlayBrowsing[] = [];
     private currentElement: OverlayBrowsing;
@@ -24,21 +25,20 @@ export class StreamOverlayComponent implements OnInit {
 
     @Output() closeOverlay = new EventEmitter();
 
-    @Input('browseAccount')
-    set browseAccount(accountName: string) {
-        this.accountSelected(accountName);
+    @Input('browseAccountData')
+    set browseAccountData(accountName: string) {
+        this.browseAccount(accountName);
         // this.accountName = accountName;
     }
 
-    @Input('browseThread')
-    set browseThread(thread: string) {
-        // this.thread = thread;
+    @Input('browseThreadData')
+    set browseThreadData(statusUri: string) {
+        this.browseThread(statusUri);
     }
 
-    @Input('browseHashtag')
-    set browseHashtag(hashtag: string) {
-        this.hashtagSelected(hashtag);
-        // this.hashtag = hashtag;
+    @Input('browseHashtagData')
+    set browseHashtagData(hashtag: string) {
+        this.browseHashtag(hashtag);
     }
 
     constructor(private toolsService: ToolsService) { }
@@ -93,7 +93,7 @@ export class StreamOverlayComponent implements OnInit {
         return false;
     }
 
-    accountSelected(accountName: string): void {
+    browseAccount(accountName: string): void {
         if(!accountName) return;
 
         console.log('accountSelected');
@@ -106,7 +106,7 @@ export class StreamOverlayComponent implements OnInit {
         this.canGoForward = false;
     }
 
-    hashtagSelected(hashtag: string): void {
+    browseHashtag(hashtag: string): void {
         if(!hashtag) return;
 
         console.log('hashtagSelected');
@@ -118,6 +118,20 @@ export class StreamOverlayComponent implements OnInit {
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
         const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null);
         const newElement = new OverlayBrowsing(hashTagElement, null, null);
+        this.loadElement(newElement);
+        this.canGoForward = false;
+    }
+
+    browseThread(statusUri: string): any {
+        if(!statusUri) return;
+
+        console.log('thread selected')
+        this.nextElements.length = 0;
+        if (this.currentElement) {
+            this.previousElements.push(this.currentElement);
+        }
+
+        const newElement = new OverlayBrowsing(null, null, statusUri);
         this.loadElement(newElement);
         this.canGoForward = false;
     }

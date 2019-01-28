@@ -10,8 +10,9 @@ import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/stream
     styleUrls: ['./hashtag.component.scss']
 })
 export class HashtagComponent implements OnInit {
-    @Output() browseAccount = new EventEmitter<string>();
-    @Output() browseHashtag = new EventEmitter<string>();
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<string>();
 
     @Input() hashtagElement: StreamElement;
 
@@ -38,11 +39,15 @@ export class HashtagComponent implements OnInit {
         return false;
     }
 
-    selectAccount(account: string) {
-        this.browseAccount.next(account);
+    browseAccount(account: string) {
+        this.browseAccountEvent.next(account);
     }
 
-    selectHashtag(hashtag: string) {
-        this.browseHashtag.next(hashtag);
+    browseHashtag(hashtag: string) {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(statusUri: string): void {
+        this.browseThreadEvent.next(statusUri);
     }
 }
