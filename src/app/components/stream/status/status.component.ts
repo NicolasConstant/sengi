@@ -49,9 +49,9 @@ export class StatusComponent implements OnInit {
     }
 
     openAccount(account: Account): boolean {
-        let accountName = account.acct; 
-        if(!accountName.includes('@'))
-        accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
+        let accountName = account.acct;
+        if (!accountName.includes('@'))
+            accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
 
         this.browseAccountEvent.next(accountName);
         return false;
@@ -77,6 +77,12 @@ export class StatusComponent implements OnInit {
     }
 
     textSelected(): void {
-        this.browseThreadEvent.next(this._statusWrapper.status.uri);
+        const status = this._statusWrapper.status;
+
+        if (status.reblog) {            
+            this.browseThreadEvent.next(status.reblog.uri);
+        } else {
+            this.browseThreadEvent.next(this._statusWrapper.status.uri);
+        }
     }
 }

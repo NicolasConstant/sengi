@@ -12,5 +12,5 @@
     <app-hashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" 
         (browseAccountEvent)="browseAccount($event)" 
         (browseHashtagEvent)="browseHashtag($event)"></app-hashtag>
-    <app-thread *ngIf="browseThread"></app-thread>
+    <app-thread *ngIf="browseThread" [currentThread]="thread"></app-thread>
 </div>
