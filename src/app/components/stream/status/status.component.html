@@ -1,6 +1,6 @@
 <div class="reblog" *ngIf="reblog">
-    <a class="reblog__profile-link" href (click)="openAccount(status.account)">{{ status.account.display_name }} <img *ngIf="reblog" class="reblog__avatar"
-            src="{{ status.account.avatar }}" /></a> boosted
+    <a class="reblog__profile-link" href (click)="openAccount(status.account)">{{ status.account.display_name }} <img
+            *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
 </div>
 <div class="status">
 
@@ -12,11 +12,15 @@
                 class="status__name--username">{{displayedStatus.account.acct}}</span>
         </span>
     </a>
-    <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">{{
-        status.created_at | timeAgo | async }}</div>
+    <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">
+        <a class="status__created-at--link" href="{{ displayedStatus.url }}" target="_blank">
+            {{ status.created_at | timeAgo | async }}
+        </a>
+    </div>
     <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
-    <app-databinded-text class="status__content" [text]="displayedStatus.content" (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)" (textSelected)="textSelected()"></app-databinded-text>
+    <app-databinded-text class="status__content" [text]="displayedStatus.content" (accountSelected)="accountSelected($event)"
+        (hashtagSelected)="hashtagSelected($event)" (textSelected)="textSelected()"></app-databinded-text>
 
 
     <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
