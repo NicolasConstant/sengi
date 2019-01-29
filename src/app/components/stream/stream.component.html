@@ -1,17 +1,16 @@
 <div class="stream-column">
 
-    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" 
-        (closeOverlay)="closeOverlay()" 
-        [browseAccountData]="overlayAccountToBrowse"
-        [browseHashtagData]="overlayHashtagToBrowse"
-        [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
+    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"
+        [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse" [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
+        <fa-icon [icon]="faCoffee"></fa-icon>
         <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
             <h1>{{ streamElement.name.toUpperCase() }}</h1>
         </a>
     </div>
-    <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()" (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
+    <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
     <!-- <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
         <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
             <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-status>

@@ -10,6 +10,8 @@ import { NgxElectronModule } from "ngx-electron";
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
@@ -79,6 +81,7 @@ const routes: Routes = [
     StreamStatusesComponent
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     HttpModule,
     HttpClientModule,

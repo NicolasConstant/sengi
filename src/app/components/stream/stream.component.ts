@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
 import { Subject } from "rxjs";
+import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamElement } from "../../states/streams.state";
 import { Status } from "../../services/models/mastodon.interfaces";
@@ -11,6 +12,8 @@ import { AccountInfo } from "../../states/accounts.state";
     styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
+    faCoffee = faCoffee;
+
     overlayActive: boolean;
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;
