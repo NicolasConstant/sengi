@@ -4,7 +4,7 @@
         [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse" [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
-        <a class="stream-column__open-menu" href title="open menu"  (click)="openMenu()">
+        <a class="stream-column__open-menu" href title="edit column"  (click)="openEditionMenu()">
             <fa-icon class="stream-column__open-menu--icon" [icon]="menuFaIcon"></fa-icon>
         </a>
         <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">            
@@ -12,6 +12,9 @@
             <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
         </a>
     </div>
+    
+    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen"></app-stream-edition>
+
     <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
     <!-- <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">

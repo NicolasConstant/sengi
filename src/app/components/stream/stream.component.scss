@@ -1,63 +1,55 @@
 @import "variables";
 @import "commons";
 $stream-header-height: 40px;
+.stream-edition {
+    width: $stream-column-width;
+    position: absolute;
+    z-index: 50;
+}
+
 .stream-column {
     position: relative;
     width: $stream-column-width;
     height: calc(100%);
     background-color: $column-color;
     margin: 0 0 0 $stream-column-separator;
-    &__stream-header {         
-        border-bottom: 1px solid #222736;       
+    &__stream-header {
+        border-bottom: 1px solid #222736;
     }
-
     &__open-menu {
         float: right;
         display: block;
         width: $stream-header-height - 10px;
         height: $stream-header-height - 10px;
         margin: 5px;
-
         &:hover &--icon {
-            color: darken(whitesmoke, 30); 
+            color: darken(whitesmoke, 30);
         }
-        
         &--icon {
-            color: whitesmoke;
-            // float: left;
+            color: whitesmoke; // float: left;
             position: relative;
-            top: 4px;            
+            top: 4px;
             left: 8px;
-
-            
         }
     }
-
     &__stream-selector {
         display: block;
         width: calc(100%);
         height: $stream-header-height;
         background-color: $column-header-background-color;
-        text-decoration: none;
-        
-        // &:hover {
-          
+        text-decoration: none; // &:hover {
         // }
-
         &--icon {
             color: whitesmoke;
             float: left;
             position: relative;
             left: 11px;
             top: 9px;
-            
         }
-
         &--title {
             color: whitesmoke;
             font-size: 0.8em;
-            font-weight: normal;
-            // margin: 0 0 0 25px;
+            font-weight: normal; // margin: 0 0 0 25px;
             padding: 14px 0 0 35px;
         }
     }
