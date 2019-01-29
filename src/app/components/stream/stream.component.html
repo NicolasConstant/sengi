@@ -4,8 +4,11 @@
         [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse" [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
-        <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
-            <fa-icon class="stream-column__stream-selector--icon" [icon]="faIcon"></fa-icon>
+        <a class="stream-column__open-menu" href title="open menu"  (click)="openMenu()">
+            <fa-icon class="stream-column__open-menu--icon" [icon]="menuFaIcon"></fa-icon>
+        </a>
+        <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">            
+            <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
             <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
         </a>
     </div>

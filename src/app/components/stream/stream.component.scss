@@ -11,6 +11,28 @@ $stream-header-height: 40px;
         border-bottom: 1px solid #222736;       
     }
 
+    &__open-menu {
+        float: right;
+        display: block;
+        width: $stream-header-height - 10px;
+        height: $stream-header-height - 10px;
+        margin: 5px;
+
+        &:hover &--icon {
+            color: darken(whitesmoke, 30); 
+        }
+        
+        &--icon {
+            color: whitesmoke;
+            // float: left;
+            position: relative;
+            top: 4px;            
+            left: 8px;
+
+            
+        }
+    }
+
     &__stream-selector {
         display: block;
         width: calc(100%);

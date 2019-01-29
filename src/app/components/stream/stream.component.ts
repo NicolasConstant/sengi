@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
 import { Subject } from "rxjs";
-import { faHome, faGlobe, faUser, faHashtag, faListUl, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { Status } from "../../services/models/mastodon.interfaces";
@@ -12,7 +12,8 @@ import { AccountInfo } from "../../states/accounts.state";
     styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
-    faIcon: IconDefinition;
+    columnFaIcon: IconDefinition;
+    menuFaIcon = faBars;
 
     overlayActive: boolean;
     overlayAccountToBrowse: string;
@@ -27,19 +28,19 @@ export class StreamComponent implements OnInit {
     set streamElement(stream: StreamElement) {
         switch (stream.type) {
             case StreamTypeEnum.personnal:
-                this.faIcon = faHome;
+                this.columnFaIcon = faHome;
                 break;
             case StreamTypeEnum.global:
-                this.faIcon = faGlobe;
+                this.columnFaIcon = faGlobe;
                 break;
             case StreamTypeEnum.local:
-                this.faIcon = faUser;
+                this.columnFaIcon = faUser;
                 break;
             case StreamTypeEnum.tag:
-                this.faIcon = faHashtag;
+                this.columnFaIcon = faHashtag;
                 break;
             case StreamTypeEnum.list:
-                this.faIcon = faListUl;
+                this.columnFaIcon = faListUl;
                 break;
         }
 
@@ -86,6 +87,11 @@ export class StreamComponent implements OnInit {
         this.overlayHashtagToBrowse = null;
         this.overlayThreadToBrowse = null;
         this.overlayActive = false;
+    }
+
+    openMenu(): bool {
+        console.log('opened menu');
+        return false;
     }
 }
 
