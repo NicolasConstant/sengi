@@ -4,9 +4,9 @@
         [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse" [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
-        <fa-icon [icon]="faCoffee"></fa-icon>
         <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
-            <h1>{{ streamElement.name.toUpperCase() }}</h1>
+            <fa-icon class="stream-column__stream-selector--icon" [icon]="faIcon"></fa-icon>
+            <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
         </a>
     </div>
     <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()"

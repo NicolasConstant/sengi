@@ -16,17 +16,27 @@ $stream-header-height: 40px;
         width: calc(100%);
         height: $stream-header-height;
         background-color: $column-header-background-color;
+        text-decoration: none;
         
-        &:hover {
-            text-decoration: none;
+        // &:hover {
+          
+        // }
+
+        &--icon {
+            color: whitesmoke;
+            float: left;
+            position: relative;
+            left: 11px;
+            top: 9px;
+            
         }
 
-        & h1 {
+        &--title {
             color: whitesmoke;
             font-size: 0.8em;
             font-weight: normal;
-            margin: 0;
-            padding: 13px 0 0 10px;
+            // margin: 0 0 0 25px;
+            padding: 14px 0 0 35px;
         }
     }
 }

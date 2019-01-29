@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
 import { Subject } from "rxjs";
-import { faCoffee } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faGlobe, faUser, faHashtag, faListUl, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
-import { StreamElement } from "../../states/streams.state";
+import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { Status } from "../../services/models/mastodon.interfaces";
 import { AccountInfo } from "../../states/accounts.state";
 
@@ -12,7 +12,7 @@ import { AccountInfo } from "../../states/accounts.state";
     styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
-    faCoffee = faCoffee;
+    faIcon: IconDefinition;
 
     overlayActive: boolean;
     overlayAccountToBrowse: string;
@@ -21,7 +21,34 @@ export class StreamComponent implements OnInit {
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
-    @Input() streamElement: StreamElement;
+    private _streamElement: StreamElement;
+
+    @Input('streamElement')
+    set streamElement(stream: StreamElement) {
+        switch (stream.type) {
+            case StreamTypeEnum.personnal:
+                this.faIcon = faHome;
+                break;
+            case StreamTypeEnum.global:
+                this.faIcon = faGlobe;
+                break;
+            case StreamTypeEnum.local:
+                this.faIcon = faUser;
+                break;
+            case StreamTypeEnum.tag:
+                this.faIcon = faHashtag;
+                break;
+            case StreamTypeEnum.list:
+                this.faIcon = faListUl;
+                break;
+        }
+
+        this._streamElement = stream;
+    }
+    get streamElement(): StreamElement {
+        return this._streamElement;
+    }
+
 
     constructor() { }
 
