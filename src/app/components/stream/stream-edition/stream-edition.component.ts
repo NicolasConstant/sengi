@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Store } from '@ngxs/store';
+
+import { StreamElement, RemoveStream } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-stream-edition',
@@ -6,8 +9,9 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./stream-edition.component.scss']
 })
 export class StreamEditionComponent implements OnInit {
+    @Input() streamElement: StreamElement;
 
-    constructor() { }
+    constructor(private readonly store: Store) { }
 
     ngOnInit() {
     }
@@ -24,6 +28,7 @@ export class StreamEditionComponent implements OnInit {
 
     delete(): boolean {
         console.log('delete');
+        this.store.dispatch([new RemoveStream(this.streamElement.id)]);
         return false;
     }
 }

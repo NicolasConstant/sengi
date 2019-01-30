@@ -13,7 +13,8 @@
         </a>
     </div>
     
-    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen"></app-stream-edition>
+    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" 
+        [streamElement]="streamElement"></app-stream-edition>
 
     <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
