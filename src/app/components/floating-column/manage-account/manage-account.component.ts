@@ -30,4 +30,9 @@ export class ManageAccountComponent implements OnInit {
         }
         return false;
     }
+
+    removeAccount(): boolean {
+
+        return false;
+    }
 }
