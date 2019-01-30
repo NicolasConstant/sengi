@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 
-import { StreamElement, RemoveStream } from '../../../states/streams.state';
+import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-stream-edition',
@@ -17,17 +17,16 @@ export class StreamEditionComponent implements OnInit {
     }
 
     moveLeft(): boolean {
-        console.log('move left');
+        this.store.dispatch([new MoveStreamUp(this.streamElement.id)]);
         return false;
     }
 
     moveRight(): boolean {
-        console.log('move right');
+        this.store.dispatch([new MoveStreamDown(this.streamElement.id)]);
         return false;
     }
 
     delete(): boolean {
-        console.log('delete');
         this.store.dispatch([new RemoveStream(this.streamElement.id)]);
         return false;
     }
