@@ -33,7 +33,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
-
+                //Update and Add
                 for (let acc of accounts) {
                     const previousAcc = this.accounts.find(x => x.info.id === acc.id)
                     if (previousAcc) {
@@ -41,7 +41,6 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                     } else {
                         const accWrapper = new AccountWrapper();
                         accWrapper.info = acc;
-
                         this.accounts.push(accWrapper);
 
                         this.mastodonService.retrieveAccountDetails(acc)
@@ -49,10 +48,12 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                                 accWrapper.avatar = result.avatar;
                             });
                     }
+                }
 
-                    //TODO: see when deleted
-
-
+                //Delete
+                const deletedAccounts = this.accounts.filter(x => accounts.findIndex(y => y.id === x.info.id) === -1);
+                for(let delAcc of deletedAccounts){
+                    this.accounts = this.accounts.filter(x => x.info.id !== delAcc.info.id);
                 }
             }
         });

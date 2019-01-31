@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
+import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../../../states/streams.state';
 import { Store } from '@ngxs/store';
-import { AccountsStateModel, AccountInfo } from '../../../states/accounts.state';
+import { AccountsStateModel, AccountInfo, RemoveAccount } from '../../../states/accounts.state';
 import { AccountWrapper } from '../../../models/account.models';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
     selector: 'app-manage-account',
@@ -14,7 +15,9 @@ export class ManageAccountComponent implements OnInit {
 
     availableStreams: StreamElement[] = [];
 
-    constructor(private readonly store: Store) { }
+    constructor(
+        private readonly store: Store,
+        private readonly navigationService: NavigationService) { }
 
     ngOnInit() {
         const instance = this.account.info.instance;
@@ -32,7 +35,9 @@ export class ManageAccountComponent implements OnInit {
     }
 
     removeAccount(): boolean {
-
+        const accountId = this.account.info.id;
+        this.store.dispatch([new RemoveAllStreams(accountId), new RemoveAccount(accountId)]);
+        this.navigationService.closePanel();
         return false;
     }
 }
