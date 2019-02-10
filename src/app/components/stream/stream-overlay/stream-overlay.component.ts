@@ -116,7 +116,7 @@ export class StreamOverlayComponent implements OnInit {
         }
 
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
-        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null);
+        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, `#${hashtag}@${selectedAccount.instance}`);
         const newElement = new OverlayBrowsing(hashTagElement, null, null);
         this.loadElement(newElement);
         this.canGoForward = false;

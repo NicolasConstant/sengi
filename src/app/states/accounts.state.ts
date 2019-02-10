@@ -11,6 +11,11 @@ export class SelectAccount {
     constructor(public account: AccountInfo, public multiselection: boolean = false) {}
 }
 
+export class RemoveAccount {
+    static readonly type = '[Accounts] Remove account';
+    constructor(public accountId: string) {}
+}
+
 export interface AccountsStateModel {
     accounts: AccountInfo[];
 }
@@ -49,6 +54,15 @@ export class AccountsState {
 
         ctx.patchState({
             accounts: copyAccounts
+        });
+    }
+
+    @Action(RemoveAccount)
+    RemoveAccount(ctx: StateContext<AccountsStateModel>, action: RemoveAccount){
+        const state = ctx.getState();
+        const filteredAccounts = state.accounts.filter(x => x.id !== action.accountId);
+        ctx.patchState({
+            accounts: filteredAccounts
         });
     }
 }

@@ -1,17 +1,23 @@
 <div class="stream-column">
 
-    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" 
-        (closeOverlay)="closeOverlay()" 
-        [browseAccountData]="overlayAccountToBrowse"
-        [browseHashtagData]="overlayHashtagToBrowse"
-        [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
+    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"
+        [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse" [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
-        <a href title="return to top" (click)="goToTop()">
-            <h1>{{ streamElement.name.toUpperCase() }}</h1>
+        <a class="stream-column__open-menu" href title="edit column"  (click)="openEditionMenu()">
+            <fa-icon class="stream-column__open-menu--icon" [icon]="menuFaIcon"></fa-icon>
+        </a>
+        <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">            
+            <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
+            <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
         </a>
     </div>
-    <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()" (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
+    
+    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" 
+        [streamElement]="streamElement"></app-stream-edition>
+
+    <app-stream-statuses class="stream-statuses" [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
     <!-- <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
         <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
             <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-status>
