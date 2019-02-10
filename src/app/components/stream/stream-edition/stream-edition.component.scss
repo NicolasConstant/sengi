@@ -1,5 +1,21 @@
+@import "variables";
+@import "mixins";
+
 .stream-edition {
     width: 100%;
-    min-height: 50px;
+    // min-height: 50px;
     background-color: #222736;
+    &__button {
+        @include clearButton;
+        padding: 5px 10px 5px 10px;
+        margin: 3px 0;
+        &--delete{
+            float: right;
+            margin-right: 5px;
+        }
+
+        &:hover {
+            color: darken($font-color-primary, 20);
+        }
+    }
 }

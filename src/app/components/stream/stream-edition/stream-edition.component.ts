@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown } from '../../../states/streams.state';
 
@@ -9,6 +10,10 @@ import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown } from '../..
     styleUrls: ['./stream-edition.component.scss']
 })
 export class StreamEditionComponent implements OnInit {
+    faChevronLeft = faChevronLeft;
+    faChevronRight = faChevronRight;
+    faTimes = faTimes;
+
     @Input() streamElement: StreamElement;
 
     constructor(private readonly store: Store) { }

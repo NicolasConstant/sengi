@@ -72,7 +72,7 @@ $stream-header-height: 40px;
 // }
 .stream-overlay {
     position: absolute;
-    z-index: 50;
+    z-index: 100;
     width: $stream-column-width;
     height: calc(100%);
 }
