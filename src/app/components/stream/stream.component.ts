@@ -1,11 +1,10 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
-import { AccountWrapper } from "../../models/account.models";
+import { Subject } from "rxjs";
+import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
-import { StreamingService, StreamingWrapper, EventEnum, StatusUpdate } from "../../services/streaming.service";
-import { Store } from "@ngxs/store";
-import { AccountInfo } from "../../states/accounts.state";
 import { Status } from "../../services/models/mastodon.interfaces";
-import { MastodonService } from "../../services/mastodon.service";
+import { AccountInfo } from "../../states/accounts.state";
 
 @Component({
     selector: "app-stream",
@@ -13,177 +12,88 @@ import { MastodonService } from "../../services/mastodon.service";
     styleUrls: ["./stream.component.scss"]
 })
 export class StreamComponent implements OnInit {
-    private _streamElement: StreamElement;
-    private account: AccountInfo;
-    private websocketStreaming: StreamingWrapper;
-
-    statuses: StatusWrapper[] = [];
-    private bufferStream: Status[] = [];
-    private bufferWasCleared: boolean;
+    columnFaIcon: IconDefinition;
+    menuFaIcon = faBars;
 
     overlayActive: boolean;
-    overlayAccountToBrowse: Account;
+    overlayAccountToBrowse: string;
+    overlayHashtagToBrowse: string;
+    overlayThreadToBrowse: string;
 
-    @Input()
-    set streamElement(streamElement: StreamElement) {
-        this._streamElement = streamElement;
+    goToTopSubject: Subject<void> = new Subject<void>();
 
-        const splitedUserName = streamElement.accountId.split('@');
-        const user = splitedUserName[0];
-        const instance = splitedUserName[1];
-        this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
+    private _streamElement: StreamElement;
 
-        this.retrieveToots();
-        this.launchWebsocket();
+    @Input('streamElement')
+    set streamElement(stream: StreamElement) {
+        switch (stream.type) {
+            case StreamTypeEnum.personnal:
+                this.columnFaIcon = faHome;
+                break;
+            case StreamTypeEnum.global:
+                this.columnFaIcon = faGlobe;
+                break;
+            case StreamTypeEnum.local:
+                this.columnFaIcon = faUser;
+                break;
+            case StreamTypeEnum.tag:
+                this.columnFaIcon = faHashtag;
+                break;
+            case StreamTypeEnum.list:
+                this.columnFaIcon = faListUl;
+                break;
+        }
+
+        this._streamElement = stream;
     }
-
     get streamElement(): StreamElement {
         return this._streamElement;
     }
 
-    constructor(
-        private readonly store: Store,
-        private readonly streamingService: StreamingService,
-        private readonly mastodonService: MastodonService) {
-    }
+
+    constructor() { }
 
     ngOnInit() {
     }
 
-    browseAccount(account: Account): void {
+    goToTop(): boolean {
+        this.goToTopSubject.next();
+        return false;
+    }
+
+    browseAccount(account: string): void {
         this.overlayAccountToBrowse = account;
+        this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = true;
     }
 
-    browseHashtag(hashtag: any): void {
-        console.warn('browseHashtag');
-        console.warn(hashtag);
+    browseHashtag(hashtag: string): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = hashtag;
+        this.overlayThreadToBrowse = null;
+        this.overlayActive = true;
     }
 
-    browseThread(thread: any): void {
-        console.warn('browseThread');
-        console.warn(thread);
+    browseThread(statusUri: string): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = statusUri;
+        this.overlayActive = true;
     }
 
     closeOverlay(): void {
         this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = false;
     }
 
-    @ViewChild('statusstream') public statustream: ElementRef;
-    goToTop(): boolean {
-        this.loadBuffer();
-        if (this.statuses.length > 40) {
-            this.statuses.length = 40;
-        }
-        const stream = this.statustream.nativeElement as HTMLElement;
-        stream.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+    editionPanelIsOpen: boolean;
+    openEditionMenu(): boolean {
+        console.log('opened menu');
+        this.editionPanelIsOpen = !this.editionPanelIsOpen;
         return false;
-    }
-
-    private streamPositionnedAtTop: boolean = true;
-    private isProcessingInfiniteScroll: boolean;
-
-    onScroll() {
-        var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight  <= element.clientHeight + element.scrollTop + 500;
-        const atTop = element.scrollTop === 0;
-
-        this.streamPositionnedAtTop = false;
-        if (atBottom && !this.isProcessingInfiniteScroll) {
-            this.scrolledToBottom();
-        } else if (atTop) {
-            this.scrolledToTop();
-        }
-    }
-
-    private scrolledToTop() {
-        this.streamPositionnedAtTop = true;
-
-        this.loadBuffer();
-    }
-
-    private loadBuffer(){        
-        if(this.bufferWasCleared) {
-            this.statuses.length = 0;
-            this.bufferWasCleared = false;
-        }
-
-        for (const status of this.bufferStream) {
-            const wrapper = new StatusWrapper(status, this.account);
-            this.statuses.unshift(wrapper); 
-        }
-
-        this.bufferStream.length = 0;
-    }
-
-    private scrolledToBottom() {
-        this.isProcessingInfiniteScroll = true;
-
-        const lastStatus = this.statuses[this.statuses.length - 1];
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id)
-            .then((status: Status[]) => {
-                for (const s of status) {
-                    const wrapper = new StatusWrapper(s, this.account);
-                    this.statuses.push(wrapper);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-            })
-            .then(() => {
-                this.isProcessingInfiniteScroll = false;
-            });
-    }
-
-    private getRegisteredAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-        return regAccounts;
-    }
-
-    private retrieveToots(): void {
-        this.mastodonService.getTimeline(this.account, this._streamElement.type)
-            .then((results: Status[]) => {
-                for (const s of results) {
-                    const wrapper = new StatusWrapper(s, this.account);
-                    this.statuses.push(wrapper);
-                }
-            });
-    }
-
-    private launchWebsocket(): void {
-        this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement.type);
-        this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
-            if (update) {
-                if (update.type === EventEnum.update) {
-                    if (!this.statuses.find(x => x.status.id == update.status.id)) {
-                        if (this.streamPositionnedAtTop) {
-                            const wrapper = new StatusWrapper(update.status, this.account);
-                            this.statuses.unshift(wrapper);
-                        } else {
-                            this.bufferStream.push(update.status);
-                        }
-                    }
-                }
-            }
-
-            this.checkAndCleanUpStream();
-        });
-    }
-    
-    private checkAndCleanUpStream(): void {
-        if (this.streamPositionnedAtTop && this.statuses.length > 60) {
-            this.statuses.length = 40;
-        }
-
-        if (this.bufferStream.length > 60) {
-            this.bufferWasCleared = true;
-            this.bufferStream.length = 40;
-
-        }
     }
 }
 
@@ -191,5 +101,5 @@ export class StatusWrapper {
     constructor(
         public status: Status,
         public provider: AccountInfo
-    ) {}    
+    ) { }
 }

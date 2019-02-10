@@ -1,1 +1,1 @@
-<div #content class="content" innerHTML="{{processedText}}" (click)="selectText()"></div>
+<div #content class="content" [class.selectable]="textIsSelectable" innerHTML="{{processedText}}" (click)="selectText()"></div>

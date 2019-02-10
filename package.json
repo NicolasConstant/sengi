@@ -5,15 +5,14 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng build && electron .",
-    "serve": "ng serve",
+    "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
     "test-nowatch": "ng test --watch=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build && electron .",
-    "electron-prod": "ng build --prod && electron ."
+    "electron": "ng build --prod && electron .",
+    "electron-debug": "ng build && electron ."
   },
   "private": true,
   "dependencies": {
@@ -26,6 +25,11 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@fortawesome/angular-fontawesome": "^0.3.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.13",
+    "@fortawesome/free-brands-svg-icons": "^5.7.0",
+    "@fortawesome/free-regular-svg-icons": "^5.7.0",
+    "@fortawesome/free-solid-svg-icons": "^5.7.0",
     "@ngxs/storage-plugin": "^3.2.0",
     "@ngxs/store": "^3.2.0",
     "bootstrap": "^4.1.3",

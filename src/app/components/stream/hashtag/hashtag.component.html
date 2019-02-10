@@ -1,3 +1,15 @@
-<p>
-  hashtag works!
-</p>
+<div class="hashtag-column">
+    <div class="hashtag-header">
+        <a href (click)="goToTop()" class="hashtag-header__gototop" title="go to top">
+            <h3 class="hashtag-header__title">#{{hashtagElement.tag}}</h3>
+
+            <button class="btn-custom-secondary hashtag-header__add-column" (click)="addColumn($event)" title="add column to board">add column</button>
+        </a>
+    </div>
+    <app-stream-statuses class="hashtag-stream" *ngIf="hashtagElement" 
+        [streamElement]="hashtagElement" 
+        [goToTop]="goToTopSubject.asObservable()"
+        (browseAccountEvent)="browseAccount($event)" 
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
+</div>

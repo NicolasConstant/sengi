@@ -6,7 +6,7 @@ $color-primary: #141824;
 $color-secondary: #090b10;
 
 $column-color: #0f111a;
-$column-header-background-color: black;
+$column-header-background-color: #0c0c10;
 
 
 
@@ -32,5 +32,13 @@ $stream-selector-height: 30px;
 $stream-column-separator: 7px;
 $stream-column-width: 320px;
 $avatar-column-space: 70px;
+
 //Bootstrap cuistomization
 $enable-rounded: false;
+
+$separator-color:$color-primary;
+$button-size: 30px;
+$button-color: darken(white, 30);
+$button-color-hover: white;
+$button-background-color: $color-primary;
+$button-background-color-hover: lighten($color-primary, 20);

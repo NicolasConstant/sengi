@@ -1,9 +1,11 @@
 @import "variables";
 @import "mixins";
 
+$floating-column-size: 330px;
+
 .floating-column {
     width: calc(100%);
-    max-width: 330px;
+    width: $floating-column-size;
     
     background-color: $color-secondary;
     overflow: hidden;
@@ -13,12 +15,17 @@
     bottom: $stream-selector-height;
     padding: 0;
 
-    &__header {
+    // &__header {
         
-        // @include clearfix;
-    }
+    // }
 }
 
+.stream-overlay {
+    position: absolute;
+    z-index: 50;
+    width: $floating-column-size;
+    height: calc(100%);
+}
 
 .close-button {
     // display: inline-block;

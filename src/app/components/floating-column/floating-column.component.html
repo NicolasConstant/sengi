@@ -1,11 +1,17 @@
 <div class="floating-column">
-  <div class="floating-column__header">
-    <a class="close-button" href (click)="closePanel()" title="close">x</a>
-  </div> 
+    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()" 
+        [browseAccountData]="overlayAccountToBrowse" 
+        [browseHashtagData]="overlayHashtagToBrowse"></app-stream-overlay>
 
-  <app-manage-account *ngIf="openPanel === 'manageAccount'" [account]="userAccountUsed"></app-manage-account>
-  <app-add-new-status *ngIf="openPanel === 'createNewStatus'"></app-add-new-status>
-  <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
-  <app-search *ngIf="openPanel === 'search'"></app-search>
-  <app-settings *ngIf="openPanel === 'settings'"></app-settings>
+    <div class="floating-column__header">
+        <a class="close-button" href (click)="closePanel()" title="close">x</a>
+    </div>
+
+    <app-manage-account *ngIf="openPanel === 'manageAccount'" [account]="userAccountUsed"></app-manage-account>
+    <app-add-new-status *ngIf="openPanel === 'createNewStatus'"></app-add-new-status>
+    <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
+    <app-search *ngIf="openPanel === 'search'" 
+        (browseAccountEvent)="browseAccount($event)" 
+        (browseHashtagEvent)="browseHashtag($event)"></app-search>
+    <app-settings *ngIf="openPanel === 'settings'"></app-settings>
 </div>

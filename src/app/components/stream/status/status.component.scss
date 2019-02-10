@@ -83,11 +83,19 @@
     //     margin: 0 !important;
     //     font-size: 0.85em;
     // }
-    &__created-at {
-        color: $status-secondary-color;
+    &__created-at {       
         position: absolute;
         top: 7px;
         right: 5px;
+
+        &--link {
+            color: $status-secondary-color;
+            text-decoration: none;
+            
+            &:hover {
+                color: lighten($status-secondary-color, 20);
+            }
+        }
     }
 }
 

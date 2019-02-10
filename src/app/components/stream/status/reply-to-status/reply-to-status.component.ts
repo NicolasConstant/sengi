@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
-import { Store } from '@ngxs/store';
+// import { Store } from '@ngxs/store';
 import { MastodonService, VisibilityEnum } from '../../../../services/mastodon.service';
-import { AccountInfo } from '../../../../states/accounts.state';
+// import { AccountInfo } from '../../../../states/accounts.state';
 import { StatusWrapper } from '../../stream.component';
 import { Status } from '../../../../services/models/mastodon.interfaces';
+import { ToolsService } from '../../../../services/tools.service';
 
 @Component({
     selector: 'app-reply-to-status',
@@ -22,7 +23,8 @@ export class ReplyToStatusComponent implements OnInit {
     privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
 
     constructor(
-        private readonly store: Store,
+        // private readonly store: Store,
+        private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
@@ -39,8 +41,7 @@ export class ReplyToStatusComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        const accounts = this.getRegisteredAccounts();
-        const selectedAccounts = accounts.filter(x => x.isSelected);
+        const selectedAccounts = this.toolsService.getSelectedAccounts();
 
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
         switch (this.selectedPrivacy) {
@@ -72,10 +73,10 @@ export class ReplyToStatusComponent implements OnInit {
         return false;
     }
 
-    private getRegisteredAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-        return regAccounts;
-    }
+    // private getRegisteredAccounts(): AccountInfo[] {
+    //     var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+    //     return regAccounts;
+    // }
 
     onCtrlEnter(): boolean {
         this.onSubmit();

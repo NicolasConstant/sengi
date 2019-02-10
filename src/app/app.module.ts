@@ -10,6 +10,8 @@ import { NgxElectronModule } from "ngx-electron";
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
@@ -40,6 +42,9 @@ import { ThreadComponent } from './components/stream/thread/thread.component';
 import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
 import { StreamOverlayComponent } from './components/stream/stream-overlay/stream-overlay.component';
 import { DatabindedTextComponent } from './components/stream/status/databinded-text/databinded-text.component';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { StreamStatusesComponent } from './components/stream/stream-statuses/stream-statuses.component';
+import { StreamEditionComponent } from './components/stream/stream-edition/stream-edition.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -72,9 +77,13 @@ const routes: Routes = [
     ThreadComponent,
     HashtagComponent,
     StreamOverlayComponent,
-    DatabindedTextComponent
+    DatabindedTextComponent,
+    TimeAgoPipe,
+    StreamStatusesComponent,
+    StreamEditionComponent
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     HttpModule,
     HttpClientModule,

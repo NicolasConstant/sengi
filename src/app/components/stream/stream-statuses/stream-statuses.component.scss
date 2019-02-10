@@ -1,0 +1,13 @@
+@import "variables";
+@import "commons";
+
+.stream-toots {
+    height: calc(100%);
+    width: calc(100%);
+
+    overflow: auto;
+    &__status:not(:last-child) {
+        border: solid #06070b;
+        border-width: 0 0 1px 0;
+    }
+}
