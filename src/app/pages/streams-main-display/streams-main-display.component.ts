@@ -33,7 +33,7 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
     private focusOnColumn(columnIndex: number): void {
         if (columnIndex > -1) {
             setTimeout(() => {
-                this.streamsElementRef.toArray()[columnIndex].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+                this.streamsElementRef.toArray()[columnIndex].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
             });
         }
     }
