@@ -5,15 +5,14 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng build && electron .",
-    "serve": "ng serve",
+    "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
     "test-nowatch": "ng test --watch=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build && electron .",
-    "electron-prod": "ng build --prod && electron ."
+    "electron": "ng build --prod && electron .",
+    "electron-debug": "ng build && electron ."
   },
   "private": true,
   "dependencies": {
