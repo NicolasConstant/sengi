@@ -64,12 +64,10 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
-        console.warn(`onToogleAccountNotify username ${acc.info.username}`);
         this.store.dispatch([new SelectAccount(acc.info)]);
     }
 
     onOpenMenuNotify(acc: AccountWrapper) {
-        console.warn(`onOpenMenuNotify username ${acc.info.username}`);
         this.navigationService.openColumnEditor(acc);
     }
 

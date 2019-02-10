@@ -32,7 +32,6 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Input()
     set streamElement(streamElement: StreamElement) {
-        console.warn('new stream');
         this.resetStream();
 
         this._streamElement = streamElement;
@@ -139,7 +138,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     }
 
     textSelected(): void {
-        console.warn(`status comp: textSelected`);
+        console.warn(`status comp: textSelected`); //TODO
     }
 
     private scrolledToTop() {

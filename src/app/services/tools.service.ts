@@ -24,10 +24,6 @@ export class ToolsService {
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {
         return this.mastodonService.search(account, accountName, true)
             .then((result: Results) => {
-                console.warn('findAccount');
-                console.warn(`accountName ${accountName}`);
-                console.warn(result);
-
                 if(accountName[0] === '@') accountName = accountName.substr(1);
 
                 const foundAccount = result.accounts.filter(

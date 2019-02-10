@@ -32,9 +32,6 @@ export class AddNewStatusComponent implements OnInit {
         const accounts = this.getRegisteredAccounts();
         const selectedAccounts = accounts.filter(x => x.isSelected);
 
-        console.warn(`selectedAccounts ${selectedAccounts.length}`);
-        console.warn(`statusHandle ${this.status}`);
-
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
         switch (this.selectedPrivacy) {
             case 'Public':

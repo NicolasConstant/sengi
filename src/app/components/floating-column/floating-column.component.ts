@@ -64,7 +64,7 @@ export class FloatingColumnComponent implements OnInit {
     }
 
     browseThread(thread: string): void {
-        console.warn('browseThread');
+        console.warn('browseThread'); //TODO
         console.warn(thread);
     }
 

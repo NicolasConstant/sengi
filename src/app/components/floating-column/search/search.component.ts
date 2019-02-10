@@ -57,7 +57,6 @@ export class SearchComponent implements OnInit {
     // }
 
     browseAccount(accountName: string): boolean {
-        console.warn(accountName);
         if (accountName) {
             this.browseAccountEvent.next(accountName);
         }
@@ -71,8 +70,6 @@ export class SearchComponent implements OnInit {
         this.hashtags.length = 0;
         this.isLoading = true;
 
-        console.warn(`search: ${data}`);
-
         const enabledAccounts = this.toolsService.getSelectedAccounts();
         //First candid implementation
         if (enabledAccounts.length > 0) {
@@ -80,7 +77,6 @@ export class SearchComponent implements OnInit {
             this.mastodonService.search(this.lastAccountUsed, data, true)
                 .then((results: Results) => {
                     if (results) {
-                        console.warn(results);
                         this.accounts = results.accounts.slice(0, 5);
                         this.hashtags = results.hashtags;
 

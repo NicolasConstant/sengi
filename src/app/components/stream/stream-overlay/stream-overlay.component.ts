@@ -151,8 +151,6 @@ class OverlayBrowsing {
         public readonly account: string,
         public readonly thread: string) {
 
-        console.warn(`OverlayBrowsing: ${hashtag} ${account} ${thread}`);
-
         if (hashtag) {
             this.type = OverlayEnum.hashtag;
         } else if (account) {
