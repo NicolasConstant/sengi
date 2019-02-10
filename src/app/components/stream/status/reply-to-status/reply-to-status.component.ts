@@ -28,7 +28,11 @@ export class ReplyToStatusComponent implements OnInit {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
-        this.statusReplyingTo = this.statusReplyingToWrapper.status;
+        if( this.statusReplyingToWrapper.status.reblog){
+            this.statusReplyingTo = this.statusReplyingToWrapper.status.reblog;
+        } else {
+            this.statusReplyingTo = this.statusReplyingToWrapper.status;
+        }
 
         this.status += `@${this.statusReplyingTo.account.acct} `;
         for (const mention of this.statusReplyingTo.mentions) {
