@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription, BehaviorSubject, Observable } from "rxjs";
+import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
+import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
 
 import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
-import { AccountsStateModel, AccountInfo, SelectAccount } from "../../states/accounts.state";
+import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { MastodonService } from "../../services/mastodon.service";
 
@@ -15,6 +16,8 @@ import { MastodonService } from "../../services/mastodon.service";
     styleUrls: ["./left-side-bar.component.scss"]
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
+    faCommentAlt = faCommentAlt;
+
     accounts: AccountWrapper[] = [];
     hasAccounts: boolean;
     private accounts$: Observable<AccountInfo[]>;

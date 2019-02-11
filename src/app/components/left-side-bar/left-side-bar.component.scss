@@ -25,10 +25,12 @@ $height-button: 40px;
     transition: all .2s;
     // outline: 1px dotted greenyellow;
     &--status {
-        padding: 5px 0 0 10px;
+        font-size: 26px;
+        padding: 5px 0 0 12px;
     }
     &--search {
-        padding: 0 0 0 9px;
+        font-size: 28px;
+        padding: 0 0 0 11px;
     }
     &--add {
         padding: 0 0 0 12px;

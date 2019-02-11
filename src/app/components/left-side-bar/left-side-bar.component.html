@@ -1,6 +1,7 @@
 <div class="left-bar">
     <a class="left-bar-button left-bar-button--status left-bar-link" href title="write new message" (click)="createNewStatus()" *ngIf="hasAccounts">
-        <ion-icon name="md-send"></ion-icon>
+        <fa-icon [icon]="faCommentAlt"></fa-icon>
+        <!-- <ion-icon name="md-send"></ion-icon> -->
     </a>
     <a class="left-bar-button left-bar-button--search left-bar-link" href title="search" (click)="openSearch()" *ngIf="hasAccounts">
         <ion-icon name="md-search"></ion-icon>
