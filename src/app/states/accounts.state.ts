@@ -29,10 +29,13 @@ export interface AccountsStateModel {
 export class AccountsState {
     @Action(AddAccount)
     AddAccount(ctx: StateContext<AccountsStateModel>, action: AddAccount) {
+        const state = ctx.getState();
         const newAcc = action.account;
         newAcc.id = `${newAcc.username}@${newAcc.instance}`;
 
-        const state = ctx.getState();
+        if(state.accounts.filter(x => x.isSelected).length === 0)
+            newAcc.isSelected = true;
+
         ctx.patchState({
             accounts: [...state.accounts, newAcc]
         });
@@ -41,19 +44,25 @@ export class AccountsState {
     @Action(SelectAccount)
     SelectAccount(ctx: StateContext<AccountsStateModel>, action: SelectAccount){
         const state = ctx.getState();
-        const multiSelection = action.multiselection;
+        // const multiSelection = action.multiselection;
         const selectedAccount = action.account;
-        const copyAccounts = [...state.accounts];
-        if(!multiSelection) {
-            copyAccounts
-                .filter(x => x.id !== selectedAccount.id)
-                .forEach(x => x.isSelected = false);
-        }
-        const acc = copyAccounts.find(x => x.id === selectedAccount.id);
-        acc.isSelected = !acc.isSelected;
+
+
+        // const copyAccounts = [...state.accounts];
+        // copyAccounts
+        //         .filter(x => x.id !== selectedAccount.id)
+        //         .forEach(x => x.isSelected = false);
+
+        const oldSelectedAccount = state.accounts.find(x => x.isSelected);
+
+        if(selectedAccount.id === oldSelectedAccount.id) return;
+
+        const acc = state.accounts.find(x => x.id === selectedAccount.id);
+        acc.isSelected = true;
+        oldSelectedAccount.isSelected = false;
 
         ctx.patchState({
-            accounts: copyAccounts
+            accounts: [...state.accounts]
         });
     }
 
@@ -61,6 +70,10 @@ export class AccountsState {
     RemoveAccount(ctx: StateContext<AccountsStateModel>, action: RemoveAccount){
         const state = ctx.getState();
         const filteredAccounts = state.accounts.filter(x => x.id !== action.accountId);
+
+        if(filteredAccounts.length === 1)
+            filteredAccounts[0].isSelected = true;
+
         ctx.patchState({
             accounts: filteredAccounts
         });
