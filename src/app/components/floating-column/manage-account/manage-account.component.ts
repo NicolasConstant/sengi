@@ -4,6 +4,7 @@ import { Store } from '@ngxs/store';
 import { AccountsStateModel, AccountInfo, RemoveAccount } from '../../../states/accounts.state';
 import { AccountWrapper } from '../../../models/account.models';
 import { NavigationService } from '../../../services/navigation.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-manage-account',
@@ -17,7 +18,8 @@ export class ManageAccountComponent implements OnInit {
 
     constructor(
         private readonly store: Store,
-        private readonly navigationService: NavigationService) { }
+        private readonly navigationService: NavigationService,
+        private notificationService: NotificationService) { }
 
     ngOnInit() {
         const instance = this.account.info.instance;
@@ -29,7 +31,9 @@ export class ManageAccountComponent implements OnInit {
 
     addStream(stream: StreamElement): boolean {
         if (stream) {
-            this.store.dispatch([new AddStream(stream)]);
+            this.store.dispatch([new AddStream(stream)]).toPromise().then(() => {
+                this.notificationService.notify(`added ${stream.displayableFullName}`, false);
+            });
         }
         return false;
     }

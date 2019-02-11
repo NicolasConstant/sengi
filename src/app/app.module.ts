@@ -46,6 +46,8 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { StreamStatusesComponent } from './components/stream/stream-statuses/stream-statuses.component';
 import { StreamEditionComponent } from './components/stream/stream-edition/stream-edition.component';
 import { TutorialComponent } from './components/tutorial/tutorial.component';
+import { NotificationHubComponent } from './components/notification-hub/notification-hub.component';
+import { NotificationService } from "./services/notification.service";
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -82,7 +84,8 @@ const routes: Routes = [
     TimeAgoPipe,
     StreamStatusesComponent,
     StreamEditionComponent,
-    TutorialComponent
+    TutorialComponent,
+    NotificationHubComponent
   ],
   imports: [
     FontAwesomeModule,
@@ -100,7 +103,7 @@ const routes: Routes = [
     ]),
     NgxsStoragePluginModule.forRoot()
   ],
-  providers: [AuthService, NavigationService, MastodonService, StreamingService],
+  providers: [AuthService, NavigationService, NotificationService, MastodonService, StreamingService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

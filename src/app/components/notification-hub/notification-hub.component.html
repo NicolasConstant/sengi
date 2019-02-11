@@ -1,0 +1,5 @@
+<div class="notification-hub">
+    <div class="notification-hub__notification" *ngFor="let notification of notifications" (click)="onClick(notification)">
+        {{ notification.message }}
+    </div>
+</div>  

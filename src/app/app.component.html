@@ -7,7 +7,8 @@
 <div id="display-zone">
     <app-tutorial id="tutorial" *ngIf="tutorialActive"></app-tutorial>
     <app-floating-column id="floating-column" *ngIf="floatingColumnActive"></app-floating-column>
-    <router-outlet></router-outlet> 
+    <app-notification-hub></app-notification-hub>
+    <router-outlet></router-outlet>     
 </div>
 
 <app-streams-selection-footer>
