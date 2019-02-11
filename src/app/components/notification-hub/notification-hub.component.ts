@@ -36,6 +36,6 @@ export class NotificationHubComponent implements OnInit {
 
         setTimeout(() => {
             this.notifications.length = 0;
-        }, 2000);
+        }, 500);
     }
 }
