@@ -1,0 +1,45 @@
+@import "variables";
+@import "mixins";
+
+// .tutorial {
+//     width: $floating-column-size;
+    
+//     overflow: hidden;
+//     z-index: 99;
+//     position: fixed;
+//     top: 0;
+//     bottom: $stream-selector-height;
+//     padding: 0;
+
+    
+//     font-size: $default-font-size;
+// }
+
+
+.add-account{
+    position: absolute;
+
+    &__arrow {
+
+    }
+
+    &__title{
+        position: relative;
+        top: 30px;
+        left: 70px;
+    }
+
+    &__description {
+        position: relative;
+        top: 40px;
+        left: 70px;
+
+        text-align: center;
+
+        width: 200px;
+        display: inline-block;
+
+        word-break: break-all;
+        white-space: normal;
+    }
+}

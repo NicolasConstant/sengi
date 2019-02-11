@@ -45,6 +45,7 @@ import { DatabindedTextComponent } from './components/stream/status/databinded-t
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { StreamStatusesComponent } from './components/stream/stream-statuses/stream-statuses.component';
 import { StreamEditionComponent } from './components/stream/stream-edition/stream-edition.component';
+import { TutorialComponent } from './components/tutorial/tutorial.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -80,7 +81,8 @@ const routes: Routes = [
     DatabindedTextComponent,
     TimeAgoPipe,
     StreamStatusesComponent,
-    StreamEditionComponent
+    StreamEditionComponent,
+    TutorialComponent
   ],
   imports: [
     FontAwesomeModule,
