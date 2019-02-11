@@ -24,7 +24,9 @@
     position: absolute;
 
     &__arrow {
-
+        position: fixed;
+        top: 15px;
+        left: 60px;
     }
 
     &__title{
@@ -35,8 +37,8 @@
 
     &__description {
         position: relative;
-        top: 40px;
-        left: 70px;
+        top: 45px;
+        left: 75px;
 
         text-align: center;
 
@@ -53,7 +55,9 @@
     position: absolute;
 
     &__arrow {
-        position: relative;
+        position: fixed;
+        top: 85px;
+        left: 65px;
     }
 
     &__title{
