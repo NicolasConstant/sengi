@@ -1,6 +1,7 @@
 @import "variables";
 $width-button: 50px;
 $height-button: 40px;
+
 .left-bar {
     width: $width-button;
     height: calc(100%);
@@ -62,3 +63,7 @@ $height-button: 40px;
     }
 }
 
+.no-accounts {
+    margin-top: 10px;
+    // color: cornflowerblue;   
+}

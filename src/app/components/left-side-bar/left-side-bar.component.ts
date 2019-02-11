@@ -16,6 +16,7 @@ import { MastodonService } from "../../services/mastodon.service";
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
     accounts: AccountWrapper[] = [];
+    hasAccounts: boolean;
     private accounts$: Observable<AccountInfo[]>;
 
     // private loadedAccounts: { [index: string]: AccountInfo } = {};
@@ -55,6 +56,8 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                 for(let delAcc of deletedAccounts){
                     this.accounts = this.accounts.filter(x => x.info.id !== delAcc.info.id);
                 }
+
+                this.hasAccounts = this.accounts.length > 0;
             }
         });
     }

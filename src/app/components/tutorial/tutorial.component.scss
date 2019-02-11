@@ -15,6 +15,10 @@
 //     font-size: $default-font-size;
 // }
 
+.underline {
+    text-decoration: underline;    
+}
+
 
 .add-account{
     position: absolute;
@@ -39,7 +43,37 @@
         width: 200px;
         display: inline-block;
 
-        word-break: break-all;
+        //word-break: break-all;
+        white-space: normal;
+    }
+}
+
+
+.open-account{
+    position: absolute;
+
+    &__arrow {
+        position: relative;
+    }
+
+    &__title{
+        position: relative;
+        top: 30px;
+        left: 160px;
+        width: 50px;
+    }
+
+    &__description {
+        position: relative;
+        top: 40px;
+        left: 90px;
+
+        text-align: right;
+
+        width: 200px;
+        display: inline-block;
+
+        // word-break: break-all;
         white-space: normal;
     }
 }

@@ -1,10 +1,17 @@
 <!-- <div class="tutorial"> -->
-    <div class="add-account">
-        <div class="add-account__arrow"></div>
-        <h3 class="add-account__title">Welcome to Sengi!</h3> 
-        <p class="add-account__description"> 
-            Let's start, click the "+" button to add a new account.
-        </p>
-    </div>
-    <div class="open-account"></div>
+<div class="add-account" *ngIf="showAddAccount">
+    <div class="add-account__arrow"></div>
+    <h3 class="add-account__title">Welcome to Sengi!</h3>
+    <p class="add-account__description">
+        Let's start, click the "+" button to add a new account.
+    </p>
+</div>
+<div class="open-account" *ngIf="showOpenAccount">
+    <div class="open-account__arrow"></div>
+    <div class="open-account__mouse-icon"></div>
+    <h3 class="open-account__title">Nice!</h3>
+    <p class="open-account__description">
+        Now <span class="underline">left-click</span> on your avatar to open your account and be able to add some timelines!
+    </p>
+</div>
 <!-- </div> -->
