@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement } from '../../../states/streams.state';
@@ -6,9 +8,8 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StreamingService, EventEnum, StreamingWrapper, StatusUpdate } from '../../../services/streaming.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../services/mastodon.service';
-import { Observable, Subscription } from 'rxjs';
 import { StatusWrapper } from '../stream.component';
-
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-stream-statuses',
@@ -54,6 +55,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly store: Store,
+        private readonly notificationService: NotificationService,
         private readonly streamingService: StreamingService,
         private readonly mastodonService: MastodonService) {
     }
@@ -172,8 +174,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                     this.statuses.push(wrapper);
                 }
             })
-            .catch(err => {
-                console.error(err);
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             })
             .then(() => {
                 this.isProcessingInfiniteScroll = false;
@@ -193,6 +195,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                     const wrapper = new StatusWrapper(s, this.account);
                     this.statuses.push(wrapper);
                 }
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             });
     }
         

@@ -91,7 +91,6 @@ export class StreamComponent implements OnInit {
 
     editionPanelIsOpen: boolean;
     openEditionMenu(): boolean {
-        console.log('opened menu');
         this.editionPanelIsOpen = !this.editionPanelIsOpen;
         return false;
     }

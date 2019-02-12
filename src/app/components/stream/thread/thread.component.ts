@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { StatusWrapper } from '../stream.component';
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService } from '../../../services/tools.service';
-import { Status, Results, Context } from '../../../services/models/mastodon.interfaces';
+import { Results, Context } from '../../../services/models/mastodon.interfaces';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-thread',
@@ -26,6 +29,7 @@ export class ThreadComponent implements OnInit {
     }
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
@@ -56,6 +60,9 @@ export class ThreadComponent implements OnInit {
                     this.isLoading = false;
                     console.error('could not retrieve status');
                 }
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             });
     }
 

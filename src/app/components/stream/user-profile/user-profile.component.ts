@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Account, Status, Results } from "../../../services/models/mastodon.interfaces";
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Account, Status} from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../stream.component';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -37,15 +40,17 @@ export class UserProfileComponent implements OnInit {
                 this.hasNote = account && account.note && account.note !== '<p></p>';
                 return this.getStatuses(this.account);
             })
-            .catch(err => {
-                this.error = 'Error when retrieving account';
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
                 this.isLoading = false;
                 this.statusLoading = false;
-                console.error(this.error);
             });
     }
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonService,
         private readonly toolsService: ToolsService) { }
 
@@ -95,12 +100,6 @@ export class UserProfileComponent implements OnInit {
                     this.statuses.push(wrapper);
                 }
                 this.statusLoading = false;
-            });
-        // .catch(err => {
-
-        // })
-        // .then(() => {
-        //     this.statusLoading = false;
-        // });
+            });      
     }
 }

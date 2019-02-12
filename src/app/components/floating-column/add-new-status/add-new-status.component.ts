@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { AccountInfo } from '../../../states/accounts.state';
 import { MastodonService, VisibilityEnum } from '../../../services/mastodon.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
-import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-add-new-status',
@@ -20,6 +22,7 @@ export class AddNewStatusComponent implements OnInit {
 
     constructor(
         private readonly store: Store,
+        private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
@@ -56,9 +59,11 @@ export class AddNewStatusComponent implements OnInit {
         for (const acc of selectedAccounts) {
             this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler)
                 .then((res: Status) => {
-                    console.log(res);
                     this.title = '';
                     this.status = '';
+                })
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
                 });
         }
 

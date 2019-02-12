@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { MastodonService } from '../../../services/mastodon.service';
 import { AccountInfo } from '../../../states/accounts.state';
-import { Results, Account, Status } from '../../../services/models/mastodon.interfaces';
+import { Results, Account } from '../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../stream/stream.component';
-import { StreamElement, StreamTypeEnum, AddStream } from './../../../states/streams.state';
-
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-search',
@@ -28,6 +27,7 @@ export class SearchComponent implements OnInit {
     @Output() browseThreadEvent = new EventEmitter<string>();
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
@@ -84,11 +84,11 @@ export class SearchComponent implements OnInit {
                             const statusWrapper = new StatusWrapper(status, this.lastAccountUsed);
                             this.statuses.push(statusWrapper);
                         }
-
-
                     }
                 })
-                .catch((err) => console.error(err))
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
+                })
                 .then(() => { this.isLoading = false; });
         }
     }

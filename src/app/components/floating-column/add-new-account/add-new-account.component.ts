@@ -1,8 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Store } from '@ngxs/store';
+
 import { RegisteredAppsStateModel, AppInfo, AddRegisteredApp } from '../../../states/registered-apps.state';
 import { AuthService, CurrentAuthProcess } from '../../../services/auth.service';
-import { Store } from '@ngxs/store';
 import { AppData } from '../../../services/models/mastodon.interfaces';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-add-new-account',
@@ -13,6 +16,7 @@ export class AddNewAccountComponent implements OnInit {
     @Input() mastodonFullHandle: string;
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly store: Store) { }
 
@@ -28,6 +32,9 @@ export class AddNewAccountComponent implements OnInit {
         this.checkAndCreateApplication(instance)
             .then((appData: AppData) => {
                 this.redirectToInstanceAuthPage(username, instance, appData);
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             });
 
         return false;
@@ -38,10 +45,8 @@ export class AddNewAccountComponent implements OnInit {
         const instanceApps = alreadyRegisteredApps.filter(x => x.instance === instance);
 
         if (instanceApps.length !== 0) {
-            console.log('instance already registered');
             return Promise.resolve(instanceApps[0].app);
         } else {
-            console.log('instance not registered');
             const redirect_uri = this.getLocalHostname() + '/register';
             return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://github.com/NicolasConstant/sengi')
                 .then((appData: AppData) => {

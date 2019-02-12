@@ -75,7 +75,6 @@ export class ReplyToStatusComponent implements OnInit {
                     return this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, status.id);
                 })
                 .then((res: Status) => {
-                    console.log(res);
                     this.status = '';
                     this.onClose.emit();
                 })

@@ -31,9 +31,10 @@ export class ManageAccountComponent implements OnInit {
 
     addStream(stream: StreamElement): boolean {
         if (stream) {
-            this.store.dispatch([new AddStream(stream)]).toPromise().then(() => {
-                this.notificationService.notify(`added ${stream.displayableFullName}`, false);
-            });
+            this.store.dispatch([new AddStream(stream)]).toPromise()
+                .then(() => {
+                    this.notificationService.notify(`${stream.displayableFullName} added`, false);
+                });
         }
         return false;
     }

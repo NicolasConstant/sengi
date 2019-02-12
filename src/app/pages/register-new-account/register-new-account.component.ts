@@ -1,13 +1,13 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Store, Select } from '@ngxs/store';
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
 import { AuthService, CurrentAuthProcess } from "../../services/auth.service";
-import { TokenData, AppData } from "../../services/models/mastodon.interfaces";
-import { AddRegisteredApp, RegisteredAppsState, RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
+import { TokenData } from "../../services/models/mastodon.interfaces";
+import { RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
 import { AccountInfo, AddAccount } from "../../states/accounts.state";
-import { MastodonService } from "../../services/mastodon.service";
+import { NotificationService } from "../../services/notification.service";
 
 @Component({
     selector: "app-register-new-account",
@@ -23,6 +23,7 @@ export class RegisterNewAccountComponent implements OnInit {
     private authStorageKey: string = 'tempAuth';
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly store: Store,
         private readonly activatedRoute: ActivatedRoute,
@@ -57,6 +58,9 @@ export class RegisterNewAccountComponent implements OnInit {
                             localStorage.removeItem(this.authStorageKey);
                             this.router.navigate(['/home']);
                         });
+                })
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
                 });
         });
     }

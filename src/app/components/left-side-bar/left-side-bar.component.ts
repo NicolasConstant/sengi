@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
 import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
@@ -8,7 +9,7 @@ import { AccountWrapper } from "../../models/account.models";
 import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { MastodonService } from "../../services/mastodon.service";
-
+import { NotificationService } from "../../services/notification.service";
 
 @Component({
     selector: "app-left-side-bar",
@@ -26,6 +27,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private sub: Subscription;
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService,
         private readonly store: Store) {
@@ -50,6 +52,9 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                         this.mastodonService.retrieveAccountDetails(acc)
                             .then((result: Account) => {
                                 accWrapper.avatar = result.avatar;
+                            })
+                            .catch((err: HttpErrorResponse) => {
+                                this.notificationService.notifyHttpError(err);
                             });
                     }
                 }

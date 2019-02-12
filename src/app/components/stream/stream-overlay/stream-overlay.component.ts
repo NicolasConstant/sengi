@@ -52,8 +52,6 @@ export class StreamOverlayComponent implements OnInit {
     }
 
     next(): boolean {
-        console.log('next');
-
         if (this.nextElements.length === 0) {
             return false;
         }
@@ -70,8 +68,6 @@ export class StreamOverlayComponent implements OnInit {
     }
 
     previous(): boolean {
-        console.log('previous');
-
         if (this.previousElements.length === 0) {
             this.closeOverlay.next();
             return false;
@@ -96,7 +92,6 @@ export class StreamOverlayComponent implements OnInit {
     browseAccount(accountName: string): void {
         if(!accountName) return;
 
-        console.log('accountSelected');
         this.nextElements.length = 0;
         if (this.currentElement) {
             this.previousElements.push(this.currentElement);
@@ -109,7 +104,6 @@ export class StreamOverlayComponent implements OnInit {
     browseHashtag(hashtag: string): void {
         if(!hashtag) return;
 
-        console.log('hashtagSelected');
         this.nextElements.length = 0;
         if (this.currentElement) {
             this.previousElements.push(this.currentElement);
@@ -125,7 +119,6 @@ export class StreamOverlayComponent implements OnInit {
     browseThread(statusUri: string): any {
         if(!statusUri) return;
 
-        console.log('thread selected')
         this.nextElements.length = 0;
         if (this.currentElement) {
             this.previousElements.push(this.currentElement);
