@@ -1,5 +1,5 @@
 <div class="notification-hub">
-    <div class="notification-hub__notification" *ngFor="let notification of notifications" (click)="onClick(notification)">
+    <div class="notification-hub__notification" [ngClass]="{'notification-hub__notification--error':notification.isError}" *ngFor="let notification of notifications" (click)="onClick(notification)" title="close">
         {{ notification.message }}
     </div>
 </div>  

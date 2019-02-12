@@ -20,15 +20,15 @@ export class NotificationHubComponent implements OnInit {
             }, 2000);
         });
 
-        // this.autoSubmit();       
+        //this.autoSubmit();       
     }
     
     autoSubmit(): any {
-        this.notificationService.notify("test message", false);
+        this.notificationService.notify("test message", true);
 
         setTimeout(() => {
             this.autoSubmit();
-        }, 5000);
+        }, 1500);
     }
 
     onClick(notification: NotificatioData): void{

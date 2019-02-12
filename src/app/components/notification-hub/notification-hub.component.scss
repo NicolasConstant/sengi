@@ -11,5 +11,10 @@
         border-radius: 2px;
         margin: 0 0 5px 15px;
         cursor: pointer;
+
+        &--error{
+            background-color: #be0a0a;
+            color: whitesmoke;
+        }
     }
 }
