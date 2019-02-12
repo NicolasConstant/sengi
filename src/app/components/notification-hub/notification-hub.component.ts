@@ -16,7 +16,7 @@ export class NotificationHubComponent implements OnInit {
             this.notifications.push(notification);
 
             setTimeout(() => {
-                this.notifications = this.notifications.filter(x => x.id === notification.id);
+                this.notifications = this.notifications.filter(x => x.id !== notification.id);
             }, 2000);
         });
 
@@ -32,10 +32,6 @@ export class NotificationHubComponent implements OnInit {
     }
 
     onClick(notification: NotificatioData): void{
-        this.notifications = this.notifications.filter(x => x.id === notification.id);
-
-        setTimeout(() => {
-            this.notifications.length = 0;
-        }, 500);
+        this.notifications = this.notifications.filter(x => x.id !== notification.id);
     }
 }
