@@ -3,7 +3,8 @@ import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
 import { MastodonService } from './mastodon.service';
-import { Account, Results } from "./models/mastodon.interfaces";
+import { Account, Results, Status } from "./models/mastodon.interfaces";
+import { StatusWrapper } from '../components/stream/stream.component';
 
 
 @Injectable({
@@ -32,6 +33,24 @@ export class ToolsService {
                     )[0];
                 return foundAccount;
             });
+    }
+
+    getStatusUsableByAccount(account: AccountInfo, originalStatus: StatusWrapper): Promise<Status>{
+        const isProvider = originalStatus.provider.id === account.id;
+
+        let statusPromise: Promise<Status> = Promise.resolve(originalStatus.status);
+
+        if (!isProvider) {
+            statusPromise = statusPromise.then((foreignStatus: Status) => {
+                const statusUrl = foreignStatus.url;
+                return this.mastodonService.search(account, statusUrl)
+                    .then((results: Results) => {
+                        return results.statuses[0];
+                    });
+            });
+        }
+
+        return statusPromise;
     }
 
 }
