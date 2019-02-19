@@ -10,6 +10,7 @@ import { Status } from '../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../services/mastodon.service';
 import { StatusWrapper } from '../stream.component';
 import { NotificationService } from '../../../services/notification.service';
+import { OpenThreadEvent } from '../../../services/tools.service';
 
 @Component({
     selector: 'app-stream-statuses',
@@ -18,6 +19,7 @@ import { NotificationService } from '../../../services/notification.service';
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
     isLoading = false; //TODO
+    displayError: string;
 
     private _streamElement: StreamElement;
     private account: AccountInfo;
@@ -29,7 +31,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -135,8 +137,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    browseThread(statusUri: string): void {
-        this.browseThreadEvent.next(statusUri);
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 
     textSelected(): void {

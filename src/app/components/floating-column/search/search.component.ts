@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MastodonService } from '../../../services/mastodon.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account } from '../../../services/models/mastodon.interfaces';
-import { ToolsService } from '../../../services/tools.service';
+import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StatusWrapper } from '../../stream/stream.component';
 import { NotificationService } from '../../../services/notification.service';
 
@@ -24,7 +24,7 @@ export class SearchComponent implements OnInit {
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     constructor(
         private readonly notificationService: NotificationService,

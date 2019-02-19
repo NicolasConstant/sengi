@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { Account, Status} from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
-import { ToolsService } from '../../../services/tools.service';
+import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StatusWrapper } from '../stream.component';
 import { NotificationService } from '../../../services/notification.service';
 
@@ -26,7 +26,7 @@ export class UserProfileComponent implements OnInit {
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('currentAccount')
     //set currentAccount(account: Account) {
@@ -65,8 +65,8 @@ export class UserProfileComponent implements OnInit {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    browseThread(statusUri: string): void {
-        this.browseThreadEvent.next(statusUri);
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 
     private loadAccount(accountName: string): Promise<Account> {

@@ -1,6 +1,8 @@
 <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
+    <div *ngIf="displayError">{{displayError}}</div>
+
     <!-- data-simplebar  -->
     <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
         <app-status [statusWrapper]="statusWrapper" (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"

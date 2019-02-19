@@ -52,5 +52,12 @@ export class ToolsService {
 
         return statusPromise;
     }
+}
 
+export class OpenThreadEvent {
+    constructor(
+        public status: Status,
+        public sourceAccount: AccountInfo
+    ) {
+    }
 }

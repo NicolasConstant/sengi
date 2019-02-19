@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
+import { OpenThreadEvent } from '../../../services/tools.service';
 
 @Component({
     selector: 'app-hashtag',
@@ -12,7 +13,7 @@ import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/stream
 export class HashtagComponent implements OnInit {
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input() hashtagElement: StreamElement;
 
@@ -47,7 +48,7 @@ export class HashtagComponent implements OnInit {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    browseThread(statusUri: string): void {
-        this.browseThreadEvent.next(statusUri);
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 }

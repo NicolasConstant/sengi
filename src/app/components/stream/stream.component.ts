@@ -5,6 +5,7 @@ import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition } 
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { Status } from "../../services/models/mastodon.interfaces";
 import { AccountInfo } from "../../states/accounts.state";
+import { OpenThreadEvent } from "../../services/tools.service";
 
 @Component({
     selector: "app-stream",
@@ -18,7 +19,7 @@ export class StreamComponent implements OnInit {
     overlayActive: boolean;
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;
-    overlayThreadToBrowse: string;
+    overlayThreadToBrowse: OpenThreadEvent;
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
@@ -75,10 +76,10 @@ export class StreamComponent implements OnInit {
         this.overlayActive = true;
     }
 
-    browseThread(statusUri: string): void {
+    browseThread(openThreadEvent: OpenThreadEvent): void {
         this.overlayAccountToBrowse = null;
         this.overlayHashtagToBrowse = null;
-        this.overlayThreadToBrowse = statusUri;
+        this.overlayThreadToBrowse = openThreadEvent;
         this.overlayActive = true;
     }
 

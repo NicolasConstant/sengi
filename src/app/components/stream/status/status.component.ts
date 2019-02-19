@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { StatusWrapper } from "../stream.component";
+import { OpenThreadEvent } from "../../../services/tools.service";
 
 @Component({
     selector: "app-status",
@@ -15,7 +16,7 @@ export class StatusComponent implements OnInit {
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -78,11 +79,15 @@ export class StatusComponent implements OnInit {
 
     textSelected(): void {
         const status = this._statusWrapper.status;
+        const accountInfo = this._statusWrapper.provider;
 
-        if (status.reblog) {            
-            this.browseThreadEvent.next(status.reblog.uri);
+        let openThread: OpenThreadEvent;
+        if (status.reblog) {    
+            openThread = new OpenThreadEvent(status.reblog, accountInfo);            
         } else {
-            this.browseThreadEvent.next(this._statusWrapper.status.uri);
+            openThread = new OpenThreadEvent(status, accountInfo);
         }
+
+        this.browseThreadEvent.next(openThread);
     }
 }

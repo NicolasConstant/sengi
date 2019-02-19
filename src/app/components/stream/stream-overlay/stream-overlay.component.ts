@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Account, Results } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
-import { ToolsService } from '../../../services/tools.service';
+import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
 
 @Component({
@@ -19,7 +19,7 @@ export class StreamOverlayComponent implements OnInit {
     canGoForward: boolean;
 
     accountName: string;
-    thread: string;
+    thread: OpenThreadEvent;
     // hashtag: string;
     hashtagElement: StreamElement;
 
@@ -32,8 +32,8 @@ export class StreamOverlayComponent implements OnInit {
     }
 
     @Input('browseThreadData')
-    set browseThreadData(statusUri: string) {
-        this.browseThread(statusUri);
+    set browseThreadData(openThread: OpenThreadEvent) {
+        this.browseThread(openThread);
     }
 
     @Input('browseHashtagData')
@@ -116,15 +116,15 @@ export class StreamOverlayComponent implements OnInit {
         this.canGoForward = false;
     }
 
-    browseThread(statusUri: string): any {
-        if(!statusUri) return;
+    browseThread(openThread: OpenThreadEvent): any {
+        if(!openThread) return;
 
         this.nextElements.length = 0;
         if (this.currentElement) {
             this.previousElements.push(this.currentElement);
         }
 
-        const newElement = new OverlayBrowsing(null, null, statusUri);
+        const newElement = new OverlayBrowsing(null, null, openThread);
         this.loadElement(newElement);
         this.canGoForward = false;
     }
@@ -142,7 +142,7 @@ class OverlayBrowsing {
     constructor(
         public readonly hashtag: StreamElement,
         public readonly account: string,
-        public readonly thread: string) {
+        public readonly thread: OpenThreadEvent) {
 
         if (hashtag) {
             this.type = OverlayEnum.hashtag;
