@@ -6,6 +6,7 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { MastodonService, VisibilityEnum } from '../../../services/mastodon.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../services/notification.service';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
     selector: 'app-add-new-status',
@@ -23,6 +24,7 @@ export class AddNewStatusComponent implements OnInit {
     constructor(
         private readonly store: Store,
         private readonly notificationService: NotificationService,
+        private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
@@ -61,6 +63,7 @@ export class AddNewStatusComponent implements OnInit {
                 .then((res: Status) => {
                     this.title = '';
                     this.status = '';
+                    this.navigationService.closePanel();
                 })
                 .catch((err: HttpErrorResponse) => {
                     this.notificationService.notifyHttpError(err);
