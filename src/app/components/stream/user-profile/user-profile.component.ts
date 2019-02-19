@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Account, Status} from "../../../services/models/mastodon.interfaces";
+import { Account, Status } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StatusWrapper } from '../stream.component';
@@ -13,6 +13,7 @@ import { NotificationService } from '../../../services/notification.service';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+
     account: Account;
     hasNote: boolean;
 
@@ -22,7 +23,7 @@ export class UserProfileComponent implements OnInit {
 
     statuses: StatusWrapper[] = [];
 
-    private accountName: string;
+    private lastAccountName: string;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -31,6 +32,19 @@ export class UserProfileComponent implements OnInit {
     @Input('currentAccount')
     //set currentAccount(account: Account) {
     set currentAccount(accountName: string) {
+        this.lastAccountName = accountName;
+        this.load(this.lastAccountName);
+    }
+
+    constructor(
+        private readonly notificationService: NotificationService,
+        private readonly mastodonService: MastodonService,
+        private readonly toolsService: ToolsService) { }
+
+    ngOnInit() {
+    }
+
+    private load(accountName: string) {
         this.statuses.length = 0;
         this.isLoading = true;
 
@@ -49,12 +63,8 @@ export class UserProfileComponent implements OnInit {
             });
     }
 
-    constructor(
-        private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService,
-        private readonly toolsService: ToolsService) { }
-
-    ngOnInit() {
+    refresh(): any {
+        this.load(this.lastAccountName);
     }
 
     browseAccount(accountName: string): void {
@@ -71,7 +81,7 @@ export class UserProfileComponent implements OnInit {
 
     private loadAccount(accountName: string): Promise<Account> {
         this.account = null;
-        this.accountName = accountName;
+
         let selectedAccounts = this.toolsService.getSelectedAccounts();
 
         if (selectedAccounts.length === 0) {
@@ -100,6 +110,6 @@ export class UserProfileComponent implements OnInit {
                     this.statuses.push(wrapper);
                 }
                 this.statusLoading = false;
-            });      
+            });
     }
 }

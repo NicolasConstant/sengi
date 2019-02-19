@@ -10,7 +10,7 @@ import { Status } from '../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../services/mastodon.service';
 import { StatusWrapper } from '../stream.component';
 import { NotificationService } from '../../../services/notification.service';
-import { OpenThreadEvent } from '../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 
 @Component({
     selector: 'app-stream-statuses',
@@ -18,6 +18,7 @@ import { OpenThreadEvent } from '../../../services/tools.service';
     styleUrls: ['./stream-statuses.component.scss']
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
+
     isLoading = false; //TODO
     displayError: string;
 
@@ -35,17 +36,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Input()
     set streamElement(streamElement: StreamElement) {
-        this.resetStream();
-
         this._streamElement = streamElement;
-
-        const splitedUserName = streamElement.accountId.split('@');
-        const user = splitedUserName[0];
-        const instance = splitedUserName[1];
-        this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
-
-        this.retrieveToots();
-        this.launchWebsocket();
+        this.load(this._streamElement);
     }
     get streamElement(): StreamElement {
         return this._streamElement;
@@ -53,10 +45,13 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Input() goToTop: Observable<void>;
 
+    @Input() userLocked = true;
+
     private goToTopSubscription: Subscription;
 
     constructor(
         private readonly store: Store,
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly streamingService: StreamingService,
         private readonly mastodonService: MastodonService) {
@@ -68,14 +63,34 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(){
-        if( this.goToTopSubscription)  this.goToTopSubscription.unsubscribe();
+    ngOnDestroy() {
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+    }
+
+    refresh(): any {
+        this.load(this._streamElement);
+    }
+
+    private load(streamElement: StreamElement) {
+        this.resetStream();
+
+        if (this.userLocked) {
+            const splitedUserName = streamElement.accountId.split('@');
+            const user = splitedUserName[0];
+            const instance = splitedUserName[1];
+            this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
+        } else {
+            this.account = this.toolsService.getSelectedAccounts()[0];
+        }
+
+        this.retrieveToots();
+        this.launchWebsocket();
     }
 
     private resetStream() {
         this.statuses.length = 0;
         this.bufferStream.length = 0;
-        if(this.websocketStreaming) this.websocketStreaming.dispose();
+        if (this.websocketStreaming) this.websocketStreaming.dispose();
     }
 
     private launchWebsocket(): void {
@@ -98,7 +113,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         });
     }
 
-    
+
     @ViewChild('statusstream') public statustream: ElementRef;
     private applyGoToTop(): boolean {
         this.loadBuffer();
@@ -118,7 +133,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight  <= element.clientHeight + element.scrollTop + 1000;
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
         const atTop = element.scrollTop === 0;
 
         this.streamPositionnedAtTop = false;
@@ -151,15 +166,15 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.loadBuffer();
     }
 
-    private loadBuffer(){        
-        if(this.bufferWasCleared) {
+    private loadBuffer() {
+        if (this.bufferWasCleared) {
             this.statuses.length = 0;
             this.bufferWasCleared = false;
         }
 
         for (const status of this.bufferStream) {
             const wrapper = new StatusWrapper(status, this.account);
-            this.statuses.unshift(wrapper); 
+            this.statuses.unshift(wrapper);
         }
 
         this.bufferStream.length = 0;
@@ -189,7 +204,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return regAccounts;
     }
 
-    
+
     private retrieveToots(): void {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
             .then((results: Status[]) => {
@@ -202,7 +217,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 this.notificationService.notifyHttpError(err);
             });
     }
-        
+
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;

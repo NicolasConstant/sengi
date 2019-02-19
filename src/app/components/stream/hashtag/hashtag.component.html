@@ -6,9 +6,10 @@
             <button class="btn-custom-secondary hashtag-header__add-column" (click)="addColumn($event)" title="add column to board">add column</button>
         </a>
     </div>
-    <app-stream-statuses class="hashtag-stream" *ngIf="hashtagElement" 
+    <app-stream-statuses #appStreamStatuses class="hashtag-stream" *ngIf="hashtagElement" 
         [streamElement]="hashtagElement" 
         [goToTop]="goToTopSubject.asObservable()"
+        [userLocked]="false"
         (browseAccountEvent)="browseAccount($event)" 
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-stream-statuses>

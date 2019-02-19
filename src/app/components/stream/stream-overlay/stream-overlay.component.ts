@@ -1,8 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Account, Results } from "../../../services/models/mastodon.interfaces";
-import { MastodonService } from '../../../services/mastodon.service';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
+import { ThreadComponent } from '../thread/thread.component';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
+import { HashtagComponent } from '../hashtag/hashtag.component';
 
 @Component({
     selector: 'app-stream-overlay',
@@ -15,7 +17,7 @@ export class StreamOverlayComponent implements OnInit {
     private nextElements: OverlayBrowsing[] = [];
     private currentElement: OverlayBrowsing;
 
-    canRefresh: boolean;
+    canRefresh: boolean = true;
     canGoForward: boolean;
 
     accountName: string;
@@ -41,7 +43,11 @@ export class StreamOverlayComponent implements OnInit {
         this.browseHashtag(hashtag);
     }
 
-    constructor(private toolsService: ToolsService) { }
+    @ViewChild('appUserProfile') appUserProfile: UserProfileComponent;
+    @ViewChild('appHashtag') appHashtag: HashtagComponent;
+    @ViewChild('appThread') appThread: ThreadComponent;
+
+    constructor(private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
     }
@@ -85,7 +91,14 @@ export class StreamOverlayComponent implements OnInit {
     }
 
     refresh(): boolean {
-        console.log('refresh');
+        if(this.thread){
+            this.appThread.refresh();
+        } else if(this.hashtagElement){
+            this.appHashtag.refresh();
+        } else if(this.accountName){
+            this.appUserProfile.refresh();
+        }
+
         return false;
     }
 

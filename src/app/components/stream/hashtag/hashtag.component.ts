@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
 import { OpenThreadEvent } from '../../../services/tools.service';
+import { StreamStatusesComponent } from '../stream-statuses/stream-statuses.component';
 
 @Component({
     selector: 'app-hashtag',
@@ -11,11 +12,14 @@ import { OpenThreadEvent } from '../../../services/tools.service';
     styleUrls: ['./hashtag.component.scss']
 })
 export class HashtagComponent implements OnInit {
+ 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input() hashtagElement: StreamElement;
+
+    @ViewChild('appStreamStatuses') appStreamStatuses: StreamStatusesComponent;
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
@@ -38,6 +42,10 @@ export class HashtagComponent implements OnInit {
         this.store.dispatch([new AddStream(newStream)]);
 
         return false;
+    }
+
+    refresh(): any {
+        this.appStreamStatuses.refresh();
     }
 
     browseAccount(account: string) {

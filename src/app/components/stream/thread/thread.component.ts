@@ -13,10 +13,12 @@ import { AccountInfo } from '../../../states/accounts.state';
     templateUrl: '../stream-statuses/stream-statuses.component.html',
     styleUrls: ['../stream-statuses/stream-statuses.component.scss']
 })
-export class ThreadComponent implements OnInit {
+export class ThreadComponent implements OnInit {   
     statuses: StatusWrapper[] = [];
     isLoading: boolean;
     displayError: string;
+
+    private lastThreadEvent: OpenThreadEvent;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -26,6 +28,7 @@ export class ThreadComponent implements OnInit {
     set currentThread(thread: OpenThreadEvent) {
         if (thread) {
             this.isLoading = true;
+            this.lastThreadEvent = thread;
             this.getThread(thread);
         }
     }
@@ -91,6 +94,12 @@ export class ThreadComponent implements OnInit {
                         this.notificationService.notifyHttpError(err);
                     });
             });
+    }
+
+    refresh(): any {
+        this.isLoading = true;
+        this.statuses.length = 0;
+        this.getThread(this.lastThreadEvent);
     }
 
     onScroll() {
