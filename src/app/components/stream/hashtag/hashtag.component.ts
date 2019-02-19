@@ -5,7 +5,7 @@ import { Store } from '@ngxs/store';
 import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { StreamStatusesComponent } from '../stream-statuses/stream-statuses.component';
-import { AccountInfo } from 'src/app/states/accounts.state';
+import { AccountInfo } from '../../../states/accounts.state';
 
 @Component({
     selector: 'app-hashtag',
