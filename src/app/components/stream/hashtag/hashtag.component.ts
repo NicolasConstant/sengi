@@ -3,8 +3,9 @@ import { Subject } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
-import { OpenThreadEvent } from '../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { StreamStatusesComponent } from '../stream-statuses/stream-statuses.component';
+import { AccountInfo } from 'src/app/states/accounts.state';
 
 @Component({
     selector: 'app-hashtag',
@@ -17,14 +18,25 @@ export class HashtagComponent implements OnInit {
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
-    @Input() hashtagElement: StreamElement;
+    private _hashtagElement: StreamElement;
+    @Input() 
+    set hashtagElement(hashtagElement: StreamElement){
+        this._hashtagElement = hashtagElement;
+        this.lastUsedAccount = this.toolsService.getSelectedAccounts()[0];
+    }
+    get hashtagElement(): StreamElement{
+        return this._hashtagElement;
+    }
 
     @ViewChild('appStreamStatuses') appStreamStatuses: StreamStatusesComponent;
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
+    private lastUsedAccount: AccountInfo;
+
     constructor(
-        private readonly store: Store) { }
+        private readonly store: Store,
+        private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
     }
@@ -38,13 +50,14 @@ export class HashtagComponent implements OnInit {
         event.stopPropagation();
 
         const hashtag = this.hashtagElement.tag;
-        const newStream = new StreamElement(StreamTypeEnum.tag, `${hashtag}`, this.hashtagElement.accountId, hashtag, null, this.hashtagElement.displayableFullName);
+        const newStream = new StreamElement(StreamTypeEnum.tag, `${hashtag}`, this.lastUsedAccount.id, hashtag, null, this.hashtagElement.displayableFullName);
         this.store.dispatch([new AddStream(newStream)]);
 
         return false;
     }
 
     refresh(): any {
+        this.lastUsedAccount = this.toolsService.getSelectedAccounts()[0];
         this.appStreamStatuses.refresh();
     }
 
