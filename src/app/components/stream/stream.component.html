@@ -1,7 +1,9 @@
 <div class="stream-column">
 
     <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"
-        [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse" [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
+        [browseAccountData]="overlayAccountToBrowse" 
+        [browseHashtagData]="overlayHashtagToBrowse" 
+        [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="stream-column__stream-header">
         <a class="stream-column__open-menu" href title="edit column"  (click)="openEditionMenu()">

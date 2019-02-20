@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationService, LeftPanelType } from '../../services/navigation.service';
 import { AccountWrapper } from '../../models/account.models';
+import { OpenThreadEvent } from '../../services/tools.service';
 
 @Component({
     selector: 'app-floating-column',
@@ -11,6 +12,7 @@ export class FloatingColumnComponent implements OnInit {
     overlayActive: boolean;
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;
+    overlayThreadToBrowse: OpenThreadEvent;
 
     userAccountUsed: AccountWrapper;
 
@@ -54,18 +56,22 @@ export class FloatingColumnComponent implements OnInit {
     browseAccount(account: string): void {
         this.overlayAccountToBrowse = account;
         this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = true;        
     }
 
     browseHashtag(hashtag: string): void {
         this.overlayAccountToBrowse = null;
         this.overlayHashtagToBrowse = hashtag;
+        this.overlayThreadToBrowse = null;
         this.overlayActive = true;  
     }
 
-    browseThread(thread: string): void {
-        console.warn('browseThread'); //TODO
-        console.warn(thread);
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.overlayAccountToBrowse = null;
+        this.overlayHashtagToBrowse = null;
+        this.overlayThreadToBrowse = openThreadEvent;
+        this.overlayActive = true; 
     }
 
     closeOverlay(): boolean {
