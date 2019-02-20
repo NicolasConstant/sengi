@@ -1,0 +1,20 @@
+.notification-hub {
+    position: fixed;
+    bottom: 30px;
+    z-index: 9999999;
+    margin: 0 0 10px 0;
+    
+    &__notification{
+        background-color: #22b90e;
+        color: black;
+        padding: 5px 10px;
+        border-radius: 2px;
+        margin: 0 0 5px 15px;
+        cursor: pointer;
+
+        &--error{
+            background-color: #be0a0a;
+            color: whitesmoke;
+        }
+    }
+}

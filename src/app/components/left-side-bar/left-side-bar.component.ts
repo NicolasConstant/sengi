@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription, BehaviorSubject, Observable } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
+import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
 
 import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
-import { AccountsStateModel, AccountInfo, SelectAccount } from "../../states/accounts.state";
+import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { MastodonService } from "../../services/mastodon.service";
-
+import { NotificationService } from "../../services/notification.service";
 
 @Component({
     selector: "app-left-side-bar",
@@ -15,13 +17,17 @@ import { MastodonService } from "../../services/mastodon.service";
     styleUrls: ["./left-side-bar.component.scss"]
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
+    faCommentAlt = faCommentAlt;
+
     accounts: AccountWrapper[] = [];
+    hasAccounts: boolean;
     private accounts$: Observable<AccountInfo[]>;
 
     // private loadedAccounts: { [index: string]: AccountInfo } = {};
     private sub: Subscription;
 
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService,
         private readonly store: Store) {
@@ -46,6 +52,9 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                         this.mastodonService.retrieveAccountDetails(acc)
                             .then((result: Account) => {
                                 accWrapper.avatar = result.avatar;
+                            })
+                            .catch((err: HttpErrorResponse) => {
+                                this.notificationService.notifyHttpError(err);
                             });
                     }
                 }
@@ -55,6 +64,8 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                 for(let delAcc of deletedAccounts){
                     this.accounts = this.accounts.filter(x => x.info.id !== delAcc.info.id);
                 }
+
+                this.hasAccounts = this.accounts.length > 0;
             }
         });
     }
@@ -64,12 +75,10 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
-        console.warn(`onToogleAccountNotify username ${acc.info.username}`);
         this.store.dispatch([new SelectAccount(acc.info)]);
     }
 
     onOpenMenuNotify(acc: AccountWrapper) {
-        console.warn(`onOpenMenuNotify username ${acc.info.username}`);
         this.navigationService.openColumnEditor(acc);
     }
 

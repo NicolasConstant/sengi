@@ -5,6 +5,8 @@ import { MastodonService, VisibilityEnum } from '../../../../services/mastodon.s
 import { StatusWrapper } from '../../stream.component';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
+import { NotificationService } from '../../../../services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-reply-to-status',
@@ -24,25 +26,28 @@ export class ReplyToStatusComponent implements OnInit {
 
     constructor(
         // private readonly store: Store,
+        private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
-        this.statusReplyingTo = this.statusReplyingToWrapper.status;
+        if (this.statusReplyingToWrapper.status.reblog) {
+            this.statusReplyingTo = this.statusReplyingToWrapper.status.reblog;
+        } else {
+            this.statusReplyingTo = this.statusReplyingToWrapper.status;
+        }
 
         this.status += `@${this.statusReplyingTo.account.acct} `;
         for (const mention of this.statusReplyingTo.mentions) {
             this.status += `@${mention.acct} `;
         }
 
-        setTimeout(() => { 
+        setTimeout(() => {
             this.replyElement.nativeElement.focus();
         }, 0);
     }
 
     onSubmit(): boolean {
-        const selectedAccounts = this.toolsService.getSelectedAccounts();
-
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
         switch (this.selectedPrivacy) {
             case 'Public':
@@ -61,12 +66,20 @@ export class ReplyToStatusComponent implements OnInit {
 
         let spoiler = this.statusReplyingTo.spoiler_text;
 
+        const selectedAccounts = this.toolsService.getSelectedAccounts();
         for (const acc of selectedAccounts) {
-            this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, this.statusReplyingTo.id)
+
+            const usableStatus = this.toolsService.getStatusUsableByAccount(acc, this.statusReplyingToWrapper);
+            usableStatus
+                .then((status: Status) => {
+                    return this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, status.id);
+                })
                 .then((res: Status) => {
-                    console.log(res);
                     this.status = '';
                     this.onClose.emit();
+                })
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
                 });
         }
 

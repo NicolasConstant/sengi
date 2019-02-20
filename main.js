@@ -10,7 +10,7 @@ let win
 
 function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({ width: 395, height: 800, title: "Sengi", backgroundColor: '#FFF' });
+    win = new BrowserWindow({ width: 393, height: 800, title: "Sengi", backgroundColor: '#FFF' });
 
     var server = http.createServer(requestHandler).listen(9527);
     win.loadURL('http://localhost:9527');

@@ -1,9 +1,12 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { AccountInfo } from '../../../states/accounts.state';
 import { MastodonService, VisibilityEnum } from '../../../services/mastodon.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
-import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../../services/notification.service';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
     selector: 'app-add-new-status',
@@ -20,6 +23,8 @@ export class AddNewStatusComponent implements OnInit {
 
     constructor(
         private readonly store: Store,
+        private readonly notificationService: NotificationService,
+        private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
@@ -31,9 +36,6 @@ export class AddNewStatusComponent implements OnInit {
     onSubmit(): boolean {
         const accounts = this.getRegisteredAccounts();
         const selectedAccounts = accounts.filter(x => x.isSelected);
-
-        console.warn(`selectedAccounts ${selectedAccounts.length}`);
-        console.warn(`statusHandle ${this.status}`);
 
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
         switch (this.selectedPrivacy) {
@@ -59,9 +61,12 @@ export class AddNewStatusComponent implements OnInit {
         for (const acc of selectedAccounts) {
             this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler)
                 .then((res: Status) => {
-                    console.log(res);
                     this.title = '';
                     this.status = '';
+                    this.navigationService.closePanel();
+                })
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
                 });
         }
 

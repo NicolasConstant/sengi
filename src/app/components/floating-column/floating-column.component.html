@@ -1,7 +1,8 @@
 <div class="floating-column">
     <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()" 
         [browseAccountData]="overlayAccountToBrowse" 
-        [browseHashtagData]="overlayHashtagToBrowse"></app-stream-overlay>
+        [browseHashtagData]="overlayHashtagToBrowse"
+        [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
     <div class="floating-column__header">
         <a class="close-button" href (click)="closePanel()" title="close">x</a>
@@ -12,6 +13,7 @@
     <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
     <app-search *ngIf="openPanel === 'search'" 
         (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"></app-search>
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-search>
     <app-settings *ngIf="openPanel === 'settings'"></app-settings>
 </div>

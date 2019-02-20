@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 
@@ -6,6 +7,8 @@ import { StatusWrapper } from '../../stream.component';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Status, Results } from '../../../../services/models/mastodon.interfaces';
+import { ToolsService } from '../../../../services/tools.service';
+import { NotificationService } from '../../../../services/notification.service';
 // import { map } from "rxjs/operators";
 
 @Component({
@@ -35,15 +38,14 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly store: Store,
-        private readonly mastodonService: MastodonService) {
+        private readonly toolsService: ToolsService,
+        private readonly mastodonService: MastodonService, 
+        private readonly notificationService: NotificationService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
     ngOnInit() {
-        // const selectedAccounts = this.getSelectedAccounts();
-        // this.checkStatus(selectedAccounts);
-
         const status = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
         this.favoriteStatePerAccountId[account.id] = status.favourited;
@@ -86,23 +88,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
+        //TODO get rid of that
         this.selectedAccounts.forEach((account: AccountInfo) => {
-            const isProvider = this.statusWrapper.provider.id === account.id;
 
-            let pipeline: Promise<Status> = Promise.resolve(this.statusWrapper.status);
-
-            if (!isProvider) {
-                pipeline = pipeline.then((foreignStatus: Status) => {
-                    const statusUrl = foreignStatus.url;
-                    return this.mastodonService.search(account, statusUrl)
-                        .then((results: Results) => {
-                            //TODO check and type errors
-                            return results.statuses[0];
-                        });
-                });
-            }
-
-            pipeline
+            const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+            usableStatus
                 .then((status: Status) => {
                     if (this.isBoosted) {
                         return this.mastodonService.unreblog(account, status);
@@ -115,8 +105,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                     this.checkIfBoosted();
                     // this.isBoosted = !this.isBoosted;
                 })
-                .catch(err => {
-                    console.error(err);
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
                 });
         });
 
@@ -125,22 +115,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     favorite(): boolean {
         this.selectedAccounts.forEach((account: AccountInfo) => {
-            const isProvider = this.statusWrapper.provider.id === account.id;
-
-            let pipeline: Promise<Status> = Promise.resolve(this.statusWrapper.status);
-
-            if (!isProvider) {
-                pipeline = pipeline.then((foreignStatus: Status) => {
-                    const statusUrl = foreignStatus.url;
-                    return this.mastodonService.search(account, statusUrl)
-                        .then((results: Results) => {
-                            //TODO check and type errors
-                            return results.statuses[0];
-                        });
-                });
-            }
-
-            pipeline
+            
+            const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+            usableStatus
                 .then((status: Status) => {
                     if (this.isFavorited) {
                         return this.mastodonService.unfavorite(account, status);
@@ -153,8 +130,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                     this.checkIfFavorited();
                     // this.isFavorited = !this.isFavorited;
                 })
-                .catch(err => {
-                    console.error(err);
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
                 });
         });
         return false;
@@ -180,7 +157,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     more(): boolean {
-        console.warn('more');
+        console.warn('more'); //TODO
         return false;
     }
 

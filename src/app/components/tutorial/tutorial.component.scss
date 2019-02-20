@@ -1,0 +1,83 @@
+@import "variables";
+@import "mixins";
+
+// .tutorial {
+//     width: $floating-column-size;
+    
+//     overflow: hidden;
+//     z-index: 99;
+//     position: fixed;
+//     top: 0;
+//     bottom: $stream-selector-height;
+//     padding: 0;
+
+    
+//     font-size: $default-font-size;
+// }
+
+.underline {
+    text-decoration: underline;    
+}
+
+
+.add-account{
+    position: absolute;
+
+    &__arrow {
+        position: fixed;
+        top: 15px;
+        left: 60px;
+    }
+
+    &__title{
+        position: relative;
+        top: 30px;
+        left: 70px;
+    }
+
+    &__description {
+        position: relative;
+        top: 45px;
+        left: 75px;
+
+        text-align: center;
+
+        width: 200px;
+        display: inline-block;
+
+        //word-break: break-all;
+        white-space: normal;
+    }
+}
+
+
+.open-account{
+    position: absolute;
+
+    &__arrow {
+        position: fixed;
+        top: 85px;
+        left: 65px;
+    }
+
+    &__title{
+        position: relative;
+        top: 30px;
+        left: 160px;
+        width: 50px;
+    }
+
+    &__description {
+        position: relative;
+        top: 40px;
+        left: 90px;
+
+        text-align: right;
+
+        width: 200px;
+        display: inline-block;
+
+        // word-break: break-all;
+        white-space: normal;
+    }
+}

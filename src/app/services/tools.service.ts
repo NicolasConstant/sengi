@@ -3,7 +3,8 @@ import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
 import { MastodonService } from './mastodon.service';
-import { Account, Results } from "./models/mastodon.interfaces";
+import { Account, Results, Status } from "./models/mastodon.interfaces";
+import { StatusWrapper } from '../components/stream/stream.component';
 
 
 @Injectable({
@@ -24,10 +25,6 @@ export class ToolsService {
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {
         return this.mastodonService.search(account, accountName, true)
             .then((result: Results) => {
-                console.warn('findAccount');
-                console.warn(`accountName ${accountName}`);
-                console.warn(result);
-
                 if(accountName[0] === '@') accountName = accountName.substr(1);
 
                 const foundAccount = result.accounts.filter(
@@ -38,4 +35,29 @@ export class ToolsService {
             });
     }
 
+    getStatusUsableByAccount(account: AccountInfo, originalStatus: StatusWrapper): Promise<Status>{
+        const isProvider = originalStatus.provider.id === account.id;
+
+        let statusPromise: Promise<Status> = Promise.resolve(originalStatus.status);
+
+        if (!isProvider) {
+            statusPromise = statusPromise.then((foreignStatus: Status) => {
+                const statusUrl = foreignStatus.url;
+                return this.mastodonService.search(account, statusUrl)
+                    .then((results: Results) => {
+                        return results.statuses[0];
+                    });
+            });
+        }
+
+        return statusPromise;
+    }
+}
+
+export class OpenThreadEvent {
+    constructor(
+        public status: Status,
+        public sourceAccount: AccountInfo
+    ) {
+    }
 }

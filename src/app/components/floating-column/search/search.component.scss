@@ -56,7 +56,8 @@
         }
     }
 
-    &__status {
+    &__status {        
+        font-size: 15px;
         border-top: 1px solid $separator-color;
         &:last-of-type {
             border-bottom: 1px solid $separator-color;

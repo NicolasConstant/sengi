@@ -1,26 +1,33 @@
 #display-zone {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 30px;
-  left: 50px;
-  overflow-y: hidden;
-  overflow-x: auto;
-  white-space: nowrap;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 30px;
+    left: 50px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 #floating-column {
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 9999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 9999;
 }
 
+#tutorial {
+    position: relative;
+    top: 0; 
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+}
 
 app-streams-selection-footer {
-  position: absolute;
-  height: 30px;
-  right: 0;
-  bottom: 0;
-  left: 50px;
+    position: absolute;
+    height: 30px;
+    right: 0;
+    bottom: 0;
+    left: 50px;
 }

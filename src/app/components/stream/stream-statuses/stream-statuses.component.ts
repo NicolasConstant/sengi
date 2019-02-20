@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement } from '../../../states/streams.state';
@@ -6,9 +8,9 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StreamingService, EventEnum, StreamingWrapper, StatusUpdate } from '../../../services/streaming.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../services/mastodon.service';
-import { Observable, Subscription } from 'rxjs';
 import { StatusWrapper } from '../stream.component';
-
+import { NotificationService } from '../../../services/notification.service';
+import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 
 @Component({
     selector: 'app-stream-statuses',
@@ -16,7 +18,9 @@ import { StatusWrapper } from '../stream.component';
     styleUrls: ['./stream-statuses.component.scss']
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
+
     isLoading = false; //TODO
+    displayError: string;
 
     private _streamElement: StreamElement;
     private account: AccountInfo;
@@ -28,22 +32,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input()
     set streamElement(streamElement: StreamElement) {
-        console.warn('new stream');
-        this.resetStream();
-
         this._streamElement = streamElement;
-
-        const splitedUserName = streamElement.accountId.split('@');
-        const user = splitedUserName[0];
-        const instance = splitedUserName[1];
-        this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
-
-        this.retrieveToots();
-        this.launchWebsocket();
+        this.load(this._streamElement);
     }
     get streamElement(): StreamElement {
         return this._streamElement;
@@ -51,10 +45,14 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @Input() goToTop: Observable<void>;
 
+    @Input() userLocked = true;
+
     private goToTopSubscription: Subscription;
 
     constructor(
         private readonly store: Store,
+        private readonly toolsService: ToolsService,
+        private readonly notificationService: NotificationService,
         private readonly streamingService: StreamingService,
         private readonly mastodonService: MastodonService) {
     }
@@ -65,14 +63,34 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(){
-        if( this.goToTopSubscription)  this.goToTopSubscription.unsubscribe();
+    ngOnDestroy() {
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+    }
+
+    refresh(): any {
+        this.load(this._streamElement);
+    }
+
+    private load(streamElement: StreamElement) {
+        this.resetStream();
+
+        if (this.userLocked) {
+            const splitedUserName = streamElement.accountId.split('@');
+            const user = splitedUserName[0];
+            const instance = splitedUserName[1];
+            this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
+        } else {
+            this.account = this.toolsService.getSelectedAccounts()[0];
+        }
+
+        this.retrieveToots();
+        this.launchWebsocket();
     }
 
     private resetStream() {
         this.statuses.length = 0;
         this.bufferStream.length = 0;
-        if(this.websocketStreaming) this.websocketStreaming.dispose();
+        if (this.websocketStreaming) this.websocketStreaming.dispose();
     }
 
     private launchWebsocket(): void {
@@ -95,7 +113,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         });
     }
 
-    
+
     @ViewChild('statusstream') public statustream: ElementRef;
     private applyGoToTop(): boolean {
         this.loadBuffer();
@@ -115,7 +133,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight  <= element.clientHeight + element.scrollTop + 1000;
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
         const atTop = element.scrollTop === 0;
 
         this.streamPositionnedAtTop = false;
@@ -134,12 +152,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    browseThread(statusUri: string): void {
-        this.browseThreadEvent.next(statusUri);
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 
     textSelected(): void {
-        console.warn(`status comp: textSelected`);
+        console.warn(`status comp: textSelected`); //TODO
     }
 
     private scrolledToTop() {
@@ -148,15 +166,15 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.loadBuffer();
     }
 
-    private loadBuffer(){        
-        if(this.bufferWasCleared) {
+    private loadBuffer() {
+        if (this.bufferWasCleared) {
             this.statuses.length = 0;
             this.bufferWasCleared = false;
         }
 
         for (const status of this.bufferStream) {
             const wrapper = new StatusWrapper(status, this.account);
-            this.statuses.unshift(wrapper); 
+            this.statuses.unshift(wrapper);
         }
 
         this.bufferStream.length = 0;
@@ -173,8 +191,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                     this.statuses.push(wrapper);
                 }
             })
-            .catch(err => {
-                console.error(err);
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             })
             .then(() => {
                 this.isProcessingInfiniteScroll = false;
@@ -186,7 +204,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return regAccounts;
     }
 
-    
+
     private retrieveToots(): void {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
             .then((results: Status[]) => {
@@ -194,9 +212,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                     const wrapper = new StatusWrapper(s, this.account);
                     this.statuses.push(wrapper);
                 }
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             });
     }
-        
+
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;

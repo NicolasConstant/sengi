@@ -1,6 +1,7 @@
 @import "variables";
 $width-button: 50px;
 $height-button: 40px;
+
 .left-bar {
     width: $width-button;
     height: calc(100%);
@@ -22,12 +23,16 @@ $height-button: 40px;
     width: $width-button;
     height: $height-button;
     transition: all .2s;
+    
     // outline: 1px dotted greenyellow;
     &--status {
-        padding: 5px 0 0 10px;
+        //margin-top: 3px;
+        font-size: 26px;
+        padding: 8px 0 2px 12px;
     }
     &--search {
-        padding: 0 0 0 9px;
+        font-size: 28px;
+        padding: 0 0 0 11px;
     }
     &--add {
         padding: 0 0 0 12px;
@@ -62,3 +67,7 @@ $height-button: 40px;
     }
 }
 
+.no-accounts {
+    padding-top: 10px;
+    // color: cornflowerblue;   
+}

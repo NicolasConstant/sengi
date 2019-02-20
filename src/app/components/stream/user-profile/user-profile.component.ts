@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Account, Status, Results } from "../../../services/models/mastodon.interfaces";
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Account, Status } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
-import { ToolsService } from '../../../services/tools.service';
+import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StatusWrapper } from '../stream.component';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -10,6 +13,7 @@ import { StatusWrapper } from '../stream.component';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+
     account: Account;
     hasNote: boolean;
 
@@ -19,15 +23,28 @@ export class UserProfileComponent implements OnInit {
 
     statuses: StatusWrapper[] = [];
 
-    private accountName: string;
+    private lastAccountName: string;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('currentAccount')
     //set currentAccount(account: Account) {
     set currentAccount(accountName: string) {
+        this.lastAccountName = accountName;
+        this.load(this.lastAccountName);
+    }
+
+    constructor(
+        private readonly notificationService: NotificationService,
+        private readonly mastodonService: MastodonService,
+        private readonly toolsService: ToolsService) { }
+
+    ngOnInit() {
+    }
+
+    private load(accountName: string) {
         this.statuses.length = 0;
         this.isLoading = true;
 
@@ -37,19 +54,17 @@ export class UserProfileComponent implements OnInit {
                 this.hasNote = account && account.note && account.note !== '<p></p>';
                 return this.getStatuses(this.account);
             })
-            .catch(err => {
-                this.error = 'Error when retrieving account';
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
                 this.isLoading = false;
                 this.statusLoading = false;
-                console.error(this.error);
             });
     }
 
-    constructor(
-        private readonly mastodonService: MastodonService,
-        private readonly toolsService: ToolsService) { }
-
-    ngOnInit() {
+    refresh(): any {
+        this.load(this.lastAccountName);
     }
 
     browseAccount(accountName: string): void {
@@ -60,13 +75,13 @@ export class UserProfileComponent implements OnInit {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    browseThread(statusUri: string): void {
-        this.browseThreadEvent.next(statusUri);
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 
     private loadAccount(accountName: string): Promise<Account> {
         this.account = null;
-        this.accountName = accountName;
+
         let selectedAccounts = this.toolsService.getSelectedAccounts();
 
         if (selectedAccounts.length === 0) {
@@ -96,11 +111,5 @@ export class UserProfileComponent implements OnInit {
                 }
                 this.statusLoading = false;
             });
-        // .catch(err => {
-
-        // })
-        // .then(() => {
-        //     this.statusLoading = false;
-        // });
     }
 }

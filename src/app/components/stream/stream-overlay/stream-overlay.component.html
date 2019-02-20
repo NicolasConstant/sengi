@@ -6,15 +6,15 @@
         <a href class="overlay-next" *ngIf="canGoForward" (click)="next()">NEXT</a>
     </div>
     
-    <app-user-profile *ngIf="accountName" [currentAccount]="accountName" 
+    <app-user-profile #appUserProfile *ngIf="accountName" [currentAccount]="accountName" 
         (browseAccountEvent)="browseAccount($event)" 
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-user-profile>
-    <app-hashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" 
+    <app-hashtag #appHashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" 
         (browseAccountEvent)="browseAccount($event)" 
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-hashtag>
-    <app-thread *ngIf="browseThread" [currentThread]="thread"
+    <app-thread #appThread *ngIf="browseThread" [currentThread]="thread"
         (browseAccountEvent)="browseAccount($event)"
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-thread>
