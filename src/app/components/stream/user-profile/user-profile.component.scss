@@ -44,6 +44,7 @@ $header-height: 160px;
     &-sub-header {
         overflow: auto;
         height: calc(100% - #{$header-height});
+        height: calc(100%);
         // height: calc(20% - 190px);
         // height: 150px;
         // border: 1px solid greenyellow;
