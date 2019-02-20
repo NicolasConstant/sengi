@@ -5,7 +5,9 @@
 
     <!-- data-simplebar  -->
     <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
-        <app-status [statusWrapper]="statusWrapper" (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+        <app-status [statusWrapper]="statusWrapper" 
+            (browseAccountEvent)="browseAccount($event)"
+            (browseHashtagEvent)="browseHashtag($event)"
             (browseThreadEvent)="browseThread($event)"></app-status>
     </div>
 </div>

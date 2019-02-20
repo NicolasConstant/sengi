@@ -1,7 +1,10 @@
 .panel{
-    width: 100%;
+    // width: 100%;
+    width: calc(100%);
+    height: calc(100%);
     padding: 10px 10px 0 7px;
     font-size: $small-font-size;
+    white-space: normal;
     &__title {
         font-size: 13px;
         text-transform: uppercase;
