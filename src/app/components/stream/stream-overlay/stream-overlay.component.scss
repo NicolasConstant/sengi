@@ -1,18 +1,24 @@
 @import "variables";
+@import "mixins";
 @import "commons";
 
 
-$header-content: 30px;
+$header-content: 40px;
 
 .stream-overlay {
     // width: $stream-column-width;
     height: calc(100%);
     background-color: $column-color; 
+ 
+
     &__header {
         width: calc(100%);
         height: $header-content;
         background-color: $column-header-background-color;
-        padding: 6px 10px 0 10px;
+        // padding: 6px 10px 0 10px;
+
+        border-bottom: 1px solid #222736;
+
         & a {
             color: whitesmoke;
             font-size: 0.8em;
@@ -37,23 +43,66 @@ $header-content: 30px;
 
 .overlay {
     margin: 0;
+
+    &__button {
+        @include clearButton;
+        width: 25px;
+        height: 25px;
+        // border-radius: 50%;
+
+        // background-color: $button-background-color;
+        // background-color: #303031;
+
+        // background-color: greenyellow;
+         color: #252c42;
+         color: #2e3752;
+         color: #354060;
+        transition: all .2s;
+
+        margin: 8px 0 0 8px;
+       
+
+        &:hover {
+            // background-color: $button-background-color-hover;
+            // color: $button-color-hover;
+            color: white;
+
+        }
+    }
+
     &-previous {
         display: block;
         float: left;
+        font-size: 18px; 
+
+        & fa-icon{
+            position: relative;
+            left: -1px;
+        }
     }
     &-refresh {
         display: block;
         float: left;
-        margin-left: 65px;
+        font-size: 14px;
+
+        // & fa-icon{
+        //     position: relative;
+        //     top: 1px;
+        // }
     }
     &-next {
         display: block;
-        float: right;
-        padding-right: 20px;
+        float: left;
+        font-size: 18px;
+        // padding-right: 20px;
     }
     &-close {
         display: block;
         float: right;
+        font-size: 14px;
+
+        color: white;
+        margin-right: 8px;
     }
 }
 

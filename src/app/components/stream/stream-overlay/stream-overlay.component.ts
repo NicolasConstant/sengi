@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { faAngleLeft, faAngleRight, faTimes, faRedoAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
@@ -12,6 +13,10 @@ import { HashtagComponent } from '../hashtag/hashtag.component';
     styleUrls: ['./stream-overlay.component.scss']
 })
 export class StreamOverlayComponent implements OnInit {
+    faAngleLeft = faAngleLeft;
+    faAngleRight = faAngleRight;
+    faTimes = faTimes;
+    faRedoAlt = faRedoAlt;
    
     private previousElements: OverlayBrowsing[] = [];
     private nextElements: OverlayBrowsing[] = [];
