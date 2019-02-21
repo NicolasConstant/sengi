@@ -44,7 +44,7 @@ $inner-column-size: 320px;
 
 .hashtag-stream {
     display: block;
-    height: calc(100% - #{$hashtag-header-height} - 30px);
+    height: calc(100% - #{$hashtag-header-height});
     width: $inner-column-size;
     // outline: 1px greenyellow solid;
 }

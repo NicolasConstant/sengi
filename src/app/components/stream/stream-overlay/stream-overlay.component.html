@@ -7,14 +7,17 @@
     </div>
     
     <app-user-profile #appUserProfile *ngIf="accountName" [currentAccount]="accountName" 
+        class="stream-overlay__content"
         (browseAccountEvent)="browseAccount($event)" 
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-user-profile>
     <app-hashtag #appHashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" 
+        class="stream-overlay__content"
         (browseAccountEvent)="browseAccount($event)" 
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-hashtag>
-    <app-thread #appThread *ngIf="browseThread" [currentThread]="thread"
+    <app-thread #appThread *ngIf="browseThread" [currentThread]="thread" 
+        class="stream-overlay__content"
         (browseAccountEvent)="browseAccount($event)"
         (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-thread>
