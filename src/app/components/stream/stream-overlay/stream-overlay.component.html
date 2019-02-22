@@ -4,13 +4,13 @@
             <fa-icon [icon]="faTimes"></fa-icon>
         </button>
 
-        <button class="overlay__button overlay-previous" title="previous" (click)="previous()">
+        <button class="overlay__button overlay-previous" [ngClass]="{'overlay__button--focus': previousElements.length > 0 }" title="previous" (click)="previous()">
             <fa-icon [icon]="faAngleLeft"></fa-icon>
         </button>
-        <button class="overlay__button overlay-refresh" *ngIf="canRefresh" title="refresh" (click)="refresh()">
+        <button class="overlay__button overlay-refresh"  [ngClass]="{'overlay__button--focus': refreshFocused }" title="refresh" (click)="refresh()">
             <fa-icon [icon]="faRedoAlt"></fa-icon>
         </button>
-        <button class="overlay__button overlay-next" title="next" (click)="next()">
+        <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': nextElements.length > 0 }" title="next" (click)="next()">
             <fa-icon [icon]="faAngleRight"></fa-icon>
         </button> 
 
