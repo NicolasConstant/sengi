@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 @import "commons";
 
 $header-height: 160px;
@@ -6,19 +7,21 @@ $header-height: 160px;
 .profile {
     // overflow: auto;
     height: calc(100%);
+    overflow: auto;
 
     &-header {
         background-size: cover;
         position: relative; // height: 140px;
         overflow: hidden; // background-color: black;
         border-bottom: 1px solid black;
+
         & h2 {
             font-size: $default-font-size;
         }
         &__inner {
             overflow: auto;
             height: $header-height;
-            background-color: rgba(0, 0, 0, .45);
+            background-color: rgba(0, 0, 0, .45);            
         }
         &__avatar {
             position: absolute;
@@ -31,20 +34,59 @@ $header-height: 160px;
             position: absolute;
             top: 105px;
             left: 15px;
+            width: calc(100% - 30px);     
+            overflow: hidden;  
             color: white;
         }
         &__fullhandle a {
             position: absolute;
             top: 130px;
             left: 15px;
+            width: calc(100% - 30px);     
+            overflow: hidden;       
             color: white;
         }
+        &__follow{
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+
+            &--button{
+                @include clearButton;
+            }
+
+            &--unfollowed {
+
+            }
+
+            &--followed {
+                color: #38abff;
+                color: #5fbcff;
+                color: #85ccff;
+            }
+        }
+        &__state {
+            position: absolute;
+            top: 50px;
+            right: 15px;
+            font-size: 12px;
+
+            &--data{               
+               text-align: right;
+            }
+        }
+    
     }
 
     &-sub-header {
-        overflow: auto;
-        height: calc(100% - #{$header-height});
-        height: calc(100%);
+        // overflow: auto;
+        // height: calc(100% - #{$header-height});
+
+        // height: calc(100%);
         // height: calc(20% - 190px);
         // height: 150px;
         // border: 1px solid greenyellow;

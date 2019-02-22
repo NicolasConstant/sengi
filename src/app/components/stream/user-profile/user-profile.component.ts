@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { faUser, faHourglassHalf, faUserCheck } from "@fortawesome/free-solid-svg-icons";
+import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { Account, Status } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
@@ -13,6 +15,10 @@ import { NotificationService } from '../../../services/notification.service';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+    faUser = faUser;
+    faUserRegular = faUserRegular;
+    faHourglassHalf = faHourglassHalf;
+    faUserCheck = faUserCheck;
 
     account: Account;
     hasNote: boolean;
