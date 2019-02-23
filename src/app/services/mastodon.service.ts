@@ -179,12 +179,19 @@ export class MastodonService {
         return this.httpClient.get<Relationship[]>(route, { headers: headers }).toPromise();
     }
 
-    unfollow(currentlyUsedAccount: AccountInfo, account: Account): any {
-        throw new Error("Method not implemented.");
+    follow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship>  {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }  
+
+    unfollow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.unfollow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+
     }
-    follow(currentlyUsedAccount: AccountInfo, account: Account): any {
-        throw new Error("Method not implemented.");
-    }   
+    
 }
 
 export enum VisibilityEnum {

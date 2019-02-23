@@ -62,16 +62,16 @@ export class UserProfileComponent implements OnInit {
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (this.account) {
-                this.relationship = null;
-                const userAccount = accounts.filter(x => x.isSelected)[0];                
+                //this.relationship = null;
+                this.currentlyUsedAccount = accounts.filter(x => x.isSelected)[0];
 
-                this.toolsService.findAccount(userAccount, this.lastAccountName)
+                this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
                     .then((account: Account) => {
-                        this.getFollowStatus(userAccount, account);
+                        this.getFollowStatus(this.currentlyUsedAccount, account);
                     })
                     .catch((err: HttpErrorResponse) => {
                         this.notificationService.notifyHttpError(err);
-                    });       
+                    });
             }
         });
     }
@@ -124,7 +124,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     private getFollowStatus(userAccount: AccountInfo, account: Account): Promise<void> {
-        this.relationship = null;
+        // this.relationship = null;
         return this.mastodonService.getRelationships(userAccount, [account])
             .then((result: Relationship[]) => {
                 this.relationship = result.filter(x => x.id === account.id)[0];
@@ -148,17 +148,32 @@ export class UserProfileComponent implements OnInit {
     }
 
     follow(): boolean {
-
-        this.mastodonService.follow(this.currentlyUsedAccount, this.account)
-            .then(() => {})
-            .catch(() => {});
+        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
+            .then((account: Account) => {
+                return this.mastodonService.follow(this.currentlyUsedAccount, account);
+            })
+            .then((relationship: Relationship) => {
+                this.relationship = relationship;
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            });
         return false;
     }
 
     unfollow(): boolean {
-        this.mastodonService.unfollow(this.currentlyUsedAccount, this.account)
-        .then(() => {})
-        .catch(() => {});
+        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
+            .then((account: Account) => {
+                return this.mastodonService.unfollow(this.currentlyUsedAccount, account);
+            })
+            .then((relationship: Relationship) => {
+                this.relationship = relationship;
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            });
         return false;
     }
 }
