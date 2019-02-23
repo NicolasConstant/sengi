@@ -85,12 +85,12 @@ export interface Notification {
 }
 
 export interface Relationship {
-  id: string;
-  following: string;
-  followed_by: string;
-  blocking: string;
-  muting: string;
-  requested: string;
+  id: number;
+  following: boolean;
+  followed_by: boolean;
+  blocking: boolean;
+  muting: boolean;
+  requested: boolean;
 }
 
 export interface Report {

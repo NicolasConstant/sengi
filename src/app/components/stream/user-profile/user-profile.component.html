@@ -9,23 +9,24 @@
             <h2 class="profile-header__display-name">{{account.display_name}}</h2>
             <h2 class="profile-header__fullhandle"><a href="{{account.url}}" target="_blank">@{{account.acct}}</a></h2>
 
-            <div class="profile-header__follow">
+            <div class="profile-header__follow" *ngIf="relationship">
                 <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
-                    (click)="folow()">
+                    (click)="folow()" *ngIf="!relationship.following && !relationship.requested">
                     <fa-icon [icon]="faUserRegular"></fa-icon>
                 </button>
                 <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
-                    (click)="unfolow()">
+                    (click)="unfolow()" *ngIf="relationship.following">
                     <fa-icon [icon]="faUserCheck"></fa-icon>
                 </button>
                 <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
-                    (click)="unfolow()">
+                    (click)="unfolow()" *ngIf="relationship.requested">
                     <fa-icon [icon]="faHourglassHalf"></fa-icon>
                 </button>
             </div>
-            <div class="profile-header__state">
-                <div class="profile-header__state--data">follows you</div>
-                <div class="profile-header__state--data">blocked</div>
+            <div class="profile-header__state" *ngIf="relationship">
+                <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
+                <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
+                <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
             </div>
 
         </div>
