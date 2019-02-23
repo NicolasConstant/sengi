@@ -46,10 +46,8 @@ export class UserProfileComponent implements OnInit {
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('currentAccount')
-    //set currentAccount(account: Account) {
     set currentAccount(accountName: string) {
-        this.lastAccountName = accountName;
-        this.load(this.lastAccountName);
+        this.load(accountName);
     }
 
     constructor(
@@ -62,10 +60,11 @@ export class UserProfileComponent implements OnInit {
     }
 
     ngOnInit() {
-        // this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
-            const userAccount = accounts.filter(x => x.isSelected)[0];
-            // this.load()
+            if (this.account) {
+                const userAccount = accounts.filter(x => x.isSelected)[0];
+                this.getFollowStatus(userAccount, this.account);
+            }
         });
     }
 
@@ -78,12 +77,14 @@ export class UserProfileComponent implements OnInit {
 
         this.account = null;
         this.isLoading = true;
-        this.statusLoading = true;
 
-        this.currentlyUsedAccount  = this.toolsService.getSelectedAccounts()[0];
+        this.lastAccountName = accountName;
+        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
+
         return this.toolsService.findAccount(this.currentlyUsedAccount, accountName)
             .then((account: Account) => {
                 this.isLoading = false;
+                this.statusLoading = true;
 
                 this.account = account;
                 this.hasNote = account && account.note && account.note !== '<p></p>';
@@ -101,7 +102,7 @@ export class UserProfileComponent implements OnInit {
                 this.statusLoading = false;
             });
     }
-    
+
     private getStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
         this.statusLoading = true;
         return this.mastodonService.getAccountStatuses(userAccount, account.id, false, false, true, null, null, 40)
@@ -112,12 +113,12 @@ export class UserProfileComponent implements OnInit {
                 }
                 this.statusLoading = false;
             });
-    }   
+    }
 
-    private getFollowStatus(userAccount: AccountInfo, account: Account):Promise<void> {
+    private getFollowStatus(userAccount: AccountInfo, account: Account): Promise<void> {
         this.relationship = null;
         return this.mastodonService.getRelationships(userAccount, [account])
-            .then((result: Relationship[])=> {
+            .then((result: Relationship[]) => {
                 this.relationship = result.filter(x => x.id === account.id)[0];
             });
     }
@@ -136,5 +137,5 @@ export class UserProfileComponent implements OnInit {
 
     browseThread(openThreadEvent: OpenThreadEvent): void {
         this.browseThreadEvent.next(openThreadEvent);
-    }   
+    }
 }
