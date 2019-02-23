@@ -33,10 +33,9 @@
     </div>
     <div class="profile-sub-header ">
         <div *ngIf="account && hasNote" class="profile-description">
-            <app-databinded-text class="status__content" [textIsSelectable]="false" [text]="account.note"
+            <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="account.note"
                 (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
             </app-databinded-text>
-            <!-- <p innerHTML="{{account.note}}"></p> -->
         </div>
         <div class="profile-statuses">
             <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>

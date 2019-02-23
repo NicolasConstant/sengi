@@ -97,6 +97,11 @@ $header-height: 160px;
         padding: 10px 10px 15px 10px;
         font-size: 13px;
         border-bottom: 1px solid black;
+
+        &__content {
+            width: calc(100%);
+            word-break: break-word;
+        }
     }
 
     &-no-toots {
