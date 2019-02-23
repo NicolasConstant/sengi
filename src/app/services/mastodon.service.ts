@@ -178,6 +178,13 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Relationship[]>(route, { headers: headers }).toPromise();
     }
+
+    unfollow(currentlyUsedAccount: AccountInfo, account: Account): any {
+        throw new Error("Method not implemented.");
+    }
+    follow(currentlyUsedAccount: AccountInfo, account: Account): any {
+        throw new Error("Method not implemented.");
+    }   
 }
 
 export enum VisibilityEnum {

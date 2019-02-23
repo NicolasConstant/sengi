@@ -11,15 +11,15 @@
 
             <div class="profile-header__follow" *ngIf="relationship">
                 <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
-                    (click)="folow()" *ngIf="!relationship.following && !relationship.requested">
+                    (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                     <fa-icon [icon]="faUserRegular"></fa-icon>
                 </button>
                 <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
-                    (click)="unfolow()" *ngIf="relationship.following">
+                    (click)="unfollow()" *ngIf="relationship.following">
                     <fa-icon [icon]="faUserCheck"></fa-icon>
                 </button>
                 <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
-                    (click)="unfolow()" *ngIf="relationship.requested">
+                    (click)="unfollow()" *ngIf="relationship.requested">
                     <fa-icon [icon]="faHourglassHalf"></fa-icon>
                 </button>
             </div>

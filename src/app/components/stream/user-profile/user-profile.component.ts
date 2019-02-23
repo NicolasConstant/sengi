@@ -62,8 +62,16 @@ export class UserProfileComponent implements OnInit {
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (this.account) {
-                const userAccount = accounts.filter(x => x.isSelected)[0];
-                this.getFollowStatus(userAccount, this.account);
+                this.relationship = null;
+                const userAccount = accounts.filter(x => x.isSelected)[0];                
+
+                this.toolsService.findAccount(userAccount, this.lastAccountName)
+                    .then((account: Account) => {
+                        this.getFollowStatus(userAccount, account);
+                    })
+                    .catch((err: HttpErrorResponse) => {
+                        this.notificationService.notifyHttpError(err);
+                    });       
             }
         });
     }
@@ -81,7 +89,7 @@ export class UserProfileComponent implements OnInit {
         this.lastAccountName = accountName;
         this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
 
-        return this.toolsService.findAccount(this.currentlyUsedAccount, accountName)
+        return this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
             .then((account: Account) => {
                 this.isLoading = false;
                 this.statusLoading = true;
@@ -137,5 +145,20 @@ export class UserProfileComponent implements OnInit {
 
     browseThread(openThreadEvent: OpenThreadEvent): void {
         this.browseThreadEvent.next(openThreadEvent);
+    }
+
+    follow(): boolean {
+
+        this.mastodonService.follow(this.currentlyUsedAccount, this.account)
+            .then(() => {})
+            .catch(() => {});
+        return false;
+    }
+
+    unfollow(): boolean {
+        this.mastodonService.unfollow(this.currentlyUsedAccount, this.account)
+        .then(() => {})
+        .catch(() => {});
+        return false;
     }
 }
