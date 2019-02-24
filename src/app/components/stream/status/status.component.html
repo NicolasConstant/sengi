@@ -31,12 +31,16 @@
     </div>
     <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
-    <app-databinded-text class="status__content" [text]="displayedStatus.content"
-        (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
+    <a href class="status__content-warning" *ngIf="isContentWarned" title="show content" (click)="removeContentWarning()">
+        <span class="status__content-warning--title">sensitive content</span>
+        {{ contentWarningText }}
+    </a>
+    <app-databinded-text class="status__content" *ngIf="!isContentWarned"
+        [text]="displayedStatus.content"
+        (accountSelected)="accountSelected($event)" 
+        (hashtagSelected)="hashtagSelected($event)"
         (textSelected)="textSelected()"></app-databinded-text>
-
-
-    <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments">
+    <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments">
     </app-attachements>
 
     <app-action-bar [statusWrapper]="statusWrapper" (replyEvent)="openReply()"></app-action-bar>

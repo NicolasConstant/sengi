@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { StatusWrapper } from "../stream.component";
 import { OpenThreadEvent } from "../../../services/tools.service";
+import { stat } from "fs";
 
 @Component({
     selector: "app-status",
@@ -14,6 +15,8 @@ export class StatusComponent implements OnInit {
     hasAttachments: boolean;
     replyingToStatus: boolean;
     isCrossPoster: boolean;
+    isContentWarned: boolean;
+    contentWarningText: string;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -27,6 +30,7 @@ export class StatusComponent implements OnInit {
         this.status = value.status;
 
         this.checkCrossPosting(this.status);
+        this.checkContentWarning(this.status);
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -50,6 +54,18 @@ export class StatusComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    private checkContentWarning(status: Status) {
+        if(status.sensitive || status.spoiler_text){
+            this.isContentWarned = true;
+            this.contentWarningText = status.spoiler_text;
+        }
+    }
+
+    removeContentWarning(): boolean {
+        this.isContentWarned = false;
+        return false;
     }
 
     private checkCrossPosting(status: Status) {
