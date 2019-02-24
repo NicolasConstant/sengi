@@ -13,6 +13,7 @@ export class StatusComponent implements OnInit {
     reblog: boolean;
     hasAttachments: boolean;
     replyingToStatus: boolean;
+    isCrossPoster: boolean;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -24,6 +25,8 @@ export class StatusComponent implements OnInit {
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
         this.status = value.status;
+
+        this.checkCrossPosting(this.status);
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -47,6 +50,21 @@ export class StatusComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    private checkCrossPosting(status: Status) {
+        //since API is limited with federated status...
+        if(status.uri.includes('birdsite.link')){
+            this.isCrossPoster = true;
+        }
+
+        if (status.application) {
+            console.warn(status.application);
+            const usedApp = status.application.name.toLowerCase();
+            if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
+                this.isCrossPoster = true;
+            }
+        }
     }
 
     openAccount(account: Account): boolean {
@@ -82,8 +100,8 @@ export class StatusComponent implements OnInit {
         const accountInfo = this._statusWrapper.provider;
 
         let openThread: OpenThreadEvent;
-        if (status.reblog) {    
-            openThread = new OpenThreadEvent(status.reblog, accountInfo);            
+        if (status.reblog) {
+            openThread = new OpenThreadEvent(status.reblog, accountInfo);
         } else {
             openThread = new OpenThreadEvent(status, accountInfo);
         }

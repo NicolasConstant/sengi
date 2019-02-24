@@ -1,5 +1,4 @@
 @import "variables";
-
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;
@@ -48,6 +47,32 @@
             border-radius: 2px;
         }
     }
+    &__automation-data {
+        position: absolute;
+        top: 65px;
+        left: 10px;
+        width: 50px;
+        cursor: default;
+
+        &--label {
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 7px;
+            margin-bottom: 3px; // color: #000;
+            border-radius: 2px; //border: 1px solid greenyellow;
+            padding-top: 1px;
+        }
+        &--bot {
+            background-color: rgb(0, 225, 255);
+            background-color: rgb(0, 159, 180);
+            background-color: rgb(0, 114, 129);
+        }
+        &--xpost {
+            background-color: rgb(255, 153, 0);
+            background-color: rgb(189, 113, 0);
+            background-color: rgb(156, 94, 0);
+        }
+    }
     &__name {
         display: inline-block;
         width: calc(100% - 40px);
@@ -77,21 +102,18 @@
         /*width: calc(100% - 50px);*/
         word-wrap: break-word;
         margin: 0 10px 0 $avatar-column-space;
-        display: block;        
-    }
-    // &__content p {
+        display: block;
+    } // &__content p {
     //     margin: 0 !important;
     //     font-size: 0.85em;
     // }
-    &__created-at {       
+    &__created-at {
         position: absolute;
         top: 7px;
         right: 5px;
-
         &--link {
             color: $status-secondary-color;
             text-decoration: none;
-            
             &:hover {
                 color: lighten($status-secondary-color, 20);
             }
@@ -100,7 +122,6 @@
 }
 
 .attachments {
-    display: block;
-    // width: calc(100% - 80px);
+    display: block; // width: calc(100% - 80px);
     margin: 10px 10px 0 $avatar-column-space;
 }
