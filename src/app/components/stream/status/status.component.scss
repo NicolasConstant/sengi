@@ -47,7 +47,7 @@
             border-radius: 2px;
         }
     }
-    &__automation-data {
+    &__labels {
         position: absolute;
         top: 65px;
         left: 10px;
@@ -70,6 +70,11 @@
             background-color: rgb(255, 153, 0);
             background-color: rgb(189, 113, 0);
             background-color: rgb(156, 94, 0);
+        }
+        &--thread {
+            background-color: rgb(0, 187, 84);
+            background-color: rgb(0, 136, 61);
+            background-color: rgb(0, 114, 51);
         }
     }
     &__name {

@@ -127,7 +127,7 @@ export interface Status {
     url: string;
     account: Account;
     in_reply_to_id: string;
-    in_reply_to_account_id: string;
+    in_reply_to_account_id: number;
     reblog: Status;
     content: string;
     created_at: string;

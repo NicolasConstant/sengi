@@ -15,6 +15,7 @@ export class StatusComponent implements OnInit {
     hasAttachments: boolean;
     replyingToStatus: boolean;
     isCrossPoster: boolean;
+    isThread: boolean;
     isContentWarned: boolean;
     contentWarningText: string;
 
@@ -29,7 +30,7 @@ export class StatusComponent implements OnInit {
         this._statusWrapper = value;
         this.status = value.status;
 
-        this.checkCrossPosting(this.status);
+        this.checkLabels(this.status);
         this.checkContentWarning(this.status);
 
         if (this.status.reblog) {
@@ -57,7 +58,7 @@ export class StatusComponent implements OnInit {
     }
 
     private checkContentWarning(status: Status) {
-        if(status.sensitive || status.spoiler_text){
+        if (status.sensitive || status.spoiler_text) {
             this.isContentWarned = true;
             this.contentWarningText = status.spoiler_text;
         }
@@ -68,17 +69,20 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    private checkCrossPosting(status: Status) {
+    private checkLabels(status: Status) {
         //since API is limited with federated status...
-        if(status.uri.includes('birdsite.link')){
+        if (status.uri.includes('birdsite.link')) {
             this.isCrossPoster = true;
         }
-
-        if (status.application) {
+        else if (status.application) {
             const usedApp = status.application.name.toLowerCase();
             if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
                 this.isCrossPoster = true;
             }
+        }
+
+        if (this.status.in_reply_to_account_id && this.status.in_reply_to_account_id === this.status.account.id) {
+            this.isThread = true;
         }
     }
 

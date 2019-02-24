@@ -19,15 +19,19 @@
             {{ status.created_at | timeAgo | async }}
         </a>
     </div>
-    <div class="status__automation-data">
-        <div class="status__automation-data--label status__automation-data--bot" title="bot"
+    <div class="status__labels">
+        <div class="status__labels--label status__labels--bot" title="bot"
             *ngIf="status.account.bot">
             bot
         </div>
-        <div class="status__automation-data--label status__automation-data--xpost" title="cross-poster"
+        <div class="status__labels--label status__labels--xpost" title="cross-poster"
             *ngIf="isCrossPoster">
             x-post
         </div>
+        <div class="status__labels--label status__labels--thread" title="thread"
+        *ngIf="isThread">
+        thread
+    </div>
     </div>
     <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
