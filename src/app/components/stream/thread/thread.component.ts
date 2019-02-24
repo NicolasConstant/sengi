@@ -7,6 +7,7 @@ import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { Results, Context, Status } from '../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
+import { StreamStatusesComponent } from '../stream-statuses/stream-statuses.component';
 
 @Component({
     selector: 'app-thread',
@@ -15,8 +16,8 @@ import { AccountInfo } from '../../../states/accounts.state';
 })
 export class ThreadComponent implements OnInit {   
     statuses: StatusWrapper[] = [];
-    isLoading: boolean;
     displayError: string;
+    isLoading = true; 
 
     private lastThreadEvent: OpenThreadEvent;
 
@@ -27,9 +28,8 @@ export class ThreadComponent implements OnInit {
     @Input('currentThread')
     set currentThread(thread: OpenThreadEvent) {
         if (thread) {
-            this.isLoading = true;
             this.lastThreadEvent = thread;
-            this.getThread(thread);
+            // this.getThread(thread);
         }
     }
 
@@ -39,10 +39,12 @@ export class ThreadComponent implements OnInit {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        this.getThread(this.lastThreadEvent);
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
         this.statuses.length = 0;
+        this.displayError = null;
 
         let currentAccount = this.toolsService.getSelectedAccounts()[0];
 
@@ -66,10 +68,8 @@ export class ThreadComponent implements OnInit {
             this.retrieveThread(currentAccount, statusPromise);
 
         } else if (sourceAccount.id === currentAccount.id) {
-
             var statusPromise = Promise.resolve(status);
             this.retrieveThread(currentAccount, statusPromise);
-
         } else {
             this.isLoading = false;
             this.displayError = `You need to use your account ${sourceAccount.username}@${sourceAccount.instance} to show this thread`;
@@ -79,25 +79,28 @@ export class ThreadComponent implements OnInit {
     private retrieveThread(currentAccount: AccountInfo, pipeline: Promise<Status>) {
         pipeline
             .then((status: Status) => {
-                this.mastodonService.getStatusContext(currentAccount, status.id)
+                return this.mastodonService.getStatusContext(currentAccount, status.id)
                     .then((context: Context) => {
-                        this.isLoading = false;
                         let contextStatuses = [...context.ancestors, status, ...context.descendants]
 
                         for (const s of contextStatuses) {
                             const wrapper = new StatusWrapper(s, currentAccount);
                             this.statuses.push(wrapper);
                         }
-                    })
-                    .catch((err: HttpErrorResponse) => {
-                        this.isLoading = false;
-                        this.notificationService.notifyHttpError(err);
                     });
+                 
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.isLoading = false;
             });
     }
 
     refresh(): any {
         this.isLoading = true;
+        this.displayError = null;
         this.statuses.length = 0;
         this.getThread(this.lastThreadEvent);
     }

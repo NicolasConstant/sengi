@@ -18,8 +18,7 @@ import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
     styleUrls: ['./stream-statuses.component.scss']
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
-
-    isLoading = false; //TODO
+    isLoading = true; 
     displayError: string;
 
     private _streamElement: StreamElement;
@@ -113,7 +112,6 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         });
     }
 
-
     @ViewChild('statusstream') public statustream: ElementRef;
     private applyGoToTop(): boolean {
         this.loadBuffer();
@@ -181,6 +179,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     }
 
     private scrolledToBottom() {
+        if(this.isLoading) return;
+
+        this.isLoading = true;
         this.isProcessingInfiniteScroll = true;
 
         const lastStatus = this.statuses[this.statuses.length - 1];
@@ -195,6 +196,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 this.notificationService.notifyHttpError(err);
             })
             .then(() => {
+                this.isLoading = false;
                 this.isProcessingInfiniteScroll = false;
             });
     }
@@ -208,6 +210,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private retrieveToots(): void {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
             .then((results: Status[]) => {
+                this.isLoading = false;
                 for (const s of results) {
                     const wrapper = new StatusWrapper(s, this.account);
                     this.statuses.push(wrapper);
@@ -227,6 +230,6 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             this.bufferWasCleared = true;
             this.bufferStream.length = 2 * this.streamingService.nbStatusPerIteration;
         }
-    }
+    }  
 }
 
