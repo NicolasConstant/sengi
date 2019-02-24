@@ -1,39 +1,44 @@
 <div class="panel">
-    <h3 class="panel__title">search</h3>
 
-    <form class="form-section" (ngSubmit)="onSubmit()">
-        <input type="text" class="form-control form-control-sm form-with-button" [(ngModel)]="searchHandle" name="searchHandle"
-            placeholder="Search" autocomplete="off" />
-        <button class="form-button" type="submit" title="search">GO</button>
-    </form>
+    <div class="search-result-form">
+        <h3 class="panel__title">search</h3>
 
-    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
-
-    <div *ngIf="accounts.length > 0" class="search-results">
-        <h3 class="search-results__title">Accounts</h3>
-        <a href *ngFor="let account of accounts" class="account" title="open account" 
-            (click)="browseAccount(account.acct)">
-            <img src="{{account.avatar}}" class="account__avatar" />
-            <div class="account__name">{{ account.username }}</div>
-            <div class="account__fullhandle">@{{ account.acct }}</div>
-        </a>
+        <form class="form-section" (ngSubmit)="onSubmit()">
+            <input type="text" class="form-control form-control-sm form-with-button" [(ngModel)]="searchHandle"
+                name="searchHandle" placeholder="Search" autocomplete="off" />
+            <button class="form-button" type="submit" title="search">GO</button>
+        </form>
     </div>
 
-    <div *ngIf="hashtags.length > 0" class="search-results">
-        <h3 class="search-results__title">Hashtags</h3>
-        <a (click)="browseHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag" title="browse hashtag">
-            #{{ hashtag }}
-        </a>
-    </div>   
+    <div class="search-result-display flexcroll">
+        <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
-    <div *ngIf="statuses.length > 0" class="search-results">
-        <h3 class="search-results__title">Statuses</h3>
+        <div *ngIf="accounts.length > 0" class="search-results">
+            <h3 class="search-results__title">Accounts</h3>
+            <a href *ngFor="let account of accounts" class="account" title="open account"
+                (click)="browseAccount(account.acct)">
+                <img src="{{account.avatar}}" class="account__avatar" />
+                <div class="account__name">{{ account.username }}</div>
+                <div class="account__fullhandle">@{{ account.acct }}</div>
+            </a>
+        </div>
 
-        <div class="search-results__status" *ngFor="let statusWrapper of statuses">
-            <app-status [statusWrapper]="statusWrapper" 
-                (browseAccountEvent)="browseAccount($event)" 
-                (browseHashtagEvent)="browseHashtag($event)"
-                (browseThreadEvent)="browseThread($event)"></app-status>
+        <div *ngIf="hashtags.length > 0" class="search-results">
+            <h3 class="search-results__title">Hashtags</h3>
+            <a (click)="browseHashtag(hashtag)" href *ngFor="let hashtag of hashtags" class="search-results__hashtag"
+                title="browse hashtag">
+                #{{ hashtag }}
+            </a>
+        </div>
+
+        <div *ngIf="statuses.length > 0" class="search-results">
+            <h3 class="search-results__title">Statuses</h3>
+
+            <div class="search-results__status" *ngFor="let statusWrapper of statuses">
+                <app-status [statusWrapper]="statusWrapper" (browseAccountEvent)="browseAccount($event)"
+                    (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+                </app-status>
+            </div>
         </div>
     </div>
 </div>

@@ -2,7 +2,10 @@
 @import "mixins";
 @import "panel";
 @import "commons";
-
+.panel {
+    padding-left: 0px;
+    padding-right: 0px;
+}
 
 .form-section {
     overflow: auto;
@@ -29,10 +32,24 @@
     }
 }
 
+$search-form-height: 70px;
+.search-result-form {
+    height: $search-form-height;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 1px solid #222736;
+}
+
+.search-result-display {
+    overflow: auto;
+    height: calc(100% - #{$search-form-height});
+}
+
 .search-results {
     // outline: 1px solid greenyellow;
     margin-top: 10px; // &:first-of-type{
-    //     margin-top: 10px;
+    padding-left: 10px; //     margin-top: 10px;
+    padding-right: 10px; //     margin-top: 10px;
     // }
     &__title {
         text-transform: uppercase;
@@ -44,19 +61,16 @@
         padding: 5px;
         color: white;
         text-decoration: none;
-
-        transition: all .3s;        
+        transition: all .3s;
         &:hover {
             background-color: $button-background-color-hover;
         }
-
         border-top: 1px solid $separator-color;
         &:last-of-type {
             border-bottom: 1px solid $separator-color;
         }
     }
-
-    &__status {        
+    &__status {
         font-size: 15px;
         border-top: 1px solid $separator-color;
         &:last-of-type {
@@ -68,12 +82,8 @@
 .account {
     display: block;
     color: white;
-
     border-radius: 2px;
-    transition: all .3s;    
-
-   
-    // &:hover &__name {
+    transition: all .3s; // &:hover &__name {
     //     text-decoration: underline;
     // }
     border-top: 1px solid $separator-color;
@@ -92,18 +102,15 @@
     &__fullhandle {
         margin: 0 0 5px 0;
         color: $status-secondary-color;
-        transition: all .3s;
-        // &:hover {
+        transition: all .3s; // &:hover {
         //     color: white;
         // }
     }
-
-    &:hover, 
+    &:hover,
     &:hover &__fullhandle {
         color: white;
         text-decoration: none;
         background-color: $button-background-color-hover;
     }
-
     @include clearfix;
 }

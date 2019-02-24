@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 import { stat } from 'fs';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
-export class MastodonService {
-   
+export class MastodonService {   
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -166,6 +166,32 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
+
+    getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
+        let params = "?";
+        accountsToRetrieve.forEach(x => {
+            if(params.includes('id')) params += '&';
+            params += `id[]=${x.id}`;
+        });
+
+        const route = `https://${account.instance}${this.apiRoutes.getAccountRelationships}${params}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Relationship[]>(route, { headers: headers }).toPromise();
+    }
+
+    follow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship>  {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }  
+
+    unfollow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.unfollow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+
+    }
+    
 }
 
 export enum VisibilityEnum {

@@ -1,19 +1,26 @@
 @import "variables";
+@import "mixins";
 @import "commons";
+$header-content: 40px;
 .stream-overlay {
     // width: $stream-column-width;
     height: calc(100%);
-    background-color: $column-color; 
+    background-color: $column-color;
     &__header {
         width: calc(100%);
-        height: 30px;
-        background-color: $column-header-background-color;
-        padding: 6px 10px 0 10px;
+        height: $header-content;
+        background-color: $column-header-background-color; // padding: 6px 10px 0 10px;
+        border-bottom: 1px solid #222736;
         & a {
             color: whitesmoke;
             font-size: 0.8em;
-            font-weight: normal;        
+            font-weight: normal;
         }
+    }
+    &__content {
+        display: block;
+        width: calc(100%);
+        height: calc(100% - #{$header-content});
     }
     &__title {
         width: calc(100%);
@@ -27,23 +34,45 @@
 
 .overlay {
     margin: 0;
+    &__button {
+        @include clearButton;
+        width: 25px;
+        height: 25px;
+        color: #354060;
+        transition: all .2s;
+        margin: 8px 0 0 8px;
+        &:hover {
+            color: whitesmoke;
+        }
+        &--focus {
+            color: whitesmoke;
+        }
+    }
     &-previous {
         display: block;
         float: left;
+        font-size: 18px;
+        & fa-icon {
+            position: relative;
+            left: -1px;
+        }
     }
     &-refresh {
         display: block;
         float: left;
-        margin-left: 65px;
+        font-size: 14px;
     }
     &-next {
         display: block;
-        float: right;
-        padding-right: 20px;
+        float: left;
+        font-size: 18px;
     }
     &-close {
         display: block;
         float: right;
+        font-size: 14px;
+        color: white;
+        margin-right: 8px;
     }
 }
 

@@ -17,17 +17,20 @@ $stream-header-height: 40px;
         border-bottom: 1px solid #222736;
     }
     &__open-menu {
-        float: right;
-        display: block;
         width: $stream-header-height - 10px;
         height: $stream-header-height - 10px;
-        margin: 5px;
+
+        position: absolute;
+        top: 5px;
+        right: 5px;
+
         &:hover &--icon {
             color: darken(whitesmoke, 30);
         }
         &--icon {
             color: whitesmoke; // float: left;
-            position: relative;
+            // position: relative;
+            position: absolute;
             top: 4px;
             left: 8px;
         }
@@ -37,20 +40,30 @@ $stream-header-height: 40px;
         width: calc(100%);
         height: $stream-header-height;
         background-color: $column-header-background-color;
-        text-decoration: none; // &:hover {
-        // }
+        text-decoration: none; 
+        color: whitesmoke;
+        position: relative;
         &--icon {
-            color: whitesmoke;
             float: left;
             position: relative;
             left: 11px;
             top: 9px;
         }
         &--title {
-            color: whitesmoke;
             font-size: 0.8em;
-            font-weight: normal; // margin: 0 0 0 25px;
-            padding: 14px 0 0 35px;
+            font-weight: normal;
+            position: absolute;
+            top: 9px;
+            left: 35px;
+        }
+        &--subtitle {
+            color: $font-link-primary-hover;
+            font-size: 0.7em;
+            font-weight: normal;
+            font-style: italic;
+            position: absolute;
+            top: 21px;
+            left: 35px;;
         }
     }
 }

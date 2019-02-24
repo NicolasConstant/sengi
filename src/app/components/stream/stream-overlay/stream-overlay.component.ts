@@ -1,28 +1,37 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, ViewChild } from '@angular/core';
+import { faAngleLeft, faAngleRight, faTimes, faRedoAlt } from "@fortawesome/free-solid-svg-icons";
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngxs/store';
 
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
 import { ThreadComponent } from '../thread/thread.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { HashtagComponent } from '../hashtag/hashtag.component';
+import { AccountInfo } from '../../../states/accounts.state';
+
 
 @Component({
     selector: 'app-stream-overlay',
     templateUrl: './stream-overlay.component.html',
     styleUrls: ['./stream-overlay.component.scss']
 })
-export class StreamOverlayComponent implements OnInit {
+export class StreamOverlayComponent implements OnInit, OnDestroy {
+    faAngleLeft = faAngleLeft;
+    faAngleRight = faAngleRight;
+    faTimes = faTimes;
+    faRedoAlt = faRedoAlt;
    
-    private previousElements: OverlayBrowsing[] = [];
-    private nextElements: OverlayBrowsing[] = [];
+    refreshFocused: boolean;
+    previousElements: OverlayBrowsing[] = [];
+    nextElements: OverlayBrowsing[] = [];
     private currentElement: OverlayBrowsing;
 
-    canRefresh: boolean = true;
-    canGoForward: boolean;
+    // canRefresh: boolean = true;
+    // canGoForward: boolean;
 
     accountName: string;
     thread: OpenThreadEvent;
-    // hashtag: string;
     hashtagElement: StreamElement;
 
     @Output() closeOverlay = new EventEmitter();
@@ -30,7 +39,6 @@ export class StreamOverlayComponent implements OnInit {
     @Input('browseAccountData')
     set browseAccountData(accountName: string) {
         this.browseAccount(accountName);
-        // this.accountName = accountName;
     }
 
     @Input('browseThreadData')
@@ -47,9 +55,30 @@ export class StreamOverlayComponent implements OnInit {
     @ViewChild('appHashtag') appHashtag: HashtagComponent;
     @ViewChild('appThread') appThread: ThreadComponent;
 
-    constructor(private readonly toolsService: ToolsService) { }
+    private currentlyUsedAccount: AccountInfo;
+    private accounts$: Observable<AccountInfo[]>;
+    private accountSub: Subscription;
+
+    constructor(
+        private readonly store: Store,
+        private readonly toolsService: ToolsService) { 
+        this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+    }
 
     ngOnInit() {
+        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+            this.checkAccountChanges(accounts);
+        });
+    }
+
+    checkAccountChanges(accounts: AccountInfo[]): any {
+        const selectedAccount = accounts.filter(x => x.isSelected)[0];
+        this.refreshFocused = selectedAccount.id !== this.currentlyUsedAccount.id;
+    }
+
+    ngOnDestroy() {
+        this.accountSub.unsubscribe();
     }
 
     close(): boolean {
@@ -69,7 +98,8 @@ export class StreamOverlayComponent implements OnInit {
         const nextElement = this.nextElements.pop();
         this.loadElement(nextElement);
 
-        if(this.nextElements.length === 0) this.canGoForward = false;
+        //if(this.nextElements.length === 0) this.canGoForward = false;       
+
         return false;
     }
 
@@ -86,11 +116,14 @@ export class StreamOverlayComponent implements OnInit {
         const previousElement = this.previousElements.pop();
         this.loadElement(previousElement);
 
-        this.canGoForward = true;
+        //this.canGoForward = true;
         return false;
     }
 
     refresh(): boolean {
+        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.refreshFocused = false;  
+
         if(this.thread){
             this.appThread.refresh();
         } else if(this.hashtagElement){
@@ -111,7 +144,7 @@ export class StreamOverlayComponent implements OnInit {
         }
         const newElement = new OverlayBrowsing(null, accountName, null);
         this.loadElement(newElement);
-        this.canGoForward = false;
+        //this.canGoForward = false;
     }
 
     browseHashtag(hashtag: string): void {
@@ -123,10 +156,10 @@ export class StreamOverlayComponent implements OnInit {
         }
 
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
-        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, `#${hashtag}@${selectedAccount.instance}`);
+        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, selectedAccount.instance);
         const newElement = new OverlayBrowsing(hashTagElement, null, null);
         this.loadElement(newElement);
-        this.canGoForward = false;
+        // this.canGoForward = false;
     }
 
     browseThread(openThread: OpenThreadEvent): any {
@@ -139,10 +172,13 @@ export class StreamOverlayComponent implements OnInit {
 
         const newElement = new OverlayBrowsing(null, null, openThread);
         this.loadElement(newElement);
-        this.canGoForward = false;
+        //this.canGoForward = false;
     }
 
     private loadElement(element: OverlayBrowsing) {
+        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.refreshFocused = false;        
+
         this.currentElement = element;
 
         this.accountName = this.currentElement.account;
