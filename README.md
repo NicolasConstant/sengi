@@ -30,10 +30,13 @@ It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) fro
 
 ![Rhynchocyon petersi](https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Rhynchocyon_petersi_from_side.jpg/400px-Rhynchocyon_petersi_from_side.jpg)
 
+## Contribute
+
+Please see the [contributing guidelines](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the AGPLv3 License - see LICENSE file for details
+This project is licensed under the AGPLv3 License - see [LICENSE](LICENSE) for details
 
 ## Dependencies 
 
