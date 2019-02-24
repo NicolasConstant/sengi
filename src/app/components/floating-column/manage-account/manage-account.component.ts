@@ -24,16 +24,16 @@ export class ManageAccountComponent implements OnInit {
     ngOnInit() {
         const instance = this.account.info.instance;
         this.availableStreams.length = 0;
-        this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', this.account.info.id, null, null, `federate@${instance}`));
-        this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.info.id, null, null, `local@${instance}`));
-        this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Home', this.account.info.id, null, null, `home@${instance}`));
+        this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', this.account.info.id, null, null, instance));
+        this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.info.id, null, null, instance));
+        this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Home', this.account.info.id, null, null, instance));
     }
 
     addStream(stream: StreamElement): boolean {
         if (stream) {
             this.store.dispatch([new AddStream(stream)]).toPromise()
                 .then(() => {
-                    this.notificationService.notify(`${stream.displayableFullName} added`, false);
+                    this.notificationService.notify(`stream added`, false);
                 });
         }
         return false;
