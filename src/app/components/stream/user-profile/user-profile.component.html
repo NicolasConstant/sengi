@@ -33,10 +33,21 @@
     </div>
     <div class="profile-sub-header ">
         <div *ngIf="account && hasNote" class="profile-description">
+            <!-- <div *ngIf="account && account.note" class="profile-description"> -->
             <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="account.note"
                 (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
             </app-databinded-text>
         </div>
+        <div class="profile-fields" *ngIf="account && account.fields.length > 0">
+            <div class="profile-fields__field" *ngFor="let field of account.fields">
+                <div class="profile-fields__field--value" innerHTML="{{field.value}}" [ngClass]="{'profile-fields__field--validated': field.verified_at }">
+                </div>
+                <div class="profile-fields__field--name">
+                    {{ field.name }}
+                </div>
+            </div>
+        </div>
+
         <div class="profile-statuses">
             <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
 

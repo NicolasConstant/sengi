@@ -62,7 +62,6 @@ export class UserProfileComponent implements OnInit {
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (this.account) {
-                //this.relationship = null;
                 this.currentlyUsedAccount = accounts.filter(x => x.isSelected)[0];
 
                 this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
@@ -91,6 +90,9 @@ export class UserProfileComponent implements OnInit {
 
         return this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
             .then((account: Account) => {
+
+                console.warn(account);
+
                 this.isLoading = false;
                 this.statusLoading = true;
 
