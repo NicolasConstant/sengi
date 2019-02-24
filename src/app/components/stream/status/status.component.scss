@@ -108,10 +108,10 @@
         display: block;
     }
     &__content-warning {
-        height: 80px;
+        min-height: 80px;
         display: block; // border: 1px solid greenyellow;
         margin: 0 10px 0 $avatar-column-space;
-        padding: 3px 5px 0 5px;
+        padding: 3px 5px 3px 5px;
         background-color: $content-warning-background-color;
         color: $content-warning-font-color;
         border-radius: 3px;
