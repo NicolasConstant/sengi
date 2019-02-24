@@ -4,18 +4,34 @@
     </a>
     <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
 
-    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link" title="Boost" [class.boosted]="isBoosted" (click)="boost()">
+    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link" title="Boost" [class.boosted]="isBoosted"
+        (click)="boost()">
         <ion-icon name="md-swap"></ion-icon>
     </a>
-    <ion-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" name="lock" title="This post cannot be boosted"></ion-icon>
+    <ion-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" name="lock"
+        title="This post cannot be boosted"></ion-icon>
     <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
 
-    <a *ngIf="!isLocked" href class="action-bar__link" title="Favourite" [class.favorited]="isFavorited" (click)="favorite()">
+    <a *ngIf="!isLocked" href class="action-bar__link" title="Favourite" [class.favorited]="isFavorited"
+        (click)="favorite()">
         <ion-icon name="md-star"></ion-icon>
     </a>
     <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
 
-    <a href class="action-bar__link" title="More" (click)="more()">
-        <ion-icon name="ios-more"></ion-icon>
+    <a href class="action-bar__link action-bar__link--cw" 
+        title="show content" (click)="showContent()"
+        *ngIf="isContentWarningActive">
+        <fa-icon class="action-bar__cw" [icon]="faWindowClose"></fa-icon>
     </a>
+    <a href class="action-bar__link action-bar__link--cw"
+        title="hide content" (click)="hideContent()"
+        *ngIf="!isContentWarningActive">
+        <fa-icon class="action-bar__cw" [icon]="faWindowCloseRegular"></fa-icon>
+    </a>
+
+    <a href class="action-bar__link action-bar__link--more" title="More" (click)="more()">
+        <ion-icon name="ios-more"></ion-icon>
+    </a> 
+
+
 </div>

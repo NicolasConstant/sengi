@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { StatusWrapper } from "../stream.component";
 import { OpenThreadEvent } from "../../../services/tools.service";
-import { stat } from "fs";
+import { ActionBarComponent } from "./action-bar/action-bar.component";
 
 @Component({
     selector: "app-status",
@@ -22,6 +22,7 @@ export class StatusComponent implements OnInit {
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+    @ViewChild('appActionBar') appActionBar: ActionBarComponent;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -66,7 +67,12 @@ export class StatusComponent implements OnInit {
 
     removeContentWarning(): boolean {
         this.isContentWarned = false;
+        this.appActionBar.showContent();
         return false;
+    }
+
+    changeCw(cwIsActive: boolean){
+        this.isContentWarned = cwIsActive;
     }
 
     private checkLabels(status: Status) {

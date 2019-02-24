@@ -2,14 +2,16 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
+import { faWindowClose, faReply, faRetweet, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { StatusWrapper } from '../../stream.component';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { Status, Results } from '../../../../services/models/mastodon.interfaces';
+import { Status } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
-// import { map } from "rxjs/operators";
+import { st } from '@angular/core/src/render3';
 
 @Component({
     selector: 'app-action-bar',
@@ -17,15 +19,23 @@ import { NotificationService } from '../../../../services/notification.service';
     styleUrls: ['./action-bar.component.scss']
 })
 export class ActionBarComponent implements OnInit, OnDestroy {
+    faWindowClose = faWindowClose;
+    faReply = faReply;
+    faRetweet = faRetweet;
+    faStar = faStar;
+    faWindowCloseRegular = faWindowCloseRegular;
 
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
+    @Output() cwIsActiveEvent = new EventEmitter<boolean>();
 
     isFavorited: boolean;
     isBoosted: boolean;
 
     isBoostLocked: boolean;
     isLocked: boolean;
+
+    isContentWarningActive: boolean = false;
 
     private isProviderSelected: boolean;
     private selectedAccounts: AccountInfo[];
@@ -78,8 +88,24 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.isLocked = false;
         }
 
+        if(status.sensitive || status.spoiler_text){
+            this.isContentWarningActive = true;
+        }
+
         this.checkIfFavorited();
         this.checkIfBoosted();
+    }
+
+    showContent(): boolean {
+        this.isContentWarningActive = false;
+        this.cwIsActiveEvent.next(false);
+        return false;
+    }
+
+    hideContent(): boolean {
+        this.isContentWarningActive = true;
+        this.cwIsActiveEvent.next(true);
+        return false;
     }
 
     reply(): boolean {
