@@ -59,7 +59,6 @@ export class StatusComponent implements OnInit {
         }
 
         if (status.application) {
-            console.warn(status.application);
             const usedApp = status.application.name.toLowerCase();
             if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
                 this.isCrossPoster = true;
