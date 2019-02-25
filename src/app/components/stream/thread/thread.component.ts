@@ -29,7 +29,7 @@ export class ThreadComponent implements OnInit {
     set currentThread(thread: OpenThreadEvent) {
         if (thread) {
             this.lastThreadEvent = thread;
-            // this.getThread(thread);
+            this.getThread(thread);
         }
     }
 
@@ -39,7 +39,6 @@ export class ThreadComponent implements OnInit {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
-        this.getThread(this.lastThreadEvent);
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
