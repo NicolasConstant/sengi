@@ -13,9 +13,10 @@ import { StreamElement } from './states/streams.state';
 })
 export class AppComponent implements OnInit, OnDestroy {    
     title = 'Sengi';
-
     floatingColumnActive: boolean;
     tutorialActive: boolean;
+    mediaViewerActive: boolean = false;
+
     private columnEditorSub: Subscription;
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
