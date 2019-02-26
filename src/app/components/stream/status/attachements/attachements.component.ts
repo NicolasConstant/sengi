@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { Attachment } from '../../../../services/models/mastodon.interfaces';
+import { NavigationService } from '../../../../services/navigation.service';
+import { OpenMediaEvent } from '../../../../models/common.model';
 
 @Component({
     selector: 'app-attachements',
@@ -7,7 +10,7 @@ import { Attachment } from '../../../../services/models/mastodon.interfaces';
     styleUrls: ['./attachements.component.scss']
 })
 export class AttachementsComponent implements OnInit {
-    private _attachments: Attachment[]; 
+    private _attachments: Attachment[];
     isImage: boolean;
     imageUrls: string[];
 
@@ -15,7 +18,7 @@ export class AttachementsComponent implements OnInit {
     set attachments(value: Attachment[]) {
         this._attachments = value;
 
-        if(this._attachments[0].type === 'image'){
+        if (this._attachments[0].type === 'image') {
             this.isImage = true;
             // this.imageUrls = this._attachments.map(x => x.url);
         }
@@ -24,9 +27,15 @@ export class AttachementsComponent implements OnInit {
         return this._attachments;
     }
 
-    constructor() { }
+    constructor(private readonly navigationService: NavigationService) { }
 
     ngOnInit() {
+    }
+
+    attachmentSelected(index: number): boolean {
+        let openMediaEvent = new OpenMediaEvent(index, this.attachments);
+        this.navigationService.openMedia(openMediaEvent);
+        return false;
     }
 
 }

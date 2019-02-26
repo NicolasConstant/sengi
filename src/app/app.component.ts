@@ -5,19 +5,23 @@ import { Select } from '@ngxs/store';
 
 import { NavigationService, LeftPanelType } from './services/navigation.service';
 import { StreamElement } from './states/streams.state';
+import { OpenMediaEvent } from './models/common.model';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {    
+export class AppComponent implements OnInit, OnDestroy {
     title = 'Sengi';
     floatingColumnActive: boolean;
     tutorialActive: boolean;
-    mediaViewerActive: boolean = false;
+    // mediaViewerActive: boolean = false;
+    openedMediaEvent: OpenMediaEvent
 
     private columnEditorSub: Subscription;
+    private openMediaSub: Subscription;
+    private streamSub: Subscription;
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
@@ -25,8 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.streamElements$.subscribe((streams: StreamElement[]) => {
-            if(streams && streams.length === 0){
+        this.streamSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
+            if (streams && streams.length === 0) {
                 this.tutorialActive = true;
             } else {
                 this.tutorialActive = false;
@@ -40,10 +44,25 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.floatingColumnActive = true;
             }
         });
+
+        this.openMediaSub = this.navigationService.activatedMediaSubject.subscribe((openedMediaEvent: OpenMediaEvent) => {
+            if (openedMediaEvent) {
+                this.openedMediaEvent = openedMediaEvent;
+                // this.mediaViewerActive = true;
+                
+            }
+        });
     }
 
     ngOnDestroy(): void {
+        this.streamSub.unsubscribe();
         this.columnEditorSub.unsubscribe();
+        this.openMediaSub.unsubscribe();
+    }
+
+    closeMedia(){
+        console.warn('closeMedia()');
+        this.openedMediaEvent = null;
     }
 
 }

@@ -1,5 +1,7 @@
-<app-media-viewer id="media-viewer" 
-    *ngIf="mediaViewerActive"></app-media-viewer>
+<app-media-viewer 
+    id="media-viewer" 
+    *ngIf="openedMediaEvent"
+    [openedMediaEvent]="openedMediaEvent" (closeSubject)="closeMedia()"></app-media-viewer>
 
 <app-left-side-bar>
 </app-left-side-bar>
