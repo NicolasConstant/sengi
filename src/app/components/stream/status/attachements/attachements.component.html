@@ -24,7 +24,7 @@
         </a>
         <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
             title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
-            <img src="{{ attachments[2].urpreview_urll }}" />
+            <img src="{{ attachments[2].preview_url }}" />
         </a>
 
         <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
@@ -48,6 +48,32 @@
 <div class="galery" *ngIf="isGifv">
     <!-- <video width="480" height="320" controls="controls"> -->
     <video class="galery__gifv" role="application" loop autoplay (click)="attachmentSelected(0)">
-       <source src="{{ attachments[0].url }}" type="video/mp4"> 
+        <source src="{{ attachments[0].url }}" type="video/mp4">
     </video>
+</div>
+<div class="galery galery__hover" *ngIf="isVideo">
+    <!-- <video width="480" height="320" controls="controls"> -->
+    <video class="galery__video" role="application" loop>
+        <source src="{{ attachments[0].url }}" type="video/mp4">
+    </video>
+    <div class="galery__play-control">
+        <button type="button" id="play-pause" class="galery__control--button" (click)="onPlay()">
+            <fa-icon [icon]="faPlay" *ngIf="!isPlaying"></fa-icon>
+            <fa-icon [icon]="faPause" *ngIf="isPlaying"></fa-icon>
+        </button>
+        <!-- <button type="button" id="play-pause" class="galery__control--button">
+            <fa-icon [icon]="faPause"></fa-icon>
+        </button> -->
+    </div>
+    <div class="galery__control">
+        <!-- <input type="range" id="seek-bar" class="video-control__button" value="0"> -->
+        <button type="button" class="galery__control--button galery__control--expand" (click)="onExpand()">
+            <fa-icon [icon]="faExpand"></fa-icon>
+        </button> 
+        <!-- <input type="range" id="volume-bar" class="video-control__button" min="0" max="1" step="0.1" value="1"> -->
+        <button type="button" class="galery__control--button galery__control--mute" (click)="onMute()">
+            <fa-icon [icon]="faVolumeUp" *ngIf="!isMuted"></fa-icon>
+            <fa-icon [icon]="faVolumeMute" *ngIf="isMuted"></fa-icon>
+        </button> 
+    </div>
 </div>

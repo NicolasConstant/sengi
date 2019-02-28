@@ -3,6 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Attachment } from '../../../../services/models/mastodon.interfaces';
 import { NavigationService } from '../../../../services/navigation.service';
 import { OpenMediaEvent } from '../../../../models/common.model';
+import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-attachements',
@@ -13,7 +14,18 @@ export class AttachementsComponent implements OnInit {
     private _attachments: Attachment[];
     isImage: boolean;
     isGifv: boolean;
-    imageUrls: string[];
+    isVideo: boolean;
+
+    faPlay = faPlay;
+    faPause = faPause;
+    faExpand = faExpand;
+    faVolumeUp = faVolumeUp;
+    faVolumeMute = faVolumeMute;
+
+    isPlaying: boolean = false;
+    isMuted: boolean = false;
+
+    // imageUrls: string[];
 
     @Input('attachments')
     set attachments(value: Attachment[]) {
@@ -22,8 +34,9 @@ export class AttachementsComponent implements OnInit {
         if (this._attachments[0].type === 'image') {
             this.isImage = true;
         } else if(this._attachments[0].type === 'gifv'){
-            console.warn(value);
             this.isGifv = true;
+        } else if(this._attachments[0].type === 'video'){
+            this.isVideo = true;
         }
     }
     get attachments(): Attachment[] {
@@ -41,4 +54,17 @@ export class AttachementsComponent implements OnInit {
         return false;
     }
 
+    onPlay(){ 
+        console.warn('onPlay()');
+        this.isPlaying = !this.isPlaying;
+    }
+
+    onExpand(){ 
+        console.warn('onExpand()');
+    }
+
+    onMute(){ 
+        console.warn('onMute()');
+        this.isMuted = !this.isMuted;
+    }
 }
