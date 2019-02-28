@@ -53,7 +53,7 @@
 </div>
 <div class="galery galery__hover" *ngIf="isVideo">
     <!-- <video width="480" height="320" controls="controls"> -->
-    <video class="galery__video" role="application" loop>
+    <video #videoPlayer class="galery__video" role="application" loop>
         <source src="{{ attachments[0].url }}" type="video/mp4">
     </video>
     <div class="galery__play-control">

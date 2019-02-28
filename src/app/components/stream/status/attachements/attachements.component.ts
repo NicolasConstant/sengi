@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { Attachment } from '../../../../services/models/mastodon.interfaces';
 import { NavigationService } from '../../../../services/navigation.service';
 import { OpenMediaEvent } from '../../../../models/common.model';
-import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute} from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-attachements',
@@ -33,15 +33,17 @@ export class AttachementsComponent implements OnInit {
 
         if (this._attachments[0].type === 'image') {
             this.isImage = true;
-        } else if(this._attachments[0].type === 'gifv'){
+        } else if (this._attachments[0].type === 'gifv') {
             this.isGifv = true;
-        } else if(this._attachments[0].type === 'video'){
+        } else if (this._attachments[0].type === 'video') {
             this.isVideo = true;
         }
     }
     get attachments(): Attachment[] {
         return this._attachments;
     }
+
+    @ViewChild('videoPlayer') videoplayer: ElementRef;
 
     constructor(private readonly navigationService: NavigationService) { }
 
@@ -54,17 +56,35 @@ export class AttachementsComponent implements OnInit {
         return false;
     }
 
-    onPlay(){ 
-        console.warn('onPlay()');
+    private getVideo(): HTMLVideoElement {
+        return this.videoplayer.nativeElement;
+    }
+
+    onPlay() {
+        if (!this.isPlaying) {
+            this.getVideo().play();
+        } else {
+            this.getVideo().pause();
+        }
+
         this.isPlaying = !this.isPlaying;
+
     }
 
-    onExpand(){ 
-        console.warn('onExpand()');
+    onExpand() {
+        if (!this.isMuted) {
+            this.onMute();
+        }
+
+        if (this.isPlaying) {
+            this.onPlay();
+        }
+
+        this.attachmentSelected(0);
     }
 
-    onMute(){ 
-        console.warn('onMute()');
+    onMute() {        
         this.isMuted = !this.isMuted;
+        this.getVideo().muted = this.isMuted;
     }
 }
