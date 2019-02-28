@@ -40,9 +40,6 @@ export class MediaViewerComponent implements OnInit {
     }
 
     private loadAttachment(attachment: Attachment) {
-        console.warn('attachment');
-        console.warn(attachment);
-
         if (attachment.type === 'image') {
             this.imageUrl = attachment.url;
         } else if (attachment.type === 'gifv'){
@@ -52,9 +49,13 @@ export class MediaViewerComponent implements OnInit {
         }
     }
 
-
     close(): boolean {
         this.closeSubject.next(true);
+        return false;
+    }
+
+    blockClick(event: any): boolean{
+        event.stopPropagation();
         return false;
     }
 }
