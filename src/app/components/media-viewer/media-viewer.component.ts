@@ -16,7 +16,9 @@ export class MediaViewerComponent implements OnInit {
     faChevronLeft = faChevronLeft;
     faChevronRight = faChevronRight;
     faTimes = faTimes;
+
     imageUrl: string;
+    gifvUrl: string;
     
     @Input('openedMediaEvent')
     set openedMediaEvent(value: OpenMediaEvent) {
@@ -42,6 +44,8 @@ export class MediaViewerComponent implements OnInit {
 
         if (attachment.type === 'image') {
             this.imageUrl = attachment.url;
+        } else if (attachment.type === 'gifv'){
+            this.gifvUrl = attachment.url;
         }
     }
 

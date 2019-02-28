@@ -1,16 +1,16 @@
 <div class="galery" *ngIf="isImage">
     <div class="galery__image">
-        <a *ngIf="attachments.length === 1" class="galery__image--link" title="{{ attachments[0].text_url }}"
+        <a *ngIf="attachments.length === 1" class="galery__image--link" title="{{ attachments[0].description }}"
             (click)="attachmentSelected(0)">
             <img class="galery__image--1" src="{{ attachments[0].preview_url }}" />
         </a>
 
         <a *ngIf="attachments.length === 2" class="galery__image--link galery__image--link-2"
-            title="{{ attachments[0].text_url }}" (click)="attachmentSelected(0)">
+            title="{{ attachments[0].description }}" (click)="attachmentSelected(0)">
             <img src="{{ attachments[0].preview_url }}" />
         </a>
         <a *ngIf="attachments.length === 2" class="galery__image--link galery__image--link-2"
-            title="{{ attachments[1].text_url }}" (click)="attachmentSelected(1)">
+            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
             <img src="{{ attachments[1].preview_url }}" />
         </a>
 
@@ -19,11 +19,11 @@
             <img src="{{ attachments[0].preview_url }}" />
         </a>
         <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
-            title="{{ attachments[1].text_url }}" (click)="attachmentSelected(1)">
+            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
             <img src="{{ attachments[1].preview_url }}" />
         </a>
         <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
-            title="{{ attachments[2].text_url }}" (click)="attachmentSelected(2)">
+            title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
             <img src="{{ attachments[2].urpreview_urll }}" />
         </a>
 
@@ -32,22 +32,22 @@
             <img src="{{ attachments[0].preview_url }}" />
         </a>
         <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[1].text_url }}" (click)="attachmentSelected(1)">
+            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
             <img src="{{ attachments[1].preview_url }}" />
         </a>
         <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[2].text_url }}" (click)="attachmentSelected(2)">
+            title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
             <img src="{{ attachments[2].preview_url }}" />
         </a>
         <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[3].text_url }}" (click)="attachmentSelected(3)">
+            title="{{ attachments[3].description }}" (click)="attachmentSelected(3)">
             <img src="{{ attachments[3].preview_url }}" />
         </a>
     </div>
 </div>
 <div class="galery" *ngIf="isGifv">
     <!-- <video width="480" height="320" controls="controls"> -->
-    <video class="galery__gifv" role="application" loop autoplay>
+    <video class="galery__gifv" role="application" loop autoplay (click)="attachmentSelected(0)">
        <source src="{{ attachments[0].url }}" type="video/mp4"> 
     </video>
 </div>
