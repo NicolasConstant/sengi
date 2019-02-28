@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { StatusWrapper } from "../stream.component";
 import { OpenThreadEvent } from "../../../services/tools.service";
+import { ActionBarComponent } from "./action-bar/action-bar.component";
 
 @Component({
     selector: "app-status",
@@ -13,10 +14,15 @@ export class StatusComponent implements OnInit {
     reblog: boolean;
     hasAttachments: boolean;
     replyingToStatus: boolean;
+    isCrossPoster: boolean;
+    isThread: boolean;
+    isContentWarned: boolean;
+    contentWarningText: string;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+    @ViewChild('appActionBar') appActionBar: ActionBarComponent;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -24,6 +30,9 @@ export class StatusComponent implements OnInit {
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
         this.status = value.status;
+
+        this.checkLabels(this.status);
+        this.checkContentWarning(this.status);
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -47,6 +56,40 @@ export class StatusComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    private checkContentWarning(status: Status) {
+        if (status.sensitive || status.spoiler_text) {
+            this.isContentWarned = true;
+            this.contentWarningText = status.spoiler_text;
+        }
+    }
+
+    removeContentWarning(): boolean {
+        this.isContentWarned = false;
+        this.appActionBar.showContent();
+        return false;
+    }
+
+    changeCw(cwIsActive: boolean){
+        this.isContentWarned = cwIsActive;
+    }
+
+    private checkLabels(status: Status) {
+        //since API is limited with federated status...
+        if (status.uri.includes('birdsite.link')) {
+            this.isCrossPoster = true;
+        }
+        else if (status.application) {
+            const usedApp = status.application.name.toLowerCase();
+            if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
+                this.isCrossPoster = true;
+            }
+        }
+
+        if (this.status.in_reply_to_account_id && this.status.in_reply_to_account_id === this.status.account.id) {
+            this.isThread = true;
+        }
     }
 
     openAccount(account: Account): boolean {
@@ -82,8 +125,8 @@ export class StatusComponent implements OnInit {
         const accountInfo = this._statusWrapper.provider;
 
         let openThread: OpenThreadEvent;
-        if (status.reblog) {    
-            openThread = new OpenThreadEvent(status.reblog, accountInfo);            
+        if (status.reblog) {
+            openThread = new OpenThreadEvent(status.reblog, accountInfo);
         } else {
             openThread = new OpenThreadEvent(status, accountInfo);
         }

@@ -19,12 +19,10 @@
     <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" [streamElement]="streamElement">
     </app-stream-edition>
 
-    <app-stream-statuses class="stream-statuses" [streamElement]="streamElement"
-        [goToTop]="goToTopSubject.asObservable()" (browseAccountEvent)="browseAccount($event)"
-        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
-    <!-- <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
-        <div class="stream-toots__status" *ngFor="let statusWrapper of statuses">
-            <app-status [statusWrapper]="statusWrapper" (browseAccount)="browseAccount($event)" (browseHashtag)="browseHashtag($event)"></app-status>
-        </div>
-    </div>  -->
+    <app-stream-statuses class="stream-statuses"
+        [streamElement]="streamElement"
+        [goToTop]="goToTopSubject.asObservable()" 
+        (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" 
+        (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
 </div>

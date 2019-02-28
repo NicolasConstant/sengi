@@ -1,6 +1,4 @@
 <div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
-    <app-waiting-animation *ngIf="statuses.length === 0" class="waiting-icon"></app-waiting-animation>
-
     <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>
 
     <!-- data-simplebar  -->
@@ -10,4 +8,6 @@
             (browseHashtagEvent)="browseHashtag($event)"
             (browseThreadEvent)="browseThread($event)"></app-status>
     </div>
+
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 </div>

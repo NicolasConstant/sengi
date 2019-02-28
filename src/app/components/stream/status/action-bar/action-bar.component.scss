@@ -5,6 +5,8 @@
     padding: 0;
     font-size: 24px;
     height: 30px;
+    position: relative;
+
     &__link {
         color: $status-secondary-color;
         &:hover {
@@ -12,6 +14,18 @@
         }
         &:not(:last-child) {
             margin-right: 15px;
+        }
+
+        &--cw {
+            position: absolute;
+            bottom: -2px;
+            font-size: 22px;
+        }
+
+        &--more {
+            position: absolute;
+            left: 155px;
+            bottom: -6px;
         }
     }
 
@@ -23,6 +37,15 @@
             margin-right: 15px;
         }
     }
+
+    // &_cw {
+    //     // width: 18px;
+    //     font-size: 10px;
+
+    //     &:not(:last-child) {
+    //         margin-right: 15px;
+    //     }
+    // }
 }
 
 .boosted {

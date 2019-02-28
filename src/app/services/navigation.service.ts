@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+
 import { AccountWrapper } from '../models/account.models';
+import { OpenMediaEvent } from '../models/common.model';
 
 @Injectable()
 export class NavigationService {
-
-
     private accountToManage: AccountWrapper;
     activatedPanelSubject = new BehaviorSubject<LeftPanelType>(LeftPanelType.Closed);
-    // openColumnEditorSubject = new BehaviorSubject<AccountWrapper>(null);
-    columnSelectedSubject = new BehaviorSubject<number>(-1);
+    activatedMediaSubject: Subject<OpenMediaEvent> = new Subject<OpenMediaEvent>();
+    columnSelectedSubject = new BehaviorSubject<number>(-1); 
 
     constructor() { }
 
@@ -33,6 +33,10 @@ export class NavigationService {
 
     getAccountToManage(): AccountWrapper {
         return this.accountToManage;
+    }
+
+    openMedia(openMediaEvent: OpenMediaEvent): void{
+        this.activatedMediaSubject.next(openMediaEvent);
     }
 }
 

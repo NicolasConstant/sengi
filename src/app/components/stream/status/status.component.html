@@ -4,8 +4,10 @@
 </div>
 <div class="status">
 
-    <a href class="status__profile-link" title="{{displayedStatus.account.acct}}" (click)="openAccount(displayedStatus.account)">
-        <img [class.status__avatar--boosted]="reblog" class="status__avatar" src="{{ displayedStatus.account.avatar }}" />
+    <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
+        (click)="openAccount(displayedStatus.account)">
+        <img [class.status__avatar--boosted]="reblog" class="status__avatar"
+            src="{{ displayedStatus.account.avatar }}" />
         <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
         <span class="status__name">
             <span class="status__name--displayname" innerHTML="{{displayedStatus.account.display_name}}"></span><span
@@ -17,15 +19,39 @@
             {{ status.created_at | timeAgo | async }}
         </a>
     </div>
+    <div class="status__labels">
+        <div class="status__labels--label status__labels--bot" title="bot"
+            *ngIf="status.account.bot">
+            bot
+        </div>
+        <div class="status__labels--label status__labels--xpost" title="cross-poster"
+            *ngIf="isCrossPoster">
+            x-post
+        </div>
+        <div class="status__labels--label status__labels--thread" title="thread"
+        *ngIf="isThread">
+        thread
+    </div>
+    </div>
     <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
-    <app-databinded-text class="status__content" [text]="displayedStatus.content" (accountSelected)="accountSelected($event)"
-        (hashtagSelected)="hashtagSelected($event)" (textSelected)="textSelected()"></app-databinded-text>
+    <a href class="status__content-warning" *ngIf="isContentWarned" title="show content" (click)="removeContentWarning()">
+        <span class="status__content-warning--title">sensitive content</span>
+        {{ contentWarningText }}
+    </a>
+    <app-databinded-text class="status__content" *ngIf="!isContentWarned"
+        [text]="displayedStatus.content"
+        (accountSelected)="accountSelected($event)" 
+        (hashtagSelected)="hashtagSelected($event)"
+        (textSelected)="textSelected()"></app-databinded-text>
+    <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments">
+    </app-attachements>
 
+    <app-action-bar #appActionBar
+        [statusWrapper]="statusWrapper" 
+        (cwIsActiveEvent)="changeCw($event)"
+        (replyEvent)="openReply()"></app-action-bar>
 
-    <app-attachements *ngIf="hasAttachments" class="attachments" [attachments]="displayedStatus.media_attachments"></app-attachements>
-
-    <app-action-bar [statusWrapper]="statusWrapper" (replyEvent)="openReply()"></app-action-bar>
-
-    <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()"></app-reply-to-status>
+    <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()">
+    </app-reply-to-status>
 </div>

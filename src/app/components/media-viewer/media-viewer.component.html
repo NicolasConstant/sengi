@@ -1,0 +1,12 @@
+<div class="media-viewer-canvas" (click)="close()">
+    <button class="media-viewer-canvas__close" title="close">
+        <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+    <img class="media-viewer-canvas__image" *ngIf="imageUrl" src="{{imageUrl}}" (click)="blockClick($event)"/>
+    <video class="media-viewer-canvas__image" *ngIf="gifvUrl" role="application" loop autoplay (click)="blockClick($event)">
+        <source src="{{ gifvUrl }}" type="video/mp4">
+    </video>
+    <video class="media-viewer-canvas__image" *ngIf="videoUrl" role="application" loop controls="controls" (click)="blockClick($event)">
+        <source src="{{ videoUrl }}" type="video/mp4">
+    </video>
+</div>

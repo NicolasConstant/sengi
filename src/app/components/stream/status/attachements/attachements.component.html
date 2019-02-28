@@ -1,48 +1,79 @@
 <div class="galery" *ngIf="isImage">
     <div class="galery__image">
-
-        <a *ngIf="attachments.length === 1" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
-            target="_blank">
-            <img class="galery__image--1" src="{{ attachments[0].url }}" />
+        <a *ngIf="attachments.length === 1" class="galery__image--link" title="{{ attachments[0].description }}"
+            (click)="attachmentSelected(0)">
+            <img class="galery__image--1" src="{{ attachments[0].preview_url }}" />
         </a>
 
-        <a *ngIf="attachments.length === 2" class="galery__image--link-2" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[0].url }}" />
+        <a *ngIf="attachments.length === 2" class="galery__image--link galery__image--link-2"
+            title="{{ attachments[0].description }}" (click)="attachmentSelected(0)">
+            <img src="{{ attachments[0].preview_url }}" />
         </a>
-        <a *ngIf="attachments.length === 2" class="galery__image--link-2" href="{{ attachments[1].url }}" title="{{ attachments[1].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[1].url }}" />
-        </a>
-
-        <a *ngIf="attachments.length === 3" class="galery__image--link-3-1" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[0].url }}" />
-        </a>
-        <a *ngIf="attachments.length === 3" class="galery__image--link-3-2" href="{{ attachments[1].url }}" title="{{ attachments[1].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[1].url }}" />
-        </a>
-        <a *ngIf="attachments.length === 3" class="galery__image--link-3-2" href="{{ attachments[2].url }}" title="{{ attachments[2].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[2].url }}" />
+        <a *ngIf="attachments.length === 2" class="galery__image--link galery__image--link-2"
+            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
+            <img src="{{ attachments[1].preview_url }}" />
         </a>
 
-        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[0].url }}" title="{{ attachments[0].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[0].url }}" />
+        <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-1"
+            title="{{ attachments[0].text_url }}" (click)="attachmentSelected(0)">
+            <img src="{{ attachments[0].preview_url }}" />
         </a>
-        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[1].url }}" title="{{ attachments[1].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[1].url }}" />
+        <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
+            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
+            <img src="{{ attachments[1].preview_url }}" />
         </a>
-        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[2].url }}" title="{{ attachments[2].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[2].url }}" />
+        <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
+            title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
+            <img src="{{ attachments[2].preview_url }}" />
         </a>
-        <a *ngIf="attachments.length === 4" class="galery__image--link-4" href="{{ attachments[3].url }}" title="{{ attachments[3].text_url }}"
-            target="_blank">
-            <img src="{{ attachments[3].url }}" />
+
+        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ attachments[0].text_url }}" (click)="attachmentSelected(0)">
+            <img src="{{ attachments[0].preview_url }}" />
         </a>
+        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
+            <img src="{{ attachments[1].preview_url }}" />
+        </a>
+        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
+            <img src="{{ attachments[2].preview_url }}" />
+        </a>
+        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ attachments[3].description }}" (click)="attachmentSelected(3)">
+            <img src="{{ attachments[3].preview_url }}" />
+        </a>
+    </div>
+</div>
+<div class="galery" *ngIf="isGifv">
+    <!-- <video width="480" height="320" controls="controls"> -->
+    <video class="galery__gifv" role="application" loop autoplay (click)="attachmentSelected(0)">
+        <source src="{{ attachments[0].url }}" type="video/mp4">
+    </video>
+</div>
+<div class="galery galery__hover" *ngIf="isVideo">
+    <!-- <video width="480" height="320" controls="controls"> -->
+    <video #videoPlayer class="galery__video" role="application" loop>
+        <source src="{{ attachments[0].url }}" type="video/mp4">
+    </video>
+    <div class="galery__play-control">
+        <button type="button" id="play-pause" class="galery__control--button" (click)="onPlay()">
+            <fa-icon [icon]="faPlay" *ngIf="!isPlaying"></fa-icon>
+            <fa-icon [icon]="faPause" *ngIf="isPlaying"></fa-icon>
+        </button>
+        <!-- <button type="button" id="play-pause" class="galery__control--button">
+            <fa-icon [icon]="faPause"></fa-icon>
+        </button> -->
+    </div>
+    <div class="galery__control">
+        <!-- <input type="range" id="seek-bar" class="video-control__button" value="0"> -->
+        <button type="button" class="galery__control--button galery__control--expand" (click)="onExpand()">
+            <fa-icon [icon]="faExpand"></fa-icon>
+        </button> 
+        <!-- <input type="range" id="volume-bar" class="video-control__button" min="0" max="1" step="0.1" value="1"> -->
+        <button type="button" class="galery__control--button galery__control--mute" (click)="onMute()">
+            <fa-icon [icon]="faVolumeUp" *ngIf="!isMuted"></fa-icon>
+            <fa-icon [icon]="faVolumeMute" *ngIf="isMuted"></fa-icon>
+        </button> 
     </div>
 </div>
