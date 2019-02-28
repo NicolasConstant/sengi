@@ -11,7 +11,6 @@ import { AccountInfo } from '../../../../states/accounts.state';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { st } from '@angular/core/src/render3';
 
 @Component({
     selector: 'app-action-bar',

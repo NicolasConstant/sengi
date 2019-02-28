@@ -12,6 +12,7 @@ import { OpenMediaEvent } from '../../../../models/common.model';
 export class AttachementsComponent implements OnInit {
     private _attachments: Attachment[];
     isImage: boolean;
+    isGifv: boolean;
     imageUrls: string[];
 
     @Input('attachments')
@@ -20,7 +21,9 @@ export class AttachementsComponent implements OnInit {
 
         if (this._attachments[0].type === 'image') {
             this.isImage = true;
-            // this.imageUrls = this._attachments.map(x => x.url);
+        } else if(this._attachments[0].type === 'gifv'){
+            console.warn(value);
+            this.isGifv = true;
         }
     }
     get attachments(): Attachment[] {
