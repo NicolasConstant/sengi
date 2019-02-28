@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output } from '@angular/core';
+import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Subject } from 'rxjs';
 
 import { OpenMediaEvent } from '../../models/common.model';
 import { Attachment } from '../../services/models/mastodon.interfaces';
-import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-media-viewer',
@@ -12,6 +13,9 @@ import { Subject } from 'rxjs';
 export class MediaViewerComponent implements OnInit {
     private _mediaEvent: OpenMediaEvent;
 
+    faChevronLeft = faChevronLeft;
+    faChevronRight = faChevronRight;
+    faTimes = faTimes;
     imageUrl: string;
     
     @Input('openedMediaEvent')

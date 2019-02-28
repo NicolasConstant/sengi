@@ -1,3 +1,6 @@
 <div class="media-viewer-canvas" (click)="close()">
-    <img class="media-viewer-canvas__image" *ngIf="imageUrl" src="{{imageUrl}}"/>
+    <button class="media-viewer-canvas__close" title="close">
+        <fa-icon [icon]="faTimes"></fa-icon>
+    </button>
+    <img class="media-viewer-canvas__image" *ngIf="imageUrl" src="{{imageUrl}}" />
 </div>
