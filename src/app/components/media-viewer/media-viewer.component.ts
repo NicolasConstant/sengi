@@ -19,6 +19,7 @@ export class MediaViewerComponent implements OnInit {
 
     imageUrl: string;
     gifvUrl: string;
+    videoUrl: string;
     
     @Input('openedMediaEvent')
     set openedMediaEvent(value: OpenMediaEvent) {
@@ -46,12 +47,13 @@ export class MediaViewerComponent implements OnInit {
             this.imageUrl = attachment.url;
         } else if (attachment.type === 'gifv'){
             this.gifvUrl = attachment.url;
+        } else if (attachment.type === 'video'){
+            this.videoUrl = attachment.url;
         }
     }
 
 
     close(): boolean {
-        console.warn('xclose media');
         this.closeSubject.next(true);
         return false;
     }
