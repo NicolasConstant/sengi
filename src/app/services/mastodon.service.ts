@@ -5,8 +5,6 @@ import { ApiRoutes } from './models/api.settings';
 import { Account, Status, Results, Context, Relationship } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
-import { stat } from 'fs';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Injectable()
 export class MastodonService {   

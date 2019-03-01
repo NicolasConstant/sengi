@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { NgxElectronModule } from "ngx-electron";
+// import { NgxElectronModule } from "ngx-electron";
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -95,7 +95,6 @@ const routes: Routes = [
     HttpModule,
     HttpClientModule,
     FormsModule,
-    NgxElectronModule,
     RouterModule.forRoot(routes),
 
     NgxsModule.forRoot([
