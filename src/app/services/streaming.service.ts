@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Status } from "./models/mastodon.interfaces";
 import { BehaviorSubject } from "rxjs";
+
+import { Status } from "./models/mastodon.interfaces";
 import { ApiRoutes } from "./models/api.settings";
 import { StreamTypeEnum, StreamElement } from "../states/streams.state";
 import { MastodonService } from "./mastodon.service";
 import { AccountInfo } from "../states/accounts.state";
-import { stat } from "fs";
 
 @Injectable()
 export class StreamingService {
@@ -18,8 +18,6 @@ export class StreamingService {
     getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
     }
-
-
 }
 
 export class StreamingWrapper {
