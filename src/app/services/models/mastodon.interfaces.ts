@@ -131,7 +131,8 @@ export interface Status {
     reblog: Status;
     content: string;
     created_at: string;
-    reblogs_count: string;
+    reblogs_count: number;
+    replies_count: number;
     favourites_count: string;
     reblogged: boolean;
     favourited: boolean;

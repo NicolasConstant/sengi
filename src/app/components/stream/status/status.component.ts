@@ -17,6 +17,7 @@ export class StatusComponent implements OnInit {
     isCrossPoster: boolean;
     isThread: boolean;
     isContentWarned: boolean;
+    hasReply: boolean;
     contentWarningText: string;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
@@ -29,10 +30,7 @@ export class StatusComponent implements OnInit {
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
-        this.status = value.status;
-
-        this.checkLabels(this.status);
-        this.checkContentWarning(this.status);
+        this.status = value.status;    
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -40,6 +38,9 @@ export class StatusComponent implements OnInit {
         } else {
             this.displayedStatus = this.status;
         }
+        
+        this.checkLabels(this.displayedStatus);
+        this.checkContentWarning(this.displayedStatus);
 
         if (!this.displayedStatus.account.display_name) {
             this.displayedStatus.account.display_name = this.displayedStatus.account.username;
@@ -71,7 +72,7 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    changeCw(cwIsActive: boolean){
+    changeCw(cwIsActive: boolean) {
         this.isContentWarned = cwIsActive;
     }
 
@@ -87,9 +88,11 @@ export class StatusComponent implements OnInit {
             }
         }
 
-        if (this.status.in_reply_to_account_id && this.status.in_reply_to_account_id === this.status.account.id) {
+        if (status.in_reply_to_account_id && status.in_reply_to_account_id === status.account.id) {
             this.isThread = true;
         }
+
+        this.hasReply = status.replies_count > 0;
     }
 
     openAccount(account: Account): boolean {
