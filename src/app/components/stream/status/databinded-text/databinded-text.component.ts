@@ -172,6 +172,16 @@ export class DatabindedTextComponent implements OnInit {
                 window.open(link, '_blank');
                 return false;
             });
+
+            this.renderer.listen(el, 'mouseup', (event) => {
+                if(event.which === 2){
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+    
+                    window.open(link, '_blank');
+                    return false;
+                }
+            });
         }
     }
 
