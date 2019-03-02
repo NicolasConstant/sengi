@@ -30,7 +30,7 @@ export class StatusComponent implements OnInit {
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
-        this.status = value.status;    
+        this.status = value.status;
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -38,7 +38,7 @@ export class StatusComponent implements OnInit {
         } else {
             this.displayedStatus = this.status;
         }
-        
+
         this.checkLabels(this.displayedStatus);
         this.checkContentWarning(this.displayedStatus);
 
@@ -78,13 +78,15 @@ export class StatusComponent implements OnInit {
 
     private checkLabels(status: Status) {
         //since API is limited with federated status...
-        if (status.uri.includes('birdsite.link')) {
-            this.isCrossPoster = true;
-        }
-        else if (status.application) {
-            const usedApp = status.application.name.toLowerCase();
-            if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
+        if (!status.account.bot) {
+            if (status.uri.includes('birdsite.link')) {
                 this.isCrossPoster = true;
+            }
+            else if (status.application) {
+                const usedApp = status.application.name.toLowerCase();
+                if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
+                    this.isCrossPoster = true;
+                }
             }
         }
 
