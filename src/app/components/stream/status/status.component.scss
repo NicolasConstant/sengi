@@ -115,24 +115,25 @@
         display: block; // border: 1px solid greenyellow;
         margin: 0 10px 0 $avatar-column-space;
         padding: 3px 5px 3px 5px;
-        background-color: $content-warning-background-color;
-        color: $content-warning-font-color;
-        border-radius: 3px;
+        
         text-decoration: none;
         text-align: center;
+        text-align: left;
         position: relative;
-        font-size: 13px;
+        
+        border: 3px solid  $status-secondary-color;
+        color: whitesmoke;
+
         &--title {
-            // padding-top: 3px;
-            color: whitesmoke;
+            color:  $content-warning-font-color;
             font-size: 11px;
-            //font-weight: bold;
-            // outline: 1px solid greenyellow;
             display: block;
             width: calc(100%);
             text-align: center;
-            // position: absolute;
-            // bottom: 5px;
+            text-align: right;
+            position: absolute;
+            bottom: 0px;
+            right: 4px;
         }
     }
     &__created-at {
