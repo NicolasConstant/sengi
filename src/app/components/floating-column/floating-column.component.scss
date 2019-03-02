@@ -29,26 +29,32 @@
 }
 
 .close-button {
-    // display: inline-block;
-    background-color: $color-primary;
-    color: darken(white, 30);
-    border-radius: 999px;
-    width: 26px;
-    height: 26px;
-    text-align: center;
-    text-decoration: none;
-    padding: 1px;
-
-    z-index: 9999;
+    display: block;
     float: right;
-    margin: 10px;
+    font-size: 14px;
+    color: white;
+    margin: 10px 16px 0 0;
 
-    transition: all .2s;
+    // display: inline-block;
+    // background-color: $color-primary;
+    // color: darken(white, 30);
+    // border-radius: 999px;
+    // width: 26px;
+    // height: 26px;
+    // text-align: center;
+    // text-decoration: none;
+    // padding: 1px;
 
-    &:hover {
-        background-color: lighten($color-primary, 20);
-        color: white;
-        // transform: scale(1.2);
-    }
+    // z-index: 9999;
+    // float: right;
+    // margin: 10px;
+
+    // transition: all .2s;
+
+    // &:hover {
+    //     background-color: lighten($color-primary, 20);
+    //     color: white;
+    //     // transform: scale(1.2);
+    // }
     
 }
