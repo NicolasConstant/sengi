@@ -22,6 +22,9 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
+        // console.warn('text');
+        // console.warn(value);
+
         this.processedText = '';
         let linksSections = value.split('<a ');
 
@@ -111,7 +114,7 @@ export class DatabindedTextComponent implements OnInit {
             extractedName = extractedLinkAndNext[0].split('<span class="ellipsis">')[1].split('</span>')[0];
         } catch (err) {
             try {
-                extractedName = extractedLinkAndNext[0].split('<span class="invisible">https://</span><span class="">')[1].split('</span>')[0];
+                extractedName = extractedLinkAndNext[0].split(`<span class="">`)[1].split('</span>')[0];
             }
             catch (err) {
                 extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];

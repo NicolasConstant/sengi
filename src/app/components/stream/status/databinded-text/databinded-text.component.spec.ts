@@ -60,6 +60,13 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
     });
 
+    it('should parse https://www. link', () => {
+        const url = 'bbc.com/news/magazine-34901704';
+        const sample = `<p>The rise of"<br><a href="https:www//${url}" rel="nofollow noopener" target="_blank"><span class="invisible">https://www.</span><span class="">${url}</span><span class="invisible"></span></a></p>`;
+        component.text = sample;
+        expect(component.processedText).toContain('<a href class="link-httpswwwbbccomnewsmagazine34901704" title="open link">bbc.com/news/magazine-34901704</a></p>');
+    });
+
     it('should parse link - dual section', () => {
         const sample = `<p>Test.<br><a href="https://peertube.fr/videos/watch/69bb6e90-ec0f-49a3-9e28-41792f4a7c5f" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="ellipsis">peertube.fr/videos/watch/69bb6</span><span class="invisible">e90-ec0f-49a3-9e28-41792f4a7c5f</span></a></p>`;
 
@@ -89,7 +96,7 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
         expect(component.processedText).toContain('bla3');
         expect(component.processedText).toContain('bla4');
-    });
+    });  
 
     it('should parse link - GNU social in Mastodon', () => {
         const sample = `bla1 <a href="https://www.lemonde.fr/planete.html?xtor=RSS-3208" rel="nofollow noopener" class="" target="_blank">https://social.bitcast.info/url/819438</a>`;
