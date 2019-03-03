@@ -34,7 +34,13 @@ export class AddNewAccountComponent implements OnInit {
                 this.redirectToInstanceAuthPage(username, instance, appData);
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                if (err instanceof HttpErrorResponse) {
+                    this.notificationService.notifyHttpError(err);
+                } else if ((<Error>err).message === 'CORS'){
+                    this.notificationService.notify('There is maybe a CORS issue with the server you\'re connecting to. Please check in the console and if so, contact your administrator with those informations.', true);
+                } else {
+                    this.notificationService.notify('Unkown error', true);
+                }
             });
 
         return false;
@@ -53,6 +59,13 @@ export class AddNewAccountComponent implements OnInit {
                     return this.saveNewApp(instance, appData)
                         .then(() => { return appData; });
                 })
+                .catch((err: HttpErrorResponse) => {
+                    if (err.status === 0) {
+                        throw Error('CORS');
+                    } else {
+                        throw err;
+                    }
+                });
         }
     }
 
@@ -60,7 +73,7 @@ export class AddNewAccountComponent implements OnInit {
         const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;
         return snapshot.apps;
     }
-    
+
     private redirectToInstanceAuthPage(username: string, instance: string, app: AppData) {
         const appDataTemp = new CurrentAuthProcess(username, instance);
         localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
@@ -69,11 +82,11 @@ export class AddNewAccountComponent implements OnInit {
 
         window.location.href = instanceUrl;
     }
-    
+
     private getLocalHostname(): string {
         let localHostname = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
         return localHostname;
-    }   
+    }
 
     private saveNewApp(instance: string, app: AppData): Promise<any> {
         const appInfo = new AppInfo();
