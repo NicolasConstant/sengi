@@ -6,7 +6,7 @@ import { Status } from '../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
-import { AccountInfo } from 'src/app/states/accounts.state';
+import { AccountInfo } from '../../states/accounts.state';
 
 @Component({
     selector: 'app-create-status',
