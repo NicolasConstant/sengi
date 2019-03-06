@@ -39,15 +39,7 @@ export class CreateStatusComponent implements OnInit {
             } else {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status;
             }
-
-            // const mentions = [...this.statusReplyingTo.mentions.map(x => x.acct), this.statusReplyingTo.account.acct];
-            // let uniqueMentions = [];
-            // for(const mention of mentions){
-            //     if(!uniqueMentions.includes(mention)){
-            //         uniqueMentions.push(mention);
-            //     }
-            // }
-
+            
             const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
             for (const mention of uniqueMentions) {
                 this.status += `@${mention} `;
