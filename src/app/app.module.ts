@@ -36,7 +36,6 @@ import { AddNewStatusComponent } from "./components/floating-column/add-new-stat
 import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
 import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 import { WaitingAnimationComponent } from './components/waiting-animation/waiting-animation.component';
-import { ReplyToStatusComponent } from './components/stream/status/reply-to-status/reply-to-status.component';
 import { UserProfileComponent } from './components/stream/user-profile/user-profile.component';
 import { ThreadComponent } from './components/stream/thread/thread.component';
 import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
@@ -77,7 +76,6 @@ const routes: Routes = [
     SearchComponent,
     ActionBarComponent,
     WaitingAnimationComponent,
-    ReplyToStatusComponent,
     UserProfileComponent,
     ThreadComponent,
     HashtagComponent,
