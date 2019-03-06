@@ -1,0 +1,36 @@
+@import "variables";
+@import "panel";
+@import "buttons";
+$btn-send-status-width: 60px;
+.form-control {
+    margin: 0 0 5px 5px;
+    width: calc(100% - 10px);
+    background-color: $column-color;
+    border-color: $status-secondary-color;
+    color: #fff;
+    font-size: $default-font-size;
+    
+    &:focus {
+        box-shadow: none;
+    }
+
+    &--privacy {
+        display: inline-block;
+        width: calc(100% - 15px - #{$btn-send-status-width});
+    }
+}
+
+.btn-custom-primary {
+    display: inline-block;
+    width: $btn-send-status-width;
+    position: relative;
+    top: -1px;
+    left: 5px; // background-color: orange;
+    // border-color: orange;
+    // color: black;
+    font-weight: 500; // &:hover {
+    // }
+    // &:focus {
+    //     border-color: darkblue;
+    // }
+}

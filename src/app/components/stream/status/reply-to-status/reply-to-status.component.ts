@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
-// import { Store } from '@ngxs/store';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { MastodonService, VisibilityEnum } from '../../../../services/mastodon.service';
-// import { AccountInfo } from '../../../../states/accounts.state';
-import { StatusWrapper } from '../../stream.component';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { StatusWrapper } from '../../../../models/common.model';
 
 @Component({
     selector: 'app-reply-to-status',

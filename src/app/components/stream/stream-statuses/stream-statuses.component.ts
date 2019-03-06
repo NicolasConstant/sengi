@@ -8,9 +8,9 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StreamingService, EventEnum, StreamingWrapper, StatusUpdate } from '../../../services/streaming.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../services/mastodon.service';
-import { StatusWrapper } from '../stream.component';
 import { NotificationService } from '../../../services/notification.service';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
+import { StatusWrapper } from '../../../models/common.model';
 
 @Component({
     selector: 'app-stream-statuses',

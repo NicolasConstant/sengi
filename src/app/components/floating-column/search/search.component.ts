@@ -5,8 +5,8 @@ import { MastodonService } from '../../../services/mastodon.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account } from '../../../services/models/mastodon.interfaces';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
-import { StatusWrapper } from '../../stream/stream.component';
 import { NotificationService } from '../../../services/notification.service';
+import { StatusWrapper } from '../../../models/common.model';
 
 @Component({
     selector: 'app-search',

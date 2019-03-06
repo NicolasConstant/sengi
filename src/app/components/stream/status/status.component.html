@@ -50,6 +50,8 @@
     <app-action-bar #appActionBar [statusWrapper]="statusWrapper" (cwIsActiveEvent)="changeCw($event)"
         (replyEvent)="openReply()"></app-action-bar>
 
-    <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()">
-    </app-reply-to-status>
+    <!-- <app-reply-to-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()">
+    </app-reply-to-status> -->
+
+    <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()"></app-create-status>
 </div>

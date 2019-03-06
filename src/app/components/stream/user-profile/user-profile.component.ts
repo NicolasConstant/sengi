@@ -8,9 +8,9 @@ import { Store } from '@ngxs/store';
 import { Account, Status, Relationship } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
-import { StatusWrapper } from '../stream.component';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
+import { StatusWrapper } from '../../../models/common.model';
 
 
 

@@ -49,6 +49,7 @@ import { TutorialComponent } from './components/tutorial/tutorial.component';
 import { NotificationHubComponent } from './components/notification-hub/notification-hub.component';
 import { NotificationService } from "./services/notification.service";
 import { MediaViewerComponent } from './components/media-viewer/media-viewer.component';
+import { CreateStatusComponent } from './components/create-status/create-status.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -87,7 +88,8 @@ const routes: Routes = [
     StreamEditionComponent,
     TutorialComponent,
     NotificationHubComponent,
-    MediaViewerComponent
+    MediaViewerComponent,
+    CreateStatusComponent
   ],
   imports: [
     FontAwesomeModule,

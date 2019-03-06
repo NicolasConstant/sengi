@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
-import { StatusWrapper } from "../stream.component";
 import { OpenThreadEvent } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
+import { StatusWrapper } from '../../../models/common.model';
 
 @Component({
     selector: "app-status",

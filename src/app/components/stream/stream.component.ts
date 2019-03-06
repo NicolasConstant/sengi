@@ -97,9 +97,3 @@ export class StreamComponent implements OnInit {
     }
 }
 
-export class StatusWrapper {
-    constructor(
-        public status: Status,
-        public provider: AccountInfo
-    ) { }
-}
