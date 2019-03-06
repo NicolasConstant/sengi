@@ -6,6 +6,7 @@ import { Status } from '../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
+import { AccountInfo } from 'src/app/states/accounts.state';
 
 @Component({
     selector: 'app-create-status',
@@ -47,7 +48,7 @@ export class CreateStatusComponent implements OnInit {
             //     }
             // }
 
-            const uniqueMentions = this.getMentions(this.statusReplyingTo);
+            const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
             for (const mention of uniqueMentions) {
                 this.status += `@${mention} `;
             }
@@ -58,18 +59,25 @@ export class CreateStatusComponent implements OnInit {
         }, 0);
     }
 
-    private getMentions(status: Status): string[]{
+    private getMentions(status: Status, providerInfo: AccountInfo): string[]{
         const mentions = [...status.mentions.map(x => x.acct), status.account.acct];
+
         let uniqueMentions = [];
         for(let mention of mentions){
-            if(!uniqueMentions.includes(mention)){
-                // if(!mention.includes('@')){
-                //     mention += `@${status.}`;
-                // }
+            if(!uniqueMentions.includes(mention)){               
                 uniqueMentions.push(mention);
             }
-        }        
-        return uniqueMentions;      
+        }
+
+        let globalUniqueMentions = [];
+        for(let mention of uniqueMentions){
+            if(!mention.includes('@')){
+                mention += `@${providerInfo.instance}`;
+            }
+            globalUniqueMentions.push(mention);
+        }
+
+        return globalUniqueMentions;
     }
 
     onSubmit(): boolean {
