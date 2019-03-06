@@ -37,7 +37,7 @@ export class AddNewAccountComponent implements OnInit {
                 if (err instanceof HttpErrorResponse) {
                     this.notificationService.notifyHttpError(err);
                 } else if ((<Error>err).message === 'CORS'){
-                    this.notificationService.notify('There is maybe a CORS issue with the server you\'re connecting to. Please check in the console and if so, contact your administrator with those informations.', true);
+                    this.notificationService.notify('Connection Error. It\'s usually a CORS issue with the server you\'re connecting to. Please check in the console and if so, contact your administrator with those informations.', true);
                 } else {
                     this.notificationService.notify('Unkown error', true);
                 }
