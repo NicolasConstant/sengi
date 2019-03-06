@@ -1,4 +1,5 @@
 @import "variables";
+@import "commons";
 @import "panel";
 @import "buttons";
 $btn-send-status-width: 60px;
@@ -9,11 +10,9 @@ $btn-send-status-width: 60px;
     border-color: $status-secondary-color;
     color: #fff;
     font-size: $default-font-size;
-    
     &:focus {
         box-shadow: none;
     }
-
     &--privacy {
         display: inline-block;
         width: calc(100% - 15px - #{$btn-send-status-width});
@@ -33,4 +32,21 @@ $btn-send-status-width: 60px;
     // &:focus {
     //     border-color: darkblue;
     // }
+}
+
+.status-form {
+    position: relative;
+    &__sending {
+        position: absolute;
+        top: 0px;
+        left: 4px;
+        right: 4px;
+        bottom: 4px;
+        background-color: rgba($column-color, .75);
+        z-index: 2;
+
+        &--waiting{
+            margin-top: calc(25%);
+        }
+    }
 }

@@ -1,4 +1,8 @@
-<form (ngSubmit)="onSubmit()">
+<form class="status-form" (ngSubmit)="onSubmit()">
+    <div class="status-form__sending" *ngIf="isSending">
+        <app-waiting-animation class="waiting-icon status-form__sending--waiting"></app-waiting-animation>
+    </div>
+
     <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off" placeholder="Title, Content Warning (optional)" />
 
     <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm" rows="5" required

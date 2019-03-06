@@ -17,6 +17,8 @@ export class CreateStatusComponent implements OnInit {
     title: string;
     status: string = '';
 
+    isSending: boolean;
+
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
@@ -73,6 +75,10 @@ export class CreateStatusComponent implements OnInit {
     }
 
     onSubmit(): boolean {
+        if(this.isSending) return false;
+
+        this.isSending = true;
+
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
         switch (this.selectedPrivacy) { //FIXME: in case of responding, set the visibility to original
             case 'Public':
@@ -118,6 +124,9 @@ export class CreateStatusComponent implements OnInit {
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.isSending = false;
             });
 
         return false;
