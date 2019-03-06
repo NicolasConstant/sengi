@@ -41,11 +41,13 @@ export class CreateStatusComponent implements OnInit {
             } else {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status;
             }
-            
+
             const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
             for (const mention of uniqueMentions) {
                 this.status += `@${mention} `;
             }
+
+            this.title = this.statusReplyingTo.spoiler_text;
         }
 
         setTimeout(() => {
@@ -53,19 +55,19 @@ export class CreateStatusComponent implements OnInit {
         }, 0);
     }
 
-    private getMentions(status: Status, providerInfo: AccountInfo): string[]{
+    private getMentions(status: Status, providerInfo: AccountInfo): string[] {
         const mentions = [...status.mentions.map(x => x.acct), status.account.acct];
 
         let uniqueMentions = [];
-        for(let mention of mentions){
-            if(!uniqueMentions.includes(mention)){               
+        for (let mention of mentions) {
+            if (!uniqueMentions.includes(mention)) {
                 uniqueMentions.push(mention);
             }
         }
 
         let globalUniqueMentions = [];
-        for(let mention of uniqueMentions){
-            if(!mention.includes('@')){
+        for (let mention of uniqueMentions) {
+            if (!mention.includes('@')) {
                 mention += `@${providerInfo.instance}`;
             }
             globalUniqueMentions.push(mention);
@@ -75,7 +77,7 @@ export class CreateStatusComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        if(this.isSending) return false;
+        if (this.isSending) return false;
 
         this.isSending = true;
 
@@ -96,9 +98,7 @@ export class CreateStatusComponent implements OnInit {
         }
 
         let spoiler = this.title;
-        if (this.statusReplyingToWrapper) {
-            spoiler = this.statusReplyingTo.spoiler_text;
-        }
+
 
         const acc = this.toolsService.getSelectedAccounts()[0];
 

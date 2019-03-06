@@ -3,9 +3,10 @@
         <app-waiting-animation class="waiting-icon status-form__sending--waiting"></app-waiting-animation>
     </div>
 
-    <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off" placeholder="Title, Content Warning (optional)" />
+    <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)"/>
 
-    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm" rows="5" required
+    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm" 
+        rows="5" required title="content"
         placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
 
     <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy"
