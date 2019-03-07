@@ -17,14 +17,16 @@ export class CreateStatusComponent implements OnInit {
     title: string;
 
     private _status: string = '';
-    set status(value: string){
-        this._status = value;
-        console.warn(value);
+    set status(value: string){        
+        this.countStatusChar(value);
+        this._status = value;        
     }
     get status(): string {
         return this._status;
     }
-    
+
+    charCountLeft: number = 500;
+    postCounts: number = 1;
 
     isSending: boolean;
 
@@ -62,6 +64,14 @@ export class CreateStatusComponent implements OnInit {
         setTimeout(() => {
             this.replyElement.nativeElement.focus();
         }, 0);
+    }
+
+    private countStatusChar(status: string){
+        const maxLength = 500;
+        const statusLength = status.length;
+        const mod = statusLength % maxLength;
+        this.charCountLeft = maxLength - mod;
+        this.postCounts = Math.trunc(statusLength/maxLength) + 1;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
