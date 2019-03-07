@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Store } from '@ngxs/store';
+import { Subscription, Observable } from 'rxjs';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status } from '../../services/models/mastodon.interfaces';
@@ -7,13 +9,15 @@ import { ToolsService } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
+import { InstancesInfoService } from '../../services/instances-info.service';
+
 
 @Component({
     selector: 'app-create-status',
     templateUrl: './create-status.component.html',
     styleUrls: ['./create-status.component.scss']
 })
-export class CreateStatusComponent implements OnInit {
+export class CreateStatusComponent implements OnInit, OnDestroy {
     title: string;
 
     private _status: string = '';
@@ -25,7 +29,8 @@ export class CreateStatusComponent implements OnInit {
         return this._status;
     }
 
-    charCountLeft: number = 500;
+    private maxCharLength: number;
+    charCountLeft: number;
     postCounts: number = 1;
 
     isSending: boolean;
@@ -39,13 +44,23 @@ export class CreateStatusComponent implements OnInit {
     selectedPrivacy = 'Public';
     privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
 
+    private accounts$: Observable<AccountInfo[]>;
+    private accountSub: Subscription;
+
     constructor(
-        // private readonly store: Store,
+        private readonly store: Store,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonService,
+        private readonly instancesInfoService: InstancesInfoService) { 
+            this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+        }
 
     ngOnInit() {
+        this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+            this.accountChanged(accounts);
+        });
+
         if (this.statusReplyingToWrapper) {
             if (this.statusReplyingToWrapper.status.reblog) {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status.reblog;
@@ -66,12 +81,25 @@ export class CreateStatusComponent implements OnInit {
         }, 0);
     }
 
+    ngOnDestroy(){
+        this.accountSub.unsubscribe();
+    }
+
+    private accountChanged(accounts: AccountInfo[]): void {
+        const selectedAccount = accounts.filter(x => x.isSelected)[0];
+        this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
+            .then((maxChars: number) => {
+                this.maxCharLength = maxChars;
+                this.countStatusChar(this.status);
+            });
+    }
+
     private countStatusChar(status: string){
-        const maxLength = 500;
+        // const maxLength = 500;
         const statusLength = status.length;
-        const mod = statusLength % maxLength;
-        this.charCountLeft = maxLength - mod;
-        this.postCounts = Math.trunc(statusLength/maxLength) + 1;
+        const mod = statusLength % this.maxCharLength;
+        this.charCountLeft = this.maxCharLength - mod;
+        this.postCounts = Math.trunc(statusLength/this.maxCharLength) + 1;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {

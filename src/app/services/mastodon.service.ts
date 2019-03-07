@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 
@@ -12,6 +12,11 @@ export class MastodonService {
 
     constructor(private readonly httpClient: HttpClient) { }
 
+    getInstance(instance: string): Promise<Instance>{
+        const route =  `https://${instance}${this.apiRoutes.getInstance}`;
+        return this.httpClient.get<Instance>(route).toPromise();
+    }
+
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Account>('https://' + account.instance + this.apiRoutes.getCurrentAccount, { headers: headers }).toPromise();
@@ -20,7 +25,7 @@ export class MastodonService {
     getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20, tag: string = null, list: string = null): Promise<Status[]> {
         const route = `https://${account.instance}${this.getTimelineRoute(type, max_id, since_id, limit, tag, list)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise()
+        return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
     }
 
     private getTimelineRoute(type: StreamTypeEnum, max_id: string, since_id: string, limit: number, tag: string, list: string): string {

@@ -84,6 +84,10 @@ export interface Instance {
     title: string;
     description: string;
     email: string;
+    version: string;
+    urls: string[];
+    contact_account: Account;
+    max_toot_chars: number;
 }
 
 export interface Mention {
