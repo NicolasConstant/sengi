@@ -15,7 +15,16 @@ import { AccountInfo } from '../../states/accounts.state';
 })
 export class CreateStatusComponent implements OnInit {
     title: string;
-    status: string = '';
+
+    private _status: string = '';
+    set status(value: string){
+        this._status = value;
+        console.warn(value);
+    }
+    get status(): string {
+        return this._status;
+    }
+    
 
     isSending: boolean;
 

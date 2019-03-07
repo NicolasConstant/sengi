@@ -13,6 +13,9 @@
         [(ngModel)]="selectedPrivacy">
         <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
     </select>
+    <div class="status-form__counter">
+        <span class="status-form__counter--count">5000</span> <span class="status-form__counter--posts">0/1</span>
+    </div>
     <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="statusReplyingToWrapper">REPLY!</button>
     <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="!statusReplyingToWrapper">POST!</button>
 </form>

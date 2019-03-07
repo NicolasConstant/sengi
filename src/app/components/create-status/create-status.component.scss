@@ -3,6 +3,7 @@
 @import "panel";
 @import "buttons";
 $btn-send-status-width: 60px;
+$counter-width: 90px;
 .form-control {
     margin: 0 0 5px 5px;
     width: calc(100% - 10px);
@@ -15,7 +16,7 @@ $btn-send-status-width: 60px;
     }
     &--privacy {
         display: inline-block;
-        width: calc(100% - 15px - #{$btn-send-status-width});
+        width: calc(100% - 15px - #{$btn-send-status-width} - #{$counter-width});
     }
 }
 
@@ -34,8 +35,11 @@ $btn-send-status-width: 60px;
     // }
 }
 
+
 .status-form {
     position: relative;
+    font-size: $default-font-size;
+
     &__sending {
         position: absolute;
         top: 0px;
@@ -47,6 +51,34 @@ $btn-send-status-width: 60px;
 
         &--waiting{
             margin-top: calc(25%);
+        }
+    }
+
+    &__counter {
+        display: inline-block;
+        border: 1px solid $status-secondary-color;
+        margin-left: 5px;  
+        width: calc(#{$counter-width} - 5px);
+        height: 32px;
+        position: relative;
+        top: 0px;
+        padding: 4px 7px 0 7px;
+        // color: lighten($font-link-primary-hover, 10);
+        // position: relative;
+        // overflow: hidden;
+
+        &--count {
+            // position: absolute;
+            // left: 0;
+            // overflow: hidden;
+            // outline: 1px solid greenyellow;
+        }
+
+        &--posts {
+            // position: absolute;
+            // right: 0;
+            margin-left: 10px;
+            float: right;
         }
     }
 }
