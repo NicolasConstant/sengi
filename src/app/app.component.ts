@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
             if (openedMediaEvent) {
                 this.openedMediaEvent = openedMediaEvent;
                 // this.mediaViewerActive = true;
-                
+
             }
         });
     }
@@ -60,9 +60,42 @@ export class AppComponent implements OnInit, OnDestroy {
         this.openMediaSub.unsubscribe();
     }
 
-    closeMedia(){
-        console.warn('closeMedia()');
+    closeMedia() {
         this.openedMediaEvent = null;
     }
 
+    drag: boolean;
+    drag2: boolean;
+    private dragCounter: number = 0;
+
+    dragenter(event): boolean {
+        event.stopPropagation();
+        event.preventDefault();        
+        this.drag = true;
+        return false;
+    }
+    dragleave(event): boolean {
+        event.stopPropagation();
+        event.preventDefault();        
+        this.drag = false;
+        return false;
+    }
+    dragover(event): boolean{
+        event.stopPropagation();
+        event.preventDefault();
+        return false;
+    }
+    drop(event): boolean {
+        event.stopPropagation();
+        event.preventDefault();        
+        
+        let files = event.dataTransfer.files;
+        for(let file of files){
+            console.warn(file.name);
+            console.warn(file);
+        };
+
+        this.drag = false;
+        return false;
+    }
 }

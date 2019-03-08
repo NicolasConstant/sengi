@@ -1,23 +1,34 @@
-<app-media-viewer 
-    id="media-viewer" 
-    *ngIf="openedMediaEvent"
-    [openedMediaEvent]="openedMediaEvent" (closeSubject)="closeMedia()"></app-media-viewer>
-
-<app-left-side-bar>
-</app-left-side-bar>
-
-<!--<app-streams-main-display>
-</app-streams-main-display>-->
-
-<div id="display-zone">
-    <app-tutorial id="tutorial" *ngIf="tutorialActive"></app-tutorial>
-    <app-floating-column id="floating-column" *ngIf="floatingColumnActive"></app-floating-column>
-    <app-notification-hub></app-notification-hub>
-    <router-outlet></router-outlet>     
+<div class="drag-and-drop" *ngIf="drag" (dragleave)="dragleave($event)" (dragover)="dragover($event)"  (drop)="drop($event)"
+    [ngClass]="{'drag-and-drop__on-drag': drag2 === true }">
+    <div class="drag-and-drop__card">
+        <div class="drag-and-drop__border">
+            <div class="drag-and-drop__label">
+                Drag & drop to upload
+            </div>
+        </div>
+    </div>
 </div>
 
-<app-streams-selection-footer>
-</app-streams-selection-footer>
+<app-media-viewer id="media-viewer" *ngIf="openedMediaEvent" [openedMediaEvent]="openedMediaEvent"
+    (closeSubject)="closeMedia()" (dragenter)="dragenter($event)"></app-media-viewer>
+
+<div class="app" (dragenter)="dragenter($event)">
+    <app-left-side-bar>
+    </app-left-side-bar>
+
+    <!--<app-streams-main-display>
+</app-streams-main-display>-->
+
+    <div id="display-zone">
+        <app-tutorial id="tutorial" *ngIf="tutorialActive"></app-tutorial>
+        <app-floating-column id="floating-column" *ngIf="floatingColumnActive"></app-floating-column>
+        <app-notification-hub></app-notification-hub>
+        <router-outlet></router-outlet>
+    </div>
+
+    <app-streams-selection-footer>
+    </app-streams-selection-footer>
+</div>
 
 <!--<div style="text-align:center">
   <h1>

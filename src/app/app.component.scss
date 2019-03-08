@@ -1,3 +1,5 @@
+@import"variables";
+
 #display-zone {
     position: absolute;
     top: 0;
@@ -18,7 +20,7 @@
 
 #tutorial {
     position: relative;
-    top: 0; 
+    top: 0;
     left: 0;
     bottom: 0;
     z-index: 1;
@@ -30,7 +32,63 @@
     right: 0;
     left: 0;
     bottom: 0;
+    z-index: 9999999;
+}
+
+.app {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.drag-and-drop {    
+    transition: all .2s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 99999999;
+    background: rgba(black, .8);
+    // opacity: 0.2;
+    &__on-drag {
+        opacity: 1;
+        // background: rgba(black, .7);
+    }
+    &__card {
+        background: $font-link-primary;
+        background: $column-color;
+        max-width: 300px;
+
+        $card-height: 200px;
+        height: $card-height;        
+        position: relative;
+        top: calc(50% - #{$card-height}/2);
+        margin: auto;
+        padding: 10px;
+
+        border-radius: 5px;
+        // transform: perspective(1px) translateY(-50%);
+
+        // margin-top: calc(50%);
+        // transform: translateY(50px);
+    }
+    &__border {
+        border: 3px black dashed;
+        // margin: 50px 50px 0 50px;
+        height: calc(100%);
+    }
+    &__label {
+        font-size: 17px;
+        // font-weight: 400;
+        text-align: center;
+        height: 100px;
+        margin: auto;
+        padding-top: 70px;
+
+    }
 }
 
 app-streams-selection-footer {
