@@ -1,0 +1,8 @@
+<div *ngFor="let m of media" class="media">
+    <div *ngIf="m.attachment === null" class="media__loading">
+        uploading {{ m.file.name }}
+    </div>
+    <div *ngIf="m.attachment !== null" class="media__loaded">
+        <img class="media__preview" src="{{m.attachment.preview_url}}" />
+    </div>
+</div>
