@@ -6,6 +6,8 @@ import { Select } from '@ngxs/store';
 import { NavigationService, LeftPanelType } from './services/navigation.service';
 import { StreamElement } from './states/streams.state';
 import { OpenMediaEvent } from './models/common.model';
+import { ToolsService } from './services/tools.service';
+import { MediaService } from './services/media.service';
 
 @Component({
     selector: 'app-root',
@@ -25,7 +27,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
-    constructor(private readonly navigationService: NavigationService) {
+    constructor(
+        private readonly toolsService: ToolsService,
+        private readonly mediaService: MediaService,
+        private readonly navigationService: NavigationService) {
     }
 
     ngOnInit(): void {
@@ -65,37 +70,32 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     drag: boolean;
-    drag2: boolean;
-    private dragCounter: number = 0;
-
+    // drag2: boolean;
     dragenter(event): boolean {
         event.stopPropagation();
-        event.preventDefault();        
+        event.preventDefault();
         this.drag = true;
         return false;
     }
     dragleave(event): boolean {
         event.stopPropagation();
-        event.preventDefault();        
+        event.preventDefault();
         this.drag = false;
         return false;
     }
-    dragover(event): boolean{
+    dragover(event): boolean {
         event.stopPropagation();
         event.preventDefault();
         return false;
     }
-    drop(event): boolean {
+    drop(event): boolean {     
         event.stopPropagation();
-        event.preventDefault();        
-        
-        let files = event.dataTransfer.files;
-        for(let file of files){
-            console.warn(file.name);
-            console.warn(file);
-        };
-
+        event.preventDefault();
         this.drag = false;
+
+        let files = <File[]>event.dataTransfer.files;
+        const selectedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.mediaService.uploadMedia(files, selectedAccount);
         return false;
     }
 }
