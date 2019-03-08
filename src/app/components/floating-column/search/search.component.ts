@@ -47,11 +47,11 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    browseThread(openThreadEvent: OpenThreadEvent): boolean{
-        if(openThreadEvent){
+    browseThread(openThreadEvent: OpenThreadEvent): boolean {
+        if (openThreadEvent) {
             this.browseThreadEvent.next(openThreadEvent);
         }
-        return false;        
+        return false;
     }
 
     browseAccount(accountName: string): boolean {
@@ -68,26 +68,25 @@ export class SearchComponent implements OnInit {
         this.hashtags.length = 0;
         this.isLoading = true;
 
-        const enabledAccounts = this.toolsService.getSelectedAccounts();
-        //First candid implementation
-        if (enabledAccounts.length > 0) {
-            this.lastAccountUsed = enabledAccounts[0];
-            this.mastodonService.search(this.lastAccountUsed, data, true)
-                .then((results: Results) => {
-                    if (results) {
-                        this.accounts = results.accounts.slice(0, 5);
-                        this.hashtags = results.hashtags;
+        this.lastAccountUsed = this.toolsService.getSelectedAccounts()[0];
 
-                        for (let status of results.statuses) {
-                            const statusWrapper = new StatusWrapper(status, this.lastAccountUsed);
-                            this.statuses.push(statusWrapper);
-                        }
+        this.mastodonService.search(this.lastAccountUsed, data, true)
+            .then((results: Results) => {
+                if (results) {
+                    this.accounts = results.accounts.slice(0, 5);
+                    this.hashtags = results.hashtags;
+
+                    for (let status of results.statuses) {
+                        const statusWrapper = new StatusWrapper(status, this.lastAccountUsed);
+                        this.statuses.push(statusWrapper);
                     }
-                })
-                .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
-                })
-                .then(() => { this.isLoading = false; });
-        }
+                }
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => { this.isLoading = false; });
     }
+
+    private 
 }
