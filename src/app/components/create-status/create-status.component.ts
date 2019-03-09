@@ -95,11 +95,16 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private countStatusChar(status: string){
-        // const maxLength = 500;
-        const statusLength = status.length;
-        const mod = statusLength % this.maxCharLength;
-        this.charCountLeft = this.maxCharLength - mod;
-        this.postCounts = Math.trunc(statusLength/this.maxCharLength) + 1;
+        const parseStatus = this.parseStatus(status);
+        const currentStatus = parseStatus[parseStatus.length - 1];
+
+        const statusLength = currentStatus.length;
+        this.charCountLeft = this.maxCharLength - statusLength;
+        this.postCounts = parseStatus.length;
+
+        // const mod = statusLength % this.maxCharLength;
+        // this.charCountLeft = this.maxCharLength - mod;
+        // this.postCounts = Math.trunc(statusLength/this.maxCharLength) + 1;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
