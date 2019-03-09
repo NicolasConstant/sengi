@@ -17,6 +17,7 @@ export class ThreadComponent implements OnInit {
     statuses: StatusWrapper[] = [];
     displayError: string;
     isLoading = true; 
+    isThread = true;
 
     private lastThreadEvent: OpenThreadEvent;
 

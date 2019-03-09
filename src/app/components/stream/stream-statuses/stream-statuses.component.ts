@@ -19,6 +19,7 @@ import { StatusWrapper } from '../../../models/common.model';
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
     isLoading = true; 
+    isThread = false;
     displayError: string;
 
     private _streamElement: StreamElement;

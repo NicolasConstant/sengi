@@ -25,6 +25,8 @@ export class StatusComponent implements OnInit {
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
     @ViewChild('appActionBar') appActionBar: ActionBarComponent;
 
+    @Input() isThreadDisplay: boolean;
+
     private _statusWrapper: StatusWrapper;
     status: Status;
     @Input('statusWrapper')
@@ -89,6 +91,8 @@ export class StatusComponent implements OnInit {
                 }
             }
         }
+
+        if(this.isThreadDisplay) return;
 
         if (status.in_reply_to_account_id && status.in_reply_to_account_id === status.account.id) {
             this.isThread = true;
