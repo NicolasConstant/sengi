@@ -122,6 +122,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         return globalUniqueMentions;
     }
+    
+    onCtrlEnter(): boolean {
+        this.onSubmit();
+        return false;
+    }
 
     onSubmit(): boolean {
         if (this.isSending) return false;
@@ -144,11 +149,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 break;
         }
 
-        let spoiler = this.title;
-
-
         const acc = this.toolsService.getSelectedAccounts()[0];
-
         let usableStatus: Promise<Status>;
         if (this.statusReplyingToWrapper) {
             usableStatus = this.toolsService.getStatusUsableByAccount(acc, this.statusReplyingToWrapper);
@@ -162,7 +163,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 if (status) {
                     inReplyToId = status.id;
                 }
-                return this.mastodonService.postNewStatus(acc, this.status, visibility, spoiler, inReplyToId);
+                return this.mastodonService.postNewStatus(acc, this.status, visibility, this.title, inReplyToId);
             })
             .then((res: Status) => {
                 this.title = '';
@@ -179,13 +180,20 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    // private getRegisteredAccounts(): AccountInfo[] {
-    //     var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-    //     return regAccounts;
+    // private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, inReplyToId: string): Promise {
+    //     let parsedStatus = 
     // }
 
-    onCtrlEnter(): boolean {
-        this.onSubmit();
-        return false;
+    private parseStatus(status: string): string[] {
+        let trucatedStatus = `${status}`;
+        let results = [];
+        const maxChars = this.maxCharLength - 6;
+        while(trucatedStatus.length > this.maxCharLength){
+            const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
+            results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
+            trucatedStatus = trucatedStatus.substr(nextIndex + 1);
+        }
+        results.push(trucatedStatus);
+        return results;
     }
 }
