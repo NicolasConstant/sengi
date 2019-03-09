@@ -101,10 +101,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const statusLength = currentStatus.length;
         this.charCountLeft = this.maxCharLength - statusLength;
         this.postCounts = parseStatus.length;
-
-        // const mod = statusLength % this.maxCharLength;
-        // this.charCountLeft = this.maxCharLength - mod;
-        // this.postCounts = Math.trunc(statusLength/this.maxCharLength) + 1;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
@@ -164,11 +160,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         usableStatus
             .then((status: Status) => {
-                let inReplyToId = null;
-                if (status) {
-                    inReplyToId = status.id;
-                }
-                return this.mastodonService.postNewStatus(acc, this.status, visibility, this.title, inReplyToId);
+                return this.sendStatus(acc, this.status, visibility, this.title, status);                     
             })
             .then((res: Status) => {
                 this.title = '';
@@ -185,9 +177,22 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    // private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, inReplyToId: string): Promise {
-    //     let parsedStatus = 
-    // }
+    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status): Promise<Status> {
+        let parsedStatus = this.parseStatus(status);
+        let resultPromise = Promise.resolve(previousStatus);
+
+        for(let s of parsedStatus){
+            resultPromise = resultPromise.then((pStatus: Status) => {
+                let inReplyToId = null;
+                if (pStatus) {
+                    inReplyToId = pStatus.id;
+                }
+                return this.mastodonService.postNewStatus(account, s, visibility, this.title, inReplyToId); 
+            });
+        }
+
+        return resultPromise;
+    }
 
     private parseStatus(status: string): string[] {
         let trucatedStatus = `${status}`;
