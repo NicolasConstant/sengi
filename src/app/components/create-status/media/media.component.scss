@@ -35,9 +35,7 @@
             opacity: 100;
         }
 
-        &--button {
-            display: block;
-            border:1px solid red;
+        &--button {           
             @include clearButton;
             width: 10px;
             height: 10px;
@@ -45,6 +43,15 @@
             top:5px;
             right:7px;
             color: white;
+        }
+
+        &--description {
+            position: absolute;
+            bottom:5px;
+            left: 5px;
+            width: calc(100% - 10px);
+            // background: black;
+            // color: white;
         }
 
         &--preview {

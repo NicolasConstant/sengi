@@ -7,7 +7,7 @@
             <button class="media__loaded--button" title="remove" (click)="removeMedia(m)">
                 <fa-icon [icon]="faTimes"></fa-icon> 
             </button>
-            <!-- <input></input> -->
+            <input class="media__loaded--description" autocomplete="off" placeholder="Describe for the visually impaired"/>
         </div>
         <img class="media__loaded--preview" src="{{m.attachment.preview_url}}" />
     </div>
