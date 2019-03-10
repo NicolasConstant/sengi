@@ -166,7 +166,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .then((status: Status) => {
                 return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
-            .then((res: Status) => {
+            .then((res: Status) => {                
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
@@ -194,7 +194,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 }
 
                 if(i === 0){
-                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id)); 
+                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
+                        .then((status:Status) => {
+                            this.mediaService.clearMedia();
+                            return status;
+                        }); 
                 } else {
                     return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []); 
                 }
