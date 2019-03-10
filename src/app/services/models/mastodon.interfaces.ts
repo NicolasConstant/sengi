@@ -61,6 +61,8 @@ export interface Attachment {
     remote_url: string;
     preview_url: string;
     text_url: string;
+    meta: any;
+    description: string;
 }
 
 export interface Card {

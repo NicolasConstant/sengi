@@ -110,7 +110,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         let files = <File[]>event.dataTransfer.files;
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
-        this.mediaService.uploadMedia(files, selectedAccount);
+        this.mediaService.uploadMedia(selectedAccount, files);
         return false;
     }
 }

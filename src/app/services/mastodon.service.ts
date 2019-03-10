@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {   
+export class MastodonService {
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
 
-    getInstance(instance: string): Promise<Instance>{
-        const route =  `https://${instance}${this.apiRoutes.getInstance}`;
+    getInstance(instance: string): Promise<Instance> {
+        const route = `https://${instance}${this.apiRoutes.getInstance}`;
         return this.httpClient.get<Instance>(route).toPromise();
     }
 
@@ -114,25 +114,25 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, formData, { headers: headers }).toPromise();
     }
 
-    search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results>{
-        if(query[0] === '#') query = query.substr(1);
+    search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results> {
+        if (query[0] === '#') query = query.substr(1);
         const route = `https://${account.instance}${this.apiRoutes.search}?q=${query}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
     }
 
-    getAccountStatuses(account: AccountInfo, targetAccountId: number, onlyMedia: boolean, onlyPinned: boolean, excludeReplies: boolean, maxId: string, sinceId: string, limit: number = 20): Promise<Status[]>{
+    getAccountStatuses(account: AccountInfo, targetAccountId: number, onlyMedia: boolean, onlyPinned: boolean, excludeReplies: boolean, maxId: string, sinceId: string, limit: number = 20): Promise<Status[]> {
         const route = `https://${account.instance}${this.apiRoutes.getAccountStatuses}`.replace('{0}', targetAccountId.toString());
         let params = `?only_media=${onlyMedia}&pinned=${onlyPinned}&exclude_replies=${excludeReplies}&limit=${limit}`;
 
-        if(maxId) params += `&max_id=${maxId}`;
-        if(sinceId) params += `&since_id=${sinceId}`;
+        if (maxId) params += `&max_id=${maxId}`;
+        if (sinceId) params += `&since_id=${sinceId}`;
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.get<Status[]>(route+params, { headers: headers }).toPromise();
+        return this.httpClient.get<Status[]>(route + params, { headers: headers }).toPromise();
     }
 
-    getStatusContext(account: AccountInfo, targetStatusId: string): Promise<Context>{
+    getStatusContext(account: AccountInfo, targetStatusId: string): Promise<Context> {
         const params = this.apiRoutes.getStatusContext.replace('{0}', targetStatusId);
         const route = `https://${account.instance}${params}`;
 
@@ -140,7 +140,7 @@ export class MastodonService {
         return this.httpClient.get<Context>(route, { headers: headers }).toPromise();
     }
 
-    searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]>{
+    searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]> {
         const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Account[]>(route, { headers: headers }).toPromise()
@@ -152,7 +152,7 @@ export class MastodonService {
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
 
-    unreblog(account: AccountInfo, status: Status): Promise<Status>  {
+    unreblog(account: AccountInfo, status: Status): Promise<Status> {
         const route = `https://${account.instance}${this.apiRoutes.unreblogStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
@@ -163,7 +163,7 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
-    
+
     unfavorite(account: AccountInfo, status: Status): any {
         const route = `https://${account.instance}${this.apiRoutes.unfavouritingStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
@@ -173,7 +173,7 @@ export class MastodonService {
     getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
         let params = "?";
         accountsToRetrieve.forEach(x => {
-            if(params.includes('id')) params += '&';
+            if (params.includes('id')) params += '&';
             params += `id[]=${x.id}`;
         });
 
@@ -182,11 +182,11 @@ export class MastodonService {
         return this.httpClient.get<Relationship[]>(route, { headers: headers }).toPromise();
     }
 
-    follow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship>  {
+    follow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
         const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
-    }  
+    }
 
     unfollow(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
         const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.unfollow}`.replace('{0}', account.id.toString());
@@ -194,7 +194,23 @@ export class MastodonService {
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
 
     }
-    
+
+    uploadMediaAttachment(account: AccountInfo, file: File): Promise<Attachment> {
+        let input = new FormData();
+        input.append('file', file);
+        const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Attachment>(route, input, { headers: headers }).toPromise();
+    }
+
+    //TODO: add focus support
+    updateMediaAttachment(account: AccountInfo, mediaId: string, description: string): Promise<Attachment>  {
+        let input = new FormData();
+        input.append('description', description);
+        const route = `https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', mediaId)}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
+    }
 }
 
 export enum VisibilityEnum {
