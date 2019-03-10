@@ -4,12 +4,13 @@ import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
-import { Status } from '../../services/models/mastodon.interfaces';
+import { Status, Attachment } from '../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
+import { MediaService } from '../../services/media.service';
 
 
 @Component({
@@ -52,7 +53,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
-        private readonly instancesInfoService: InstancesInfoService) { 
+        private readonly instancesInfoService: InstancesInfoService,
+        private readonly mediaService: MediaService) { 
             this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
         }
 
@@ -150,6 +152,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 break;
         }
 
+        const mediaAttachments = this.mediaService.mediaSubject.value.map(x => x.attachment);
+
         const acc = this.toolsService.getSelectedAccounts()[0];
         let usableStatus: Promise<Status>;
         if (this.statusReplyingToWrapper) {
@@ -160,7 +164,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         usableStatus
             .then((status: Status) => {
-                return this.sendStatus(acc, this.status, visibility, this.title, status);                     
+                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
             .then((res: Status) => {
                 this.title = '';
@@ -177,17 +181,23 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status): Promise<Status> {
+    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[]): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
 
-        for(let s of parsedStatus){
+        for(let i = 0; i < parsedStatus.length; i++){
+            let s = parsedStatus[i];
             resultPromise = resultPromise.then((pStatus: Status) => {
                 let inReplyToId = null;
                 if (pStatus) {
                     inReplyToId = pStatus.id;
                 }
-                return this.mastodonService.postNewStatus(account, s, visibility, this.title, inReplyToId); 
+
+                if(i === 0){
+                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id)); 
+                } else {
+                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []); 
+                }
             });
         }
 

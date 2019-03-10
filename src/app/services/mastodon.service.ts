@@ -72,46 +72,40 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[]): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
-        const formData = new FormData();
-
-        formData.append('status', status);
-
-        // formData.append('media_ids', media_ids);
-        // formData.append('language', '');
+        const statusData = new StatusData();
+        statusData.status = status;
+        statusData.media_ids = mediaIds;
 
         if (in_reply_to_id) {
-            formData.append('in_reply_to_id', in_reply_to_id);
+            statusData.in_reply_to_id = in_reply_to_id;
         }
-
         if (spoiler) {
-            formData.append('sensitive', 'true');
-            formData.append('spoiler_text', spoiler);
+            statusData.sensitive = true;
+            statusData.spoiler_text = spoiler;
         }
-
         switch (visibility) {
             case VisibilityEnum.Public:
-                formData.append('visibility', 'public');
+                statusData.visibility = 'public';
                 break;
             case VisibilityEnum.Unlisted:
-                formData.append('visibility', 'unlisted');
+                statusData.visibility = 'unlisted';
                 break;
             case VisibilityEnum.Private:
-                formData.append('visibility', 'private');
+                statusData.visibility = 'private';
                 break;
             case VisibilityEnum.Direct:
-                formData.append('visibility', 'direct');
+                statusData.visibility = 'direct';
                 break;
             default:
-                formData.append('visibility', 'private');
+                statusData.visibility = 'private';
                 break;
         }
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-
-        return this.httpClient.post<Status>(url, formData, { headers: headers }).toPromise();
+        return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
     search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results> {
@@ -170,12 +164,15 @@ export class MastodonService {
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
 
+    
+
     getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
-        let params = "?";
-        accountsToRetrieve.forEach(x => {
-            if (params.includes('id')) params += '&';
-            params += `id[]=${x.id}`;
-        });
+        let params = `?${this.formatArray(accountsToRetrieve.map(x => x.id.toString()), 'id')}`;
+
+        // accountsToRetrieve.forEach(x => {
+        //     if (params.includes('id')) params += '&';
+        //     params += `id[]=${x.id}`;
+        // });
 
         const route = `https://${account.instance}${this.apiRoutes.getAccountRelationships}${params}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
@@ -211,6 +208,15 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
     }
+
+    private formatArray(data: string[], paramName: string): string {
+        let result = '';
+        data.forEach(x => {
+            if (result.includes('paramName')) result += '&';
+            result += `${paramName}[]=${x}`;
+        });
+        return result;
+    }
 }
 
 export enum VisibilityEnum {
@@ -219,4 +225,13 @@ export enum VisibilityEnum {
     Unlisted = 2,
     Private = 3,
     Direct = 4
+}
+
+class StatusData {
+    status: string;
+    media_ids: string[];
+    in_reply_to_id: string;
+    sensitive: boolean;
+    spoiler_text: string;
+    visibility: string;
 }
