@@ -186,8 +186,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private getSelectedAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-        return regAccounts;
-    }
+    // private getSelectedAccounts(): AccountInfo[] {
+    //     var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+    //     return regAccounts;
+    // }
 }

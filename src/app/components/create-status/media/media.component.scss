@@ -18,6 +18,7 @@
         height: 75px;
         border: 1px solid $status-secondary-color;
         position: relative;
+        transition: all .2s;
 
         &--hover {
             position: absolute;
@@ -26,9 +27,19 @@
             left:0;
             right:0;
             z-index: 10;
-            transition: all .2s;
             opacity: 0;
             background: rgba(black, .5); 
+        }
+
+        &--migrating{
+            position: absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            z-index: 20;
+            opacity: 100;
+            background: rgba(black, .7); 
         }
         
         &:hover &--hover {

@@ -46,7 +46,7 @@ export class MediaService {
             });
     }
 
-    update(account: AccountInfo, media: MediaWrapper): any {
+    update(account: AccountInfo, media: MediaWrapper) {
         if (media.attachment.description === media.description) return;
 
         this.mastodonService.updateMediaAttachment(account, media.attachment.id, media.description)
@@ -61,7 +61,7 @@ export class MediaService {
             });
     }
 
-    remove(media: MediaWrapper): any {
+    remove(media: MediaWrapper) {
         let medias = this.mediaSubject.value;
         let filteredMedias = medias.filter(x => x.id !== media.id);
         this.mediaSubject.next(filteredMedias);
@@ -71,7 +71,30 @@ export class MediaService {
         this.mediaSubject.next([]);
     }
 
-    // migrate
+    migrateMedias(account: AccountInfo) {
+        let medias = this.mediaSubject.value;
+        medias.forEach(media => {
+            media.isMigrating = true;
+        });
+        this.mediaSubject.next(medias);
+
+        for (let media of medias) {
+            this.mastodonService.uploadMediaAttachment(account, media.file)
+                .then((attachment: Attachment) => {
+                    let currentMedias = this.mediaSubject.value;
+                    let currentMedia = currentMedias.filter(x => x.id === media.id)[0];
+                    if (currentMedia) {
+                        currentMedia.attachment = attachment;
+                        currentMedia.isMigrating = false;
+                        this.mediaSubject.next(currentMedias);
+                    }
+                })
+                .catch((err) => {
+                    this.remove(media);
+                    this.notificationService.notifyHttpError(err);
+                });
+        }
+    }
 }
 
 export class MediaWrapper {
