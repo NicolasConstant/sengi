@@ -31,7 +31,7 @@ export class MediaService {
         medias.push(wrapper);
         this.mediaSubject.next(medias);
 
-        this.mastodonService.uploadMediaAttachment(account, file)
+        this.mastodonService.uploadMediaAttachment(account, file, null)
             .then((attachment: Attachment) => {
                 let currentMedias = this.mediaSubject.value;
                 let currentMedia = currentMedias.filter(x => x.id === uniqueId)[0];
@@ -79,7 +79,7 @@ export class MediaService {
         this.mediaSubject.next(medias);
 
         for (let media of medias) {
-            this.mastodonService.uploadMediaAttachment(account, media.file)
+            this.mastodonService.uploadMediaAttachment(account, media.file, media.description)
                 .then((attachment: Attachment) => {
                     let currentMedias = this.mediaSubject.value;
                     let currentMedia = currentMedias.filter(x => x.id === media.id)[0];

@@ -192,9 +192,10 @@ export class MastodonService {
 
     }
 
-    uploadMediaAttachment(account: AccountInfo, file: File): Promise<Attachment> {
+    uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
         let input = new FormData();
         input.append('file', file);
+        input.append('description', description);
         const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Attachment>(route, input, { headers: headers }).toPromise();
