@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { MediaService, MediaWrapper } from '../../../services/media.service';
 import { Subscription } from 'rxjs';
@@ -9,6 +10,7 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./media.component.scss']
 })
 export class MediaComponent implements OnInit, OnDestroy {
+    faTimes = faTimes;
     media: MediaWrapper[] = [];
     private mediaSub: Subscription;
 
@@ -22,5 +24,12 @@ export class MediaComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.mediaSub.unsubscribe();
+    }
+
+    removeMedia(media: MediaWrapper): boolean{
+        console.warn('delete');
+        console.warn(media);
+
+        return false;
     }
 }

@@ -1,4 +1,6 @@
 @import "variables";
+@import "commons";
+@import "mixins";
 
 .media {
     width: calc(100%);
@@ -7,18 +9,54 @@
     &__loading{
         width: calc(100%);
         border: 1px solid $status-secondary-color;
-        background: rgb(0, 96, 134);
+        // background: rgb(0, 96, 134);
         overflow: hidden;
-        padding: 5px;
+        padding: 0;
     }
     &__loaded{
         width: calc(100%);
+        height: 75px;
         border: 1px solid $status-secondary-color;
+        position: relative;
+
+        &--hover {
+            position: absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            z-index: 10;
+            transition: all .2s;
+            opacity: 0;
+            background: rgba(black, .5); 
+        }
+        
+        &:hover &--hover {
+            opacity: 100;
+        }
+
+        &--button {
+            display: block;
+            border:1px solid red;
+            @include clearButton;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            top:5px;
+            right:7px;
+            color: white;
+        }
+
+        &--preview {
+            // display: block;
+
+            width: calc(100%);
+            height: calc(100%);
+         
+            object-fit: cover;
+            object-position: 50% 50%;    
+        }
+
     }
-    &__preview {
-        width: calc(100%);
-        height: 150px;
-        object-fit: cover;
-        object-position: 50% 50%;
-    }
+   
 }

@@ -1,8 +1,14 @@
 <div *ngFor="let m of media" class="media">
-    <div *ngIf="m.attachment === null" class="media__loading">
-        uploading {{ m.file.name }}
+    <div *ngIf="m.attachment === null" class="media__loading" title="{{m.file.name}}">
+        <app-waiting-animation class="waiting-icon status-form__sending--waiting"></app-waiting-animation>
     </div>
-    <div *ngIf="m.attachment !== null" class="media__loaded">
-        <img class="media__preview" src="{{m.attachment.preview_url}}" />
+    <div *ngIf="m.attachment !== null" class="media__loaded" title="{{m.file.name}}">
+        <div class="media__loaded--hover">
+            <button class="media__loaded--button" title="remove" (click)="removeMedia(m)">
+                <fa-icon [icon]="faTimes"></fa-icon> 
+            </button>
+            <!-- <input></input> -->
+        </div>
+        <img class="media__loaded--preview" src="{{m.attachment.preview_url}}" />
     </div>
 </div>
