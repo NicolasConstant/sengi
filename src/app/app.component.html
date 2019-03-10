@@ -1,5 +1,6 @@
-<div class="drag-and-drop" *ngIf="drag" (dragleave)="dragleave($event)" (dragover)="dragover($event)"  (drop)="drop($event)"
+<div class="drag-and-drop" *ngIf="drag" (dragover)="dragover($event)"  (drop)="drop($event)"
     [ngClass]="{'drag-and-drop__on-drag': drag2 === true }">
+    <!-- (dragleave)="dragleave($event)"  -->
     <div class="drag-and-drop__card">
         <div class="drag-and-drop__border">
             <div class="drag-and-drop__label">

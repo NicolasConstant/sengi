@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, Subject } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 // import { ElectronService } from 'ngx-electron';
 
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private columnEditorSub: Subscription;
     private openMediaSub: Subscription;
     private streamSub: Subscription;
+    private dragoverSub: Subscription;
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
@@ -57,20 +59,31 @@ export class AppComponent implements OnInit, OnDestroy {
 
             }
         });
+
+
+        this.dragoverSub = this.dragoverSubject
+            .pipe(
+                debounceTime(150)
+            )
+            .subscribe(() => {
+                console.warn('disable drag');
+                this.drag = false;
+            })
     }
 
     ngOnDestroy(): void {
         this.streamSub.unsubscribe();
         this.columnEditorSub.unsubscribe();
         this.openMediaSub.unsubscribe();
+        this.dragoverSub.unsubscribe();
     }
 
     closeMedia() {
         this.openedMediaEvent = null;
     }
 
+    private dragoverSubject = new Subject<boolean>();
     drag: boolean;
-    // drag2: boolean;
     dragenter(event): boolean {
         event.stopPropagation();
         event.preventDefault();
@@ -84,11 +97,13 @@ export class AppComponent implements OnInit, OnDestroy {
         return false;
     }
     dragover(event): boolean {
+        // console.warn('dragover');
         event.stopPropagation();
         event.preventDefault();
+        this.dragoverSubject.next(true);
         return false;
     }
-    drop(event): boolean {     
+    drop(event): boolean {
         event.stopPropagation();
         event.preventDefault();
         this.drag = false;
