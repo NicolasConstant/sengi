@@ -34,6 +34,14 @@ export interface Account {
     moved: boolean;
     fields: Field[];
     bot: boolean;
+    source: AccountInfo;
+}
+
+export interface AccountInfo {
+    privacy: string;
+    sensitive: boolean;
+    note: string;
+    fields: Field[];
 }
 
 export interface Emoji {

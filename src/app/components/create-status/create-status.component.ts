@@ -22,9 +22,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     title: string;
 
     private _status: string = '';
-    set status(value: string){        
+    set status(value: string) {
         this.countStatusChar(value);
-        this._status = value;        
+        this._status = value;
     }
     get status(): string {
         return this._status;
@@ -54,9 +54,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
         private readonly instancesInfoService: InstancesInfoService,
-        private readonly mediaService: MediaService) { 
-            this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
-        }
+        private readonly mediaService: MediaService) {
+        this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+    }
 
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
@@ -83,7 +83,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }, 0);
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
         this.accountSub.unsubscribe();
     }
 
@@ -93,10 +93,34 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .then((maxChars: number) => {
                 this.maxCharLength = maxChars;
                 this.countStatusChar(this.status);
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            });
+
+        this.instancesInfoService.getDefaultPrivacy(selectedAccount)
+            .then((defaultPrivacy: VisibilityEnum) => {
+                switch (defaultPrivacy) {
+                    case VisibilityEnum.Public:
+                        this.selectedPrivacy = 'Public';
+                        break;
+                    case VisibilityEnum.Unlisted:
+                        this.selectedPrivacy = 'Unlisted';
+                        break;
+                    case VisibilityEnum.Private:
+                        this.selectedPrivacy = 'Follows-only';
+                        break;
+                    case VisibilityEnum.Direct:
+                        this.selectedPrivacy = 'DM';
+                        break;
+                }
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
             });
     }
 
-    private countStatusChar(status: string){
+    private countStatusChar(status: string) {
         const parseStatus = this.parseStatus(status);
         const currentStatus = parseStatus[parseStatus.length - 1];
 
@@ -125,7 +149,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         return globalUniqueMentions;
     }
-    
+
     onCtrlEnter(): boolean {
         this.onSubmit();
         return false;
@@ -166,7 +190,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .then((status: Status) => {
                 return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
-            .then((res: Status) => {                
+            .then((res: Status) => {
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
@@ -185,7 +209,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
 
-        for(let i = 0; i < parsedStatus.length; i++){
+        for (let i = 0; i < parsedStatus.length; i++) {
             let s = parsedStatus[i];
             resultPromise = resultPromise.then((pStatus: Status) => {
                 let inReplyToId = null;
@@ -193,14 +217,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     inReplyToId = pStatus.id;
                 }
 
-                if(i === 0){
+                if (i === 0) {
                     return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
-                        .then((status:Status) => {
+                        .then((status: Status) => {
                             this.mediaService.clearMedia();
                             return status;
-                        }); 
+                        });
                 } else {
-                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []); 
+                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
                 }
             });
         }
@@ -212,7 +236,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let trucatedStatus = `${status}`;
         let results = [];
         const maxChars = this.maxCharLength - 6;
-        while(trucatedStatus.length > this.maxCharLength){
+        while (trucatedStatus.length > this.maxCharLength) {
             const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
             results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
             trucatedStatus = trucatedStatus.substr(nextIndex + 1);
