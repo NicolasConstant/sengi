@@ -88,4 +88,10 @@ $counter-width: 90px;
             width: 12px;
         }
     }
+
+    &__mention-error {
+        border: 2px dashed red;
+        padding: 5px 10px;
+        margin: 5px;
+    }
 }

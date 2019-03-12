@@ -11,6 +11,7 @@ import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
+import { identifierModuleUrl } from '@angular/compiler';
 
 
 @Component({
@@ -122,8 +123,39 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
     }
 
+    mentionTooFarAwayError: boolean;
+
     private countStatusChar(status: string) {
+        this.mentionTooFarAwayError = false;
         const parseStatus = this.parseStatus(status);
+
+        const mentions = this.getMentionsFromStatus(status);
+        if(mentions.length > 0){
+            let containAllMention = true;
+            mentions.forEach(m => {
+                if(!parseStatus[0].includes(m)){
+                    containAllMention = false;
+                }
+            });
+
+            if(!containAllMention){
+                this.mentionTooFarAwayError = true;
+                this.charCountLeft = this.maxCharLength - status.length;
+                this.postCounts = 1;
+                return;
+            }
+
+            // const lastMention = mentions[mentions.length - 1];
+            // const lastMentionPosition = status.lastIndexOf(lastMention);
+            // console.warn(`lastMentionPosition ${lastMentionPosition}`);
+            // if(lastMentionPosition > (this.maxCharLength - lastMention.length * 2 + 10)){
+            //     this.mentionTooFarAwayError = true;
+            //     this.charCountLeft = this.maxCharLength - status.length;
+            //     this.postCounts = 1;
+            //     return;
+            // }
+        }
+
         const currentStatus = parseStatus[parseStatus.length - 1];
         const statusExtraChars = this.getMentionExtraChars(status);
 
@@ -159,7 +191,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     onSubmit(): boolean {
-        if (this.isSending) return false;
+        if (this.isSending || this.mentionTooFarAwayError) return false;
 
         this.isSending = true;
 
