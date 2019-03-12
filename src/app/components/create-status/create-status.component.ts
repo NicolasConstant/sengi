@@ -88,43 +88,46 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private accountChanged(accounts: AccountInfo[]): void {
-        const selectedAccount = accounts.filter(x => x.isSelected)[0];
-        this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
-            .then((maxChars: number) => {
-                this.maxCharLength = maxChars;
-                this.countStatusChar(this.status);
-            })
-            .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
-            });
+        if (accounts && accounts.length > 0) {
+            const selectedAccount = accounts.filter(x => x.isSelected)[0];
+            this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
+                .then((maxChars: number) => {
+                    this.maxCharLength = maxChars;
+                    this.countStatusChar(this.status);
+                })
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
+                });
 
-        this.instancesInfoService.getDefaultPrivacy(selectedAccount)
-            .then((defaultPrivacy: VisibilityEnum) => {
-                switch (defaultPrivacy) {
-                    case VisibilityEnum.Public:
-                        this.selectedPrivacy = 'Public';
-                        break;
-                    case VisibilityEnum.Unlisted:
-                        this.selectedPrivacy = 'Unlisted';
-                        break;
-                    case VisibilityEnum.Private:
-                        this.selectedPrivacy = 'Follows-only';
-                        break;
-                    case VisibilityEnum.Direct:
-                        this.selectedPrivacy = 'DM';
-                        break;
-                }
-            })
-            .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
-            });
+            this.instancesInfoService.getDefaultPrivacy(selectedAccount)
+                .then((defaultPrivacy: VisibilityEnum) => {
+                    switch (defaultPrivacy) {
+                        case VisibilityEnum.Public:
+                            this.selectedPrivacy = 'Public';
+                            break;
+                        case VisibilityEnum.Unlisted:
+                            this.selectedPrivacy = 'Unlisted';
+                            break;
+                        case VisibilityEnum.Private:
+                            this.selectedPrivacy = 'Follows-only';
+                            break;
+                        case VisibilityEnum.Direct:
+                            this.selectedPrivacy = 'DM';
+                            break;
+                    }
+                })
+                .catch((err: HttpErrorResponse) => {
+                    this.notificationService.notifyHttpError(err);
+                });
+        }
     }
 
     private countStatusChar(status: string) {
         const parseStatus = this.parseStatus(status);
         const currentStatus = parseStatus[parseStatus.length - 1];
+        const statusExtraChars = this.getMentionExtraChars(status);
 
-        const statusLength = currentStatus.length;
+        const statusLength = currentStatus.length - statusExtraChars;
         this.charCountLeft = this.maxCharLength - statusLength;
         this.postCounts = parseStatus.length;
     }
@@ -233,15 +236,44 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private parseStatus(status: string): string[] {
+        let mentionExtraChars = this.getMentionExtraChars(status);
         let trucatedStatus = `${status}`;
         let results = [];
-        const maxChars = this.maxCharLength - 6;
-        while (trucatedStatus.length > this.maxCharLength) {
+
+        let aggregateMention = '';
+        let mentions = this.getMentionsFromStatus(status);
+        mentions.forEach(x => {
+            aggregateMention += `${x} `;           
+        });
+
+        const currentMaxCharLength = this.maxCharLength + mentionExtraChars;
+        const maxChars = currentMaxCharLength - 6;
+
+        while (trucatedStatus.length > currentMaxCharLength) {
             const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
             results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
-            trucatedStatus = trucatedStatus.substr(nextIndex + 1);
+            trucatedStatus = aggregateMention + trucatedStatus.substr(nextIndex + 1);
         }
         results.push(trucatedStatus);
         return results;
+    }
+
+    private getMentionExtraChars(status: string): number{
+        let mentionExtraChars = 0;
+        let mentions = this.getMentionsFromStatus(status);
+
+        for (const mention of mentions) {
+            if (mention.lastIndexOf('@') !== 0) {
+                const domain = mention.split('@')[2];
+                if (domain.length > 1) {
+                    mentionExtraChars += (domain.length + 1);
+                }
+            }
+        }
+        return mentionExtraChars;
+    }
+
+    private getMentionsFromStatus(status: string): string[]{
+        return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
     }
 }

@@ -12,7 +12,7 @@ import { StreamsState } from '../../states/streams.state';
 import { NavigationService } from '../../services/navigation.service';
 import { NotificationService } from '../../services/notification.service';
 import { MastodonService } from '../../services/mastodon.service';
-import { restoreView } from '@angular/core/src/render3';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('CreateStatusComponent', () => {
     let component: CreateStatusComponent;
@@ -33,6 +33,7 @@ describe('CreateStatusComponent', () => {
                   ]),                  
            ],
            providers: [NavigationService, NotificationService, MastodonService], 
+           schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
         }).compileComponents();
     }));
 
@@ -93,4 +94,42 @@ describe('CreateStatusComponent', () => {
         expect(result[1].length).toBeLessThanOrEqual(500);
         expect(result[2].length).toBeLessThanOrEqual(500);
     });
+
+    it('should not count domain length when replying', () => {
+        const status = '@Lorem@ipsum.com ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed ante id dolor vulputate pulvinar sit amet a nisl. Duis sagittis nisl sit amet est rhoncus rutrum. Duis aliquet eget erat nec molestie. Fusce bibendum consectetur rhoncus. Aenean vel neque ac diam hendrerit interdum id a nisl. Aenean leo ante, luctus eget erat at, interdum tincidunt turpis. Donec non efficitur magna. Nam placerat convallis tincidunt. Etiam ac scelerisque velit, at vestibulum turpis. In hac habitasse platea dictu';
+        (<any>component).maxCharLength = 500;
+        const result = <string[]>(<any>component).parseStatus(status);
+        expect(result.length).toBe(1);
+    });
+
+    it('should not count domain length when replying', () => {
+        const status = '@Lorem@ipsum.com @1orem@ipsum.com ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed ante id dolor vulputate pulvinar sit amet a nisl. Duis sagittis nisl sit amet est rhoncus rutrum. Duis aliquet eget erat nec molestie. Fusce bibendum consectetur rhoncus. Aenean vel neque ac diam hendrerit interdum id a nisl. Aenean leo ante, luctus eget erat at, interdum tincidunt turpis. Donec non efficitur magna. Nam placerat convallis tincidunt. Etiam ac scelerisque velit, at vestibulum turpis. In hac habitasse plate';
+        (<any>component).maxCharLength = 500;
+        const result = <string[]>(<any>component).parseStatus(status);
+        expect(result.length).toBe(1);
+    });
+
+    it('should add alias in multiposting replies', () => {
+        const status = '@Lorem@ipsum.com ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed ante id dolor vulputate pulvinar sit amet a nisl. Duis sagittis nisl sit amet est rhoncus rutrum. Duis aliquet eget erat nec molestie. Fusce bibendum consectetur rhoncus. Aenean vel neque ac diam hendrerit interdum id a nisl. Aenean leo ante, luctus eget erat at, interdum tincidunt turpis. Donec non efficitur magna. Nam placerat convallis tincidunt. Etiam ac scelerisque velit, at vestibulum turpis. In hac habitasse platea dictu0';
+        (<any>component).maxCharLength = 500;
+        const result = <string[]>(<any>component).parseStatus(status);
+        expect(result.length).toBe(2);
+        expect(result[0].length).toBeLessThanOrEqual(510);
+        expect(result[1].length).toBeLessThanOrEqual(510);
+        expect(result[0]).toContain('@Lorem@ipsum.com ');
+        expect(result[1]).toContain('@Lorem@ipsum.com ');
+    });
+
+    it('should add alias in multiposting replies', () => {
+        const status = '@Lorem@ipsum.com @48756@987586.ipsum.com ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed ante id dolor vulputate pulvinar sit amet a nisl. Duis sagittis nisl sit amet est rhoncus rutrum. Duis aliquet eget erat nec molestie. Fusce bibendum consectetur rhoncus. Aenean vel neque ac diam hendrerit interdum id a nisl. Aenean leo ante, luctus eget erat at, interdum tincidunt turpis. Donec non efficitur magna. Nam placerat convallis tincidunt. Etiam ac scelerisque velit, at vestibulum turpis. In hac habitasse platea dictu0';
+        (<any>component).maxCharLength = 500;
+        const result = <string[]>(<any>component).parseStatus(status);
+        expect(result.length).toBe(2);
+        expect(result[0].length).toBeLessThanOrEqual(527);
+        expect(result[1].length).toBeLessThanOrEqual(527);
+        expect(result[0]).toContain('@Lorem@ipsum.com ');
+        expect(result[1]).toContain('@Lorem@ipsum.com ');
+        console.warn(result);
+    });
+
 });
