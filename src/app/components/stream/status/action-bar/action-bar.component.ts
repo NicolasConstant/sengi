@@ -5,12 +5,12 @@ import { Observable, Subscription } from 'rxjs';
 import { faWindowClose, faReply, faRetweet, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
-import { StatusWrapper } from '../../stream.component';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
+import { StatusWrapper } from '../../../../models/common.model';
 
 @Component({
     selector: 'app-action-bar',
@@ -186,8 +186,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private getSelectedAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-        return regAccounts;
-    }
+    // private getSelectedAccounts(): AccountInfo[] {
+    //     var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+    //     return regAccounts;
+    // }
 }

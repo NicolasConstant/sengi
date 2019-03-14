@@ -17,7 +17,7 @@ export class NotificationHubComponent implements OnInit {
 
             setTimeout(() => {
                 this.notifications = this.notifications.filter(x => x.id !== notification.id);
-            }, 2000);
+            }, 5000);
         });
 
         //this.autoSubmit();       

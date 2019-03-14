@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { NgxElectronModule } from "ngx-electron";
+// import { NgxElectronModule } from "ngx-electron";
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -36,7 +36,6 @@ import { AddNewStatusComponent } from "./components/floating-column/add-new-stat
 import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
 import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 import { WaitingAnimationComponent } from './components/waiting-animation/waiting-animation.component';
-import { ReplyToStatusComponent } from './components/stream/status/reply-to-status/reply-to-status.component';
 import { UserProfileComponent } from './components/stream/user-profile/user-profile.component';
 import { ThreadComponent } from './components/stream/thread/thread.component';
 import { HashtagComponent } from './components/stream/hashtag/hashtag.component';
@@ -49,6 +48,8 @@ import { TutorialComponent } from './components/tutorial/tutorial.component';
 import { NotificationHubComponent } from './components/notification-hub/notification-hub.component';
 import { NotificationService } from "./services/notification.service";
 import { MediaViewerComponent } from './components/media-viewer/media-viewer.component';
+import { CreateStatusComponent } from './components/create-status/create-status.component';
+import { MediaComponent } from './components/create-status/media/media.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -76,7 +77,6 @@ const routes: Routes = [
     SearchComponent,
     ActionBarComponent,
     WaitingAnimationComponent,
-    ReplyToStatusComponent,
     UserProfileComponent,
     ThreadComponent,
     HashtagComponent,
@@ -87,7 +87,9 @@ const routes: Routes = [
     StreamEditionComponent,
     TutorialComponent,
     NotificationHubComponent,
-    MediaViewerComponent
+    MediaViewerComponent,
+    CreateStatusComponent,
+    MediaComponent
   ],
   imports: [
     FontAwesomeModule,
@@ -95,7 +97,6 @@ const routes: Routes = [
     HttpModule,
     HttpClientModule,
     FormsModule,
-    NgxElectronModule,
     RouterModule.forRoot(routes),
 
     NgxsModule.forRoot([

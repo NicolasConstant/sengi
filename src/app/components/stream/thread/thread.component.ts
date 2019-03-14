@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { StatusWrapper } from '../stream.component';
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { Results, Context, Status } from '../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
-import { StreamStatusesComponent } from '../stream-statuses/stream-statuses.component';
+import { StatusWrapper } from '../../../models/common.model';
 
 @Component({
     selector: 'app-thread',
@@ -18,6 +17,7 @@ export class ThreadComponent implements OnInit {
     statuses: StatusWrapper[] = [];
     displayError: string;
     isLoading = true; 
+    isThread = true;
 
     private lastThreadEvent: OpenThreadEvent;
 

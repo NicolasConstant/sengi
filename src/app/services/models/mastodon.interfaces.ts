@@ -34,6 +34,14 @@ export interface Account {
     moved: boolean;
     fields: Field[];
     bot: boolean;
+    source: AccountInfo;
+}
+
+export interface AccountInfo {
+    privacy: string;
+    sensitive: boolean;
+    note: string;
+    fields: Field[];
 }
 
 export interface Emoji {
@@ -61,6 +69,8 @@ export interface Attachment {
     remote_url: string;
     preview_url: string;
     text_url: string;
+    meta: any;
+    description: string;
 }
 
 export interface Card {
@@ -84,6 +94,10 @@ export interface Instance {
     title: string;
     description: string;
     email: string;
+    version: string;
+    urls: string[];
+    contact_account: Account;
+    max_toot_chars: number;
 }
 
 export interface Mention {
@@ -131,7 +145,8 @@ export interface Status {
     reblog: Status;
     content: string;
     created_at: string;
-    reblogs_count: string;
+    reblogs_count: number;
+    replies_count: number;
     favourites_count: string;
     reblogged: boolean;
     favourited: boolean;

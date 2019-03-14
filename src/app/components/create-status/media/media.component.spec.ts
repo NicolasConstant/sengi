@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReplyToStatusComponent } from './reply-to-status.component';
+import { MediaComponent } from './media.component';
 
-xdescribe('ReplyToStatusComponent', () => {
-  let component: ReplyToStatusComponent;
-  let fixture: ComponentFixture<ReplyToStatusComponent>;
+xdescribe('MediaComponent', () => {
+  let component: MediaComponent;
+  let fixture: ComponentFixture<MediaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReplyToStatusComponent ]
+      declarations: [ MediaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReplyToStatusComponent);
+    fixture = TestBed.createComponent(MediaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

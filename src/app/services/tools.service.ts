@@ -4,8 +4,7 @@ import { Store } from '@ngxs/store';
 import { AccountInfo } from '../states/accounts.state';
 import { MastodonService } from './mastodon.service';
 import { Account, Results, Status } from "./models/mastodon.interfaces";
-import { StatusWrapper } from '../components/stream/stream.component';
-
+import { StatusWrapper } from '../models/common.model';
 
 @Injectable({
     providedIn: 'root'

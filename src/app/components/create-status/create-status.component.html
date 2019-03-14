@@ -1,0 +1,28 @@
+<form class="status-form" (ngSubmit)="onSubmit()">
+    <div class="status-form__sending" *ngIf="isSending">
+        <app-waiting-animation class="waiting-icon"></app-waiting-animation>
+    </div>
+
+    <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off"
+        placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
+
+    <textarea #reply [(ngModel)]="status" name="status"
+        class="form-control form-control-sm status-form__status flexcroll" rows="5" required title="content"
+        placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
+
+    <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the
+        start in order to use multiposting.</div>
+
+    <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy"
+        [(ngModel)]="selectedPrivacy">
+        <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
+    </select>
+    <div class="status-form__counter">
+        <span class="status-form__counter--count">{{charCountLeft}}</span> <span
+            class="status-form__counter--posts">{{postCounts - 1}}/{{postCounts}}</span>
+    </div>
+    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="statusReplyingToWrapper">REPLY!</button>
+    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="!statusReplyingToWrapper">POST!</button>
+
+    <app-media></app-media>
+</form>

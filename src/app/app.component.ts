@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, Subject } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 // import { ElectronService } from 'ngx-electron';
 
 import { NavigationService, LeftPanelType } from './services/navigation.service';
 import { StreamElement } from './states/streams.state';
 import { OpenMediaEvent } from './models/common.model';
+import { ToolsService } from './services/tools.service';
+import { MediaService } from './services/media.service';
 
 @Component({
     selector: 'app-root',
@@ -22,10 +25,14 @@ export class AppComponent implements OnInit, OnDestroy {
     private columnEditorSub: Subscription;
     private openMediaSub: Subscription;
     private streamSub: Subscription;
+    private dragoverSub: Subscription;
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
-    constructor(private readonly navigationService: NavigationService) {
+    constructor(
+        private readonly toolsService: ToolsService,
+        private readonly mediaService: MediaService,
+        private readonly navigationService: NavigationService) {
     }
 
     ngOnInit(): void {
@@ -49,20 +56,61 @@ export class AppComponent implements OnInit, OnDestroy {
             if (openedMediaEvent) {
                 this.openedMediaEvent = openedMediaEvent;
                 // this.mediaViewerActive = true;
-                
+
             }
         });
+
+
+        this.dragoverSub = this.dragoverSubject
+            .pipe(
+                debounceTime(150)
+            )
+            .subscribe(() => {
+                console.warn('disable drag');
+                this.drag = false;
+            })
     }
 
     ngOnDestroy(): void {
         this.streamSub.unsubscribe();
         this.columnEditorSub.unsubscribe();
         this.openMediaSub.unsubscribe();
+        this.dragoverSub.unsubscribe();
     }
 
-    closeMedia(){
-        console.warn('closeMedia()');
+    closeMedia() {
         this.openedMediaEvent = null;
     }
 
+    private dragoverSubject = new Subject<boolean>();
+    drag: boolean;
+    dragenter(event): boolean {
+        event.stopPropagation();
+        event.preventDefault();
+        this.drag = true;
+        return false;
+    }
+    dragleave(event): boolean {
+        event.stopPropagation();
+        event.preventDefault();
+        this.drag = false;
+        return false;
+    }
+    dragover(event): boolean {
+        // console.warn('dragover');
+        event.stopPropagation();
+        event.preventDefault();
+        this.dragoverSubject.next(true);
+        return false;
+    }
+    drop(event): boolean {
+        event.stopPropagation();
+        event.preventDefault();
+        this.drag = false;
+
+        let files = <File[]>event.dataTransfer.files;
+        const selectedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.mediaService.uploadMedia(selectedAccount, files);
+        return false;
+    }
 }

@@ -1,4 +1,4 @@
-[![AppVeyor master](https://img.shields.io/appveyor/ci/NicolasConstant/sengi/master.svg?style=flat-square)](https://ci.appveyor.com/project/NicolasConstant/sengi) [![AppVeyor tests master](https://img.shields.io/appveyor/tests/nicolasconstant/sengi/master.svg?style=flat-square)](https://ci.appveyor.com/project/NicolasConstant/sengi/build/tests) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0)
+![GitHub release](https://img.shields.io/github/release/nicolasconstant/sengi.svg?style=flat-square) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0) [![AppVeyor master](https://img.shields.io/appveyor/ci/NicolasConstant/sengi/master.svg?style=flat-square)](https://ci.appveyor.com/project/NicolasConstant/sengi) [![AppVeyor tests master](https://img.shields.io/appveyor/tests/nicolasconstant/sengi/master.svg?style=flat-square)](https://ci.appveyor.com/project/NicolasConstant/sengi/build/tests) 
  
 ## Introduction
 
@@ -40,9 +40,9 @@ This project is licensed under the AGPLv3 License - see [LICENSE](LICENSE) for d
 
 ## Dependencies 
 
-  * [Angular 6](https://github.com/angular/angular)
+  * [Angular 7](https://github.com/angular/angular)
   * [NGXS](https://github.com/ngxs/store)
   * [SASS](https://github.com/sass/dart-sass)
-  * [Electron](https://github.com/electron/electron)
+  * [Electron 4](https://github.com/electron/electron)
 
 

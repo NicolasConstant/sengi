@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
 import { NavigationService, LeftPanelType } from '../../services/navigation.service';
 import { AccountWrapper } from '../../models/account.models';
 import { OpenThreadEvent } from '../../services/tools.service';
@@ -9,6 +11,7 @@ import { OpenThreadEvent } from '../../services/tools.service';
     styleUrls: ['./floating-column.component.scss']
 })
 export class FloatingColumnComponent implements OnInit {
+    faTimes = faTimes;
     overlayActive: boolean;
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
-import { StatusWrapper } from "../stream.component";
 import { OpenThreadEvent } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
+import { StatusWrapper } from '../../../models/common.model';
 
 @Component({
     selector: "app-status",
@@ -17,12 +17,15 @@ export class StatusComponent implements OnInit {
     isCrossPoster: boolean;
     isThread: boolean;
     isContentWarned: boolean;
+    hasReply: boolean;
     contentWarningText: string;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
     @ViewChild('appActionBar') appActionBar: ActionBarComponent;
+
+    @Input() isThreadDisplay: boolean;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -31,15 +34,15 @@ export class StatusComponent implements OnInit {
         this._statusWrapper = value;
         this.status = value.status;
 
-        this.checkLabels(this.status);
-        this.checkContentWarning(this.status);
-
         if (this.status.reblog) {
             this.reblog = true;
             this.displayedStatus = this.status.reblog;
         } else {
             this.displayedStatus = this.status;
         }
+
+        this.checkLabels(this.displayedStatus);
+        this.checkContentWarning(this.displayedStatus);
 
         if (!this.displayedStatus.account.display_name) {
             this.displayedStatus.account.display_name = this.displayedStatus.account.username;
@@ -71,25 +74,31 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    changeCw(cwIsActive: boolean){
+    changeCw(cwIsActive: boolean) {
         this.isContentWarned = cwIsActive;
     }
 
     private checkLabels(status: Status) {
         //since API is limited with federated status...
-        if (status.uri.includes('birdsite.link')) {
-            this.isCrossPoster = true;
-        }
-        else if (status.application) {
-            const usedApp = status.application.name.toLowerCase();
-            if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
+        if (!status.account.bot) {
+            if (status.uri.includes('birdsite.link')) {
                 this.isCrossPoster = true;
+            }
+            else if (status.application) {
+                const usedApp = status.application.name.toLowerCase();
+                if (usedApp && (usedApp.includes('moa') || usedApp.includes('birdsite') || usedApp.includes('twitter'))) {
+                    this.isCrossPoster = true;
+                }
             }
         }
 
-        if (this.status.in_reply_to_account_id && this.status.in_reply_to_account_id === this.status.account.id) {
+        if(this.isThreadDisplay) return;
+
+        if (status.in_reply_to_account_id && status.in_reply_to_account_id === status.account.id) {
             this.isThread = true;
         }
+
+        this.hasReply = status.replies_count > 0;
     }
 
     openAccount(account: Account): boolean {
