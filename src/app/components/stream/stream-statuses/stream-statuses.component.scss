@@ -1,19 +1,48 @@
 @import "variables";
 @import "commons";
-
+@import "mixins";
 .stream-toots {
     height: calc(100%);
     width: calc(100%);
-
     overflow: auto;
-
     &__error {
         padding: 20px 20px 0 20px;
         color: rgb(255, 113, 113);
     }
-
     &__status:not(:last-child) {
         border: solid #06070b;
         border-width: 0 0 1px 0;
+    }
+    &__remove-cw {       
+        padding: 5px;
+        // border: solid #06070b;
+        // border-width: 0 0 1px 0;
+        height: 45px;
+        // width: calc(100%);
+        // position: relative;
+
+        &--button {
+            @include clearButton;
+            position: absolute;
+            z-index: 10;            
+            padding: 3px;
+            text-align: center;
+            border: 2px $status-secondary-color dashed;
+            width: calc(80%);
+            margin-left: 40%;
+            transform: translateX(-40%);
+            transition: all .2s;
+            background-color: $color-secondary;
+
+            &:hover{
+                $hover-color: rgb(0, 206, 27);                
+                $hover-color: rgb(0, 231, 231);
+                $hover-color: rgb(164, 222, 255);
+                // $hover-color: $status-secondary-color;
+                background-color: $hover-color;
+                color: black;
+                border: 3px $hover-color dashed;
+            }
+        }
     }
 }
