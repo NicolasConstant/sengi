@@ -1,16 +1,20 @@
 <div class="panel">
     <h3 class="panel__title">Manage Account</h3>
 
-    <div class="account-editor__display-avatar">
-        <img class="account-editor__avatar" src="{{account.avatar}}" title="{{ account.info.id }} " />
+    <div class="account__header">
+        <!-- <div class="account__display-avatar"> -->
+        <img class="account__avatar" src="{{account.avatar}}" title="{{ account.info.id }} " />
+        <!-- </div> -->
     </div>
 
-    <h4 class="account__label">add column:</h4>
+    <div class="account__body flexcroll">
 
-    <a class="account__link account__blue" href *ngFor="let stream of availableStreams" (click)="addStream(stream)">
-        {{ stream.name }}
-    </a>
-    <!-- <a class="add-column__link" href>
+        <h4 class="account__label">add column:</h4>
+
+        <a class="account__link account__blue" href *ngFor="let stream of availableStreams" (click)="addStream(stream)">
+            {{ stream.name }}
+        </a>
+        <!-- <a class="add-column__link" href>
     Global Timeline
   </a>
   <a class="add-column__link" href>
@@ -21,8 +25,9 @@
   </a> -->
 
 
-    <h4 class="account__label account__margin-top">remove account from sengi:</h4>
-    <a class="account__link account__red" href (click)="removeAccount()">
-        Delete
-    </a>
+        <h4 class="account__label account__margin-top">remove account from sengi:</h4>
+        <a class="account__link account__red" href (click)="removeAccount()">
+            Delete
+        </a>
+    </div>
 </div>

@@ -1,29 +1,42 @@
 @import "variables";
 @import "panel";
-.account-editor {
-    // padding: 10px 10px 0 7px;
-    // font-size: $small-font-size;
-    // &__title {
-    //     font-size: 13px;
-    //     text-transform: uppercase;
-    //     margin: 6px 0 12px 0;
-    // }
-    &__display-avatar {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    &__avatar {
-        // display: block;
-        width: 75px;
-        border-radius: 50px;
-        transform: translateX(15px); // margin: auto;
-    }
+@import "commons";
+
+$account-header-height: 55px;
+
+.panel {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .account {
+    &__header {
+        // padding-left: 10px;
+        padding-left: 5px;
+        padding-right: 10px;
+        padding-bottom: 5px;
+        height: $account-header-height; //border-top: 1px solid #222736;
+        border-bottom: 1px solid #222736;
+    } // &__display-avatar {
+    //     text-align: center;
+    //     margin-bottom: 30px;
+    // }
+    &__avatar {
+        // display: block;
+        width: 50px;
+        border-radius: 3px; //transform: translateX(15px); // margin: auto;
+    }
+    &__body {
+        overflow: auto;
+        height: calc(100% - #{$account-header-height} - 31px);
+        padding-left: 10px;
+        padding-right: 10px;
+        // outline: 1px solid red;
+    }
     &__label {
         // text-decoration: underline;
         font-size: $small-font-size;
+        margin-top: 10px;
         margin-left: 5px;
         color: $font-color-secondary;
     }
@@ -55,7 +68,6 @@
             background-color: lighten($color-primary, 15);
         }
     }
-
     &__red {
         $red-button-color: rgb(65, 3, 3);
         background-color: $red-button-color;
