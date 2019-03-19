@@ -2,7 +2,7 @@
 @import "panel";
 @import "commons";
 
-$account-header-height: 55px;
+$account-header-height: 60px;
 
 .panel {
     padding-left: 0px;
@@ -17,6 +17,23 @@ $account-header-height: 55px;
         padding-bottom: 5px;
         height: $account-header-height; //border-top: 1px solid #222736;
         border-bottom: 1px solid #222736;
+
+        &--button{
+            // outline: 1px greenyellow solid;
+
+            margin-top: 15px;
+            width: 35px;
+            height: 35px;            
+            float: right;
+            margin-left: 5px;
+            font-size: 24px;
+            color: whitesmoke;
+            padding-left: 6px;
+
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
     } // &__display-avatar {
     //     text-align: center;
     //     margin-bottom: 30px;
