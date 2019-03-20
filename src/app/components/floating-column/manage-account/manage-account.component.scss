@@ -46,62 +46,15 @@ $account-header-height: 60px;
                 }
             }
         }
-    } // &__display-avatar {
-    //     text-align: center;
-    //     margin-bottom: 30px;
-    // }
+    }
     &__avatar {
-        // display: block;
         width: 50px;
-        border-radius: 3px; //transform: translateX(15px); // margin: auto;
+        border-radius: 3px;
     }
     &__body {
         overflow: auto;
         height: calc(100% - #{$account-header-height} - 31px);
         display: block;
         // border: 1px red solid;        
-    }
-    &__label {
-        // text-decoration: underline;
-        font-size: $small-font-size;
-        margin-top: 10px;
-        margin-left: 5px;
-        color: $font-color-secondary;
-    }
-    &__margin-top {
-        margin-top: 25px;
-    }
-    &__link {
-        text-decoration: none;
-        display: block; // width: calc(100% - 20px);
-        width: 100%; // height: 30px;
-        padding: 5px 10px; // border: solid 1px black;
-        &:not(:last-child) {
-            margin-bottom: 5px;
-        }
-    }
-    &__mid-link {
-        text-decoration: none;
-        display: block; // width: calc(100% - 20px);
-        width: 45%; // height: 30px;
-        padding: 5px 10px; // border: solid 1px black;
-        &:not(:last-child) {
-            margin-bottom: 5px;
-        }
-    }
-    &__blue {
-        background-color: $color-primary;
-        color: #fff;
-        &:hover {
-            background-color: lighten($color-primary, 15);
-        }
-    }
-    &__red {
-        $red-button-color: rgb(65, 3, 3);
-        background-color: $red-button-color;
-        color: #fff;
-        &:hover {
-            background-color: lighten($red-button-color, 15);
-        }
     }
 }
