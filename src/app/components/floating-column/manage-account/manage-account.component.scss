@@ -60,6 +60,7 @@ $account-header-height: 60px;
         height: calc(100% - #{$account-header-height} - 31px);
         padding-left: 10px;
         padding-right: 10px; // outline: 1px solid red;
+        font-size: $default-font-size;
     }
     &__label {
         // text-decoration: underline;
