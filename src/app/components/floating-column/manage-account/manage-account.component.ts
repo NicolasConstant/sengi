@@ -22,6 +22,10 @@ export class ManageAccountComponent implements OnInit {
     faStar = faStar;
     faUserPlus = faUserPlus;
 
+    subPanel = 'account';
+    hasNotifications = false;
+    hasMentions = false;
+
     @Input() account: AccountWrapper;
 
     availableStreams: StreamElement[] = [];
@@ -53,6 +57,11 @@ export class ManageAccountComponent implements OnInit {
         const accountId = this.account.info.id;
         this.store.dispatch([new RemoveAllStreams(accountId), new RemoveAccount(accountId)]);
         this.navigationService.closePanel();
+        return false;
+    }
+
+    loadSubPanel(subpanel: string): boolean {
+        this.subPanel = subpanel;
         return false;
     }
 }
