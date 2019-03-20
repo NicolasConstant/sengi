@@ -1,9 +1,7 @@
 @import "variables";
 @import "panel";
 @import "commons";
-
 $account-header-height: 60px;
-
 .panel {
     padding-left: 0px;
     padding-right: 0px;
@@ -17,22 +15,36 @@ $account-header-height: 60px;
         padding-bottom: 5px;
         height: $account-header-height; //border-top: 1px solid #222736;
         border-bottom: 1px solid #222736;
-
-        &--button{
+        &--button {
             // outline: 1px greenyellow solid;
-
-            margin-top: 15px;
+            margin-top: 20px;
             width: 35px;
-            height: 35px;            
+            height: 35px;
             float: right;
             margin-left: 5px;
-            font-size: 24px;
-            color: whitesmoke;
+            font-size: 22px;
+            font-size: 20px;
+            color: $font-link-primary;
             padding-left: 6px;
-
             -moz-osx-font-smoothing: grayscale;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
+            transition: all .2s;
+            &:hover {
+                color: $font-link-primary-hover;
+            }
+            &--selected {
+                color: whitesmoke;
+                &:hover {
+                    color: whitesmoke;
+                }
+            }
+            &--notification {
+                color: rgb(250, 152, 41);
+                &:hover {
+                    color: rgb(250, 152, 41);
+                }
+            }
         }
     } // &__display-avatar {
     //     text-align: center;
@@ -47,8 +59,7 @@ $account-header-height: 60px;
         overflow: auto;
         height: calc(100% - #{$account-header-height} - 31px);
         padding-left: 10px;
-        padding-right: 10px;
-        // outline: 1px solid red;
+        padding-right: 10px; // outline: 1px solid red;
     }
     &__label {
         // text-decoration: underline;

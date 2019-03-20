@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { faAt } from "@fortawesome/free-solid-svg-icons";
-import { faBell, faEnvelope, faUser,  } from "@fortawesome/free-regular-svg-icons";
+import { faAt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faEnvelope, faUser, faStar } from "@fortawesome/free-regular-svg-icons";
 
 import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../../../states/streams.state';
 import { RemoveAccount } from '../../../states/accounts.state';
@@ -19,6 +19,8 @@ export class ManageAccountComponent implements OnInit {
     faBell = faBell;
     faEnvelope = faEnvelope;
     faUser = faUser;
+    faStar = faStar;
+    faUserPlus = faUserPlus;
 
     @Input() account: AccountWrapper;
 

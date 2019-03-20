@@ -2,13 +2,25 @@
     <h3 class="panel__title">Manage Account</h3>
 
     <div class="account__header">
-        <!-- <div class="account__display-avatar"> -->
         <img class="account__avatar" src="{{account.avatar}}" title="{{ account.info.id }} " />
-        <!-- </div> -->
-        <a href class="account__header--button"><fa-icon [icon]="faEnvelope"></fa-icon></a>
-        <a href class="account__header--button"><fa-icon [icon]="faAt"></fa-icon></a>
-        <a href class="account__header--button"><fa-icon [icon]="faBell"></fa-icon></a>
-        <a href class="account__header--button"><fa-icon [icon]="faUser"></fa-icon></a>
+
+        <!-- <a href class="account__header--button"><fa-icon [icon]="faUserPlus"></fa-icon></a> -->
+        <a href class="account__header--button" 
+            [ngClass]="{ 'account__header--button--selected': true, 'account__header--button--notification': true }">
+            <fa-icon [icon]="faStar"></fa-icon>
+        </a>
+        <a href class="account__header--button" [ngClass]="{ 'account__header--button--selected': true }">
+            <fa-icon [icon]="faEnvelope"></fa-icon>
+        </a>
+        <a href class="account__header--button" [ngClass]="{ 'account__header--button--selected': true }">
+            <fa-icon [icon]="faAt"></fa-icon>
+        </a>
+        <a href class="account__header--button" [ngClass]="{ 'account__header--button--selected': false }">
+            <fa-icon [icon]="faBell"></fa-icon>
+        </a>
+        <a href class="account__header--button" [ngClass]="{ 'account__header--button--selected': true }">
+            <fa-icon [icon]="faUser"></fa-icon>
+        </a>
     </div>
 
     <div class="account__body flexcroll">
