@@ -31,30 +31,7 @@
     <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'"></app-direct-messages>
     <app-favorites class="account__body" *ngIf="subPanel === 'favorites'"></app-favorites>
     <app-mentions class="account__body" *ngIf="subPanel === 'mentions'"></app-mentions>
-    <app-my-account class="account__body" *ngIf="subPanel === 'account'"></app-my-account>
+    <app-my-account class="account__body" *ngIf="subPanel === 'account'" [account]="account">    
+    </app-my-account>
     <app-notifications class="account__body" *ngIf="subPanel === 'notifications'"></app-notifications>
-
-    <!-- <div class="account__body flexcroll">
-
-        <h4 class="account__label">add column:</h4>
-
-        <a class="account__link account__blue" href *ngFor="let stream of availableStreams" (click)="addStream(stream)">
-            {{ stream.name }}
-        </a> -->
-        <!-- <a class="add-column__link" href>
-    Global Timeline
-  </a>
-  <a class="add-column__link" href>
-    Personnal Timeline
-  </a>
-  <a class="add-column__link" href>
-    Lists, Favs, Activitires, etc
-  </a> -->
-
-<!-- 
-        <h4 class="account__label account__margin-top">remove account from sengi:</h4>
-        <a class="account__link account__red" href (click)="removeAccount()">
-            Delete
-        </a>
-    </div> -->
 </div>

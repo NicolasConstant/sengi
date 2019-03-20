@@ -3,9 +3,8 @@
     width: calc(100%);
     height: calc(100%);
     padding: 10px 10px 0 7px;
-    font-size: $small-font-size;
+    font-size: $small-font-size; //FIXME: remove this
     white-space: normal;
-    // overflow: auto;
     &__title {
         font-size: 13px;
         text-transform: uppercase;

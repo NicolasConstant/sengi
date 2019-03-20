@@ -58,9 +58,8 @@ $account-header-height: 60px;
     &__body {
         overflow: auto;
         height: calc(100% - #{$account-header-height} - 31px);
-        padding-left: 10px;
-        padding-right: 10px; // outline: 1px solid red;
-        font-size: $default-font-size;
+        display: block;
+        // border: 1px red solid;        
     }
     &__label {
         // text-decoration: underline;
