@@ -29,7 +29,7 @@
     </div>
     
     <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'"></app-direct-messages>
-    <app-favorites class="account__body" *ngIf="subPanel === 'favorites'"></app-favorites>
+    <app-favorites class="account__body" *ngIf="subPanel === 'favorites'" [account]="account"></app-favorites>
     <app-mentions class="account__body" *ngIf="subPanel === 'mentions'"></app-mentions>
     <app-my-account class="account__body" *ngIf="subPanel === 'account'" [account]="account">    
     </app-my-account>

@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {
+export class MastodonService {    
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -133,6 +133,12 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Context>(route, { headers: headers }).toPromise();
     }
+    
+    getFavorites(account: AccountInfo): Promise<Status[]> {
+        const route = `https://${account.instance}${this.apiRoutes.getFavourites}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
+    }  
 
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]> {
         const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}`;
@@ -162,9 +168,7 @@ export class MastodonService {
         const route = `https://${account.instance}${this.apiRoutes.unfavouritingStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
-    }
-
-    
+    } 
 
     getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
         let params = `?${this.formatArray(accountsToRetrieve.map(x => x.id.toString()), 'id')}`;

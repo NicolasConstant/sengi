@@ -55,6 +55,6 @@ $account-header-height: 60px;
         overflow: auto;
         height: calc(100% - #{$account-header-height} - 31px);
         display: block;
-        // border: 1px red solid;        
+        font-size: $default-font-size;
     }
 }

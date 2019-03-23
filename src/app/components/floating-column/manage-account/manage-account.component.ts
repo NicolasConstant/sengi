@@ -25,7 +25,7 @@ export class ManageAccountComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() {       
+    ngOnInit() {        
     }
 
     loadSubPanel(subpanel: string): boolean {
