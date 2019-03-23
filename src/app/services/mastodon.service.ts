@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
 import { Account, Status, Results, Context, Relationship, Instance, Attachment } from "./models/mastodon.interfaces";
@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {    
+export class MastodonService {
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -133,12 +133,27 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Context>(route, { headers: headers }).toPromise();
     }
-    
-    getFavorites(account: AccountInfo): Promise<Status[]> {
-        const route = `https://${account.instance}${this.apiRoutes.getFavourites}`;
+
+    getFavorites(account: AccountInfo, maxId: string = null): Promise<FavoriteResult> { //, minId: string = null
+        let route = `https://${account.instance}${this.apiRoutes.getFavourites}`; //?limit=${limit}
+
+        if (maxId) route += `?max_id=${maxId}`;
+        //if (minId) route += `&min_id=${minId}`;
+
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
-    }  
+        return this.httpClient.get(route, { headers: headers, observe: "response" }).toPromise()
+            .then((res: HttpResponse<Status[]>) => {                
+                const link = res.headers.get('Link');
+                let lastId = null;
+                if(link){
+                    const maxId = link.split('max_id=')[1];
+                    if(maxId){
+                        lastId = maxId.split('>;')[0];
+                    }
+                }
+                return new FavoriteResult(lastId, res.body);
+            });
+    }
 
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]> {
         const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}`;
@@ -168,7 +183,7 @@ export class MastodonService {
         const route = `https://${account.instance}${this.apiRoutes.unfavouritingStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
-    } 
+    }
 
     getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
         let params = `?${this.formatArray(accountsToRetrieve.map(x => x.id.toString()), 'id')}`;
@@ -206,7 +221,7 @@ export class MastodonService {
     }
 
     //TODO: add focus support
-    updateMediaAttachment(account: AccountInfo, mediaId: string, description: string): Promise<Attachment>  {
+    updateMediaAttachment(account: AccountInfo, mediaId: string, description: string): Promise<Attachment> {
         let input = new FormData();
         input.append('description', description);
         const route = `https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', mediaId)}`;
@@ -239,4 +254,10 @@ class StatusData {
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
+}
+
+export class FavoriteResult {
+    constructor(
+        public max_id: string,
+        public favorites: Status[]) {}   
 }
