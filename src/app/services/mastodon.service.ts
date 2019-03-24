@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {
+export class MastodonService {    
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -227,6 +227,26 @@ export class MastodonService {
         const route = `https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', mediaId)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
+    }
+
+    getNotifications(account: AccountInfo, excludeTypes: string[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+        let route = `https://${account.instance}${this.apiRoutes.getNotifications}?limit=${limit}`;
+
+        if(maxId){
+            route += `&max_id=${maxId}`;
+        }
+
+        if(sinceId){
+            route += `&since_id=${sinceId}`;
+        }
+
+        if(excludeTypes && excludeTypes.length > 0) {
+            const excludeTypeArray = this.formatArray(excludeTypes, 'exclude_types');
+            route += `&${excludeTypeArray}`;
+        }
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Notification[]>(route, { headers: headers }).toPromise();
     }
 
     private formatArray(data: string[], paramName: string): string {
