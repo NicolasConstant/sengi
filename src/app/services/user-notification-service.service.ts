@@ -27,7 +27,7 @@ export class UserNotificationServiceService {
         let promises: Promise<any>[] = [];
 
         accounts.forEach(account => {
-            let getNotificationPromise = this.mastodonService.getNotifications(account)
+            let getNotificationPromise = this.mastodonService.getNotifications(account, null, null, null, 30)
                 .then((notifications: Notification[]) => {
                     this.processNotifications(account, notifications);
                 })
