@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@ang
 import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../../models/account.models';
-import { UserNotificationServiceService, UserNotification } from '../../../../services/user-notification-service.service';
+import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { Status, Notification } from '../../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../../services/mastodon.service';
@@ -40,7 +40,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly userNotificationService: UserNotificationServiceService,
+        private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {

@@ -10,7 +10,7 @@ import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { MastodonService } from "../../services/mastodon.service";
 import { NotificationService } from "../../services/notification.service";
-import { UserNotificationServiceService, UserNotification } from '../../services/user-notification-service.service';
+import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
 
 @Component({
     selector: "app-left-side-bar",
@@ -28,7 +28,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private notificationSub: Subscription;
 
     constructor(
-        private readonly userNotificationServiceService: UserNotificationServiceService,
+        private readonly userNotificationServiceService: UserNotificationService,
         private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService,

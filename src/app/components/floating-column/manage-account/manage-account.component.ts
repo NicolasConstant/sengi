@@ -4,7 +4,7 @@ import { faBell, faEnvelope, faUser, faStar } from "@fortawesome/free-regular-sv
 import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../models/account.models';
-import { UserNotificationServiceService, UserNotification } from '../../../services/user-notification-service.service';
+import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     private _account: AccountWrapper;
 
     constructor(
-        private readonly userNotificationService: UserNotificationServiceService) { }
+        private readonly userNotificationService: UserNotificationService) { }
 
     ngOnInit() {
       

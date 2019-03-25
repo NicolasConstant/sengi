@@ -10,7 +10,7 @@ import { NotificationService } from './notification.service';
 @Injectable({
     providedIn: 'root'
 })
-export class UserNotificationServiceService {
+export class UserNotificationService {
     userNotifications = new BehaviorSubject<UserNotification[]>([]);
 
     constructor(
