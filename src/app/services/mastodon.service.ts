@@ -252,7 +252,7 @@ export class MastodonService {
     private formatArray(data: string[], paramName: string): string {
         let result = '';
         data.forEach(x => {
-            if (result.includes('paramName')) result += '&';
+            if (result.includes(paramName)) result += '&';
             result += `${paramName}[]=${x}`;
         });
         return result;

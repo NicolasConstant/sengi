@@ -11,7 +11,6 @@ import { NotificationService } from './notification.service';
     providedIn: 'root'
 })
 export class UserNotificationServiceService {
-
     userNotifications = new BehaviorSubject<UserNotification[]>([]);
 
     constructor(
@@ -52,6 +51,8 @@ export class UserNotificationServiceService {
         const userNotifications = notifications.filter(x => x.type !== 'mention');
         const userMentions = notifications.filter(x => x.type === 'mention').map(x => x.status);
 
+        const lastId = notifications[notifications.length - 1].id;
+
         if (currentAccountNotifications) {
             const currentUserNotifications = currentAccountNotifications.notifications;
             const currentUserMentions = currentAccountNotifications.mentions;
@@ -66,6 +67,7 @@ export class UserNotificationServiceService {
                 currentAccountNotifications.hasNewNotifications = hasNewNotifications;
                 currentAccountNotifications.notifications = userNotifications;
                 currentAccountNotifications.mentions = userMentions;
+                currentAccountNotifications.lastId = lastId;
 
                 currentNotifications = currentNotifications.filter(x => x.account.id !== account.id);
                 currentNotifications.push(currentAccountNotifications);
@@ -78,10 +80,25 @@ export class UserNotificationServiceService {
             newNotifications.hasNewMentions = false; //TODO: check in local settings
             newNotifications.notifications = userNotifications;
             newNotifications.mentions = userMentions;
+            newNotifications.lastId = lastId;
 
             currentNotifications.push(newNotifications);
             this.userNotifications.next(currentNotifications);
         }
+    }
+
+    markMentionsAsRead(account: AccountInfo) {
+        let currentNotifications = this.userNotifications.value;
+        const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
+        currentAccountNotifications.hasNewMentions = false;
+        this.userNotifications.next(currentNotifications);
+    }
+
+    markNotificationAsRead(account: AccountInfo) {
+        let currentNotifications = this.userNotifications.value;
+        const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
+        currentAccountNotifications.hasNewNotifications = false;
+        this.userNotifications.next(currentNotifications);
     }
 }
 
@@ -91,4 +108,5 @@ export class UserNotification {
     hasNewMentions: boolean;
     notifications: Notification[] = [];
     mentions: Status[] = [];
+    lastId: string;
 }

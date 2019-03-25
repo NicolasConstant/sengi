@@ -26,7 +26,6 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
 
     @Input('account')
     set account(acc: AccountWrapper) {
-        console.warn('account');
         this._account = acc;
         this.checkNotifications();
     }
@@ -49,6 +48,10 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     }
 
     private checkNotifications(){
+        if(this.userNotificationServiceSub){
+            this.userNotificationServiceSub.unsubscribe();
+        }
+
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
             if(userNotification){
