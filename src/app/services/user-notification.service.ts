@@ -13,6 +13,8 @@ import { NotificationService } from './notification.service';
 export class UserNotificationService {
     userNotifications = new BehaviorSubject<UserNotification[]>([]);
 
+    private sinceIds: { [id: string]: string } = {};
+
     constructor(
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonService,
@@ -25,8 +27,13 @@ export class UserNotificationService {
         let accounts = this.store.snapshot().registeredaccounts.accounts;
         let promises: Promise<any>[] = [];
 
-        accounts.forEach(account => {
-            let getNotificationPromise = this.mastodonService.getNotifications(account, null, null, null, 30)
+        accounts.forEach((account: AccountInfo) => {
+            let sinceId = null;
+            if(this.sinceIds[account.id]){
+                sinceId = this.sinceIds[account.id];
+            }
+
+            let getNotificationPromise = this.mastodonService.getNotifications(account, null, null, sinceId, 30)
                 .then((notifications: Notification[]) => {
                     this.processNotifications(account, notifications);
                 })
@@ -45,6 +52,10 @@ export class UserNotificationService {
     }
 
     private processNotifications(account: AccountInfo, notifications: Notification[]) {
+        if(notifications.length === 0){
+            return;
+        }
+
         let currentNotifications = this.userNotifications.value;
         const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
 
@@ -52,6 +63,8 @@ export class UserNotificationService {
         const userMentions = notifications.filter(x => x.type === 'mention').map(x => x.status);
 
         const lastId = notifications[notifications.length - 1].id;
+        const sinceId = notifications[0].id;
+        this.sinceIds[account.id] = sinceId;
 
         if (currentAccountNotifications) {
             const currentUserNotifications = currentAccountNotifications.notifications;
