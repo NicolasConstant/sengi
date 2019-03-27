@@ -23,25 +23,26 @@
 
         &--button {
             @include clearButton;
-            position: absolute;
+
+            // position: absolute;
+            // width: calc(80%);
+            // margin-left: 40%;
+            // transform: translateX(-40%);
+
+            width: calc(100%);
+            padding: 5px 0;
+
             z-index: 10;            
-            padding: 3px;
             text-align: center;
-            border: 2px $status-secondary-color dashed;
-            width: calc(80%);
-            margin-left: 40%;
-            transform: translateX(-40%);
+            border: 3px $status-secondary-color double;            
             transition: all .2s;
             background-color: $color-secondary;
 
             &:hover{
-                $hover-color: rgb(0, 206, 27);                
-                $hover-color: rgb(0, 231, 231);
-                $hover-color: rgb(164, 222, 255);
-                // $hover-color: $status-secondary-color;
+                $hover-color: $status-secondary-color;
                 background-color: $hover-color;
-                color: black;
-                border: 3px $hover-color dashed;
+                color: white;
+                border: 3px $hover-color double;
             }
         }
     }
