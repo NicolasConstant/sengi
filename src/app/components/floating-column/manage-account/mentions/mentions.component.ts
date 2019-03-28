@@ -12,7 +12,7 @@ import { NotificationService } from '../../../../services/notification.service';
 @Component({
     selector: 'app-mentions',
     templateUrl: '../../../stream/stream-statuses/stream-statuses.component.html',
-    styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss']
+    styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss', './mentions.component.scss']
 })
 export class MentionsComponent implements OnInit, OnDestroy {
     statuses: StatusWrapper[] = [];
