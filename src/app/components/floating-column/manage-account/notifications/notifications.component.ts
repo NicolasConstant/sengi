@@ -64,6 +64,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this.userNotificationService.markNotificationAsRead(this.account.info);    
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
+            this.notifications.length = 0; //TODO: don't reset, only add the new ones
             const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
             if(userNotification && userNotification.notifications){
                 userNotification.notifications.forEach((notification: Notification) => {
@@ -72,6 +73,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 }); 
             }
             this.lastId = userNotification.lastId;
+            this.userNotificationService.markNotificationAsRead(this.account.info);
         });
     }
 

@@ -85,10 +85,10 @@ export class UserNotificationService {
     }
 
     private analyseNotifications(userNotification: UserNotification): UserNotification {
-        if(userNotification.allNotifications.length > 30){
+        if (userNotification.allNotifications.length > 30) {
             userNotification.allNotifications.length = 30;
         }
-        userNotification.lastId =  userNotification.allNotifications[userNotification.allNotifications.length - 1].id;
+        userNotification.lastId = userNotification.allNotifications[userNotification.allNotifications.length - 1].id;
 
         const newNotifications = userNotification.allNotifications.filter(x => x.type !== 'mention');
         const newMentions = userNotification.allNotifications.filter(x => x.type === 'mention').map(x => x.status);
@@ -130,15 +130,21 @@ export class UserNotificationService {
     markMentionsAsRead(account: AccountInfo) {
         let currentNotifications = this.userNotifications.value;
         const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
-        currentAccountNotifications.hasNewMentions = false;
-        this.userNotifications.next(currentNotifications);
+
+        if (currentAccountNotifications.hasNewMentions === true) {
+            currentAccountNotifications.hasNewMentions = false;
+            this.userNotifications.next(currentNotifications);
+        }
     }
 
     markNotificationAsRead(account: AccountInfo) {
         let currentNotifications = this.userNotifications.value;
         const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
-        currentAccountNotifications.hasNewNotifications = false;
-        this.userNotifications.next(currentNotifications);
+
+        if (currentAccountNotifications.hasNewNotifications === true) {
+            currentAccountNotifications.hasNewNotifications = false;
+            this.userNotifications.next(currentNotifications);
+        }
     }
 }
 

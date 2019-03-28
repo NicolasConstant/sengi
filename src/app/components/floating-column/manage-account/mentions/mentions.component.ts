@@ -61,6 +61,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
         this.userNotificationService.markMentionsAsRead(this.account.info);    
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
+            this.statuses.length = 0; //TODO: don't reset, only add the new ones
             const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
             if(userNotification && userNotification.mentions){
                 userNotification.mentions.forEach((mention: Status) => {
@@ -69,6 +70,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
                 }); 
             }
             this.lastId = userNotification.lastId;
+            this.userNotificationService.markMentionsAsRead(this.account.info);   
         });
     }
 
@@ -88,7 +90,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
         this.mastodonService.getNotifications(this.account.info, ['follow', 'favourite', 'reblog'], this.lastId)
             .then((result: Notification[]) => {
-                
+
                 const statuses = result.map(x => x.status);
                 if (statuses.length === 0) {
                     this.maxReached = true;
