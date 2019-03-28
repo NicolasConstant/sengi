@@ -29,7 +29,7 @@ export class UserNotificationService {
 
         accounts.forEach((account: AccountInfo) => {
             let sinceId = null;
-            if(this.sinceIds[account.id]){
+            if (this.sinceIds[account.id]) {
                 sinceId = this.sinceIds[account.id];
             }
 
@@ -48,56 +48,83 @@ export class UserNotificationService {
                 setTimeout(() => {
                     this.fetchNotifications();
                 }, 15 * 1000);
-            });      
+            });
     }
 
     private processNotifications(account: AccountInfo, notifications: Notification[]) {
-        if(notifications.length === 0){
+        if (notifications.length === 0) {
             return;
         }
 
         let currentNotifications = this.userNotifications.value;
-        const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
+        let currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
 
-        const userNotifications = notifications.filter(x => x.type !== 'mention');
-        const userMentions = notifications.filter(x => x.type === 'mention').map(x => x.status);
-
-        const lastId = notifications[notifications.length - 1].id;
         const sinceId = notifications[0].id;
         this.sinceIds[account.id] = sinceId;
 
         if (currentAccountNotifications) {
-            const currentUserNotifications = currentAccountNotifications.notifications;
-            const currentUserMentions = currentAccountNotifications.mentions;
+            currentAccountNotifications.allNotifications = [...notifications, ...currentAccountNotifications.allNotifications];
 
-            const hasNewNotifications = (userNotifications.length === 0 && currentUserNotifications.length > 0)
-                || (userNotifications.length > 0 && currentUserNotifications.length > 0) && (userNotifications[0].id !== currentUserNotifications[0].id);
-            const hasNewMentions = (userMentions.length === 0 && currentUserMentions.length > 0)
-                || (userMentions.length > 0 && currentUserMentions.length > 0) && (userMentions[0].id !== currentUserMentions[0].id);
+            currentAccountNotifications = this.analyseNotifications(currentAccountNotifications);
 
-            if (hasNewNotifications || hasNewMentions) {
-                currentAccountNotifications.hasNewMentions = hasNewMentions;
-                currentAccountNotifications.hasNewNotifications = hasNewNotifications;
-                currentAccountNotifications.notifications = userNotifications;
-                currentAccountNotifications.mentions = userMentions;
-                currentAccountNotifications.lastId = lastId;
-
+            if (currentAccountNotifications.hasNewMentions || currentAccountNotifications.hasNewNotifications) {
                 currentNotifications = currentNotifications.filter(x => x.account.id !== account.id);
                 currentNotifications.push(currentAccountNotifications);
                 this.userNotifications.next(currentNotifications);
             }
         } else {
-            const newNotifications = new UserNotification();
+            let newNotifications = new UserNotification();
             newNotifications.account = account;
-            newNotifications.hasNewNotifications = false; //TODO: check in local settings
-            newNotifications.hasNewMentions = false; //TODO: check in local settings
-            newNotifications.notifications = userNotifications;
-            newNotifications.mentions = userMentions;
-            newNotifications.lastId = lastId;
+            newNotifications.allNotifications = notifications;
+
+            newNotifications = this.analyseNotifications(newNotifications);
 
             currentNotifications.push(newNotifications);
             this.userNotifications.next(currentNotifications);
         }
+    }
+
+    private analyseNotifications(userNotification: UserNotification): UserNotification {
+        if(userNotification.allNotifications.length > 30){
+            userNotification.allNotifications.length = 30;
+        }
+        userNotification.lastId =  userNotification.allNotifications[userNotification.allNotifications.length - 1].id;
+
+        const newNotifications = userNotification.allNotifications.filter(x => x.type !== 'mention');
+        const newMentions = userNotification.allNotifications.filter(x => x.type === 'mention').map(x => x.status);
+
+        const currentNotifications = userNotification.notifications;
+        const currentMentions = userNotification.mentions;
+
+        if (!currentNotifications) {
+            userNotification.notifications = newNotifications;
+
+        } else if (currentNotifications.length === 0) {
+            if (newNotifications.length > 0) {
+                userNotification.hasNewNotifications = true;
+            }
+            userNotification.notifications = newNotifications;
+
+        } else if (newNotifications.length > 0) {
+            userNotification.hasNewNotifications = currentNotifications[0].id !== newNotifications[0].id;
+            userNotification.notifications = [...newNotifications, ...currentNotifications];
+        }
+
+        if (!currentNotifications) {
+            userNotification.mentions = newMentions;
+
+        } else if (currentMentions.length === 0) {
+            if (newMentions.length > 0) {
+                userNotification.hasNewMentions = true;
+            }
+            userNotification.mentions = newMentions;
+
+        } else if (newMentions.length > 0) {
+            userNotification.hasNewMentions = currentMentions[0].id !== newMentions[0].id;
+            userNotification.mentions = [...newMentions, ...currentMentions];
+        }
+
+        return userNotification;
     }
 
     markMentionsAsRead(account: AccountInfo) {
@@ -117,9 +144,12 @@ export class UserNotificationService {
 
 export class UserNotification {
     account: AccountInfo;
+    allNotifications: Notification[] = [];
+
     hasNewNotifications: boolean;
     hasNewMentions: boolean;
-    notifications: Notification[] = [];
-    mentions: Status[] = [];
+
+    notifications: Notification[];
+    mentions: Status[];
     lastId: string;
 }

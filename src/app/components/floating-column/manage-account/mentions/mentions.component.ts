@@ -86,12 +86,9 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
         this.isLoading = true;
 
-        console.warn(`this.lastId ${this.lastId}`);
-
         this.mastodonService.getNotifications(this.account.info, ['follow', 'favourite', 'reblog'], this.lastId)
             .then((result: Notification[]) => {
-                console.warn(result);
-
+                
                 const statuses = result.map(x => x.status);
                 if (statuses.length === 0) {
                     this.maxReached = true;
