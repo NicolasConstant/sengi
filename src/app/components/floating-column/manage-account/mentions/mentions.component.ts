@@ -47,7 +47,9 @@ export class MentionsComponent implements OnInit, OnDestroy {
     }
     
     ngOnDestroy(): void {
-        this.userNotificationServiceSub.unsubscribe();
+        if(this.userNotificationServiceSub){
+            this.userNotificationServiceSub.unsubscribe();
+        }
     }
 
     private loadMentions(){

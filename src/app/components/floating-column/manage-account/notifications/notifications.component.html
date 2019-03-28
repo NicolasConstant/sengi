@@ -1,3 +1,34 @@
-<p>
-  notifications works!
-</p>
+<div class="stream flexcroll" #statusstream (scroll)="onScroll()">
+    <div class="stream__notification" *ngFor="let notification of notifications">
+        <div *ngIf="notification.type === 'favourite'">
+            <div class="stream__notification--icon">
+
+            </div>
+            <div class="stream__notification--label">
+                <a href class="stream__link">{{ notification.account.username }}</a> favorited your status
+            </div>
+        </div>
+
+        <div *ngIf="notification.type === 'reblog'">
+            <div class="stream__notification--icon">
+
+            </div>
+            <div class="stream__notification--label">
+                <a href class="stream__link">{{ notification.account.username }}</a> boosted your status
+            </div>
+        </div>
+
+        <div *ngIf="notification.type === 'follow'">
+            <div class="stream__notification--icon">
+
+            </div>
+            <div class="stream__notification--label">
+                <a href class="stream__link">{{ notification.account.username }}</a> followed you!
+            </div>
+        </div>
+
+        <app-status *ngIf="notification.status" class="stream__status" [statusWrapper]="notification.status"
+            [isThreadDisplay]="false" (browseAccountEvent)="browseAccount($event)"
+            (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
+    </div>
+</div>
