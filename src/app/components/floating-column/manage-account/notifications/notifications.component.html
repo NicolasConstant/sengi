@@ -31,4 +31,6 @@
             [isThreadDisplay]="false" (browseAccountEvent)="browseAccount($event)"
             (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
     </div>
+
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 </div>

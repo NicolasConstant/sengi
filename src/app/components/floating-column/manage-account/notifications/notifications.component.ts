@@ -75,6 +75,48 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         });
     }
 
+    
+    onScroll() {
+        var element = this.statustream.nativeElement as HTMLElement;
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+
+        if (atBottom) {
+            this.scrolledToBottom();
+        }
+    }
+
+    private scrolledToBottom() {
+        if (this.isLoading || this.maxReached || this.notifications.length === 0) return;
+
+        this.isLoading = true;
+
+        console.warn(`this.lastId ${this.lastId}`);
+
+        this.mastodonService.getNotifications(this.account.info, ['mention'], this.lastId)
+            .then((notifications: Notification[]) => {
+                console.warn(notifications);
+
+                // const statuses = result.map(x => x.status);
+                if (notifications.length === 0) {
+                    this.maxReached = true;
+                    return;
+                }
+                
+                for (const s of notifications) {
+                    const wrapper = new NotificationWrapper(s, this.account.info);
+                    this.notifications.push(wrapper);
+                }
+
+                this.lastId = notifications[notifications.length - 1].id;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.isLoading = false;
+            });
+    }
+
 }
 
 class NotificationWrapper {
