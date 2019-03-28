@@ -42,7 +42,7 @@ export class ToolsService {
         if (!isProvider) {
             statusPromise = statusPromise.then((foreignStatus: Status) => {
                 const statusUrl = foreignStatus.url;
-                return this.mastodonService.search(account, statusUrl)
+                return this.mastodonService.search(account, statusUrl, true)
                     .then((results: Results) => {
                         return results.statuses[0];
                     });
