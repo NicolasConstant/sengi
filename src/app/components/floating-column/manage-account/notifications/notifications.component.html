@@ -2,7 +2,7 @@
     <div class="stream__notification" *ngFor="let notification of notifications">
         <div *ngIf="notification.type === 'favourite'">
             <div class="stream__notification--icon">
-
+                <fa-icon class="favorite" [icon]="faStar"></fa-icon>
             </div>
             <div class="stream__notification--label">
                 <a href class="stream__link">{{ notification.account.username }}</a> favorited your status
@@ -11,7 +11,7 @@
 
         <div *ngIf="notification.type === 'reblog'">
             <div class="stream__notification--icon">
-
+                <fa-icon class="boost" [icon]="faRetweet"></fa-icon>
             </div>
             <div class="stream__notification--label">
                 <a href class="stream__link">{{ notification.account.username }}</a> boosted your status
@@ -20,7 +20,7 @@
 
         <div *ngIf="notification.type === 'follow'">
             <div class="stream__notification--icon">
-
+                <fa-icon class="followed" [icon]="faUserPlus"></fa-icon>
             </div>
             <div class="stream__notification--label">
                 <a href class="stream__link">{{ notification.account.username }}</a> followed you!

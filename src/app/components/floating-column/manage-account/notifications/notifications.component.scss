@@ -14,8 +14,16 @@
     }
 
     &__notification {
+        position: relative;
 
-        &--icon {}
+        &--icon {
+            position: absolute;
+            top: 5px;
+            left: 43px;
+            text-align: center;
+            width: 20px;
+            // outline: 1px dotted greenyellow;
+        }
 
         &--label {
             margin: 0 10px 0 $avatar-column-space;
@@ -35,6 +43,18 @@
 
     &__status {
         display: block;
-        opacity: 0.6;
+        opacity: 0.55;
     }
+}
+
+.boost {
+    color: $boost-color;
+}
+
+.favorite {
+    color: $favorite-color;
+}
+
+.followed {
+    color: $boost-color;
 }

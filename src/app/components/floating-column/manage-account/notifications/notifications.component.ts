@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { faStar, faUserPlus, faRetweet } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faStar2 } from "@fortawesome/free-regular-svg-icons";
 
 import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
@@ -15,6 +17,10 @@ import { AccountInfo } from '../../../../states/accounts.state';
     styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
+    faUserPlus = faUserPlus;
+    faStar = faStar;
+    faRetweet = faRetweet;
+
     notifications: NotificationWrapper[] = [];
     isLoading = false;
 
