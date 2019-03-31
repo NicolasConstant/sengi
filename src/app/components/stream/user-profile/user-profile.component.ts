@@ -90,9 +90,6 @@ export class UserProfileComponent implements OnInit {
 
         return this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
             .then((account: Account) => {
-
-                console.warn(account);
-
                 this.isLoading = false;
                 this.statusLoading = true;
 

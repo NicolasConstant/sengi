@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Store } from '@ngxs/store';
 
 import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
@@ -7,6 +8,8 @@ import { StatusWrapper } from '../../../../models/common.model';
 import { Status, Notification } from '../../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
+import { AccountSettings, SettingsState } from '../../../../states/settings.state';
+import { ToolsService } from '../../../../services/tools.service';
 
 
 @Component({
@@ -26,6 +29,9 @@ export class MentionsComponent implements OnInit, OnDestroy {
         console.warn('account');
         this._account = acc;
         this.loadMentions();
+
+        const accountSettings = this.toolsService.getAccountSettings(acc.info);
+        console.warn(accountSettings);
     }
     get account(): AccountWrapper {
         return this._account;        
@@ -39,9 +45,13 @@ export class MentionsComponent implements OnInit, OnDestroy {
     private lastId: string;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonService,
+        private readonly store: Store) { 
+            
+        }
 
     ngOnInit() {
     }

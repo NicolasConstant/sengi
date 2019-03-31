@@ -55,6 +55,7 @@ import { FavoritesComponent } from './components/floating-column/manage-account/
 import { DirectMessagesComponent } from './components/floating-column/manage-account/direct-messages/direct-messages.component';
 import { MentionsComponent } from './components/floating-column/manage-account/mentions/mentions.component';
 import { NotificationsComponent } from './components/floating-column/manage-account/notifications/notifications.component';
+import { SettingsState } from './states/settings.state';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -112,7 +113,8 @@ const routes: Routes = [
     NgxsModule.forRoot([
       RegisteredAppsState,
       AccountsState,
-      StreamsState
+      StreamsState,
+      SettingsState
     ]),
     NgxsStoragePluginModule.forRoot()
   ],

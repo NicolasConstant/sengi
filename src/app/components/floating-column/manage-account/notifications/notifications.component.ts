@@ -26,7 +26,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
     @Input('account')
     set account(acc: AccountWrapper) {
-        console.warn('account');
         this._account = acc;
         this.loadNotifications();
     }
@@ -92,13 +91,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
         this.isLoading = true;
 
-        console.warn(`this.lastId ${this.lastId}`);
-
         this.mastodonService.getNotifications(this.account.info, ['mention'], this.lastId)
             .then((notifications: Notification[]) => {
-                console.warn(notifications);
-
-                // const statuses = result.map(x => x.status);
                 if (notifications.length === 0) {
                     this.maxReached = true;
                     return;

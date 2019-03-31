@@ -1,21 +1,21 @@
-import { State, Action, StateContext } from '@ngxs/store';
+import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 
-export class RemoveUserSettings {
-    static readonly type = '[Settings] Remove UserSettings';
+export class RemoveAccountSettings {
+    static readonly type = '[Settings] Remove AccountSettings';
     constructor(public accountId: string) {}
 }
 
-export class SaveUserSettings {
-    static readonly type = '[Settings] Update UserSettings';
-    constructor(public userSettings: UserSettings) {}
+export class SaveAccountSettings {
+    static readonly type = '[Settings] Save AccountSettings';
+    constructor(public accountSettings: AccountSettings) {}
 }
 
 export class SaveSettings {
-    static readonly type = '[Settings] Update UserSettings';
+    static readonly type = '[Settings] Save Settings';
     constructor(public settings: GlobalSettings) {}
 }
 
-export class UserSettings {
+export class AccountSettings {
     accountId: string;
     displayMention: boolean = true;
     displayNotifications: boolean = true;
@@ -25,7 +25,7 @@ export class UserSettings {
 
 export class GlobalSettings {
     disableAllNotifications = false;
-    userSettings: UserSettings[] = [];
+    accountSettings: AccountSettings[] = [];
 }
 
 export interface SettingsStateModel {
@@ -38,27 +38,35 @@ export interface SettingsStateModel {
         settings: new GlobalSettings()
     }
 })
-export class SettingsState {    
-    @Action(RemoveUserSettings)
-    RemoveUserSettings(ctx: StateContext<SettingsStateModel>, action: RemoveUserSettings){
+export class SettingsState {
+
+    accountSettings(accountId: string){
+        return createSelector([SettingsState], (state: GlobalSettings) => {
+            return state.accountSettings.find(x => x.accountId === accountId);
+        });
+    }
+
+
+    @Action(RemoveAccountSettings)
+    RemoveAccountSettings(ctx: StateContext<SettingsStateModel>, action: RemoveAccountSettings){
         const state = ctx.getState();
         const newSettings = new GlobalSettings();
 
         newSettings.disableAllNotifications = state.settings.disableAllNotifications;
-        newSettings.userSettings = [...state.settings.userSettings.filter(x => x.accountId !== action.accountId)];
+        newSettings.accountSettings = [...state.settings.accountSettings.filter(x => x.accountId !== action.accountId)];
                   
         ctx.patchState({
             settings: newSettings
         });
     }
 
-    @Action(SaveUserSettings)
-    SaveUserSettings(ctx: StateContext<SettingsStateModel>, action: SaveUserSettings){
+    @Action(SaveAccountSettings)
+    SaveAccountSettings(ctx: StateContext<SettingsStateModel>, action: SaveAccountSettings){
         const state = ctx.getState();
         const newSettings = new GlobalSettings();
 
         newSettings.disableAllNotifications = state.settings.disableAllNotifications;
-        newSettings.userSettings = [...state.settings.userSettings.filter(x => x.accountId !== action.userSettings.accountId), action.userSettings];
+        newSettings.accountSettings = [...state.settings.accountSettings.filter(x => x.accountId !== action.accountSettings.accountId), action.accountSettings];
 
         ctx.patchState({
             settings: newSettings
@@ -71,7 +79,7 @@ export class SettingsState {
         const newSettings = new GlobalSettings();
 
         newSettings.disableAllNotifications = action.settings.disableAllNotifications;
-        newSettings.userSettings = [...state.settings.userSettings];
+        newSettings.accountSettings = [...state.settings.accountSettings];
         
         ctx.patchState({
             settings: newSettings

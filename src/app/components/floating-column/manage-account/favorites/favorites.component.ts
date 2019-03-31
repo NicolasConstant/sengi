@@ -30,7 +30,6 @@ export class FavoritesComponent implements OnInit {
 
     @Input('account')
     set account(acc: AccountWrapper) {
-        console.warn('account');
         this._account = acc;
         this.getFavorites();
     }
