@@ -173,13 +173,13 @@ export class MastodonService {
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
 
-    favorite(account: AccountInfo, status: Status): any {
+    favorite(account: AccountInfo, status: Status): Promise<Status> {
         const route = `https://${account.instance}${this.apiRoutes.favouritingStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
 
-    unfavorite(account: AccountInfo, status: Status): any {
+    unfavorite(account: AccountInfo, status: Status): Promise<Status> {
         const route = `https://${account.instance}${this.apiRoutes.unfavouritingStatus}`.replace('{0}', status.id);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
