@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { faStar, faUserPlus, faRetweet } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStar2 } from "@fortawesome/free-regular-svg-icons";
@@ -6,10 +6,11 @@ import { faStar as faStar2 } from "@fortawesome/free-regular-svg-icons";
 import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
-import { Status, Notification, Account } from '../../../../services/models/mastodon.interfaces';
+import { Notification, Account } from '../../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { AccountInfo } from '../../../../states/accounts.state';
+import { OpenThreadEvent } from '../../../../services/tools.service';
 
 @Component({
     selector: 'app-notifications',
@@ -23,6 +24,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 
     notifications: NotificationWrapper[] = [];
     isLoading = false;
+
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('account')
     set account(acc: AccountWrapper) {
@@ -113,6 +118,18 @@ export class NotificationsComponent implements OnInit, OnDestroy {
             });
     }
 
+    
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
+    }
+
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
+    }
 }
 
 class NotificationWrapper {

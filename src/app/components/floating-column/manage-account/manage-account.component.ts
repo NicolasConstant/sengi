@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { faAt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBell, faEnvelope, faUser, faStar } from "@fortawesome/free-regular-svg-icons";
 import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
+import { OpenThreadEvent } from '../../../services/tools.service';
 
 
 @Component({
@@ -23,6 +24,10 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     subPanel = 'account';
     hasNotifications = false;
     hasMentions = false;
+
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('account')
     set account(acc: AccountWrapper) {
@@ -64,5 +69,17 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     loadSubPanel(subpanel: string): boolean {
         this.subPanel = subpanel;
         return false;
+    }
+
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
+    }
+
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 }

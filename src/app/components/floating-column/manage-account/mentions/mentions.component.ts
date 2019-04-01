@@ -1,6 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Store } from '@ngxs/store';
 
 import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
@@ -8,8 +7,7 @@ import { StatusWrapper } from '../../../../models/common.model';
 import { Status, Notification } from '../../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { AccountSettings, SettingsState } from '../../../../states/settings.state';
-import { ToolsService } from '../../../../services/tools.service';
+import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
 
 
 @Component({
@@ -24,6 +22,10 @@ export class MentionsComponent implements OnInit, OnDestroy {
     isThread = false;
     hasContentWarnings = false;
     
+    @Output() browseAccountEvent = new EventEmitter<string>();
+    @Output() browseHashtagEvent = new EventEmitter<string>();
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+
     @Input('account')
     set account(acc: AccountWrapper) {
         console.warn('account');
@@ -48,8 +50,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
-        private readonly mastodonService: MastodonService,
-        private readonly store: Store) { 
+        private readonly mastodonService: MastodonService) { 
             
         }
 
@@ -120,5 +121,17 @@ export class MentionsComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.isLoading = false;
             });
+    }
+    
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
+    }
+
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
     }
 }
