@@ -196,7 +196,7 @@ export class UserNotification {
     hasNewNotifications: boolean;
     hasNewMentions: boolean;
 
-    notifications: Notification[];
-    mentions: Status[];
+    notifications: Notification[] = [];
+    mentions: Status[] = [];
     lastId: string;
 }
