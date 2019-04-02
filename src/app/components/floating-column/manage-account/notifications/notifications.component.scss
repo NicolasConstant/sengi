@@ -50,3 +50,41 @@
 .followed {
     color: $boost-color;
 }
+
+.follow-account {
+    padding: 5px;
+    height: 60px;
+    width: calc(100%);
+    overflow: hidden;
+    display: block;
+    position: relative;
+    text-decoration: none;
+
+    &__avatar {
+        float: left;
+        margin: 0 0 0 10px;
+        width: 45px;
+        height: 45px;
+        border-radius: 2px;
+    }
+
+    $acccount-info-left: 70px;
+    &__display-name {
+        position: absolute;
+        top: 7px;
+        left:  $acccount-info-left;
+        color: whitesmoke;      
+    }
+
+    &:hover &__display-name {
+        text-decoration: underline;
+    }
+
+    &__acct {
+        position: absolute;
+        top: 27px;
+        left: $acccount-info-left;
+        font-size: 13px;
+        color: $status-links-color;
+    }
+}

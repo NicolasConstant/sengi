@@ -117,7 +117,15 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             });
     }
+    
+    openAccount(account: Account): boolean {
+        let accountName = account.acct;
+        if (!accountName.includes('@'))
+            accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
 
+        this.browseAccountEvent.next(accountName);
+        return false;
+    }
     
     browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
