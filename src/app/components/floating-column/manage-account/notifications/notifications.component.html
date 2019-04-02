@@ -1,0 +1,45 @@
+<div class="stream flexcroll" #statusstream (scroll)="onScroll()">
+    <div class="stream__notification" *ngFor="let notification of notifications">
+        <!-- <div *ngIf="notification.type === 'favourite'">
+            <div class="stream__notification--icon">
+                <fa-icon class="favorite" [icon]="faStar"></fa-icon>
+            </div>
+            <div class="stream__notification--label">
+                <a href class="stream__link">{{ notification.account.username }}</a> favorited your status
+            </div>
+        </div>
+
+        <div *ngIf="notification.type === 'reblog'">
+            <div class="stream__notification--icon">
+                <fa-icon class="boost" [icon]="faRetweet"></fa-icon>
+            </div>
+            <div class="stream__notification--label">
+                <a href class="stream__link">{{ notification.account.username }}</a> boosted your status
+            </div>
+        </div> -->
+
+        <div *ngIf="notification.type === 'follow'">
+            <div class="stream__notification--icon">
+                <fa-icon class="followed" [icon]="faUserPlus"></fa-icon>
+            </div>
+            <div class="stream__notification--label">
+                <a href class="stream__link"
+                    (click)="openAccount(notification.account)">{{ notification.account.display_name }}</a> followed
+                you!
+            </div>
+
+            <a href (click)="openAccount(notification.account)" class="follow-account" title="{{notification.account.acct}}">
+                <img class="follow-account__avatar" src="{{ notification.account.avatar }}" />
+                <span class="follow-account__display-name" >{{ notification.account.display_name }}</span>
+                <span class="follow-account__acct">@{{ notification.account.acct }}</span>
+            </a>
+        </div>
+
+        <app-status *ngIf="notification.status" class="stream__status" [statusWrapper]="notification.status"
+            [notificationAccount]="notification.account" [notificationType]="notification.type"
+            (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+            (browseThreadEvent)="browseThread($event)"></app-status>
+    </div>
+
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+</div>

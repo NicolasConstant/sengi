@@ -10,7 +10,11 @@
         </a>
     </div>
 
-    <app-manage-account *ngIf="openPanel === 'manageAccount'" [account]="userAccountUsed"></app-manage-account>
+    <app-manage-account *ngIf="openPanel === 'manageAccount'" 
+        [account]="userAccountUsed"
+        (browseAccountEvent)="browseAccount($event)" 
+        (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-manage-account>
     <app-add-new-status *ngIf="openPanel === 'createNewStatus'"></app-add-new-status>
     <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
     <app-search *ngIf="openPanel === 'search'" 

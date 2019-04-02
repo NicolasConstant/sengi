@@ -1,67 +1,60 @@
 @import "variables";
 @import "panel";
-.account-editor {
-    // padding: 10px 10px 0 7px;
-    // font-size: $small-font-size;
-    // &__title {
-    //     font-size: 13px;
-    //     text-transform: uppercase;
-    //     margin: 6px 0 12px 0;
-    // }
-    &__display-avatar {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    &__avatar {
-        // display: block;
-        width: 75px;
-        border-radius: 50px;
-        transform: translateX(15px); // margin: auto;
-    }
+@import "commons";
+$account-header-height: 60px;
+.panel {
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .account {
-    &__label {
-        // text-decoration: underline;
-        font-size: $small-font-size;
-        margin-left: 5px;
-        color: $font-color-secondary;
-    }
-    &__margin-top {
-        margin-top: 25px;
-    }
-    &__link {
-        text-decoration: none;
-        display: block; // width: calc(100% - 20px);
-        width: 100%; // height: 30px;
-        padding: 5px 10px; // border: solid 1px black;
-        &:not(:last-child) {
-            margin-bottom: 5px;
+    &__header {
+        // padding-left: 10px;
+        padding-left: 5px;
+        padding-right: 10px;
+        padding-bottom: 5px;
+        height: $account-header-height; //border-top: 1px solid #222736;
+        border-bottom: 1px solid #222736;
+        &--button {
+            // outline: 1px greenyellow solid;
+            margin-top: 20px;
+            width: 35px;
+            height: 35px;
+            float: right;
+            margin-left: 5px;
+            font-size: 22px;
+            font-size: 20px;
+            color: $font-link-primary;
+            padding-left: 6px;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            transition: all .2s;
+            &:hover {
+                color: $font-link-primary-hover;
+            }
+            &--selected {
+                color: whitesmoke;
+                &:hover {
+                    color: whitesmoke;
+                }
+            }
+            &--notification {
+                color: rgb(250, 152, 41);
+                &:hover {
+                    color: rgb(255, 185, 106);
+                }
+            }
         }
     }
-    &__mid-link {
-        text-decoration: none;
-        display: block; // width: calc(100% - 20px);
-        width: 45%; // height: 30px;
-        padding: 5px 10px; // border: solid 1px black;
-        &:not(:last-child) {
-            margin-bottom: 5px;
-        }
+    &__avatar {
+        width: 50px;
+        border-radius: 3px;
     }
-    &__blue {
-        background-color: $color-primary;
-        color: #fff;
-        &:hover {
-            background-color: lighten($color-primary, 15);
-        }
-    }
-
-    &__red {
-        $red-button-color: rgb(65, 3, 3);
-        background-color: $red-button-color;
-        color: #fff;
-        &:hover {
-            background-color: lighten($red-button-color, 15);
-        }
+    &__body {
+        overflow: auto;
+        height: calc(100% - #{$account-header-height} - 31px);
+        display: block;
+        font-size: $default-font-size;
     }
 }

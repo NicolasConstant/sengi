@@ -1,8 +1,8 @@
 {
   "name": "sengi",
   "version": "0.0.0",
-  "license": "MIT",
-  "main": "main.js",
+  "license": "AGPL-3.0-or-later",
+  "main": "main-electron.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -5,12 +5,13 @@ import { AccountInfo } from '../states/accounts.state';
 import { MastodonService } from './mastodon.service';
 import { Account, Results, Status } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
+import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ToolsService {
-
+    
     constructor(
         private readonly mastodonService: MastodonService,
         private readonly store: Store) { }
@@ -19,6 +20,23 @@ export class ToolsService {
     getSelectedAccounts(): AccountInfo[] {
         var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         return regAccounts.filter(x => x.isSelected);
+    }
+    
+    getAccountSettings(account: AccountInfo): AccountSettings {
+        var accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
+        let accountSettings = accountsSettings.find(x => x.accountId === account.id);
+        if(!accountSettings){
+            accountSettings = new AccountSettings();
+            accountSettings.accountId = account.id;
+            this.saveAccountSettings(accountSettings);           
+        }
+        return accountSettings;
+    }
+
+    saveAccountSettings(accountSettings: AccountSettings){
+        this.store.dispatch([
+            new SaveAccountSettings(accountSettings)
+        ])
     }
 
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {
@@ -42,7 +60,7 @@ export class ToolsService {
         if (!isProvider) {
             statusPromise = statusPromise.then((foreignStatus: Status) => {
                 const statusUrl = foreignStatus.url;
-                return this.mastodonService.search(account, statusUrl)
+                return this.mastodonService.search(account, statusUrl, true)
                     .then((results: Results) => {
                         return results.statuses[0];
                     });
@@ -51,6 +69,7 @@ export class ToolsService {
 
         return statusPromise;
     }
+
 }
 
 export class OpenThreadEvent {

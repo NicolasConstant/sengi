@@ -10,6 +10,7 @@ import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { MastodonService } from "../../services/mastodon.service";
 import { NotificationService } from "../../services/notification.service";
+import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
 
 @Component({
     selector: "app-left-side-bar",
@@ -19,14 +20,15 @@ import { NotificationService } from "../../services/notification.service";
 export class LeftSideBarComponent implements OnInit, OnDestroy {
     faCommentAlt = faCommentAlt;
 
-    accounts: AccountWrapper[] = [];
+    accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;
     private accounts$: Observable<AccountInfo[]>;
 
-    // private loadedAccounts: { [index: string]: AccountInfo } = {};
-    private sub: Subscription;
+    private accountSub: Subscription;
+    private notificationSub: Subscription;
 
     constructor(
+        private readonly userNotificationServiceService: UserNotificationService,
         private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService,
@@ -37,7 +39,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
     private currentLoading: number;
     ngOnInit() {
-        this.accounts$.subscribe((accounts: AccountInfo[]) => {
+        this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
                 //Update and Add
                 for (let acc of accounts) {
@@ -45,8 +47,9 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                     if (previousAcc) {
                         previousAcc.info.isSelected = acc.isSelected;
                     } else {
-                        const accWrapper = new AccountWrapper();
+                        const accWrapper = new AccountWithNotificationWrapper();
                         accWrapper.info = acc;
+
                         this.accounts.push(accWrapper);
 
                         this.mastodonService.retrieveAccountDetails(acc)
@@ -61,17 +64,31 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
                 //Delete
                 const deletedAccounts = this.accounts.filter(x => accounts.findIndex(y => y.id === x.info.id) === -1);
-                for(let delAcc of deletedAccounts){
+                for (let delAcc of deletedAccounts) {
                     this.accounts = this.accounts.filter(x => x.info.id !== delAcc.info.id);
                 }
 
                 this.hasAccounts = this.accounts.length > 0;
             }
         });
+
+        this.notificationSub = this.userNotificationServiceService.userNotifications.subscribe((notifications: UserNotification[]) => {
+
+            notifications.forEach((notification: UserNotification) => {
+                const acc = this.accounts.find(x => x.info.id === notification.account.id);
+                if(acc){
+                    acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
+                }
+            });
+
+            console.warn('new notifications');
+            console.warn(notifications);
+        });
     }
 
     ngOnDestroy(): void {
-        this.sub.unsubscribe();
+        this.accountSub.unsubscribe();
+        this.notificationSub.unsubscribe();
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
@@ -101,4 +118,15 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.navigationService.openPanel(LeftPanelType.Settings);
         return false;
     }
+}
+
+export class AccountWithNotificationWrapper extends AccountWrapper {
+    // constructor(accountWrapper: AccountWrapper) {
+    //     super();
+
+    //     this.avatar = accountWrapper.avatar;
+    //     this.info = accountWrapper.info;
+    // }
+
+    hasActivityNotifications: boolean;
 }

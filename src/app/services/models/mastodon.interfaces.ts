@@ -11,7 +11,12 @@ export interface TokenData {
     access_token: string;
     token_type: string;
     scope: string;
-    created_at: string;
+    created_at: number;
+
+    //TODO: Pleroma support this
+    me: string;
+    expires_in: number;
+    refresh_token: string;
 }
 
 export interface Account {

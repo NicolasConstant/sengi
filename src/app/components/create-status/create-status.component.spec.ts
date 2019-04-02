@@ -129,7 +129,6 @@ describe('CreateStatusComponent', () => {
         expect(result[1].length).toBeLessThanOrEqual(527);
         expect(result[0]).toContain('@Lorem@ipsum.com ');
         expect(result[1]).toContain('@Lorem@ipsum.com ');
-        console.warn(result);
     });
 
 });
