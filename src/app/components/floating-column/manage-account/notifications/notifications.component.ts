@@ -19,8 +19,8 @@ import { OpenThreadEvent } from '../../../../services/tools.service';
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
     faUserPlus = faUserPlus;
-    faStar = faStar;
-    faRetweet = faRetweet;
+    // faStar = faStar;
+    // faRetweet = faRetweet;
 
     notifications: NotificationWrapper[] = [];
     isLoading = false;

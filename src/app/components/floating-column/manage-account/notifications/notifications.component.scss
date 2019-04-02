@@ -43,16 +43,8 @@
 
     &__status {
         display: block;
-        opacity: 0.65;
+        // opacity: 0.65;
     }
-}
-
-.boost {
-    color: $boost-color;
-}
-
-.favorite {
-    color: $favorite-color;
 }
 
 .followed {
