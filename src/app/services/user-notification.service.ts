@@ -110,13 +110,13 @@ export class UserNotificationService {
 
         const accountSettings = this.toolsService.getAccountSettings(account);
 
-        if (lastMentionNotification && new Date(lastMentionNotification.created_at) > new Date(accountSettings.lastMentionCreationDate)) {
+        if (lastMentionNotification && accountSettings.lastMentionCreationDate && new Date(lastMentionNotification.created_at) > new Date(accountSettings.lastMentionCreationDate)) {
             userNotification.hasNewMentions = true;
         } else {
             userNotification.hasNewMentions = false;
         }
 
-        if (lastNotification && (new Date(lastNotification.created_at)) > new Date(accountSettings.lastNotificationCreationDate)) {
+        if (lastNotification && accountSettings.lastNotificationCreationDate && (new Date(lastNotification.created_at)) > new Date(accountSettings.lastNotificationCreationDate)) {
             userNotification.hasNewNotifications = true;
         } else {
             userNotification.hasNewNotifications = false;
@@ -125,18 +125,20 @@ export class UserNotificationService {
         if (!accountSettings.lastMentionCreationDate && lastMentionNotification) {           
             accountSettings.lastMentionCreationDate = lastMentionNotification.created_at;
             this.toolsService.saveAccountSettings(accountSettings);
-        } else if(!accountSettings.lastMentionCreationDate){
-            accountSettings.lastMentionCreationDate = "2000-01-01T01:01:01.000Z";
-            this.toolsService.saveAccountSettings(accountSettings);
-        }
+        } 
+        // else if(!accountSettings.lastMentionCreationDate){
+        //     accountSettings.lastMentionCreationDate = "2000-01-01T01:01:01.000Z";
+        //     this.toolsService.saveAccountSettings(accountSettings);
+        // }
 
         if(!accountSettings.lastNotificationCreationDate && lastNotification){            
             accountSettings.lastNotificationCreationDate = lastNotification.created_at;
             this.toolsService.saveAccountSettings(accountSettings);
-        } else if(!accountSettings.lastNotificationCreationDate){
-            accountSettings.lastNotificationCreationDate = "2000-01-01T01:01:01.000Z";
-            this.toolsService.saveAccountSettings(accountSettings);
-        }
+        } 
+        // else if(!accountSettings.lastNotificationCreationDate){
+        //     accountSettings.lastNotificationCreationDate = "2000-01-01T01:01:01.000Z";
+        //     this.toolsService.saveAccountSettings(accountSettings);
+        // }
 
         return userNotification;
     }
