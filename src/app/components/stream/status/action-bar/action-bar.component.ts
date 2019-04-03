@@ -119,10 +119,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
             usableStatus
                 .then((status: Status) => {
-                    if (this.isBoosted) {
+                    if (this.isBoosted && status.reblogged) {
                         return this.mastodonService.unreblog(account, status);
-                    } else {
+                    } else if(!this.isBoosted && !status.reblogged){
                         return this.mastodonService.reblog(account, status);
+                    } else {
+                        return Promise.resolve(status);
                     }
                 })
                 .then((boostedStatus: Status) => {
@@ -144,10 +146,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
             usableStatus
                 .then((status: Status) => {
-                    if (this.isFavorited) {
+                    if (this.isFavorited && status.favourited) {
                         return this.mastodonService.unfavorite(account, status);
-                    } else {
+                    } else if(!this.isFavorited && !status.favourited) {
                         return this.mastodonService.favorite(account, status);
+                    } else {
+                        return Promise.resolve(status);
                     }
                 })
                 .then((favoritedStatus: Status) => {

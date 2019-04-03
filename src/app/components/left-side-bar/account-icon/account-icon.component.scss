@@ -1,45 +1,98 @@
 .account-icon {
     display: inline-block;
-    width: 50px;
-    // padding-top: 4px;
+    width: 50px; // padding-top: 4px;
     // margin-left: 5px;
     margin: 0 0 5px 5px;
-   
-   
-
-  
     &__avatar {
-        border-radius: 50%;
         border-radius: 2px;
         width: 40px;
         opacity: .3;
         transition: all .2s;
-
         &:hover {
             filter: alpha(opacity=50);
             opacity: .5;
         }
-
         &--selected {
             // border-radius: 20%;
             filter: alpha(opacity=100);
             opacity: 1;
-
             &:hover {
                 filter: alpha(opacity=100);
                 opacity: 1;
             }
-    
         }
     }
-    
-   
-    // & a {
-    //     margin-left: 4px;
-    //     /*margin-top: 4px;*/
-    // }
-    // & img {
-    //     width: 40px;
-    //     border-radius: 50%;
-    // }
+}
+
+@keyframes flickerAnimation {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-o-keyframes flickerAnimation {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes flickerAnimation {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes flickerAnimation {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.hasActivity {
+
+    -webkit-animation: flickerAnimation 2s infinite;
+    -moz-animation: flickerAnimation 2s infinite;
+    -o-animation: flickerAnimation 2s infinite;
+     animation: flickerAnimation 2s infinite;
+
+    border-radius: 2px;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border: 2px solid orange;
+    z-index: 20;
+    color: orange;
+    font-size: 10px;
+    font-style: italic;
+    padding: 23px 0 0 3px;
+
+    background: rgba(0,0,0, .55);
+
+    &:hover {
+        color: orange;
+    }
 }

@@ -21,6 +21,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     isLoading = true; 
     isThread = false;
     displayError: string;
+    hasContentWarnings = false;
 
     private _streamElement: StreamElement;
     private account: AccountInfo;

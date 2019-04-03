@@ -14,10 +14,12 @@ export class NotificationService {
         this.notifactionStream.next(newNotification);
     }
 
-    public notifyHttpError(err: HttpErrorResponse){
-        console.error(err.message);
-        // let message = `${err.status}: ${err.statusText}`;
-        let message = `${err.statusText}`;
+    public notifyHttpError(err: HttpErrorResponse){    
+        let message = 'Oops, Unknown Error'  ;
+        try{  
+            message = `Oops, Error ${err.status}`;
+            console.error(err.message);
+        } catch(err){}
         this.notify(message, true);
     }
 }

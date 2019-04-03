@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { faStar, faRetweet } from "@fortawesome/free-solid-svg-icons";
+
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
@@ -10,6 +12,9 @@ import { StatusWrapper } from '../../../models/common.model';
     styleUrls: ["./status.component.scss"]
 })
 export class StatusComponent implements OnInit {
+    faStar = faStar;
+    faRetweet = faRetweet;
+
     displayedStatus: Status;
     reblog: boolean;
     hasAttachments: boolean;
@@ -26,6 +31,9 @@ export class StatusComponent implements OnInit {
     @ViewChild('appActionBar') appActionBar: ActionBarComponent;
 
     @Input() isThreadDisplay: boolean;
+
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite';
+    @Input() notificationAccount: Account;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -92,7 +100,7 @@ export class StatusComponent implements OnInit {
             }
         }
 
-        if(this.isThreadDisplay) return;
+        if (this.isThreadDisplay) return;
 
         if (status.in_reply_to_account_id && status.in_reply_to_account_id === status.account.id) {
             this.isThread = true;

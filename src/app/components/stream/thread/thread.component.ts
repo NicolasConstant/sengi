@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { MastodonService } from '../../../services/mastodon.service';
@@ -7,6 +7,7 @@ import { Results, Context, Status } from '../../../services/models/mastodon.inte
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper } from '../../../models/common.model';
+import { StatusComponent } from '../status/status.component';
 
 @Component({
     selector: 'app-thread',
@@ -18,6 +19,7 @@ export class ThreadComponent implements OnInit {
     displayError: string;
     isLoading = true; 
     isThread = true;
+    hasContentWarnings = false;
 
     private lastThreadEvent: OpenThreadEvent;
 
@@ -32,6 +34,8 @@ export class ThreadComponent implements OnInit {
             this.getThread(thread);
         }
     }
+
+    @ViewChildren(StatusComponent) statusChildren: QueryList<StatusComponent>;
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -86,6 +90,8 @@ export class ThreadComponent implements OnInit {
                             const wrapper = new StatusWrapper(s, currentAccount);
                             this.statuses.push(wrapper);
                         }
+
+                        this.hasContentWarnings = this.statuses.filter(x => x.status.sensitive || x.status.spoiler_text).length > 1;
                     });
                  
             })
@@ -118,5 +124,13 @@ export class ThreadComponent implements OnInit {
 
     browseThread(openThreadEvent: OpenThreadEvent): void {
         this.browseThreadEvent.next(openThreadEvent);
+    }
+
+    removeCw(){
+        const statuses = this.statusChildren.toArray();
+        statuses.forEach(x => {
+            x.removeContentWarning();
+        });
+        this.hasContentWarnings = false;
     }
 }

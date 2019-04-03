@@ -1,0 +1,50 @@
+@import "variables";
+@import "commons";
+
+.my-account {   
+    transition: all .2s;
+    &__body {
+        overflow: auto;
+        height: calc(100%);
+        // width: calc(100%);
+        padding-left: 10px;
+        padding-right: 10px; 
+        font-size: $small-font-size;
+        padding-bottom: 20px;
+        outline: 1px dotted greenyellow;
+    }
+    &__label {
+        // text-decoration: underline;
+        font-size: $small-font-size;
+        margin-top: 10px;
+        margin-left: 5px;
+        color: $font-color-secondary;
+    }  
+    &__link {
+        text-decoration: none;
+        display: block; // width: calc(100% - 20px);
+        width: 100%; // height: 30px;
+        padding: 5px 10px; // border: solid 1px black;
+        &:not(:last-child) {
+            margin-bottom: 5px;
+        }
+    }
+    &__margin-top {
+        margin-top: 25px;
+    }
+    &__blue {
+        background-color: $color-primary;
+        color: #fff;
+        &:hover {
+            background-color: lighten($color-primary, 15);
+        }
+    }
+    &__red {
+        $red-button-color: rgb(65, 3, 3);
+        background-color: $red-button-color;
+        color: #fff;
+        &:hover {
+            background-color: lighten($red-button-color, 15);
+        }
+    }
+}
