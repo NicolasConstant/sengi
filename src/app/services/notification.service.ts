@@ -15,6 +15,7 @@ export class NotificationService {
     }
 
     public notifyHttpError(err: HttpErrorResponse){
+        console.error(err);
         console.error(err.message);
         // let message = `${err.status}: ${err.statusText}`;
         let message = `${err.statusText}`;

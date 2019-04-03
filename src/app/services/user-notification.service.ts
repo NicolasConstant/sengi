@@ -98,57 +98,41 @@ export class UserNotificationService {
         const currentNotifications = userNotification.notifications;
         const currentMentions = userNotification.mentions;
 
+        const lastMention = userNotification.mentions[0];
+        let lastMentionNotification: Notification;
+        if (lastMention) {
+            lastMentionNotification = userNotification.allNotifications.find(x => x.type === 'mention' && x.status.id === lastMention.id);
+        }
+        const lastNotification = userNotification.notifications[0];
+
         userNotification.notifications = [...newNotifications, ...currentNotifications];
         userNotification.mentions = [...newMentions, ...currentMentions];
-        
+
         const accountSettings = this.toolsService.getAccountSettings(account);
 
-        if(accountSettings.lastMentionReadId && userNotification.mentions[0] && accountSettings.lastMentionReadId !== userNotification.mentions[0].id){
+        if (accountSettings.lastMentionReadId && lastMention && accountSettings.lastMentionReadId !== lastMention.id && lastMentionNotification.created_at > accountSettings.lastMentionCreationDate) {
             userNotification.hasNewMentions = true;
         } else {
             userNotification.hasNewMentions = false;
         }
 
-        if(accountSettings.lastNotificationReadId && userNotification.notifications[0] && accountSettings.lastNotificationReadId !== userNotification.notifications[0].id){
+        if (accountSettings.lastNotificationReadId && lastNotification && accountSettings.lastNotificationReadId !== lastNotification.id && lastNotification.created_at > accountSettings.lastNotificationCreationDate) {
             userNotification.hasNewNotifications = true;
         } else {
             userNotification.hasNewNotifications = false;
         }
 
-        if((!accountSettings.lastMentionReadId && userNotification.mentions[0]) 
-            || (!accountSettings.lastNotificationReadId && userNotification.notifications[0])){
-            accountSettings.lastMentionReadId = userNotification.mentions[0].id;
-            accountSettings.lastNotificationReadId = userNotification.notifications[0].id;
+        if ((!accountSettings.lastMentionReadId && !accountSettings.lastNotificationCreationDate) && lastMention && lastMentionNotification) {
+            accountSettings.lastMentionReadId = lastMention.id;
+            accountSettings.lastMentionCreationDate = lastMentionNotification.created_at;
             this.toolsService.saveAccountSettings(accountSettings);
         }
 
-        // if (!currentNotifications) {
-        //     userNotification.notifications = newNotifications;
-
-        // } else if (currentNotifications.length === 0) {
-        //     if (newNotifications.length > 0) {
-        //         userNotification.hasNewNotifications = true;
-        //     }
-        //     userNotification.notifications = newNotifications;
-
-        // } else if (newNotifications.length > 0) {
-        //     userNotification.hasNewNotifications = currentNotifications[0].id !== newNotifications[0].id;
-        //     userNotification.notifications = [...newNotifications, ...currentNotifications];
-        // }
-
-        // if (!currentNotifications) {
-        //     userNotification.mentions = newMentions;
-
-        // } else if (currentMentions.length === 0) {
-        //     if (newMentions.length > 0) {
-        //         userNotification.hasNewMentions = true;
-        //     }
-        //     userNotification.mentions = newMentions;
-
-        // } else if (newMentions.length > 0) {
-        //     userNotification.hasNewMentions = currentMentions[0].id !== newMentions[0].id;
-        //     userNotification.mentions = [...newMentions, ...currentMentions];
-        // }
+        if((!accountSettings.lastNotificationReadId || !accountSettings.lastNotificationCreationDate) && lastNotification){
+            accountSettings.lastNotificationReadId = lastNotification.id;
+            accountSettings.lastNotificationCreationDate = lastNotification.created_at;
+            this.toolsService.saveAccountSettings(accountSettings);
+        }
 
         return userNotification;
     }
@@ -158,7 +142,7 @@ export class UserNotificationService {
         const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
 
         const lastMention = currentAccountNotifications.mentions[0];
-        if(lastMention){
+        if (lastMention) {
             // const lastNotification = currentAccountNotifications.allNotifications.find(x => x.status && x.status.id === lastMention.id);
             const settings = this.toolsService.getAccountSettings(account);
             settings.lastMentionReadId = lastMention.id;
@@ -176,7 +160,7 @@ export class UserNotificationService {
         const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
 
         const lastNotification = currentAccountNotifications.notifications[0];
-        if(lastNotification){
+        if (lastNotification) {
             const settings = this.toolsService.getAccountSettings(account);
             settings.lastNotificationReadId = lastNotification.id;
             this.toolsService.saveAccountSettings(settings);

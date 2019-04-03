@@ -20,7 +20,9 @@ export class AccountSettings {
     displayMention: boolean = true;
     displayNotifications: boolean = true;
     lastMentionReadId: string;
+    lastMentionCreationDate: Date;
     lastNotificationReadId: string;
+    lastNotificationCreationDate: Date;
 }
 
 export class GlobalSettings {

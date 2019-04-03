@@ -115,7 +115,7 @@ export interface Mention {
 export interface Notification {
     id: string;
     type: 'mention' | 'reblog' | 'favourite' | 'follow';
-    created_at: string;
+    created_at: Date;
     account: Account;
     status?: Status;
 }

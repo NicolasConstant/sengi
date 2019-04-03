@@ -73,16 +73,12 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         });
 
         this.notificationSub = this.userNotificationServiceService.userNotifications.subscribe((notifications: UserNotification[]) => {
-
             notifications.forEach((notification: UserNotification) => {
                 const acc = this.accounts.find(x => x.info.id === notification.account.id);
                 if(acc){
                     acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
                 }
             });
-
-            console.warn('new notifications');
-            console.warn(notifications);
         });
     }
 
