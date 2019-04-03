@@ -98,39 +98,43 @@ export class UserNotificationService {
         const currentNotifications = userNotification.notifications;
         const currentMentions = userNotification.mentions;
 
-        const lastMention = userNotification.mentions[0];
+        const lastMention = newMentions[0];
         let lastMentionNotification: Notification;
         if (lastMention) {
             lastMentionNotification = userNotification.allNotifications.find(x => x.type === 'mention' && x.status.id === lastMention.id);
         }
-        const lastNotification = userNotification.notifications[0];
+        const lastNotification = newNotifications[0];
 
         userNotification.notifications = [...newNotifications, ...currentNotifications];
         userNotification.mentions = [...newMentions, ...currentMentions];
 
         const accountSettings = this.toolsService.getAccountSettings(account);
 
-        if (accountSettings.lastMentionReadId && lastMention && accountSettings.lastMentionReadId !== lastMention.id && lastMentionNotification.created_at > accountSettings.lastMentionCreationDate) {
+        if (lastMentionNotification && new Date(lastMentionNotification.created_at) > new Date(accountSettings.lastMentionCreationDate)) {
             userNotification.hasNewMentions = true;
         } else {
             userNotification.hasNewMentions = false;
         }
 
-        if (accountSettings.lastNotificationReadId && lastNotification && accountSettings.lastNotificationReadId !== lastNotification.id && lastNotification.created_at > accountSettings.lastNotificationCreationDate) {
+        if (lastNotification && (new Date(lastNotification.created_at)) > new Date(accountSettings.lastNotificationCreationDate)) {
             userNotification.hasNewNotifications = true;
         } else {
             userNotification.hasNewNotifications = false;
         }
 
-        if ((!accountSettings.lastMentionReadId && !accountSettings.lastNotificationCreationDate) && lastMention && lastMentionNotification) {
-            accountSettings.lastMentionReadId = lastMention.id;
+        if (!accountSettings.lastMentionCreationDate && lastMentionNotification) {           
             accountSettings.lastMentionCreationDate = lastMentionNotification.created_at;
+            this.toolsService.saveAccountSettings(accountSettings);
+        } else if(!accountSettings.lastMentionCreationDate){
+            accountSettings.lastMentionCreationDate = "2000-01-01T01:01:01.000Z";
             this.toolsService.saveAccountSettings(accountSettings);
         }
 
-        if((!accountSettings.lastNotificationReadId || !accountSettings.lastNotificationCreationDate) && lastNotification){
-            accountSettings.lastNotificationReadId = lastNotification.id;
+        if(!accountSettings.lastNotificationCreationDate && lastNotification){            
             accountSettings.lastNotificationCreationDate = lastNotification.created_at;
+            this.toolsService.saveAccountSettings(accountSettings);
+        } else if(!accountSettings.lastNotificationCreationDate){
+            accountSettings.lastNotificationCreationDate = "2000-01-01T01:01:01.000Z";
             this.toolsService.saveAccountSettings(accountSettings);
         }
 
@@ -141,11 +145,12 @@ export class UserNotificationService {
         let currentNotifications = this.userNotifications.value;
         const currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
 
-        const lastMention = currentAccountNotifications.mentions[0];
-        if (lastMention) {
-            // const lastNotification = currentAccountNotifications.allNotifications.find(x => x.status && x.status.id === lastMention.id);
+        const lastMention = currentAccountNotifications.mentions[0];        
+
+        if (lastMention) {            
             const settings = this.toolsService.getAccountSettings(account);
-            settings.lastMentionReadId = lastMention.id;
+            const lastMentionNotification = currentAccountNotifications.allNotifications.find(x => x.type === 'mention' && x.status.id === lastMention.id);
+            settings.lastMentionCreationDate = lastMentionNotification.created_at;
             this.toolsService.saveAccountSettings(settings);
         }
 
@@ -162,7 +167,7 @@ export class UserNotificationService {
         const lastNotification = currentAccountNotifications.notifications[0];
         if (lastNotification) {
             const settings = this.toolsService.getAccountSettings(account);
-            settings.lastNotificationReadId = lastNotification.id;
+            settings.lastNotificationCreationDate = lastNotification.created_at;
             this.toolsService.saveAccountSettings(settings);
         }
 
