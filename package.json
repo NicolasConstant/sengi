@@ -4,7 +4,8 @@
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "author": {
-        "name": "Nicolas Constant"
+        "name": "Nicolas Constant",
+        "email": "github@nicolas-constant.com"
     },
     "repository": {
         "type": "git",
