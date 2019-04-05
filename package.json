@@ -79,6 +79,7 @@
     "build": {
         "productName": "Sengi",
         "appId": "org.sengi.desktop",
+        "artifactName": "${productName}-${version}-${os}.${ext}",
         "directories": {
             "output": "release"
         },
