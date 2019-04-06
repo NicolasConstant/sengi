@@ -18,14 +18,17 @@ build: off
 version: '{build}'
 shallow_clone: true
 clone_depth: 1
-artifacts:
-- path: dist
 test_script:
 - ps: >-
     npm run test-nowatch
+
     $wc = New-Object 'System.Net.WebClient'
+
     Get-ChildItem . -Name -Recurse 'TESTS-*.xml'  |
+    
     Foreach-Object {
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
     }
 - npm run dist
+artifacts:
+- path: dist
