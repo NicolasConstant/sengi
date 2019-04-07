@@ -34,6 +34,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     isBoostLocked: boolean;
     isLocked: boolean;
 
+    favoriteIsLoading: boolean;
+    boostIsLoading: boolean;
+
     isContentWarningActive: boolean = false;
 
     private isProviderSelected: boolean;
@@ -48,7 +51,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     constructor(
         private readonly store: Store,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService, 
+        private readonly mastodonService: MastodonService,
         private readonly notificationService: NotificationService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
@@ -87,7 +90,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.isLocked = false;
         }
 
-        if(status.sensitive || status.spoiler_text){
+        if (status.sensitive || status.spoiler_text) {
             this.isContentWarningActive = true;
         }
 
@@ -113,56 +116,63 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
-        //TODO get rid of that
-        this.selectedAccounts.forEach((account: AccountInfo) => {
+        if(this.boostIsLoading) return;
 
-            const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
-            usableStatus
-                .then((status: Status) => {
-                    if (this.isBoosted && status.reblogged) {
-                        return this.mastodonService.unreblog(account, status);
-                    } else if(!this.isBoosted && !status.reblogged){
-                        return this.mastodonService.reblog(account, status);
-                    } else {
-                        return Promise.resolve(status);
-                    }
-                })
-                .then((boostedStatus: Status) => {
-                    this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
-                    this.checkIfBoosted();
-                    // this.isBoosted = !this.isBoosted;
-                })
-                .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
-                });
-        });
+        this.boostIsLoading = true;
+        const account = this.toolsService.getSelectedAccounts()[0];
+        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+        usableStatus
+            .then((status: Status) => {
+                if (this.isBoosted && status.reblogged) {
+                    return this.mastodonService.unreblog(account, status);
+                } else if (!this.isBoosted && !status.reblogged) {
+                    return this.mastodonService.reblog(account, status);
+                } else {
+                    return Promise.resolve(status);
+                }
+            })
+            .then((boostedStatus: Status) => {
+                this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
+                this.checkIfBoosted();
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.boostIsLoading = false;
+            });
 
         return false;
     }
 
     favorite(): boolean {
-        this.selectedAccounts.forEach((account: AccountInfo) => {
-            
-            const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
-            usableStatus
-                .then((status: Status) => {
-                    if (this.isFavorited && status.favourited) {
-                        return this.mastodonService.unfavorite(account, status);
-                    } else if(!this.isFavorited && !status.favourited) {
-                        return this.mastodonService.favorite(account, status);
-                    } else {
-                        return Promise.resolve(status);
-                    }
-                })
-                .then((favoritedStatus: Status) => {
-                    this.favoriteStatePerAccountId[account.id] = favoritedStatus.favourited;
-                    this.checkIfFavorited();
-                    // this.isFavorited = !this.isFavorited;
-                })
-                .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
-                });
-        });
+        if(this.favoriteIsLoading) return;
+
+        this.favoriteIsLoading = true;
+        const account = this.toolsService.getSelectedAccounts()[0];
+        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+        usableStatus
+            .then((status: Status) => {
+                if (this.isFavorited && status.favourited) {
+                    return this.mastodonService.unfavorite(account, status);
+                } else if (!this.isFavorited && !status.favourited) {
+                    return this.mastodonService.favorite(account, status);
+                } else {
+                    return Promise.resolve(status);
+                }
+            })
+            .then((favoritedStatus: Status) => {
+                this.favoriteStatePerAccountId[account.id] = favoritedStatus.favourited;
+                this.checkIfFavorited();
+                // this.isFavorited = !this.isFavorited;
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.favoriteIsLoading = false;
+            });
+
         return false;
     }
 
@@ -189,9 +199,4 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         console.warn('more'); //TODO
         return false;
     }
-
-    // private getSelectedAccounts(): AccountInfo[] {
-    //     var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
-    //     return regAccounts;
-    // }
 }

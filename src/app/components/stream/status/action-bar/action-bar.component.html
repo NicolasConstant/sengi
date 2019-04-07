@@ -4,7 +4,9 @@
     </a>
     <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
 
-    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link" title="Boost" [class.boosted]="isBoosted"
+    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link" title="Boost" 
+        [class.boosted]="isBoosted"
+        [class.boosting]="boostIsLoading"
         (click)="boost()">
         <ion-icon name="md-swap"></ion-icon>
     </a>
@@ -12,7 +14,9 @@
         title="This post cannot be boosted"></ion-icon>
     <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
 
-    <a *ngIf="!isLocked" href class="action-bar__link" title="Favourite" [class.favorited]="isFavorited"
+    <a *ngIf="!isLocked" href class="action-bar__link" title="Favourite" 
+        [class.favorited]="isFavorited"
+        [class.favoriting]="favoriteIsLoading"
         (click)="favorite()">
         <ion-icon name="md-star"></ion-icon>
     </a>
