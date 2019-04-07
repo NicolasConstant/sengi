@@ -1,6 +1,6 @@
 {
     "name": "sengi",
-    "version": "0.5.2",
+    "version": "0.5.1",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "author": {
@@ -103,14 +103,25 @@
                 }
             ]
         },
+        "mac": {
+            "icon": "assets/icons/mac/icon.icns",
+            "target": [
+                "dmg"
+            ],
+            "category": "public.app-category.social-networking"
+        },
         "win": {
+            "icon": "assets/icons/win/icon.ico",
             "target": "nsis"
         },
         "linux": {
+            "icon": "assets/icons/png",
             "target": [
                 "AppImage",
-                "deb"
-            ]
+                "deb",
+                "snap"
+            ],
+            "category": "Network"
         }
     }
 }
