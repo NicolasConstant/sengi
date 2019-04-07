@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { faUser, faHourglassHalf, faUserCheck } from "@fortawesome/free-solid-svg-icons";
 import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
@@ -25,10 +25,13 @@ export class UserProfileComponent implements OnInit {
     faHourglassHalf = faHourglassHalf;
     faUserCheck = faUserCheck;
 
-    account: Account;
+    displayedAccount: Account;
     hasNote: boolean;
 
     isLoading: boolean;
+    
+    private maxReached = false;
+    private maxId: string;
     statusLoading: boolean;
     error: string;
 
@@ -40,6 +43,8 @@ export class UserProfileComponent implements OnInit {
     private currentlyUsedAccount: AccountInfo;
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+
+    @ViewChild('statusstream') public statustream: ElementRef;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -61,12 +66,12 @@ export class UserProfileComponent implements OnInit {
 
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
-            if (this.account) {
-                this.currentlyUsedAccount = accounts.filter(x => x.isSelected)[0];
+            if (this.displayedAccount) {
+                const userAccount = accounts.filter(x => x.isSelected)[0];
 
-                this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
+                this.toolsService.findAccount(userAccount, this.lastAccountName)
                     .then((account: Account) => {
-                        this.getFollowStatus(this.currentlyUsedAccount, account);
+                        this.getFollowStatus(userAccount, account);
                     })
                     .catch((err: HttpErrorResponse) => {
                         this.notificationService.notifyHttpError(err);
@@ -82,7 +87,7 @@ export class UserProfileComponent implements OnInit {
     private load(accountName: string) {
         this.statuses.length = 0;
 
-        this.account = null;
+        this.displayedAccount = null;
         this.isLoading = true;
 
         this.lastAccountName = accountName;
@@ -93,11 +98,11 @@ export class UserProfileComponent implements OnInit {
                 this.isLoading = false;
                 this.statusLoading = true;
 
-                this.account = account;
+                this.displayedAccount = account;
                 this.hasNote = account && account.note && account.note !== '<p></p>';
 
-                const getFollowStatusPromise = this.getFollowStatus(this.currentlyUsedAccount, this.account);
-                const getStatusesPromise = this.getStatuses(this.currentlyUsedAccount, this.account);
+                const getFollowStatusPromise = this.getFollowStatus(this.currentlyUsedAccount, this.displayedAccount);
+                const getStatusesPromise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount);
 
                 return Promise.all([getFollowStatusPromise, getStatusesPromise]);
             })
@@ -113,11 +118,25 @@ export class UserProfileComponent implements OnInit {
     private getStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
         this.statusLoading = true;
         return this.mastodonService.getAccountStatuses(userAccount, account.id, false, false, true, null, null, 40)
-            .then((result: Status[]) => {
-                for (const status of result) {
-                    const wrapper = new StatusWrapper(status, userAccount);
-                    this.statuses.push(wrapper);
-                }
+            .then((statuses: Status[]) => {
+                this.loadStatus(userAccount, statuses);
+
+                // if (statuses.length === 0) {
+                //     this.maxReached = true;
+                //     return;
+                // }
+
+                // for (const status of statuses) {
+                //     const wrapper = new StatusWrapper(status, userAccount);
+                //     this.statuses.push(wrapper);
+                // }
+
+                // this.maxId = this.statuses[this.statuses.length - 1].status.id;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
                 this.statusLoading = false;
             });
     }
@@ -147,10 +166,10 @@ export class UserProfileComponent implements OnInit {
     }
 
     follow(): boolean {
-        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
-        this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
+        const userAccount = this.toolsService.getSelectedAccounts()[0];
+        this.toolsService.findAccount(userAccount, this.lastAccountName)
             .then((account: Account) => {
-                return this.mastodonService.follow(this.currentlyUsedAccount, account);
+                return this.mastodonService.follow(userAccount, account);
             })
             .then((relationship: Relationship) => {
                 this.relationship = relationship;
@@ -162,10 +181,10 @@ export class UserProfileComponent implements OnInit {
     }
 
     unfollow(): boolean {
-        this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
-        this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
+        const userAccount =  this.toolsService.getSelectedAccounts()[0];
+        this.toolsService.findAccount(userAccount, this.lastAccountName)
             .then((account: Account) => {
-                return this.mastodonService.unfollow(this.currentlyUsedAccount, account);
+                return this.mastodonService.unfollow(userAccount, account);
             })
             .then((relationship: Relationship) => {
                 this.relationship = relationship;
@@ -174,5 +193,45 @@ export class UserProfileComponent implements OnInit {
                 this.notificationService.notifyHttpError(err);
             });
         return false;
+    }
+
+    onScroll() {
+        var element = this.statustream.nativeElement as HTMLElement;
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+
+        if (atBottom) {
+            this.scrolledToBottom();
+        }
+    }
+   
+    private scrolledToBottom() {
+        if (this.statusLoading || this.maxReached) return;
+
+        this.statusLoading = true;
+        const userAccount = this.currentlyUsedAccount;
+        this.mastodonService.getAccountStatuses(userAccount, this.displayedAccount.id, false, false, true, this.maxId, null, 40)
+            .then((statuses: Status[]) => {
+                this.loadStatus(userAccount, statuses);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.statusLoading = false;
+            });
+    }
+
+    private loadStatus(userAccount: AccountInfo, statuses: Status[]){
+        if (statuses.length === 0) {
+            this.maxReached = true;
+            return;
+        }
+
+        for (const status of statuses) {
+            const wrapper = new StatusWrapper(status, userAccount);
+            this.statuses.push(wrapper);
+        }
+
+        this.maxId = this.statuses[this.statuses.length - 1].status.id;
     }
 }
