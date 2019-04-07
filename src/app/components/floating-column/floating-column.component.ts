@@ -29,6 +29,7 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.activatedPanelSub = this.navigationService.activatedPanelSubject.subscribe((type: LeftPanelType) => {
+            this.overlayActive = false;
             switch (type) {
                 case LeftPanelType.Closed:
                     this.openPanel = '';
