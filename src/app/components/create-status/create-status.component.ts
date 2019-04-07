@@ -191,6 +191,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             globalUniqueMentions.push(mention);
         }
 
+        const selectedUser = this.toolsService.getSelectedAccounts()[0];
+        globalUniqueMentions = globalUniqueMentions.filter(x => x.toLowerCase() !== `${selectedUser.username}@${selectedUser.instance}`.toLowerCase());
+
         return globalUniqueMentions;
     }
 
