@@ -60,8 +60,14 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     ngOnInit() {
         const status = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
-        this.favoriteStatePerAccountId[account.id] = status.favourited;
-        this.bootedStatePerAccountId[account.id] = status.reblogged;
+
+        if(status.reblog){
+            this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
+            this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
+        } else {
+            this.favoriteStatePerAccountId[account.id] = status.favourited;
+            this.bootedStatePerAccountId[account.id] = status.reblogged;
+        }        
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.checkStatus(accounts);
