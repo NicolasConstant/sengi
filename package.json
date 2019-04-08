@@ -3,6 +3,7 @@
     "version": "0.5.1",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
+    "description": "A multi-account desktop client for Mastodon and Pleroma",
     "author": {
         "name": "Nicolas Constant",
         "email": "github@nicolas-constant.com"
