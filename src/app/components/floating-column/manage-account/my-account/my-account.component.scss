@@ -20,18 +20,6 @@
         margin-left: 5px;
         color: $font-color-secondary;
     }  
-    &__link {
-        text-decoration: none;
-        display: block; // width: calc(100% - 20px);
-        width: 100%; // height: 30px;
-        padding: 5px 10px; // border: solid 1px black;
-        &:not(:last-child) {
-            margin-bottom: 5px;
-        }
-    }
-    &__margin-top {
-        margin-top: 25px;
-    }
     &__blue {
         background-color: $color-primary;
         color: #fff;
@@ -47,4 +35,26 @@
             background-color: lighten($red-button-color, 15);
         }
     }
+    &__link {
+        text-decoration: none;
+        display: block; // width: calc(100% - 20px);
+        width: 100%; // height: 30px;
+        padding: 5px 10px; // border: solid 1px black;
+        &:not(:last-child) {
+            margin-bottom: 5px;
+        }
+        &--icon {
+            float: right;
+        }
+        &--disabled {
+            cursor: default;
+            background-color: darken($color-primary, 4);
+            &:hover {
+                background-color: darken($color-primary, 4);
+            }
+        }
+    }
+    &__margin-top {
+        margin-top: 25px;
+    }   
 }

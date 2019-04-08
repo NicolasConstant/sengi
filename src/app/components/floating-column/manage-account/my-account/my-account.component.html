@@ -1,7 +1,8 @@
 <div class="my-account__body flexcroll">
     <h4 class="my-account__label">add column:</h4>
-    <a class="my-account__link my-account__blue" href *ngFor="let stream of availableStreams" (click)="addStream(stream)">
-        {{ stream.name }}
+    <a class="my-account__link my-account__blue" href *ngFor="let stream of availableStreams" 
+        (click)="addStream(stream)" title="{{ stream.isAdded ? '' : 'add stream'}}" [class.my-account__link--disabled]="stream.isAdded">
+        {{ stream.name }} <fa-icon class="my-account__link--icon" *ngIf="stream.isAdded" [icon]="faCheckSquare"></fa-icon>
     </a>
     <h4 class="my-account__label my-account__margin-top">remove account from sengi:</h4>
     <a class="my-account__link my-account__red" href (click)="removeAccount()">
