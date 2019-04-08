@@ -6,7 +6,6 @@
     &__body {
         overflow: auto;
         height: calc(100%);
-        // width: calc(100%);
         padding-left: 10px;
         padding-right: 10px; 
         font-size: $small-font-size;
@@ -14,7 +13,6 @@
         outline: 1px dotted greenyellow;
     }
     &__label {
-        // text-decoration: underline;
         font-size: $small-font-size;
         margin-top: 10px;
         margin-left: 5px;
