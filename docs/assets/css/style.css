@@ -23,3 +23,7 @@ body {
   @media (max-width: 56.25em) {
     body {
       padding: 0rem; } }
+
+.header {
+  background-color: #f7f7f7;
+  height: calc(100vh - 3rem); }
