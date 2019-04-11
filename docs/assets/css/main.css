@@ -1,0 +1,81 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+html {
+  font-size: 62.5%; }
+  @media (max-width: 78em) {
+    html {
+      font-size: 56.25%; } }
+  @media (max-width: 56.25em) {
+    html {
+      font-size: 50%; } }
+  @media (min-width: 112.5em) {
+    html {
+      font-size: 75%; } }
+
+body {
+  box-sizing: border-box;
+  padding: 3rem; }
+  @media (max-width: 56.25em) {
+    body {
+      padding: 0rem; } }
+
+.row {
+  margin: 0 auto; }
+  .row:not(:last-child) {
+    margin-bottom: 1rem; }
+    @media (max-width: 56.25em) {
+      .row:not(:last-child) {
+        margin-bottom: 1rem; } }
+  @media (max-width: 56.25em) {
+    .row {
+      padding: 0 1rem; } }
+  .row::after {
+    content: "";
+    display: table;
+    clear: both; }
+  .row [class^="col-"] {
+    float: left; }
+    .row [class^="col-"]:not(:last-child) {
+      margin-right: 1rem; }
+      @media (max-width: 56.25em) {
+        .row [class^="col-"]:not(:last-child) {
+          margin-right: 0;
+          margin-bottom: 1rem; } }
+    @media (max-width: 56.25em) {
+      .row [class^="col-"] {
+        width: 100% !important; } }
+  .row .col-1-of-2 {
+    width: calc((100% - 1rem) / 2); }
+  .row .col-1-of-3 {
+    width: calc((100% - 2 * 1rem) / 3); }
+  .row .col-2-of-3 {
+    width: calc(2*(100% - 2 * 1rem) / 3 + 1rem); }
+  .row .col-1-of-4 {
+    width: calc((100% - 3 * 1rem) / 4); }
+  .row .col-2-of-4 {
+    width: calc(2 * (100% - 3 * 1rem) / 4 + 1rem); }
+  .row .col-3-of-4 {
+    width: calc(3 * (100% - 3 * 1rem) / 4 + 2 * 1rem); }
+
+.header {
+  background-color: #f7f7f7;
+  height: calc(100vh - 3rem);
+  overflow: hidden; }
+  .header__image {
+    display: block;
+    margin: 8vh auto 0 auto; }
+    @media (max-width: 56.25em) {
+      .header__image {
+        display: none; } }
+  .header__download-box {
+    outline: 1px solid green;
+    margin: 30vh auto 0 auto;
+    width: 30vw; }
+    @media (max-width: 56.25em) {
+      .header__download-box {
+        width: 70vw; } }

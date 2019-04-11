@@ -1,4 +1,33 @@
 .header {
     background-color: rgb(247, 247, 247);
     height: calc(100vh - 3rem);
+    overflow: hidden;
+
+    &__image {
+        display: block;
+        margin: 8vh auto 0 auto;
+        
+        @include respond(tab-port){
+            display: none;         
+        }
+        // @include respond(phone){
+        //     display: none;         
+        // }       
+    }
+
+    &__download-box {
+        // display: inline-block;
+        outline: 1px solid green;
+        margin: 30vh auto 0 auto;
+        width: 30vw;
+
+        @include respond(tab-port){
+            width: 70vw;
+        }
+
+        // position: relative;
+        // top: 50%;
+        // transform: translateY(-50%);
+
+    }
 }
