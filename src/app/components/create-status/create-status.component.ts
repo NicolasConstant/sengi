@@ -238,6 +238,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
             .then((res: Status) => {
+                if (this.statusReplyingToWrapper) {
+                    this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(res, acc));
+                }
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
