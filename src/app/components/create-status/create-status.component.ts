@@ -34,8 +34,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private maxCharLength: number;
     charCountLeft: number;
     postCounts: number = 1;
-
     isSending: boolean;
+    mentionTooFarAwayError: boolean;
 
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
@@ -76,6 +76,21 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.status += `@${mention} `;
             }
 
+            switch (this.statusReplyingTo.visibility) {
+                case 'unlisted':
+                    this.setVisibility(VisibilityEnum.Unlisted);
+                    break;
+                case 'public':
+                    this.setVisibility(VisibilityEnum.Public);
+                    break;
+                case 'private':
+                    this.setVisibility(VisibilityEnum.Private);
+                    break;
+                case 'direct':
+                    this.setVisibility(VisibilityEnum.Direct);
+                    break;
+            }
+
             this.title = this.statusReplyingTo.spoiler_text;
         }
 
@@ -100,60 +115,54 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     this.notificationService.notifyHttpError(err);
                 });
 
-            this.instancesInfoService.getDefaultPrivacy(selectedAccount)
-                .then((defaultPrivacy: VisibilityEnum) => {
-                    switch (defaultPrivacy) {
-                        case VisibilityEnum.Public:
-                            this.selectedPrivacy = 'Public';
-                            break;
-                        case VisibilityEnum.Unlisted:
-                            this.selectedPrivacy = 'Unlisted';
-                            break;
-                        case VisibilityEnum.Private:
-                            this.selectedPrivacy = 'Follows-only';
-                            break;
-                        case VisibilityEnum.Direct:
-                            this.selectedPrivacy = 'DM';
-                            break;
-                    }
-                })
-                .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
-                });
+            if (!this.statusReplyingToWrapper) {
+                this.instancesInfoService.getDefaultPrivacy(selectedAccount)
+                    .then((defaultPrivacy: VisibilityEnum) => {
+                        this.setVisibility(defaultPrivacy);
+                    })
+                    .catch((err: HttpErrorResponse) => {
+                        this.notificationService.notifyHttpError(err);
+                    });
+            }
         }
     }
 
-    mentionTooFarAwayError: boolean;
+    private setVisibility(defaultPrivacy: VisibilityEnum) {
+        switch (defaultPrivacy) {
+            case VisibilityEnum.Public:
+                this.selectedPrivacy = 'Public';
+                break;
+            case VisibilityEnum.Unlisted:
+                this.selectedPrivacy = 'Unlisted';
+                break;
+            case VisibilityEnum.Private:
+                this.selectedPrivacy = 'Follows-only';
+                break;
+            case VisibilityEnum.Direct:
+                this.selectedPrivacy = 'DM';
+                break;
+        }
+    }
 
     private countStatusChar(status: string) {
         this.mentionTooFarAwayError = false;
         const parseStatus = this.parseStatus(status);
 
         const mentions = this.getMentionsFromStatus(status);
-        if(mentions.length > 0){
+        if (mentions.length > 0) {
             let containAllMention = true;
             mentions.forEach(m => {
-                if(!parseStatus[0].includes(m)){
+                if (!parseStatus[0].includes(m)) {
                     containAllMention = false;
                 }
             });
 
-            if(!containAllMention){
+            if (!containAllMention) {
                 this.mentionTooFarAwayError = true;
                 this.charCountLeft = this.maxCharLength - status.length;
                 this.postCounts = 1;
                 return;
             }
-
-            // const lastMention = mentions[mentions.length - 1];
-            // const lastMentionPosition = status.lastIndexOf(lastMention);
-            // console.warn(`lastMentionPosition ${lastMentionPosition}`);
-            // if(lastMentionPosition > (this.maxCharLength - lastMention.length * 2 + 10)){
-            //     this.mentionTooFarAwayError = true;
-            //     this.charCountLeft = this.maxCharLength - status.length;
-            //     this.postCounts = 1;
-            //     return;
-            // }
         }
 
         const currentStatus = parseStatus[parseStatus.length - 1];
@@ -182,6 +191,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             globalUniqueMentions.push(mention);
         }
 
+        const selectedUser = this.toolsService.getSelectedAccounts()[0];
+        globalUniqueMentions = globalUniqueMentions.filter(x => x.toLowerCase() !== `${selectedUser.username}@${selectedUser.instance}`.toLowerCase());
+
         return globalUniqueMentions;
     }
 
@@ -196,7 +208,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.isSending = true;
 
         let visibility: VisibilityEnum = VisibilityEnum.Unknown;
-        switch (this.selectedPrivacy) { //FIXME: in case of responding, set the visibility to original
+        switch (this.selectedPrivacy) {
             case 'Public':
                 visibility = VisibilityEnum.Public;
                 break;
@@ -275,7 +287,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let aggregateMention = '';
         let mentions = this.getMentionsFromStatus(status);
         mentions.forEach(x => {
-            aggregateMention += `${x} `;           
+            aggregateMention += `${x} `;
         });
 
         const currentMaxCharLength = this.maxCharLength + mentionExtraChars;
@@ -290,7 +302,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return results;
     }
 
-    private getMentionExtraChars(status: string): number{
+    private getMentionExtraChars(status: string): number {
         let mentionExtraChars = 0;
         let mentions = this.getMentionsFromStatus(status);
 
@@ -305,7 +317,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return mentionExtraChars;
     }
 
-    private getMentionsFromStatus(status: string): string[]{
+    private getMentionsFromStatus(status: string): string[] {
         return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
     }
 }

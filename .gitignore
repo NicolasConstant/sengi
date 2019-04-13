@@ -2,6 +2,7 @@
 /release
 
 # compiled output
+/release
 /dist
 /dist-server
 /tmp

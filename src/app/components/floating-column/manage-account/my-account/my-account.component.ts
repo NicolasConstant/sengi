@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Store } from '@ngxs/store';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { Store, Select } from '@ngxs/store';
+import { faCheckSquare } from "@fortawesome/free-regular-svg-icons";
 
 import { NotificationService } from '../../../../services/notification.service';
 import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../../../../states/streams.state';
@@ -12,11 +14,24 @@ import { NavigationService } from '../../../../services/navigation.service';
     templateUrl: './my-account.component.html',
     styleUrls: ['./my-account.component.scss']
 })
-export class MyAccountComponent implements OnInit {
+export class MyAccountComponent implements OnInit, OnDestroy {
+   
+    faCheckSquare = faCheckSquare;
     
-    availableStreams: StreamElement[] = [];
+    availableStreams: StreamWrapper[] = [];
 
-    @Input() account: AccountWrapper;
+    private _account: AccountWrapper;
+    @Input('account')
+    set account(acc: AccountWrapper) {
+        this._account = acc;
+        this.loadStreams(acc);
+    }
+    get account(): AccountWrapper {
+        return this._account;
+    }
+    
+    @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
+    private streamChangedSub: Subscription;
 
     constructor(
         private readonly store: Store,
@@ -24,19 +39,41 @@ export class MyAccountComponent implements OnInit {
         private notificationService: NotificationService) { }
 
     ngOnInit() {
-        const instance = this.account.info.instance;
-        this.availableStreams.length = 0;
-        this.availableStreams.push(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', this.account.info.id, null, null, instance));
-        this.availableStreams.push(new StreamElement(StreamTypeEnum.local, 'Local Timeline', this.account.info.id, null, null, instance));
-        this.availableStreams.push(new StreamElement(StreamTypeEnum.personnal, 'Home', this.account.info.id, null, null, instance));
+        this.streamChangedSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
+            this.loadStreams(this.account);
+        });
     }
 
-    addStream(stream: StreamElement): boolean {
-        if (stream) {
+    ngOnDestroy(): void {
+        if(this.streamChangedSub) { 
+            this.streamChangedSub.unsubscribe();
+        }
+    }
+
+    private loadStreams(account: AccountWrapper){
+        const instance = account.info.instance;
+        this.availableStreams.length = 0;
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', account.info.id, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.local, 'Local Timeline', account.info.id, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.personnal, 'Home', account.info.id, null, null, instance)));
+
+        const loadedStreams = <StreamElement[]>this.store.snapshot().streamsstatemodel.streams;
+        this.availableStreams.forEach(s => {
+            if(loadedStreams.find(x => x.id === s.id)){
+                s.isAdded = true;
+            } else {
+                s.isAdded = false;
+            }
+        });
+    }
+
+    addStream(stream: StreamWrapper): boolean {
+        if (stream && !stream.isAdded) {
             this.store.dispatch([new AddStream(stream)]).toPromise()
                 .then(() => {
-                    this.notificationService.notify(`stream added`, false);
-                });
+                    stream.isAdded = true;
+                    //this.notificationService.notify(`stream added`, false);
+                });            
         }
         return false;
     }
@@ -47,4 +84,12 @@ export class MyAccountComponent implements OnInit {
         this.navigationService.closePanel();
         return false;
     }
+}
+
+class StreamWrapper extends StreamElement {
+    constructor(stream: StreamElement) {
+        super(stream.type, stream.name, stream.accountId, stream.tag, stream.list, stream.instance);        
+    }
+
+    isAdded: boolean;
 }

@@ -29,6 +29,9 @@ export class MediaService {
 
         let medias = this.mediaSubject.value;
         medias.push(wrapper);
+        if(medias.length > 4){
+            medias.splice(0, 1);
+        }
         this.mediaSubject.next(medias);
 
         this.mastodonService.uploadMediaAttachment(account, file, null)

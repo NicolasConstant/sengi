@@ -1,0 +1,45 @@
+os: unstable
+cache:
+  - node_modules
+environment:
+  GH_TOKEN:
+      secure: wRRBU0GXTmTBgZBs2PGSaEJWOflynAyvp3Nc/7e9xmciPfkUCQAXcpOn0jIYmzpb
+  matrix:
+    - nodejs_version: 10.9.0
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - set CI=true
+  - npm install -g npm@latest
+  - set PATH=%APPDATA%\npm;%PATH%
+  - npm install
+matrix:
+  fast_finish: true
+build: off
+version: '{build}'
+shallow_clone: true
+clone_depth: 1
+test_script:
+- ps: >-
+    npm run test-nowatch
+
+    $wc = New-Object 'System.Net.WebClient'
+
+    Get-ChildItem . -Name -Recurse 'TESTS-*.xml'  |
+
+    Foreach-Object {
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
+    }
+- npm run dist
+artifacts:
+- path: dist
+deploy:
+- provider: FTP
+  host: home205977321.1and1-data.host
+  protocol: sftp
+  username: u45308485-sengi
+  password:
+    secure: Sk3NZwuaYK9hTIQ3kgIIQEc8SmaPDVGvGpgsZzFEzoVLuy4WxVfvKQtegW9oXaj7
+  folder: /
+  application: dist.zip
+  on:
+    branch: master

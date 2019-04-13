@@ -63,10 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.dragoverSub = this.dragoverSubject
             .pipe(
-                debounceTime(150)
+                debounceTime(1500)
             )
-            .subscribe(() => {
-                console.warn('disable drag');
+            .subscribe(() => {                
                 this.drag = false;
             })
     }

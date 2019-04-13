@@ -1,4 +1,5 @@
 @import "variables";
+
 .action-bar {
     // outline: 1px solid greenyellow; // height: 20px;
     margin: 5px 10px 5px $avatar-column-space;
@@ -9,9 +10,11 @@
 
     &__link {
         color: $status-secondary-color;
+
         &:hover {
             color: $status-links-color;
         }
+
         &:not(:last-child) {
             margin-right: 15px;
         }
@@ -50,9 +53,9 @@
 
 .boosted {
     color: $boost-color;
-    
+
     &:hover {
-        color: darken($boost-color, 10);        
+        color: darken($boost-color, 10);
     }
 }
 
@@ -62,4 +65,70 @@
     &:hover {
         color: darken($favorite-color, 10);
     }
+}
+
+
+@keyframes loadingAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@-o-keyframes loadingAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes loadingAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes loadingAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.boosting,
+.favoriting {
+    -webkit-animation: loadingAnimation 1s infinite;
+    -moz-animation: loadingAnimation 1s infinite;
+    -o-animation: loadingAnimation 1s infinite;
+    animation: loadingAnimation 1s infinite;
+
 }

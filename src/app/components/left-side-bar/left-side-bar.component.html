@@ -1,9 +1,9 @@
 <div class="left-bar">
-    <a class="left-bar-button left-bar-button--status left-bar-link" href title="write new message" (click)="createNewStatus()" *ngIf="hasAccounts">
+    <a class="left-bar-button left-bar-button--status left-bar-link" href title="write new message" (click)="createNewStatus()" (contextmenu)="createNewStatus()" *ngIf="hasAccounts">
         <fa-icon [icon]="faCommentAlt"></fa-icon>
         <!-- <ion-icon name="md-send"></ion-icon> -->
     </a>
-    <a class="left-bar-button left-bar-button--search left-bar-link" href title="search" (click)="openSearch()" *ngIf="hasAccounts">
+    <a class="left-bar-button left-bar-button--search left-bar-link" href title="search" (click)="openSearch()" (contextmenu)="openSearch()" *ngIf="hasAccounts">
         <ion-icon name="md-search"></ion-icon>
     </a>
 
@@ -12,11 +12,11 @@
         </app-account-icon>
     </div>
 
-    <a class="left-bar-button left-bar-button--add left-bar-link" [ngClass]="{'no-accounts': hasAccounts === false }" href title="add new account" (click)="addNewAccount()">
+    <a class="left-bar-button left-bar-button--add left-bar-link" [ngClass]="{'no-accounts': hasAccounts === false }" href title="add new account" (click)="addNewAccount()" (contextmenu)="addNewAccount()">
         <ion-icon name="md-add"></ion-icon>
     </a>
 
-    <a class="left-bar-button left-bar-button--cog left-bar-link" href title="settings" (click)="openSettings()" *ngIf="hasAccounts">
+    <a class="left-bar-button left-bar-button--cog left-bar-link" href title="settings" (click)="openSettings()" (contextmenu)="openSettings()" *ngIf="hasAccounts">
         <ion-icon name="md-cog"></ion-icon>
     </a>
 </div>

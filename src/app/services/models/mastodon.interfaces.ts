@@ -157,7 +157,7 @@ export interface Status {
     favourited: boolean;
     sensitive: boolean;
     spoiler_text: string;
-    visibility: string;
+    visibility: 'public' | 'unlisted' | 'private' | 'direct';
     media_attachments: Attachment[];
     mentions: Mention[];
     tags: Tag[];
