@@ -1,0 +1,33 @@
+.footer {
+    text-align: center;
+    background-color: rgb(20, 20, 20);
+    color: white;
+    height: 18rem;
+    padding-top: 4em;
+
+    &__title {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: lighter;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        
+    }
+
+    &__buttons {
+        margin: auto;       
+
+        &--button {
+            font-size: 4rem;
+            color:whitesmoke;
+            transition: all .2s;
+
+            &:not(:last-child){
+                margin-right: 2rem;
+            }
+
+            &:hover {
+                color:rgb(250, 164, 36);
+            }
+        }
+    }
+}

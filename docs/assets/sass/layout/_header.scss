@@ -1,0 +1,127 @@
+.header {
+    position: relative;
+    background-color: rgb(247, 247, 247);
+    height: calc(100vh - 3rem);
+    overflow: hidden;
+
+    @include respond(tab-port) {
+        height: calc(100vh);
+    }
+
+    &__image {
+        display: block;
+        margin: 8.5vh auto 0 auto;
+
+        @include respond(tab-port) {
+            display: none;
+        }
+
+        // @include respond(phone){
+        //     display: none;         
+        // }       
+    }
+
+    &__download-box {
+        transition: all .2s;
+        // display: inline-block;
+        // outline: 1px solid green;
+        margin: 21vh auto 0 auto;
+        width: calc(95%);
+
+        @include respond(tab-port) {
+            margin: 10vh auto 0 auto;
+            width: calc(80%);
+        }
+
+        // position: relative;
+        // top: 50%;
+        // transform: translateY(-50%);
+
+        font-family: 'Open Sans', sans-serif;
+        font-size: 2rem;
+
+        &--title {
+            font-weight: 300;
+            font-size: 5rem;
+            margin: 0 0 10rem 2rem;
+        }
+
+        &--subtitle {
+            font-weight: 400;
+            font-size: 2rem;
+            margin-bottom: .5rem;
+        }
+
+    }
+}
+
+.download-button {
+    // -webkit-appearance: button;
+    // -moz-appearance: button;
+    // appearance: button;
+    transition: all .2s;
+
+    background-color: white;
+    display: block;
+    border: 1px solid #cdcdcd;
+    border-radius: 2px;
+    float: left;
+    margin-right: 5px;
+    padding: 0 15px 2px 15px;
+    font-size: 38px;
+    color: rgb(63, 63, 63);
+    //color: black;
+    //opacity: .80;
+    text-decoration: none;
+    // outline-color: rgb(141, 140, 140);
+    margin-bottom: 1rem;
+
+    &:hover {
+        color: rgb(250, 164, 36);
+
+    }
+
+    &__web {
+        font-size: 25px;
+        background-color: rgb(4, 212, 49);
+        background-color: rgb(250, 164, 36);
+        background-color: rgb(253, 157, 13);
+        background-color: rgb(63, 63, 63);;
+        color: white;
+        color: rgb(32, 32, 32);
+        color: white;
+
+
+        padding: 10px 20px 10px 15px;
+        border-radius: 3px;
+
+        // border: 1px solid #ececec;
+        border: 1px solid #ffffff;
+        border: 1px solid #e7e7e7;
+
+        &--label {
+            font-size: 25px;
+            font-weight: normal;
+            padding-left: 10px;
+        }
+
+        &:hover {
+            color: rgb(61, 61, 61);
+            background-color: rgb(255, 229, 190);
+            background-color: rgb(250, 164, 36);
+        }
+    }
+}
+
+.fa-apple {
+    position: relative;
+    top: -2px;
+}
+
+.sengi-icon {
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    width: 6rem;
+    height: 6rem;
+}
