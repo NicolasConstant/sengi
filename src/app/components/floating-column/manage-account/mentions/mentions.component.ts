@@ -7,7 +7,7 @@ import { StatusWrapper } from '../../../../models/common.model';
 import { Status, Notification } from '../../../../services/models/mastodon.interfaces';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent } from '../../../../services/tools.service';
 
 
 @Component({
@@ -28,12 +28,8 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
     @Input('account')
     set account(acc: AccountWrapper) {
-        console.warn('account');
         this._account = acc;
         this.loadMentions();
-
-        const accountSettings = this.toolsService.getAccountSettings(acc.info);
-        console.warn(accountSettings);
     }
     get account(): AccountWrapper {
         return this._account;        
@@ -47,7 +43,6 @@ export class MentionsComponent implements OnInit, OnDestroy {
     private lastId: string;
 
     constructor(
-        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonService) { 
