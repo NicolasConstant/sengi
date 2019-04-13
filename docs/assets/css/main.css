@@ -78,7 +78,7 @@ body {
         display: none; } }
   .header__download-box {
     transition: all .2s;
-    margin: 30vh auto 0 auto;
+    margin: 21vh auto 0 auto;
     width: calc(95%);
     font-family: 'Open Sans', sans-serif;
     font-size: 2rem; }
@@ -89,7 +89,7 @@ body {
     .header__download-box--title {
       font-weight: 300;
       font-size: 5rem;
-      margin: 0 0 1rem 2rem; }
+      margin: 0 0 10rem 2rem; }
     .header__download-box--subtitle {
       font-weight: 400;
       font-size: 2rem;
