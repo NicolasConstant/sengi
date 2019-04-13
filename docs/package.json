@@ -1,0 +1,19 @@
+{
+  "name": "sengi-project-page",
+  "version": "1.0.0",
+  "description": "The Project Page of Sengi",
+  "main": "index.js",
+  "scripts": {
+    "start": "node-sass ./assets/sass/main.scss ./assets/css/main.css"
+  },
+  "author": "Nicolas Constant",
+  "license": "WTFPL",
+  "devDependencies": {
+    "node-sass": "^4.11.0"
+  },
+  "dependencies": {
+    "gulp": "~3.9.1",
+    "gulp-run": "^1.7.1",
+    "gulp-sass": "^4.0.1"
+  }
+}
