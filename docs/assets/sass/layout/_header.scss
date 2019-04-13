@@ -1,5 +1,5 @@
 .header {
-
+    position: relative;
     background-color: rgb(247, 247, 247);
     height: calc(100vh - 3rem);
     overflow: hidden;
@@ -118,36 +118,10 @@
     top: -2px;
 }
 
-.footer {
-    text-align: center;
-    background-color: rgb(20, 20, 20);
-    color: white;
-    height: 18rem;
-    padding-top: 4em;
-
-    &__title {
-        font-family: 'Open Sans', sans-serif;
-        font-weight: lighter;
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-        
-    }
-
-    &__buttons {
-        margin: auto;       
-
-        &--button {
-            font-size: 4rem;
-            color:whitesmoke;
-            transition: all .2s;
-
-            &:not(:last-child){
-                margin-right: 2rem;
-            }
-
-            &:hover {
-                color:rgb(250, 164, 36);
-            }
-        }
-    }
+.sengi-icon {
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    width: 6rem;
+    height: 6rem;
 }
