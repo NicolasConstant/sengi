@@ -35,18 +35,18 @@
                     <div class="header__download-box--buttons">
                         <p>
                             <h4 class="header__download-box--subtitle">Try it in your browser!</h4>
-                            <a href="#" class="download-button download-button__web"
+                            <a href="#" class="download-button download-button__web" title="what are you waiting for? click!"
                                 onClick="window.open('http://sengi.nicolas-constant.com'+'?qt='+ (new Date()).getTime(),'Sengi','toolbar=no,location=no,status=no,menubar=no,scrollbars=no, resizable=yes,width=377,height=800'); return false;"
-                                class="button"><i class="fas fa-globe"></i><span class="download-button__web--label">launch!</span></a><br />
+                                class="button"><i class="fas fa-globe"></i><span
+                                    class="download-button__web--label">launch!</span></a><br />
                             <br />
                             <br />
 
                             <h4 class="header__download-box--subtitle">Or download the desktop client:</h4>
-                            <a href="#" class="download-button"><i class="fab fa-windows"></i></a>
-                            <a href="#" class="download-button"><i class="fab fa-apple"></i></a>
-                            <a href="#" class="download-button"><i class="fab fa-ubuntu"></i></a>
-                            <a href="https://snapcraft.io/sengi"><img
-                                    src="/images/[EN]-snap-store-white-uneditable@1x.png" /></a>
+                            <a href="#" class="download-button" title="download client for windows"><i class="fab fa-windows"></i></a>
+                            <a href="#" class="download-button" title="download client for mac"><i class="fab fa-apple"></i></a>
+                            <a href="#" class="download-button" title="download client for debian-based distrib"><i class="fab fa-ubuntu"></i></a>
+                            <a href="https://snapcraft.io/sengi" title="use Snap Store for linux"><img src="/images/[EN]-snap-store-white-uneditable@1x.png" /></a>
                         </p>
                     </div>
 
@@ -70,8 +70,13 @@
 
         </section>
     </main>
-    <footer>
+    <footer class="footer">
+        <h3 class="footer__title">Let's keep in touch!</h3> 
 
+        <div class="footer__buttons">
+            <a href="https://mastodon.social/@sengi_app" class="footer__buttons--button" title="open pleroma-compatible account"><i class="fab fa-mastodon"></i></a>
+            <a href="https://github.com/NicolasConstant/sengi" class="footer__buttons--button"  title="open microsoft github repository"><i class="fab fa-github"></i></a>
+        </div>
     </footer>
 </body>
 

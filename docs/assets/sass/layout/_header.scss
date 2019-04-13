@@ -4,9 +4,13 @@
     height: calc(100vh - 3rem);
     overflow: hidden;
 
+    @include respond(tab-port) {
+        height: calc(100vh);
+    }
+
     &__image {
         display: block;
-        margin: 8vh auto 0 auto;
+        margin: 8.5vh auto 0 auto;
 
         @include respond(tab-port) {
             display: none;
@@ -26,14 +30,14 @@
 
         @include respond(tab-port) {
             margin: 10vh auto 0 auto;
+            width: calc(80%);
         }
 
         // position: relative;
         // top: 50%;
         // transform: translateY(-50%);
 
-        font-family: 'Open Sans',
-        sans-serif;
+        font-family: 'Open Sans', sans-serif;
         font-size: 2rem;
 
         &--title {
@@ -70,6 +74,7 @@
     //opacity: .80;
     text-decoration: none;
     // outline-color: rgb(141, 140, 140);
+    margin-bottom: 1rem;
 
     &:hover {
         color: rgb(250, 164, 36);
@@ -111,4 +116,38 @@
 .fa-apple {
     position: relative;
     top: -2px;
+}
+
+.footer {
+    text-align: center;
+    background-color: rgb(20, 20, 20);
+    color: white;
+    height: 18rem;
+    padding-top: 4em;
+
+    &__title {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: lighter;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        
+    }
+
+    &__buttons {
+        margin: auto;       
+
+        &--button {
+            font-size: 4rem;
+            color:whitesmoke;
+            transition: all .2s;
+
+            &:not(:last-child){
+                margin-right: 2rem;
+            }
+
+            &:hover {
+                color:rgb(250, 164, 36);
+            }
+        }
+    }
 }
