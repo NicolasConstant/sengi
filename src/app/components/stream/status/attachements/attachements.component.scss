@@ -90,8 +90,8 @@
     &__play-control{
         z-index: 2;
         position: absolute;
-        bottom: 0;
-        left: 5px;  
+        bottom: 5px;
+        left: 0;  
         // outline: 1px greenyellow solid;    
     }
     &__control {
@@ -111,9 +111,17 @@
             font-size: 16px;
             padding: 10px 15px;
 
+            width: 40px;
+            height: 40px;
+
             &:hover {
                 color: #fff;         
             }
+        }
+
+        &--play{
+            position: absolute;
+            left: 0;
         }
 
         &--expand {
@@ -122,7 +130,9 @@
         }
 
         &--mute {
-            margin-left: 40px;
+            position: absolute;
+            left: 40px;
+            // margin-left: 40px;
         }
 
         background-image: linear-gradient(rgba(0, 0, 0, 0),  rgba(0, 0, 0, .1), rgba(0, 0, 0, .6), rgba(0, 0, 0, 1));
