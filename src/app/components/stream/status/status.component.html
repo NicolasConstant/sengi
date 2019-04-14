@@ -29,7 +29,7 @@
             <img *ngIf="notificationAccount" class="notification--avatar" src="{{ notificationAccount.avatar }}" />
             <span class="status__name">
                 <span class="status__name--displayname"
-                    innerHTML="{{displayedStatus.account.display_name}}"></span><span
+                    innerHTML="{{statusAccountName}}"></span><span
                     class="status__name--username">{{displayedStatus.account.acct}}</span>
             </span>
         </a>
@@ -61,7 +61,7 @@
             <span class="status__content-warning--title">sensitive content</span>
             {{ contentWarningText }}
         </a>
-        <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="displayedStatus.content"
+        <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="statusContent"
             (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
             (textSelected)="textSelected()"></app-databinded-text>
         <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments"
