@@ -27,8 +27,8 @@ export class EmojiConverter {
         // }
 
         while (text.includes('https://cdn.jsdelivr.net/emojione/assets/4.5/png/32/')) {
-            text = text.replace('https://cdn.jsdelivr.net/emojione/assets/4.5/png/32/', 'assets/emoji/');
-            text = text.replace('.png', '.svg');
+            text = text.replace('https://cdn.jsdelivr.net/emojione/assets/4.5/png/32/', 'assets/emoji/72x72/');
+            // text = text.replace('.png', '.svg');
         }
 
         return text;
