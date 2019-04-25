@@ -20,7 +20,7 @@ export class StatusComponent implements OnInit {
 
     displayedStatus: Status;
 
-    statusAccountName: string;
+    // statusAccountName: string;
     statusContent: string;
 
     reblog: boolean;
@@ -67,11 +67,9 @@ export class StatusComponent implements OnInit {
             this.hasAttachments = true;
         }
 
-
         // const instanceUrl = 'https://' + this.status.uri.split('https://')[1].split('/')[0];
-
-        this.statusAccountName = this.emojiConverter.applyEmojis(this.displayedStatus.account.emojis, this.displayedStatus.account.display_name, EmojiTypeEnum.small,  this.status.uri);
-        this.statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, this.displayedStatus.content, EmojiTypeEnum.medium,  this.status.uri);
+        // this.statusAccountName = this.emojiConverter.applyEmojis(this.displayedStatus.account.emojis, this.displayedStatus.account.display_name, EmojiTypeEnum.small);
+        this.statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, this.displayedStatus.content, EmojiTypeEnum.medium);
     }
     get statusWrapper(): StatusWrapper {
         return this._statusWrapper;
