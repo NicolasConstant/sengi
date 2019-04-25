@@ -9,7 +9,13 @@ import { Account } from '../services/models/mastodon.interfaces';
 export class AccountEmojiPipe implements PipeTransform {
   private emojiConverter = new EmojiConverter();
 
-  transform(value: Account, args?: any): any {
-    return this.emojiConverter.applyEmojis(value.emojis, value.display_name, EmojiTypeEnum.small)
+  transform(value: Account, text?: string): any {
+
+    let textToTransform = text;
+    if(!text){
+      textToTransform = value.display_name;
+    } 
+
+    return this.emojiConverter.applyEmojis(value.emojis, textToTransform, EmojiTypeEnum.small)
   }
 }

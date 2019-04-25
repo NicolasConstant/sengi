@@ -38,7 +38,7 @@
         </div>
         <div class="profile-fields" *ngIf="displayedAccount && displayedAccount.fields.length > 0">
             <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
-                <div class="profile-fields__field--value" innerHTML="{{field.value}}" [ngClass]="{'profile-fields__field--validated': field.verified_at }">
+                <div class="profile-fields__field--value" innerHTML="{{ displayedAccount | accountEmoji:field.value}}" [ngClass]="{'profile-fields__field--validated': field.verified_at }">
                 </div>
                 <div class="profile-fields__field--name">
                     {{ field.name }}
