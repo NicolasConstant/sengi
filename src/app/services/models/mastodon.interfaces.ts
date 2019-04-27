@@ -162,7 +162,7 @@ export interface Status {
     mentions: Mention[];
     tags: Tag[];
     application: Application;
-    emojis: any[];
+    emojis: Emoji[];
     language: string;
     pinned: boolean;
 

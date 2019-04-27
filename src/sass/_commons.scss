@@ -23,3 +23,16 @@
         // -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
     }
 }
+
+:host ::ng-deep .emoji-small {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+
+:host ::ng-deep .emoji-medium {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}

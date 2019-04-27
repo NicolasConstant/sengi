@@ -5,7 +5,7 @@
     <div *ngIf="displayedAccount" class="profile-header" [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
         <div class="profile-header__inner">
             <img class="profile-header__avatar" src="{{displayedAccount.avatar}}" alt="header" />
-            <h2 class="profile-header__display-name">{{displayedAccount.display_name}}</h2>
+            <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"></h2>
             <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank">@{{displayedAccount.acct}}</a></h2>
 
             <div class="profile-header__follow" *ngIf="relationship">
@@ -32,13 +32,13 @@
     </div>
     <div class="profile-sub-header ">
         <div *ngIf="displayedAccount && hasNote" class="profile-description">
-            <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="displayedAccount.note"
+            <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="note"
                 (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
             </app-databinded-text>
         </div>
         <div class="profile-fields" *ngIf="displayedAccount && displayedAccount.fields.length > 0">
             <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
-                <div class="profile-fields__field--value" innerHTML="{{field.value}}" [ngClass]="{'profile-fields__field--validated': field.verified_at }">
+                <div class="profile-fields__field--value" innerHTML="{{ displayedAccount | accountEmoji:field.value}}" [ngClass]="{'profile-fields__field--validated': field.verified_at }">
                 </div>
                 <div class="profile-fields__field--name">
                     {{ field.name }}
