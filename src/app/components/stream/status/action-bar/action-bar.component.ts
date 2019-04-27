@@ -138,7 +138,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 }
             })
             .then((boostedStatus: Status) => {
-                this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
+                if(boostedStatus.pleroma){
+                    this.bootedStatePerAccountId[account.id] = boostedStatus.reblog !== null; //FIXME: when Pleroma will return the good status
+                } else {
+                    this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
+                }                
+               
                 this.checkIfBoosted();
             })
             .catch((err: HttpErrorResponse) => {

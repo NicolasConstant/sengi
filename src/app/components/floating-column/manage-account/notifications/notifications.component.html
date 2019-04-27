@@ -23,14 +23,13 @@
                 <fa-icon class="followed" [icon]="faUserPlus"></fa-icon>
             </div>
             <div class="stream__notification--label">
-                <a href class="stream__link"
-                    (click)="openAccount(notification.account)">{{ notification.account.display_name }}</a> followed
+                <a href class="stream__link" (click)="openAccount(notification.account)" innerHTML="{{ notification.account | accountEmoji }}"></a> followed
                 you!
             </div>
 
             <a href (click)="openAccount(notification.account)" class="follow-account" title="{{notification.account.acct}}">
                 <img class="follow-account__avatar" src="{{ notification.account.avatar }}" />
-                <span class="follow-account__display-name" >{{ notification.account.display_name }}</span>
+                <span class="follow-account__display-name" innerHTML="{{ notification.account | accountEmoji }}"></span>
                 <span class="follow-account__acct">@{{ notification.account.acct }}</span>
             </a>
         </div>

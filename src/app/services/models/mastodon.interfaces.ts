@@ -162,10 +162,18 @@ export interface Status {
     mentions: Mention[];
     tags: Tag[];
     application: Application;
-    emojis: any[];
+    emojis: Emoji[];
     language: string;
     pinned: boolean;
+
+    pleroma: PleromaStatusInfo;
 }
+
+export interface PleromaStatusInfo {
+    conversation_id: number;
+    local: boolean;
+}
+
 export interface Tag {
     name: string;
     url: string;

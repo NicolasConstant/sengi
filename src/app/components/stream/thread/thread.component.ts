@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { Results, Context, Status } from '../../../services/models/mastodon.interfaces';
-import { NotificationService } from '../../../services/notification.service';
+import { NotificationService, NewReplyData } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper } from '../../../models/common.model';
 import { StatusComponent } from '../status/status.component';
@@ -14,10 +15,10 @@ import { StatusComponent } from '../status/status.component';
     templateUrl: '../stream-statuses/stream-statuses.component.html',
     styleUrls: ['../stream-statuses/stream-statuses.component.scss']
 })
-export class ThreadComponent implements OnInit {   
+export class ThreadComponent implements OnInit, OnDestroy {
     statuses: StatusWrapper[] = [];
     displayError: string;
-    isLoading = true; 
+    isLoading = true;
     isThread = true;
     hasContentWarnings = false;
 
@@ -37,12 +38,43 @@ export class ThreadComponent implements OnInit {
 
     @ViewChildren(StatusComponent) statusChildren: QueryList<StatusComponent>;
 
+    private newPostSub: Subscription;
+
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        this.newPostSub = this.notificationService.newRespondPostedStream.subscribe((replyData: NewReplyData) => {
+            if(replyData){
+                const repondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
+                const responseStatus = replyData.response;
+                if(repondingStatus && this.statuses[0]){
+                    this.statuses.push(responseStatus);
+                    
+                    // const uiProvider = this.statuses[0].provider;
+                    // if(uiProvider.id === responseStatus.provider.id){
+                        
+                    // } else {
+                    //     this.toolsService.getStatusUsableByAccount(uiProvider, responseStatus)
+                    //         .then((status: Status) => {
+                    //             this.statuses.push(new StatusWrapper(status, uiProvider));
+                    //         })
+                    //         .catch((err) => {
+                    //             this.notificationService.notifyHttpError(err);
+                    //         });
+                    // }
+                    // this.getThread(this.statuses[0].provider, this.lastThreadEvent);
+                }
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.newPostSub) {
+            this.newPostSub.unsubscribe();
+        }
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
@@ -93,7 +125,7 @@ export class ThreadComponent implements OnInit {
 
                         this.hasContentWarnings = this.statuses.filter(x => x.status.sensitive || x.status.spoiler_text).length > 1;
                     });
-                 
+
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);
@@ -126,7 +158,7 @@ export class ThreadComponent implements OnInit {
         this.browseThreadEvent.next(openThreadEvent);
     }
 
-    removeCw(){
+    removeCw() {
         const statuses = this.statusChildren.toArray();
         statuses.forEach(x => {
             x.removeContentWarning();

@@ -11,8 +11,7 @@ import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper } from '../../../models/common.model';
-
-
+import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 
 @Component({
     selector: 'app-user-profile',
@@ -20,6 +19,8 @@ import { StatusWrapper } from '../../../models/common.model';
     styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+    private emojiConverter = new EmojiConverter();
+
     faUser = faUser;
     faUserRegular = faUserRegular;
     faHourglassHalf = faHourglassHalf;
@@ -27,6 +28,8 @@ export class UserProfileComponent implements OnInit {
 
     displayedAccount: Account;
     hasNote: boolean;
+
+    note: string;
 
     isLoading: boolean;
     
@@ -100,6 +103,9 @@ export class UserProfileComponent implements OnInit {
 
                 this.displayedAccount = account;
                 this.hasNote = account && account.note && account.note !== '<p></p>';
+                if(this.hasNote){
+                    this.note = this.emojiConverter.applyEmojis(account.emojis, account.note, EmojiTypeEnum.medium);
+                }
 
                 const getFollowStatusPromise = this.getFollowStatus(this.currentlyUsedAccount, this.displayedAccount);
                 const getStatusesPromise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount);
