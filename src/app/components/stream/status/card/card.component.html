@@ -8,4 +8,27 @@
         <h3 class="card__link--title">{{ card.title }}</h3>
         <span class="card__link--host">{{ host }}</span>
     </a>
+    <div *ngIf="card.type === 'photo'" class="card__photo">
+
+    </div>
+    <div *ngIf="card.type === 'video'" class="card__video">
+        <div class="card__video--preview">
+            <div class="card__video--preview--controls">
+                <a href>
+                    <fa-icon class="" [icon]="faFileAlt"></fa-icon>
+                </a>
+                <a href>
+                    <fa-icon class="" [icon]="faFileAlt"></fa-icon>
+                </a>
+                <a href>
+                    <fa-icon class="" [icon]="faFileAlt"></fa-icon>
+                </a>
+            </div>
+            <img src="{{card.image}}" class="card__video--preview--image" />
+        </div>
+        <div class="card__video--content">
+
+        </div>
+    </div>
+    <div *ngIf="card.type === 'rich'" class="card__rich" innerHTML="card.html"></div>
 </div>

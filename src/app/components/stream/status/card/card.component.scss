@@ -48,4 +48,39 @@
 
     }
     
+    &__photo {
+
+    }
+
+    &__video {
+        // border-radius: 3px;
+
+        &--preview {
+            position: relative;
+
+            &--controls {
+                position: absolute;
+                top: 50px;
+                left: 50px;
+                outline: 2px solid greenyellow;
+                width: 100px;
+                height: 50px;
+                z-index: 10;
+
+            }
+
+            &--image {
+                width: 100%;
+                height: 150px;
+                // border: 1px solid salmon;
+                object-fit: cover;
+            }
+        }
+
+    }
+
+    &__rich {
+
+
+    }
 }
