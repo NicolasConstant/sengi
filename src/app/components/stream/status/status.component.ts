@@ -47,6 +47,7 @@ export class StatusComponent implements OnInit {
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
+        console.warn(value.status);
         this.status = value.status;
 
         if (this.status.reblog) {

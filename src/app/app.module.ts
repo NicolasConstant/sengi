@@ -57,6 +57,7 @@ import { MentionsComponent } from './components/floating-column/manage-account/m
 import { NotificationsComponent } from './components/floating-column/manage-account/notifications/notifications.component';
 import { SettingsState } from './states/settings.state';
 import { AccountEmojiPipe } from './pipes/account-emoji.pipe';
+import { CardComponent } from './components/stream/status/card/card.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -102,7 +103,8 @@ const routes: Routes = [
     DirectMessagesComponent,
     MentionsComponent,
     NotificationsComponent,
-    AccountEmojiPipe
+    AccountEmojiPipe,
+    CardComponent
   ],
   imports: [
     FontAwesomeModule,
