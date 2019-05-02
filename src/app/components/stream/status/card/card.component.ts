@@ -11,11 +11,15 @@ export class CardComponent implements OnInit {
 
     @Input() card: Card;
 
+    host: string;
+
     constructor() { }
 
     ngOnInit() {
         console.warn('card');
         console.warn(this.card);
+
+        this.host = this.card.url.replace('https://', '').replace('http://', '').split('/')[0];
     }
 
 }

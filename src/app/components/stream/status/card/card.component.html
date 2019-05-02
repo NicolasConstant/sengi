@@ -1,3 +1,8 @@
-<p>
-  card works!
-</p>
+<div class="card">
+    <a *ngIf="card.type === 'link'" class="card__link" href="{{ card.url }}" target="_blank">
+        <img class="card__link--image" src="{{ card.image }}" alt="" />
+        
+        <h3 class="card__link--title">{{ card.title }}</h3>
+        <span class="card__link--host">{{ host }}</span>
+    </a>
+</div>
