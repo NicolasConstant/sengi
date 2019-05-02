@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+// import { faWindowClose, faReply, faRetweet, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 
 import { Card } from '../../../../services/models/mastodon.interfaces';
 
@@ -8,6 +10,7 @@ import { Card } from '../../../../services/models/mastodon.interfaces';
     styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
+    faFileAlt = faFileAlt;
 
     @Input() card: Card;
 

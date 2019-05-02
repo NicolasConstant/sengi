@@ -25,6 +25,13 @@
             object-fit: cover;
             border-right: 1px solid $card-border-color;
             margin-right: 10px;
+
+            &--logo {
+                display: block;
+                font-size: 24px;
+                color: lighten($card-border-color, 5);
+                margin: 9px 0 0 18px;
+            }
         }
 
         &--title {
