@@ -66,7 +66,27 @@ function createWindow() {
             { role: "paste" },
             { role: "pasteandmatchstyle" },
             { role: "delete" },
-            { role: "selectall" }
+            { role: "selectall" },
+            { type: "separator" },
+            { role: "close" }
+          ]
+        },
+        {
+          label: "View",
+          submenu: [{ role: "reload" }, { role: "forcereload" }]
+        },
+        {
+          role: "help",
+          submenu: [
+            { role: "toggledevtools" },
+            {
+              label: "Open GitHub project",
+              click() {
+                require("electron").shell.openExternal(
+                  "https://github.com/NicolasConstant/sengi"
+                );
+              }
+            }
           ]
         }
       ])
