@@ -12,23 +12,27 @@
 
     </div>
     <div *ngIf="card.type === 'video'" class="card__video">
-        <div class="card__video--preview">
+        <div *ngIf="!showHtml" class="card__video--preview">
             <div class="card__video--preview--controls">
-                <a href>
-                    <fa-icon class="" [icon]="faFileAlt"></fa-icon>
+                <a href class="card__video--preview--link" (click)="play()">
+                    <fa-icon [icon]="faPlay"></fa-icon>
                 </a>
-                <a href>
-                    <fa-icon class="" [icon]="faFileAlt"></fa-icon>
+                <a href class="card__video--preview--link" (click)="expand()">
+                    <fa-icon [icon]="faExpand"></fa-icon>
                 </a>
-                <a href>
-                    <fa-icon class="" [icon]="faFileAlt"></fa-icon>
+                <a href="{{ card.url }}" class="card__video--preview--link" target="_blank">
+                    <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
                 </a>
             </div>
-            <img src="{{card.image}}" class="card__video--preview--image" />
+            <img src="{{ card.image }}" class="card__video--preview--image" />
         </div>
-        <div class="card__video--content">
+        <div #video *ngIf="showHtml" class="card__video--content" [innerHTML]="html">
 
         </div>
+        <!-- {{ card.html }} -->
+        <!-- <div [innerHTML]="html">
+
+        </div> -->
     </div>
-    <div *ngIf="card.type === 'rich'" class="card__rich" innerHTML="card.html"></div>
+    <div *ngIf="card.type === 'rich'" class="card__rich" [innerHTML]="html"></div>
 </div>
