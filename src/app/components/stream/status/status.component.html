@@ -36,7 +36,7 @@
             </span>
         </a>
         <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">
-            <a class="status__created-at--link" href="{{ displayedStatus.url }}" target="_blank">
+            <a href class="status__created-at--link" (click)="textSelected()" (auxclick)="openUrl()">
                 {{ status.created_at | timeAgo | async }}
             </a>
         </div>
