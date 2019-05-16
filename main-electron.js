@@ -28,7 +28,8 @@ function createWindow() {
         { role: "reload" },
         { role: "forcereload" },
         { type: "separator" },
-        { role: "close" }
+        { role: "close" },
+        { role: 'quit' }
       ]
     },
     {
@@ -68,7 +69,8 @@ function createWindow() {
             { role: "delete" },
             { role: "selectall" },
             { type: "separator" },
-            { role: "close" }
+            { role: "close" },
+            { role: 'quit' }
           ]
         },
         {
