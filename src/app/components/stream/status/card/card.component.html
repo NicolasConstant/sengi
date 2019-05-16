@@ -1,5 +1,5 @@
 <div class="card">
-    <a *ngIf="card.type === 'link'" class="card__link" href="{{ card.url }}" target="_blank">
+    <a *ngIf="card.type === 'link'" class="card__link" href="{{ card.url }}" target="_blank" title="{{ card.title }}">
         <img *ngIf="card.image" class="card__link--image" src="{{ card.image }}" alt="" />
         <div *ngIf="!card.image" class="card__link--image">
             <fa-icon class="card__link--image--logo" [icon]="faFileAlt"></fa-icon>
