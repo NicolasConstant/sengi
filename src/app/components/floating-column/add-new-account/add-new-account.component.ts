@@ -54,7 +54,7 @@ export class AddNewAccountComponent implements OnInit {
             return Promise.resolve(instanceApps[0].app);
         } else {
             const redirect_uri = this.getLocalHostname() + '/register';
-            return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://github.com/NicolasConstant/sengi')
+            return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://nicolasconstant.github.io/sengi/')
                 .then((appData: AppData) => {
                     return this.saveNewApp(instance, appData)
                         .then(() => { return appData; });
