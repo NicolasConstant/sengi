@@ -14,7 +14,8 @@
         top: 15px;
         right: 20px;
         font-size: 24px;
-        color: $font-link-primary; 
+        color: $font-link-primary;
+
         &:hover {
             color: $font-link-primary-hover;
         }
@@ -33,6 +34,5 @@
         width: 95vw;
         max-height: 600px;
         max-width: 950px;
-        border: 1px solid greenyellow;
     }
 }

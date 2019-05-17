@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, ElementRef, ViewChild } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Subject } from 'rxjs';
@@ -13,6 +13,7 @@ import { Attachment } from '../../services/models/mastodon.interfaces';
     styleUrls: ['./media-viewer.component.scss']
 })
 export class MediaViewerComponent implements OnInit {
+   
     private _mediaEvent: OpenMediaEvent;
 
     faChevronLeft = faChevronLeft;
@@ -30,6 +31,7 @@ export class MediaViewerComponent implements OnInit {
 
         if (value.iframe) {
             this.html = value.iframe;
+            this.autoplayIframe();
         } else {
             const attachment = value.attachments[value.selectedIndex];
             this.loadAttachment(attachment);
@@ -40,6 +42,7 @@ export class MediaViewerComponent implements OnInit {
     }
 
     @Output() closeSubject = new Subject<boolean>();
+    @ViewChild('video') myVideo: ElementRef;
 
     constructor() { }
 
@@ -54,6 +57,16 @@ export class MediaViewerComponent implements OnInit {
         } else if (attachment.type === 'video') {
             this.videoUrl = attachment.url;
         }
+    }
+
+    private autoplayIframe(): any {
+        setTimeout(() => {
+            if(this.myVideo.nativeElement.childNodes[0].src.includes('?')){
+                this.myVideo.nativeElement.childNodes[0].src+='&autoplay=1&auto_play=1';
+            } else {
+                this.myVideo.nativeElement.childNodes[0].src+='?autoplay=1&auto_play=1';
+            }
+        }, 500);
     }
 
     close(): boolean {
