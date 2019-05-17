@@ -14,13 +14,13 @@
     <div *ngIf="card.type === 'video'" class="card__video">
         <div *ngIf="!showHtml" class="card__video--preview">
             <div class="card__video--preview--controls">
-                <a href class="card__video--preview--link" (click)="play()">
+                <a href class="card__video--preview--link" (click)="play()" title="play">
                     <fa-icon [icon]="faPlay"></fa-icon>
                 </a>
-                <a href class="card__video--preview--link" (click)="expand()">
+                <a href class="card__video--preview--link" (click)="expand()" title="open">
                     <fa-icon [icon]="faExpand"></fa-icon>
                 </a>
-                <a href="{{ card.url }}" class="card__video--preview--link" target="_blank">
+                <a href="{{ card.url }}" class="card__video--preview--link" target="_blank" title="browse">
                     <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
                 </a>
             </div>
