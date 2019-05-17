@@ -9,4 +9,7 @@
     <video class="media-viewer-canvas__image" *ngIf="videoUrl" role="application" loop controls="controls" (click)="blockClick($event)">
         <source src="{{ videoUrl }}" type="video/mp4">
     </video>
+
+    <div #video *ngIf="html" class="media-viewer-canvas__image media-viewer-canvas__iframe" [innerHTML]="html">
+    </div>
 </div>

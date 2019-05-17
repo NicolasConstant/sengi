@@ -51,7 +51,7 @@ export class AttachementsComponent implements OnInit {
     }
 
     attachmentSelected(index: number): boolean {
-        let openMediaEvent = new OpenMediaEvent(index, this.attachments);
+        let openMediaEvent = new OpenMediaEvent(index, this.attachments, null);
         this.navigationService.openMedia(openMediaEvent);
         return false;
     }

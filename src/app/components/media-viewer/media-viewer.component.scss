@@ -27,4 +27,12 @@
         margin-left: 50vw;
         transform: translate(-50%, -50%);
     }
+
+    &__iframe {
+        height: 60vw;
+        width: 95vw;
+        max-height: 600px;
+        max-width: 950px;
+        border: 1px solid greenyellow;
+    }
 }

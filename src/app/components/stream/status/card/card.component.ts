@@ -4,6 +4,8 @@ import { faPlay, faExpand, faExternalLinkAlt } from "@fortawesome/free-solid-svg
 import { faFileAlt } from "@fortawesome/free-regular-svg-icons";
 
 import { Card } from '../../../../services/models/mastodon.interfaces';
+import { NavigationService } from '../../../../services/navigation.service';
+import { OpenMediaEvent } from '../../../../models/common.model';
 
 
 @Component({
@@ -24,14 +26,12 @@ export class CardComponent implements OnInit {
     html: SafeHtml;
     showHtml: boolean;
 
-    constructor(private sanitizer: DomSanitizer) { }
+    constructor(
+        private readonly navigationService: NavigationService,
+        private readonly sanitizer: DomSanitizer) { }
 
     ngOnInit() {
-        // console.warn('card');
-        // console.warn(this.card);
-
         this.host = this.card.url.replace('https://', '').replace('http://', '').split('/')[0];
-        this.html = this.sanitize(this.card);
     }
 
     private sanitize(card: Card): SafeHtml{
@@ -44,6 +44,7 @@ export class CardComponent implements OnInit {
     }
     
     play(): boolean {
+        this.html = this.sanitize(this.card);
         this.showHtml = true;
 
         setTimeout(() => {
@@ -56,7 +57,11 @@ export class CardComponent implements OnInit {
         return false;
     }
 
-    expand(): boolean {        
+    expand(): boolean {
+        this.html = this.sanitize(this.card);
+
+        const openMedia = new OpenMediaEvent(null, null, this.html);
+        this.navigationService.openMedia(openMedia);
 
         return false;
     }
