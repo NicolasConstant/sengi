@@ -14,7 +14,8 @@
         top: 15px;
         right: 20px;
         font-size: 24px;
-        color: $font-link-primary; 
+        color: $font-link-primary;
+
         &:hover {
             color: $font-link-primary-hover;
         }
@@ -26,5 +27,12 @@
         margin-top: 50vh;
         margin-left: 50vw;
         transform: translate(-50%, -50%);
+    }
+
+    &__iframe {
+        height: 60vw;
+        width: 95vw;
+        max-height: 600px;
+        max-width: 950px;
     }
 }

@@ -47,6 +47,7 @@ export class StatusComponent implements OnInit {
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
+        // console.warn(value.status);
         this.status = value.status;
 
         if (this.status.reblog) {
@@ -148,7 +149,7 @@ export class StatusComponent implements OnInit {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    textSelected(): void {
+    textSelected(): boolean {
         const status = this._statusWrapper.status;
         const accountInfo = this._statusWrapper.provider;
 
@@ -160,5 +161,12 @@ export class StatusComponent implements OnInit {
         }
 
         this.browseThreadEvent.next(openThread);
+        return false;
+    }
+
+    openUrl(): boolean {
+        event.preventDefault();
+        window.open(this.displayedStatus.url, "_blank");
+        return false;
     }
 }
