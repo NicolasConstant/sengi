@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="card.type === 'link' || card.type === 'video'">
     <a *ngIf="card.type === 'link'" class="card__link" href="{{ card.url }}" target="_blank" title="{{ card.title }}">
         <img *ngIf="card.image" class="card__link--image" src="{{ card.image }}" alt="" />
         <div *ngIf="!card.image" class="card__link--image">
