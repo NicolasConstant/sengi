@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, ElementRef, ViewChild } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Subject } from 'rxjs';
 
 import { OpenMediaEvent } from '../../models/common.model';
@@ -12,13 +12,11 @@ import { Attachment } from '../../services/models/mastodon.interfaces';
     templateUrl: './media-viewer.component.html',
     styleUrls: ['./media-viewer.component.scss']
 })
-export class MediaViewerComponent implements OnInit {
-   
+export class MediaViewerComponent implements OnInit {   
     private _mediaEvent: OpenMediaEvent;
-
-    faChevronLeft = faChevronLeft;
-    faChevronRight = faChevronRight;
     faTimes = faTimes;
+    faAngleLeft = faAngleLeft;
+    faAngleRight = faAngleRight;
 
     imageUrl: string;
     gifvUrl: string;
@@ -76,6 +74,18 @@ export class MediaViewerComponent implements OnInit {
 
     blockClick(event: any): boolean {
         event.stopPropagation();
+        return false;
+    }
+
+    previous(event): boolean{
+        event.stopPropagation();
+
+        return false;
+    }
+
+    next(event): boolean{
+        event.stopPropagation();
+
         return false;
     }
 }
