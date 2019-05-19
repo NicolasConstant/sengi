@@ -5,7 +5,7 @@ import { faCheckSquare } from "@fortawesome/free-regular-svg-icons";
 import { faPenAlt, faTrash, faPlus, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { NotificationService } from '../../../../services/notification.service';
-import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../../../../states/streams.state';
+import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams, RemoveStream } from '../../../../states/streams.state';
 import { AccountWrapper } from '../../../../models/account.models';
 import { RemoveAccount } from '../../../../states/accounts.state';
 import { NavigationService } from '../../../../services/navigation.service';
@@ -89,7 +89,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 }                
             })
             .catch(err => {
-
+                this.notificationService.notifyHttpError(err);
             });
     }
 
@@ -146,6 +146,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     deleteList(list: StreamWrapper): boolean {
         this.mastodonService.deleteList(this.account.info, list.listId)
             .then(() => {
+                const isAdded = this.availableLists.find(x => x.id === list.id).isAdded;
+                if(isAdded){
+                    this.store.dispatch([new RemoveStream(list.id)]);
+                }
                 this.availableLists = this.availableLists.filter(x => x.id !== list.id);
             })
             .catch(err => {
