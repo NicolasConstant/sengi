@@ -8,6 +8,7 @@ import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../.
 import { AccountWrapper } from '../../../../models/account.models';
 import { RemoveAccount } from '../../../../states/accounts.state';
 import { NavigationService } from '../../../../services/navigation.service';
+import { MastodonService } from '../../../../services/mastodon.service';
 
 @Component({
     selector: 'app-my-account',
@@ -19,6 +20,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     faCheckSquare = faCheckSquare;
     
     availableStreams: StreamWrapper[] = [];
+    availableLists: StreamWrapper[] = [];
 
     private _account: AccountWrapper;
     @Input('account')
@@ -36,7 +38,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     constructor(
         private readonly store: Store,
         private readonly navigationService: NavigationService,
-        private notificationService: NotificationService) { }
+        private readonly mastodonService: MastodonService,
+        private readonly notificationService: NotificationService) { }
 
     ngOnInit() {
         this.streamChangedSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
@@ -53,9 +56,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     private loadStreams(account: AccountWrapper){
         const instance = account.info.instance;
         this.availableStreams.length = 0;
-        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', account.info.id, null, null, instance)));
-        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.local, 'Local Timeline', account.info.id, null, null, instance)));
-        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.personnal, 'Home', account.info.id, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', account.info.id, null, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.local, 'Local Timeline', account.info.id, null, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.personnal, 'Home', account.info.id, null, null, null, instance)));
 
         const loadedStreams = <StreamElement[]>this.store.snapshot().streamsstatemodel.streams;
         this.availableStreams.forEach(s => {
@@ -65,6 +68,24 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 s.isAdded = false;
             }
         });
+
+        this.availableLists.length = 0;
+        this.mastodonService.getLists(account.info)
+            .then((streams: StreamElement[]) => {
+                this.availableLists.length = 0;
+                for (let stream of streams) {
+                    let wrappedStream = new StreamWrapper(stream);
+                    if(loadedStreams.find(x => x.id == stream.id)){
+                        wrappedStream.isAdded = true;
+                    } else {
+                        wrappedStream.isAdded = false;
+                    }
+                    this.availableLists.push(wrappedStream);
+                }                
+            })
+            .catch(err => {
+
+            });
     }
 
     addStream(stream: StreamWrapper): boolean {
@@ -72,7 +93,6 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             this.store.dispatch([new AddStream(stream)]).toPromise()
                 .then(() => {
                     stream.isAdded = true;
-                    //this.notificationService.notify(`stream added`, false);
                 });            
         }
         return false;
@@ -88,7 +108,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
 class StreamWrapper extends StreamElement {
     constructor(stream: StreamElement) {
-        super(stream.type, stream.name, stream.accountId, stream.tag, stream.list, stream.instance);        
+        super(stream.type, stream.name, stream.accountId, stream.tag, stream.list, stream.listId, stream.instance);
     }
 
     isAdded: boolean;

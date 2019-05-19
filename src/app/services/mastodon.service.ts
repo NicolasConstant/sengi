@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
-import { StreamTypeEnum } from '../states/streams.state';
+import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
 export class MastodonService {    
@@ -22,13 +22,13 @@ export class MastodonService {
         return this.httpClient.get<Account>('https://' + account.instance + this.apiRoutes.getCurrentAccount, { headers: headers }).toPromise();
     }
 
-    getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20, tag: string = null, list: string = null): Promise<Status[]> {
-        const route = `https://${account.instance}${this.getTimelineRoute(type, max_id, since_id, limit, tag, list)}`;
+    getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20, tag: string = null, listId: string = null): Promise<Status[]> {
+        const route = `https://${account.instance}${this.getTimelineRoute(type, max_id, since_id, limit, tag, listId)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
     }
 
-    private getTimelineRoute(type: StreamTypeEnum, max_id: string, since_id: string, limit: number, tag: string, list: string): string {
+    private getTimelineRoute(type: StreamTypeEnum, max_id: string, since_id: string, limit: number, tag: string, listId: string): string {
         let route: string;
         switch (type) {
             case StreamTypeEnum.personnal:
@@ -47,7 +47,7 @@ export class MastodonService {
                 route = this.apiRoutes.getTagTimeline.replace('{0}', tag);
                 break;
             case StreamTypeEnum.list:
-                route = this.apiRoutes.getListTimeline.replace('{0}', list);
+                route = this.apiRoutes.getListTimeline.replace('{0}', listId);
                 break;
             default:
                 throw new Error('StreamTypeEnum not supported');
@@ -256,6 +256,20 @@ export class MastodonService {
             result += `${paramName}[]=${x}`;
         });
         return result;
+    } 
+
+    getLists(account: AccountInfo): Promise<StreamElement[]> {
+        let route = `https://${account.instance}${this.apiRoutes.getLists}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<List[]>(route, { headers: headers }).toPromise()
+            .then((lists: List[]) => {
+                const streams: StreamElement[] = [];
+                for (const list of lists) {
+                    const stream = new StreamElement(StreamTypeEnum.list, list.title, account.id, null, list.title, list.id, account.instance);
+                    streams.push(stream);
+                }
+                return streams;
+            });
     }
 }
 

@@ -47,7 +47,7 @@ export class StreamingWrapper {
         this.eventSource = new WebSocket(route);
         this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
         this.eventSource.onerror = x => this.webSocketGotError(x);
-        this.eventSource.onopen = x => console.log(x);
+        this.eventSource.onopen = x => {};
         this.eventSource.onclose = x => this.webSocketClosed(route, x);
     }
 
@@ -65,7 +65,7 @@ export class StreamingWrapper {
     }
 
     private pullNewStatuses(domain) {
-        this.mastodonService.getTimeline(this.account, this.stream.type, null, this.since_id, this.nbStatusPerIteration, this.stream.tag, this.stream.list)
+        this.mastodonService.getTimeline(this.account, this.stream.type, null, this.since_id, this.nbStatusPerIteration, this.stream.tag, this.stream.listId)
             .then((status: Status[]) => {
                 // status = status.sort((n1, n2) => {  return (<number>n1.id) < (<number>n2.id); });
                 status = status.sort((a, b) => a.id.localeCompare(b.id));
@@ -112,7 +112,7 @@ export class StreamingWrapper {
         let route = `wss://${account.instance}${this.apiRoutes.getStreaming}`.replace('{0}', account.token.access_token).replace('{1}', streamingRouteType);
 
         if (stream.tag) route = `${route}&tag=${stream.tag}`;
-        if (stream.list) route = `${route}&tag=${stream.list}`;
+        if (stream.list) route = `${route}&list=${stream.listId}`;
 
         return route;
     }
