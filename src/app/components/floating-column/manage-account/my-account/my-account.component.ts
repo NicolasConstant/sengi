@@ -109,7 +109,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
 
     listTitle: string;
-    private creationLoading: boolean;
+    creationLoading: boolean;
     createList(): boolean {
         if(this.creationLoading || !this.listTitle || this.listTitle == '') return false;
                 
