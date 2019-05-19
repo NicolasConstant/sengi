@@ -9,10 +9,10 @@
 
     <h4 class="my-account__label my-account__margin-top">manage list:</h4>
     <div class="my-account__link--margin-bottom" *ngFor="let list of availableLists">
-        <a href class="my-account__list--button" title="delete list">
+        <a href class="my-account__list--button" title="delete list" (click)="deleteList(list)">
             <fa-icon class="my-account__link--icon" [icon]="faTrash"></fa-icon>
         </a>
-        <a href class="my-account__list--button" title="edit list">
+        <a href class="my-account__list--button" title="edit list" (click)="editList(list)">
             <fa-icon class="my-account__link--icon" [icon]="faPenAlt"></fa-icon>
         </a>
         <a class="my-account__link my-account__list my-account__blue" href (click)="addStream(list)"
@@ -21,11 +21,10 @@
             </fa-icon>
         </a>
     </div>
-    <a href class="my-account__list--button" title="create list">
+    <a href class="my-account__list--button" title="create list" (click)="createList()">
         <fa-icon class="my-account__link--icon" [icon]="faPlus"></fa-icon>
     </a>
-    <input class="my-account__list--new-list-title" placeholder="new list title" />
-
+    <input class="my-account__list--new-list-title" placeholder="new list title" [(ngModel)]="listTitle" (keyup.enter)="createList()" [disabled]="creationLoading"/>
 
     <h4 class="my-account__label my-account__margin-top">remove account from sengi:</h4>
     <a class="my-account__link my-account__red" href (click)="removeAccount()">

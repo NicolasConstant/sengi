@@ -107,6 +107,40 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         this.navigationService.closePanel();
         return false;
     }
+
+    listTitle: string;
+    private creationLoading: boolean;
+    createList(): boolean {
+        if(this.creationLoading || !this.listTitle || this.listTitle == '') return false;
+                
+        this.creationLoading = true;
+        this.mastodonService.createList(this.account.info, this.listTitle)
+            .then((stream: StreamElement) => {
+                this.listTitle = null;
+                let wrappedStream = new StreamWrapper(stream);
+                this.availableLists.push(wrappedStream);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.creationLoading = false;
+            });
+
+        return false;
+    }
+
+    editList(list: StreamWrapper): boolean {
+
+
+        return false;
+    }
+
+    deleteList(list: StreamWrapper): boolean {
+
+
+        return false;
+    }
 }
 
 class StreamWrapper extends StreamElement {
@@ -115,4 +149,5 @@ class StreamWrapper extends StreamElement {
     }
 
     isAdded: boolean;
+    confirmDeletion: boolean;
 }
