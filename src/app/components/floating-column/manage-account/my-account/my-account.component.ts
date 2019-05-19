@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, Select } from '@ngxs/store';
 import { faCheckSquare } from "@fortawesome/free-regular-svg-icons";
+import { faPenAlt, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { NotificationService } from '../../../../services/notification.service';
 import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../../../../states/streams.state';
@@ -16,7 +17,9 @@ import { MastodonService } from '../../../../services/mastodon.service';
     styleUrls: ['./my-account.component.scss']
 })
 export class MyAccountComponent implements OnInit, OnDestroy {
-   
+    faPlus = faPlus;
+    faTrash = faTrash;
+    faPenAlt = faPenAlt;
     faCheckSquare = faCheckSquare;
     
     availableStreams: StreamWrapper[] = [];

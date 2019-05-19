@@ -32,15 +32,13 @@
         &:hover {
             background-color: lighten($red-button-color, 15);
         }
-    }
+    }    
     &__link {
         text-decoration: none;
         display: block; // width: calc(100% - 20px);
         width: 100%; // height: 30px;
         padding: 5px 10px; // border: solid 1px black;
-        &:not(:last-child) {
-            margin-bottom: 5px;
-        }
+      
         &--icon {
             float: right;
         }
@@ -49,6 +47,43 @@
             background-color: darken($color-primary, 4);
             &:hover {
                 background-color: darken($color-primary, 4);
+            }
+        }
+        &--margin-bottom{
+            &:not(:last-child) {
+                margin-bottom: 5px;
+            }
+        }
+    }
+    &__list {
+        $list-width: 60px;
+        width: calc(100% - #{$list-width} - 2px);
+
+        &--button {
+            margin-left: 1px;
+            width: calc(#{$list-width}/2);
+            float: right;
+            padding: 5px 10px;
+            background-color: $color-primary;
+            color: #fff;
+            color: $font-color-secondary;
+            &:hover {
+                color: #fff;
+                background-color: lighten($color-primary, 15);
+            }
+        }
+
+        &--new-list-title {
+            color: #fff;
+            background-color: darken($color-primary, 4);
+            border: 2px solid $color-primary;
+            width: calc(100% - #{$list-width}/2 - 1px);
+            padding: 3px 5px;
+
+            &:focus {
+                outline: none !important;
+                // border:1px solid red;
+                box-shadow: none;
             }
         }
     }
