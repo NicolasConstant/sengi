@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, Select } from '@ngxs/store';
 import { faCheckSquare } from "@fortawesome/free-regular-svg-icons";
-import { faPenAlt, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPenAlt, faTrash, faPlus, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { NotificationService } from '../../../../services/notification.service';
 import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams } from '../../../../states/streams.state';
@@ -21,6 +21,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     faTrash = faTrash;
     faPenAlt = faPenAlt;
     faCheckSquare = faCheckSquare;
+    faCheck = faCheck;
+    faTimes = faTimes;
     
     availableStreams: StreamWrapper[] = [];
     availableLists: StreamWrapper[] = [];
@@ -136,8 +138,19 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    deleteList(list: StreamWrapper): boolean {
+    openCloseDeleteConfirmation(list: StreamWrapper, state: boolean): boolean {
+        list.confirmDeletion = state;
+        return false;
+    }
 
+    deleteList(list: StreamWrapper): boolean {
+        this.mastodonService.deleteList(this.account.info, list.listId)
+            .then(() => {
+                this.availableLists = this.availableLists.filter(x => x.id !== list.id);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
 
         return false;
     }

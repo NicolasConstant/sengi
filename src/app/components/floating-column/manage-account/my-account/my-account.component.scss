@@ -17,22 +17,7 @@
         margin-top: 10px;
         margin-left: 5px;
         color: $font-color-secondary;
-    }  
-    &__blue {
-        background-color: $color-primary;
-        color: #fff;
-        &:hover {
-            background-color: lighten($color-primary, 15);
-        }
-    }
-    &__red {
-        $red-button-color: rgb(65, 3, 3);
-        background-color: $red-button-color;
-        color: #fff;
-        &:hover {
-            background-color: lighten($red-button-color, 15);
-        }
-    }    
+    }   
     &__link {
         text-decoration: none;
         display: block; // width: calc(100% - 20px);
@@ -90,4 +75,19 @@
     &__margin-top {
         margin-top: 25px;
     }   
+    &__blue {
+        background-color: $color-primary;
+        color: #fff;
+        &:hover {
+            background-color: lighten($color-primary, 15);
+        }
+    }
+    &__red {
+        $red-button-color: rgb(65, 3, 3);
+        background-color: $red-button-color;
+        color: #fff;
+        &:hover {
+            background-color: lighten($red-button-color, 15);
+        }
+    }    
 }

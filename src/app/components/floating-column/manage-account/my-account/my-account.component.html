@@ -9,12 +9,24 @@
 
     <h4 class="my-account__label my-account__margin-top">manage list:</h4>
     <div class="my-account__link--margin-bottom" *ngFor="let list of availableLists">
-        <a href class="my-account__list--button" title="delete list" (click)="deleteList(list)">
+        <a href class="my-account__list--button" title="delete list" 
+            (click)="openCloseDeleteConfirmation(list, true)" *ngIf="!list.confirmDeletion">
             <fa-icon class="my-account__link--icon" [icon]="faTrash"></fa-icon>
         </a>
-        <a href class="my-account__list--button" title="edit list" (click)="editList(list)">
+        <a href class="my-account__list--button" title="edit list" 
+            (click)="editList(list)" *ngIf="!list.confirmDeletion">
             <fa-icon class="my-account__link--icon" [icon]="faPenAlt"></fa-icon>
         </a>
+
+        <a href class="my-account__list--button" title="cancel" 
+            (click)="openCloseDeleteConfirmation(list, false)" *ngIf="list.confirmDeletion">
+            <fa-icon class="my-account__link--icon" [icon]="faTimes"></fa-icon>
+        </a>
+        <a href class="my-account__list--button my-account__red" title="delete list" 
+            (click)="deleteList(list)" *ngIf="list.confirmDeletion">
+            <fa-icon class="my-account__link--icon" [icon]="faCheck"></fa-icon>
+        </a>
+
         <a class="my-account__link my-account__list my-account__blue" href (click)="addStream(list)"
             title="{{ list.isAdded ? '' : 'add list'}}" [class.my-account__link--disabled]="list.isAdded">
             {{ list.name }} <fa-icon class="my-account__link--icon" *ngIf="list.isAdded" [icon]="faCheckSquare">
