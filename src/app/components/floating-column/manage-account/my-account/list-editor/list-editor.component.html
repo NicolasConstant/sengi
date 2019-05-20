@@ -1,3 +1,5 @@
-<p>
-  list-editor works!
-</p>
+<div class="list-editor flexcroll">
+    <div class="list-editor__list">
+        <app-list-account class="list-editor__account" *ngFor="let account of accountsInList" [account]="account"></app-list-account>
+    </div>
+</div>

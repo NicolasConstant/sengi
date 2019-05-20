@@ -133,8 +133,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
 
     editList(list: StreamWrapper): boolean {
-
-
+        list.editList = !list.editList;
         return false;
     }
 
@@ -160,11 +159,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
 }
 
-class StreamWrapper extends StreamElement {
+export class StreamWrapper extends StreamElement {
     constructor(stream: StreamElement) {
         super(stream.type, stream.name, stream.accountId, stream.tag, stream.list, stream.listId, stream.instance);
     }
 
     isAdded: boolean;
     confirmDeletion: boolean;
+    editList: boolean;
 }

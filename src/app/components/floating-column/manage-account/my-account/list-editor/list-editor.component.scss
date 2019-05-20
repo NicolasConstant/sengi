@@ -1,0 +1,17 @@
+@import "variables";
+@import "commons";
+
+.list-editor {
+    background-color: $color-primary;
+    min-height: 20px;
+    max-height: 300px;
+    margin-top: 1px;
+    overflow-y: auto;
+
+    &__account {
+        display: block;
+        &:not(:last-child){
+            border-bottom: 1px solid #000;
+        }
+    }
+}

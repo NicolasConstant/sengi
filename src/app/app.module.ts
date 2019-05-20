@@ -59,6 +59,7 @@ import { SettingsState } from './states/settings.state';
 import { AccountEmojiPipe } from './pipes/account-emoji.pipe';
 import { CardComponent } from './components/stream/status/card/card.component';
 import { ListEditorComponent } from './components/floating-column/manage-account/my-account/list-editor/list-editor.component';
+import { ListAccountComponent } from './components/floating-column/manage-account/my-account/list-editor/list-account/list-account.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -106,7 +107,8 @@ const routes: Routes = [
     NotificationsComponent,
     AccountEmojiPipe,
     CardComponent,
-    ListEditorComponent
+    ListEditorComponent,
+    ListAccountComponent
   ],
   imports: [
     FontAwesomeModule,

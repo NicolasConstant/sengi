@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {        
+export class MastodonService {       
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -286,6 +286,12 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.delete(route, { headers: headers }).toPromise();
     } 
+
+    getListAccounts(account: AccountInfo, listId: string): Promise<Account[]> {
+        let route = `https://${account.instance}${this.apiRoutes.getAccountsInList}`.replace('{0}', listId);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Account[]>(route, { headers: headers }).toPromise();
+    }   
 }
 
 export enum VisibilityEnum {

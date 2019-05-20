@@ -32,6 +32,8 @@
             {{ list.name }} <fa-icon class="my-account__link--icon" *ngIf="list.isAdded" [icon]="faCheckSquare">
             </fa-icon>
         </a>
+
+        <app-list-editor *ngIf="list.editList" [list]="list" [account]="account"></app-list-editor>
     </div>
     <a href class="my-account__list--button" title="create list" (click)="createList()">
         <fa-icon class="my-account__link--icon" [icon]="faPlus"></fa-icon>

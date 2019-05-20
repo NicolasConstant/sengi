@@ -1,0 +1,39 @@
+@import "variables";
+
+.list-account {
+    $actin-width: 50px;
+
+    &__action {
+        float: right;
+        width: $actin-width;
+    }
+
+    &__account {
+        width: calc(100% - #{ $actin-width });
+        position: relative;
+        height: 50px;
+        
+
+        &--avatar {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        &--display-name {
+            position: absolute;
+            top: 8px;
+            left: 60px;
+            color: white;
+        }
+
+        &--acct {
+            position: absolute;
+            top: 26px;
+            left: 60px;
+            color: $status-secondary-color;
+        }
+    }
+}
