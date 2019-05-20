@@ -299,6 +299,13 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post(route, null, { headers: headers }).toPromise();
     }
+
+    removeAccountFromList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
+        let route = `https://${account.instance}${this.apiRoutes.addAccountToList}`.replace('{0}', listId);
+        route += `?account_ids[]=${accountId}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.delete(route, { headers: headers }).toPromise();
+    }
 }
 
 export enum VisibilityEnum {

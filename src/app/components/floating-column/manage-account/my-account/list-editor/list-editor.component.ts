@@ -123,6 +123,19 @@ export class ListEditorComponent implements OnInit {
 
     removeEvent(accountWrapper: AccountListWrapper) {
         console.log(accountWrapper);
+
+        accountWrapper.isLoading = true;
+        this.mastodonService.removeAccountFromList(this.account.info, this.list.listId, accountWrapper.account.id)
+            .then(() => {
+                accountWrapper.isInList = false;
+                this.accountsInList = this.accountsInList.filter(x => x.account.id !== accountWrapper.account.id);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                accountWrapper.isLoading = false;
+            });
     }
 }
 

@@ -24,13 +24,13 @@ export class ListAccountComponent implements OnInit {
     }
 
     add(): boolean {
-        if(this.accountWrapper.isLoading) return;
+        if(this.accountWrapper && this.accountWrapper.isLoading) return;
         this.addEvent.emit(this.accountWrapper);
         return false;
     }
 
     remove(): boolean {
-        if(this.accountWrapper.isLoading) return;
+        if(this.accountWrapper && this.accountWrapper.isLoading) return;
         this.removeEvent.emit(this.accountWrapper);
         return false;
     }
