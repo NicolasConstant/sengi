@@ -1,11 +1,27 @@
 @import "variables";
 
 .list-account {
+    transition: all .2s;
     $actin-width: 50px;
 
     &__action {
         float: right;
         width: $actin-width;
+        position: relative;
+
+        &--button {       
+            position: absolute;     
+            top: 4px;
+            right: 15px;
+            color: #fff;
+            font-size: 14px;
+            padding: 10px;
+            // outline: 1px solid greenyellow;
+            
+            &:hover{
+                color: darken(#fff, 20);
+            }
+        }
     }
 
     &__account {
