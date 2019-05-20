@@ -3,6 +3,7 @@ import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { Account } from "../../../../../../services/models/mastodon.interfaces";
 import { AccountListWrapper } from '../list-editor.component';
+import { isUndefined } from 'util';
 
 @Component({
     selector: 'app-list-account',
@@ -23,11 +24,13 @@ export class ListAccountComponent implements OnInit {
     }
 
     add(): boolean {
+        if(this.accountWrapper.isLoading) return;
         this.addEvent.emit(this.accountWrapper);
         return false;
     }
 
     remove(): boolean {
+        if(this.accountWrapper.isLoading) return;
         this.removeEvent.emit(this.accountWrapper);
         return false;
     }
