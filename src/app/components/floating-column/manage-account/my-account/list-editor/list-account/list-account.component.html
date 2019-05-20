@@ -1,11 +1,11 @@
 <div class="list-account">
     <div class="list-account__action">
-        <a href class="list-account__action--button" title="add account to list"
+        <a href class="list-account__action--button list-account__action--button--add" title="add account to list"
             *ngIf="!accountWrapper.isInList" (click)="add()">
             <fa-icon [icon]="faPlus"></fa-icon>
         </a>
 
-        <a href class="list-account__action--button"  title="remove account from list"
+        <a href class="list-account__action--button list-account__action--button--remove"  title="remove account from list"
             *ngIf="accountWrapper.isInList" (click)="remove()">
             <fa-icon [icon]="faTimes"></fa-icon>
         </a>

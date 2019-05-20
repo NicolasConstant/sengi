@@ -21,6 +21,22 @@
             &:hover{
                 color: darken(#fff, 20);
             }
+
+            // $add-color: rgb(167, 220, 255);            
+            // $remove-color: rgb(255, 154, 196);
+            // &--add {
+            //     color: $add-color;
+            //     &:hover{
+            //         color: darken($add-color, 20);
+            //     }
+            // }
+
+            &--remove {
+                color: $font-link-primary;
+                &:hover{
+                    color: lighten($font-link-primary, 40);
+                }
+            }
         }
     }
 
