@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { Account } from "../../../../../../services/models/mastodon.interfaces";
+import { AccountListWrapper } from '../list-editor.component';
 
 @Component({
     selector: 'app-list-account',
@@ -12,10 +13,9 @@ export class ListAccountComponent implements OnInit {
     faTimes = faTimes;
     faPlus = faPlus;
 
-    @Input() account: Account;
-    @Input() fromSearch: boolean;
-    @Output() addEvent = new EventEmitter();
-    @Output() removeEvent = new EventEmitter();
+    @Input() accountWrapper: AccountListWrapper;
+    @Output() addEvent = new EventEmitter<AccountListWrapper>();
+    @Output() removeEvent = new EventEmitter<AccountListWrapper>();
 
     constructor() { }
 
@@ -23,12 +23,12 @@ export class ListAccountComponent implements OnInit {
     }
 
     add(): boolean {
-        this.addEvent.emit();
+        this.addEvent.emit(this.accountWrapper);
         return false;
     }
 
     remove(): boolean {
-        this.removeEvent.emit();
+        this.removeEvent.emit(this.accountWrapper);
         return false;
     }
 }

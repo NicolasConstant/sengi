@@ -18,8 +18,8 @@ export class ListEditorComponent implements OnInit {
     @Input() list: StreamWrapper;
     @Input() account: AccountWrapper;
 
-    accountsInList: Account[] = [];
-    accountsSearch: Account[] = [];
+    accountsInList: AccountListWrapper[] = [];
+    accountsSearch: AccountListWrapper[] = [];
     searchPattern: string;
     searchOpen: boolean;
 
@@ -31,7 +31,10 @@ export class ListEditorComponent implements OnInit {
         this.accountsInList.length = 0;
         this.mastodonService.getListAccounts(this.account.info, this.list.listId)
             .then((accounts: Account[]) => {
-                this.accountsInList = accounts;
+                this.accountsInList.length = 0;
+                for (const account of accounts) {
+                    this.accountsInList.push(new AccountListWrapper(account, true));
+                }                
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
@@ -47,7 +50,9 @@ export class ListEditorComponent implements OnInit {
         this.mastodonService.searchAccount(this.account.info, this.searchPattern, 15)
             .then((accounts: Account[]) => {
                 this.accountsSearch.length = 0;
-                this.accountsSearch = accounts;
+                for (const account of accounts) {
+                    this.accountsSearch.push(new AccountListWrapper(account, false));
+                }
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
@@ -60,5 +65,11 @@ export class ListEditorComponent implements OnInit {
         this.accountsSearch.length = 0;
         return false;
     }
+}
 
+export class AccountListWrapper {
+    constructor(public account: Account, public isInList: boolean) {
+    }
+    
+    isProcessing: boolean;
 }
