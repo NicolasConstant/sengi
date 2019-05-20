@@ -3,10 +3,39 @@
 
 .list-editor {
     background-color: $color-primary;
-    min-height: 20px;
-    max-height: 300px;
+    min-height: 20px;    
     margin-top: 1px;
-    overflow-y: auto;
+    position: relative;
+
+    &__search {
+        color: #fff;
+        background-color: darken($color-primary, 4);
+        border: 2px solid $color-primary;
+        width: calc(100%);
+        padding: 3px 5px;
+
+        &:focus {
+            outline: none !important;
+            box-shadow: none;
+        }
+    }
+
+    &__close-search {
+        position: absolute;
+        top: 0px;
+        right: 5px;
+        color: white;
+        padding: 5px;
+        &:hover {
+            color: rgb(160, 160, 160);
+        }
+    }
+
+    &__list {
+        max-height: 300px;
+        overflow-y: auto;
+        border-top: 1px solid #000;
+    }
 
     &__account {
         display: block;

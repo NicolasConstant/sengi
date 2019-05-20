@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { Account } from "../../../../../../services/models/mastodon.interfaces";
@@ -14,6 +14,8 @@ export class ListAccountComponent implements OnInit {
 
     @Input() account: Account;
     @Input() fromSearch: boolean;
+    @Output() addEvent = new EventEmitter();
+    @Output() removeEvent = new EventEmitter();
 
     constructor() { }
 
@@ -21,12 +23,12 @@ export class ListAccountComponent implements OnInit {
     }
 
     add(): boolean {
-
+        this.addEvent.emit();
         return false;
     }
 
     remove(): boolean {
-
+        this.removeEvent.emit();
         return false;
     }
 }

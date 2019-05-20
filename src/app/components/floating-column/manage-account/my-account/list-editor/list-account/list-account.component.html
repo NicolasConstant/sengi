@@ -5,7 +5,7 @@
             <fa-icon [icon]="faPlus"></fa-icon>
         </a>
 
-        <a href class="list-account__action--button"  title="remove account to list"
+        <a href class="list-account__action--button"  title="remove account from list"
             *ngIf="!fromSearch" (click)="remove()">
             <fa-icon [icon]="faTimes"></fa-icon>
         </a>
@@ -14,8 +14,8 @@
     <div class="list-account__account">
         <img src="{{ account.avatar }}}" alt="" class="list-account__account--avatar">
 
-        <span class="list-account__account--display-name">{{ account.display_name }}</span>
-        <span class="list-account__account--acct">{{ account.acct }}</span>
+        <span class="list-account__account--display-name" title="{{ account.display_name }}">{{ account.display_name }}</span>
+        <span class="list-account__account--acct" title="{{ account.acct }}">{{ account.acct }}</span>
     </div>
 
 </div>

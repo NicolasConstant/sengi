@@ -12,7 +12,7 @@
         &--button {       
             position: absolute;     
             top: 4px;
-            right: 15px;
+            right: 12px;
             color: #fff;
             font-size: 14px;
             padding: 10px;
@@ -38,11 +38,17 @@
             height: 40px;
         }
 
+        $max-name-width: 190px;
         &--display-name {
             position: absolute;
             top: 8px;
             left: 60px;
             color: white;
+
+            max-width: $max-name-width;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         &--acct {
@@ -50,6 +56,11 @@
             top: 26px;
             left: 60px;
             color: $status-secondary-color;
+            
+            max-width: $max-name-width;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
         }
     }
 }

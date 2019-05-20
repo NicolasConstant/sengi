@@ -155,8 +155,8 @@ export class MastodonService {
             });
     }
 
-    searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false): Promise<Account[]> {
-        const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}`;
+    searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false, resolve = true): Promise<Account[]> {
+        const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Account[]>(route, { headers: headers }).toPromise()
     }
