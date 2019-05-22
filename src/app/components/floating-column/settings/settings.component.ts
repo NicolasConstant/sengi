@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-const { version: appVersion } = require('../../../../../package.json')
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-settings',
@@ -15,10 +15,4 @@ export class SettingsComponent implements OnInit {
     ngOnInit() {
         this.version = environment.VERSION;
     }
-
 }
-
-
-export const environment = {
-    VERSION: require('../../../../../package.json').version
-};
