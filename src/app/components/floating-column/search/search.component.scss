@@ -2,6 +2,7 @@
 @import "mixins";
 @import "panel";
 @import "commons";
+@import "buttons";
 .panel {
     padding-left: 0px;
     padding-right: 0px;
@@ -15,7 +16,34 @@
 .form-with-button {
     width: calc(100% - #{$button-size});
     float: left;
+
+    background-color: $column-color;
+    border-color: $button-border-color;
+    color: #fff;
+    font-size: $default-font-size;
+    &:focus {
+        box-shadow: none;
+    }
+    height: 29px;
+    padding: 0 5px 0 5px; 
 }
+
+
+// .form-control {
+//     margin: 0 0 5px 5px;
+//     width: calc(100% - 10px);
+//     background-color: $column-color;
+//     border-color: $status-secondary-color;
+//     color: #fff;
+//     font-size: $default-font-size;
+//     &:focus {
+//         box-shadow: none;
+//     }
+//     // &--privacy {
+//     //     display: inline-block;
+//     //     width: calc(100% - 15px - #{$btn-send-status-width} - #{$counter-width});
+//     // }
+// }
 
 .form-button {
     width: $button-size;
@@ -25,11 +53,16 @@
     cursor: pointer;
     background-color: $button-background-color;
     color: $button-color;
+    color: whitesmoke;
     transition: all .2s;
     &:hover {
         background-color: $button-background-color-hover;
         color: $button-color-hover;
     }
+
+    
+    border: 1px solid $button-border-color;
+    border-width: 1px 1px 1px 0;
 }
 
 $search-form-height: 70px;
