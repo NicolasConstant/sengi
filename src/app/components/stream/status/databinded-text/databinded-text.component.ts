@@ -22,8 +22,8 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
-        console.warn('text');
-        console.warn(value);
+        // console.warn('text');
+        // console.warn(value);
 
         this.processedText = '';
 
