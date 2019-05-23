@@ -27,7 +27,9 @@ export class DatabindedTextComponent implements OnInit {
 
         this.processedText = '';
 
-        value = value.replace('@<span class="">', '<span class="">'); //Friendica sanitarization
+        do {
+            value = value.replace('@<span class="">', '<span class="">'); //Friendica sanitarization
+        } while (value.includes('@<span class="">'));
 
         let linksSections = value.split('<a ');
 
@@ -80,7 +82,7 @@ export class DatabindedTextComponent implements OnInit {
         let extractedAccountAndNext: string[];
         let extractedAccountName: string;
 
-        if(section.includes('<span class="mention">')){ //Friendica
+        if (section.includes('<span class="mention">')) { //Friendica
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('<span class="mention">')[1].split('</span>')[0];
         } else if (!section.includes('@<span>')) { //GNU social
@@ -101,11 +103,11 @@ export class DatabindedTextComponent implements OnInit {
         let classname = this.getClassNameForAccount(extractedAccount);
         this.processedText += `<a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
 
-        if (extractedAccountAndNext[1]) 
+        if (extractedAccountAndNext[1])
             this.processedText += extractedAccountAndNext[1];
 
         //GNU Social clean up
-        if(this.processedText.includes('@<a')) 
+        if (this.processedText.includes('@<a'))
             this.processedText = this.processedText.replace('@<a', '<a');
 
         this.accounts.push(extractedAccount);
@@ -180,10 +182,10 @@ export class DatabindedTextComponent implements OnInit {
             });
 
             this.renderer.listen(el, 'mouseup', (event) => {
-                if(event.which === 2){
+                if (event.which === 2) {
                     event.preventDefault();
                     event.stopImmediatePropagation();
-    
+
                     window.open(link, '_blank');
                     return false;
                 }
