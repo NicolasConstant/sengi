@@ -187,7 +187,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.isProcessingInfiniteScroll = true;
 
         const lastStatus = this.statuses[this.statuses.length - 1];
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
             .then((status: Status[]) => {
                 for (const s of status) {
                     const wrapper = new StatusWrapper(s, this.account);
@@ -210,7 +210,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
 
     private retrieveToots(): void {
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.list)
+        this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
             .then((results: Status[]) => {
                 this.isLoading = false;
                 for (const s of results) {

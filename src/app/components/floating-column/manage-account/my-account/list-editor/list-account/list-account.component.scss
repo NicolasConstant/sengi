@@ -1,0 +1,82 @@
+@import "variables";
+
+.list-account {
+    transition: all .2s;
+    $actin-width: 50px;
+
+    &__action {
+        float: right;
+        width: $actin-width;
+        position: relative;
+
+        &--button {       
+            position: absolute;     
+            top: 4px;
+            right: 12px;
+            color: #fff;
+            font-size: 14px;
+            padding: 10px;
+            // outline: 1px solid greenyellow;
+            
+            &:hover{
+                color: darken(#fff, 20);
+            }
+
+            // $add-color: rgb(167, 220, 255);            
+            // $remove-color: rgb(255, 154, 196);
+            // &--add {
+            //     color: $add-color;
+            //     &:hover{
+            //         color: darken($add-color, 20);
+            //     }
+            // }
+
+            &--remove {
+                color: $font-link-primary;
+                &:hover{
+                    color: lighten($font-link-primary, 40);
+                }
+            }
+        }
+    }
+
+    &__account {
+        width: calc(100% - #{ $actin-width });
+        position: relative;
+        height: 50px;
+        
+
+        &--avatar {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 40px;
+            height: 40px;
+        }
+
+        $max-name-width: 190px;
+        &--display-name {
+            position: absolute;
+            top: 8px;
+            left: 60px;
+            color: white;
+
+            max-width: $max-name-width;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        &--acct {
+            position: absolute;
+            top: 26px;
+            left: 60px;
+            color: $status-secondary-color;
+            
+            max-width: $max-name-width;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}

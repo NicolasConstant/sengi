@@ -1,0 +1,21 @@
+<div class="list-account">
+    <div class="list-account__action">
+        <a href class="list-account__action--button list-account__action--button--add" title="add account to list"
+            *ngIf="!accountWrapper.isInList" (click)="add()">
+            <fa-icon [icon]="faPlus"></fa-icon>
+        </a>
+
+        <a href class="list-account__action--button list-account__action--button--remove"  title="remove account from list"
+            *ngIf="accountWrapper.isInList" (click)="remove()">
+            <fa-icon [icon]="faTimes"></fa-icon>
+        </a>
+
+    </div>
+    <div class="list-account__account">
+        <img src="{{ accountWrapper.account.avatar }}" alt="" class="list-account__account--avatar">
+
+        <span class="list-account__account--display-name" title="{{ accountWrapper.account.display_name }}" innerHTML="{{ accountWrapper.account | accountEmoji }}"></span>
+        <span class="list-account__account--acct" title="{{ accountWrapper.account.acct }}">{{ accountWrapper.account.acct }}</span>
+    </div>
+
+</div>

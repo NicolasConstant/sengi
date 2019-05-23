@@ -67,7 +67,7 @@
             (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
             (textSelected)="textSelected()"></app-databinded-text>
 
-        <app-card class="status__card" *ngIf="displayedStatus.card && !hasAttachments" [card]="displayedStatus.card"></app-card>
+        <app-card class="status__card" *ngIf="!isContentWarned && displayedStatus.card && !hasAttachments" [card]="displayedStatus.card"></app-card>
 
         <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments"
             [attachments]="displayedStatus.media_attachments">

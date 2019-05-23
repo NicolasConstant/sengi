@@ -50,4 +50,13 @@ export class ApiRoutes {
     getTagTimeline = '/api/v1/timelines/tag/{0}';
     getListTimeline = '/api/v1/timelines/list/{0}';
     getStreaming = '/api/v1/streaming?access_token={0}&stream={1}';
+    getLists = '/api/v1/lists';
+    getList = '/api/v1/lists/{0}';
+    getListsWithAccount = '/api/v1/accounts/{0}/lists';
+    getAccountsInList = '/api/v1/lists/{0}/accounts';
+    postList = '/api/v1/lists';
+    putList = '/api/v1/lists/{0}';
+    deleteList = '/api/v1/lists/{0}';
+    addAccountToList = '/api/v1/lists/{0}/accounts';
+    removeAccountFromList = '/api/v1/lists/{0}/accounts';
 }
