@@ -127,4 +127,11 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('<span class=""><a href class="account--me-m-s" title="@me@m.s">@me</a></span> Blablabla.');
     });
+
+    it('should parse mention - Misskey in Mastodon', () => {
+        const sample = `<p><a href="https://mastodon.social/users/sengi_app" class="mention" rel="nofollow noopener" target="_blank">@sengi_app@mastodon.social</a><span> Blabla</span></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p><a href class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
+    });
 });
