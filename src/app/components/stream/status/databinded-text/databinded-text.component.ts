@@ -22,10 +22,13 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
-        // console.warn('text');
-        // console.warn(value);
+        console.warn('text');
+        console.warn(value);
 
         this.processedText = '';
+
+        value = value.replace('@<span class="">', '<span class="">'); //Friendica sanitarization
+
         let linksSections = value.split('<a ');
 
         for (let section of linksSections) {
@@ -77,7 +80,10 @@ export class DatabindedTextComponent implements OnInit {
         let extractedAccountAndNext: string[];
         let extractedAccountName: string;
 
-        if (!section.includes('@<span>')) { //GNU social
+        if(section.includes('<span class="mention">')){ //Friendica
+            extractedAccountAndNext = section.split('</a>');
+            extractedAccountName = extractedAccountAndNext[0].split('<span class="mention">')[1].split('</span>')[0];
+        } else if (!section.includes('@<span>')) { //GNU social
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('>')[1];
         } else {

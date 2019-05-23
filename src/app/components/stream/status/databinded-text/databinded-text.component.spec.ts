@@ -120,4 +120,11 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('<div><span><a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span><a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
     });       
+
+    it('should parse mention - Friendica in Mastodon', () => {
+        const sample = `@<span class=""><a href="https://m.s/me" class="u-url mention" rel="nofollow noopener" target="_blank"><span class="mention">me</span></a></span> Blablabla.`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<span class=""><a href class="account--me-m-s" title="@me@m.s">@me</a></span> Blablabla.');
+    });
 });
