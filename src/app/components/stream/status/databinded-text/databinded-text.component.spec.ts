@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DatabindedTextComponent } from './databinded-text.component';
 import { By } from '@angular/platform-browser';
 import { isGeneratedFile } from '@angular/compiler/src/aot/util';
+import { tick } from '@angular/core/src/render3';
 
 describe('DatabindedTextComponent', () => {
     let component: DatabindedTextComponent;
@@ -134,4 +135,18 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('<p><a href class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
     });
+
+    it('should parse hastag - Pleroma', () => {
+        const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p>Bla  <a href class="hashtag-KubeCon">#KubeCon</a> Bla</p>'); 
+    });
+
+    it('should parse link - Pleroma', () => {
+        const sample = `<p>Bla <a href="https://cloudblogs.microsoft.com/opensource/2019/05/21/service-mesh-interface-smi-release/"><span>https://</span><span>cloudblogs.microsoft.com/opens</span><span>ource/2019/05/21/service-mesh-interface-smi-release/</span></a></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p>Bla <a href class="link-httpscloudblogsmicrosoftcomopensource20190521servicemeshinterfacesmirelease" title="open link">cloudblogs.microsoft.com/opens</a></p>'); 
+    })
 });

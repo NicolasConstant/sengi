@@ -43,7 +43,7 @@ export class DatabindedTextComponent implements OnInit {
                 continue;
             }
 
-            if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#')) {
+            if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#') || section.includes('rel="tag">')) {
                 try {
                     this.processHashtag(section);
                 }
@@ -63,6 +63,7 @@ export class DatabindedTextComponent implements OnInit {
             } else {
                 try {
                     this.processLink(section);
+                    //this.processedText += `<a ${section}`;
                 }
                 catch (err) {
                     console.warn('process link');
@@ -129,7 +130,11 @@ export class DatabindedTextComponent implements OnInit {
                 extractedName = extractedLinkAndNext[0].split(`<span class="">`)[1].split('</span>')[0];
             }
             catch (err) {
-                extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
+                try {
+                    extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
+                } catch (err) { // Pleroma
+                    extractedName = extractedLinkAndNext[0].split('</span><span>')[1].split('</span>')[0];
+                }
             }
         }
 
