@@ -78,7 +78,7 @@ export class DatabindedTextComponent implements OnInit {
         let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
 
         let classname = this.getClassNameForHastag(extractedHashtag);
-        this.processedText += ` <a href class="${classname}">#${extractedHashtag}</a>`;
+        this.processedText += ` <a href class="${classname}" title="#${extractedHashtag}">#${extractedHashtag}</a>`;
         if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
         this.hashtags.push(extractedHashtag);
     }
