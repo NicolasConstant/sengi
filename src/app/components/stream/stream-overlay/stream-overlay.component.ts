@@ -156,7 +156,7 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
         }
 
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
-        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, selectedAccount.instance);
+        const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, null, selectedAccount.instance);
         const newElement = new OverlayBrowsing(hashTagElement, null, null);
         this.loadElement(newElement);
         // this.canGoForward = false;

@@ -188,3 +188,7 @@ export interface Tag {
     url: string;
 }
 
+export interface List {
+    id: string;
+    title: string;
+}

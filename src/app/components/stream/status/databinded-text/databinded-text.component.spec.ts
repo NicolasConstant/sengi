@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DatabindedTextComponent } from './databinded-text.component';
 import { By } from '@angular/platform-browser';
 import { isGeneratedFile } from '@angular/compiler/src/aot/util';
+import { tick } from '@angular/core/src/render3';
 
 describe('DatabindedTextComponent', () => {
     let component: DatabindedTextComponent;
@@ -36,7 +37,7 @@ describe('DatabindedTextComponent', () => {
         const url = 'https://test.social/tags/programmers';
         const sample = `<p>bla1 <a href="${url}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="hashtag-programmers">#programmers</a>');
+        expect(component.processedText).toContain('<a href class="hashtag-programmers" title="#programmers">#programmers</a>');
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
     });
@@ -89,7 +90,7 @@ describe('DatabindedTextComponent', () => {
         const linkUrl = 'mydomain.co/test';
         const sample = `<p>bla1 <a href="${hashtagUrl}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2 <span class="h-card"><a href="${mentionUrl}" class="u-url mention" rel="nofollow noopener" target="_blank">@<span>${mention}</span></a></span> bla3 <a href="https://${linkUrl}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${linkUrl}</span><span class="invisible"></span></a> bla4</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="hashtag-programmers">#programmers</a>');
+        expect(component.processedText).toContain('<a href class="hashtag-programmers" title="#programmers">#programmers</a>');
         expect(component.processedText).toContain('<a href class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social">@sengi_app</a>');
         expect(component.processedText).toContain('<a href class="link-httpsmydomaincotest" title="open link">mydomain.co/test</a>');
         expect(component.processedText).toContain('bla1');
@@ -120,4 +121,39 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('<div><span><a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span><a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
     });       
+
+    it('should parse mention - Friendica in Mastodon', () => {
+        const sample = `@<span class=""><a href="https://m.s/me" class="u-url mention" rel="nofollow noopener" target="_blank"><span class="mention">me</span></a></span> Blablabla.`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<span class=""><a href class="account--me-m-s" title="@me@m.s">@me</a></span> Blablabla.');
+    });
+
+    it('should parse mention - Misskey in Mastodon', () => {
+        const sample = `<p><a href="https://mastodon.social/users/sengi_app" class="mention" rel="nofollow noopener" target="_blank">@sengi_app@mastodon.social</a><span> Blabla</span></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p><a href class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
+    });
+
+    it('should parse hastag - Pleroma', () => {
+        const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p>Bla  <a href class="hashtag-KubeCon" title="#KubeCon">#KubeCon</a> Bla</p>'); 
+    });
+
+    it('should parse link - Pleroma', () => {
+        const sample = `<p>Bla <a href="https://cloudblogs.microsoft.com/opensource/2019/05/21/service-mesh-interface-smi-release/"><span>https://</span><span>cloudblogs.microsoft.com/opens</span><span>ource/2019/05/21/service-mesh-interface-smi-release/</span></a></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<p>Bla <a href class="link-httpscloudblogsmicrosoftcomopensource20190521servicemeshinterfacesmirelease" title="open link">cloudblogs.microsoft.com/opens</a></p>'); 
+    });
+
+    it('should parse link 2 - Pleroma', () => {
+        const sample = `Bla<br /><br /><a href="https://link/">https://link/</a>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('Bla<br /><br /><a href class="link-httpslink" title="open link">https://link/</a>'); 
+    });
 });

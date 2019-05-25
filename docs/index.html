@@ -28,25 +28,43 @@
 
                     <div class="header__download-box--description">
                         A FLOSS multi-account Mastodon and Pleroma desktop client<br />
-                        Now available in Beta (v0.8.0)<br />
+                        Now available in Beta <span id="sengi-version"></span> <br />
                         <br />
                     </div>
 
                     <div class="header__download-box--buttons">
                         <p>
                             <h4 class="header__download-box--subtitle">Try it in your browser!</h4>
-                            <a href="#" class="download-button download-button__web" title="what are you waiting for? click!"
+                            <a href="#" class="download-button download-button__web"
+                                title="what are you waiting for? click!"
                                 onClick="window.open('http://sengi.nicolas-constant.com'+'?qt='+ (new Date()).getTime(),'Sengi','toolbar=no,location=no,status=no,menubar=no,scrollbars=no, resizable=yes,width=377,height=800'); return false;"
-                                class="button"><i class="fas fa-globe"></i><span
-                                    class="download-button__web--label">launch!</span></a><br />
+                                class="button"><i class="fas fa-globe"></i><span class="download-button__web--label">launch!</span></a><br />
                             <br />
                             <br />
 
                             <h4 class="header__download-box--subtitle">Or download the desktop client:</h4>
-                            <a href="https://github.com/NicolasConstant/sengi/releases/download/0.8.0/Sengi-0.8.0-win.exe" class="download-button" title="download client for windows"><i class="fab fa-windows"></i></a>
-                            <a href="https://github.com/NicolasConstant/sengi/releases/download/0.8.0/Sengi-0.8.0-mac.dmg" class="download-button" title="download client for mac"><i class="fab fa-apple"></i></a>
-                            <a href="https://github.com/NicolasConstant/sengi/releases/download/0.8.0/Sengi-0.8.0-linux.deb" class="download-button" title="download client for debian-based distrib"><i class="fab fa-ubuntu"></i></a>
-                            <a href="https://snapcraft.io/sengi" title="use Snap Store for linux"><img src="images/snap-store-white.png" /></a>
+                            <div id="download-buttons" style="display: none;">
+                                <a id="windows" href class="download-button" title="download client for windows">
+                                    <i class="fab fa-windows"></i>
+                                </a>
+                                <a id="mac" href class="download-button" title="download client for mac">
+                                    <i class="fab fa-apple"></i>
+                                </a>
+                                <a id="linux" href class="download-button" title="download client for debian-based distrib">
+                                    <i class="fab fa-ubuntu"></i>
+                                </a>
+                                <a href="https://snapcraft.io/sengi" title="use Snap Store for linux">
+                                    <img src="images/snap-store-white.png" />
+                                </a>
+                            </div>
+                            <div id="download-buttons-nojs">
+                                <a href="https://github.com/NicolasConstant/sengi/releases/"
+                                    class="download-button" title="latest releases">
+                                    <i class="fab fa-github"></i></a>
+                                <a href="https://snapcraft.io/sengi" title="use Snap Store for linux">
+                                    <img src="images/snap-store-white.png" />
+                                </a>
+                            </div>
                         </p>
                     </div>
 
@@ -71,13 +89,41 @@
         </section>
     </main>
     <footer class="footer">
-        <h3 class="footer__title">Let's keep in touch!</h3> 
+        <h3 class="footer__title">Let's keep in touch!</h3>
 
         <div class="footer__buttons">
-            <a href="https://mastodon.social/@sengi_app" rel="me" class="footer__buttons--button" title="open pleroma-compatible account"><i class="fab fa-mastodon"></i></a>
-            <a href="https://github.com/NicolasConstant/sengi" class="footer__buttons--button"  title="open microsoft github repository"><i class="fab fa-github"></i></a>
+            <a href="https://mastodon.social/@sengi_app" rel="me" class="footer__buttons--button"
+                title="open pleroma-compatible account"><i class="fab fa-mastodon"></i></a>
+            <a href="https://github.com/NicolasConstant/sengi" class="footer__buttons--button"
+                title="open microsoft github repository"><i class="fab fa-github"></i></a>
         </div>
     </footer>
-</body>
 
+
+    <script type="text/javascript" language="javascript">
+        const getLastRelease = async () => {
+            const response = await fetch('https://api.github.com/repos/NicolasConstant/sengi/releases/latest');
+            const myJson = await response.json(); 
+            return myJson;
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            let lastRelease = await getLastRelease();
+            let version = lastRelease.tag_name;
+
+            var downloadButtons = document.getElementById('download-buttons');
+            downloadButtons.style.display = 'block';
+
+            var downloadButtonsNojs = document.getElementById('download-buttons-nojs');
+            downloadButtonsNojs.style.display = 'none';
+
+            var sengiVersion = document.getElementById('sengi-version');
+            sengiVersion.textContent = `(${version})`;
+           
+            document.getElementById('windows').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-win.exe`;
+            document.getElementById('mac').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-mac.dmg`;
+            document.getElementById('linux').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.deb`;            
+        }, false);
+    </script>
+</body>
 </html>
