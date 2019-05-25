@@ -148,5 +148,12 @@ describe('DatabindedTextComponent', () => {
 
         component.text = sample;
         expect(component.processedText).toContain('<p>Bla <a href class="link-httpscloudblogsmicrosoftcomopensource20190521servicemeshinterfacesmirelease" title="open link">cloudblogs.microsoft.com/opens</a></p>'); 
-    })
+    });
+
+    it('should parse link 2 - Pleroma', () => {
+        const sample = `Bla<br /><br /><a href="https://link/">https://link/</a>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('Bla<br /><br /><a href class="link-httpslink" title="open link">https://link/</a>'); 
+    });
 });

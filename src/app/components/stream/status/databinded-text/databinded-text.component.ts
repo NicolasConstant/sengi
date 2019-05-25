@@ -48,8 +48,8 @@ export class DatabindedTextComponent implements OnInit {
                     this.processHashtag(section);
                 }
                 catch (err) {
-                    console.warn('process hashtag');
-                    console.warn(value);
+                    console.error('error processing hashtag');
+                    console.error(value);
                 }
 
             } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"') || section.includes('class="h-card mention')) {
@@ -57,8 +57,8 @@ export class DatabindedTextComponent implements OnInit {
                     this.processUser(section);
                 }
                 catch (err) {
-                    console.warn('process mention');
-                    console.warn(value);
+                    console.error('error processing mention');
+                    console.error(value);
                 }
             } else {
                 try {
@@ -66,8 +66,8 @@ export class DatabindedTextComponent implements OnInit {
                     //this.processedText += `<a ${section}`;
                 }
                 catch (err) {
-                    console.warn('process link');
-                    console.warn(value);
+                    console.error('error processing link');
+                    console.error(value);
                 }
             }
         }
@@ -133,7 +133,11 @@ export class DatabindedTextComponent implements OnInit {
                 try {
                     extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
                 } catch (err) { // Pleroma
-                    extractedName = extractedLinkAndNext[0].split('</span><span>')[1].split('</span>')[0];
+                    try {
+                        extractedName = extractedLinkAndNext[0].split('</span><span>')[1].split('</span>')[0];
+                    } catch (err) {
+                        extractedName = extractedLinkAndNext[0].split('">')[1];
+                    }
                 }
             }
         }
