@@ -1,5 +1,6 @@
 import { Emoji } from "../services/models/mastodon.interfaces";
-import * as EmojiOne from "emojione";
+import { EmojiOne } from "./emoji-one";
+//import * as EmojiOne from "emojione";
 
 export class EmojiConverter {
   applyEmojis(emojis: Emoji[], text: string, type: EmojiTypeEnum): string {
@@ -22,7 +23,10 @@ export class EmojiConverter {
       });
     }
 
-    text = EmojiOne.toImage(text);
+    //text = EmojiOne.toImage(text);
+
+    var emojiOne = new EmojiOne();
+    text = emojiOne.toImage(text);
 
     while (text.includes('class="emojione"')) {
       text = text.replace('class="emojione"', `class="emojione ${className}"`);
@@ -41,7 +45,7 @@ export class EmojiConverter {
         "https://cdn.jsdelivr.net/emojione/assets/4.5/png/32/",
         "assets/emoji/72x72/"
       );
-      // text = text.replace('.png', '.svg');
+      text = text.replace('.png', '.svg'); 
     }
 
     return text;
@@ -52,3 +56,5 @@ export enum EmojiTypeEnum {
   small,
   medium
 }
+
+
