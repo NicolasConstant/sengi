@@ -83,6 +83,14 @@ export interface Card {
     title: string;
     description: string;
     image: string;
+    type: 'link' | 'photo' | 'video' | 'rich';
+    author_name: string;
+    author_url: string;
+    provider_name: string;
+    provider_url: string;
+    html: any;
+    width: number;
+    height: number;
 }
 
 export interface Context {
@@ -165,6 +173,7 @@ export interface Status {
     emojis: Emoji[];
     language: string;
     pinned: boolean;
+    card: Card;
 
     pleroma: PleromaStatusInfo;
 }
@@ -179,3 +188,7 @@ export interface Tag {
     url: string;
 }
 
+export interface List {
+    id: string;
+    title: string;
+}

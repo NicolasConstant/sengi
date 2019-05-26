@@ -98,6 +98,7 @@ export class StreamElement {
         public accountId: string,
         public tag: string,
         public list: string,
+        public listId: string,
         public instance: string) {
             this.id = `${type}-${name}-${accountId}`;
     }

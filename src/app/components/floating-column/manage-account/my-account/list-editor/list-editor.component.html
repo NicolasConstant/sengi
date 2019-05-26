@@ -1,0 +1,17 @@
+<div class="list-editor">
+    <a href class="list-editor__close-search" title="close search" *ngIf="searchOpen" (click)="closeSearch()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+    </a>
+    <input class="list-editor__search" placeholder="search account" [(ngModel)]="searchPattern"
+        (keyup.enter)="search()" />
+    <div class="list-editor__list flexcroll" *ngIf="!searchOpen">
+        <app-list-account class="list-editor__account" *ngFor="let account of accountsInList"
+            [accountWrapper]="account" (addEvent)="addEvent($event)" (removeEvent)="removeEvent($event)">
+        </app-list-account>
+    </div>
+    <div class="list-editor__list flexcroll" *ngIf="searchOpen">
+        <app-list-account class="list-editor__account" *ngFor="let account of accountsSearch"
+            [accountWrapper]="account" (addEvent)="addEvent($event)" (removeEvent)="removeEvent($event)">
+        </app-list-account>
+    </div>
+</div>

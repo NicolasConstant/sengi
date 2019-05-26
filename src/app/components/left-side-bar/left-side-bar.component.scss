@@ -11,6 +11,7 @@ $height-button: 40px;
 
 .left-bar-link {
     color: $font-link-primary;
+    color: darken(whitesmoke, 17);
     text-decoration: none;
     &:hover {
         color: $font-link-primary-hover;
@@ -28,23 +29,26 @@ $height-button: 40px;
     &--status {
         //margin-top: 3px;
         font-size: 26px;
-        padding: 8px 0 2px 12px;
+        font-size: 22px;
+        padding: 8px 0 2px 13px;
     }
     &--search {
-        font-size: 28px;
-        padding: 0 0 0 11px;
+        // font-size: 28px;
+        // font-size: 22px;
+        font-size: 24px;
+        padding: 5px 0 0 12px;
     }
     &--add {
-        padding: 0 0 0 12px;
-        font-size: 26px;
+        padding: 5px 0 5px 13px;
+        font-size: 22px;
     }
     &--cog {
         padding: 2px 0 0 9px;
         position: absolute;
         bottom: 7px;
-        opacity: .2;        
+        opacity: .3;        
         transition: all .3s;
-        filter: alpha(opacity=20);
+        filter: alpha(opacity=30);
         
         // color:  darken($font-link-primary, 30);
 

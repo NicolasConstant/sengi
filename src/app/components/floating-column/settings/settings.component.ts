@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+    selector: 'app-settings',
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
 
-  constructor() { }
+    version: string;
 
-  ngOnInit() {
-  }
+    constructor() { }
 
+    ngOnInit() {
+        this.version = environment.VERSION;
+    }
 }
