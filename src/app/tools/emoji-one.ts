@@ -16,18 +16,19 @@ export class EmojiOne {
         }
         this.shortnames = this.tmpShortNames.join('|');
         this.regShortNames = new RegExp("<object[^>]*>.*?<\/object>|<span[^>]*>.*?<\/span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|(" + this.shortnames + ")", "gi");
-        // this.imagePathPNG = 'assets/emoji/72x72/';
-        this.imagePathPNG = 'assets/emoji/svg/';
+
         // this.imagePathPNG = 'https://cdn.jsdelivr.net/emojione/assets/' + this.emojiVersion + '/png/';
+        this.imagePathPNG = 'assets/emoji/72x72/';
+        
         this.defaultPathPNG = this.imagePathPNG;
 
         this.regAscii = new RegExp("<object[^>]*>.*?<\/object>|<span[^>]*>.*?<\/span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|((\\s|^)" + this.asciiRegexp + "(?=\\s|$|[!,.?]))", "gi");
         this.regAsciiRisky = new RegExp("<object[^>]*>.*?<\/object>|<span[^>]*>.*?<\/span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>|(()" + this.asciiRegexp + "())", "gi");
     }
 
-    toImage(str) {
+    toImage(str, className) {
         str = this.toShort(str);
-        str = this.shortnameToImage(str);
+        str = this.shortnameToImage(str, className);
         str = this.wipeVS16(str);
         return str;
     };
@@ -67,7 +68,7 @@ export class EmojiOne {
     };
 
     spriteSize;
-    shortnameToImage(str) {
+    shortnameToImage(str, className) {
         // replace regular shortnames first
         var replaceWith, shortname, unicode, fname, alt, category, title, size, ePath;
         var mappedUnicode = this.mapUnicodeToShort();
@@ -107,9 +108,9 @@ export class EmojiOne {
                     replaceWith = '<span class="emojione emojione-' + size + '-' + category + ' _' + fname + '" ' + title + '>' + alt + '</span>';
                 }
                 else {
-                    replaceWith = '<img class="emojione" alt="' + alt + '" ' + title + ' src="' + this.defaultPathPNG + fname + this.fileExtension + '"/>';
-                    replaceWith = '<img class="emojione" alt="' + alt + '" ' + title + ' src="' + this.defaultPathPNG + fname +'.svg' + '"/>';
+                    replaceWith = '<img class="emojione ' + className + '" alt="' + alt + '" ' + title + ' src="' + this.defaultPathPNG + fname + this.fileExtension + '"/>';
 
+                    // replaceWith = '<img class="emojione ' + className + '" alt="' + alt + '" ' + title + ' src="' + this.defaultPathPNG + fname +'.svg' + '"/>';
                     //replaceWith = '<img class="emojione" onError="this.src=this.alt;" alt="' + alt + '" ' + title + ' src="' + this.defaultPathPNG + fname + this.fileExtension + '"/>';
                     //replaceWith = `<object data="${this.defaultPathPNG + fname + this.fileExtension}" type="image/png"><img alt="${alt}" /></object>`
                 }
