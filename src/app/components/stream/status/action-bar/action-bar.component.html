@@ -1,41 +1,33 @@
 <div class="action-bar">
-    <a *ngIf="!isLocked" href class="action-bar__link" title="Reply" (click)="reply()">
-        <ion-icon name="ios-undo"></ion-icon>
+    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--reply" title="Reply" (click)="reply()">
+        <fa-icon [icon]="faReply"></fa-icon>
     </a>
-    <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
+    <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link" title="Boost" 
-        [class.boosted]="isBoosted"
-        [class.boosting]="boostIsLoading"
-        (click)="boost()">
-        <ion-icon name="md-swap"></ion-icon>
+    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link action-bar__link--boost" title="Boost" [class.boosted]="isBoosted"
+        [class.boosting]="boostIsLoading" (click)="boost()">
+        <fa-icon [icon]="faRetweet"></fa-icon>
     </a>
-    <ion-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" name="lock"
-        title="This post cannot be boosted"></ion-icon>
-    <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
+    <fa-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" title="This post cannot be boosted"
+        [icon]="faLock"></fa-icon>
+    <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!isLocked" href class="action-bar__link" title="Favourite" 
-        [class.favorited]="isFavorited"
-        [class.favoriting]="favoriteIsLoading"
-        (click)="favorite()">
-        <ion-icon name="md-star"></ion-icon>
+    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite" [class.favorited]="isFavorited"
+        [class.favoriting]="favoriteIsLoading" (click)="favorite()">
+        <fa-icon [icon]="faStar"></fa-icon>
     </a>
-    <ion-icon *ngIf="isLocked" class="action-bar__lock" name="lock" title="Account can't access this post"></ion-icon>
+    <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a href class="action-bar__link action-bar__link--cw" 
-        title="show content" (click)="showContent()"
+    <a href class="action-bar__link action-bar__link--cw" title="show content" (click)="showContent()"
         *ngIf="isContentWarningActive">
-        <fa-icon class="action-bar__cw" [icon]="faWindowClose"></fa-icon>
+        <fa-icon [icon]="faWindowClose"></fa-icon>
     </a>
-    <a href class="action-bar__link action-bar__link--cw"
-        title="hide content" (click)="hideContent()"
+    <a href class="action-bar__link action-bar__link--cw" title="hide content" (click)="hideContent()"
         *ngIf="!isContentWarningActive">
-        <fa-icon class="action-bar__cw" [icon]="faWindowCloseRegular"></fa-icon>
+        <fa-icon [icon]="faWindowCloseRegular"></fa-icon>
     </a>
 
-    <a href class="action-bar__link action-bar__link--more" title="More" (click)="more()">
-        <ion-icon name="ios-more"></ion-icon>
-    </a> 
-
-
+    <!-- <a href class="action-bar__link action-bar__link--more" title="More" (click)="more()">
+        <fa-icon [icon]="faEllipsisH"></fa-icon>
+    </a> -->
 </div>

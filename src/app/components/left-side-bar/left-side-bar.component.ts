@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
+import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
 
 import { Account } from "../../services/models/mastodon.interfaces";
@@ -19,6 +20,10 @@ import { UserNotificationService, UserNotification } from '../../services/user-n
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
     faCommentAlt = faCommentAlt;
+    faSearch = faSearch;
+    faPlus = faPlus;    
+    faCog = faCog;
+    
 
     accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;

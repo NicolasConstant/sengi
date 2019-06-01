@@ -35,15 +35,16 @@ $height-button: 40px;
     &--search {
         // font-size: 28px;
         // font-size: 22px;
-        font-size: 24px;
-        padding: 5px 0 0 12px;
+        font-size: 16px;
+        padding: 5px 0 0 16px;
     }
     &--add {
-        padding: 5px 0 5px 13px;
-        font-size: 22px;
+        padding: 2px 0 5px 18px;
+        font-size: 14px;
     }
     &--cog {
-        padding: 2px 0 0 9px;
+        font-size: 24px;
+        padding: 5px 0 0 12px;
         position: absolute;
         bottom: 7px;
         opacity: .3;        

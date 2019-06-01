@@ -68,17 +68,24 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this.userNotificationService.markNotificationAsRead(this.account.info);    
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
-            this.notifications.length = 0; //TODO: don't reset, only add the new ones
-            const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
-            if(userNotification && userNotification.notifications){
-                userNotification.notifications.forEach((notification: Notification) => {
-                    const notificationWrapper = new NotificationWrapper(notification, this.account.info);
-                    this.notifications.push(notificationWrapper);
-                }); 
-            }
-            this.lastId = userNotification.lastId;
-            this.userNotificationService.markNotificationAsRead(this.account.info);
+            this.processNewNotifications(userNotifications);
+            if(this.notifications.length < 20) this.scrolledToBottom();         
         });
+    }
+
+    private processNewNotifications(userNotifications: UserNotification[]) {
+        const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
+        if (userNotification && userNotification.notifications) {
+            let orderedNotifications = [...userNotification.notifications].reverse();
+            for (let n of orderedNotifications) {
+                const notificationWrapper = new NotificationWrapper(n, this.account.info);
+                if (!this.notifications.find(x => x.wrapperId === notificationWrapper.wrapperId)) {                   
+                    this.notifications.unshift(notificationWrapper);
+                }
+            }
+        }
+        this.lastId = userNotification.lastId;
+        this.userNotificationService.markNotificationAsRead(this.account.info);
     }
 
     
@@ -150,9 +157,11 @@ class NotificationWrapper {
                 this.status= new StatusWrapper(notification.status, provider);
                 break;          
         }    
-        this.account = notification.account;  
+        this.account = notification.account;
+        this.wrapperId = `${this.type}-${notification.id}`;
     }
 
+    wrapperId: string;
     account: Account;
     status: StatusWrapper;
     type: 'mention' | 'reblog' | 'favourite' | 'follow';
