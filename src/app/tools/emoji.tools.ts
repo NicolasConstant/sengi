@@ -14,17 +14,17 @@ export class EmojiConverter {
 
         if (emojis) {
             emojis.forEach(emoji => {
-                text = text.replace(
-                    `:${emoji.shortcode}:`,
-                    `<img class="${className}" src="${emoji.url}" title=":${
-                    emoji.shortcode
-                    }:" alt=":${emoji.shortcode}:" />`
-                );
+                text = this.replaceAll(text, `:${emoji.shortcode}:`,  `<img class="${className}" src="${emoji.url}" title=":${
+                    emoji.shortcode }:" alt=":${emoji.shortcode}:" />`)
             });
         }
 
         text = this.emojiOne.toImage(text, className);
         return text;
+    }
+
+    private replaceAll(str, find, replace) {
+        return str.replace(new RegExp(find, 'g'), replace);
     }
 }
 
@@ -32,3 +32,4 @@ export enum EmojiTypeEnum {
     small,
     medium
 }
+
