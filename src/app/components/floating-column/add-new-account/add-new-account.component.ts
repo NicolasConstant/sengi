@@ -51,7 +51,7 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     private checkBlockList(instance: string){
-        let cleanInstance = instance.replace('http://', '').replace('https://', '');
+        let cleanInstance = instance.replace('http://', '').replace('https://', '').toLowerCase();
         for (let b of this.blockList) {
             if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {                
                 let content = '<div style="width:100%; height:100%; background-color: black;"><iframe style="pointer-events: none;" width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&autoplay=1&showinfo=0&controls=0" allow="autoplay; fullscreen"></div>';
