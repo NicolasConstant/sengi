@@ -3,7 +3,7 @@
 
     <form (ngSubmit)="onSubmit()">
         <label>Please provide your account:</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle"
+        <input type="text" class="form-control form-control-sm form-color" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle"
             placeholder="@nickname@mastodon.social" />
         <br />
         <button type="submit" class="btn btn-success btn-sm">Submit</button>

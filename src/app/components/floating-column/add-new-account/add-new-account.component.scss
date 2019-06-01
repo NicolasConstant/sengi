@@ -1,2 +1,14 @@
 @import "variables";
-@import "panel";
+@import "panel"; 
+
+.form-color {
+    background-color: $column-color;
+    border-color: $button-border-color;
+    color: #fff;
+    font-size: $default-font-size;
+    &:focus {
+        box-shadow: none;
+    }
+    height: 29px;
+    padding: 0 5px 0 5px; 
+}
