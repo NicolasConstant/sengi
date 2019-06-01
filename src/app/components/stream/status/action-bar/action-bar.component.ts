@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { faWindowClose, faReply, faRetweet, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { MastodonService } from '../../../../services/mastodon.service';
@@ -23,6 +23,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faRetweet = faRetweet;
     faStar = faStar;
     faWindowCloseRegular = faWindowCloseRegular;
+    faEllipsisH = faEllipsisH;
+    faLock = faLock;
 
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
