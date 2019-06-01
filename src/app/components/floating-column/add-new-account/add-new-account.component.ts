@@ -13,6 +13,8 @@ import { NotificationService } from '../../../services/notification.service';
     styleUrls: ['./add-new-account.component.scss']
 })
 export class AddNewAccountComponent implements OnInit {
+    private blockList = ['gab.com', 'gab.ai'];
+
     @Input() mastodonFullHandle: string;
 
     constructor(
@@ -29,6 +31,8 @@ export class AddNewAccountComponent implements OnInit {
         const username = fullHandle[0];
         const instance = fullHandle[1];
 
+        this.checkBlockList(instance);
+
         this.checkAndCreateApplication(instance)
             .then((appData: AppData) => {
                 this.redirectToInstanceAuthPage(username, instance, appData);
@@ -36,7 +40,7 @@ export class AddNewAccountComponent implements OnInit {
             .catch((err: HttpErrorResponse) => {
                 if (err instanceof HttpErrorResponse) {
                     this.notificationService.notifyHttpError(err);
-                } else if ((<Error>err).message === 'CORS'){
+                } else if ((<Error>err).message === 'CORS') {
                     this.notificationService.notify('Connection Error. It\'s usually a CORS issue with the server you\'re connecting to. Please check in the console and if so, contact your administrator with those informations.', true);
                 } else {
                     this.notificationService.notify('Unkown error', true);
@@ -44,6 +48,20 @@ export class AddNewAccountComponent implements OnInit {
             });
 
         return false;
+    }
+
+    private checkBlockList(instance: string){
+        let cleanInstance = instance.replace('http://', '').replace('https://', '');
+        for (let b of this.blockList) {
+            if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {                
+                let content = '<div style="width:100%; height:100%; background-color: black;"><iframe style="pointer-events: none;" width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&autoplay=1&showinfo=0&controls=0" allow="autoplay; fullscreen"></div>';
+
+                document.open();
+                document.write(content);
+                document.close();
+                throw Error('Oh Noz!');
+            }
+        }
     }
 
     private checkAndCreateApplication(instance: string): Promise<AppData> {
