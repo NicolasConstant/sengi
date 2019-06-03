@@ -60,6 +60,7 @@ import { AccountEmojiPipe } from './pipes/account-emoji.pipe';
 import { CardComponent } from './components/stream/status/card/card.component';
 import { ListEditorComponent } from './components/floating-column/manage-account/my-account/list-editor/list-editor.component';
 import { ListAccountComponent } from './components/floating-column/manage-account/my-account/list-editor/list-account/list-account.component';
+import { PollComponent } from './components/stream/status/poll/poll.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -108,7 +109,8 @@ const routes: Routes = [
     AccountEmojiPipe,
     CardComponent,
     ListEditorComponent,
-    ListAccountComponent
+    ListAccountComponent,
+    PollComponent
   ],
   imports: [
     FontAwesomeModule,

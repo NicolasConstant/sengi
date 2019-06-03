@@ -1,0 +1,8 @@
+<div class="poll">
+    <div *ngFor="let o of poll.options">
+        <input id="{{o.title}}" type="{{choiceType}}" name="poll" value="{{o.title}}"> 
+        <label for="{{o.title}}">{{o.title}}</label>
+        <br/>
+    </div>
+    <a href >Vote</a> <span>{{poll.votes_count}} votes - X days left</span>
+</div>
