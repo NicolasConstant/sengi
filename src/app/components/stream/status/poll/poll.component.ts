@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Poll, PollOption } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
+import { MastodonService } from '../../../../services/mastodon.service';
+import { NotificationService } from '../../../../services/notification.service';
 
 @Component({
     selector: 'app-poll',
@@ -18,12 +20,14 @@ export class PollComponent implements OnInit {
     @Input() poll: Poll;
     @Input() provider: AccountInfo;
 
-    constructor() { }
+    constructor(
+        private notificationService: NotificationService,
+        private mastodonService: MastodonService) { }
 
     ngOnInit() {
         this.pollName = this.poll.id;
         
-        // this.poll.multiple = true;
+        //this.poll.multiple = true;
 
         if(this.poll.multiple){
             this.choiceType = 'checkbox';
@@ -42,6 +46,13 @@ export class PollComponent implements OnInit {
     vote(): boolean {
         console.log(this.pollSelection);
 
+        this.mastodonService.voteOnPoll(this.provider, this.poll.id, this.pollSelection)
+            .then((poll: Poll) => {
+                this.poll = poll;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
         return false;
     }
 
