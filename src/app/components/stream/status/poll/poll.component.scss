@@ -1,0 +1,32 @@
+// @import "variables";
+// @import "commons";
+// @import "panel";
+@import "buttons";
+
+.poll {
+
+    &__btn-vote {
+        margin: 0 10px 0 0;
+        padding: 4px 15px;
+    }
+
+    &__statistics {
+        display: inline-block;
+        font-size: 0.8em;
+        color: rgb(101, 121, 160);
+    }
+
+    &__label {
+        cursor: pointer;
+    }
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }

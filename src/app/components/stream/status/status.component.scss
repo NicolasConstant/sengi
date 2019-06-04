@@ -116,6 +116,11 @@
         margin: 10px 10px 0 $avatar-column-space;
         display: block;
     }
+    &__poll {
+        word-wrap: break-word;
+        margin: 10px 10px 0 $avatar-column-space;
+        display: block;
+    }
     &__content-warning {
         min-height: 80px;
         display: block; // border: 1px solid greenyellow;
