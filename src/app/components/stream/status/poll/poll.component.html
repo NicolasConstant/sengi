@@ -1,8 +1,16 @@
 <div class="poll">
     <div *ngFor="let o of poll.options">
-        <input class="poll__input" id="{{o.title}}" type="{{choiceType}}" name="poll" value="{{o.title}}"> 
+        <!-- <input class="poll__input" id="{{o.title}}" type="{{choiceType}}" name="poll" value="{{o.title}}">
         <label class="noselect poll__label" for="{{o.title}}">{{o.title}}</label>
-        <br/>
+        <br /> -->
+
+        <label class="poll__container">{{o.title}}
+            <input class="poll__container__input" type="{{choiceType}}" name="{{pollName}}">
+            <span class="poll__container__checkmark" [ngClass]="{'poll__container__checkmark--box' : choiceType=='checkbox', 'poll__container__checkmark--round': choiceType=='radio'}"></span>
+        </label>
     </div>
-    <button href class="btn btn-sm btn-custom-primary poll__btn-vote" title="don't boo, vote!">Vote</button> <div class="poll__statistics">{{poll.votes_count}} votes - X days left</div>
+    <div class="poll__voting">
+        <button href class="btn btn-sm btn-custom-primary poll__btn-vote" title="don't boo, vote!">Vote</button>
+        <div class="poll__statistics">{{poll.votes_count}} votes - X days left</div>
+    </div>
 </div>

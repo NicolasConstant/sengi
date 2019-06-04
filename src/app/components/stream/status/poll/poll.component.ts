@@ -8,15 +8,22 @@ import { Poll } from '../../../../services/models/mastodon.interfaces';
     styleUrls: ['./poll.component.scss']
 })
 export class PollComponent implements OnInit {
-    // choiceType: string = 'radio';
-    choiceType: string = 'checkbox';
+    pollName: string;
+
+    choiceType: string;// = 'radio';
+    //choiceType: string = 'checkbox';
 
     @Input() poll: Poll;
 
     constructor() { }
 
     ngOnInit() {
-
+        this.pollName = this.poll.id;
+        if(this.poll.multiple){
+            this.choiceType = 'checkbox';
+        } else {
+            this.choiceType = 'radio';
+        }
     }
 
 }

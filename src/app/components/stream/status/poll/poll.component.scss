@@ -19,14 +19,109 @@
     &__label {
         cursor: pointer;
     }
+
+    &__voting {
+        margin-top: 10px;
+    }
+
+    &__container {
+        display: block;
+        position: relative;
+        padding-left: 25px;
+        margin: 0 0 5px 5px;
+        cursor: pointer;
+        // font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &:hover &__input~&__checkmark {
+            background-color: #ccc;
+        }
+
+        & &__input:checked~&__checkmark {
+            background-color: rgb(62, 75, 100);
+        }
+
+        &__input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        &__checkmark--box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+
+            &:after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+        }
+
+        &__checkmark--round {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 50%;
+        }
+
+        & &__input:checked:checked~&__checkmark:after {
+            display: block;
+        }
+
+        & &__checkmark--box:after {
+            left: 7px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        &__checkmark--round:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        & &__checkmark--round:after {
+            top: 6px;
+            left: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+    }
 }
 
 .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                     supported by Chrome and Opera */
-  }
+}
