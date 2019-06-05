@@ -11,7 +11,7 @@ import { NotificationService } from '../../../../services/notification.service';
     styleUrls: ['./poll.component.scss']
 })
 export class PollComponent implements OnInit {
-    pollName: string;    
+    pollName: string;
     choiceType: string;
 
     private pollSelection: number[] = [];
@@ -26,18 +26,18 @@ export class PollComponent implements OnInit {
 
     ngOnInit() {
         this.pollName = this.poll.id;
-        
+
         //this.poll.multiple = true;
 
-        if(this.poll.multiple){
+        if (this.poll.multiple) {
             this.choiceType = 'checkbox';
         } else {
             this.choiceType = 'radio';
         }
 
         let i = 0;
-        for(let opt of this.poll.options){
-            let optWrapper = new PollOptionWrapper(i, opt);
+        for (let opt of this.poll.options) {
+            let optWrapper = new PollOptionWrapper(i, opt, this.poll.votes_count);
             this.options.push(optWrapper);
             i++;
         }
@@ -56,10 +56,10 @@ export class PollComponent implements OnInit {
         return false;
     }
 
-    onSelectionChange(entry: PollOptionWrapper){
+    onSelectionChange(entry: PollOptionWrapper) {
         let index = entry.id;
-        if(this.poll.multiple){
-            if(this.pollSelection.includes(index)){
+        if (this.poll.multiple) {
+            if (this.pollSelection.includes(index)) {
                 this.pollSelection = this.pollSelection.filter(x => x !== index);
             } else {
                 this.pollSelection.push(index);
@@ -73,13 +73,23 @@ export class PollComponent implements OnInit {
 }
 
 class PollOptionWrapper implements PollOption {
-    constructor(index: number, option: PollOption){
+    constructor(index: number, option: PollOption, totalVotes: number) {
         this.id = index;
         this.title = option.title;
         this.votes_count = option.votes_count;
+        console.log(this.votes_count);
+        console.log(totalVotes);
+        console.log(this.votes_count / totalVotes);
+        console.log( (this.votes_count / totalVotes) * 100);
+        if (totalVotes === 0) {
+            this.percentage = '0';
+        } else {
+            this.percentage = ((this.votes_count / totalVotes) * 100).toFixed(0);
+        }
     }
 
     id: number;
-    title: string;    
+    title: string;
     votes_count: number;
+    percentage: string;
 }

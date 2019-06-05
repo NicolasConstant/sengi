@@ -1,17 +1,25 @@
 <div class="poll">
-    <div *ngFor="let o of options">
-        <!-- <input class="poll__input" id="{{o.title}}" type="{{choiceType}}" name="poll" value="{{o.title}}">
-        <label class="noselect poll__label" for="{{o.title}}">{{o.title}}</label>
-        <br /> -->
-
-        <label class="poll__container">{{o.title}}
-            <input class="poll__container__input" type="{{choiceType}}" name="{{pollName}}" 
-                value="{{o.title}}" (change)="onSelectionChange(o)">
-            <span class="poll__container__checkmark" [ngClass]="{'poll__container__checkmark--box' : choiceType=='checkbox', 'poll__container__checkmark--round': choiceType=='radio'}"></span>
-        </label>
+    <div *ngIf="!poll.voted && !poll.expired">
+        <div *ngFor="let o of options">
+            <label class="poll__container">{{o.title}}
+                <input class="poll__container__input" type="{{choiceType}}" name="{{pollName}}" value="{{o.title}}"
+                    (change)="onSelectionChange(o)">
+                <span class="poll__container__checkmark"
+                    [ngClass]="{'poll__container__checkmark--box' : choiceType=='checkbox', 'poll__container__checkmark--round': choiceType=='radio'}"></span>
+            </label>
+        </div>
+    </div>
+    <div *ngIf="poll.voted || poll.expired">
+        <div *ngFor="let o of options">
+            <div class="poll__result">
+                <span class="poll__result--percentage">{{ o.percentage }}%</span> {{o.title}}
+            </div>
+        </div>
     </div>
     <div class="poll__voting">
-        <button href class="btn btn-sm btn-custom-primary poll__btn-vote" title="don't boo, vote!" (click)="vote()">Vote</button>
-        <div class="poll__statistics">{{poll.votes_count}} votes - X days left</div>
+        <button href *ngIf="!poll.voted && !poll.expired" class="btn btn-sm btn-custom-primary poll__btn-vote" title="don't boo, vote!"
+            (click)="vote()">Vote</button>
+        <a href class="poll__refresh" *ngIf="poll.voted && !poll.expired">refresh </a> 
+        <div class="poll__statistics"><span *ngIf="poll.voted"> · </span>{{poll.votes_count}} votes · X days left</div>
     </div>
 </div>

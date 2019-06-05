@@ -4,6 +4,8 @@
 @import "buttons";
 
 .poll {
+    color: white;
+    color: rgb(228, 228, 228);
 
     &__btn-vote {
         margin: 0 10px 0 0;
@@ -22,6 +24,11 @@
 
     &__voting {
         margin-top: 10px;
+    }
+
+    &__refresh {
+        font-size: 0.8em;
+        color: rgb(101, 121, 160);
     }
 
     &__container {
@@ -106,6 +113,20 @@
             height: 8px;
             border-radius: 50%;
             background: white;
+        }
+    }
+
+    &__result {
+        margin: 0 0 5px 5px;
+
+        &--percentage {
+            // font-weight: bold;    
+            // font-weight: 600;
+            // font-style: italic;
+            color: rgb(228, 228, 228);
+            color: white;
+            display: inline;
+            margin-right: 10px;
         }
     }
 }
