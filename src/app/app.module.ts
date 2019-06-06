@@ -61,6 +61,7 @@ import { CardComponent } from './components/stream/status/card/card.component';
 import { ListEditorComponent } from './components/floating-column/manage-account/my-account/list-editor/list-editor.component';
 import { ListAccountComponent } from './components/floating-column/manage-account/my-account/list-editor/list-account/list-account.component';
 import { PollComponent } from './components/stream/status/poll/poll.component';
+import { TimeLeftPipe } from './pipes/time-left.pipe';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -110,7 +111,8 @@ const routes: Routes = [
     CardComponent,
     ListEditorComponent,
     ListAccountComponent,
-    PollComponent
+    PollComponent,
+    TimeLeftPipe
   ],
   imports: [
     FontAwesomeModule,

@@ -23,6 +23,6 @@
         <button href *ngIf="!poll.voted && !poll.expired" class="btn btn-sm btn-custom-primary poll__btn-vote"
             title="don't boo, vote!" (click)="vote()">Vote</button>
         <a href class="poll__refresh" *ngIf="poll.voted || poll.expired" title="refresh poll">refresh</a>
-        <div class="poll__statistics"><span *ngIf="poll.voted || poll.expired" class="poll__separator">·</span>{{poll.votes_count}} votes<span *ngIf="!poll.expired" class="poll__separator">· X days left</span></div>
+        <div class="poll__statistics"><span *ngIf="poll.voted || poll.expired" class="poll__separator">·</span>{{poll.votes_count}} votes<span *ngIf="!poll.expired" class="poll__separator" title="{{ poll.expires_at | timeLeft | async }}">· {{ poll.expires_at | timeLeft | async }}</span></div>
     </div>
 </div>
