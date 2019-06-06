@@ -120,7 +120,7 @@
         margin: 0 0 5px 5px;
         padding: 0 5px 0 5px;
         position: relative;
-        height: 26px;
+        height: 27px;
 
         &--data {
             position: absolute;
@@ -142,7 +142,7 @@
             top:0;
             left:0;
             width: calc(100%);
-            height: 21px;
+            height: 22px;
             z-index: 1;
             float: left;
             border-radius: 2px;
@@ -151,6 +151,11 @@
                 background-color: rgb(18, 118, 158);
             }
         }
+    }
+
+    &__separator {
+        display: inline-block;
+        margin: 0 5px;
     }
 }
 
@@ -166,6 +171,5 @@
     -ms-user-select: none;
     /* Internet Explorer/Edge */
     user-select: none;
-    /* Non-prefixed version, currently
-                                    supported by Chrome and Opera */
+    /* Non-prefixed version, currently supported by Chrome and Opera */
 }

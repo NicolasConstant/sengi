@@ -82,7 +82,6 @@ class PollOptionWrapper implements PollOption {
             this.percentage = ((this.votes_count / totalVotes) * 100).toFixed(0);
         }
         this.isMax = isMax;
-        console.warn(this.isMax);
     }
 
     id: number;
