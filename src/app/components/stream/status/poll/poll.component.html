@@ -11,15 +11,18 @@
     </div>
     <div *ngIf="poll.voted || poll.expired">
         <div *ngFor="let o of options">
-            <div class="poll__result">
-                <span class="poll__result--percentage">{{ o.percentage }}%</span> {{o.title}}
+            <div class="poll__result" title="{{ o.votes_count }} votes">
+                <div class="poll__result--progress-bar" [style.width]="o.percentage + '%'" [ngClass]="{ 'poll__result--progress-bar--most-votes': o.isMax }"></div>
+                <div class="poll__result--data"> <span class="poll__result--percentage">{{ o.percentage }}%</span>
+                    {{o.title}}</div>
+
             </div>
         </div>
     </div>
     <div class="poll__voting">
-        <button href *ngIf="!poll.voted && !poll.expired" class="btn btn-sm btn-custom-primary poll__btn-vote" title="don't boo, vote!"
-            (click)="vote()">Vote</button>
-        <a href class="poll__refresh" *ngIf="poll.voted && !poll.expired">refresh </a> 
+        <button href *ngIf="!poll.voted && !poll.expired" class="btn btn-sm btn-custom-primary poll__btn-vote"
+            title="don't boo, vote!" (click)="vote()">Vote</button>
+        <a href class="poll__refresh" *ngIf="poll.voted && !poll.expired">refresh </a>
         <div class="poll__statistics"><span *ngIf="poll.voted"> · </span>{{poll.votes_count}} votes · X days left</div>
     </div>
 </div>

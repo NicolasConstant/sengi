@@ -35,17 +35,16 @@ export class PollComponent implements OnInit {
             this.choiceType = 'radio';
         }
 
+        const maxVotes = Math.max(...this.poll.options.map(x => x.votes_count));
         let i = 0;
         for (let opt of this.poll.options) {
-            let optWrapper = new PollOptionWrapper(i, opt, this.poll.votes_count);
+            let optWrapper = new PollOptionWrapper(i, opt, this.poll.votes_count, opt.votes_count === maxVotes);
             this.options.push(optWrapper);
             i++;
         }
     }
 
     vote(): boolean {
-        console.log(this.pollSelection);
-
         this.mastodonService.voteOnPoll(this.provider, this.poll.id, this.pollSelection)
             .then((poll: Poll) => {
                 this.poll = poll;
@@ -73,23 +72,22 @@ export class PollComponent implements OnInit {
 }
 
 class PollOptionWrapper implements PollOption {
-    constructor(index: number, option: PollOption, totalVotes: number) {
+    constructor(index: number, option: PollOption, totalVotes: number, isMax: boolean) {
         this.id = index;
         this.title = option.title;
         this.votes_count = option.votes_count;
-        console.log(this.votes_count);
-        console.log(totalVotes);
-        console.log(this.votes_count / totalVotes);
-        console.log( (this.votes_count / totalVotes) * 100);
         if (totalVotes === 0) {
             this.percentage = '0';
         } else {
             this.percentage = ((this.votes_count / totalVotes) * 100).toFixed(0);
         }
+        this.isMax = isMax;
+        console.warn(this.isMax);
     }
 
     id: number;
     title: string;
     votes_count: number;
     percentage: string;
+    isMax: boolean;
 }
