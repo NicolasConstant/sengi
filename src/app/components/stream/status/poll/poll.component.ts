@@ -25,9 +25,11 @@ export class PollComponent implements OnInit {
         private mastodonService: MastodonService) { }
 
     ngOnInit() {
-        this.pollName = this.poll.id;
+        this.loadPoll();
+    }
 
-        //this.poll.multiple = true;
+    private loadPoll() {
+        this.pollName = this.poll.id;
 
         if (this.poll.multiple) {
             this.choiceType = 'checkbox';
@@ -35,6 +37,7 @@ export class PollComponent implements OnInit {
             this.choiceType = 'radio';
         }
 
+        this.options.length = 0;
         const maxVotes = Math.max(...this.poll.options.map(x => x.votes_count));
         let i = 0;
         for (let opt of this.poll.options) {
@@ -48,10 +51,29 @@ export class PollComponent implements OnInit {
         this.mastodonService.voteOnPoll(this.provider, this.poll.id, this.pollSelection)
             .then((poll: Poll) => {
                 this.poll = poll;
+                this.loadPoll();
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
             });
+        return false;
+    }
+
+    refresh(): boolean {
+        this.options.forEach(p => {
+            p.votes_count = 0;
+            p.percentage = '0';
+        });
+
+        this.mastodonService.getPoll(this.provider, this.poll.id)
+            .then((poll: Poll) => {
+                this.poll = poll;
+                this.loadPoll();
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
+
         return false;
     }
 
