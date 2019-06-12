@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 import { Poll, PollOption, Status } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
@@ -15,6 +16,8 @@ import { StatusWrapper } from '../../../../models/common.model';
     styleUrls: ['./poll.component.scss']
 })
 export class PollComponent implements OnInit {
+    faLock = faLock;
+
     pollName: string;
     choiceType: string;
     pollLocked: boolean;
@@ -87,7 +90,6 @@ export class PollComponent implements OnInit {
 
             this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.status, this.provider))
                 .then((status: Status) => {
-                    console.warn(status);
                     return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
                 })
                 .then((poll: Poll) => {
@@ -98,7 +100,7 @@ export class PollComponent implements OnInit {
                     this.notificationService.notifyHttpError(err);
                     return null;
                 });
-        } else if (this.status.visibility !== 'public') {            
+        } else if (this.status.visibility !== 'public' && this.provider.id !== newSelectedAccount.id) {            
             this.pollLocked = true;
         } else {
             this.pollPerAccountId[newSelectedAccount.id]

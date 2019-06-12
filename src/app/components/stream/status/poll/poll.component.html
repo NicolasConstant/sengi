@@ -4,8 +4,9 @@
             <label class="poll__container">{{o.title}}
                 <input class="poll__container__input" type="{{choiceType}}" name="{{pollName}}" value="{{o.title}}"
                     (change)="onSelectionChange(o)">
-                <span class="poll__container__checkmark"
+                <span class="poll__container__checkmark" *ngIf="!pollLocked"
                     [ngClass]="{'poll__container__checkmark--box' : choiceType=='checkbox', 'poll__container__checkmark--round': choiceType=='radio'}"></span>
+                <fa-icon *ngIf="pollLocked" class="poll__container__lock" title="Account can't access this poll" [icon]="faLock"></fa-icon>
             </label>
         </div>
     </div>
@@ -20,9 +21,9 @@
         </div>
     </div>
     <div class="poll__voting">
-        <button href *ngIf="!poll.voted && !poll.expired" class="btn btn-sm btn-custom-primary poll__btn-vote"
+        <button href *ngIf="!poll.voted && !poll.expired && !pollLocked" class="btn btn-sm btn-custom-primary poll__btn-vote"
             title="don't boo, vote!" (click)="vote()">Vote</button>
-        <a href class="poll__refresh" *ngIf="poll.voted || poll.expired" title="refresh poll" (click)="refresh()">refresh</a>
-        <div class="poll__statistics"><span *ngIf="poll.voted || poll.expired" class="poll__separator">·</span>{{poll.votes_count}} votes<span *ngIf="!poll.expired" class="poll__separator" title="{{ poll.expires_at | timeLeft | async }}">· {{ poll.expires_at | timeLeft | async }}</span></div>
+        <a href class="poll__refresh" *ngIf="(poll.voted || poll.expired) && !pollLocked" title="refresh poll" (click)="refresh()">refresh</a>
+        <div class="poll__statistics"><span *ngIf="(poll.voted || poll.expired) && !pollLocked" class="poll__separator">·</span>{{poll.votes_count}} votes<span *ngIf="!poll.expired" class="poll__separator" title="{{ poll.expires_at | timeLeft | async }}">· {{ poll.expires_at | timeLeft | async }}</span></div>
     </div>
 </div>

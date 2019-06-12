@@ -60,6 +60,12 @@
             width: 0;
         }
 
+        &__lock {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
         &__checkmark--box {
             position: absolute;
             top: 0;
