@@ -68,7 +68,7 @@
             (textSelected)="textSelected()"></app-databinded-text>
 
         <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll" 
-            [poll]="displayedStatus.poll" [provider]="statusWrapper.provider"></app-poll>
+            [poll]="displayedStatus.poll" [status]="displayedStatus" [provider]="statusWrapper.provider"></app-poll>
 
         <app-card class="status__card" *ngIf="!isContentWarned && displayedStatus.card && !hasAttachments" [card]="displayedStatus.card"></app-card>
 

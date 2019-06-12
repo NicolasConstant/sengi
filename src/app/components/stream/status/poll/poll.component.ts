@@ -1,9 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Observable, Subscription } from 'rxjs';
 
-import { Poll, PollOption } from '../../../../services/models/mastodon.interfaces';
+import { Poll, PollOption, Status } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
+import { ToolsService } from '../../../../services/tools.service';
+import { StatusWrapper } from '../../../../models/common.model';
 
 @Component({
     selector: 'app-poll',
@@ -13,22 +17,18 @@ import { NotificationService } from '../../../../services/notification.service';
 export class PollComponent implements OnInit {
     pollName: string;
     choiceType: string;
+    pollLocked: boolean;
 
     private pollSelection: number[] = [];
     options: PollOptionWrapper[] = [];
 
-    @Input() poll: Poll;
-    @Input() provider: AccountInfo;
+    private pollPerAccountId: { [id: string]: Promise<Poll>; } = {};
 
-    constructor(
-        private notificationService: NotificationService,
-        private mastodonService: MastodonService) { }
+    private _poll: Poll;
+    @Input('poll')
+    set poll(value: Poll) {
+        this._poll = value;
 
-    ngOnInit() {
-        this.loadPoll();
-    }
-
-    private loadPoll() {
         this.pollName = this.poll.id;
 
         if (this.poll.multiple) {
@@ -46,33 +46,109 @@ export class PollComponent implements OnInit {
             i++;
         }
     }
+    get poll(): Poll {
+        return this._poll;
+    }
+
+    @Input() provider: AccountInfo;
+    @Input() status: Status;
+
+    private accounts$: Observable<AccountInfo[]>;
+    private accountSub: Subscription;
+
+    private selectedAccount: AccountInfo;
+
+    constructor(
+        private readonly store: Store,
+        private notificationService: NotificationService,
+        private toolsService: ToolsService,
+        private mastodonService: MastodonService) {
+
+        this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+    }
+
+    ngOnInit() {
+        this.pollPerAccountId[this.provider.id] = Promise.resolve(this.poll);
+
+        this.selectedAccount = this.provider;
+
+        this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+            this.checkStatus(accounts);
+        });
+    }
+
+    private checkStatus(accounts: AccountInfo[]): void {
+        this.pollLocked = false;
+        var newSelectedAccount = accounts.find(x => x.isSelected);
+
+        const accountChanged = this.selectedAccount.id !== newSelectedAccount.id;
+        if (accountChanged && !this.pollPerAccountId[newSelectedAccount.id] && this.status.visibility === 'public') {
+            this.setStatsAtZero();
+
+            this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.status, this.provider))
+                .then((status: Status) => {
+                    console.warn(status);
+                    return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
+                })
+                .then((poll: Poll) => {
+                    this.poll = poll;
+                    return poll;
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err);
+                    return null;
+                });
+        } else if (this.status.visibility !== 'public') {            
+            this.pollLocked = true;
+        } else {
+            this.pollPerAccountId[newSelectedAccount.id]
+                .then((poll: Poll) => {
+                    this.poll = poll;
+                })
+                .catch(err => this.notificationService.notifyHttpError(err));
+        }
+        this.selectedAccount = newSelectedAccount;
+    }
+
 
     vote(): boolean {
-        this.mastodonService.voteOnPoll(this.provider, this.poll.id, this.pollSelection)
+        const selectedAccount = this.selectedAccount;
+        const pollPromise = this.pollPerAccountId[selectedAccount.id];
+
+        pollPromise
+            .then((poll: Poll) => {
+                return this.mastodonService.voteOnPoll(selectedAccount, poll.id, this.pollSelection);
+            })
             .then((poll: Poll) => {
                 this.poll = poll;
-                this.loadPoll();
+                this.pollPerAccountId[selectedAccount.id] = Promise.resolve(poll);
             })
-            .catch(err => {
-                this.notificationService.notifyHttpError(err);
-            });
+            .catch(err => this.notificationService.notifyHttpError(err));
         return false;
     }
 
-    refresh(): boolean {
+    private setStatsAtZero() {
         this.options.forEach(p => {
             p.votes_count = 0;
             p.percentage = '0';
         });
+    }
 
-        this.mastodonService.getPoll(this.provider, this.poll.id)
+    refresh(): boolean {
+        this.setStatsAtZero();
+
+        const selectedAccount = this.selectedAccount;
+        const pollPromise = this.pollPerAccountId[selectedAccount.id];
+
+        pollPromise
+            .then((poll: Poll) => {
+                return this.mastodonService.getPoll(selectedAccount, poll.id);
+            })
             .then((poll: Poll) => {
                 this.poll = poll;
-                this.loadPoll();
+                this.pollPerAccountId[selectedAccount.id] = Promise.resolve(poll);
             })
-            .catch(err => {
-                this.notificationService.notifyHttpError(err);
-            });
+            .catch(err => this.notificationService.notifyHttpError(err));
 
         return false;
     }
