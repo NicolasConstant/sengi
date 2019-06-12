@@ -72,7 +72,6 @@ export class PollComponent implements OnInit {
 
     ngOnInit() {
         this.pollPerAccountId[this.provider.id] = Promise.resolve(this.poll);
-
         this.selectedAccount = this.provider;
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
@@ -85,7 +84,7 @@ export class PollComponent implements OnInit {
         var newSelectedAccount = accounts.find(x => x.isSelected);
 
         const accountChanged = this.selectedAccount.id !== newSelectedAccount.id;
-        if (accountChanged && !this.pollPerAccountId[newSelectedAccount.id] && this.status.visibility === 'public') {
+        if (accountChanged && !this.pollPerAccountId[newSelectedAccount.id] && (this.status.visibility === 'public' || this.status.visibility === 'unlisted')) {
             this.setStatsAtZero();
 
             this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.status, this.provider))
@@ -100,7 +99,7 @@ export class PollComponent implements OnInit {
                     this.notificationService.notifyHttpError(err);
                     return null;
                 });
-        } else if (this.status.visibility !== 'public' && this.provider.id !== newSelectedAccount.id) {            
+        } else if (this.status.visibility !== 'public' && this.status.visibility !== 'unlisted' && this.provider.id !== newSelectedAccount.id) {
             this.pollLocked = true;
         } else {
             this.pollPerAccountId[newSelectedAccount.id]
