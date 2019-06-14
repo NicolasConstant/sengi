@@ -1,3 +1,5 @@
+import { PlatformLocation } from '@angular/common';
+
 export interface AppData {
     client_id: string;
     client_secret: string;
@@ -122,7 +124,7 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
     created_at: string;
     account: Account;
     status?: Status;
@@ -174,6 +176,7 @@ export interface Status {
     language: string;
     pinned: boolean;
     card: Card;
+    poll: Poll;
 
     pleroma: PleromaStatusInfo;
 }
@@ -191,4 +194,19 @@ export interface Tag {
 export interface List {
     id: string;
     title: string;
+}
+
+export interface Poll {
+    id: string;
+    expires_at: string;
+    expired: boolean;
+    multiple: boolean;
+    votes_count: number;
+    options: PollOption[];
+    voted: boolean;
+}
+
+export interface PollOption {
+    title: string;
+    votes_count: number;
 }
