@@ -21,6 +21,14 @@
             innerHTML="{{ notificationAccount | accountEmoji }}"></a> boosted your status
     </div>
 </div>
+<div *ngIf="notificationType === 'poll'">
+    <div class="notification--icon">
+        <fa-icon class="boost" [icon]="faList"></fa-icon>
+    </div>
+    <div class="notification--label">
+        A poll you have voted in has ended
+    </div>
+</div>
 <div class="status">
     <div [ngClass]="{'notification--status': notificationAccount }">
         <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
