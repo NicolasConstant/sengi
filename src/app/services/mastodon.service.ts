@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {       
+export class MastodonService {         
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -306,6 +306,20 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.delete(route, { headers: headers }).toPromise();
     }
+
+    voteOnPoll(account: AccountInfo, pollId: string, pollSelection: number[]): Promise<Poll> {
+        let route = `https://${account.instance}${this.apiRoutes.voteOnPoll}`.replace('{0}', pollId);
+        route += `?${this.formatArray(pollSelection.map(x => x.toString()), 'choices')}`;
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Poll>(route, null, { headers: headers }).toPromise();
+    } 
+
+    getPoll(account: AccountInfo, pollId: string): Promise<Poll> {
+        let route = `https://${account.instance}${this.apiRoutes.getPoll}`.replace('{0}', pollId);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Poll>(route, { headers: headers }).toPromise();
+    }  
 }
 
 export enum VisibilityEnum {

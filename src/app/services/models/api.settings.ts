@@ -59,4 +59,6 @@ export class ApiRoutes {
     deleteList = '/api/v1/lists/{0}';
     addAccountToList = '/api/v1/lists/{0}/accounts';
     removeAccountFromList = '/api/v1/lists/{0}/accounts';
+    voteOnPoll = '/api/v1/polls/{0}/votes';
+    getPoll = '/api/v1/polls/{0}';
 }

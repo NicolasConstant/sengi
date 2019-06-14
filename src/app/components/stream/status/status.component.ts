@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { faStar, faRetweet } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faRetweet, faList } from "@fortawesome/free-solid-svg-icons";
 
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
@@ -17,6 +17,7 @@ export class StatusComponent implements OnInit {
 
     faStar = faStar;
     faRetweet = faRetweet;
+    faList = faList;
 
     displayedStatus: Status;
 
@@ -39,7 +40,7 @@ export class StatusComponent implements OnInit {
 
     @Input() isThreadDisplay: boolean;
 
-    @Input() notificationType: 'mention' | 'reblog' | 'favourite';
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll';
     @Input() notificationAccount: Account;
 
     private _statusWrapper: StatusWrapper;

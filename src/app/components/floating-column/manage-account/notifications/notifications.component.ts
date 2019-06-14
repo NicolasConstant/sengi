@@ -154,6 +154,7 @@ class NotificationWrapper {
             case 'mention': 
             case 'reblog': 
             case 'favourite':
+            case 'poll':
                 this.status= new StatusWrapper(notification.status, provider);
                 break;          
         }    
@@ -164,5 +165,5 @@ class NotificationWrapper {
     wrapperId: string;
     account: Account;
     status: StatusWrapper;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
 }
