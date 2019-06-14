@@ -40,7 +40,7 @@ export class StatusComponent implements OnInit {
 
     @Input() isThreadDisplay: boolean;
 
-    @Input() notificationType: 'mention' | 'reblog' | 'favourite';
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll';
     @Input() notificationAccount: Account;
 
     private _statusWrapper: StatusWrapper;
