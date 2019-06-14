@@ -5,7 +5,7 @@ import { AppData, TokenData } from "./models/mastodon.interfaces";
 
 
 @Injectable()
-export class AuthService {
+export class AuthService {  
     private apiRoutes = new ApiRoutes();
 
     constructor(
@@ -13,7 +13,7 @@ export class AuthService {
     }
 
     getInstanceLoginUrl(instance: string, client_id: string, redirect_uri: string): string{
-        return `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${client_id}`;
+        return `https://${instance}/oauth/authorize?scope=${encodeURIComponent('read write follow')}&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&client_id=${client_id}&force_login=true`;
     }
 
     getToken(instance: string, client_id: string, client_secret: string, code: string, redirect_uri: string): Promise<TokenData> {
