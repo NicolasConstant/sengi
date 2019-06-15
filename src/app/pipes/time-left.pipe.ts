@@ -31,11 +31,11 @@ export class TimeLeftPipe implements PipeTransform {
 
         if (seconds < 0) {
             text = '0 seconds left';
-        } else if (seconds <= 60) {
+        } else if (seconds <= 59) {
             text = Math.round(seconds) + ' seconds left';
-        } else if (minutes <= 90) {
+        } else if (minutes <= 59) {
             text = Math.round(minutes) + ' minutes left';
-        } else if (hours <= 24) {
+        } else if (hours <= 23) {
             text = Math.round(hours) + ' hours left';
         } else {
             text = Math.round(days) + ' days left';
