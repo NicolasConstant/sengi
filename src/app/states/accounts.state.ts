@@ -44,22 +44,16 @@ export class AccountsState {
     @Action(SelectAccount)
     SelectAccount(ctx: StateContext<AccountsStateModel>, action: SelectAccount){
         const state = ctx.getState();
-        // const multiSelection = action.multiselection;
+
         const selectedAccount = action.account;
-
-
-        // const copyAccounts = [...state.accounts];
-        // copyAccounts
-        //         .filter(x => x.id !== selectedAccount.id)
-        //         .forEach(x => x.isSelected = false);
-
         const oldSelectedAccount = state.accounts.find(x => x.isSelected);
 
-        if(selectedAccount.id === oldSelectedAccount.id) return;
+        if(oldSelectedAccount != null && selectedAccount.id === oldSelectedAccount.id) return;
 
         const acc = state.accounts.find(x => x.id === selectedAccount.id);
         acc.isSelected = true;
-        oldSelectedAccount.isSelected = false;
+
+        if(oldSelectedAccount != null) oldSelectedAccount.isSelected = false;
 
         ctx.patchState({
             accounts: [...state.accounts]
