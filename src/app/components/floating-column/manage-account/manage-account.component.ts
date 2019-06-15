@@ -6,6 +6,10 @@ import { Subscription } from 'rxjs';
 import { AccountWrapper } from '../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 import { OpenThreadEvent } from '../../../services/tools.service';
+import { MastodonService } from '../../../services/mastodon.service';
+import { Account } from "../../../services/models/mastodon.interfaces";
+import { NotificationService } from '../../../services/notification.service';
+import { AccountInfo } from '../../../states/accounts.state';
 
 
 @Component({
@@ -25,6 +29,8 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     hasNotifications = false;
     hasMentions = false;
 
+    userAccount: Account;
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
@@ -33,6 +39,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     set account(acc: AccountWrapper) {
         this._account = acc;
         this.checkNotifications();
+        this.getUserUrl(acc.info);
     }
     get account(): AccountWrapper {
         return this._account;
@@ -42,6 +49,8 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     private _account: AccountWrapper;
 
     constructor(
+        private readonly mastodonService: MastodonService,
+        private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService) { }
 
     ngOnInit() {
@@ -50,6 +59,16 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.userNotificationServiceSub.unsubscribe();
+    }
+
+    private getUserUrl(account: AccountInfo){
+        this.mastodonService.retrieveAccountDetails(this.account.info)
+            .then((acc: Account) => {
+                this.userAccount = acc;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
     }
 
     private checkNotifications(){

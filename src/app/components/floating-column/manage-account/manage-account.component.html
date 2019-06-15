@@ -2,7 +2,9 @@
     <h3 class="panel__title">Manage Account</h3>
 
     <div class="account__header">
-        <img class="account__avatar" src="{{account.avatar}}" title="{{ account.info.id }} " />
+        <a href="{{userAccount.url}}" target="_blank" >
+            <img class="account__avatar" src="{{account.avatar}}" title="{{ account.info.id }} " />
+        </a>
 
         <!-- <a href class="account__header--button"><fa-icon [icon]="faUserPlus"></fa-icon></a> -->
         <a href class="account__header--button" title="favorites" (click)="loadSubPanel('favorites')"
@@ -17,8 +19,7 @@
             [ngClass]="{ 'account__header--button--selected': subPanel === 'mentions', 'account__header--button--notification': hasMentions }">
             <fa-icon [icon]="faAt"></fa-icon>
         </a>
-        <a href class="account__header--button" title="notifications" (click)="loadSubPanel('notifications')"
-            [ngClass]="{ 'account__header--button--selected': subPanel === 'notifications', 
+        <a href class="account__header--button" title="notifications" (click)="loadSubPanel('notifications')" [ngClass]="{ 'account__header--button--selected': subPanel === 'notifications', 
             'account__header--button--notification': hasNotifications }">
             <fa-icon [icon]="faBell"></fa-icon>
         </a>
@@ -27,27 +28,18 @@
             <fa-icon [icon]="faUser"></fa-icon>
         </a>
     </div>
-    
-    <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'" 
-        [account]="account"
-        (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"
+
+    <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'" [account]="account"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-direct-messages>
-    <app-favorites class="account__body" *ngIf="subPanel === 'favorites'" 
-        [account]="account"
-        (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"
+    <app-favorites class="account__body" *ngIf="subPanel === 'favorites'" [account]="account"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-favorites>
-    <app-mentions class="account__body" *ngIf="subPanel === 'mentions'" 
-        [account]="account"
-        (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"
+    <app-mentions class="account__body" *ngIf="subPanel === 'mentions'" [account]="account"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-mentions>
-    <app-my-account class="account__body" *ngIf="subPanel === 'account'" 
-        [account]="account"></app-my-account>
-    <app-notifications class="account__body" *ngIf="subPanel === 'notifications'" 
-        [account]="account"
-        (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"
+    <app-my-account class="account__body" *ngIf="subPanel === 'account'" [account]="account"></app-my-account>
+    <app-notifications class="account__body" *ngIf="subPanel === 'notifications'" [account]="account"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-notifications>
 </div>
