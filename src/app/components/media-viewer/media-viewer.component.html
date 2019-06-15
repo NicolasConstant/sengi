@@ -3,21 +3,29 @@
         <fa-icon [icon]="faTimes"></fa-icon>
     </button>
 
-    <button class="media-viewer-canvas__previous media-viewer-canvas__button" title="previous" (click)="previous($event)" *ngIf="previousAvailable">
+    <button class="media-viewer-canvas__previous media-viewer-canvas__button" title="previous"
+        (click)="previous($event)" *ngIf="previousAvailable">
         <fa-icon [icon]="faAngleLeft"></fa-icon>
     </button>
 
-    <button class="media-viewer-canvas__next media-viewer-canvas__button" title="next" (click)="next($event)"  *ngIf="nextAvailable">
+    <button class="media-viewer-canvas__next media-viewer-canvas__button" title="next" (click)="next($event)"
+        *ngIf="nextAvailable">
         <fa-icon [icon]="faAngleRight"></fa-icon>
     </button>
-    
-    <img class="media-viewer-canvas__image" *ngIf="imageUrl" src="{{imageUrl}}" (click)="blockClick($event)"/>
-    <video class="media-viewer-canvas__image" *ngIf="gifvUrl" role="application" loop autoplay (click)="blockClick($event)">
-        <source src="{{ gifvUrl }}" type="video/mp4">
-    </video>
-    <video class="media-viewer-canvas__image" *ngIf="videoUrl" role="application" loop controls="controls" (click)="blockClick($event)">
-        <source src="{{ videoUrl }}" type="video/mp4">
-    </video>
+
+    <div *ngFor="let att of attachments" class="media-viewer-canvas__attachement" [ngClass]="{ 'collapsed': currentIndex !== att.index }">
+        <img *ngIf="att.type === 'image'" 
+            src="{{att.url}}" class="media-viewer-canvas__image" (click)="blockClick($event)" />
+
+        <video *ngIf="att.type === 'gifv'" 
+            class="media-viewer-canvas__image"  role="application" loop autoplay (click)="blockClick($event)">
+            <source src="{{att.url}}" type="video/mp4">
+        </video>
+        <video *ngIf="att.type === 'video'" 
+            class="media-viewer-canvas__image" role="application" loop autoplay controls="controls" (click)="blockClick($event)">
+            <source src="{{att.url}}" type="video/mp4">
+        </video>
+    </div>
 
     <div #video *ngIf="html" class="media-viewer-canvas__image media-viewer-canvas__iframe" [innerHTML]="html">
     </div>
