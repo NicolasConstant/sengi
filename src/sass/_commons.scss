@@ -1,7 +1,7 @@
 .waiting-icon {
     width: 40px;
     display: block;
-    margin:  5px auto;    
+    margin: 5px auto;
 }
 
 .flexcroll {
@@ -12,9 +12,11 @@
     scrollbar-darkshadow-color: #08090d;
     scrollbar-track-color: #08090d;
     scrollbar-arrow-color: #08090d;
+
     &::-webkit-scrollbar {
         width: 7px;
     }
+
     &::-webkit-scrollbar-thumb {
         -webkit-border-radius: 0px;
         border-radius: 0px;
@@ -35,4 +37,19 @@
     width: 20px;
     height: 20px;
     vertical-align: middle;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome and Opera */
 }

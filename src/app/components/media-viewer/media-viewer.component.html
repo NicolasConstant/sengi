@@ -1,5 +1,7 @@
-<div class="media-viewer-canvas" (click)="close()">
-    <button class="media-viewer-canvas__close media-viewer-canvas__button" title="close">
+<div class="media-viewer-canvas noselect">
+    <div class="background__close" (click)="close()"></div>
+
+    <button class="media-viewer-canvas__close media-viewer-canvas__button" title="close" (click)="close()">
         <fa-icon [icon]="faTimes"></fa-icon>
     </button>
 
@@ -13,16 +15,17 @@
         <fa-icon [icon]="faAngleRight"></fa-icon>
     </button>
 
-    <div *ngFor="let att of attachments" class="media-viewer-canvas__attachement" [ngClass]="{ 'collapsed': currentIndex !== att.index }">
-        <img *ngIf="att.type === 'image'" 
-            src="{{att.url}}" class="media-viewer-canvas__image" (click)="blockClick($event)" />
+    <div *ngFor="let att of attachments" class="media-viewer-canvas__attachement"
+        [ngClass]="{ 'collapsed': currentIndex !== att.index }">
+        <a href="{{att.url}}" target="_blank" title="open image">
+            <img *ngIf="att.type === 'image'" src="{{att.url}}" class="media-viewer-canvas__image" />
+        </a>
 
-        <video *ngIf="att.type === 'gifv'" 
-            class="media-viewer-canvas__image"  role="application" loop autoplay (click)="blockClick($event)">
+        <video *ngIf="att.type === 'gifv'" class="media-viewer-canvas__image" role="application" loop autoplay>
             <source src="{{att.url}}" type="video/mp4">
         </video>
-        <video *ngIf="att.type === 'video'" 
-            class="media-viewer-canvas__image" role="application" loop autoplay controls="controls" (click)="blockClick($event)">
+        <video *ngIf="att.type === 'video'" class="media-viewer-canvas__image" role="application" loop autoplay
+            controls="controls">
             <source src="{{att.url}}" type="video/mp4">
         </video>
     </div>
