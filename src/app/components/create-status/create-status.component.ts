@@ -237,10 +237,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .then((status: Status) => {
                 return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
-            .then((res: Status) => {
-                if (this.statusReplyingToWrapper) {
-                    this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(res, acc));
-                }
+            .then((res: Status) => {              
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
@@ -261,22 +258,30 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         for (let i = 0; i < parsedStatus.length; i++) {
             let s = parsedStatus[i];
-            resultPromise = resultPromise.then((pStatus: Status) => {
-                let inReplyToId = null;
-                if (pStatus) {
-                    inReplyToId = pStatus.id;
-                }
+            resultPromise = resultPromise
+                .then((pStatus: Status) => {
+                    let inReplyToId = null;
+                    if (pStatus) {
+                        inReplyToId = pStatus.id;
+                    }
 
-                if (i === 0) {
-                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
-                        .then((status: Status) => {
-                            this.mediaService.clearMedia();
-                            return status;
-                        });
-                } else {
-                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
-                }
-            });
+                    if (i === 0) {
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
+                            .then((status: Status) => {
+                                this.mediaService.clearMedia();
+                                return status;
+                            });
+                    } else {
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
+                    }
+                })
+                .then((status: Status) => {
+                    if (this.statusReplyingToWrapper) {
+                        this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(status, account));
+                    }
+
+                    return status;
+                });
         }
 
         return resultPromise;
