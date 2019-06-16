@@ -32,7 +32,7 @@
 <div class="status">
     <div [ngClass]="{'notification--status': notificationAccount }">
         <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
-            (click)="openAccount(displayedStatus.account)">
+            (click)="openAccount(displayedStatus.account)" (auxclick)="openUrl(displayedStatus.account.url)">
             <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar"
                 src="{{ displayedStatus.account.avatar }}" />
             <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
@@ -44,7 +44,7 @@
             </span>
         </a>
         <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">
-            <a href class="status__created-at--link" (click)="textSelected()" (auxclick)="openUrl()">
+            <a href class="status__created-at--link" (click)="textSelected()" (auxclick)="openUrl(displayedStatus.url)">
                 {{ status.created_at | timeAgo | async }}
             </a>
         </div>

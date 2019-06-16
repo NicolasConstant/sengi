@@ -6,6 +6,7 @@ import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
+import { TrustedString } from '@angular/core/src/sanitization/bypass';
 
 @Component({
     selector: "app-status",
@@ -165,9 +166,9 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    openUrl(): boolean {
+    openUrl(url: string): boolean {
         event.preventDefault();
-        window.open(this.displayedStatus.url, "_blank");
+        window.open(url, "_blank");
         return false;
     }
 }
