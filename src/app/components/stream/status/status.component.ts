@@ -30,6 +30,7 @@ export class StatusComponent implements OnInit {
     replyingToStatus: boolean;
     isCrossPoster: boolean;
     isThread: boolean;
+    isOld: boolean;
     isContentWarned: boolean;
     hasReply: boolean;
     contentWarningText: string;
@@ -121,6 +122,13 @@ export class StatusComponent implements OnInit {
         }
 
         this.hasReply = status.replies_count > 0;
+
+        let createdAt = new Date(status.created_at);
+        let now = new Date();
+        now.setMonth(now.getMonth() - 3);
+        if (now > createdAt) {
+            this.isOld = true;
+        }
     }
 
     openAccount(account: Account): boolean {

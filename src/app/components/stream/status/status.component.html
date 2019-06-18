@@ -63,6 +63,9 @@
                 *ngIf="hasReply">
                 replies
             </div>
+            <div class="status__labels--label status__labels--old" title="this status is old" *ngIf="isOld">
+                old
+            </div>
         </div>
         <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
