@@ -10,6 +10,8 @@ import { AccountWrapper } from '../../../../models/account.models';
 import { RemoveAccount } from '../../../../states/accounts.state';
 import { NavigationService } from '../../../../services/navigation.service';
 import { MastodonService } from '../../../../services/mastodon.service';
+import { ToolsService } from '../../../../services/tools.service';
+import { AccountSettings } from '../../../../states/settings.state';
 
 @Component({
     selector: 'app-my-account',
@@ -26,6 +28,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
     customStatusLengthEnabled: boolean;
     customStatusLength: number;
+    private accountSettings: AccountSettings;
     
     availableStreams: StreamWrapper[] = [];
     availableLists: StreamWrapper[] = [];
@@ -35,6 +38,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     set account(acc: AccountWrapper) {
         this._account = acc;
         this.loadStreams(acc);
+        this.loadAccountSettings();
     }
     get account(): AccountWrapper {
         return this._account;
@@ -45,6 +49,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly store: Store,
+        private readonly toolsService: ToolsService,
         private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonService,
         private readonly notificationService: NotificationService) { }
@@ -52,7 +57,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.streamChangedSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
             this.loadStreams(this.account);
-        });
+        });           
     }
 
     ngOnDestroy(): void {
@@ -61,8 +66,21 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         }
     }
 
-    onCustomLengthChange(): boolean {
-        this.customStatusLengthEnabled = !this.customStatusLengthEnabled;
+    private loadAccountSettings(){
+        this.accountSettings = this.toolsService.getAccountSettings(this.account.info);
+
+        this.customStatusLengthEnabled = this.accountSettings.customStatusCharLengthEnabled;          this.customStatusLength = this.accountSettings.customStatusCharLength;
+    }
+
+    onCustomLengthEnabledChanged(): boolean {
+        this.accountSettings.customStatusCharLengthEnabled = this.customStatusLengthEnabled;
+        this.toolsService.saveAccountSettings(this.accountSettings);
+        return false;
+    }
+
+    customStatusLengthChanged(event): boolean{
+        this.accountSettings.customStatusCharLength = this.customStatusLength;
+        this.toolsService.saveAccountSettings(this.accountSettings);
         return false;
     }
 

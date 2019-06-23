@@ -106,7 +106,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private accountChanged(accounts: AccountInfo[]): void {
         if (accounts && accounts.length > 0) {
             const selectedAccount = accounts.filter(x => x.isSelected)[0];
-            this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
+
+            const settings = this.toolsService.getAccountSettings(selectedAccount);
+            if(settings.customStatusCharLengthEnabled){
+                this.maxCharLength = settings.customStatusCharLength;
+                this.countStatusChar(this.status);
+            } else {
+                this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
                 .then((maxChars: number) => {
                     this.maxCharLength = maxChars;
                     this.countStatusChar(this.status);
@@ -114,6 +120,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 .catch((err: HttpErrorResponse) => {
                     this.notificationService.notifyHttpError(err);
                 });
+            }         
 
             if (!this.statusReplyingToWrapper) {
                 this.instancesInfoService.getDefaultPrivacy(selectedAccount)

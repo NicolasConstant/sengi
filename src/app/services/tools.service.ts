@@ -30,6 +30,10 @@ export class ToolsService {
             accountSettings.accountId = account.id;
             this.saveAccountSettings(accountSettings);           
         }
+        if(!accountSettings.customStatusCharLength){
+            accountSettings.customStatusCharLength = 500;
+            this.saveAccountSettings(accountSettings);
+        }
         return accountSettings;
     }
 
