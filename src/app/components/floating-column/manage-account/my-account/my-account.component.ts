@@ -23,6 +23,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     faCheckSquare = faCheckSquare;
     faCheck = faCheck;
     faTimes = faTimes;
+
+    customStatusLength: boolean;
     
     availableStreams: StreamWrapper[] = [];
     availableLists: StreamWrapper[] = [];
@@ -56,6 +58,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         if(this.streamChangedSub) { 
             this.streamChangedSub.unsubscribe();
         }
+    }
+
+    onCustomLengthChange(): boolean {
+        this.customStatusLength = !this.customStatusLength;
+        return false;
     }
 
     private loadStreams(account: AccountWrapper){
