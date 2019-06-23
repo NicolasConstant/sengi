@@ -94,6 +94,17 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
         this.browseAccountEvent.next(accountName);
     }
 
+    browseLocalAccount(): boolean {
+        var accountName = `@${this.account.info.username}@${this.account.info.instance}`;
+        this.browseAccountEvent.next(accountName);
+        return false;
+    }
+
+    openLocalAccount(): boolean {
+        window.open(this.userAccount.url, '_blank');
+        return false;
+    }
+
     browseHashtag(hashtag: string): void {
         this.browseHashtagEvent.next(hashtag);
     }

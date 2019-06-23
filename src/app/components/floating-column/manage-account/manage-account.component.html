@@ -2,8 +2,8 @@
     <h3 class="panel__title">Manage Account</h3>
 
     <div class="account__header">
-        <a href="{{userAccount.url}}" target="_blank" >
-            <img class="account__avatar" src="{{account.avatar}}" title="{{ account.info.id }} " />
+        <a href (click)="browseLocalAccount()" (auxclick)="openLocalAccount()" title="open {{ account.info.id }}">
+            <img class="account__avatar" src="{{account.avatar}}"/>
         </a>
 
         <!-- <a href class="account__header--button"><fa-icon [icon]="faUserPlus"></fa-icon></a> -->
