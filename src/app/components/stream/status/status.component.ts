@@ -21,6 +21,7 @@ export class StatusComponent implements OnInit {
     faList = faList;
 
     displayedStatus: Status;
+    displayedStatusWrapper: StatusWrapper;
 
     // statusAccountName: string;
     statusContent: string;
@@ -59,6 +60,8 @@ export class StatusComponent implements OnInit {
         } else {
             this.displayedStatus = this.status;
         }
+
+        this.displayedStatusWrapper = new StatusWrapper(this.displayedStatus, value.provider);
 
         this.checkLabels(this.displayedStatus);
         this.checkContentWarning(this.displayedStatus);

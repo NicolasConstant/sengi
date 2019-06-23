@@ -79,7 +79,7 @@
             (textSelected)="textSelected()"></app-databinded-text>
 
         <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll" 
-            [poll]="displayedStatus.poll" [status]="displayedStatus" [provider]="statusWrapper.provider"></app-poll>
+            [poll]="displayedStatus.poll" [statusWrapper]="displayedStatusWrapper"></app-poll>
 
         <app-card class="status__card" *ngIf="!isContentWarned && displayedStatus.card && !hasAttachments" [card]="displayedStatus.card"></app-card>
 
@@ -87,9 +87,9 @@
             [attachments]="displayedStatus.media_attachments">
         </app-attachements>
 
-        <app-action-bar #appActionBar [statusWrapper]="statusWrapper" (cwIsActiveEvent)="changeCw($event)"
+        <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper" (cwIsActiveEvent)="changeCw($event)"
             (replyEvent)="openReply()"></app-action-bar>
     </div>
-    <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper" (onClose)="closeReply()">
+    <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper" (onClose)="closeReply()">
     </app-create-status>
 </div>
