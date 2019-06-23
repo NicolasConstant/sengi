@@ -1,7 +1,7 @@
 <div class="reblog" *ngIf="reblog">
-    <a class="reblog__profile-link" href (click)="openAccount(status.account)" (auxclick)="openUrl(status.account.url)"><span
-            innerHTML="{{ status.account | accountEmoji }}"></span> <img *ngIf="reblog" class="reblog__avatar"
-            src="{{ status.account.avatar }}" /></a> boosted
+    <a class="reblog__profile-link" href (click)="openAccount(status.account)"
+        (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img
+            *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
 </div>
 <div *ngIf="notificationType === 'favourite'">
     <div class="notification--icon">
@@ -30,6 +30,9 @@
     </div>
 </div>
 <div class="status">
+    <a href class="status__navigation" title="open status" (click)="textSelected()">
+
+    </a>
     <div [ngClass]="{'notification--status': notificationAccount }">
         <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
             (click)="openAccount(displayedStatus.account)" (auxclick)="openUrl(displayedStatus.account.url)">
@@ -67,6 +70,8 @@
                 old
             </div>
         </div>
+
+
         <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
         <a href class="status__content-warning" *ngIf="isContentWarned" title="show content"
@@ -78,10 +83,11 @@
             (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
             (textSelected)="textSelected()"></app-databinded-text>
 
-        <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll" 
-            [poll]="displayedStatus.poll" [statusWrapper]="displayedStatusWrapper"></app-poll>
+        <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll" [poll]="displayedStatus.poll"
+            [statusWrapper]="displayedStatusWrapper"></app-poll>
 
-        <app-card class="status__card" *ngIf="!isContentWarned && displayedStatus.card && !hasAttachments" [card]="displayedStatus.card"></app-card>
+        <app-card class="status__card" *ngIf="!isContentWarned && displayedStatus.card && !hasAttachments"
+            [card]="displayedStatus.card"></app-card>
 
         <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments"
             [attachments]="displayedStatus.media_attachments">
@@ -90,6 +96,7 @@
         <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper" (cwIsActiveEvent)="changeCw($event)"
             (replyEvent)="openReply()"></app-action-bar>
     </div>
-    <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper" (onClose)="closeReply()">
+    <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper"
+        (onClose)="closeReply()">
     </app-create-status>
 </div>

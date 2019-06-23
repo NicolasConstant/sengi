@@ -162,6 +162,16 @@
             }
         }
     }
+
+    &__navigation{
+        display: block;
+        position: absolute;
+        top:65px;
+        bottom: 40px;
+        width: 65px;
+        min-height: 40px;
+        // outline: 1px solid greenyellow;
+    }
 }
 
 .attachments {
