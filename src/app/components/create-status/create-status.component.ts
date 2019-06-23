@@ -20,7 +20,14 @@ import { identifierModuleUrl } from '@angular/compiler';
     styleUrls: ['./create-status.component.scss']
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
-    title: string;
+    private _title: string;
+    set title(value: string){
+        this._title = value;
+        this.countStatusChar(this.status);
+    }
+    get title(): string {
+        return this._title;
+    }
 
     private _status: string = '';
     set status(value: string) {
@@ -108,19 +115,19 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             const selectedAccount = accounts.filter(x => x.isSelected)[0];
 
             const settings = this.toolsService.getAccountSettings(selectedAccount);
-            if(settings.customStatusCharLengthEnabled){
+            if (settings.customStatusCharLengthEnabled) {
                 this.maxCharLength = settings.customStatusCharLength;
                 this.countStatusChar(this.status);
             } else {
                 this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
-                .then((maxChars: number) => {
-                    this.maxCharLength = maxChars;
-                    this.countStatusChar(this.status);
-                })
-                .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
-                });
-            }         
+                    .then((maxChars: number) => {
+                        this.maxCharLength = maxChars;
+                        this.countStatusChar(this.status);
+                    })
+                    .catch((err: HttpErrorResponse) => {
+                        this.notificationService.notifyHttpError(err);
+                    });
+            }
 
             if (!this.statusReplyingToWrapper) {
                 this.instancesInfoService.getDefaultPrivacy(selectedAccount)
@@ -176,8 +183,16 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const statusExtraChars = this.getMentionExtraChars(status);
 
         const statusLength = currentStatus.length - statusExtraChars;
-        this.charCountLeft = this.maxCharLength - statusLength;
+        this.charCountLeft = this.maxCharLength - statusLength - this.getCwLength();
         this.postCounts = parseStatus.length;
+    }
+
+    private getCwLength(): number {
+        let cwLength = 0;
+        if (this.title) {
+            cwLength = this.title.length;
+        }
+        return cwLength;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
@@ -244,7 +259,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .then((status: Status) => {
                 return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
-            .then((res: Status) => {              
+            .then((res: Status) => {
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
@@ -305,7 +320,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             aggregateMention += `${x} `;
         });
 
-        const currentMaxCharLength = this.maxCharLength + mentionExtraChars;
+        const currentMaxCharLength = this.maxCharLength + mentionExtraChars - this.getCwLength();
         const maxChars = currentMaxCharLength - 6;
 
         while (trucatedStatus.length > currentMaxCharLength) {
