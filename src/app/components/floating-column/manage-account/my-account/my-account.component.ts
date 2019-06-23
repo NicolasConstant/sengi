@@ -24,7 +24,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     faCheck = faCheck;
     faTimes = faTimes;
 
-    customStatusLength: boolean;
+    customStatusLengthEnabled: boolean;
+    customStatusLength: number;
     
     availableStreams: StreamWrapper[] = [];
     availableLists: StreamWrapper[] = [];
@@ -61,7 +62,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
 
     onCustomLengthChange(): boolean {
-        this.customStatusLength = !this.customStatusLength;
+        this.customStatusLengthEnabled = !this.customStatusLengthEnabled;
         return false;
     }
 

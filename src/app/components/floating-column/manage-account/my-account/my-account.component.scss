@@ -119,6 +119,12 @@
 
     }
 
+    &__text {
+        display: block;
+        margin: 0 6px 9px 6px;
+        color: rgb(140, 152, 173);
+    }
+
     &__input {
         margin-left: 5px;
     }

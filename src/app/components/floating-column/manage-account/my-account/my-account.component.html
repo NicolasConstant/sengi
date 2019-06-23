@@ -43,10 +43,11 @@
 
     <h4 class="my-account__label my-account__margin-top">advanced settings:</h4>
     <div class="advanced-settings">
-        <input class="advanced-settings__checkbox" [value]="customStatusLength" (change)="onCustomLengthChange()"
+        <input class="advanced-settings__checkbox" [value]="customStatusLengthEnabled" (change)="onCustomLengthChange()"
             type="checkbox" name="customCharLength" value="customCharLength" id="customCharLength"> <label class="noselect advanced-settings__label" for="customCharLength">status'
             custom length</label><br>
-        <input *ngIf="customStatusLength" class="themed-form advanced-settings__input" type="number" />
+        <p *ngIf="customStatusLengthEnabled" class="advanced-settings__text">use this only if your instance doesn't support custom length detection (i.e. not a Pleroma or glitch-soc instance)</p>
+        <input *ngIf="customStatusLengthEnabled" [value]="customStatusLength" class="themed-form advanced-settings__input" type="number" />
     </div>
 
     <h4 class="my-account__label my-account__margin-top">remove account from sengi:</h4>
