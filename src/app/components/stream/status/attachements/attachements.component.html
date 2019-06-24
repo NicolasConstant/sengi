@@ -56,7 +56,7 @@
     <video #videoPlayer class="galery__video" role="application" loop>
         <source src="{{ attachments[0].url }}" type="video/mp4">
     </video>
-    <div class="galery__play-control" >
+    <div class="galery__play-control">
         <button type="button" class="galery__control--button" (click)="onPlay()" *ngIf="!isPlaying">
             <fa-icon [icon]="faPlay"></fa-icon>
         </button>
@@ -78,4 +78,10 @@
             <fa-icon [icon]="faVolumeMute" *ngIf="isMuted"></fa-icon>
         </button>
     </div>
+</div>
+<div *ngIf="isAudio">
+    <audio controls class="audio">
+        <source src="{{ attachments[0].url }}" type="audio/{{ attachments[0].meta.audio_encode }}">
+        Your browser does not support the audio element.
+    </audio>
 </div>

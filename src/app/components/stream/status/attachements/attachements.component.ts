@@ -15,6 +15,7 @@ export class AttachementsComponent implements OnInit {
     isImage: boolean;
     isGifv: boolean;
     isVideo: boolean;
+    isAudio: boolean;
 
     faPlay = faPlay;
     faPause = faPause;
@@ -37,6 +38,8 @@ export class AttachementsComponent implements OnInit {
             this.isGifv = true;
         } else if (this._attachments[0].type === 'video') {
             this.isVideo = true;
+        } else if (this._attachments[0].type === 'audio') {
+            this.isAudio = true;
         }
     }
     get attachments(): Attachment[] {
