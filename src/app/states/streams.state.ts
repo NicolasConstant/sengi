@@ -5,6 +5,11 @@ export class AddStream {
     constructor(public stream: StreamElement) {}
 }
 
+export class UpdateStream {
+    static readonly type = '[Streams] Update stream';
+    constructor(public stream: StreamElement) {}
+}
+
 export class RemoveAllStreams {
     static readonly type = '[Streams] Remove all streams';
     constructor(public accountId :string) {}
@@ -41,6 +46,21 @@ export class StreamsState {
         const state = ctx.getState();
         ctx.patchState({
             streams: [...state.streams, action.stream]
+        });
+    }
+    @Action(UpdateStream)
+    UpdateStream(ctx: StateContext<StreamsStateModel>, action: UpdateStream){
+        const state = ctx.getState();
+        
+        const otherStreams = state.streams.filter(x => x.id !== action.stream.id);
+        const updatedStream = state.streams.find(x => x.id === action.stream.id);
+
+        updatedStream.hideBoosts = action.stream.hideBoosts;
+        updatedStream.hideReplies = action.stream.hideReplies;
+        updatedStream.hideBots = action.stream.hideBots;
+
+        ctx.patchState({
+            streams: [...otherStreams, updatedStream]
         });
     }
     @Action(RemoveAllStreams)
@@ -91,6 +111,10 @@ export class StreamsState {
 
 export class StreamElement {
     public id: string;
+
+    public hideBoosts: boolean;
+    public hideReplies: boolean;
+    public hideBots: boolean;
 
     constructor(
         public type: StreamTypeEnum, 
