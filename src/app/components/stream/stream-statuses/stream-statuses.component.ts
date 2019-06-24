@@ -18,7 +18,7 @@ import { StatusWrapper } from '../../../models/common.model';
     styleUrls: ['./stream-statuses.component.scss']
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
-    isLoading = true; 
+    isLoading = true;
     isThread = false;
     displayError: string;
     hasContentWarnings = false;
@@ -49,6 +49,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     @Input() userLocked = true;
 
     private goToTopSubscription: Subscription;
+    private streamsSubscription: Subscription;
+    private streams$: Observable<StreamElement[]>;
 
     constructor(
         private readonly store: Store,
@@ -56,16 +58,23 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         private readonly notificationService: NotificationService,
         private readonly streamingService: StreamingService,
         private readonly mastodonService: MastodonService) {
+
+        this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
     }
 
     ngOnInit() {
         this.goToTopSubscription = this.goToTop.subscribe(() => {
             this.applyGoToTop();
         });
+
+        this.streamsSubscription = this.streams$.subscribe((streams: StreamElement[]) => {
+            this.streamElement = streams.find(x => x.id === this.streamElement.id);
+        });
     }
 
     ngOnDestroy() {
         if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+        if (this.streamsSubscription) this.streamsSubscription.unsubscribe();
     }
 
     refresh(): any {
@@ -101,9 +110,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.status.id == update.status.id)) {
                         if (this.streamPositionnedAtTop) {
-                            if(this.isFiltered(update.status)){
+                            if (this.isFiltered(update.status)) {
                                 return;
-                            }                
+                            }
 
                             const wrapper = new StatusWrapper(update.status, this.account);
                             this.statuses.unshift(wrapper);
@@ -177,7 +186,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         }
 
         for (const status of this.bufferStream) {
-            if(this.isFiltered(status)){
+            if (this.isFiltered(status)) {
                 continue;
             }
 
@@ -189,7 +198,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     }
 
     private scrolledToBottom() {
-        if(this.isLoading) return;
+        if (this.isLoading) return;
 
         this.isLoading = true;
         this.isProcessingInfiniteScroll = true;
@@ -198,7 +207,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
             .then((status: Status[]) => {
                 for (const s of status) {
-                    if(this.isFiltered(s)){
+                    if (this.isFiltered(s)) {
                         continue;
                     }
 
@@ -226,7 +235,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             .then((results: Status[]) => {
                 this.isLoading = false;
                 for (const s of results) {
-                    if(this.isFiltered(s)){
+                    if (this.isFiltered(s)) {
                         continue;
                     }
 
@@ -248,21 +257,21 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             this.bufferWasCleared = true;
             this.bufferStream.length = 2 * this.streamingService.nbStatusPerIteration;
         }
-    }  
+    }
 
-    private isFiltered(status: Status): boolean{
-        if(this.streamElement.hideBoosts){
-            if(status.reblog){
+    private isFiltered(status: Status): boolean {
+        if (this.streamElement.hideBoosts) {
+            if (status.reblog) {
                 return true;
             }
         }
-        if(this.streamElement.hideBots){
-            if(status.account.bot){
+        if (this.streamElement.hideBots) {
+            if (status.account.bot) {
                 return true;
             }
         }
-        if(this.streamElement.hideReplies){
-            if(status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id){
+        if (this.streamElement.hideReplies) {
+            if (status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id) {
                 return true;
             }
         }
