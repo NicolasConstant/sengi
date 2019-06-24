@@ -52,7 +52,6 @@ export class StreamsState {
     UpdateStream(ctx: StateContext<StreamsStateModel>, action: UpdateStream){
         const state = ctx.getState();
         
-        const otherStreams = state.streams.filter(x => x.id !== action.stream.id);
         const updatedStream = state.streams.find(x => x.id === action.stream.id);
 
         updatedStream.hideBoosts = action.stream.hideBoosts;
@@ -60,7 +59,7 @@ export class StreamsState {
         updatedStream.hideBots = action.stream.hideBots;
 
         ctx.patchState({
-            streams: [...otherStreams, updatedStream]
+            streams: [...state.streams]
         });
     }
     @Action(RemoveAllStreams)

@@ -1,15 +1,18 @@
 <div class="stream-edition">
     <div class="stream-edition__settings">
         <div class="stream-edition__setting">
-            <input class="stream-edition__setting--checkbox" type="checkbox" id="hideBoost"> <label for="hideBoost" class="noselect">hide
+            <input [(ngModel)]="hideBoosts" (change)="settingsChanged()"
+            class="stream-edition__setting--checkbox" type="checkbox" id="hideBoosts"> <label for="hideBoosts" class="noselect">hide
                 boosts</label><br />
         </div>
         <div class="stream-edition__setting">
-            <input class="stream-edition__setting--checkbox" type="checkbox" id="hideReplies"> <label for="hideReplies" class="noselect">hide
+            <input [(ngModel)]="hideReplies" (change)="settingsChanged()"
+            class="stream-edition__setting--checkbox" type="checkbox" id="hideReplies"> <label for="hideReplies" class="noselect">hide
                 replies</label><br />
         </div>
         <div class="stream-edition__setting">
-            <input class="stream-edition__setting--checkbox" type="checkbox" id="hideBots"> <label for="hideBots" class="noselect">hide
+            <input [(ngModel)]="hideBots" (change)="settingsChanged()"
+            class="stream-edition__setting--checkbox" type="checkbox" id="hideBots" > <label for="hideBots" class="noselect">hide
                 bots</label><br />
         </div>
     </div>

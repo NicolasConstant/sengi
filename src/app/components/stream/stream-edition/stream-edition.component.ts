@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown } from '../../../states/streams.state';
+import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown, UpdateStream } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-stream-edition',
@@ -14,11 +14,27 @@ export class StreamEditionComponent implements OnInit {
     faChevronRight = faChevronRight;
     faTimes = faTimes;
 
+    hideBoosts: boolean;
+    hideReplies: boolean;
+    hideBots: boolean;
+
     @Input() streamElement: StreamElement;
 
     constructor(private readonly store: Store) { }
 
     ngOnInit() {
+        this.hideBoosts = this.streamElement.hideBoosts;
+        this.hideReplies = this.streamElement.hideReplies;
+        this.hideBots = this.streamElement.hideBots;
+    }
+
+    settingsChanged(): boolean {
+        this.streamElement.hideBoosts = this.hideBoosts;
+        this.streamElement.hideReplies = this.hideReplies;
+        this.streamElement.hideBots = this.hideBots;
+        
+        this.store.dispatch([new UpdateStream(this.streamElement)]);
+        return false;
     }
 
     moveLeft(): boolean {
