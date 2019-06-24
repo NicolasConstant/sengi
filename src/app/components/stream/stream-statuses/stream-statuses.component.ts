@@ -31,6 +31,10 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
 
+    private hideBoosts: boolean;
+    private hideReplies: boolean;
+    private hideBots: boolean;
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
@@ -38,6 +42,11 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     @Input()
     set streamElement(streamElement: StreamElement) {
         this._streamElement = streamElement;
+
+        this.hideBoosts = streamElement.hideBoosts;
+        this.hideBots = streamElement.hideBots;
+        this.hideReplies = streamElement.hideReplies;
+
         this.load(this._streamElement);
     }
     get streamElement(): StreamElement {
@@ -68,7 +77,13 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         });
 
         this.streamsSubscription = this.streams$.subscribe((streams: StreamElement[]) => {
-            this.streamElement = streams.find(x => x.id === this.streamElement.id);
+            let updatedStream = streams.find(x => x.id === this.streamElement.id);
+            
+            if (this.hideBoosts !== updatedStream.hideBoosts
+                || this.hideBots !== updatedStream.hideBots
+                || this.hideReplies !== updatedStream.hideReplies) {
+                this.streamElement = updatedStream;
+            }
         });
     }
 
