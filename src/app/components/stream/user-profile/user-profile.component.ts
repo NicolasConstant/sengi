@@ -5,13 +5,14 @@ import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
-import { Account, Status, Relationship } from "../../../services/models/mastodon.interfaces";
+import { Account, Status, Relationship, Attachment } from "../../../services/models/mastodon.interfaces";
 import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
     selector: 'app-user-profile',
@@ -32,7 +33,7 @@ export class UserProfileComponent implements OnInit {
     note: string;
 
     isLoading: boolean;
-    
+
     private maxReached = false;
     private maxId: string;
     statusLoading: boolean;
@@ -60,6 +61,7 @@ export class UserProfileComponent implements OnInit {
 
     constructor(
         private readonly store: Store,
+        private readonly navigationService: NavigationService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonService,
         private readonly toolsService: ToolsService) {
@@ -103,7 +105,7 @@ export class UserProfileComponent implements OnInit {
 
                 this.displayedAccount = account;
                 this.hasNote = account && account.note && account.note !== '<p></p>';
-                if(this.hasNote){
+                if (this.hasNote) {
                     this.note = this.emojiConverter.applyEmojis(account.emojis, account.note, EmojiTypeEnum.medium);
                 }
 
@@ -155,6 +157,26 @@ export class UserProfileComponent implements OnInit {
             });
     }
 
+    showAvatar(avatarUrl: string): boolean {
+        const att: Attachment = {
+            id: '',
+            type: 'image',
+            remote_url: avatarUrl,
+            preview_url: avatarUrl,
+            url: avatarUrl,
+            meta: null,
+            text_url: '',
+            description: ''
+        }
+        this.navigationService.openMedia({
+            selectedIndex: 0,
+            attachments: [att],
+            iframe: null
+        });
+
+        return false;
+    }
+
     refresh(): any {
         this.load(this.lastAccountName);
     }
@@ -187,7 +209,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     unfollow(): boolean {
-        const userAccount =  this.toolsService.getSelectedAccounts()[0];
+        const userAccount = this.toolsService.getSelectedAccounts()[0];
         this.toolsService.findAccount(userAccount, this.lastAccountName)
             .then((account: Account) => {
                 return this.mastodonService.unfollow(userAccount, account);
@@ -209,7 +231,7 @@ export class UserProfileComponent implements OnInit {
             this.scrolledToBottom();
         }
     }
-   
+
     private scrolledToBottom() {
         if (this.statusLoading || this.maxReached) return;
 
@@ -227,7 +249,7 @@ export class UserProfileComponent implements OnInit {
             });
     }
 
-    private loadStatus(userAccount: AccountInfo, statuses: Status[]){
+    private loadStatus(userAccount: AccountInfo, statuses: Status[]) {
         if (statuses.length === 0) {
             this.maxReached = true;
             return;

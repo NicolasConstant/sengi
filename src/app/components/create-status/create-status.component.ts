@@ -20,7 +20,14 @@ import { identifierModuleUrl } from '@angular/compiler';
     styleUrls: ['./create-status.component.scss']
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
-    title: string;
+    private _title: string;
+    set title(value: string){
+        this._title = value;
+        this.countStatusChar(this.status);
+    }
+    get title(): string {
+        return this._title;
+    }
 
     private _status: string = '';
     set status(value: string) {
@@ -106,14 +113,21 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private accountChanged(accounts: AccountInfo[]): void {
         if (accounts && accounts.length > 0) {
             const selectedAccount = accounts.filter(x => x.isSelected)[0];
-            this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
-                .then((maxChars: number) => {
-                    this.maxCharLength = maxChars;
-                    this.countStatusChar(this.status);
-                })
-                .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
-                });
+
+            const settings = this.toolsService.getAccountSettings(selectedAccount);
+            if (settings.customStatusCharLengthEnabled) {
+                this.maxCharLength = settings.customStatusCharLength;
+                this.countStatusChar(this.status);
+            } else {
+                this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
+                    .then((maxChars: number) => {
+                        this.maxCharLength = maxChars;
+                        this.countStatusChar(this.status);
+                    })
+                    .catch((err: HttpErrorResponse) => {
+                        this.notificationService.notifyHttpError(err);
+                    });
+            }
 
             if (!this.statusReplyingToWrapper) {
                 this.instancesInfoService.getDefaultPrivacy(selectedAccount)
@@ -169,8 +183,16 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const statusExtraChars = this.getMentionExtraChars(status);
 
         const statusLength = currentStatus.length - statusExtraChars;
-        this.charCountLeft = this.maxCharLength - statusLength;
+        this.charCountLeft = this.maxCharLength - statusLength - this.getCwLength();
         this.postCounts = parseStatus.length;
+    }
+
+    private getCwLength(): number {
+        let cwLength = 0;
+        if (this.title) {
+            cwLength = this.title.length;
+        }
+        return cwLength;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
@@ -238,9 +260,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
             })
             .then((res: Status) => {
-                if (this.statusReplyingToWrapper) {
-                    this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(res, acc));
-                }
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
@@ -261,22 +280,30 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         for (let i = 0; i < parsedStatus.length; i++) {
             let s = parsedStatus[i];
-            resultPromise = resultPromise.then((pStatus: Status) => {
-                let inReplyToId = null;
-                if (pStatus) {
-                    inReplyToId = pStatus.id;
-                }
+            resultPromise = resultPromise
+                .then((pStatus: Status) => {
+                    let inReplyToId = null;
+                    if (pStatus) {
+                        inReplyToId = pStatus.id;
+                    }
 
-                if (i === 0) {
-                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
-                        .then((status: Status) => {
-                            this.mediaService.clearMedia();
-                            return status;
-                        });
-                } else {
-                    return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
-                }
-            });
+                    if (i === 0) {
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
+                            .then((status: Status) => {
+                                this.mediaService.clearMedia();
+                                return status;
+                            });
+                    } else {
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
+                    }
+                })
+                .then((status: Status) => {
+                    if (this.statusReplyingToWrapper) {
+                        this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(status, account));
+                    }
+
+                    return status;
+                });
         }
 
         return resultPromise;
@@ -293,7 +320,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             aggregateMention += `${x} `;
         });
 
-        const currentMaxCharLength = this.maxCharLength + mentionExtraChars;
+        const currentMaxCharLength = this.maxCharLength + mentionExtraChars - this.getCwLength();
         const maxChars = currentMaxCharLength - 6;
 
         while (trucatedStatus.length > currentMaxCharLength) {

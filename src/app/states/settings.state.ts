@@ -21,6 +21,9 @@ export class AccountSettings {
     displayNotifications: boolean = true;
     lastMentionCreationDate: string;    
     lastNotificationCreationDate: string;
+
+    customStatusCharLengthEnabled: boolean = false;
+    customStatusCharLength: number = 500;
 }
 
 export class GlobalSettings {
