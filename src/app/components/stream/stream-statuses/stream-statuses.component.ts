@@ -101,6 +101,10 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.status.id == update.status.id)) {
                         if (this.streamPositionnedAtTop) {
+                            if(this.isFiltered(update.status)){
+                                return;
+                            }                
+
                             const wrapper = new StatusWrapper(update.status, this.account);
                             this.statuses.unshift(wrapper);
                         } else {
@@ -173,6 +177,10 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         }
 
         for (const status of this.bufferStream) {
+            if(this.isFiltered(status)){
+                continue;
+            }
+
             const wrapper = new StatusWrapper(status, this.account);
             this.statuses.unshift(wrapper);
         }
@@ -190,6 +198,10 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
             .then((status: Status[]) => {
                 for (const s of status) {
+                    if(this.isFiltered(s)){
+                        continue;
+                    }
+
                     const wrapper = new StatusWrapper(s, this.account);
                     this.statuses.push(wrapper);
                 }
@@ -214,6 +226,10 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             .then((results: Status[]) => {
                 this.isLoading = false;
                 for (const s of results) {
+                    if(this.isFiltered(s)){
+                        continue;
+                    }
+
                     const wrapper = new StatusWrapper(s, this.account);
                     this.statuses.push(wrapper);
                 }
@@ -233,5 +249,24 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             this.bufferStream.length = 2 * this.streamingService.nbStatusPerIteration;
         }
     }  
+
+    private isFiltered(status: Status): boolean{
+        if(this.streamElement.hideBoosts){
+            if(status.reblog){
+                return true;
+            }
+        }
+        if(this.streamElement.hideBots){
+            if(status.account.bot){
+                return true;
+            }
+        }
+        if(this.streamElement.hideReplies){
+            if(status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id){
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

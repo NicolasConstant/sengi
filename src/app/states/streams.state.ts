@@ -51,7 +51,7 @@ export class StreamsState {
     @Action(UpdateStream)
     UpdateStream(ctx: StateContext<StreamsStateModel>, action: UpdateStream){
         const state = ctx.getState();
-        
+
         const updatedStream = state.streams.find(x => x.id === action.stream.id);
 
         updatedStream.hideBoosts = action.stream.hideBoosts;
@@ -111,9 +111,9 @@ export class StreamsState {
 export class StreamElement {
     public id: string;
 
-    public hideBoosts: boolean;
-    public hideReplies: boolean;
-    public hideBots: boolean;
+    public hideBoosts: boolean = false;
+    public hideReplies: boolean = false;
+    public hideBots: boolean = false;
 
     constructor(
         public type: StreamTypeEnum, 
