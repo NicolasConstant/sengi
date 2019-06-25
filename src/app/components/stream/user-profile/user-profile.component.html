@@ -2,11 +2,15 @@
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
 
-    <div *ngIf="displayedAccount" class="profile-header" [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
+    <div *ngIf="displayedAccount" class="profile-header"
+        [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
         <div class="profile-header__inner">
-            <img class="profile-header__avatar" src="{{displayedAccount.avatar}}" alt="header" />
+            <a href (click)="showAvatar(displayedAccount.avatar)" title="open avatar">
+                <img class="profile-header__avatar" src="{{displayedAccount.avatar}}" alt="header" />
+            </a>
             <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"></h2>
-            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank">@{{displayedAccount.acct}}</a></h2>
+            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}"
+                    target="_blank">@{{displayedAccount.acct}}</a></h2>
 
             <div class="profile-header__follow" *ngIf="relationship">
                 <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
@@ -38,7 +42,8 @@
         </div>
         <div class="profile-fields" *ngIf="displayedAccount && displayedAccount.fields.length > 0">
             <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
-                <div class="profile-fields__field--value" innerHTML="{{ displayedAccount | accountEmoji:field.value}}" [ngClass]="{'profile-fields__field--validated': field.verified_at }">
+                <div class="profile-fields__field--value" innerHTML="{{ displayedAccount | accountEmoji:field.value}}"
+                    [ngClass]="{'profile-fields__field--validated': field.verified_at }">
                 </div>
                 <div class="profile-fields__field--name">
                     {{ field.name }}
@@ -57,7 +62,7 @@
                 </app-status>
             </div>
 
-            
+
             <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
         </div>
     </div>

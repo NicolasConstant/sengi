@@ -53,8 +53,8 @@ export class PollComponent implements OnInit {
         return this._poll;
     }
 
-    @Input() provider: AccountInfo;
-    @Input() status: Status;
+    // @Input() provider: AccountInfo;
+    @Input() statusWrapper: StatusWrapper;
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
@@ -71,8 +71,8 @@ export class PollComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.pollPerAccountId[this.provider.id] = Promise.resolve(this.poll);
-        this.selectedAccount = this.provider;
+        this.pollPerAccountId[this.statusWrapper.provider.id] = Promise.resolve(this.poll);
+        this.selectedAccount = this.statusWrapper.provider;
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.checkStatus(accounts);
@@ -84,10 +84,10 @@ export class PollComponent implements OnInit {
         var newSelectedAccount = accounts.find(x => x.isSelected);
 
         const accountChanged = this.selectedAccount.id !== newSelectedAccount.id;
-        if (accountChanged && !this.pollPerAccountId[newSelectedAccount.id] && (this.status.visibility === 'public' || this.status.visibility === 'unlisted')) {
+        if (accountChanged && !this.pollPerAccountId[newSelectedAccount.id] && (this.statusWrapper.status.visibility === 'public' || this.statusWrapper.status.visibility === 'unlisted')) {
             this.setStatsAtZero();
 
-            this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.status, this.provider))
+            this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.statusWrapper.status, this.statusWrapper.provider))
                 .then((status: Status) => {
                     return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
                 })
@@ -99,7 +99,7 @@ export class PollComponent implements OnInit {
                     this.notificationService.notifyHttpError(err);
                     return null;
                 });
-        } else if (this.status.visibility !== 'public' && this.status.visibility !== 'unlisted' && this.provider.id !== newSelectedAccount.id) {
+        } else if (this.statusWrapper.status.visibility !== 'public' && this.statusWrapper.status.visibility !== 'unlisted' && this.statusWrapper.provider.id !== newSelectedAccount.id) {
             this.pollLocked = true;
         } else {
             this.pollPerAccountId[newSelectedAccount.id]

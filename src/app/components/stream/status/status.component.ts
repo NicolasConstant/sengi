@@ -6,6 +6,7 @@ import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
+import { TrustedString } from '@angular/core/src/sanitization/bypass';
 
 @Component({
     selector: "app-status",
@@ -20,6 +21,7 @@ export class StatusComponent implements OnInit {
     faList = faList;
 
     displayedStatus: Status;
+    displayedStatusWrapper: StatusWrapper;
 
     // statusAccountName: string;
     statusContent: string;
@@ -29,6 +31,7 @@ export class StatusComponent implements OnInit {
     replyingToStatus: boolean;
     isCrossPoster: boolean;
     isThread: boolean;
+    isOld: boolean;
     isContentWarned: boolean;
     hasReply: boolean;
     contentWarningText: string;
@@ -57,6 +60,8 @@ export class StatusComponent implements OnInit {
         } else {
             this.displayedStatus = this.status;
         }
+
+        this.displayedStatusWrapper = new StatusWrapper(this.displayedStatus, value.provider);
 
         this.checkLabels(this.displayedStatus);
         this.checkContentWarning(this.displayedStatus);
@@ -120,6 +125,13 @@ export class StatusComponent implements OnInit {
         }
 
         this.hasReply = status.replies_count > 0;
+
+        let createdAt = new Date(status.created_at);
+        let now = new Date();
+        now.setMonth(now.getMonth() - 3);
+        if (now > createdAt) {
+            this.isOld = true;
+        }
     }
 
     openAccount(account: Account): boolean {
@@ -165,9 +177,9 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
-    openUrl(): boolean {
+    openUrl(url: string): boolean {
         event.preventDefault();
-        window.open(this.displayedStatus.url, "_blank");
+        window.open(url, "_blank");
         return false;
     }
 }
