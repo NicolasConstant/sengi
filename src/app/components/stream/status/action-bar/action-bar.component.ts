@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
@@ -11,6 +11,8 @@ import { Status } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
+
+import { ContextMenuComponent } from 'ngx-contextmenu';
 
 @Component({
     selector: 'app-action-bar',
@@ -25,6 +27,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faWindowCloseRegular = faWindowCloseRegular;
     faEllipsisH = faEllipsisH;
     faLock = faLock;
+
+    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+    public items = [
+        { name: 'John', otherProperty: 'Foo' },
+        { name: 'Joe', otherProperty: 'Bar' }
+    ];
 
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
