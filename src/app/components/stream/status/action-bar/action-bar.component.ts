@@ -12,7 +12,7 @@ import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 
-import { ContextMenuComponent } from 'ngx-contextmenu';
+import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 
 @Component({
     selector: 'app-action-bar',
@@ -59,6 +59,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private accountSub: Subscription;
 
     constructor(
+        private contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
@@ -220,4 +221,15 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         console.warn('more'); //TODO
         return false;
     }
+
+    public onContextMenu($event: MouseEvent, item: any): void {
+        this.contextMenuService.show.next({
+          // Optional - if unspecified, all context menu components will open
+          contextMenu: this.basicMenu,
+          event: $event,
+          item: item,
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+      }
 }

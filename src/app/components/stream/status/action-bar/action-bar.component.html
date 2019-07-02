@@ -27,19 +27,19 @@
         <fa-icon [icon]="faWindowCloseRegular"></fa-icon>
     </a>
 
-    <!-- <a href class="action-bar__link action-bar__link--more" (click)="return false;" title="More" [contextMenu]="basicMenu" [contextMenuSubject]="item"> -->
-        <fa-icon [icon]="faEllipsisH" [contextMenu]="basicMenu" [contextMenuSubject]="item"></fa-icon>
-    <!-- </a> -->
+    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event, item)" title="More" [contextMenu]="basicMenu" [contextMenuSubject]="item">
+        <fa-icon [icon]="faEllipsisH" [contextMenu]="basicMenu" [contextMenuSubject]="item"  ></fa-icon>
+    </a>
     <context-menu #basicMenu>
         <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.name)">
           Say hi!
         </ng-template>
-        <ng-template contextMenuItem divider="true"></ng-template>
+        <!-- <ng-template contextMenuItem divider="true"></ng-template> -->
         <ng-template contextMenuItem let-item (execute)="showMessage($event.item.name + ' said: ' + $event.item.otherProperty)">
           Bye, {{item?.name}}
         </ng-template>
-        <ng-template contextMenuItem passive="true">
+        <!-- <ng-template contextMenuItem passive="true">
           Input something: <input type="text">
-        </ng-template>
+        </ng-template> -->
       </context-menu>
 </div>
