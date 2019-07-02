@@ -1,14 +1,11 @@
 @import "variables";
 ::ng-deep .ngx-contextmenu {
-    transition: all .4s;
-    border-radius: 3px;
-    
     & .dropdown-menu {
         border: solid 1px $context-menu-border-color;
-        background-color: $context-menu-border-color;
         background-color: $context-menu-background;
-        padding: 0;
-        border: solid 2px $context-menu-border-color;
+        padding: 3px 0;
+        border-radius: 3px;
+        //border: solid 2px $context-menu-border-color;
     }
 
     & li {
@@ -17,20 +14,21 @@
         // text-transform: uppercase;
         // text-align: center;
 
-        &:first-child {
-            border-top: none;
-        }
+        // &:first-child {
+        //     border-top: none;
+        // }
     }
 
     & a {
-        color: $btn-primary-font-color;
+        color: $context-menu-font-color;
         display: block;
         padding: 0.5em 1em;
         padding: 5px 10px;
         text-decoration: none;
+        transition: all .2s;
 
         &:hover {
-            color: $btn-primary-font-color;
+            color: $context-menu-font-color;
             background-color: $context-menu-background-hover;
             text-decoration: none;
         }
