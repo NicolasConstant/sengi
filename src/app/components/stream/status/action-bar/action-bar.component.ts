@@ -288,6 +288,10 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.toolsService.findAccount(acc, this.fullHandle)
                 .then((target: Account) => {
                     this.mastodonService.mute(acc, target.id);
+                    return target;
+                })
+                .then((target: Account) => {
+                    this.notificationService.hideAccount(target);
                 })
                 .catch(err => {
                     this.notificationService.notifyHttpError(err);
@@ -302,6 +306,10 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.toolsService.findAccount(acc, this.fullHandle)
                 .then((target: Account) => {
                     this.mastodonService.block(acc, target.id);
+                    return target;
+                })
+                .then((target: Account) => {
+                    this.notificationService.hideAccount(target);
                 })
                 .catch(err => {
                     this.notificationService.notifyHttpError(err);
