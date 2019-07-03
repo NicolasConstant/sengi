@@ -7,7 +7,7 @@ import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular
 
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { Status } from '../../../../services/models/mastodon.interfaces';
+import { Status, Account } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
@@ -68,6 +68,10 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
+    username: string;
+    private fullHandle: string;
+    private displayedStatus: Status;
+
     ngOnInit() {
         const status = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
@@ -75,14 +79,26 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         if (status.reblog) {
             this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
+            this.extractHandle(status.reblog.account);
+            this.displayedStatus = status.reblog;
         } else {
             this.favoriteStatePerAccountId[account.id] = status.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblogged;
+            this.extractHandle(status.account);
+            this.displayedStatus = status;
         }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.checkStatus(accounts);
         });
+    }
+
+    private extractHandle(account: Account) {
+        this.username = account.acct.split('@')[0];
+        this.fullHandle = account.acct;
+        if (!this.fullHandle.includes('@')) {
+            this.fullHandle += `@${account.url.replace('https://', '').split('/')[0]}`;
+        }
     }
 
     ngOnDestroy(): void {
@@ -239,6 +255,17 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     copyStatusLink(): boolean {
+        let selBox = document.createElement('textarea');
+        selBox.style.position = 'fixed';
+        selBox.style.left = '0';
+        selBox.style.top = '0';
+        selBox.style.opacity = '0';
+        selBox.value = this.displayedStatus.url;
+        document.body.appendChild(selBox);
+        selBox.focus();
+        selBox.select();
+        document.execCommand('copy');
+        document.body.removeChild(selBox);
 
         return false;
     }
@@ -254,7 +281,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     muteAccount(): boolean {
-
+        
         return false;
     }
 

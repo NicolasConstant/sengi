@@ -40,17 +40,17 @@
         </ng-template>
         <ng-template contextMenuItem divider="true"></ng-template>
         <ng-template contextMenuItem (execute)="mentionAccount()">
-            Mention @account
+            Mention @{{ this.username }}
         </ng-template>
         <ng-template contextMenuItem (execute)="dmAccount()">
-            Direct message @account
+            Direct message @{{ this.username }}
         </ng-template>
         <ng-template contextMenuItem divider="true"></ng-template>
         <ng-template contextMenuItem (execute)="muteAccount()">
-            Mute @account
+            Mute @{{ this.username }}
         </ng-template>
         <ng-template contextMenuItem (execute)="blockAccount()">
-            Block @account
+            Block @{{ this.username }}
         </ng-template>
         <!-- <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.name)">
             Mute @account
