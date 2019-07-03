@@ -4,16 +4,16 @@
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link action-bar__link--boost" title="Boost" [class.boosted]="isBoosted"
-        [class.boosting]="boostIsLoading" (click)="boost()">
+    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link action-bar__link--boost" title="Boost"
+        [class.boosted]="isBoosted" [class.boosting]="boostIsLoading" (click)="boost()">
         <fa-icon [icon]="faRetweet"></fa-icon>
     </a>
     <fa-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" title="This post cannot be boosted"
         [icon]="faLock"></fa-icon>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite" [class.favorited]="isFavorited"
-        [class.favoriting]="favoriteIsLoading" (click)="favorite()">
+    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite"
+        [class.favorited]="isFavorited" [class.favoriting]="favoriteIsLoading" (click)="favorite()">
         <fa-icon [icon]="faStar"></fa-icon>
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
@@ -27,19 +27,33 @@
         <fa-icon [icon]="faWindowCloseRegular"></fa-icon>
     </a>
 
-    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event, item)" title="More" [contextMenu]="basicMenu" [contextMenuSubject]="item">
-        <fa-icon [icon]="faEllipsisH" [contextMenu]="basicMenu" [contextMenuSubject]="item"  ></fa-icon>
+    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event, item)" title="More"
+        [contextMenu]="basicMenu" [contextMenuSubject]="item">
+        <fa-icon [icon]="faEllipsisH" [contextMenu]="basicMenu" [contextMenuSubject]="item"></fa-icon>
     </a>
     <context-menu #basicMenu>
-        <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.name)">
-          Say hi!
+        <ng-template contextMenuItem (execute)="expandStatus()">
+            Expand status
         </ng-template>
-        <!-- <ng-template contextMenuItem divider="true"></ng-template> -->
-        <ng-template contextMenuItem let-item (execute)="showMessage($event.item.name + ' said: ' + $event.item.otherProperty)">
-          Bye, {{item?.name}}
+        <ng-template contextMenuItem (execute)="copyStatusLink()">
+            Copy link to status
         </ng-template>
-        <!-- <ng-template contextMenuItem passive="true">
-          Input something: <input type="text">
+        <ng-template contextMenuItem divider="true"></ng-template>
+        <ng-template contextMenuItem (execute)="mentionAccount()">
+            Mention @account
+        </ng-template>
+        <ng-template contextMenuItem (execute)="dmAccount()">
+            Direct message @account
+        </ng-template>
+        <ng-template contextMenuItem divider="true"></ng-template>
+        <ng-template contextMenuItem (execute)="muteAccount()">
+            Mute @account
+        </ng-template>
+        <ng-template contextMenuItem (execute)="blockAccount()">
+            Block @account
+        </ng-template>
+        <!-- <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.name)">
+            Mute @account
         </ng-template> -->
-      </context-menu>
+    </context-menu>
 </div>

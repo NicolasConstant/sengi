@@ -72,13 +72,13 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         const status = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
 
-        if(status.reblog){
+        if (status.reblog) {
             this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
         } else {
             this.favoriteStatePerAccountId[account.id] = status.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblogged;
-        }        
+        }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.checkStatus(accounts);
@@ -133,7 +133,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
-        if(this.boostIsLoading) return;
+        if (this.boostIsLoading) return;
 
         this.boostIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -149,12 +149,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 }
             })
             .then((boostedStatus: Status) => {
-                if(boostedStatus.pleroma){
+                if (boostedStatus.pleroma) {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblog !== null; //FIXME: when Pleroma will return the good status
                 } else {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
-                }                
-               
+                }
+
                 this.checkIfBoosted();
             })
             .catch((err: HttpErrorResponse) => {
@@ -168,7 +168,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     favorite(): boolean {
-        if(this.favoriteIsLoading) return;
+        if (this.favoriteIsLoading) return;
 
         this.favoriteIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -224,12 +224,43 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     public onContextMenu($event: MouseEvent, item: any): void {
         this.contextMenuService.show.next({
-          // Optional - if unspecified, all context menu components will open
-          contextMenu: this.basicMenu,
-          event: $event,
-          item: item,
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.basicMenu,
+            event: $event,
+            item: item,
         });
         $event.preventDefault();
         $event.stopPropagation();
-      }
+    }
+
+    expandStatus(): boolean {
+
+        return false;
+    }
+
+    copyStatusLink(): boolean {
+
+        return false;
+    }
+
+    mentionAccount(): boolean {
+
+        return false;
+    }
+
+    dmAccount(): boolean {
+
+        return false;
+    }
+
+    muteAccount(): boolean {
+
+        return false;
+    }
+
+    blockAccount(): boolean {
+
+        return false;
+    }
+
 }

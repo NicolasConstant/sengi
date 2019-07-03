@@ -3,8 +3,8 @@
     & .dropdown-menu {
         border: solid 1px $context-menu-border-color;
         background-color: $context-menu-background;
-        padding: 3px 0;
-        border-radius: 3px;
+        padding: 2px 0;
+        border-radius: 2px;
         //border: solid 2px $context-menu-border-color;
     }
 
@@ -23,7 +23,7 @@
         color: $context-menu-font-color;
         display: block;
         padding: 0.5em 1em;
-        padding: 5px 10px;
+        padding: 3px 10px;
         text-decoration: none;
         transition: all .2s;
 
@@ -32,5 +32,9 @@
             background-color: $context-menu-background-hover;
             text-decoration: none;
         }
+    }
+
+    & .divider {
+        border-top: solid 2px $context-menu-border-color;
     }
 }
