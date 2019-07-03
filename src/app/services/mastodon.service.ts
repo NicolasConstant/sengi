@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {         
+export class MastodonService {            
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -319,6 +319,18 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.getPoll}`.replace('{0}', pollId);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Poll>(route, { headers: headers }).toPromise();
+    }
+
+    mute(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.mute}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    block(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.block}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }  
 }
 

@@ -71,6 +71,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     username: string;
     private fullHandle: string;
     private displayedStatus: Status;
+    private loadedAccounts: AccountInfo[];
 
     ngOnInit() {
         const status = this.statusWrapper.status;
@@ -89,6 +90,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+            this.loadedAccounts = accounts;
             this.checkStatus(accounts);
         });
     }
@@ -271,6 +273,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     mentionAccount(): boolean {
+        
 
         return false;
     }
@@ -281,13 +284,30 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     muteAccount(): boolean {
-        
+        this.loadedAccounts.forEach(acc => {
+            this.toolsService.findAccount(acc, this.fullHandle)
+                .then((target: Account) => {
+                    this.mastodonService.mute(acc, target.id);
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err);
+                });
+        });
+
         return false;
     }
 
     blockAccount(): boolean {
+        this.loadedAccounts.forEach(acc => {
+            this.toolsService.findAccount(acc, this.fullHandle)
+                .then((target: Account) => {
+                    this.mastodonService.block(acc, target.id);
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err);
+                });
+        });
 
         return false;
     }
-
 }
