@@ -4,6 +4,7 @@ import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
@@ -11,8 +12,7 @@ import { Status, Account } from '../../../../services/models/mastodon.interfaces
 import { ToolsService } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
-
-import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
     selector: 'app-action-bar',
@@ -59,7 +59,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private accountSub: Subscription;
 
     constructor(
-        private contextMenuService: ContextMenuService,
+        private readonly navigationService: NavigationService,
+        private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
@@ -97,7 +98,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     private extractHandle(account: Account) {
         this.username = account.acct.split('@')[0];
-        this.fullHandle = account.acct;
+        this.fullHandle = account.acct.toLowerCase();
         if (!this.fullHandle.includes('@')) {
             this.fullHandle += `@${account.url.replace('https://', '').split('/')[0]}`;
         }
@@ -273,13 +274,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     mentionAccount(): boolean {
-        
-
+        this.navigationService.replyToUser(this.fullHandle, false);
         return false;
     }
 
     dmAccount(): boolean {
-
+        this.navigationService.replyToUser(this.fullHandle, true);
         return false;
     }
 

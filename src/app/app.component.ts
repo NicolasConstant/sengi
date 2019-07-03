@@ -4,7 +4,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 // import { ElectronService } from 'ngx-electron';
 
-import { NavigationService, LeftPanelType } from './services/navigation.service';
+import { NavigationService, LeftPanelType, OpenLeftPanelEvent } from './services/navigation.service';
 import { StreamElement } from './states/streams.state';
 import { OpenMediaEvent } from './models/common.model';
 import { ToolsService } from './services/tools.service';
@@ -44,8 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.columnEditorSub = this.navigationService.activatedPanelSubject.subscribe((type: LeftPanelType) => {
-            if (type === LeftPanelType.Closed) {
+        this.columnEditorSub = this.navigationService.activatedPanelSubject.subscribe((event: OpenLeftPanelEvent) => {
+            if (event.type === LeftPanelType.Closed) {
                 this.floatingColumnActive = false;
             } else {
                 this.floatingColumnActive = true;
