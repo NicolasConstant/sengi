@@ -8,9 +8,10 @@
         [class.boosted]="isBoosted" [class.boosting]="boostIsLoading" (click)="boost()">
         <fa-icon [icon]="faRetweet"></fa-icon>
     </a>
-    <fa-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" title="This post cannot be boosted"
+    <fa-icon *ngIf="isBoostLocked && !isLocked && !isDM" class="action-bar__lock" title="This post cannot be boosted"
         [icon]="faLock"></fa-icon>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
+    <fa-icon *ngIf="isDM && !isLocked" class="action-bar__envelope" title="DM post cannot be boosted" [icon]="faEnvelope"></fa-icon>
 
     <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite"
         [class.favorited]="isFavorited" [class.favoriting]="favoriteIsLoading" (click)="favorite()">

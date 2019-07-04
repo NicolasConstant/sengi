@@ -50,7 +50,18 @@
         }
     }
 
-    &__lock {
+    &__lock {       
+        color: $status-secondary-color;
+        width: 22px;
+
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+    }
+
+    &__envelope {
+        position: relative;
+        top: 1px;
         color: $status-secondary-color;
         width: 22px;
 
