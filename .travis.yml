@@ -44,5 +44,4 @@ before_script:
   - sleep 3
 
 script:
-- npm run build
-- build --publish onTagOrDraft
+- npm run dist

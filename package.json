@@ -23,7 +23,7 @@
         "e2e": "ng e2e",
         "electron": "ng build --prod && electron .",
         "electron-debug": "ng build && electron .",
-        "dist": "npm run build && build --publish onTagOrDraft"
+        "dist": "npm run build && electron-builder --publish onTagOrDraft"
     },
     "private": true,
     "dependencies": {
