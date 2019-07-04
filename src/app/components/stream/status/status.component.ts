@@ -35,6 +35,7 @@ export class StatusComponent implements OnInit {
     isContentWarned: boolean;
     hasReply: boolean;
     contentWarningText: string;
+    isDirectMessage: boolean;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -61,6 +62,7 @@ export class StatusComponent implements OnInit {
             this.displayedStatus = this.status;
         }
 
+        this.isDirectMessage = this.displayedStatus.visibility === 'direct';
         this.displayedStatusWrapper = new StatusWrapper(this.displayedStatus, value.provider);
 
         this.checkLabels(this.displayedStatus);
