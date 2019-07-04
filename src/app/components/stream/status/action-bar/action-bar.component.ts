@@ -102,6 +102,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         if (!this.fullHandle.includes('@')) {
             this.fullHandle += `@${account.url.replace('https://', '').split('/')[0]}`;
         }
+        this.fullHandle = `@${this.fullHandle}`;
     }
 
     ngOnDestroy(): void {
