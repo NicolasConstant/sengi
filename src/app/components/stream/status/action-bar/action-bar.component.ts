@@ -9,7 +9,7 @@ import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Status, Account } from '../../../../services/models/mastodon.interfaces';
-import { ToolsService } from '../../../../services/tools.service';
+import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { NavigationService } from '../../../../services/navigation.service';
@@ -37,6 +37,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
     @Output() cwIsActiveEvent = new EventEmitter<boolean>();
+
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     isFavorited: boolean;
     isBoosted: boolean;
@@ -237,11 +239,6 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         }
     }
 
-    more(): boolean {
-        console.warn('more'); //TODO
-        return false;
-    }
-
     public onContextMenu($event: MouseEvent): void {
         this.contextMenuService.show.next({
             // Optional - if unspecified, all context menu components will open
@@ -254,7 +251,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     expandStatus(): boolean {
-
+        const openThread = new OpenThreadEvent(this.displayedStatus, this.statusWrapper.provider);
+        this.browseThreadEvent.next(openThread);
         return false;
     }
 

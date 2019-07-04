@@ -93,7 +93,9 @@
             [attachments]="displayedStatus.media_attachments">
         </app-attachements>
 
-        <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper" (cwIsActiveEvent)="changeCw($event)"
+        <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper" 
+            (browseThreadEvent)="browseThread($event)"
+            (cwIsActiveEvent)="changeCw($event)"
             (replyEvent)="openReply()"></app-action-bar>
     </div>
     <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper"
