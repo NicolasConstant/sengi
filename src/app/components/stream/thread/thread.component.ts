@@ -39,6 +39,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     @ViewChildren(StatusComponent) statusChildren: QueryList<StatusComponent>;
 
     private newPostSub: Subscription;
+    private hideAccountSubscription: Subscription;
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -69,12 +70,23 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.hideAccountSubscription = this.notificationService.hideAccountUrlStream.subscribe((accountUrl: string) => {
+            if (accountUrl) {
+                this.statuses = this.statuses.filter(x => {
+                    if(x.status.reblog){
+                        return x.status.reblog.account.url != accountUrl;
+                    } else {
+                        return x.status.account.url != accountUrl;
+                    }
+                });
+            }
+        });
     }
 
     ngOnDestroy(): void {
-        if (this.newPostSub) {
-            this.newPostSub.unsubscribe();
-        }
+        if (this.newPostSub) this.newPostSub.unsubscribe();
+        if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
