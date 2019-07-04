@@ -177,6 +177,10 @@ export class StatusComponent implements OnInit {
         return false;
     }
 
+    browseThread(event: OpenThreadEvent): void {
+        this.browseThreadEvent.next(event);
+    }
+
     openUrl(url: string): boolean {
         event.preventDefault();
         window.open(url, "_blank");

@@ -11,6 +11,7 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ContextMenuModule } from 'ngx-contextmenu';
 
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
@@ -128,7 +129,8 @@ const routes: Routes = [
       StreamsState,
       SettingsState
     ]),
-    NgxsStoragePluginModule.forRoot()
+    NgxsStoragePluginModule.forRoot(),
+    ContextMenuModule.forRoot()
   ],
   providers: [AuthService, NavigationService, NotificationService, MastodonService, StreamingService],
   bootstrap: [AppComponent],

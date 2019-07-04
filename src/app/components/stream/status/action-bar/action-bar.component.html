@@ -4,16 +4,16 @@
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link action-bar__link--boost" title="Boost" [class.boosted]="isBoosted"
-        [class.boosting]="boostIsLoading" (click)="boost()">
+    <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link action-bar__link--boost" title="Boost"
+        [class.boosted]="isBoosted" [class.boosting]="boostIsLoading" (click)="boost()">
         <fa-icon [icon]="faRetweet"></fa-icon>
     </a>
     <fa-icon *ngIf="isBoostLocked && !isLocked" class="action-bar__lock" title="This post cannot be boosted"
         [icon]="faLock"></fa-icon>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite" [class.favorited]="isFavorited"
-        [class.favoriting]="favoriteIsLoading" (click)="favorite()">
+    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite"
+        [class.favorited]="isFavorited" [class.favoriting]="favoriteIsLoading" (click)="favorite()">
         <fa-icon [icon]="faStar"></fa-icon>
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
@@ -27,7 +27,32 @@
         <fa-icon [icon]="faWindowCloseRegular"></fa-icon>
     </a>
 
-    <!-- <a href class="action-bar__link action-bar__link--more" title="More" (click)="more()">
+    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event)" title="More">
         <fa-icon [icon]="faEllipsisH"></fa-icon>
-    </a> -->
+    </a>
+    <context-menu #contextMenu>
+        <ng-template contextMenuItem (execute)="expandStatus()">
+            Expand status
+        </ng-template>
+        <ng-template contextMenuItem (execute)="copyStatusLink()">
+            Copy link to status
+        </ng-template>
+        <ng-template contextMenuItem divider="true"></ng-template>
+        <ng-template contextMenuItem (execute)="mentionAccount()">
+            Mention @{{ this.username }}
+        </ng-template>
+        <ng-template contextMenuItem (execute)="dmAccount()">
+            Direct message @{{ this.username }}
+        </ng-template>
+        <ng-template contextMenuItem divider="true"></ng-template>
+        <ng-template contextMenuItem (execute)="muteAccount()">
+            Mute @{{ this.username }}
+        </ng-template>
+        <ng-template contextMenuItem (execute)="blockAccount()">
+            Block @{{ this.username }}
+        </ng-template>
+        <!-- <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.name)">
+            Mute @account
+        </ng-template> -->
+    </context-menu>
 </div>

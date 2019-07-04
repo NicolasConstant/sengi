@@ -1,8 +1,9 @@
 @import "variables";
+@import "context-menu";
 
 .action-bar {
     // outline: 1px solid greenyellow; // height: 20px;
-    margin: 5px 10px 5px $avatar-column-space;
+    margin: 5px 0px 5px $avatar-column-space;
     padding: 0;
     font-size: 18px;
     height: 30px;
@@ -41,14 +42,12 @@
             font-size: 22px;
         }
 
-        
-
-
-        // &--more {
-        //     position: absolute;
-        //     left: 155px;
-        //     bottom: -6px;
-        // }
+        &--more {
+            position: absolute;
+            right: -5px;
+            // left: 155px;
+            bottom: -2px;
+        }
     }
 
     &__lock {

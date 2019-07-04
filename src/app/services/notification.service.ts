@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StatusWrapper } from '../models/common.model';
-import { Status } from './models/mastodon.interfaces';
+import { Account } from './models/mastodon.interfaces';
 
 @Injectable()
 export class NotificationService {
     public notifactionStream = new Subject<NotificatioData>();
     public newRespondPostedStream = new Subject<NewReplyData>();
+    public hideAccountUrlStream = new Subject<string>();
 
     constructor() {
     }
@@ -30,6 +31,10 @@ export class NotificationService {
     public newStatusPosted(uiStatusRepliedToId: string, response: StatusWrapper){
         const notification = new NewReplyData(uiStatusRepliedToId, response);
         this.newRespondPostedStream.next(notification);
+    }
+
+    public hideAccount(account: Account){
+        this.hideAccountUrlStream.next(account.url);
     }
 }
 

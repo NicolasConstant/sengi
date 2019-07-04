@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
 import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { Status } from '../../../../services/models/mastodon.interfaces';
-import { ToolsService } from '../../../../services/tools.service';
+import { Status, Account } from '../../../../services/models/mastodon.interfaces';
+import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
     selector: 'app-action-bar',
@@ -26,9 +28,17 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faEllipsisH = faEllipsisH;
     faLock = faLock;
 
+    @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+    public items = [
+        { name: 'John', otherProperty: 'Foo' },
+        { name: 'Joe', otherProperty: 'Bar' }
+    ];
+
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
     @Output() cwIsActiveEvent = new EventEmitter<boolean>();
+
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     isFavorited: boolean;
     isBoosted: boolean;
@@ -51,6 +61,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private accountSub: Subscription;
 
     constructor(
+        private readonly navigationService: NavigationService,
+        private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
@@ -59,21 +71,40 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
+    username: string;
+    private fullHandle: string;
+    private displayedStatus: Status;
+    private loadedAccounts: AccountInfo[];
+
     ngOnInit() {
         const status = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
 
-        if(status.reblog){
+        if (status.reblog) {
             this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
+            this.extractHandle(status.reblog.account);
+            this.displayedStatus = status.reblog;
         } else {
             this.favoriteStatePerAccountId[account.id] = status.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblogged;
-        }        
+            this.extractHandle(status.account);
+            this.displayedStatus = status;
+        }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+            this.loadedAccounts = accounts;
             this.checkStatus(accounts);
         });
+    }
+
+    private extractHandle(account: Account) {
+        this.username = account.acct.split('@')[0];
+        this.fullHandle = account.acct.toLowerCase();
+        if (!this.fullHandle.includes('@')) {
+            this.fullHandle += `@${account.url.replace('https://', '').split('/')[0]}`;
+        }
+        this.fullHandle = `@${this.fullHandle}`;
     }
 
     ngOnDestroy(): void {
@@ -124,7 +155,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
-        if(this.boostIsLoading) return;
+        if (this.boostIsLoading) return;
 
         this.boostIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -140,12 +171,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 }
             })
             .then((boostedStatus: Status) => {
-                if(boostedStatus.pleroma){
+                if (boostedStatus.pleroma) {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblog !== null; //FIXME: when Pleroma will return the good status
                 } else {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
-                }                
-               
+                }
+
                 this.checkIfBoosted();
             })
             .catch((err: HttpErrorResponse) => {
@@ -159,7 +190,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     favorite(): boolean {
-        if(this.favoriteIsLoading) return;
+        if (this.favoriteIsLoading) return;
 
         this.favoriteIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -208,8 +239,82 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         }
     }
 
-    more(): boolean {
-        console.warn('more'); //TODO
+    public onContextMenu($event: MouseEvent): void {
+        this.contextMenuService.show.next({
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.contextMenu,
+            event: $event,
+            item: null
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
+
+    expandStatus(): boolean {
+        const openThread = new OpenThreadEvent(this.displayedStatus, this.statusWrapper.provider);
+        this.browseThreadEvent.next(openThread);
+        return false;
+    }
+
+    copyStatusLink(): boolean {
+        let selBox = document.createElement('textarea');
+        selBox.style.position = 'fixed';
+        selBox.style.left = '0';
+        selBox.style.top = '0';
+        selBox.style.opacity = '0';
+        selBox.value = this.displayedStatus.url;
+        document.body.appendChild(selBox);
+        selBox.focus();
+        selBox.select();
+        document.execCommand('copy');
+        document.body.removeChild(selBox);
+
+        return false;
+    }
+
+    mentionAccount(): boolean {
+        this.navigationService.replyToUser(this.fullHandle, false);
+        return false;
+    }
+
+    dmAccount(): boolean {
+        this.navigationService.replyToUser(this.fullHandle, true);
+        return false;
+    }
+
+    muteAccount(): boolean {
+        this.loadedAccounts.forEach(acc => {
+            this.toolsService.findAccount(acc, this.fullHandle)
+                .then((target: Account) => {
+                    this.mastodonService.mute(acc, target.id);
+                    return target;
+                })
+                .then((target: Account) => {
+                    this.notificationService.hideAccount(target);
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err);
+                });
+        });
+
+        return false;
+    }
+
+    blockAccount(): boolean {
+        this.loadedAccounts.forEach(acc => {
+            this.toolsService.findAccount(acc, this.fullHandle)
+                .then((target: Account) => {
+                    this.mastodonService.block(acc, target.id);
+                    return target;
+                })
+                .then((target: Account) => {
+                    this.notificationService.hideAccount(target);
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err);
+                });
+        });
+
         return false;
     }
 }
