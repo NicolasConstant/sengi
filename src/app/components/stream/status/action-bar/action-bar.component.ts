@@ -28,7 +28,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faEllipsisH = faEllipsisH;
     faLock = faLock;
 
-    @ViewChild(ContextMenuComponent) public basicMenu: ContextMenuComponent;
+    @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
     public items = [
         { name: 'John', otherProperty: 'Foo' },
         { name: 'Joe', otherProperty: 'Bar' }
@@ -241,12 +241,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    public onContextMenu($event: MouseEvent, item: any): void {
+    public onContextMenu($event: MouseEvent): void {
         this.contextMenuService.show.next({
             // Optional - if unspecified, all context menu components will open
-            contextMenu: this.basicMenu,
+            contextMenu: this.contextMenu,
             event: $event,
-            item: item,
+            item: null
         });
         $event.preventDefault();
         $event.stopPropagation();

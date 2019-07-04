@@ -27,11 +27,10 @@
         <fa-icon [icon]="faWindowCloseRegular"></fa-icon>
     </a>
 
-    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event, item)" title="More"
-        [contextMenu]="basicMenu" [contextMenuSubject]="item">
-        <fa-icon [icon]="faEllipsisH" [contextMenu]="basicMenu" [contextMenuSubject]="item"></fa-icon>
+    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event)" title="More">
+        <fa-icon [icon]="faEllipsisH"></fa-icon>
     </a>
-    <context-menu #basicMenu>
+    <context-menu #contextMenu>
         <ng-template contextMenuItem (execute)="expandStatus()">
             Expand status
         </ng-template>
