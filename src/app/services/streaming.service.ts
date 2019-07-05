@@ -47,7 +47,7 @@ export class StreamingWrapper {
         this.eventSource = new WebSocket(route);
         this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
         this.eventSource.onerror = x => this.webSocketGotError(x);
-        this.eventSource.onopen = x => {};
+        this.eventSource.onopen = x => { };
         this.eventSource.onclose = x => this.webSocketClosed(route, x);
     }
 
@@ -57,10 +57,12 @@ export class StreamingWrapper {
 
     private webSocketClosed(domain, x: Event) {
         if (this.errorClosing) {
-            this.pullNewStatuses(domain);
-            this.errorClosing = false;
+            setTimeout(() => {
+                this.pullNewStatuses(domain);
+                this.errorClosing = false;
+            }, 60 * 1000);
         } else if (!this.disposed) {
-            setTimeout(() => { this.start(domain) }, 5000);
+            setTimeout(() => { this.start(domain) }, 60 * 1000);
         }
     }
 
@@ -83,7 +85,7 @@ export class StreamingWrapper {
             .then(() => {
                 // setTimeout(() => { this.start(domain) }, 20 * 1000);
                 if (!this.disposed) {
-                    setTimeout(() => { this.pullNewStatuses(domain) }, 15 * 1000);
+                    setTimeout(() => { this.pullNewStatuses(domain) }, 60 * 1000);
                 }
             });
     }

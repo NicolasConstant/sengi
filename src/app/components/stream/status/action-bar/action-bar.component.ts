@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } 
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 
@@ -27,6 +27,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faWindowCloseRegular = faWindowCloseRegular;
     faEllipsisH = faEllipsisH;
     faLock = faLock;
+    faEnvelope = faEnvelope;
 
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
     public items = [
@@ -42,6 +43,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     isFavorited: boolean;
     isBoosted: boolean;
+    isDM: boolean;
 
     isBoostLocked: boolean;
     isLocked: boolean;
@@ -90,6 +92,10 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.bootedStatePerAccountId[account.id] = status.reblogged;
             this.extractHandle(status.account);
             this.displayedStatus = status;
+        }
+
+        if(this.displayedStatus.visibility === 'direct'){
+            this.isDM = true;
         }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
