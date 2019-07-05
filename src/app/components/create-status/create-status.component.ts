@@ -51,8 +51,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _isDirectMention: boolean;
     @Input('isDirectMention')
     set isDirectMention(value: boolean) {
-        this._isDirectMention = value;
-        this.initMention();
+        if (value) {
+            this._isDirectMention = value;
+            this.initMention();
+        }
     }
     get isDirectMention(): boolean {
         return this._isDirectMention;
@@ -61,8 +63,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _replyingUserHandle: string;
     @Input('replyingUserHandle')
     set replyingUserHandle(value: string) {
-        this._replyingUserHandle = value;
-        this.initMention();
+        if (value) {
+            this._replyingUserHandle = value;
+            this.initMention();
+        }
     }
     get replyingUserHandle(): string {
         return this._replyingUserHandle;
@@ -92,7 +96,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.accountChanged(accounts);
         });
         this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
-        
+
         if (this.statusReplyingToWrapper) {
             if (this.statusReplyingToWrapper.status.reblog) {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status.reblog;
