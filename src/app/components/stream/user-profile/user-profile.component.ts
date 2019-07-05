@@ -166,7 +166,8 @@ export class UserProfileComponent implements OnInit {
             url: avatarUrl,
             meta: null,
             text_url: '',
-            description: ''
+            description: '',
+            pleroma: null
         }
         this.navigationService.openMedia({
             selectedIndex: 0,

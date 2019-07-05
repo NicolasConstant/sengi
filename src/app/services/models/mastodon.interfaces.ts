@@ -78,6 +78,12 @@ export interface Attachment {
     text_url: string;
     meta: any;
     description: string;
+
+    pleroma: PleromaAttachment;
+}
+
+export interface PleromaAttachment {
+    mime_type: string;
 }
 
 export interface Card {
