@@ -53,8 +53,15 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     isContentWarningActive: boolean = false;
 
+    isOwnerSelected: boolean;
+
     private isProviderSelected: boolean;
     private selectedAccounts: AccountInfo[];
+
+    username: string;
+    displayedStatus: Status;
+    private fullHandle: string;    
+    private loadedAccounts: AccountInfo[];
 
     private favoriteStatePerAccountId: { [id: string]: boolean; } = {};
     private bootedStatePerAccountId: { [id: string]: boolean; } = {};
@@ -72,11 +79,6 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
-
-    username: string;
-    private fullHandle: string;
-    private displayedStatus: Status;
-    private loadedAccounts: AccountInfo[];
 
     ngOnInit() {
         const status = this.statusWrapper.status;
@@ -122,6 +124,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         const provider = this.statusWrapper.provider;
         this.selectedAccounts = accounts.filter(x => x.isSelected);
         this.isProviderSelected = this.selectedAccounts.filter(x => x.id === provider.id).length > 0;
+
+        this.isOwnerSelected = this.selectedAccounts[0].username === this.displayedStatus.account.username 
+            && this.selectedAccounts[0].instance === this.displayedStatus.account.url.replace('https://', '').split('/')[0];
 
         if (status.visibility === 'direct' || status.visibility === 'private') {
             this.isBoostLocked = true;
@@ -320,6 +325,73 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                     this.notificationService.notifyHttpError(err);
                 });
         });
+
+        return false;
+    }
+
+    muteConversation(): boolean {
+        const selectedAccount = this.selectedAccounts[0];
+        this.mastodonService.muteConversation(selectedAccount, this.displayedStatus.id)
+            .then((status: Status) => {
+                this.displayedStatus.muted = status.muted;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
+
+        return false;
+    }
+
+    unmuteConversation(): boolean {
+        const selectedAccount = this.selectedAccounts[0];
+        this.mastodonService.unmuteConversation(selectedAccount, this.displayedStatus.id)
+            .then((status: Status) => {
+                this.displayedStatus.muted = status.muted;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
+
+        return false;
+    }
+
+    pinOnProfile(): boolean {
+        const selectedAccount = this.selectedAccounts[0];
+        this.mastodonService.pinOnProfile(selectedAccount, this.displayedStatus.id)
+            .then((status: Status) => {
+                this.displayedStatus.pinned = status.pinned;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
+
+        return false;
+    }
+
+    unpinFromProfile(): boolean {
+        const selectedAccount = this.selectedAccounts[0];
+        this.mastodonService.unpinFromProfile(selectedAccount, this.displayedStatus.id)
+            .then((status: Status) => {
+                this.displayedStatus.pinned = status.pinned;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
+
+        return false;
+    }
+
+    delete(redraft: boolean): boolean {
+        const selectedAccount = this.selectedAccounts[0];
+        this.mastodonService.deleteStatus(selectedAccount, this.displayedStatus.id)
+            .then(() => {
+                if(redraft){
+                    //TODO
+                }
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
 
         return false;
     }

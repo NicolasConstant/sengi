@@ -181,8 +181,9 @@ export interface Status {
     emojis: Emoji[];
     language: string;
     pinned: boolean;
+    muted: boolean;
     card: Card;
-    poll: Poll;
+    poll: Poll;    
 
     pleroma: PleromaStatusInfo;
 }
