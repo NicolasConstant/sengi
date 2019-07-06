@@ -101,6 +101,7 @@ export class StreamingWrapper {
             case 'delete':
                 newUpdate.type = EventEnum.delete;
                 newUpdate.messageId = event.payload;
+                newUpdate.account = this.account;
                 break;
             default:
                 newUpdate.type = EventEnum.unknow;
@@ -147,7 +148,8 @@ class WebSocketEvent {
 export class StatusUpdate {
     type: EventEnum;
     status: Status;
-    messageId: number;
+    messageId: string;
+    account: AccountInfo;
 }
 
 export enum EventEnum {

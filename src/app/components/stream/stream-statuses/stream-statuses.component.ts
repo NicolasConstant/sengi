@@ -90,7 +90,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.hideAccountSubscription = this.notificationService.hideAccountUrlStream.subscribe((accountUrl: string) => {
             if (accountUrl) {
                 this.statuses = this.statuses.filter(x => {
-                    if(x.status.reblog){
+                    if (x.status.reblog) {
                         return x.status.reblog.account.url != accountUrl;
                     } else {
                         return x.status.account.url != accountUrl;
@@ -98,7 +98,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 });
 
                 this.bufferStream = this.bufferStream.filter(x => {
-                    if(x.reblog){
+                    if (x.reblog) {
                         return x.reblog.account.url != accountUrl;
                     } else {
                         return x.account.url != accountUrl;
@@ -157,6 +157,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                             this.bufferStream.push(update.status);
                         }
                     }
+                } else if (update.type === EventEnum.delete) {
+                    this.statuses = this.statuses.filter(x => !(x.status.id === update.messageId && this.account.id === update.account.id));
+                    this.bufferStream = this.bufferStream.filter(x => !(x.id === update.messageId && x.url.replace('https://', '').split('/')[0] === update.account.instance));
                 }
             }
 
