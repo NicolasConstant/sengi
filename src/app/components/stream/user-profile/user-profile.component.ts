@@ -273,4 +273,9 @@ export class UserProfileComponent implements OnInit {
 
         this.maxId = this.statuses[this.statuses.length - 1].status.id;
     }
+
+    openAccount(): boolean {
+        window.open(this.displayedAccount.url, '_blank');
+        return false;
+    }
 }

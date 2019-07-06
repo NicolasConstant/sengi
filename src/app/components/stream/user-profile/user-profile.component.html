@@ -5,7 +5,7 @@
     <div *ngIf="displayedAccount" class="profile-header"
         [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
         <div class="profile-header__inner">
-            <a href (click)="showAvatar(displayedAccount.avatar)" title="open avatar">
+            <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
                 <img class="profile-header__avatar" src="{{displayedAccount.avatar}}" alt="header" />
             </a>
             <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"></h2>
