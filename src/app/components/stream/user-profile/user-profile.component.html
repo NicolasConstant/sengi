@@ -29,7 +29,10 @@
             <div class="profile-header__state" *ngIf="relationship">
                 <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
                 <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
+                <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>
+                <div class="profile-header__state--data" *ngIf="relationship.domain_blocking">domain blocked</div>
                 <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
+                <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications muted</div>
             </div>
 
         </div>
