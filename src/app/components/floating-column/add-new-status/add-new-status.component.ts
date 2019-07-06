@@ -11,6 +11,7 @@ export class AddNewStatusComponent implements OnInit {
 
     @Input() isDirectMention: boolean;
     @Input() userHandle: string;
+    @Input() status: string;
 
     constructor(private readonly navigationService: NavigationService) {
     }

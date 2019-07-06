@@ -30,9 +30,12 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private _status: string = '';
+    @Input('status')
     set status(value: string) {
-        this.countStatusChar(value);
-        this._status = value;
+        if (value) {
+            this.countStatusChar(value);
+            this._status = value;
+        }
     }
     get status(): string {
         return this._status;

@@ -23,6 +23,7 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
 
     isDirectMention: boolean;
     userHandle: string;
+    statusContent: string;
 
     openPanel: string = '';
 
@@ -52,6 +53,7 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
                     } else {
                         this.isDirectMention = event.action === LeftPanelAction.DM;
                         this.userHandle = event.userHandle;
+                        this.statusContent = event.statusContent;
                         this.openPanel = 'createNewStatus';
                     }
                     break;

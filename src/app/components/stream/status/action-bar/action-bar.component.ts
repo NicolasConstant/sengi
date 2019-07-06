@@ -405,12 +405,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 return this.mastodonService.deleteStatus(selectedAccount, status.id);
             })
             .then(() => {
+                if (redraft) {
+                    this.navigationService.redraft(this.displayedStatus.content)
+                }
+
                 const deletedStatus = new StatusWrapper(this.displayedStatus, selectedAccount);
                 this.notificationService.deleteStatus(deletedStatus);
-
-                if (redraft) {
-                    //TODO
-                }
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
