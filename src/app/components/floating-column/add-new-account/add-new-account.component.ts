@@ -13,7 +13,7 @@ import { NotificationService } from '../../../services/notification.service';
     styleUrls: ['./add-new-account.component.scss']
 })
 export class AddNewAccountComponent implements OnInit {
-    private blockList = ['gab.com', 'gab.ai'];
+    private blockList = ['gab.com', 'gab.ai', 'exited.eu', 'cyzed.com'];
 
     @Input() mastodonFullHandle: string;
 
