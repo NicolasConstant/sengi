@@ -8,7 +8,7 @@ import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 
 import { MastodonService } from '../../../../services/mastodon.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { Status, Account } from '../../../../services/models/mastodon.interfaces';
+import { Status, Account, Results } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
@@ -60,7 +60,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     username: string;
     displayedStatus: Status;
-    private fullHandle: string;    
+    private fullHandle: string;
     private loadedAccounts: AccountInfo[];
 
     private favoriteStatePerAccountId: { [id: string]: boolean; } = {};
@@ -96,7 +96,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.displayedStatus = status;
         }
 
-        if(this.displayedStatus.visibility === 'direct'){
+        if (this.displayedStatus.visibility === 'direct') {
             this.isDM = true;
         }
 
@@ -125,7 +125,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.selectedAccounts = accounts.filter(x => x.isSelected);
         this.isProviderSelected = this.selectedAccounts.filter(x => x.id === provider.id).length > 0;
 
-        this.isOwnerSelected = this.selectedAccounts[0].username === this.displayedStatus.account.username 
+        this.isOwnerSelected = this.selectedAccounts[0].username === this.displayedStatus.account.username
             && this.selectedAccounts[0].instance === this.displayedStatus.account.url.replace('https://', '').split('/')[0];
 
         if (status.visibility === 'direct' || status.visibility === 'private') {
@@ -331,7 +331,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     muteConversation(): boolean {
         const selectedAccount = this.selectedAccounts[0];
-        this.mastodonService.muteConversation(selectedAccount, this.displayedStatus.id)
+
+        this.getStatus(selectedAccount)
+            .then((status: Status) => {
+                return this.mastodonService.muteConversation(selectedAccount, status.id)
+            })
             .then((status: Status) => {
                 this.displayedStatus.muted = status.muted;
             })
@@ -344,7 +348,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     unmuteConversation(): boolean {
         const selectedAccount = this.selectedAccounts[0];
-        this.mastodonService.unmuteConversation(selectedAccount, this.displayedStatus.id)
+
+        this.getStatus(selectedAccount)
+            .then((status: Status) => {
+                return this.mastodonService.unmuteConversation(selectedAccount, status.id)
+            })
             .then((status: Status) => {
                 this.displayedStatus.muted = status.muted;
             })
@@ -357,7 +365,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     pinOnProfile(): boolean {
         const selectedAccount = this.selectedAccounts[0];
-        this.mastodonService.pinOnProfile(selectedAccount, this.displayedStatus.id)
+
+        this.getStatus(selectedAccount)
+            .then((status: Status) => {
+                return this.mastodonService.pinOnProfile(selectedAccount, status.id)
+            })
             .then((status: Status) => {
                 this.displayedStatus.pinned = status.pinned;
             })
@@ -370,7 +382,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     unpinFromProfile(): boolean {
         const selectedAccount = this.selectedAccounts[0];
-        this.mastodonService.unpinFromProfile(selectedAccount, this.displayedStatus.id)
+
+        this.getStatus(selectedAccount)
+            .then((status: Status) => {
+                return this.mastodonService.unpinFromProfile(selectedAccount, status.id)
+            })
             .then((status: Status) => {
                 this.displayedStatus.pinned = status.pinned;
             })
@@ -383,9 +399,16 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     delete(redraft: boolean): boolean {
         const selectedAccount = this.selectedAccounts[0];
-        this.mastodonService.deleteStatus(selectedAccount, this.displayedStatus.id)
+
+        this.getStatus(selectedAccount)
+            .then((status: Status) => {
+                return this.mastodonService.deleteStatus(selectedAccount, status.id);
+            })
             .then(() => {
-                if(redraft){
+                const deletedStatus = new StatusWrapper(this.displayedStatus, selectedAccount);
+                this.notificationService.deleteStatus(deletedStatus);
+
+                if (redraft) {
                     //TODO
                 }
             })
@@ -394,5 +417,18 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             });
 
         return false;
+    }
+
+    private getStatus(account: AccountInfo): Promise<Status> {
+        let statusPromise: Promise<Status> = Promise.resolve(this.statusWrapper.status);
+
+        if (account.id !== this.statusWrapper.provider.id) {
+            statusPromise = this.mastodonService.search(account, this.statusWrapper.status.url, true)
+                .then((result: Results) => {
+                    return result.statuses[0];
+                });
+        }
+
+        return statusPromise;
     }
 }

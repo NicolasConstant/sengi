@@ -9,6 +9,7 @@ export class NotificationService {
     public notifactionStream = new Subject<NotificatioData>();
     public newRespondPostedStream = new Subject<NewReplyData>();
     public hideAccountUrlStream = new Subject<string>();
+    public deletedStatusStream = new Subject<StatusWrapper>();
 
     constructor() {
     }
@@ -35,6 +36,10 @@ export class NotificationService {
 
     public hideAccount(account: Account){
         this.hideAccountUrlStream.next(account.url);
+    }
+
+    public deleteStatus(status: StatusWrapper){
+        this.deletedStatusStream.next(status);
     }
 }
 

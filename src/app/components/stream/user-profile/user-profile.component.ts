@@ -47,6 +47,7 @@ export class UserProfileComponent implements OnInit {
     private currentlyUsedAccount: AccountInfo;
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+    private deleteStatusSubscription: Subscription;
 
     @ViewChild('statusstream') public statustream: ElementRef;
 
@@ -83,10 +84,19 @@ export class UserProfileComponent implements OnInit {
                     });
             }
         });
+
+        this.deleteStatusSubscription = this.notificationService.deletedStatusStream.subscribe((status: StatusWrapper) => {
+            if(status){
+                this.statuses = this.statuses.filter(x => {
+                    return !(x.status.url.replace('https://','').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
+                });
+            }
+        });
     }
 
     ngOnDestroy() {
         this.accountSub.unsubscribe();
+        this.deleteStatusSubscription.unsubscribe();
     }
 
     private load(accountName: string) {
