@@ -14,8 +14,21 @@ import { NotificationService } from '../../../services/notification.service';
 })
 export class AddNewAccountComponent implements OnInit {
     private blockList = ['gab.com', 'gab.ai', 'exited.eu', 'cyzed.com'];
+    private comradList = ['juche.town'];
 
-    @Input() mastodonFullHandle: string;
+    private username: string;
+    private instance: string;
+    isComrad: boolean;
+
+    private _mastodonFullHandle: string;
+    @Input()
+    set mastodonFullHandle(value: string) {
+        this._mastodonFullHandle = value;
+        this.checkComrad();
+    }
+    get mastodonFullHandle(): string {
+        return this._mastodonFullHandle;
+    }
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -25,17 +38,34 @@ export class AddNewAccountComponent implements OnInit {
     ngOnInit() {
     }
 
-    onSubmit(): boolean {
+    checkComrad(): any {
         let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
+        this.username = fullHandle[0];
+        this.instance = fullHandle[1];
 
-        const username = fullHandle[0];
-        const instance = fullHandle[1];
+        if (this.username && this.instance) {
+            let cleanInstance = this.instance.replace('http://', '').replace('https://', '').toLowerCase();
+            for (let b of this.comradList) {
+                if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {
+                    this.isComrad = true;
+                    return;
+                }
+            }
+        }
 
-        this.checkBlockList(instance);
+        this.isComrad = false;
+    }
 
-        this.checkAndCreateApplication(instance)
+    onSubmit(): boolean {
+        // let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
+        // const username = fullHandle[0];
+        // const instance = fullHandle[1];
+
+        this.checkBlockList(this.instance);
+
+        this.checkAndCreateApplication(this.instance)
             .then((appData: AppData) => {
-                this.redirectToInstanceAuthPage(username, instance, appData);
+                this.redirectToInstanceAuthPage(this.username, this.instance, appData);
             })
             .catch((err: HttpErrorResponse) => {
                 if (err instanceof HttpErrorResponse) {
@@ -50,10 +80,10 @@ export class AddNewAccountComponent implements OnInit {
         return false;
     }
 
-    private checkBlockList(instance: string){
+    private checkBlockList(instance: string) {
         let cleanInstance = instance.replace('http://', '').replace('https://', '').toLowerCase();
         for (let b of this.blockList) {
-            if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {                
+            if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {
                 let content = '<div style="width:100%; height:100%; background-color: black;"><iframe style="pointer-events: none;" width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&autoplay=1&showinfo=0&controls=0" allow="autoplay; fullscreen"></div>';
 
                 document.open();
