@@ -18,7 +18,7 @@ export class AddNewAccountComponent implements OnInit {
 
     private username: string;
     private instance: string;
-    isComrad: boolean;
+    isComrade: boolean;
 
     private _mastodonFullHandle: string;
     @Input()
@@ -47,13 +47,13 @@ export class AddNewAccountComponent implements OnInit {
             let cleanInstance = this.instance.replace('http://', '').replace('https://', '').toLowerCase();
             for (let b of this.comradList) {
                 if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {
-                    this.isComrad = true;
+                    this.isComrade = true;
                     return;
                 }
             }
         }
 
-        this.isComrad = false;
+        this.isComrade = false;
     }
 
     onSubmit(): boolean {

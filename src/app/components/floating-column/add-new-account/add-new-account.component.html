@@ -1,16 +1,16 @@
-<div class="panel" [class.comrad__background]="isComrad">
-    <h3 class="panel__title" [class.comrad__text]="isComrad">Add new account</h3>
+<div class="panel" [class.comrade__background]="isComrade">
+    <h3 class="panel__title" [class.comrade__text]="isComrade">Add new account</h3>
 
-    <h2 class="comrad__title" *ngIf="isComrad">Welcome Comrad!</h2>
+    <h2 class="comrade__title" *ngIf="isComrade">Welcome Comrade!</h2>
     <form (ngSubmit)="onSubmit()">
-        <label [class.comrad__text]="isComrad">Please provide your <span *ngIf="isComrad">comrad</span> account:</label>
-        <input type="text" class="form-control form-control-sm form-color" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle" [class.comrad__input]="isComrad"
+        <label [class.comrade__text]="isComrade">Please provide your <span *ngIf="isComrade">comrade</span> account:</label>
+        <input type="text" class="form-control form-control-sm form-color" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle" [class.comrade__input]="isComrade"
             placeholder="@nickname@mastodon.social" />
         <br />
-        <button type="submit" class="btn btn-success btn-sm"  [class.comrad__button]="isComrad">Submit</button>
+        <button type="submit" class="btn btn-success btn-sm"  [class.comrade__button]="isComrade">Submit</button>
     </form>
 
-    <div *ngIf="isComrad" class="comrad__video">
+    <div *ngIf="isComrade" class="comrade__video">
         <iframe width="300" height="170" src="https://www.youtube.com/embed/NzBjnoRG7Mo?feature=oembed&autoplay=1&auto_play=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
