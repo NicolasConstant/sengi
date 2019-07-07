@@ -108,6 +108,12 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
+    getStatus(account: AccountInfo, statusId: string): Promise<Status> {
+        const route = `https://${account.instance}${this.apiRoutes.getStatus.replace('{0}', statusId)}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Status>(route, { headers: headers }).toPromise()
+    }
+
     search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results> {
         if (query[0] === '#') query = query.substr(1);
         const route = `https://${account.instance}${this.apiRoutes.search}?q=${query}&resolve=${resolve}`;

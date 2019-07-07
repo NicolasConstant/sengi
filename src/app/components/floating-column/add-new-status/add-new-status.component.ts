@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { NavigationService } from '../../../services/navigation.service';
+import { StatusWrapper } from '../../../models/common.model';
 
 @Component({
     selector: 'app-add-new-status',
@@ -11,7 +12,7 @@ export class AddNewStatusComponent implements OnInit {
 
     @Input() isDirectMention: boolean;
     @Input() userHandle: string;
-    @Input() status: string;
+    @Input() redraftedStatus: StatusWrapper;
 
     constructor(private readonly navigationService: NavigationService) {
     }

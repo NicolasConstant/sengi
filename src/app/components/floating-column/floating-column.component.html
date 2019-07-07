@@ -18,7 +18,7 @@
     <app-add-new-status *ngIf="openPanel === 'createNewStatus'"
         [isDirectMention]="isDirectMention"
         [userHandle]="userHandle"
-        [status]="statusContent"></app-add-new-status>
+        [redraftedStatus]="redraftedStatus"></app-add-new-status>
     <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
     <app-search *ngIf="openPanel === 'search'" 
         (browseAccountEvent)="browseAccount($event)" 

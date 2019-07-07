@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Subscription } from 'rxjs';
 
 import { NavigationService, LeftPanelType, OpenLeftPanelEvent, LeftPanelAction } from '../../services/navigation.service';
 import { AccountWrapper } from '../../models/account.models';
 import { OpenThreadEvent } from '../../services/tools.service';
-import { Subscription } from 'rxjs';
+import { StatusWrapper } from '../../models/common.model';
 
 @Component({
     selector: 'app-floating-column',
@@ -23,7 +24,7 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
 
     isDirectMention: boolean;
     userHandle: string;
-    statusContent: string;
+    redraftedStatus: StatusWrapper;
 
     openPanel: string = '';
 
@@ -53,7 +54,7 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
                     } else {
                         this.isDirectMention = event.action === LeftPanelAction.DM;
                         this.userHandle = event.userHandle;
-                        this.statusContent = event.statusContent;
+                        this.redraftedStatus = event.status;
                         this.openPanel = 'createNewStatus';
                     }
                     break;

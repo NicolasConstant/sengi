@@ -41,6 +41,29 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return this._status;
     }
 
+    @Input('redraftedStatus')
+    set redraftedStatus(value: StatusWrapper) {
+        if (value) {
+            this.status = value.status.content.replace(/<[^>]*>/g, '');
+            this.setVisibilityFromStatus(value.status);
+            this.title = value.status.spoiler_text;
+
+            if (value.status.in_reply_to_id) {
+                this.isSending = true;
+                this.mastodonService.getStatus(value.provider, value.status.in_reply_to_id)
+                    .then((status: Status) => {
+                        this.statusReplyingTo = status;
+                    })
+                    .catch(err => {
+                        this.notificationService.notifyHttpError(err);
+                    })
+                    .then(() => {
+                        this.isSending = false;
+                    });
+            }
+        }
+    }
+
     private maxCharLength: number;
     charCountLeft: number;
     postCounts: number = 1;
@@ -112,20 +135,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.status += `@${mention} `;
             }
 
-            switch (this.statusReplyingTo.visibility) {
-                case 'unlisted':
-                    this.setVisibility(VisibilityEnum.Unlisted);
-                    break;
-                case 'public':
-                    this.setVisibility(VisibilityEnum.Public);
-                    break;
-                case 'private':
-                    this.setVisibility(VisibilityEnum.Private);
-                    break;
-                case 'direct':
-                    this.setVisibility(VisibilityEnum.Direct);
-                    break;
-            }
+            this.setVisibilityFromStatus(this.statusReplyingTo);
 
             this.title = this.statusReplyingTo.spoiler_text;
         } else if (this.replyingUserHandle) {
@@ -194,6 +204,23 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);
             });
+    }
+
+    private setVisibilityFromStatus(status: Status) {
+        switch (status.visibility) {
+            case 'unlisted':
+                this.setVisibility(VisibilityEnum.Unlisted);
+                break;
+            case 'public':
+                this.setVisibility(VisibilityEnum.Public);
+                break;
+            case 'private':
+                this.setVisibility(VisibilityEnum.Private);
+                break;
+            case 'direct':
+                this.setVisibility(VisibilityEnum.Direct);
+                break;
+        }
     }
 
     private setVisibility(defaultPrivacy: VisibilityEnum) {

@@ -406,7 +406,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             })
             .then(() => {
                 if (redraft) {
-                    this.navigationService.redraft(this.displayedStatus.content)
+                    this.navigationService.redraft(this.statusWrapper)
                 }
 
                 const deletedStatus = new StatusWrapper(this.displayedStatus, selectedAccount);
