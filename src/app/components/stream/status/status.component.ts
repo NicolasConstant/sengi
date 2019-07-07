@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { faStar, faRetweet, faList } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
-import { TrustedString } from '@angular/core/src/sanitization/bypass';
 
 @Component({
     selector: "app-status",
@@ -19,6 +18,7 @@ export class StatusComponent implements OnInit {
     faStar = faStar;
     faRetweet = faRetweet;
     faList = faList;
+    faThumbtack = faThumbtack;
 
     displayedStatus: Status;
     displayedStatusWrapper: StatusWrapper;

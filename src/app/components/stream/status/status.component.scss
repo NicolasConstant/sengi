@@ -1,5 +1,19 @@
 @import "variables";
 @import "commons";
+
+.status-wrapper {
+    position: relative;
+}
+
+.pinned {
+    &__icon{
+        color: $status-secondary-color;
+    }
+    &__label{
+        color: $status-secondary-color;
+    }
+}
+
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;

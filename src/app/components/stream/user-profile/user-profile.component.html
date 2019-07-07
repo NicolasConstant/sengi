@@ -59,9 +59,19 @@
                 no toots found
             </div>
 
+            <div *ngFor="let statusWrapper of pinnedStatuses">
+                <app-status [statusWrapper]="statusWrapper" 
+                    (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)" 
+                    (browseThreadEvent)="browseThread($event)">
+                </app-status>
+            </div>
+
             <div *ngFor="let statusWrapper of statuses">
-                <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                    (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                <app-status [statusWrapper]="statusWrapper" 
+                    (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)" 
+                    (browseThreadEvent)="browseThread($event)">
                 </app-status>
             </div>
 
