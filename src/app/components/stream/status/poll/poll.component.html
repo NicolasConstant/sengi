@@ -2,7 +2,7 @@
     <div *ngIf="!poll.voted && !poll.expired">
         <div *ngFor="let o of options">
             <label class="poll__container">
-                <span class="poll__container__title">{{o.title}}</span>
+                <span class="poll__container__title" title="{{o.title}}">{{o.title}}</span>
                 <input class="poll__container__input" type="{{choiceType}}" name="{{pollName}}" value="{{o.title}}"
                     (change)="onSelectionChange(o)">
                 <span class="poll__container__checkmark" *ngIf="!pollLocked"
@@ -16,7 +16,7 @@
             <div class="poll__result" title="{{ o.votes_count }} votes">
                 <div class="poll__result--progress-bar" [style.width]="o.percentage + '%'" [ngClass]="{ 'poll__result--progress-bar--most-votes': o.isMax }"></div>
                 <div class="poll__result--data"> <span class="poll__result--percentage">{{ o.percentage }}%</span>
-                <span class="poll__container__title">{{o.title}}</span></div>
+                <span class="poll__container__title" title="{{o.title}}">{{o.title}}</span></div>
 
             </div>
         </div>
