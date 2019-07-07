@@ -5,15 +5,6 @@
     position: relative;
 }
 
-.pinned {
-    &__icon{
-        color: $status-secondary-color;
-    }
-    &__label{
-        color: $status-secondary-color;
-    }
-}
-
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;
@@ -244,4 +235,16 @@
 
 .favorite {
     color: $favorite-color;
+}
+
+.pinned {
+    &__icon{
+        position: absolute;
+        top: 2px;
+        color: $status-secondary-color;
+        font-size: 12px;
+    }
+    &__label{
+        color: $status-secondary-color;
+    }
 }
