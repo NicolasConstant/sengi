@@ -91,6 +91,8 @@ export class PollComponent implements OnInit {
 
             this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.statusWrapper.status, this.statusWrapper.provider))
                 .then((status: Status) => {
+                    if(status.poll === null) return null;
+
                     return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
                 })
                 .then((poll: Poll) => {

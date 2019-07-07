@@ -79,6 +79,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
         this.streamsSubscription = this.streams$.subscribe((streams: StreamElement[]) => {
             let updatedStream = streams.find(x => x.id === this.streamElement.id);
+            if(!updatedStream) return;
 
             if (this.hideBoosts !== updatedStream.hideBoosts
                 || this.hideBots !== updatedStream.hideBots
