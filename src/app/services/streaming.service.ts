@@ -45,7 +45,11 @@ export class StreamingWrapper {
 
     private start(route: string) {
         this.eventSource = new WebSocket(route);
-        this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
+        this.eventSource.onmessage = x => {
+            if (x.data !== '') {
+                this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
+            }
+        }
         this.eventSource.onerror = x => this.webSocketGotError(x);
         this.eventSource.onopen = x => { };
         this.eventSource.onclose = x => this.webSocketClosed(route, x);

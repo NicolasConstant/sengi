@@ -1,4 +1,4 @@
-<div class="poll">
+<div class="poll" *ngIf="poll">
     <div *ngIf="!poll.voted && !poll.expired">
         <div *ngFor="let o of options">
             <label class="poll__container">

@@ -30,6 +30,8 @@ export class PollComponent implements OnInit {
     private _poll: Poll;
     @Input('poll')
     set poll(value: Poll) {
+        if(!value) return;
+
         this._poll = value;
 
         this.pollName = this.poll.id;
