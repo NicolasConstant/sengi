@@ -179,7 +179,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         } else {
             this.getDefaultPrivacy();
         }
-        this.status = `@${this.replyingUserHandle} `;
+        this.status = `${this.replyingUserHandle} `;
         this.countStatusChar(this.status);
 
         this.focus();
