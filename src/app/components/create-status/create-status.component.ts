@@ -44,7 +44,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
-            this.status = value.status.content.replace(/<[^>]*>/g, '');
+            let parser = new DOMParser();
+            var dom = parser.parseFromString(value.status.content, 'text/html')
+            this.status = dom.body.textContent;
+            
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
 
@@ -52,7 +55,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.isSending = true;
                 this.mastodonService.getStatus(value.provider, value.status.in_reply_to_id)
                     .then((status: Status) => {
-                        this.statusReplyingTo = status;
+                        this.statusReplyingToWrapper = new StatusWrapper(status, value.provider);
+
+                        const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
+                        for (const mention of mentions) {
+                            const name = `@${mention.split('@')[0]}`;
+                            if(this.status.includes(name)){
+                                this.status = this.status.replace(name, `@${mention}`);
+                            } else {
+                                this.status = `@${mention} ` + this.status;
+                            }
+                        }
+
                     })
                     .catch(err => {
                         this.notificationService.notifyHttpError(err);
