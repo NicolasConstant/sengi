@@ -13,8 +13,8 @@ import { NotificationService } from '../../../services/notification.service';
     styleUrls: ['./add-new-account.component.scss']
 })
 export class AddNewAccountComponent implements OnInit {
-    private blockList = ['gab.com', 'gab.ai', 'exited.eu', 'cyzed.com'];
-    private comradList = ['juche.town'];
+    private blockList = ['gab.com', 'gab.ai', 'cyzed.com'];
+    private comradeList = ['juche.town'];
 
     private username: string;
     private instance: string;
@@ -45,7 +45,7 @@ export class AddNewAccountComponent implements OnInit {
 
         if (this.username && this.instance) {
             let cleanInstance = this.instance.replace('http://', '').replace('https://', '').toLowerCase();
-            for (let b of this.comradList) {
+            for (let b of this.comradeList) {
                 if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {
                     this.isComrade = true;
                     return;
