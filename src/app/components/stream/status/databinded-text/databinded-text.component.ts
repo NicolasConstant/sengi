@@ -159,50 +159,57 @@ export class DatabindedTextComponent implements OnInit {
     ngAfterViewInit() {
         for (const hashtag of this.hashtags) {
             let classname = this.getClassNameForHastag(hashtag);
-            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
+            let els = <Element[]>this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-            this.renderer.listen(el, 'click', (event) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
+            for (const el of els) {
+                this.renderer.listen(el, 'click', (event) => {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
 
-                this.selectHashtag(hashtag);
-                return false;
-            });
+                    this.selectHashtag(hashtag);
+                    return false;
+                });
+            }
         }
 
         for (const account of this.accounts) {
             let classname = this.getClassNameForAccount(account);
-            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
+            let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-            this.renderer.listen(el, 'click', (event) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
+            for (const el of els) {
+                this.renderer.listen(el, 'click', (event) => {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
 
-                this.selectAccount(account);
-                return false;
-            });
+                    this.selectAccount(account);
+                    return false;
+                });
+            }
         }
 
         for (const link of this.links) {
             let classname = this.getClassNameForLink(link);
-            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
-            this.renderer.listen(el, 'click', (event) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
+            let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-                window.open(link, '_blank');
-                return false;
-            });
-
-            this.renderer.listen(el, 'mouseup', (event) => {
-                if (event.which === 2) {
+            for (const el of els) {
+                this.renderer.listen(el, 'click', (event) => {
                     event.preventDefault();
                     event.stopImmediatePropagation();
 
                     window.open(link, '_blank');
                     return false;
-                }
-            });
+                });
+
+                this.renderer.listen(el, 'mouseup', (event) => {
+                    if (event.which === 2) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+
+                        window.open(link, '_blank');
+                        return false;
+                    }
+                });
+            }
         }
     }
 

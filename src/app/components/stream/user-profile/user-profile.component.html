@@ -5,7 +5,7 @@
     <div *ngIf="displayedAccount" class="profile-header"
         [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
         <div class="profile-header__inner">
-            <a href (click)="showAvatar(displayedAccount.avatar)" title="open avatar">
+            <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
                 <img class="profile-header__avatar" src="{{displayedAccount.avatar}}" alt="header" />
             </a>
             <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"></h2>
@@ -29,7 +29,10 @@
             <div class="profile-header__state" *ngIf="relationship">
                 <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
                 <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
+                <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>
+                <div class="profile-header__state--data" *ngIf="relationship.domain_blocking">domain blocked</div>
                 <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
+                <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications muted</div>
             </div>
 
         </div>
@@ -56,9 +59,19 @@
                 no toots found
             </div>
 
+            <div *ngFor="let statusWrapper of pinnedStatuses">
+                <app-status [statusWrapper]="statusWrapper" 
+                    (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)" 
+                    (browseThreadEvent)="browseThread($event)">
+                </app-status>
+            </div>
+
             <div *ngFor="let statusWrapper of statuses">
-                <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                    (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                <app-status [statusWrapper]="statusWrapper" 
+                    (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)" 
+                    (browseThreadEvent)="browseThread($event)">
                 </app-status>
             </div>
 

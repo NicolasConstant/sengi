@@ -13,6 +13,8 @@ export class ApiRoutes {
     unblock = '/api/v1/accounts/{0}/unblock';
     mute = '/api/v1/accounts/{0}/mute';
     unmute = '/api/v1/accounts/{0}/unmute';
+    muteStatus = '/api/v1/statuses/{0}/mute';
+    unmuteStatus = '/api/v1/statuses/{0}/unmute';
     getAccountRelationships = '/api/v1/accounts/relationships';
     searchForAccounts = '/api/v1/accounts/search';
     getBlocks = '/api/v1/blocks';
@@ -43,6 +45,8 @@ export class ApiRoutes {
     unreblogStatus = '/api/v1/statuses/{0}/unreblog';
     favouritingStatus = '/api/v1/statuses/{0}/favourite';
     unfavouritingStatus = '/api/v1/statuses/{0}/unfavourite';
+    pinStatus = '/api/v1/statuses/{0}/pin';
+    unpinStatus = '/api/v1/statuses/{0}/unpin';
     getHomeTimeline = '/api/v1/timelines/home';
     getPublicTimeline = '/api/v1/timelines/public';
     getHastagTimeline = '/api/v1/timelines/tag/{0}';

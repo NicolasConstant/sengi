@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { AccountWrapper } from '../models/account.models';
-import { OpenMediaEvent } from '../models/common.model';
+import { OpenMediaEvent, StatusWrapper } from '../models/common.model';
 
 @Injectable()
 export class NavigationService {
@@ -36,6 +36,11 @@ export class NavigationService {
         this.activatedPanelSubject.next(newEvent);
     }
 
+    redraft(status: StatusWrapper){
+        const newEvent = new OpenLeftPanelEvent(LeftPanelType.CreateNewStatus, LeftPanelAction.Redraft, null, status);// statusContent.replace(/<[^>]*>/g, ''));
+        this.activatedPanelSubject.next(newEvent);
+    }
+
     columnSelected(index: number): void {
         this.columnSelectedSubject.next(index);
     }
@@ -53,14 +58,16 @@ export class OpenLeftPanelEvent {
     constructor(
         public type: LeftPanelType,
         public action: LeftPanelAction = LeftPanelAction.None,
-        public userHandle: string = null ) {
+        public userHandle: string = null,
+        public status: StatusWrapper = null) {
     }
 }
 
 export enum LeftPanelAction {
     None = 0,
     DM = 1,
-    Mention = 2
+    Mention = 2,
+    Redraft = 3,
 }
 
 export enum LeftPanelType {

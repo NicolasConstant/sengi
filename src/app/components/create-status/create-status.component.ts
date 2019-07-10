@@ -30,12 +30,52 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private _status: string = '';
+    @Input('status')
     set status(value: string) {
-        this.countStatusChar(value);
-        this._status = value;
+        if (value) {
+            this.countStatusChar(value);
+            this._status = value;
+        }
     }
     get status(): string {
         return this._status;
+    }
+
+    @Input('redraftedStatus')
+    set redraftedStatus(value: StatusWrapper) {
+        if (value) {
+            let parser = new DOMParser();
+            var dom = parser.parseFromString(value.status.content, 'text/html')
+            this.status = dom.body.textContent;
+            
+            this.setVisibilityFromStatus(value.status);
+            this.title = value.status.spoiler_text;
+
+            if (value.status.in_reply_to_id) {
+                this.isSending = true;
+                this.mastodonService.getStatus(value.provider, value.status.in_reply_to_id)
+                    .then((status: Status) => {
+                        this.statusReplyingToWrapper = new StatusWrapper(status, value.provider);
+
+                        const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
+                        for (const mention of mentions) {
+                            const name = `@${mention.split('@')[0]}`;
+                            if(this.status.includes(name)){
+                                this.status = this.status.replace(name, `@${mention}`);
+                            } else {
+                                this.status = `@${mention} ` + this.status;
+                            }
+                        }
+
+                    })
+                    .catch(err => {
+                        this.notificationService.notifyHttpError(err);
+                    })
+                    .then(() => {
+                        this.isSending = false;
+                    });
+            }
+        }
     }
 
     private maxCharLength: number;
@@ -51,8 +91,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _isDirectMention: boolean;
     @Input('isDirectMention')
     set isDirectMention(value: boolean) {
-        this._isDirectMention = value;
-        this.initMention();
+        if (value) {
+            this._isDirectMention = value;
+            this.initMention();
+        }
     }
     get isDirectMention(): boolean {
         return this._isDirectMention;
@@ -61,8 +103,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _replyingUserHandle: string;
     @Input('replyingUserHandle')
     set replyingUserHandle(value: string) {
-        this._replyingUserHandle = value;
-        this.initMention();
+        if (value) {
+            this._replyingUserHandle = value;
+            this.initMention();
+        }
     }
     get replyingUserHandle(): string {
         return this._replyingUserHandle;
@@ -92,7 +136,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.accountChanged(accounts);
         });
         this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
-        
+
         if (this.statusReplyingToWrapper) {
             if (this.statusReplyingToWrapper.status.reblog) {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status.reblog;
@@ -105,20 +149,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.status += `@${mention} `;
             }
 
-            switch (this.statusReplyingTo.visibility) {
-                case 'unlisted':
-                    this.setVisibility(VisibilityEnum.Unlisted);
-                    break;
-                case 'public':
-                    this.setVisibility(VisibilityEnum.Public);
-                    break;
-                case 'private':
-                    this.setVisibility(VisibilityEnum.Private);
-                    break;
-                case 'direct':
-                    this.setVisibility(VisibilityEnum.Direct);
-                    break;
-            }
+            this.setVisibilityFromStatus(this.statusReplyingTo);
 
             this.title = this.statusReplyingTo.spoiler_text;
         } else if (this.replyingUserHandle) {
@@ -148,7 +179,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         } else {
             this.getDefaultPrivacy();
         }
-        this.status = `@${this.replyingUserHandle} `;
+        this.status = `${this.replyingUserHandle} `;
         this.countStatusChar(this.status);
 
         this.focus();
@@ -187,6 +218,23 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);
             });
+    }
+
+    private setVisibilityFromStatus(status: Status) {
+        switch (status.visibility) {
+            case 'unlisted':
+                this.setVisibility(VisibilityEnum.Unlisted);
+                break;
+            case 'public':
+                this.setVisibility(VisibilityEnum.Public);
+                break;
+            case 'private':
+                this.setVisibility(VisibilityEnum.Private);
+                break;
+            case 'direct':
+                this.setVisibility(VisibilityEnum.Direct);
+                break;
+        }
     }
 
     private setVisibility(defaultPrivacy: VisibilityEnum) {

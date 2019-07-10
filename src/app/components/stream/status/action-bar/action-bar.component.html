@@ -39,21 +39,36 @@
             Copy link to status
         </ng-template>
         <ng-template contextMenuItem divider="true"></ng-template>
-        <ng-template contextMenuItem (execute)="mentionAccount()">
+        <ng-template contextMenuItem (execute)="mentionAccount()" *ngIf="!isOwnerSelected">
             Mention @{{ this.username }}
         </ng-template>
-        <ng-template contextMenuItem (execute)="dmAccount()">
+        <ng-template contextMenuItem (execute)="dmAccount()" *ngIf="!isOwnerSelected">
             Direct message @{{ this.username }}
         </ng-template>
+        <ng-template contextMenuItem (execute)="muteConversation()" *ngIf="isOwnerSelected && !displayedStatus.muted">
+            Mute conversation
+        </ng-template>
+        <ng-template contextMenuItem (execute)="unmuteConversation()" *ngIf="isOwnerSelected && displayedStatus.muted">
+            Unmute conversation
+        </ng-template>
         <ng-template contextMenuItem divider="true"></ng-template>
-        <ng-template contextMenuItem (execute)="muteAccount()">
+        <ng-template contextMenuItem (execute)="muteAccount()" *ngIf="!isOwnerSelected">
             Mute @{{ this.username }}
         </ng-template>
-        <ng-template contextMenuItem (execute)="blockAccount()">
+        <ng-template contextMenuItem (execute)="blockAccount()" *ngIf="!isOwnerSelected">
             Block @{{ this.username }}
         </ng-template>
-        <!-- <ng-template contextMenuItem (execute)="showMessage('Hi, ' + $event.item.name)">
-            Mute @account
-        </ng-template> -->
+        <ng-template contextMenuItem (execute)="pinOnProfile()" *ngIf="isOwnerSelected && !displayedStatus.pinned && displayedStatus.visibility === 'public'">
+            Pin on profile
+        </ng-template>
+        <ng-template contextMenuItem (execute)="unpinFromProfile()" *ngIf="isOwnerSelected && displayedStatus.pinned && displayedStatus.visibility === 'public'">
+            Unpin from profile
+        </ng-template>
+        <ng-template contextMenuItem (execute)="delete(false)" *ngIf="isOwnerSelected">
+            Delete
+        </ng-template>
+        <ng-template contextMenuItem (execute)="delete(true)" *ngIf="isOwnerSelected">
+            Delete & re-draft
+        </ng-template>
     </context-menu>
 </div>

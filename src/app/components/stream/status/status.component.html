@@ -1,16 +1,25 @@
-<div [class.direct-message]="isDirectMessage">
+<div class="status-wrapper" [class.direct-message]="isDirectMessage">
     <div class="reblog" *ngIf="reblog">
         <a class="reblog__profile-link" href (click)="openAccount(status.account)"
             (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img
                 *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
+    </div>
+    <div *ngIf="statusWrapper.status.pinned" class="pinned">
+        <div class="notification--icon">
+            <fa-icon class="pinned__icon" [icon]="faThumbtack"></fa-icon>
+        </div>
+        <div class="notification--label pinned__label">
+            Pinned
+        </div>
     </div>
     <div *ngIf="notificationType === 'favourite'">
         <div class="notification--icon">
             <fa-icon class="favorite" [icon]="faStar"></fa-icon>
         </div>
         <div class="notification--label">
-            <a href class="notification--link" (click)="openAccount(notificationAccount)"
-                innerHTML="{{ notificationAccount  | accountEmoji }}"></a> favorited your status
+            <a href class="notification--link" title="open account" (click)="openAccount(notificationAccount)"
+                (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount  | accountEmoji }}"></a>
+            favorited your status
         </div>
     </div>
     <div *ngIf="notificationType === 'reblog'">
@@ -18,8 +27,9 @@
             <fa-icon class="boost" [icon]="faRetweet"></fa-icon>
         </div>
         <div class="notification--label">
-            <a href class="notification--link" (click)="openAccount(notificationAccount)"
-                innerHTML="{{ notificationAccount | accountEmoji }}"></a> boosted your status
+            <a href class="notification--link" title="open account" (click)="openAccount(notificationAccount)"
+                (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount | accountEmoji }}"></a>
+            boosted your status
         </div>
     </div>
     <div *ngIf="notificationType === 'poll'">
