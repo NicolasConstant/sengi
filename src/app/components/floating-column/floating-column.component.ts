@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Subscription } from 'rxjs';
 
-import { NavigationService, LeftPanelType } from '../../services/navigation.service';
+import { NavigationService, LeftPanelType, OpenLeftPanelEvent, LeftPanelAction } from '../../services/navigation.service';
 import { AccountWrapper } from '../../models/account.models';
 import { OpenThreadEvent } from '../../services/tools.service';
-import { Subscription } from 'rxjs';
+import { StatusWrapper } from '../../models/common.model';
 
 @Component({
     selector: 'app-floating-column',
@@ -21,6 +22,10 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
 
     userAccountUsed: AccountWrapper;
 
+    isDirectMention: boolean;
+    userHandle: string;
+    redraftedStatus: StatusWrapper;
+
     openPanel: string = '';
 
     private activatedPanelSub: Subscription;
@@ -28,9 +33,11 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
     constructor(private readonly navigationService: NavigationService) { }
 
     ngOnInit() {
-        this.activatedPanelSub = this.navigationService.activatedPanelSubject.subscribe((type: LeftPanelType) => {
+        this.activatedPanelSub = this.navigationService.activatedPanelSubject.subscribe((event: OpenLeftPanelEvent) => {
+            this.isDirectMention = false;
+            this.userHandle = null;
             this.overlayActive = false;
-            switch (type) {
+            switch (event.type) {
                 case LeftPanelType.Closed:
                     this.openPanel = '';
                     break;
@@ -42,9 +49,12 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
                     }
                     break;
                 case LeftPanelType.CreateNewStatus:
-                    if (this.openPanel === 'createNewStatus') {
+                    if (this.openPanel === 'createNewStatus' && !event.userHandle) {
                         this.closePanel();
                     } else {
+                        this.isDirectMention = event.action === LeftPanelAction.DM;
+                        this.userHandle = event.userHandle;
+                        this.redraftedStatus = event.status;
                         this.openPanel = 'createNewStatus';
                     }
                     break;

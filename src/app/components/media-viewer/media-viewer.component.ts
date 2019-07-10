@@ -4,7 +4,7 @@ import { faTimes, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-
 import { Subject } from 'rxjs';
 
 import { OpenMediaEvent } from '../../models/common.model';
-import { Attachment } from '../../services/models/mastodon.interfaces';
+import { Attachment, PleromaAttachment } from '../../services/models/mastodon.interfaces';
 
 
 @Component({
@@ -136,6 +136,7 @@ class AttachmentsWrapper implements Attachment {
         this.text_url = attachment.text_url;
         this.meta = attachment.meta;
         this.description = attachment.description;
+        this.pleroma = attachment.pleroma;
 
         this.index = index;
     }
@@ -148,6 +149,7 @@ class AttachmentsWrapper implements Attachment {
     text_url: string;
     meta: any;
     description: string;  
-    
+    pleroma: PleromaAttachment;
+
     index: number;
 }

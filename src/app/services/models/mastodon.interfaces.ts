@@ -78,6 +78,12 @@ export interface Attachment {
     text_url: string;
     meta: any;
     description: string;
+
+    pleroma: PleromaAttachment;
+}
+
+export interface PleromaAttachment {
+    mime_type: string;
 }
 
 export interface Card {
@@ -134,9 +140,14 @@ export interface Relationship {
     id: number;
     following: boolean;
     followed_by: boolean;
+    blocked_by: boolean;    
     blocking: boolean;
+    domain_blocking: boolean;
     muting: boolean;
+    muting_notifications: boolean;
     requested: boolean;
+    showing_reblogs: boolean;
+    endorsed: boolean;
 }
 
 export interface Report {
@@ -175,8 +186,9 @@ export interface Status {
     emojis: Emoji[];
     language: string;
     pinned: boolean;
+    muted: boolean;
     card: Card;
-    poll: Poll;
+    poll: Poll;    
 
     pleroma: PleromaStatusInfo;
 }

@@ -49,8 +49,9 @@ export class ToolsService {
                 if(accountName[0] === '@') accountName = accountName.substr(1);
 
                 const foundAccount = result.accounts.find(
-                    x => x.acct.toLowerCase() === accountName.toLowerCase()
-                    || x.acct.toLowerCase().split('@')[0] === accountName.toLowerCase().split('@')[0]
+                    x => (x.acct.toLowerCase() === accountName.toLowerCase()
+                    || x.acct.toLowerCase().split('@')[0] === accountName.toLowerCase().split('@')[0])
+                    && x.url.replace('https://', '').split('/')[0] === accountName.toLowerCase().split('@')[1]
                     );
                 return foundAccount;
             });

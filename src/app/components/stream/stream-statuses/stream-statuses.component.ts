@@ -59,6 +59,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     private goToTopSubscription: Subscription;
     private streamsSubscription: Subscription;
+    private hideAccountSubscription: Subscription;
     private streams$: Observable<StreamElement[]>;
 
     constructor(
@@ -78,11 +79,32 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
         this.streamsSubscription = this.streams$.subscribe((streams: StreamElement[]) => {
             let updatedStream = streams.find(x => x.id === this.streamElement.id);
-            
+            if(!updatedStream) return;
+
             if (this.hideBoosts !== updatedStream.hideBoosts
                 || this.hideBots !== updatedStream.hideBots
                 || this.hideReplies !== updatedStream.hideReplies) {
                 this.streamElement = updatedStream;
+            }
+        });
+
+        this.hideAccountSubscription = this.notificationService.hideAccountUrlStream.subscribe((accountUrl: string) => {
+            if (accountUrl) {
+                this.statuses = this.statuses.filter(x => {
+                    if (x.status.reblog) {
+                        return x.status.reblog.account.url != accountUrl;
+                    } else {
+                        return x.status.account.url != accountUrl;
+                    }
+                });
+
+                this.bufferStream = this.bufferStream.filter(x => {
+                    if (x.reblog) {
+                        return x.reblog.account.url != accountUrl;
+                    } else {
+                        return x.account.url != accountUrl;
+                    }
+                });
             }
         });
     }
@@ -90,6 +112,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
         if (this.streamsSubscription) this.streamsSubscription.unsubscribe();
+        if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
     }
 
     refresh(): any {
@@ -135,6 +158,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                             this.bufferStream.push(update.status);
                         }
                     }
+                } else if (update.type === EventEnum.delete) {
+                    this.statuses = this.statuses.filter(x => !(x.status.id === update.messageId && this.account.id === update.account.id));
+                    this.bufferStream = this.bufferStream.filter(x => !(x.id === update.messageId && x.url.replace('https://', '').split('/')[0] === update.account.instance));
                 }
             }
 

@@ -134,6 +134,11 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         return false;
     }
     
+    openUrl(url: string): boolean {
+        window.open(url, '_blank');
+        return false;
+    }
+
     browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
     }

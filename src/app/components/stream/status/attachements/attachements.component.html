@@ -81,7 +81,7 @@
 </div>
 <div *ngIf="isAudio">
     <audio controls class="audio">
-        <source src="{{ attachments[0].url }}" type="audio/{{ attachments[0].meta.audio_encode }}">
+        <source src="{{ attachments[0].url }}" type="{{ audioType }}">
         Your browser does not support the audio element.
     </audio>
 </div>

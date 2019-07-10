@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {         
+export class MastodonService {            
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -106,6 +106,12 @@ export class MastodonService {
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
+    }
+
+    getStatus(account: AccountInfo, statusId: string): Promise<Status> {
+        const route = `https://${account.instance}${this.apiRoutes.getStatus.replace('{0}', statusId)}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Status>(route, { headers: headers }).toPromise()
     }
 
     search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results> {
@@ -319,7 +325,49 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.getPoll}`.replace('{0}', pollId);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Poll>(route, { headers: headers }).toPromise();
-    }  
+    }
+
+    mute(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.mute}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    block(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.block}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    pinOnProfile(account: AccountInfo, statusId: string): Promise<Status> {
+        let route = `https://${account.instance}${this.apiRoutes.pinStatus}`.replace('{0}', statusId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise();
+    }
+
+    unpinFromProfile(account: AccountInfo, statusId: string): Promise<Status> {
+        let route = `https://${account.instance}${this.apiRoutes.unpinStatus}`.replace('{0}', statusId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise();
+    }
+
+    muteConversation(account: AccountInfo, statusId: string): Promise<Status> {
+        let route = `https://${account.instance}${this.apiRoutes.muteStatus}`.replace('{0}', statusId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise();
+    }
+  
+    unmuteConversation(account: AccountInfo, statusId: string): Promise<Status> {
+        let route = `https://${account.instance}${this.apiRoutes.unmuteStatus}`.replace('{0}', statusId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise();
+    }
+
+    deleteStatus(account: AccountInfo, statusId: string): Promise<any> {
+        let route = `https://${account.instance}${this.apiRoutes.deleteStatus}`.replace('{0}', statusId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.delete<any>(route, { headers: headers }).toPromise();
+    }   
 }
 
 export enum VisibilityEnum {

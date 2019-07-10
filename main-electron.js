@@ -19,12 +19,20 @@ function createWindow() {
     });
 
     var server = http.createServer(requestHandler).listen(9527);
-    win.loadURL("http://localhost:9527");
+    const sengiUrl = "http://localhost:9527";
+    win.loadURL(sengiUrl);
 
     const template = [
         {
             label: "View",
             submenu: [
+                {
+                    label: "Return on Sengi",
+                    click() {
+                        win.loadURL(sengiUrl);
+                    }
+                },
+                { type: "separator" },
                 { role: "reload" },
                 { role: "forcereload" },
                 { type: "separator" },
@@ -75,7 +83,17 @@ function createWindow() {
                 },
                 {
                     label: "View",
-                    submenu: [{ role: "reload" }, { role: "forcereload" }]
+                    submenu: [
+                        {
+                            label: "Return on Sengi",
+                            click() {
+                                win.loadURL(sengiUrl);
+                            }
+                        },
+                        { type: "separator" },
+                        { role: "reload" }, 
+                        { role: "forcereload" }
+                    ]
                 },
                 {
                     role: "help",

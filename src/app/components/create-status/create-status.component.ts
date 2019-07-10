@@ -21,7 +21,7 @@ import { identifierModuleUrl } from '@angular/compiler';
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
     private _title: string;
-    set title(value: string){
+    set title(value: string) {
         this._title = value;
         this.countStatusChar(this.status);
     }
@@ -30,12 +30,52 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private _status: string = '';
+    @Input('status')
     set status(value: string) {
-        this.countStatusChar(value);
-        this._status = value;
+        if (value) {
+            this.countStatusChar(value);
+            this._status = value;
+        }
     }
     get status(): string {
         return this._status;
+    }
+
+    @Input('redraftedStatus')
+    set redraftedStatus(value: StatusWrapper) {
+        if (value) {
+            let parser = new DOMParser();
+            var dom = parser.parseFromString(value.status.content, 'text/html')
+            this.status = dom.body.textContent;
+            
+            this.setVisibilityFromStatus(value.status);
+            this.title = value.status.spoiler_text;
+
+            if (value.status.in_reply_to_id) {
+                this.isSending = true;
+                this.mastodonService.getStatus(value.provider, value.status.in_reply_to_id)
+                    .then((status: Status) => {
+                        this.statusReplyingToWrapper = new StatusWrapper(status, value.provider);
+
+                        const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
+                        for (const mention of mentions) {
+                            const name = `@${mention.split('@')[0]}`;
+                            if(this.status.includes(name)){
+                                this.status = this.status.replace(name, `@${mention}`);
+                            } else {
+                                this.status = `@${mention} ` + this.status;
+                            }
+                        }
+
+                    })
+                    .catch(err => {
+                        this.notificationService.notifyHttpError(err);
+                    })
+                    .then(() => {
+                        this.isSending = false;
+                    });
+            }
+        }
     }
 
     private maxCharLength: number;
@@ -48,6 +88,30 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
 
+    private _isDirectMention: boolean;
+    @Input('isDirectMention')
+    set isDirectMention(value: boolean) {
+        if (value) {
+            this._isDirectMention = value;
+            this.initMention();
+        }
+    }
+    get isDirectMention(): boolean {
+        return this._isDirectMention;
+    }
+
+    private _replyingUserHandle: string;
+    @Input('replyingUserHandle')
+    set replyingUserHandle(value: string) {
+        if (value) {
+            this._replyingUserHandle = value;
+            this.initMention();
+        }
+    }
+    get replyingUserHandle(): string {
+        return this._replyingUserHandle;
+    }
+
     private statusReplyingTo: Status;
 
     selectedPrivacy = 'Public';
@@ -55,6 +119,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+    private selectedAccount: AccountInfo;
 
     constructor(
         private readonly store: Store,
@@ -70,6 +135,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.accountChanged(accounts);
         });
+        this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
 
         if (this.statusReplyingToWrapper) {
             if (this.statusReplyingToWrapper.status.reblog) {
@@ -83,43 +149,52 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.status += `@${mention} `;
             }
 
-            switch (this.statusReplyingTo.visibility) {
-                case 'unlisted':
-                    this.setVisibility(VisibilityEnum.Unlisted);
-                    break;
-                case 'public':
-                    this.setVisibility(VisibilityEnum.Public);
-                    break;
-                case 'private':
-                    this.setVisibility(VisibilityEnum.Private);
-                    break;
-                case 'direct':
-                    this.setVisibility(VisibilityEnum.Direct);
-                    break;
-            }
+            this.setVisibilityFromStatus(this.statusReplyingTo);
 
             this.title = this.statusReplyingTo.spoiler_text;
+        } else if (this.replyingUserHandle) {
+            this.initMention();
         }
 
-        setTimeout(() => {
-            this.replyElement.nativeElement.focus();
-        }, 0);
+        this.focus();
     }
 
     ngOnDestroy() {
         this.accountSub.unsubscribe();
     }
 
+    private focus() {
+        setTimeout(() => {
+            this.replyElement.nativeElement.focus();
+        }, 0);
+    }
+
+    private initMention() {
+        if (!this.selectedAccount) {
+            this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
+        }
+
+        if (this.isDirectMention) {
+            this.setVisibility(VisibilityEnum.Direct);
+        } else {
+            this.getDefaultPrivacy();
+        }
+        this.status = `${this.replyingUserHandle} `;
+        this.countStatusChar(this.status);
+
+        this.focus();
+    }
+
     private accountChanged(accounts: AccountInfo[]): void {
         if (accounts && accounts.length > 0) {
-            const selectedAccount = accounts.filter(x => x.isSelected)[0];
+            this.selectedAccount = accounts.filter(x => x.isSelected)[0];
 
-            const settings = this.toolsService.getAccountSettings(selectedAccount);
+            const settings = this.toolsService.getAccountSettings(this.selectedAccount);
             if (settings.customStatusCharLengthEnabled) {
                 this.maxCharLength = settings.customStatusCharLength;
                 this.countStatusChar(this.status);
             } else {
-                this.instancesInfoService.getMaxStatusChars(selectedAccount.instance)
+                this.instancesInfoService.getMaxStatusChars(this.selectedAccount.instance)
                     .then((maxChars: number) => {
                         this.maxCharLength = maxChars;
                         this.countStatusChar(this.status);
@@ -129,15 +204,36 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     });
             }
 
-            if (!this.statusReplyingToWrapper) {
-                this.instancesInfoService.getDefaultPrivacy(selectedAccount)
-                    .then((defaultPrivacy: VisibilityEnum) => {
-                        this.setVisibility(defaultPrivacy);
-                    })
-                    .catch((err: HttpErrorResponse) => {
-                        this.notificationService.notifyHttpError(err);
-                    });
+            if (!this.statusReplyingToWrapper && !this.replyingUserHandle) {
+                this.getDefaultPrivacy();
             }
+        }
+    }
+
+    private getDefaultPrivacy() {
+        this.instancesInfoService.getDefaultPrivacy(this.selectedAccount)
+            .then((defaultPrivacy: VisibilityEnum) => {
+                this.setVisibility(defaultPrivacy);
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err);
+            });
+    }
+
+    private setVisibilityFromStatus(status: Status) {
+        switch (status.visibility) {
+            case 'unlisted':
+                this.setVisibility(VisibilityEnum.Unlisted);
+                break;
+            case 'public':
+                this.setVisibility(VisibilityEnum.Public);
+                break;
+            case 'private':
+                this.setVisibility(VisibilityEnum.Private);
+                break;
+            case 'direct':
+                this.setVisibility(VisibilityEnum.Direct);
+                break;
         }
     }
 

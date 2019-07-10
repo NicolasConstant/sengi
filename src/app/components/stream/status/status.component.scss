@@ -1,5 +1,10 @@
 @import "variables";
 @import "commons";
+
+.status-wrapper {
+    position: relative;
+}
+
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;
@@ -22,6 +27,10 @@
         border-radius: 2px;
         z-index: 10;
     }
+}
+
+.direct-message {
+    background-color: $direct-message-background;
 }
 
 .status {
@@ -226,4 +235,16 @@
 
 .favorite {
     color: $favorite-color;
+}
+
+.pinned {
+    &__icon{
+        position: absolute;
+        top: 2px;
+        color: $status-secondary-color;
+        font-size: 12px;
+    }
+    &__label{
+        color: $status-secondary-color;
+    }
 }

@@ -41,12 +41,14 @@ export class UserProfileComponent implements OnInit {
 
     relationship: Relationship;
     statuses: StatusWrapper[] = [];
+    pinnedStatuses: StatusWrapper[] = [];
 
     private lastAccountName: string;
 
     private currentlyUsedAccount: AccountInfo;
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+    private deleteStatusSubscription: Subscription;
 
     @ViewChild('statusstream') public statustream: ElementRef;
 
@@ -83,14 +85,24 @@ export class UserProfileComponent implements OnInit {
                     });
             }
         });
+
+        this.deleteStatusSubscription = this.notificationService.deletedStatusStream.subscribe((status: StatusWrapper) => {
+            if (status) {
+                this.statuses = this.statuses.filter(x => {
+                    return !(x.status.url.replace('https://', '').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
+                });
+            }
+        });
     }
 
     ngOnDestroy() {
         this.accountSub.unsubscribe();
+        this.deleteStatusSubscription.unsubscribe();
     }
 
     private load(accountName: string) {
         this.statuses.length = 0;
+        this.pinnedStatuses.length = 0;
 
         this.displayedAccount = null;
         this.isLoading = true;
@@ -111,8 +123,9 @@ export class UserProfileComponent implements OnInit {
 
                 const getFollowStatusPromise = this.getFollowStatus(this.currentlyUsedAccount, this.displayedAccount);
                 const getStatusesPromise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount);
+                const getPinnedStatusesPromise = this.getPinnedStatuses(this.currentlyUsedAccount, this.displayedAccount);
 
-                return Promise.all([getFollowStatusPromise, getStatusesPromise]);
+                return Promise.all([getFollowStatusPromise, getStatusesPromise, getPinnedStatusesPromise]);
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);
@@ -123,23 +136,24 @@ export class UserProfileComponent implements OnInit {
             });
     }
 
+    private getPinnedStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
+        return this.mastodonService.getAccountStatuses(userAccount, account.id, false, true, false, null, null, 40)
+            .then((statuses: Status[]) => {
+                for (const status of statuses) {
+                    const wrapper = new StatusWrapper(status, userAccount);
+                    this.pinnedStatuses.push(wrapper);
+                }
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
+    }
+
     private getStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
         this.statusLoading = true;
         return this.mastodonService.getAccountStatuses(userAccount, account.id, false, false, true, null, null, 40)
             .then((statuses: Status[]) => {
                 this.loadStatus(userAccount, statuses);
-
-                // if (statuses.length === 0) {
-                //     this.maxReached = true;
-                //     return;
-                // }
-
-                // for (const status of statuses) {
-                //     const wrapper = new StatusWrapper(status, userAccount);
-                //     this.statuses.push(wrapper);
-                // }
-
-                // this.maxId = this.statuses[this.statuses.length - 1].status.id;
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
@@ -166,7 +180,8 @@ export class UserProfileComponent implements OnInit {
             url: avatarUrl,
             meta: null,
             text_url: '',
-            description: ''
+            description: '',
+            pleroma: null
         }
         this.navigationService.openMedia({
             selectedIndex: 0,
@@ -261,5 +276,10 @@ export class UserProfileComponent implements OnInit {
         }
 
         this.maxId = this.statuses[this.statuses.length - 1].status.id;
+    }
+
+    openAccount(): boolean {
+        window.open(this.displayedAccount.url, '_blank');
+        return false;
     }
 }

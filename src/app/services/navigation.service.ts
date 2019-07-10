@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { AccountWrapper } from '../models/account.models';
-import { OpenMediaEvent } from '../models/common.model';
+import { OpenMediaEvent, StatusWrapper } from '../models/common.model';
 
 @Injectable()
 export class NavigationService {
     private accountToManage: AccountWrapper;
-    activatedPanelSubject = new BehaviorSubject<LeftPanelType>(LeftPanelType.Closed);
+    activatedPanelSubject = new BehaviorSubject<OpenLeftPanelEvent>(new OpenLeftPanelEvent(LeftPanelType.Closed));
     activatedMediaSubject: Subject<OpenMediaEvent> = new Subject<OpenMediaEvent>();
     columnSelectedSubject = new BehaviorSubject<number>(-1); 
 
@@ -15,16 +15,30 @@ export class NavigationService {
 
     openColumnEditor(acc: AccountWrapper) {
         this.accountToManage = acc;
-        this.activatedPanelSubject.next(LeftPanelType.ManageAccount);
+        const newEvent = new OpenLeftPanelEvent(LeftPanelType.ManageAccount);
+        this.activatedPanelSubject.next(newEvent);
     }
 
     openPanel(type: LeftPanelType){
-        this.activatedPanelSubject.next(type);
+        const newEvent = new OpenLeftPanelEvent(type);
+        this.activatedPanelSubject.next(newEvent);
     }
 
     closePanel() {
-        this.activatedPanelSubject.next(LeftPanelType.Closed);
+        const newEvent = new OpenLeftPanelEvent(LeftPanelType.Closed);
+        this.activatedPanelSubject.next(newEvent);
         this.accountToManage = null;
+    }
+
+    replyToUser(userHandle: string, isDirectMessage: boolean = false) {
+        const action = isDirectMessage ? LeftPanelAction.DM : LeftPanelAction.Mention;
+        const newEvent = new OpenLeftPanelEvent(LeftPanelType.CreateNewStatus, action, userHandle);
+        this.activatedPanelSubject.next(newEvent);
+    }
+
+    redraft(status: StatusWrapper){
+        const newEvent = new OpenLeftPanelEvent(LeftPanelType.CreateNewStatus, LeftPanelAction.Redraft, null, status);// statusContent.replace(/<[^>]*>/g, ''));
+        this.activatedPanelSubject.next(newEvent);
     }
 
     columnSelected(index: number): void {
@@ -38,6 +52,22 @@ export class NavigationService {
     openMedia(openMediaEvent: OpenMediaEvent): void{
         this.activatedMediaSubject.next(openMediaEvent);
     }
+}
+
+export class OpenLeftPanelEvent {
+    constructor(
+        public type: LeftPanelType,
+        public action: LeftPanelAction = LeftPanelAction.None,
+        public userHandle: string = null,
+        public status: StatusWrapper = null) {
+    }
+}
+
+export enum LeftPanelAction {
+    None = 0,
+    DM = 1,
+    Mention = 2,
+    Redraft = 3,
 }
 
 export enum LeftPanelType {
