@@ -108,11 +108,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     private extractHandle(account: Account) {
         this.username = account.acct.split('@')[0];
-        this.fullHandle = account.acct.toLowerCase();
-        if (!this.fullHandle.includes('@')) {
-            this.fullHandle += `@${account.url.replace('https://', '').split('/')[0]}`;
-        }
-        this.fullHandle = `@${this.fullHandle}`;
+
+        this.fullHandle = this.toolsService.getAccountFullHandle(account);
+        // this.fullHandle = `@${this.fullHandle}`;
     }
 
     ngOnDestroy(): void {
