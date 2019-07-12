@@ -146,8 +146,44 @@ body {
   width: 6rem;
   height: 6rem; }
 
+.section {
+  font-family: 'Open Sans', sans-serif; }
+  .section-about {
+    min-height: 10rem;
+    background-color: #141414;
+    color: whitesmoke;
+    padding: 7rem 0; }
+    .section-about__about {
+      font-weight: 300;
+      font-family: 'Open Sans', sans-serif;
+      margin: auto;
+      text-align: center;
+      font-size: 2.5rem; }
+  .section-clear {
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    min-height: 20rem;
+    background-color: whitesmoke;
+    padding: 1rem; }
+    .section-clear__title {
+      font-weight: 400;
+      font-size: 2.5rem;
+      color: #141414;
+      margin-left: 15vw; }
+    .section-clear__subtitle {
+      font-weight: 400;
+      font-size: 2rem;
+      color: #141414;
+      margin-left: 1rem;
+      font-style: italic; }
+  .section-separator {
+    height: .5rem;
+    background-color: #141414;
+    background-color: white; }
+
 .footer {
   text-align: center;
+  background-color: #141414;
   background-color: #141414;
   color: white;
   height: 18rem;

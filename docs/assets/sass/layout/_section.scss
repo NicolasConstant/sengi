@@ -1,0 +1,49 @@
+.section {
+    font-family: 'Open Sans', sans-serif;
+
+    &-about {
+        min-height: 10rem;
+        background-color: $dark-background;
+        color: whitesmoke;
+        padding: 7rem 0;
+
+        &__about {
+            font-weight: 300;
+            font-family: 'Open Sans', sans-serif;
+            margin: auto;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+    }
+
+    &-clear {
+        font-weight: 300;
+        font-family: 'Open Sans', sans-serif;       
+        min-height: 20rem;
+        background-color: whitesmoke;
+        padding: 1rem;
+
+        &__title {
+            font-weight: 400;
+            font-size: 2.5rem;
+            color: $dark-background;
+            margin-left: 15vw;
+            // text-align: center;
+        }
+
+        &__subtitle{
+            font-weight: 400;
+            font-size: 2rem;
+            color: $dark-background;
+            margin-left: 1rem;
+            font-style: italic;
+        }
+
+    }
+
+    &-separator {
+        height: .5rem;
+        background-color: $dark-background;
+        background-color: rgb(255, 255, 255);
+    }
+}
