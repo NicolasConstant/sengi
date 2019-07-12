@@ -1,6 +1,7 @@
 <div class="status-wrapper" [class.direct-message]="isDirectMessage">
     <div class="reblog" *ngIf="reblog">
-        <a class="reblog__profile-link" href (click)="openAccount(status.account)"
+        <a class="reblog__profile-link" href title="{{ status.account.acct }}" 
+            (click)="openAccount(status.account)"
             (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img
                 *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
     </div>
@@ -17,7 +18,8 @@
             <fa-icon class="favorite" [icon]="faStar"></fa-icon>
         </div>
         <div class="notification--label">
-            <a href class="notification--link" title="open account" (click)="openAccount(notificationAccount)"
+            <a href class="notification--link" title="{{ notificationAccount.acct }}" 
+                (click)="openAccount(notificationAccount)"
                 (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount  | accountEmoji }}"></a>
             favorited your status
         </div>
@@ -27,7 +29,8 @@
             <fa-icon class="boost" [icon]="faRetweet"></fa-icon>
         </div>
         <div class="notification--label">
-            <a href class="notification--link" title="open account" (click)="openAccount(notificationAccount)"
+            <a href class="notification--link" title="{{ notificationAccount.acct }}" 
+                (click)="openAccount(notificationAccount)"
                 (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount | accountEmoji }}"></a>
             boosted your status
         </div>

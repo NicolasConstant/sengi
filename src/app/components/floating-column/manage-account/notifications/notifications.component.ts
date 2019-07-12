@@ -10,7 +10,7 @@ import { Notification, Account } from '../../../../services/models/mastodon.inte
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
 
 @Component({
     selector: 'app-notifications',
@@ -46,6 +46,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private lastId: string;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonService) { }
@@ -126,10 +127,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
     
     openAccount(account: Account): boolean {
-        let accountName = account.acct;
-        if (!accountName.includes('@'))
-            accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
-
+        let accountName = this.toolsService.getAccountFullHandle(account);
         this.browseAccountEvent.next(accountName);
         return false;
     }

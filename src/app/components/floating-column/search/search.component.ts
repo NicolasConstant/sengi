@@ -54,10 +54,9 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    browseAccount(accountName: string): boolean {
-        if (accountName) {
-            this.browseAccountEvent.next(accountName);
-        }
+    browseAccount(account: Account): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(account);
+        this.browseAccountEvent.next(accountName);
         return false;
     }
 
@@ -88,5 +87,5 @@ export class SearchComponent implements OnInit {
             .then(() => { this.isLoading = false; });
     }
 
-    private 
+    private
 }

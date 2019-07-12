@@ -84,7 +84,8 @@ export class StatusComponent implements OnInit {
         return this._statusWrapper;
     }
 
-    constructor() { }
+    constructor(
+        private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
     }
@@ -137,10 +138,7 @@ export class StatusComponent implements OnInit {
     }
 
     openAccount(account: Account): boolean {
-        let accountName = account.acct;
-        if (!accountName.includes('@'))
-            accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
-
+        let accountName = this.toolsService.getAccountFullHandle(account);
         this.browseAccountEvent.next(accountName);
         return false;
     }
