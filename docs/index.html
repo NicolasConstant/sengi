@@ -38,7 +38,8 @@
                             <a href="#" class="download-button download-button__web"
                                 title="what are you waiting for? click!"
                                 onClick="window.open('http://sengi.nicolas-constant.com'+'?qt='+ (new Date()).getTime(),'Sengi','toolbar=no,location=no,status=no,menubar=no,scrollbars=no, resizable=yes,width=377,height=800'); return false;"
-                                class="button"><i class="fas fa-globe"></i><span class="download-button__web--label">launch!</span></a><br />
+                                class="button"><i class="fas fa-globe"></i><span
+                                    class="download-button__web--label">launch!</span></a><br />
                             <br />
                             <br />
 
@@ -50,37 +51,41 @@
                                 <a id="mac" href class="download-button" title="download client for mac">
                                     <i class="fab fa-apple"></i>
                                 </a>
-                                <a id="linux" href class="download-button" title="download client for debian-based distrib">
+                                <a id="deb" href class="download-button"
+                                    title="download client for debian-based distrib">
                                     <i class="fab fa-ubuntu"></i>
+                                </a>
+                                <a id="appimage" href class="download-button"
+                                    title="download client for linux (AppImage)">
+                                    <i class="fab fa-linux"></i>
                                 </a>
                                 <a href="https://snapcraft.io/sengi" title="use Snap Store for linux">
                                     <img src="images/snap-store-white.png" />
                                 </a>
                             </div>
                             <div id="download-buttons-nojs">
-                                <a href="https://github.com/NicolasConstant/sengi/releases/"
-                                    class="download-button" title="latest releases">
+                                <a href="https://github.com/NicolasConstant/sengi/releases/" class="download-button"
+                                    title="latest releases">
                                     <i class="fab fa-github"></i></a>
                                 <a href="https://snapcraft.io/sengi" title="use Snap Store for linux">
                                     <img src="images/snap-store-white.png" />
                                 </a>
                             </div>
                         </p>
+
                     </div>
-
-
+                    <div>
+                        <a class="header__old-releases" href="https://github.com/NicolasConstant/sengi/releases/">browse previous releases</a>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="header__app-image-box">
-
-        </div>
-
-
+        <div class="header__app-image-box"></div>
     </header>
     <main>
         <section class="section-about">
+
+            <!-- <p>Sengi is a </p> -->
 
         </section>
 
@@ -103,7 +108,7 @@
     <script type="text/javascript" language="javascript">
         const getLastRelease = async () => {
             const response = await fetch('https://api.github.com/repos/NicolasConstant/sengi/releases/latest');
-            const myJson = await response.json(); 
+            const myJson = await response.json();
             return myJson;
         }
 
@@ -119,11 +124,13 @@
 
             var sengiVersion = document.getElementById('sengi-version');
             sengiVersion.textContent = `(${version})`;
-           
+
             document.getElementById('windows').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-win.exe`;
             document.getElementById('mac').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-mac.dmg`;
-            document.getElementById('linux').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.deb`;            
+            document.getElementById('deb').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.deb`;
+            document.getElementById('appimage').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.AppImage`;
         }, false);
     </script>
 </body>
+
 </html>
