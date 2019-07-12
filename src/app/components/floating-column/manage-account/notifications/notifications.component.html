@@ -19,11 +19,12 @@
         </div> -->
 
         <div *ngIf="notification.type === 'follow'">
-            <div class="stream__notification--icon">
+            <div class="stream__notification--icon" title="{{notification.account.acct}}">
                 <fa-icon class="followed" [icon]="faUserPlus"></fa-icon>
             </div>
             <div class="stream__notification--label">
                 <a href class="stream__link" 
+                    title="{{notification.account.acct}}"
                     (click)="openAccount(notification.account)" 
                     (auxclick)="openUrl(notification.account.url)"
                     innerHTML="{{ notification.account | accountEmoji }}"></a> followed
