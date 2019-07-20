@@ -18,6 +18,9 @@ function createWindow() {
         useContentSize: true
     });
 
+    win.setAutoHideMenuBar(true);
+    win.setMenuBarVisibility(false);
+
     var server = http.createServer(requestHandler).listen(9527);
     const sengiUrl = "http://localhost:9527";
     win.loadURL(sengiUrl);
