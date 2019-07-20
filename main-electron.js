@@ -35,6 +35,8 @@ function createWindow() {
                 { type: "separator" },
                 { role: "reload" },
                 { role: "forcereload" },
+                { type: 'separator' },
+                { role: 'togglefullscreen' },
                 { type: "separator" },
                 { role: "close" },
                 { role: 'quit' }
@@ -92,7 +94,9 @@ function createWindow() {
                         },
                         { type: "separator" },
                         { role: "reload" }, 
-                        { role: "forcereload" }
+                        { role: "forcereload" },
+                        { type: 'separator' },
+                        { role: 'togglefullscreen' }
                     ]
                 },
                 {
