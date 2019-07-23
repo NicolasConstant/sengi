@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, 
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
+import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
@@ -471,6 +472,19 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if(parsedStatus[parsedStatus.length - 1] === selection.pattern){
             this.status = `${this.status.replace(new RegExp(`${selection.pattern}$`), selection.autosuggest)} `;
             this.focus();
+        }
+    }
+
+    handleKeyDown(event: KeyboardEvent): boolean {
+        if(this.autosuggestData){           
+            if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW || event.keyCode === ENTER) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                event.stopPropagation();               
+                
+                console.warn(event.keyCode);
+                return false;
+            }
         }
     }
 }

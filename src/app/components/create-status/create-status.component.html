@@ -8,7 +8,9 @@
 
     <textarea #reply [(ngModel)]="status" name="status"
         class="form-control form-control-sm status-form__status flexcroll" rows="5" required title="content"
-        placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
+        placeholder="What's in your mind?" 
+        (keydown.control.enter)="onCtrlEnter()"
+        (keydown)="handleKeyDown($event)"></textarea>
 
     <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" 
         [pattern]="autosuggestData" 
