@@ -475,8 +475,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
     }
 
+    private hasSuggestions: boolean;
+    suggestionsChanged(hasSuggestions: boolean) {
+        this.hasSuggestions = hasSuggestions;
+    }
+
     handleKeyDown(event: KeyboardEvent): boolean {
-        if(this.autosuggestData){           
+        if(this.hasSuggestions){           
             if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW || event.keyCode === ENTER) {
                 event.stopImmediatePropagation();
                 event.preventDefault();

@@ -14,7 +14,8 @@
 
     <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" 
         [pattern]="autosuggestData" 
-        (suggestionSelectedEvent)="suggestionSelected($event)"></app-autosuggest>
+        (suggestionSelectedEvent)="suggestionSelected($event)"
+        (hasSuggestionsEvent)="suggestionsChanged($event)"></app-autosuggest> 
 
     <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the start in order to use multiposting.</div>
 

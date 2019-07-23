@@ -15,6 +15,7 @@ export class AutosuggestComponent implements OnInit {
     hashtags: string[] = [];
 
     @Output() suggestionSelectedEvent = new EventEmitter<AutosuggestSelection>();
+    @Output() hasSuggestionsEvent = new EventEmitter<boolean>();
 
     private _pattern: string;
     @Input('pattern')
@@ -68,6 +69,13 @@ export class AutosuggestComponent implements OnInit {
                             if(this.hashtags.length > 7) return;
                         }
                     }
+                }
+            })
+            .then(() => {
+                if(this.hashtags.length > 0 || this.accounts.length > 0){
+                    this.hasSuggestionsEvent.next(true);
+                } else {
+                    this.hasSuggestionsEvent.next(false);
                 }
             })
             .catch(err => {
