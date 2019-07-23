@@ -1,16 +1,16 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
 import { Attachment } from '../../../../services/models/mastodon.interfaces';
 import { NavigationService } from '../../../../services/navigation.service';
 import { OpenMediaEvent } from '../../../../models/common.model';
-import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-attachements',
     templateUrl: './attachements.component.html',
     styleUrls: ['./attachements.component.scss']
 })
-export class AttachementsComponent implements OnInit {
+export class AttachementsComponent implements OnInit {    
     private _attachments: Attachment[];
     isImage: boolean;
     isGifv: boolean;
@@ -26,7 +26,7 @@ export class AttachementsComponent implements OnInit {
     isPlaying: boolean = false;
     isMuted: boolean = false;
 
-    // imageUrls: string[];
+    audioType: string;
 
     @Input('attachments')
     set attachments(value: Attachment[]) {
@@ -40,6 +40,7 @@ export class AttachementsComponent implements OnInit {
             this.isVideo = true;
         } else if (this._attachments[0].type === 'audio') {
             this.isAudio = true;
+            this.setAudioData(this._attachments[0]);
         }
     }
     get attachments(): Attachment[] {
@@ -89,5 +90,13 @@ export class AttachementsComponent implements OnInit {
     onMute() {        
         this.isMuted = !this.isMuted;
         this.getVideo().muted = this.isMuted;
+    }
+
+    setAudioData(att: Attachment): any {
+        if(att.meta && att.meta.audio_encode){
+            this.audioType = `audio/${att.meta.audio_encode}`;
+        } else if(att.pleroma && att.pleroma.mime_type){
+            this.audioType = att.pleroma.mime_type;
+        }
     }
 }

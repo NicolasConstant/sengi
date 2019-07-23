@@ -16,9 +16,9 @@
     </button>
 
     <div *ngFor="let att of attachments" class="media-viewer-canvas__attachement"
-        [ngClass]="{ 'collapsed': currentIndex !== att.index }">
-        <a href="{{att.url}}" target="_blank" title="open image">
-            <img *ngIf="att.type === 'image'" src="{{att.url}}" class="media-viewer-canvas__image" />
+        [class.collapsed]="currentIndex !== att.index">
+        <a href="{{att.url}}" target="_blank" title="{{att.description}}">
+            <img *ngIf="att.type === 'image'" src="{{att.url}}" class="media-viewer-canvas__image"   [class.collapsed]="currentIndex !== att.index" />
         </a>
 
         <video *ngIf="att.type === 'gifv'" class="media-viewer-canvas__image" role="application" loop autoplay>

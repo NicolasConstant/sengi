@@ -76,7 +76,7 @@
             max-width: 95%;
         }   
 
-        max-height: calc(100% - 120px);
+        max-height: 90vh;
         margin-top: 50vh;
         margin-left: 50vw;
         transform: translate(-50%, -50%);
@@ -104,4 +104,5 @@
 
 .collapsed {
     height: 0;
+    max-height: 0;
 }

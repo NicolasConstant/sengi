@@ -18,15 +18,28 @@ function createWindow() {
         useContentSize: true
     });
 
+    win.setAutoHideMenuBar(true);
+    win.setMenuBarVisibility(false);
+
     var server = http.createServer(requestHandler).listen(9527);
-    win.loadURL("http://localhost:9527");
+    const sengiUrl = "http://localhost:9527";
+    win.loadURL(sengiUrl);
 
     const template = [
         {
             label: "View",
             submenu: [
+                {
+                    label: "Return on Sengi",
+                    click() {
+                        win.loadURL(sengiUrl);
+                    }
+                },
+                { type: "separator" },
                 { role: "reload" },
                 { role: "forcereload" },
+                { type: 'separator' },
+                { role: 'togglefullscreen' },
                 { type: "separator" },
                 { role: "close" },
                 { role: 'quit' }
@@ -75,7 +88,19 @@ function createWindow() {
                 },
                 {
                     label: "View",
-                    submenu: [{ role: "reload" }, { role: "forcereload" }]
+                    submenu: [
+                        {
+                            label: "Return on Sengi",
+                            click() {
+                                win.loadURL(sengiUrl);
+                            }
+                        },
+                        { type: "separator" },
+                        { role: "reload" }, 
+                        { role: "forcereload" },
+                        { type: 'separator' },
+                        { role: 'togglefullscreen' }
+                    ]
                 },
                 {
                     role: "help",

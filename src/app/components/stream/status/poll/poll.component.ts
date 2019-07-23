@@ -30,6 +30,8 @@ export class PollComponent implements OnInit {
     private _poll: Poll;
     @Input('poll')
     set poll(value: Poll) {
+        if(!value) return;
+
         this._poll = value;
 
         this.pollName = this.poll.id;
@@ -89,6 +91,7 @@ export class PollComponent implements OnInit {
 
             this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.statusWrapper.status, this.statusWrapper.provider))
                 .then((status: Status) => {
+                    if(!status || !(status.poll)) return null;
                     return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
                 })
                 .then((poll: Poll) => {

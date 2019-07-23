@@ -40,6 +40,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
     private newPostSub: Subscription;
     private hideAccountSubscription: Subscription;
+    private deleteStatusSubscription: Subscription;
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -82,11 +83,20 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.deleteStatusSubscription = this.notificationService.deletedStatusStream.subscribe((status: StatusWrapper) => {
+            if(status){
+                this.statuses = this.statuses.filter(x => {
+                    return !(x.status.url.replace('https://','').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
+                });
+            }
+        });
     }
 
     ngOnDestroy(): void {
         if (this.newPostSub) this.newPostSub.unsubscribe();
         if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
+        if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
