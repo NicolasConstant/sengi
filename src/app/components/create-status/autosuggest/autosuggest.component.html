@@ -1,0 +1,9 @@
+<div class="autosuggest">
+    <div *ngFor="let a of accounts" class="autosuggest__entry autosuggest__account">
+        <img class="autosuggest__account--avatar" src="{{ a.avatar }}" /> {{ a.username }} @{{ a.acct }}
+    </div>
+
+    <div *ngFor="let h of hashtags" class="autosuggest__entry">
+        #{{ h }}
+    </div>
+</div>

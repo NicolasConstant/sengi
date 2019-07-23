@@ -10,8 +10,9 @@
         class="form-control form-control-sm status-form__status flexcroll" rows="5" required title="content"
         placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
 
-    <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the
-        start in order to use multiposting.</div>
+    <app-autosuggest *ngIf="autosuggestData" [pattern]="autosuggestData"></app-autosuggest>
+
+    <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the start in order to use multiposting.</div>
 
     <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy"
         [(ngModel)]="selectedPrivacy">

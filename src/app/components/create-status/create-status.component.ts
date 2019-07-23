@@ -11,7 +11,6 @@ import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
-import { identifierModuleUrl } from '@angular/compiler';
 
 
 @Component({
@@ -34,6 +33,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     set status(value: string) {
         if (value) {
             this.countStatusChar(value);
+            this.detectAutosuggestion(value);
             this._status = value;
         }
     }
@@ -83,6 +83,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     postCounts: number = 1;
     isSending: boolean;
     mentionTooFarAwayError: boolean;
+    autosuggestData: string = null;
 
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
@@ -161,6 +162,19 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.accountSub.unsubscribe();
+    }
+
+    private detectAutosuggestion(status: string) {
+        const parsedStatus = status.split(' ');
+        if(parsedStatus && parsedStatus.length > 0){
+            const lastElement = parsedStatus[parsedStatus.length - 1];
+            if(lastElement.length > 2 && (lastElement.startsWith('@') || lastElement.startsWith('#'))){
+                //this.autosuggestData = lastElement.substring(1);
+                this.autosuggestData = lastElement;
+                return;
+            }
+        }
+        this.autosuggestData = null;
     }
 
     private focus() {
