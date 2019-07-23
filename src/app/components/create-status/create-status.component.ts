@@ -11,6 +11,7 @@ import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
+import { AutosuggestSelection } from './autosuggest/autosuggest.component';
 
 
 @Component({
@@ -182,6 +183,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private focus() {
         setTimeout(() => {
             this.replyElement.nativeElement.focus();
+            this.replyElement.nativeElement.setSelectionRange(this.status.length, this.status.length);
         }, 0);
     }
 
@@ -461,5 +463,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private getMentionsFromStatus(status: string): string[] {
         return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
+    }
+
+
+    suggestionSelected(selection: AutosuggestSelection){
+        const parsedStatus = this.status.split(' ');
+        if(parsedStatus[parsedStatus.length - 1] === selection.pattern){
+            this.status = `${this.status.replace(new RegExp(`${selection.pattern}$`), selection.autosuggest)} `;
+            this.focus();
+        }
     }
 }

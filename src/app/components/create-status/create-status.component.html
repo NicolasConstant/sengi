@@ -11,7 +11,8 @@
         placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
 
     <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" 
-        [pattern]="autosuggestData"></app-autosuggest>
+        [pattern]="autosuggestData" 
+        (suggestionSelectedEvent)="suggestionSelected($event)"></app-autosuggest>
 
     <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the start in order to use multiposting.</div>
 

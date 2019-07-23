@@ -40,11 +40,13 @@ export class AutosuggestComponent implements OnInit {
     }
 
     private lastPatternUsed: string;
+    private lastPatternUsedWtType: string;
     private analysePattern(value: string) {
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
         const isAccount = value[0] === '@';
         const pattern = value.substring(1);
         this.lastPatternUsed = pattern;
+        this.lastPatternUsedWtType = value;
 
         this.mastodonService.search(selectedAccount, pattern, false)
             .then((results: Results) => {
@@ -75,12 +77,12 @@ export class AutosuggestComponent implements OnInit {
 
     accountSelected(account: Account): boolean {
         const fullHandle = this.toolsService.getAccountFullHandle(account);
-        this.suggestionSelectedEvent.next(new AutosuggestSelection(this.lastPatternUsed, fullHandle));
+        this.suggestionSelectedEvent.next(new AutosuggestSelection(this.lastPatternUsedWtType, fullHandle));
         return false;
     }
 
     hashtagSelected(hashtag: string): boolean {
-        this.suggestionSelectedEvent.next(new AutosuggestSelection(this.lastPatternUsed, hashtag));
+        this.suggestionSelectedEvent.next(new AutosuggestSelection(this.lastPatternUsedWtType, `#${hashtag}`));
         return false;
     }
 }
