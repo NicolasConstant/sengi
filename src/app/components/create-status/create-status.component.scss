@@ -4,6 +4,7 @@
 @import "buttons";
 $btn-send-status-width: 60px;
 $counter-width: 90px;
+
 .form-control {
     margin: 0 0 5px 5px;
     width: calc(100% - 10px);
@@ -11,9 +12,11 @@ $counter-width: 90px;
     border-color: $status-secondary-color;
     color: #fff;
     font-size: $default-font-size;
+
     &:focus {
         box-shadow: none;
     }
+
     &--privacy {
         display: inline-block;
         width: calc(100% - 15px - #{$btn-send-status-width} - #{$counter-width});
@@ -38,6 +41,7 @@ $counter-width: 90px;
 .status-form {
     position: relative;
     font-size: $default-font-size;
+
     &__sending {
         position: absolute;
         top: 0px;
@@ -46,10 +50,12 @@ $counter-width: 90px;
         bottom: 4px;
         background-color: rgba($column-color, .75);
         z-index: 2;
+
         &--waiting {
             margin-top: calc(25%);
         }
     }
+
     &__counter {
         display: inline-block;
         border: 1px solid $status-secondary-color;
@@ -59,6 +65,7 @@ $counter-width: 90px;
         position: relative;
         top: 0px;
         padding: 4px 7px 0 7px; // color: lighten($font-link-primary-hover, 10);
+
         // position: relative;
         // overflow: hidden;
         &--count {
@@ -67,6 +74,7 @@ $counter-width: 90px;
             // overflow: hidden;
             // outline: 1px solid greenyellow;
         }
+
         &--posts {
             // position: absolute;
             // right: 0;
@@ -74,6 +82,7 @@ $counter-width: 90px;
             float: right;
         }
     }
+
     &__status {
         &::-webkit-resizer {
             // border: 2px solid black;
@@ -87,6 +96,18 @@ $counter-width: 90px;
         &::-webkit-scrollbar {
             width: 12px;
         }
+    }
+
+    &__autosuggest {
+        // position: absolute;        
+        // z-index: 100;
+        display: block;
+        margin: auto;
+        position: relative;
+        top: -5px;
+        width: calc(100% - 10px);
+        // width: calc(100% - 20px);
+        
     }
 
     &__mention-error {

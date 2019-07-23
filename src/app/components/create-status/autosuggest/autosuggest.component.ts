@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { ToolsService } from '../../../services/tools.service';
 import { MastodonService } from '../../../services/mastodon.service';
@@ -14,11 +14,18 @@ export class AutosuggestComponent implements OnInit {
     accounts: Account[] = [];
     hashtags: string[] = [];
 
+    @Output() suggestionSelectedEvent = new EventEmitter<AutosuggestSelection>();
+
     private _pattern: string;
     @Input('pattern')
     set pattern(value: string) {
-        this._pattern = value;
-        this.analysePattern(value);
+        if (value) {
+            this._pattern = value;
+            this.analysePattern(value);
+        } else {
+            this.accounts.length = 0;
+            this.hashtags.length = 0;
+        }
     }
     get pattern(): string {
         return this._pattern;
@@ -41,7 +48,7 @@ export class AutosuggestComponent implements OnInit {
 
         this.mastodonService.search(selectedAccount, pattern, false)
             .then((results: Results) => {
-                if(this.lastPatternUsed !== pattern) return;
+                if (this.lastPatternUsed !== pattern) return;
 
                 this.accounts.length = 0;
                 this.hashtags.length = 0;
@@ -49,12 +56,14 @@ export class AutosuggestComponent implements OnInit {
                 if (isAccount) {
                     for (let account of results.accounts) {
                         this.accounts.push(account);
+                        if(this.accounts.length > 7) return;
                     }
                 }
                 else {
                     for (let hashtag of results.hashtags) {
                         if (hashtag.includes(this.lastPatternUsed) || hashtag === this.lastPatternUsed) {
                             this.hashtags.push(hashtag);
+                            if(this.hashtags.length > 7) return;
                         }
                     }
                 }
@@ -62,5 +71,21 @@ export class AutosuggestComponent implements OnInit {
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
             });
+    }
+
+    accountSelected(account: Account): boolean {
+        const fullHandle = this.toolsService.getAccountFullHandle(account);
+        this.suggestionSelectedEvent.next(new AutosuggestSelection(this.lastPatternUsed, fullHandle));
+        return false;
+    }
+
+    hashtagSelected(hashtag: string): boolean {
+        this.suggestionSelectedEvent.next(new AutosuggestSelection(this.lastPatternUsed, hashtag));
+        return false;
+    }
+}
+
+export class AutosuggestSelection{
+    constructor(public pattern: string, public autosuggest: string) {        
     }
 }

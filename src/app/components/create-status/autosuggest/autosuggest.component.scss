@@ -1,10 +1,45 @@
-.autosuggest {
-    &__entry {}
+@import "variables";
 
-    &__account {
-        &--avatar {
-            width: 25px;
+
+.autosuggest {
+    background-color: $column-color;
+    border: solid $status-secondary-color;
+    border-width: 0 1px 1px 1px;
+    
+    &__entry {        
+        display: block;
+        padding: 1px 5px;
+        color: $font-link-primary-hover;
+        background-color: darken($column-color, 5%);
+        white-space: nowrap;
+        text-overflow: ellipsis; 
+        overflow: hidden;
+        width: calc(100%);
+
+        &:hover {
+            color: $font-color-primary;
+            text-decoration: none;
+            background-color: $column-color;
         }
     }
 
+    &__account {
+        padding: 5px 5px 0 5px;
+
+        &:last-child{
+            padding: 5px 5px 5px 5px;
+        }
+
+        &--avatar {
+            width: 25px;
+        }
+
+        &--acct {
+            color: $font-link-primary;
+        }
+    }
+
+    &__entry:hover &__account--acct {
+        color: $font-link-primary-hover;
+    }
 }
