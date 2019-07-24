@@ -1,6 +1,6 @@
 {
     "name": "sengi",
-    "version": "0.12.2",
+    "version": "0.12.3",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
@@ -23,7 +23,7 @@
         "e2e": "ng e2e",
         "electron": "ng build --prod && electron .",
         "electron-debug": "ng build && electron .",
-        "dist": "npm run build && electron-builder --publish onTagOrDraft"
+        "dist": "npm run build && electron-builder --ia32 --x64 --publish onTagOrDraft"
     },
     "private": true,
     "dependencies": {
