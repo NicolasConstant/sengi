@@ -510,4 +510,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             }
         }
     }
+
+    statusTextEditorLostFocus(): boolean {
+        this.autosuggestData = null;
+        this.hasSuggestions = false;
+        return false;
+    }
 }
