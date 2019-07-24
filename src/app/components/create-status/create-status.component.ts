@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, 
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
-import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes';
+import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
@@ -484,12 +484,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     handleKeyDown(event: KeyboardEvent): boolean {
         if (this.hasSuggestions) {
-            if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW || event.keyCode === ENTER) {
+            let keycode = event.keyCode;
+            if (keycode === DOWN_ARROW || keycode === UP_ARROW || keycode === ENTER || keycode === ESCAPE) {
                 event.stopImmediatePropagation();
                 event.preventDefault();
                 event.stopPropagation();
 
-                switch (event.keyCode) {
+                switch (keycode) {
                     case DOWN_ARROW:
                         this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveDown);
                         break;
@@ -498,6 +499,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         break;
                     case ENTER:
                         this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.Validate);
+                        break;
+                    case ESCAPE:                        
+                        this.autosuggestData = null;
+                        this.hasSuggestions = false;
                         break;
                 }
                                 
