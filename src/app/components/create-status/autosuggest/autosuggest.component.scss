@@ -16,11 +16,13 @@
         overflow: hidden;
         width: calc(100%);
 
-        &:hover {
+        &:hover, &--selected {
             color: $font-color-primary;
             text-decoration: none;
             background-color: $column-color;
         }
+
+       
     }
 
     &__account {
@@ -39,7 +41,7 @@
         }
     }
 
-    &__entry:hover &__account--acct {
+    &__entry:hover &__account--acct,  &__entry--selected &__account--acct {
         color: $font-link-primary-hover;
     }
 }

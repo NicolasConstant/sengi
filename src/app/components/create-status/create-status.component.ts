@@ -12,7 +12,7 @@ import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
-import { AutosuggestSelection } from './autosuggest/autosuggest.component';
+import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
 
 
 @Component({
@@ -21,6 +21,8 @@ import { AutosuggestSelection } from './autosuggest/autosuggest.component';
     styleUrls: ['./create-status.component.scss']
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
+    autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
+
     private _title: string;
     set title(value: string) {
         this._title = value;
@@ -51,7 +53,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             let parser = new DOMParser();
             var dom = parser.parseFromString(value.status.content, 'text/html')
             this.status = dom.body.textContent;
-            
+
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
 
@@ -64,7 +66,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
                         for (const mention of mentions) {
                             const name = `@${mention.split('@')[0]}`;
-                            if(this.status.includes(name)){
+                            if (this.status.includes(name)) {
                                 this.status = this.status.replace(name, `@${mention}`);
                             } else {
                                 this.status = `@${mention} ` + this.status;
@@ -170,9 +172,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private detectAutosuggestion(status: string) {
         const parsedStatus = status.split(' ');
-        if(parsedStatus && parsedStatus.length > 0){
+        if (parsedStatus && parsedStatus.length > 0) {
             const lastElement = parsedStatus[parsedStatus.length - 1];
-            if(lastElement.length > 2 && (lastElement.startsWith('@') || lastElement.startsWith('#'))){
+            if (lastElement.length > 2 && (lastElement.startsWith('@') || lastElement.startsWith('#'))) {
                 //this.autosuggestData = lastElement.substring(1);
                 this.autosuggestData = lastElement;
                 return;
@@ -467,9 +469,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
 
-    suggestionSelected(selection: AutosuggestSelection){
+    suggestionSelected(selection: AutosuggestSelection) {
         const parsedStatus = this.status.split(' ');
-        if(parsedStatus[parsedStatus.length - 1] === selection.pattern){
+        if (parsedStatus[parsedStatus.length - 1] === selection.pattern) {
             this.status = `${this.status.replace(new RegExp(`${selection.pattern}$`), selection.autosuggest)} `;
             this.focus();
         }
@@ -481,13 +483,24 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     handleKeyDown(event: KeyboardEvent): boolean {
-        if(this.hasSuggestions){           
+        if (this.hasSuggestions) {
             if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW || event.keyCode === ENTER) {
                 event.stopImmediatePropagation();
                 event.preventDefault();
-                event.stopPropagation();               
-                
-                console.warn(event.keyCode);
+                event.stopPropagation();
+
+                switch (event.keyCode) {
+                    case DOWN_ARROW:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveDown);
+                        break;
+                    case UP_ARROW:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveUp);
+                        break;
+                    case ENTER:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.Validate);
+                        break;
+                }
+                                
                 return false;
             }
         }

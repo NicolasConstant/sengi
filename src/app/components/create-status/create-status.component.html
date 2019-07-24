@@ -14,6 +14,7 @@
 
     <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" 
         [pattern]="autosuggestData" 
+        [autoSuggestUserActionsStream]="autoSuggestUserActionsStream"
         (suggestionSelectedEvent)="suggestionSelected($event)"
         (hasSuggestionsEvent)="suggestionsChanged($event)"></app-autosuggest> 
 
