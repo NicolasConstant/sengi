@@ -30,6 +30,9 @@ addons:
       - xorriso
       - xvfb
 
+before_install:
+  - sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib 
+
 install:
   - nvm install 10.9.0
   - npm install electron-builder@next
