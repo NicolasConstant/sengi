@@ -171,22 +171,45 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private detectAutosuggestion(status: string) {
-        const parsedStatus = status.split(' ');
-        if (parsedStatus && parsedStatus.length > 0) {
-            const lastElement = parsedStatus[parsedStatus.length - 1];
-            if (lastElement.length > 2 && (lastElement.startsWith('@') || lastElement.startsWith('#'))) {
-                //this.autosuggestData = lastElement.substring(1);
-                this.autosuggestData = lastElement;
-                return;
-            }
+        const caretPosition = this.replyElement.nativeElement.selectionStart;
+        const word = this.getWordByPos(status, caretPosition);
+        if (word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
+            this.autosuggestData = word;
+            return;
         }
+
+        // const parsedStatus = status.split(' ');
+        // if (parsedStatus && parsedStatus.length > 0 && status.length === caretPosition) {
+        //     const lastElement = parsedStatus[parsedStatus.length - 1];
+        //     if (lastElement.length > 2 && (lastElement.startsWith('@') || lastElement.startsWith('#'))) {
+        //         //this.autosuggestData = lastElement.substring(1);
+        //         this.autosuggestData = lastElement;
+        //         return;
+        //     }
+        // }
         this.autosuggestData = null;
     }
 
-    private focus() {
+    private getWordByPos(str, pos) {
+        var left = str.substr(0, pos);
+        var right = str.substr(pos);
+
+        left = left.replace(/^.+ /g, "");
+        right = right.replace(/ .+$/g, "");
+
+        return left + right;
+    }
+
+    private focus(caretPos = null) {
         setTimeout(() => {
+            console.log('focus');
             this.replyElement.nativeElement.focus();
-            this.replyElement.nativeElement.setSelectionRange(this.status.length, this.status.length);
+
+            if(caretPos){
+                this.replyElement.nativeElement.setSelectionRange(caretPos, caretPos);
+            } else {
+                this.replyElement.nativeElement.setSelectionRange(this.status.length, this.status.length);
+            }
         }, 0);
     }
 
@@ -470,10 +493,27 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
 
     suggestionSelected(selection: AutosuggestSelection) {
-        const parsedStatus = this.status.split(' ');
-        if (parsedStatus[parsedStatus.length - 1] === selection.pattern) {
-            this.status = `${this.status.replace(new RegExp(`${selection.pattern}$`), selection.autosuggest)} `;
-            this.focus();
+        if (this.status.includes(selection.pattern)) {
+
+            let transformedStatus = this.status;
+            transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
+            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
+            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
+            this.status = transformedStatus;
+
+            let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
+            if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
+
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+                        
+            if (document.activeElement === this.replyElement.nativeElement) {
+                setTimeout(() => {
+                    this.replyElement.nativeElement.setSelectionRange(newCaretPosition, newCaretPosition);
+                }, 0);
+            } else {
+                this.focus(newCaretPosition);
+            }
         }
     }
 
@@ -500,20 +540,22 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     case ENTER:
                         this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.Validate);
                         break;
-                    case ESCAPE:                        
+                    case ESCAPE:
                         this.autosuggestData = null;
                         this.hasSuggestions = false;
                         break;
                 }
-                                
+
                 return false;
             }
         }
     }
 
     statusTextEditorLostFocus(): boolean {
-        this.autosuggestData = null;
-        this.hasSuggestions = false;
+        setTimeout(() => {
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+        }, 250);
         return false;
     }
 }
