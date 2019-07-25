@@ -42,7 +42,7 @@ $counter-width: 90px;
         color: $status-editor-color;
         margin-bottom: 0;
         
-        resize: none;
+        //resize: none;
         border: none;
         overflow: auto;
         outline: none;
@@ -50,10 +50,14 @@ $counter-width: 90px;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
         box-shadow: none;
+
+
+        border-bottom: 1px solid black;
     }
 
     &__footer {
-        height: 35px;
+        
+        height: 34px;
         margin: 0 5px;
         border-width: 0;
         // position: relative;
@@ -72,7 +76,7 @@ $counter-width: 90px;
             transition: all .2s;
             float: right;
             padding: 0 15px 0 15px;
-            height: 35px;
+            height: 34px;
             background-color: $status-editor-footer-background;
             //border-left: 1px solid rgb(0, 0, 0);
 
@@ -90,7 +94,7 @@ $counter-width: 90px;
 
         &__counter {
             float: right;
-            height: 35px;
+            height: 34px;
             padding: 6px 7px 0 7px;
             vertical-align: center;
 

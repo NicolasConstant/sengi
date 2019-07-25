@@ -3,8 +3,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
-import { faPaperclip, faGlobe, faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
+import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
@@ -17,6 +18,7 @@ import { MediaService } from '../../services/media.service';
 import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
 
 
+
 @Component({
     selector: 'app-create-status',
     templateUrl: './create-status.component.html',
@@ -26,6 +28,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     faPaperclip = faPaperclip;
     faGlobe = faGlobe;
     faGlobeAmericas = faGlobeAmericas;
+    faLock = faLock;
+    faLockOpen = faLockOpen;
+    faEnvelope = faEnvelope;
 
     autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
 
@@ -100,6 +105,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
+    @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
     private _isDirectMention: boolean;
     @Input('isDirectMention')
@@ -135,6 +141,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
@@ -563,5 +570,17 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.hasSuggestions = false;
         }, 250);
         return false;
+    }
+
+
+    public onContextMenu($event: MouseEvent): void {
+        this.contextMenuService.show.next({
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.contextMenu,
+            event: $event,
+            item: null
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
     }
 }
