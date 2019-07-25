@@ -3,34 +3,54 @@
         <app-waiting-animation class="waiting-icon"></app-waiting-animation>
     </div>
 
-    <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off"
-        placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
+    <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title"
+        autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
 
     <textarea #reply [(ngModel)]="status" name="status"
-        class="form-control form-control-sm status-form__status flexcroll" rows="5" required title="content"
-        placeholder="What's in your mind?" 
-        (keydown.control.enter)="onCtrlEnter()"
-        (keydown)="handleKeyDown($event)"
-        (blur)="statusTextEditorLostFocus()"></textarea>
+        class="form-control form-control-sm status-form__status status-editor__content flexcroll" rows="5" required
+        title="content" placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"
+        (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()"></textarea>
 
-    <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" 
-        [pattern]="autosuggestData" 
+    <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" [pattern]="autosuggestData"
         [autoSuggestUserActionsStream]="autoSuggestUserActionsStream"
-        (suggestionSelectedEvent)="suggestionSelected($event)"
-        (hasSuggestionsEvent)="suggestionsChanged($event)"></app-autosuggest> 
+        (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
+    </app-autosuggest>
 
-    <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the start in order to use multiposting.</div>
+    <div class="status-editor__footer">
+        <button type="submit" class="status-editor__footer--send-button">
+            <span *ngIf="statusReplyingToWrapper" title="reply">REPLY!</span>
+            <span *ngIf="!statusReplyingToWrapper" title="post">POST!</span>
+        </button>
+        <div class="status-editor__footer__counter">
+            <div class="status-editor__footer__counter--posts" title="number of statuses">{{postCounts - 1}}/{{postCounts}}</div>
+            <div class="status-editor__footer__counter--count" title="char count">{{charCountLeft}}</div>
+        </div>
 
+        <a href class="status-editor__footer--link" title="add media">
+            <fa-icon [icon]="faPaperclip"></fa-icon>
+        </a>
+        <a href class="status-editor__footer--link" title="adjust status privacy">
+            <fa-icon [icon]="faGlobeAmericas"></fa-icon>
+        </a>
+
+
+    </div>
+
+    <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the
+        start in order to use multiposting.</div>
+
+<!-- 
     <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy"
         [(ngModel)]="selectedPrivacy">
         <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
-    </select>
-    <div class="status-form__counter">
+    </select> -->
+
+    <!-- <div class="status-form__counter">
         <span class="status-form__counter--count">{{charCountLeft}}</span> <span
             class="status-form__counter--posts">{{postCounts - 1}}/{{postCounts}}</span>
-    </div>
-    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="statusReplyingToWrapper">REPLY!</button>
-    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="!statusReplyingToWrapper">POST!</button>
+    </div> -->
+    <!-- <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="statusReplyingToWrapper">REPLY!</button>
+    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="!statusReplyingToWrapper">POST!</button> -->
 
     <app-media></app-media>
 </form>

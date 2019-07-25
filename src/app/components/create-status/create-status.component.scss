@@ -2,6 +2,7 @@
 @import "commons";
 @import "panel";
 @import "buttons";
+@import "mixins";
 $btn-send-status-width: 60px;
 $counter-width: 90px;
 
@@ -9,8 +10,9 @@ $counter-width: 90px;
     margin: 0 0 5px 5px;
     width: calc(100% - 10px);
     background-color: $column-color;
+    background-color: $status-editor-background;
     border-color: $status-secondary-color;
-    color: #fff;
+    color: $status-editor-color;
     font-size: $default-font-size;
 
     &:focus {
@@ -20,6 +22,90 @@ $counter-width: 90px;
     &--privacy {
         display: inline-block;
         width: calc(100% - 15px - #{$btn-send-status-width} - #{$counter-width});
+    }
+}
+
+.status-editor {
+
+    &__title {
+        background-color: $status-editor-title-background;
+        color: $status-editor-color;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+        border-width: 0;
+        margin-bottom: 0;
+    }
+
+    &__content {
+        border-width: 0;
+        background-color: $status-editor-background;
+        color: $status-editor-color;
+        margin-bottom: 0;
+        
+        resize: none;
+        border: none;
+        overflow: auto;
+        outline: none;
+    
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+
+    &__footer {
+        height: 35px;
+        margin: 0 5px;
+        border-width: 0;
+        // position: relative;
+
+        background-color: $status-editor-footer-background;
+
+        &--link {
+            color: $status-editor-footer-link-color;
+            display: inline-block;
+            padding: 5px;
+            margin: 2px 0 0 5px;
+        }
+
+        &--send-button {
+            @include clearButton;            
+            transition: all .2s;
+            float: right;
+            padding: 0 15px 0 15px;
+            height: 35px;
+            background-color: $status-editor-footer-background;
+            //border-left: 1px solid rgb(0, 0, 0);
+
+            &:hover {
+                background-color: lighten($status-editor-footer-background, 20%);
+                background-color: darken($status-editor-footer-background, 20%);
+                // background-color: rgb(34, 71, 114);
+            }
+
+            & span {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        &__counter {
+            float: right;
+            height: 35px;
+            padding: 6px 7px 0 7px;
+            vertical-align: center;
+
+            &--count {
+                display: block;
+                //float: right;
+                margin-right: 40px
+            }
+
+            &--posts {
+                display: block;
+                // margin-left: 10px;
+                float: right;
+            }
+        }
     }
 }
 

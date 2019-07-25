@@ -3,6 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
+import { faPaperclip, faGlobe, faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
@@ -21,6 +23,10 @@ import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/a
     styleUrls: ['./create-status.component.scss']
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
+    faPaperclip = faPaperclip;
+    faGlobe = faGlobe;
+    faGlobeAmericas = faGlobeAmericas;
+
     autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
 
     private _title: string;
