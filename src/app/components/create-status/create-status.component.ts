@@ -151,6 +151,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
+    private loaded: boolean;
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.accountChanged(accounts);
@@ -176,6 +177,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.initMention();
         }
 
+        this.loaded = true;
         this.focus();
     }
 
@@ -184,22 +186,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private detectAutosuggestion(status: string) {
+        if(!this.loaded) return;
+
         const caretPosition = this.replyElement.nativeElement.selectionStart;
         const word = this.getWordByPos(status, caretPosition);
         if (word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
             this.autosuggestData = word;
             return;
         }
-
-        // const parsedStatus = status.split(' ');
-        // if (parsedStatus && parsedStatus.length > 0 && status.length === caretPosition) {
-        //     const lastElement = parsedStatus[parsedStatus.length - 1];
-        //     if (lastElement.length > 2 && (lastElement.startsWith('@') || lastElement.startsWith('#'))) {
-        //         //this.autosuggestData = lastElement.substring(1);
-        //         this.autosuggestData = lastElement;
-        //         return;
-        //     }
-        // }
         this.autosuggestData = null;
     }
 
@@ -215,7 +209,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private focus(caretPos = null) {
         setTimeout(() => {
-            console.log('focus');
             this.replyElement.nativeElement.focus();
 
             if(caretPos){
