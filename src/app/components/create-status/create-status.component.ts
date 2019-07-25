@@ -134,7 +134,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private statusReplyingTo: Status;
 
     selectedPrivacy = 'Public';
-    privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
+    // privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
@@ -183,6 +183,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.accountSub.unsubscribe();
+    }
+
+    changePrivacy(value: string): boolean {
+        this.selectedPrivacy = value;
+        return false;
     }
 
     private detectAutosuggestion(status: string) {

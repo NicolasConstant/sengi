@@ -34,23 +34,26 @@
             <fa-icon [icon]="faPaperclip"></fa-icon>
         </a>
         <a href class="status-editor__footer--link" title="adjust status privacy" (click)="onContextMenu($event)">
-            <fa-icon [icon]="faGlobeAmericas"></fa-icon>
+            <fa-icon [icon]="faGlobeAmericas" *ngIf="selectedPrivacy === 'Public'"></fa-icon>
+            <fa-icon [icon]="faLockOpen" *ngIf="selectedPrivacy === 'Unlisted'"></fa-icon>
+            <fa-icon [icon]="faLock" *ngIf="selectedPrivacy === 'Follows-only'"></fa-icon>
+            <fa-icon [icon]="faEnvelope" *ngIf="selectedPrivacy === 'DM'"></fa-icon> 
         </a>
     </div>
 
     <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the start in order to use multiposting.</div>
 
     <context-menu #contextMenu>
-        <ng-template contextMenuItem (execute)="changePrivacy()">
+        <ng-template contextMenuItem (execute)="changePrivacy('Public')">
             <fa-icon [icon]="faGlobeAmericas"></fa-icon> Public
         </ng-template>
-        <ng-template contextMenuItem (execute)="changePrivacy()">
+        <ng-template contextMenuItem (execute)="changePrivacy('Unlisted')">
             <fa-icon [icon]="faLockOpen"></fa-icon> Unlisted
         </ng-template>        
-        <ng-template contextMenuItem (execute)="changePrivacy()">
+        <ng-template contextMenuItem (execute)="changePrivacy('Follows-only')">
             <fa-icon [icon]="faLock"></fa-icon> Followers-only
         </ng-template>
-        <ng-template contextMenuItem (execute)="changePrivacy()">
+        <ng-template contextMenuItem (execute)="changePrivacy('DM')">
             <fa-icon [icon]="faEnvelope"></fa-icon> Direct
         </ng-template>       
     </context-menu>
