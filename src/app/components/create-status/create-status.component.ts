@@ -186,7 +186,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private detectAutosuggestion(status: string) {
-        if(!this.loaded) return;
+        if (!this.loaded) return;
 
         const caretPosition = this.replyElement.nativeElement.selectionStart;
         const word = this.getWordByPos(status, caretPosition);
@@ -211,7 +211,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.replyElement.nativeElement.focus();
 
-            if(caretPos){
+            if (caretPos) {
                 this.replyElement.nativeElement.setSelectionRange(caretPos, caretPos);
             } else {
                 this.replyElement.nativeElement.setSelectionRange(this.status.length, this.status.length);
@@ -512,7 +512,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
             this.autosuggestData = null;
             this.hasSuggestions = false;
-                        
+
             if (document.activeElement === this.replyElement.nativeElement) {
                 setTimeout(() => {
                     this.replyElement.nativeElement.setSelectionRange(newCaretPosition, newCaretPosition);
@@ -565,6 +565,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    autoGrowTextZone(e) {
+        let scrolling = (e.target.scrollHeight + 25);
+        if (scrolling > 135) {
+            e.target.style.height = "0px";
+            e.target.style.height = (e.target.scrollHeight + 25) + "px";
+        }
+    }
 
     public onContextMenu($event: MouseEvent): void {
         this.contextMenuService.show.next({

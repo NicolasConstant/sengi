@@ -42,7 +42,7 @@ $counter-width: 90px;
         color: $status-editor-color;
         margin-bottom: 0;
         
-        //resize: none;
+        resize: none;
         border: none;
         overflow: auto;
         outline: none;
@@ -51,8 +51,10 @@ $counter-width: 90px;
         -moz-box-shadow: none;
         box-shadow: none;
 
+        min-height: 110px;
+        height: 110px;
 
-        border-bottom: 1px solid black;
+        //border-bottom: 1px solid black;
     }
 
     &__footer {
@@ -146,32 +148,32 @@ $counter-width: 90px;
         }
     }
 
-    &__counter {
-        display: inline-block;
-        border: 1px solid $status-secondary-color;
-        margin-left: 5px;
-        width: calc(#{$counter-width} - 5px);
-        height: 32px;
-        position: relative;
-        top: 0px;
-        padding: 4px 7px 0 7px; // color: lighten($font-link-primary-hover, 10);
+    // &__counter {
+    //     display: inline-block;
+    //     border: 1px solid $status-secondary-color;
+    //     margin-left: 5px;
+    //     width: calc(#{$counter-width} - 5px);
+    //     height: 32px;
+    //     position: relative;
+    //     top: 0px;
+    //     padding: 4px 7px 0 7px; // color: lighten($font-link-primary-hover, 10);
 
-        // position: relative;
-        // overflow: hidden;
-        &--count {
-            // position: absolute;
-            // left: 0;
-            // overflow: hidden;
-            // outline: 1px solid greenyellow;
-        }
+    //     // position: relative;
+    //     // overflow: hidden;
+    //     &--count {
+    //         // position: absolute;
+    //         // left: 0;
+    //         // overflow: hidden;
+    //         // outline: 1px solid greenyellow;
+    //     }
 
-        &--posts {
-            // position: absolute;
-            // right: 0;
-            margin-left: 10px;
-            float: right;
-        }
-    }
+    //     &--posts {
+    //         // position: absolute;
+    //         // right: 0;
+    //         margin-left: 10px;
+    //         float: right;
+    //     }
+    // }
 
     &__status {
         &::-webkit-resizer {
