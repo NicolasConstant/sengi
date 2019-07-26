@@ -59,12 +59,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
+            this.statusLoaded = false;
             let parser = new DOMParser();
             var dom = parser.parseFromString(value.status.content, 'text/html')
             this.status = dom.body.textContent;
 
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
+            this.statusLoaded = true;
 
             if (value.status.in_reply_to_id) {
                 this.isSending = true;
@@ -87,7 +89,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         this.notificationService.notifyHttpError(err);
                     })
                     .then(() => {
-                        this.isSending = false;
+                        this.isSending = false;                        
                     });
             }
         }
@@ -99,6 +101,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     isSending: boolean;
     mentionTooFarAwayError: boolean;
     autosuggestData: string = null;
+    private statusLoaded: boolean;
 
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
@@ -121,7 +124,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _replyingUserHandle: string;
     @Input('replyingUserHandle')
     set replyingUserHandle(value: string) {
-        if (value) {
+        if (value) {            
             this._replyingUserHandle = value;
             this.initMention();
         }
@@ -150,7 +153,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
-    private loaded: boolean;
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.accountChanged(accounts);
@@ -176,7 +178,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.initMention();
         }
 
-        this.loaded = true;
+        this.statusLoaded = true;
         this.focus();
     }
 
@@ -201,7 +203,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private detectAutosuggestion(status: string) {
-        if (!this.loaded) return;
+        if (!this.statusLoaded) return;
 
         const caretPosition = this.replyElement.nativeElement.selectionStart;
         const word = this.getWordByPos(status, caretPosition);
@@ -235,6 +237,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private initMention() {
+        this.statusLoaded = false;
+
         if (!this.selectedAccount) {
             this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
         }
@@ -247,6 +251,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.status = `${this.replyingUserHandle} `;
         this.countStatusChar(this.status);
 
+        this.statusLoaded = true;
         this.focus();
     }
 
