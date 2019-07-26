@@ -12,6 +12,6 @@
         (click)="hashtagSelected(h)"
         class="autosuggest__entry"
         [class.autosuggest__entry--selected]="h.selected">
-        #{{ h.hashtag }}
+        <span  class="autosuggest__account--handle">#{{ h.hashtag }}</span>
     </a>
 </div>
