@@ -138,21 +138,7 @@ $counter-width: 90px;
 .status-form {
     position: relative;
     font-size: $default-font-size;
-
-    &__sending {
-        position: absolute;
-        top: 0px;
-        left: 4px;
-        right: 4px;
-        bottom: 4px;
-        background-color: rgba($column-color, .75);
-        z-index: 2;
-
-        &--waiting {
-            margin-top: calc(25%);
-        }
-    }
-
+    
     &__status {
         &::-webkit-resizer {
             // border: 2px solid black;
@@ -167,14 +153,6 @@ $counter-width: 90px;
             width: 12px;
         }
     }
-
-    // &__autosuggest {
-    //     display: block;
-    //     margin: auto;
-    //     position: relative;
-    //     top: -5px;
-    //     width: calc(100% - 10px);
-    // }
 
     &__mention-error {
         border: 2px dashed red;

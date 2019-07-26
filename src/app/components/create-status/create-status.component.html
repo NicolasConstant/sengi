@@ -1,8 +1,4 @@
 <form class="status-form" (ngSubmit)="onSubmit()">
-    <div class="status-form__sending" *ngIf="isSending">
-        <app-waiting-animation class="waiting-icon"></app-waiting-animation>
-    </div>
-
     <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title"
         autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
 
@@ -20,10 +16,12 @@
 
     <div class="status-editor__footer">
         <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">
-            <span>REPLY!</span>
+            <span *ngIf="!isSending">REPLY!</span>
+            <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
         </button>
         <button type="submit" title="post" class="status-editor__footer--send-button" *ngIf="!statusReplyingToWrapper">
-            <span>POST!</span>
+            <span *ngIf="!isSending">POST!</span>
+            <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
         </button>
         <div class="status-editor__footer__counter">
             <div class="status-editor__footer__counter--posts" title="number of statuses">
