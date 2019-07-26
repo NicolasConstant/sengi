@@ -17,8 +17,6 @@ import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
 import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
 
-
-
 @Component({
     selector: 'app-create-status',
     templateUrl: './create-status.component.html',
