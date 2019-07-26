@@ -2,31 +2,29 @@
 
 
 .autosuggest {
-    background-color: $column-color;
-    border: solid $status-secondary-color;
-    border-width: 0 1px 1px 1px;
+    background-color: $autosuggest-background;
+    // border: solid $autosuggest-background;
+    // border-width: 0 1px 1px 1px;
     
     &__entry {        
         display: block;
         padding: 1px 5px;
-        color: $font-link-primary-hover;
-        background-color: darken($column-color, 5%);
+        color: $autosuggest-entry-color;
+        background-color: $autosuggest-entry-background;
         white-space: nowrap;
         text-overflow: ellipsis; 
         overflow: hidden;
         width: calc(100%);
 
         &:hover, &--selected {
-            color: $font-color-primary;
+            color: $autosuggest-entry-color-hover;
             text-decoration: none;
-            background-color: $column-color;
-        }
-
-       
+            background-color: $autosuggest-entry-background-hover;
+        }       
     }
 
     &__account {
-        padding: 5px 5px 0 5px;
+        padding: 5px 5px 5px 5px;
 
         &:last-child{
             padding: 5px 5px 5px 5px;
@@ -34,14 +32,23 @@
 
         &--avatar {
             width: 25px;
+            margin-right: 7px;
         }
 
-        &--acct {
-            color: $font-link-primary;
+        &--text {
+            position: relative;
+            top: 1px;
         }
+
+        &--handle {
+            color: $autosuggest-entry-handle-color;
+        }
+        // &--acct {
+        //     color: $autosuggest-entry-color;
+        // }
     }
 
-    &__entry:hover &__account--acct,  &__entry--selected &__account--acct {
-        color: $font-link-primary-hover;
+    &__entry:hover &__account--handle,  &__entry--selected &__account--handle {
+        color: $autosuggest-entry-handle-color-hover;
     }
 }

@@ -12,7 +12,8 @@
         (keydown)="handleKeyDown($event)" (keyup)="autoGrowTextZone($event)"
         (blur)="statusTextEditorLostFocus()"></textarea>
 
-    <app-autosuggest class="status-form__autosuggest" *ngIf="autosuggestData" [pattern]="autosuggestData"
+    <app-autosuggest class="status-editor__autosuggest" *ngIf="autosuggestData" 
+        [pattern]="autosuggestData"
         [autoSuggestUserActionsStream]="autoSuggestUserActionsStream"
         (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
     </app-autosuggest>
