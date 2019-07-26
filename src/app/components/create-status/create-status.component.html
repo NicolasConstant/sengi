@@ -29,9 +29,11 @@
             <div class="status-editor__footer__counter--count" title="chars left">{{charCountLeft}}</div>
         </div>
 
-        <a href class="status-editor__footer--link" title="add media">
+        <a href class="status-editor__footer--link" title="add media" (click)="addMedia()">
             <fa-icon [icon]="faPaperclip"></fa-icon>
         </a>
+        <input #fileInput type="file" id="file" style="display: none;" (change)="handleFileInput($event.target.files)">
+
         <a href class="status-editor__footer--link" title="adjust status privacy" (click)="onContextMenu($event)">
             <fa-icon [icon]="faGlobeAmericas" *ngIf="selectedPrivacy === 'Public'"></fa-icon>
             <fa-icon [icon]="faLockOpen" *ngIf="selectedPrivacy === 'Unlisted'"></fa-icon>

@@ -105,6 +105,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
+    @ViewChild('fileInput') fileInputElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
     private _isDirectMention: boolean;
@@ -187,6 +188,17 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     changePrivacy(value: string): boolean {
         this.selectedPrivacy = value;
+        return false;
+    }
+
+    addMedia(): boolean {
+        this.fileInputElement.nativeElement.click();
+        return false;
+    }
+
+    handleFileInput(files: File[]): boolean {
+        const acc = this.toolsService.getSelectedAccounts()[0];
+        this.mediaService.uploadMedia(acc, files);
         return false;
     }
 
