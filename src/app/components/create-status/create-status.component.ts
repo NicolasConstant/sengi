@@ -362,7 +362,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
-        const mentions = [...status.mentions.map(x => x.acct), status.account.acct];
+        const mentions = [status.account.acct, ...status.mentions.map(x => x.acct)];
 
         let uniqueMentions = [];
         for (let mention of mentions) {
@@ -381,7 +381,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         const selectedUser = this.toolsService.getSelectedAccounts()[0];
         globalUniqueMentions = globalUniqueMentions.filter(x => x.toLowerCase() !== `${selectedUser.username}@${selectedUser.instance}`.toLowerCase());
-
+        
         return globalUniqueMentions;
     }
 
