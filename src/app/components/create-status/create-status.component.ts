@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef, ComponentRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
@@ -639,7 +639,17 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         // const filePreviewPortal = ;
         //overlayRef.attach(new ComponentPortal(EmojiPickerComponent, this.viewContainerRef));
         // overlayRef.attach(new ComponentPortal(EmojiPickerComponent));
-        this.overlayRef.attach(new ComponentPortal(EmojiPickerComponent));
+
+        
+        let comp = new ComponentPortal(EmojiPickerComponent);       
+        //this.overlayRef.attach(comp);
+
+        const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
+        compRef.instance.closedEvent.subscribe(() => {
+            this.overlayRef.dispose();
+        })
+
+
         // overlayRef.backdropClick().subscribe(() => {
         //     console.warn('wut?');
         //     overlayRef.dispose();
