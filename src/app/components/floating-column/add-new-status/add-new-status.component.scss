@@ -25,11 +25,13 @@ $btn-send-status-width: 60px;
 
 .panel {
     padding-left: 0;
-    padding-right: 0;
+    padding-right: 0;    
 }
 
 .new-message-body {
     overflow: auto;
     height: calc(100% - 30px);
     padding-right: 5px;
+    
+    padding-bottom: 100px;    
 }
