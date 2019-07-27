@@ -591,10 +591,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private autoGrow() {
-        let scrolling = (this.replyElement.nativeElement.scrollHeight + 25); 
+        let scrolling = (this.replyElement.nativeElement.scrollHeight); 
 
-        if (scrolling > 135) {
-            //this.replyElement.nativeElement.style.height = `0px`;
+        if (scrolling > 110) {
+            this.replyElement.nativeElement.style.height = `0px`;
             this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
         }
     }
