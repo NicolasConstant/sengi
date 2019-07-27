@@ -37,6 +37,7 @@
         "@angular/platform-browser": "^7.2.7",
         "@angular/platform-browser-dynamic": "^7.2.7",
         "@angular/router": "^7.2.7",
+        "@ctrl/ngx-emoji-mart": "^0.17.0",
         "@fortawesome/angular-fontawesome": "^0.3.0",
         "@fortawesome/fontawesome-svg-core": "^1.2.13",
         "@fortawesome/free-brands-svg-icons": "^5.7.0",

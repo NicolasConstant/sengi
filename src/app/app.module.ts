@@ -9,9 +9,11 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
@@ -64,78 +66,86 @@ import { ListAccountComponent } from './components/floating-column/manage-accoun
 import { PollComponent } from './components/stream/status/poll/poll.component';
 import { TimeLeftPipe } from './pipes/time-left.pipe';
 import { AutosuggestComponent } from './components/create-status/autosuggest/autosuggest.component';
+import { EmojiPickerComponent } from './components/create-status/emoji-picker/emoji-picker.component';
+
 
 const routes: Routes = [
-  { path: "", redirectTo: "home", pathMatch: "full" },
-  { path: "home", component: StreamsMainDisplayComponent },
-  { path: "register", component: RegisterNewAccountComponent}, 
-  { path: "**", redirectTo: "home" }
+    { path: "", redirectTo: "home", pathMatch: "full" },
+    { path: "home", component: StreamsMainDisplayComponent },
+    { path: "register", component: RegisterNewAccountComponent },
+    { path: "**", redirectTo: "home" }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LeftSideBarComponent,
-    StreamsMainDisplayComponent,
-    StreamComponent,
-    StreamsSelectionFooterComponent,
-    StatusComponent,
-    RegisterNewAccountComponent,
-    AccountIconComponent,
-    FloatingColumnComponent,
-    ManageAccountComponent,
-    AddNewStatusComponent,
-    AttachementsComponent,
-    SettingsComponent,
-    AddNewAccountComponent,
-    SearchComponent,
-    ActionBarComponent,
-    WaitingAnimationComponent,
-    UserProfileComponent,
-    ThreadComponent,
-    HashtagComponent,
-    StreamOverlayComponent,
-    DatabindedTextComponent,
-    TimeAgoPipe,
-    StreamStatusesComponent,
-    StreamEditionComponent,
-    TutorialComponent,
-    NotificationHubComponent,
-    MediaViewerComponent,
-    CreateStatusComponent,
-    MediaComponent,
-    MyAccountComponent,
-    FavoritesComponent,
-    DirectMessagesComponent,
-    MentionsComponent,
-    NotificationsComponent,
-    AccountEmojiPipe,
-    CardComponent,
-    ListEditorComponent,
-    ListAccountComponent,
-    PollComponent,
-    TimeLeftPipe,
-    AutosuggestComponent
-  ],
-  imports: [
-    FontAwesomeModule,
-    BrowserModule,
-    HttpModule,
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot(routes),
+    declarations: [
+        AppComponent,
+        LeftSideBarComponent,
+        StreamsMainDisplayComponent,
+        StreamComponent,
+        StreamsSelectionFooterComponent,
+        StatusComponent,
+        RegisterNewAccountComponent,
+        AccountIconComponent,
+        FloatingColumnComponent,
+        ManageAccountComponent,
+        AddNewStatusComponent,
+        AttachementsComponent,
+        SettingsComponent,
+        AddNewAccountComponent,
+        SearchComponent,
+        ActionBarComponent,
+        WaitingAnimationComponent,
+        UserProfileComponent,
+        ThreadComponent,
+        HashtagComponent,
+        StreamOverlayComponent,
+        DatabindedTextComponent,
+        TimeAgoPipe,
+        StreamStatusesComponent,
+        StreamEditionComponent,
+        TutorialComponent,
+        NotificationHubComponent,
+        MediaViewerComponent,
+        CreateStatusComponent,
+        MediaComponent,
+        MyAccountComponent,
+        FavoritesComponent,
+        DirectMessagesComponent,
+        MentionsComponent,
+        NotificationsComponent,
+        AccountEmojiPipe,
+        CardComponent,
+        ListEditorComponent,
+        ListAccountComponent,
+        PollComponent,
+        TimeLeftPipe,
+        AutosuggestComponent,
+        EmojiPickerComponent
+    ],
+    entryComponents: [
+        EmojiPickerComponent
+    ],
+    imports: [
+        FontAwesomeModule,
+        BrowserModule,
+        HttpModule,
+        HttpClientModule,
+        FormsModule,
+        PickerModule,
+        OverlayModule,
+        RouterModule.forRoot(routes),
 
-    NgxsModule.forRoot([
-      RegisteredAppsState,
-      AccountsState,
-      StreamsState,
-      SettingsState
-    ]),
-    NgxsStoragePluginModule.forRoot(),
-    ContextMenuModule.forRoot()
-  ],
-  providers: [AuthService, NavigationService, NotificationService, MastodonService, StreamingService],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+        NgxsModule.forRoot([
+            RegisteredAppsState,
+            AccountsState,
+            StreamsState,
+            SettingsState
+        ]),
+        NgxsStoragePluginModule.forRoot(),
+        ContextMenuModule.forRoot()
+    ],
+    providers: [AuthService, NavigationService, NotificationService, MastodonService, StreamingService],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

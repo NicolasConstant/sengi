@@ -6,6 +6,8 @@
 $btn-send-status-width: 60px;
 $counter-width: 90px;
 
+// @import "~@ctrl/ngx-emoji-mart/picker";
+
 .form-control {
     margin: 0 0 5px 5px;
     width: calc(100% - 10px);
@@ -148,3 +150,20 @@ $counter-width: 90px;
     font-size: 12px;
     color: #1f1f1f;
 }
+
+.emojipicker {
+
+    font-size: $default-font-size !important;
+
+
+
+}
+
+@import '~@angular/cdk/overlay-prebuilt.css';
+// ::ng-deep .cdk-overlay-backdrop  {
+//     // width: 100%;
+//     // height: 100%;
+//     border: 3px solid greenyellow;
+//     background-color: black;
+//     min-height: 20px;
+// }

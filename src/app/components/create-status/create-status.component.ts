@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
@@ -16,6 +16,9 @@ import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
 import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
+import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
 
 @Component({
     selector: 'app-create-status',
@@ -155,7 +158,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
         private readonly instancesInfoService: InstancesInfoService,
-        private readonly mediaService: MediaService) {
+        private readonly mediaService: MediaService,
+        private readonly overlay: Overlay,
+        public viewContainerRef: ViewContainerRef) {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
@@ -591,7 +596,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private autoGrow() {
-        let scrolling = (this.replyElement.nativeElement.scrollHeight); 
+        let scrolling = (this.replyElement.nativeElement.scrollHeight);
 
         if (scrolling > 110) {
             this.replyElement.nativeElement.style.height = `0px`;
@@ -608,5 +613,43 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         });
         $event.preventDefault();
         $event.stopPropagation();
+    }
+
+    //https://stackblitz.com/edit/overlay-demo
+    @ViewChild('emojiButton') emojiButtonElement: ElementRef;
+    overlayRef: OverlayRef;
+    openEmojiPicker(e: MouseEvent): boolean {
+        console.warn(e);
+
+
+        let config = new OverlayConfig();
+        config.positionStrategy = this.overlay.position()
+            .global()
+            .left(`${e.pageX}px`)
+            .top(`${e.pageY}px`);
+        config.hasBackdrop = true;
+
+
+        this.overlayRef = this.overlay.create(config);
+        this.overlayRef.backdropClick().subscribe(() => {
+            console.warn('wut?');
+            this.overlayRef.dispose();
+        });
+
+        // const filePreviewPortal = ;
+        //overlayRef.attach(new ComponentPortal(EmojiPickerComponent, this.viewContainerRef));
+        // overlayRef.attach(new ComponentPortal(EmojiPickerComponent));
+        this.overlayRef.attach(new ComponentPortal(EmojiPickerComponent));
+        // overlayRef.backdropClick().subscribe(() => {
+        //     console.warn('wut?');
+        //     overlayRef.dispose();
+        // });
+
+        return false;
+    }
+
+    closeEmoji(): boolean {
+        this.overlayRef.dispose();
+        return false;
     }
 }
