@@ -58,6 +58,13 @@ $counter-width: 90px;
         //border-bottom: 1px solid black;
     }
 
+    &__mention-error {
+        background-color: $status-editor-background;
+        color: rgb(255, 34, 34);
+        padding: 5px 10px;
+        margin: 0 5px;
+    }
+
     &__autosuggest {
         display: block;
         margin: 0 5px;
@@ -155,11 +162,11 @@ $counter-width: 90px;
         }
     }
 
-    &__mention-error {
-        border: 2px dashed red;
-        padding: 5px 10px;
-        margin: 5px;
-    }
+    // &__mention-error {
+    //     border: 2px dashed red;
+    //     padding: 5px 10px;
+    //     margin: 5px;
+    // }
 }
 
 .context-menu-icon {
