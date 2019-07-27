@@ -48,6 +48,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.countStatusChar(value);
             this.detectAutosuggestion(value);
             this._status = value;
+
+            setTimeout(() => {
+                this.autoGrow();
+            }, 0);
+
         } else {
             this.autosuggestData = null;
         }
@@ -89,7 +94,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         this.notificationService.notifyHttpError(err);
                     })
                     .then(() => {
-                        this.isSending = false;                        
+                        this.isSending = false;
                     });
             }
         }
@@ -102,6 +107,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     mentionTooFarAwayError: boolean;
     autosuggestData: string = null;
     private statusLoaded: boolean;
+    private hasSuggestions: boolean;
 
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
@@ -124,7 +130,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _replyingUserHandle: string;
     @Input('replyingUserHandle')
     set replyingUserHandle(value: string) {
-        if (value) {            
+        if (value) {
             this._replyingUserHandle = value;
             this.initMention();
         }
@@ -381,7 +387,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         const selectedUser = this.toolsService.getSelectedAccounts()[0];
         globalUniqueMentions = globalUniqueMentions.filter(x => x.toLowerCase() !== `${selectedUser.username}@${selectedUser.instance}`.toLowerCase());
-        
+
         return globalUniqueMentions;
     }
 
@@ -543,7 +549,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
     }
 
-    private hasSuggestions: boolean;
     suggestionsChanged(hasSuggestions: boolean) {
         this.hasSuggestions = hasSuggestions;
     }
@@ -585,11 +590,12 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    autoGrowTextZone(e) {
-        let scrolling = (e.target.scrollHeight + 25);
+    private autoGrow() {
+        let scrolling = (this.replyElement.nativeElement.scrollHeight + 25); 
+
         if (scrolling > 135) {
-            e.target.style.height = "0px";
-            e.target.style.height = (e.target.scrollHeight + 25) + "px";
+            //this.replyElement.nativeElement.style.height = `0px`;
+            this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
         }
     }
 

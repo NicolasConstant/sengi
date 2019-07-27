@@ -3,10 +3,10 @@
         autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
 
     <textarea #reply [(ngModel)]="status" name="status"
-        class="form-control form-control-sm status-form__status status-editor__content flexcroll" rows="5" required
+        class="form-control form-control-sm status-form__status status-editor__content" rows="5" required
         title="content" placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"
-        (keydown)="handleKeyDown($event)" (keyup)="autoGrowTextZone($event)"
-        (blur)="statusTextEditorLostFocus()"></textarea>
+        (keydown)="handleKeyDown($event)"
+        (blur)="statusTextEditorLostFocus()"></textarea> <!-- flexcroll  (keyup)="autoGrow($event)" -->
 
     <app-autosuggest class="status-editor__autosuggest" *ngIf="autosuggestData" 
         [pattern]="autosuggestData"
