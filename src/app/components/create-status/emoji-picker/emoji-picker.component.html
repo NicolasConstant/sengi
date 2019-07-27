@@ -1,2 +1,7 @@
-<emoji-mart [showPreview]="false" [perLine]="7" [isNative]="true" [sheetSize]="16"
+<emoji-mart 
+    [showPreview]="false" 
+    [perLine]="7" 
+    [isNative]="true" 
+    [sheetSize]="16"
+    (emojiSelect)="emojiSelected($event)"
 class="emojipicker" title="Pick your emoji…" emoji="point_up"></emoji-mart>

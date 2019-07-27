@@ -662,7 +662,12 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
         compRef.instance.closedEvent.subscribe(() => {
             this.overlayRef.dispose();
-        })
+        });
+        compRef.instance.emojiSelectedEvent.subscribe((emoji) => {
+            if(emoji){
+                this.status += ` ${emoji}`;
+            }            
+        });
 
 
         // overlayRef.backdropClick().subscribe(() => {

@@ -9,6 +9,7 @@ export class EmojiPickerComponent implements OnInit {
     private init = false;
 
     @Output('closed') public closedEvent = new EventEmitter();
+    @Output('emojiSelected') public emojiSelectedEvent = new EventEmitter<string>();
 
     constructor(private eRef: ElementRef) { }
 
@@ -25,5 +26,11 @@ export class EmojiPickerComponent implements OnInit {
         setTimeout(() => {
             this.init = true;
         }, 0);
+    }
+
+    emojiSelected(select: any): boolean {
+        console.warn(select);
+        this.emojiSelectedEvent.next(select.emoji.native);
+        return false;
     }
 }
