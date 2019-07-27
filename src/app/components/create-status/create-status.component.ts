@@ -2,6 +2,10 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, 
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
+import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
+import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
@@ -11,8 +15,7 @@ import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
-import { identifierModuleUrl } from '@angular/compiler';
-
+import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
 
 @Component({
     selector: 'app-create-status',
@@ -20,6 +23,15 @@ import { identifierModuleUrl } from '@angular/compiler';
     styleUrls: ['./create-status.component.scss']
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
+    faPaperclip = faPaperclip;
+    faGlobe = faGlobe;
+    faGlobeAmericas = faGlobeAmericas;
+    faLock = faLock;
+    faLockOpen = faLockOpen;
+    faEnvelope = faEnvelope;
+
+    autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
+
     private _title: string;
     set title(value: string) {
         this._title = value;
@@ -34,7 +46,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     set status(value: string) {
         if (value) {
             this.countStatusChar(value);
+            this.detectAutosuggestion(value);
             this._status = value;
+
+            setTimeout(() => {
+                this.autoGrow();
+            }, 0);
+
+        } else {
+            this.autosuggestData = null;
         }
     }
     get status(): string {
@@ -44,12 +64,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
+            this.statusLoaded = false;
             let parser = new DOMParser();
             var dom = parser.parseFromString(value.status.content, 'text/html')
             this.status = dom.body.textContent;
-            
+
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
+            this.statusLoaded = true;
 
             if (value.status.in_reply_to_id) {
                 this.isSending = true;
@@ -60,7 +82,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
                         for (const mention of mentions) {
                             const name = `@${mention.split('@')[0]}`;
-                            if(this.status.includes(name)){
+                            if (this.status.includes(name)) {
                                 this.status = this.status.replace(name, `@${mention}`);
                             } else {
                                 this.status = `@${mention} ` + this.status;
@@ -83,10 +105,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     postCounts: number = 1;
     isSending: boolean;
     mentionTooFarAwayError: boolean;
+    autosuggestData: string = null;
+    private statusLoaded: boolean;
+    private hasSuggestions: boolean;
 
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
+    @ViewChild('fileInput') fileInputElement: ElementRef;
+    @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
     private _isDirectMention: boolean;
     @Input('isDirectMention')
@@ -115,13 +142,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private statusReplyingTo: Status;
 
     selectedPrivacy = 'Public';
-    privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
+    // privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
@@ -156,6 +184,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.initMention();
         }
 
+        this.statusLoaded = true;
         this.focus();
     }
 
@@ -163,13 +192,59 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
     }
 
-    private focus() {
+    changePrivacy(value: string): boolean {
+        this.selectedPrivacy = value;
+        return false;
+    }
+
+    addMedia(): boolean {
+        this.fileInputElement.nativeElement.click();
+        return false;
+    }
+
+    handleFileInput(files: File[]): boolean {
+        const acc = this.toolsService.getSelectedAccounts()[0];
+        this.mediaService.uploadMedia(acc, files);
+        return false;
+    }
+
+    private detectAutosuggestion(status: string) {
+        if (!this.statusLoaded) return;
+
+        const caretPosition = this.replyElement.nativeElement.selectionStart;
+        const word = this.getWordByPos(status, caretPosition);
+        if (word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
+            this.autosuggestData = word;
+            return;
+        }
+        this.autosuggestData = null;
+    }
+
+    private getWordByPos(str, pos) {
+        var left = str.substr(0, pos);
+        var right = str.substr(pos);
+
+        left = left.replace(/^.+ /g, "");
+        right = right.replace(/ .+$/g, "");
+
+        return left + right;
+    }
+
+    private focus(caretPos = null) {
         setTimeout(() => {
             this.replyElement.nativeElement.focus();
+
+            if (caretPos) {
+                this.replyElement.nativeElement.setSelectionRange(caretPos, caretPos);
+            } else {
+                this.replyElement.nativeElement.setSelectionRange(this.status.length, this.status.length);
+            }
         }, 0);
     }
 
     private initMention() {
+        this.statusLoaded = false;
+
         if (!this.selectedAccount) {
             this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
         }
@@ -182,6 +257,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.status = `${this.replyingUserHandle} `;
         this.countStatusChar(this.status);
 
+        this.statusLoaded = true;
         this.focus();
     }
 
@@ -292,7 +368,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
-        const mentions = [...status.mentions.map(x => x.acct), status.account.acct];
+        const mentions = [status.account.acct, ...status.mentions.map(x => x.acct)];
 
         let uniqueMentions = [];
         for (let mention of mentions) {
@@ -445,5 +521,92 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private getMentionsFromStatus(status: string): string[] {
         return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
+    }
+
+
+    suggestionSelected(selection: AutosuggestSelection) {
+        if (this.status.includes(selection.pattern)) {
+
+            let transformedStatus = this.status;
+            transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
+            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
+            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
+            this.status = transformedStatus;
+
+            let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
+            if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
+
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+
+            if (document.activeElement === this.replyElement.nativeElement) {
+                setTimeout(() => {
+                    this.replyElement.nativeElement.setSelectionRange(newCaretPosition, newCaretPosition);
+                }, 0);
+            } else {
+                this.focus(newCaretPosition);
+            }
+        }
+    }
+
+    suggestionsChanged(hasSuggestions: boolean) {
+        this.hasSuggestions = hasSuggestions;
+    }
+
+    handleKeyDown(event: KeyboardEvent): boolean {
+        if (this.hasSuggestions) {
+            let keycode = event.keyCode;
+            if (keycode === DOWN_ARROW || keycode === UP_ARROW || keycode === ENTER || keycode === ESCAPE) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                event.stopPropagation();
+
+                switch (keycode) {
+                    case DOWN_ARROW:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveDown);
+                        break;
+                    case UP_ARROW:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveUp);
+                        break;
+                    case ENTER:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.Validate);
+                        break;
+                    case ESCAPE:
+                        this.autosuggestData = null;
+                        this.hasSuggestions = false;
+                        break;
+                }
+
+                return false;
+            }
+        }
+    }
+
+    statusTextEditorLostFocus(): boolean {
+        setTimeout(() => {
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+        }, 250);
+        return false;
+    }
+
+    private autoGrow() {
+        let scrolling = (this.replyElement.nativeElement.scrollHeight); 
+
+        if (scrolling > 110) {
+            this.replyElement.nativeElement.style.height = `0px`;
+            this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
+        }
+    }
+
+    public onContextMenu($event: MouseEvent): void {
+        this.contextMenuService.show.next({
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.contextMenu,
+            event: $event,
+            item: null
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
     }
 }

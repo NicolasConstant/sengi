@@ -63,6 +63,7 @@ import { ListEditorComponent } from './components/floating-column/manage-account
 import { ListAccountComponent } from './components/floating-column/manage-account/my-account/list-editor/list-account/list-account.component';
 import { PollComponent } from './components/stream/status/poll/poll.component';
 import { TimeLeftPipe } from './pipes/time-left.pipe';
+import { AutosuggestComponent } from './components/create-status/autosuggest/autosuggest.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "home", pathMatch: "full" },
@@ -113,7 +114,8 @@ const routes: Routes = [
     ListEditorComponent,
     ListAccountComponent,
     PollComponent,
-    TimeLeftPipe
+    TimeLeftPipe,
+    AutosuggestComponent
   ],
   imports: [
     FontAwesomeModule,

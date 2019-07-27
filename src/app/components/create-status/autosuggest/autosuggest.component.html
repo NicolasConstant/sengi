@@ -1,0 +1,17 @@
+<div class="autosuggest" *ngIf="accounts.length > 0 || hashtags.length > 0">
+    <a href *ngFor="let a of accounts" 
+        title="@{{a.account.acct}}"
+        (click)="accountSelected(a)"
+        class="autosuggest__entry autosuggest__account"
+        [class.autosuggest__entry--selected]="a.selected">
+        <img class="autosuggest__account--avatar" src="{{ a.account.avatar }}" /> <span class="autosuggest__account--text"><span  class="autosuggest__account--handle">{{ a.account.username }}</span> @{{ a.account.acct }}</span>
+    </a>
+
+    <a href *ngFor="let h of hashtags" 
+        title="#{{h.hashtag}}"
+        (click)="hashtagSelected(h)"
+        class="autosuggest__entry"
+        [class.autosuggest__entry--selected]="h.selected">
+        <span  class="autosuggest__account--handle">#{{ h.hashtag }}</span>
+    </a>
+</div>

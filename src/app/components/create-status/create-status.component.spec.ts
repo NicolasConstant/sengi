@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgxsModule } from '@ngxs/store';
 import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ContextMenuModule } from 'ngx-contextmenu';
 
 import { CreateStatusComponent } from './create-status.component';
 import { WaitingAnimationComponent } from '../waiting-animation/waiting-animation.component';
@@ -12,7 +14,7 @@ import { StreamsState } from '../../states/streams.state';
 import { NavigationService } from '../../services/navigation.service';
 import { NotificationService } from '../../services/notification.service';
 import { MastodonService } from '../../services/mastodon.service';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 
 describe('CreateStatusComponent', () => {
     let component: CreateStatusComponent;
@@ -26,6 +28,7 @@ describe('CreateStatusComponent', () => {
             imports: [
                 FormsModule,
                 HttpClientModule,
+                ContextMenuModule.forRoot(),
                 NgxsModule.forRoot([
                     RegisteredAppsState,
                     AccountsState,
