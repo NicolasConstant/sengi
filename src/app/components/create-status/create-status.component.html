@@ -1,12 +1,11 @@
-<form class="status-form" (ngSubmit)="onSubmit()">
+<form class="status-editor" (ngSubmit)="onSubmit()">
     <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title"
         autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
 
     <textarea #reply [(ngModel)]="status" name="status"
-        class="form-control form-control-sm status-form__status status-editor__content" rows="5" required
+        class="form-control form-control-sm status-editor__content" rows="5" required
         title="content" placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"
-        (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()"></textarea>
-    <!-- flexcroll  (keyup)="autoGrow($event)" -->
+        (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()"></textarea>    
 
     <div class="status-editor__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the
         start in order to use multiposting.</div>
