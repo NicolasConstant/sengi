@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef, ComponentRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef, ComponentRef, HostListener } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
@@ -191,6 +191,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         this.statusLoaded = true;
         this.focus();
+
+        this.innerHeight = window.innerHeight;
     }
 
     ngOnDestroy() {
@@ -618,15 +620,28 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     //https://stackblitz.com/edit/overlay-demo
     @ViewChild('emojiButton') emojiButtonElement: ElementRef;
     overlayRef: OverlayRef;
+
+    public innerHeight: number;
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.innerHeight = window.innerHeight;
+    }
+
     openEmojiPicker(e: MouseEvent): boolean {
         console.warn(e);
 
+        let topPosition = e.pageY;
+        if(this.innerHeight - e.pageY < 360){
+            topPosition -= 360;
+        }
+
+        
 
         let config = new OverlayConfig();
         config.positionStrategy = this.overlay.position()
             .global()
             .left(`${e.pageX}px`)
-            .top(`${e.pageY}px`);
+            .top(`${topPosition}px`);
         config.hasBackdrop = true;
 
 
@@ -640,8 +655,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         //overlayRef.attach(new ComponentPortal(EmojiPickerComponent, this.viewContainerRef));
         // overlayRef.attach(new ComponentPortal(EmojiPickerComponent));
 
-        
-        let comp = new ComponentPortal(EmojiPickerComponent);       
+
+        let comp = new ComponentPortal(EmojiPickerComponent);
         //this.overlayRef.attach(comp);
 
         const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
