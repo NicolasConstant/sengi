@@ -4,5 +4,13 @@
 }
 
 ::ng-deep .emoji-mart-emoji-native {
-    font-size: 16px !important;
+    cursor: pointer !important;
+}
+
+::ng-deep .emoji-mart-emoji-native span {
+    position: relative;
+    top: 1px;
+    left: -1px;
+    font-size: 19px !important;
+    cursor: pointer !important;
 }

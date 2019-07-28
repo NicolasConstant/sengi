@@ -29,7 +29,6 @@ export class EmojiPickerComponent implements OnInit {
     }
 
     emojiSelected(select: any): boolean {
-        console.warn(select);
         this.emojiSelectedEvent.next(select.emoji.native);
         return false;
     }
