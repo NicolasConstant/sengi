@@ -50,6 +50,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if (value) {
             this.countStatusChar(value);
             this.detectAutosuggestion(value);
+
             this._status = value;
 
             setTimeout(() => {
@@ -629,8 +630,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private emojiCloseSub: Subscription;
     private emojiSelectedSub: Subscription;
+    private beforeEmojiCaretPosition: number;
     openEmojiPicker(e: MouseEvent): boolean {
         if (this.overlayRef) return false;
+
+        this.beforeEmojiCaretPosition = this.replyElement.nativeElement.selectionStart;
 
         let topPosition = e.pageY;
         if (this.innerHeight - e.pageY < 360) {
@@ -653,23 +657,26 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let comp = new ComponentPortal(EmojiPickerComponent);
         const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
         this.emojiCloseSub = compRef.instance.closedEvent.subscribe(() => {
-            this.closeEEmojiPanel();
+            this.closeEmojiPanel();
         });
         this.emojiSelectedSub = compRef.instance.emojiSelectedEvent.subscribe((emoji) => {
             if (emoji) {
-                this.status += ` ${emoji}`;
-                this.closeEEmojiPanel();
+                this.status = [this.status.slice(0, this.beforeEmojiCaretPosition), emoji, ' ', this.status.slice(this.beforeEmojiCaretPosition)].join('').replace('  ', ' ');
+                this.beforeEmojiCaretPosition += emoji.length + 1;
+
+                this.closeEmojiPanel();
             }
         });
 
         return false;
     }
 
-    private closeEEmojiPanel() {
-        if(this.emojiCloseSub) this.emojiCloseSub.unsubscribe();
-        if(this.emojiSelectedSub) this.emojiSelectedSub.unsubscribe();
-        if(this.overlayRef) this.overlayRef.dispose();
+    private closeEmojiPanel() {
+        if (this.emojiCloseSub) this.emojiCloseSub.unsubscribe();
+        if (this.emojiSelectedSub) this.emojiSelectedSub.unsubscribe();
+        if (this.overlayRef) this.overlayRef.dispose();
         this.overlayRef = null;
+        this.focus(this.beforeEmojiCaretPosition);
     }
 
     closeEmoji(): boolean {
