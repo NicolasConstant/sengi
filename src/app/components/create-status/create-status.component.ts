@@ -47,19 +47,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _status: string = '';
     @Input('status')
     set status(value: string) {
-        if (value) {
-            this.countStatusChar(value);
-            this.detectAutosuggestion(value);
+        this.countStatusChar(value);
+        this.detectAutosuggestion(value);
+        this._status = value;
 
-            this._status = value;
-
-            setTimeout(() => {
-                this.autoGrow();
-            }, 0);
-
-        } else {
-            this.autosuggestData = null;
-        }
+        setTimeout(() => {
+            this.autoGrow();
+        }, 0);
     }
     get status(): string {
         return this._status;
