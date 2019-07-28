@@ -627,56 +627,49 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.innerHeight = window.innerHeight;
     }
 
+    private emojiCloseSub: Subscription;
+    private emojiSelectedSub: Subscription;
     openEmojiPicker(e: MouseEvent): boolean {
-        console.warn(e);
+        if (this.overlayRef) return false;
 
         let topPosition = e.pageY;
-        if(this.innerHeight - e.pageY < 360){
+        if (this.innerHeight - e.pageY < 360) {
             topPosition -= 360;
         }
-
-        
 
         let config = new OverlayConfig();
         config.positionStrategy = this.overlay.position()
             .global()
-            .left(`${e.pageX}px`)
+            .left(`${e.pageX - 283}px`)
             .top(`${topPosition}px`);
         config.hasBackdrop = true;
 
-
         this.overlayRef = this.overlay.create(config);
-        this.overlayRef.backdropClick().subscribe(() => {
-            console.warn('wut?');
-            this.overlayRef.dispose();
-        });
-
-        // const filePreviewPortal = ;
-        //overlayRef.attach(new ComponentPortal(EmojiPickerComponent, this.viewContainerRef));
-        // overlayRef.attach(new ComponentPortal(EmojiPickerComponent));
-
-
-        let comp = new ComponentPortal(EmojiPickerComponent);
-        //this.overlayRef.attach(comp);
-
-        const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
-        compRef.instance.closedEvent.subscribe(() => {
-            this.overlayRef.dispose();
-        });
-        compRef.instance.emojiSelectedEvent.subscribe((emoji) => {
-            if(emoji){
-                this.status += ` ${emoji}`;
-                this.overlayRef.dispose();
-            }            
-        });
-
-
-        // overlayRef.backdropClick().subscribe(() => {
+        // this.overlayRef.backdropClick().subscribe(() => {
         //     console.warn('wut?');
-        //     overlayRef.dispose();
+        //     this.overlayRef.dispose();
         // });
 
+        let comp = new ComponentPortal(EmojiPickerComponent);
+        const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
+        this.emojiCloseSub = compRef.instance.closedEvent.subscribe(() => {
+            this.closeEEmojiPanel();
+        });
+        this.emojiSelectedSub = compRef.instance.emojiSelectedEvent.subscribe((emoji) => {
+            if (emoji) {
+                this.status += ` ${emoji}`;
+                this.closeEEmojiPanel();
+            }
+        });
+
         return false;
+    }
+
+    private closeEEmojiPanel() {
+        if(this.emojiCloseSub) this.emojiCloseSub.unsubscribe();
+        if(this.emojiSelectedSub) this.emojiSelectedSub.unsubscribe();
+        if(this.overlayRef) this.overlayRef.dispose();
+        this.overlayRef = null;
     }
 
     closeEmoji(): boolean {
