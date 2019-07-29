@@ -355,8 +355,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         const currentStatus = parseStatus[parseStatus.length - 1];
         const statusExtraChars = this.getMentionExtraChars(status);
+        const linksExtraChars = this.getLinksExtraChars(status);
 
-        const statusLength = [...currentStatus].length - statusExtraChars;
+        const statusLength = [...currentStatus].length - statusExtraChars - linksExtraChars;
         this.charCountLeft = this.maxCharLength - statusLength - this.getCwLength();
         this.postCounts = parseStatus.length;
     }
@@ -504,6 +505,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
         results.push(trucatedStatus);
         return results;
+    }
+
+    private getLinksExtraChars(status: string): number {
+        let mentionExtraChars = 0;
+        let links = status.split(' ').filter(x => x.startsWith('http://') || x.startsWith('https://'));
+        for (let link of links) {
+            if(link.length > 23){
+                mentionExtraChars += link.length - 23;
+            }
+        }
+
+        return mentionExtraChars;
     }
 
     private getMentionExtraChars(status: string): number {

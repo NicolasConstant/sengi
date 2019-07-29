@@ -72,13 +72,35 @@ describe('CreateStatusComponent', () => {
         expect((<any>component).charCountLeft).toBe(466);
     });
 
+    it('should not count https link more than the minimum', () => {
+        const status = "https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(477);
+    });
+
+    it('should not count http link more than the minimum', () => {
+        const status = "http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(477);
+    });
+
+    
+    it('should not count links more than the minimum', () => {
+        const status = "http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(429);
+    });
+
     it('should count correctly complex status', () => {
-        const status = 'dsqdqs @NicolasConstant@mastodon.partipirate.org dsqdqs👇😱 😶 status #Pleroma with 😱 😶 emojis 😏 👍 #Mastodon @ddqsdqs @dsqdsq@dqsdsqqdsq';
+        const status = 'dsqdqs @NicolasConstant@mastodon.partipirate.org dsqdqs👇😱 😶 status https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ #Pleroma with 😱 😶 emojis 😏 👍 #Mastodon @ddqsdqs @dsqdsq@dqsdsqqdsq';
         (<any>component).title = '🙂 test';
         (<any>component).maxCharLength = 500;
         (<any>component).countStatusChar(status);
-        expect((<any>component).charCountLeft).toBe(397);
-    });
+        expect((<any>component).charCountLeft).toBe(373);
+    });    
 
     it('should not parse small status', () => {
         const status = 'this is a cool status';
