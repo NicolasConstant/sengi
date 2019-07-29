@@ -50,6 +50,57 @@ describe('CreateStatusComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should not count emoji as multiple chars', () => {
+        const status = '😃 😍 👌 👇 😱 😶 status with 😱 😶 emojis 😏 👍 ';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(461);
+    });
+
+    it('should not count emoji in CW as multiple chars', () => {
+        const status = 'test';
+        (<any>component).title = '🙂 test';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(490);
+    });
+
+    it('should not count domain chars in username', () => {
+        const status = 'dsqdqs @NicolasConstant@mastodon.partipirate.org dsqdqsdqsd';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(466);
+    });
+
+    it('should not count https link more than the minimum', () => {
+        const status = "https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(477);
+    });
+
+    it('should not count http link more than the minimum', () => {
+        const status = "http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(477);
+    });
+    
+    it('should not count links more than the minimum', () => {
+        const status = "http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(429);
+    });
+
+    it('should count correctly complex status', () => {
+        const status = 'dsqdqs @NicolasConstant@mastodon.partipirate.org dsqdqs👇😱 😶 status https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ #Pleroma with 😱 😶 emojis 😏 👍 #Mastodon @ddqsdqs @dsqdsq@dqsdsqqdsq';
+        (<any>component).title = '🙂 test';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(373);
+    });    
+
     it('should not parse small status', () => {
         const status = 'this is a cool status';
         (<any>component).maxCharLength = 500;
@@ -134,4 +185,13 @@ describe('CreateStatusComponent', () => {
         expect(result[1]).toContain('@Lorem@ipsum.com ');
     });
 
+    it('should parse long link properly for multiposting', () => {
+        const status = 'dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd dsq http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/';
+        (<any>component).maxCharLength = 500;
+        const result = <string[]>(<any>component).parseStatus(status);
+        expect(result.length).toBe(2);
+        expect(result[0].length).toBeLessThanOrEqual(527);
+        expect(result[1].length).toBeLessThanOrEqual(527);      
+        expect(result[1]).toBe('http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/');      
+    });
 });
