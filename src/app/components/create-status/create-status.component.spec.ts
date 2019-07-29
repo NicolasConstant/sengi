@@ -57,6 +57,29 @@ describe('CreateStatusComponent', () => {
         expect((<any>component).charCountLeft).toBe(461);
     });
 
+    it('should not count emoji in CW as multiple chars', () => {
+        const status = 'test';
+        (<any>component).title = '🙂 test';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(490);
+    });
+
+    it('should not count domain chars in username', () => {
+        const status = 'dsqdqs @NicolasConstant@mastodon.partipirate.org dsqdqsdqsd';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(466);
+    });
+
+    it('should count correctly complex status', () => {
+        const status = 'dsqdqs @NicolasConstant@mastodon.partipirate.org dsqdqs👇😱 😶 status #Pleroma with 😱 😶 emojis 😏 👍 #Mastodon @ddqsdqs @dsqdsq@dqsdsqqdsq';
+        (<any>component).title = '🙂 test';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(397);
+    });
+
     it('should not parse small status', () => {
         const status = 'this is a cool status';
         (<any>component).maxCharLength = 500;

@@ -364,7 +364,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private getCwLength(): number {
         let cwLength = 0;
         if (this.title) {
-            cwLength = this.title.length;
+            cwLength = [...this.title].length;
         }
         return cwLength;
     }
