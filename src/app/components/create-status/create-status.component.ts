@@ -356,7 +356,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const currentStatus = parseStatus[parseStatus.length - 1];
         const statusExtraChars = this.getMentionExtraChars(status);
 
-        const statusLength = currentStatus.length - statusExtraChars;
+        const statusLength = [...currentStatus].length - statusExtraChars;
         this.charCountLeft = this.maxCharLength - statusLength - this.getCwLength();
         this.postCounts = parseStatus.length;
     }

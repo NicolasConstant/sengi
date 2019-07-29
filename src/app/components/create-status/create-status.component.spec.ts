@@ -50,6 +50,13 @@ describe('CreateStatusComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it('should not count emoji as multiple chars', () => {
+        const status = '😃 😍 👌 👇 😱 😶 status with 😱 😶 emojis 😏 👍 ';
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(461);
+    });
+
     it('should not parse small status', () => {
         const status = 'this is a cool status';
         (<any>component).maxCharLength = 500;
