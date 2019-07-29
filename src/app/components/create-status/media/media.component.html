@@ -21,7 +21,11 @@
             <fa-icon [icon]="faTimes"></fa-icon>
         </button>
 
-        <audio *ngIf="m.audioType" controls class="audio__player">
+        <div *ngIf="m.isMigrating">
+            <app-waiting-animation class="waiting-icon"></app-waiting-animation>
+        </div>
+
+        <audio *ngIf="m.audioType && !m.isMigrating" controls class="audio__player">
             <source src="{{ m.attachment.url }}" type="{{ m.audioType }}">
             Your browser does not support the audio element.
         </audio>
