@@ -85,7 +85,6 @@ describe('CreateStatusComponent', () => {
         (<any>component).countStatusChar(status);
         expect((<any>component).charCountLeft).toBe(477);
     });
-
     
     it('should not count links more than the minimum', () => {
         const status = "http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/ http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/";
@@ -186,4 +185,13 @@ describe('CreateStatusComponent', () => {
         expect(result[1]).toContain('@Lorem@ipsum.com ');
     });
 
+    it('should parse long link properly for multiposting', () => {
+        const status = 'dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd qsd sqd qsd qsd dsqd qsd qsd sqd qsd sqd dsq http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/';
+        (<any>component).maxCharLength = 500;
+        const result = <string[]>(<any>component).parseStatus(status);
+        expect(result.length).toBe(2);
+        expect(result[0].length).toBeLessThanOrEqual(527);
+        expect(result[1].length).toBeLessThanOrEqual(527);      
+        expect(result[1]).toBe('http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/');      
+    });
 });
