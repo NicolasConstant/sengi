@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {            
+export class MastodonService {           
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -367,6 +367,11 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.deleteStatus}`.replace('{0}', statusId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.delete<any>(route, { headers: headers }).toPromise();
+    } 
+    
+    getCustomEmojis(account: AccountInfo): Promise<Emoji[]> {
+        let route = `https://${account.instance}${this.apiRoutes.getCustomEmojis}`;
+        return this.httpClient.get<Emoji[]>(route).toPromise();
     }   
 }
 
