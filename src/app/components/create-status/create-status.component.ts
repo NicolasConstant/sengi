@@ -223,6 +223,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private getWordByPos(str, pos) {
+        str = str.replace(/(\r\n|\n|\r)/gm,"");
         var left = str.substr(0, pos);
         var right = str.substr(pos);
 
