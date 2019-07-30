@@ -1,0 +1,22 @@
+::ng-deep .emoji-mart {
+    border-radius: 0 !important;
+    font-size: 10px !important;
+}
+
+::ng-deep .emoji-mart-emoji-native {
+    cursor: pointer !important;
+}
+
+::ng-deep .emoji-mart-emoji-native span {
+    position: relative;
+    top: 1px;
+    left: -1px;
+    font-size: 19px !important;
+    cursor: pointer !important;
+}
+
+::ng-deep .emoji-mart-emoji-custom span {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}

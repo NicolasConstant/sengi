@@ -2,18 +2,33 @@
     <div *ngIf="m.attachment === null" class="media__loading" title="{{m.file.name}}">
         <app-waiting-animation class="waiting-icon"></app-waiting-animation>
     </div>
-    <div *ngIf="m.attachment !== null" class="media__loaded" title="{{m.file.name}}"
-        (mouseleave) ="updateMedia(m)">
+    <div *ngIf="m.attachment !== null && m.attachment.type !== 'audio'" class="media__loaded" title="{{m.file.name}}"
+        (mouseleave)="updateMedia(m)">
         <div class="media__loaded--migrating" *ngIf="m.isMigrating">
             <app-waiting-animation class="waiting-icon"></app-waiting-animation>
         </div>
         <div class="media__loaded--hover">
             <button class="media__loaded--button" title="remove" (click)="removeMedia(m)">
-                <fa-icon [icon]="faTimes"></fa-icon> 
+                <fa-icon [icon]="faTimes"></fa-icon>
             </button>
-            <input class="media__loaded--description" [(ngModel)]="m.description"
-                autocomplete="off" placeholder="Describe for the visually impaired"/>
+            <input class="media__loaded--description" [(ngModel)]="m.description" autocomplete="off"
+                placeholder="Describe for the visually impaired" />
         </div>
         <img class="media__loaded--preview" src="{{m.attachment.preview_url}}" />
+    </div>
+    <div *ngIf="m.attachment !== null && m.attachment.type === 'audio'" class="audio">
+        <button class="audio__button" title="remove" (click)="removeMedia(m)">
+            <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+
+        <div *ngIf="m.isMigrating">
+            <app-waiting-animation class="waiting-icon"></app-waiting-animation>
+        </div>
+
+        <audio *ngIf="m.audioType && !m.isMigrating" controls class="audio__player">
+            <source src="{{ m.attachment.url }}" type="{{ m.audioType }}">
+            Your browser does not support the audio element.
+        </audio>
+
     </div>
 </div>

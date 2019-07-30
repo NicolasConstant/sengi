@@ -1,7 +1,11 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef, ComponentRef, HostListener } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
+import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
+import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
@@ -11,8 +15,10 @@ import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
-import { identifierModuleUrl } from '@angular/compiler';
-
+import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
+import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
 
 @Component({
     selector: 'app-create-status',
@@ -20,6 +26,15 @@ import { identifierModuleUrl } from '@angular/compiler';
     styleUrls: ['./create-status.component.scss']
 })
 export class CreateStatusComponent implements OnInit, OnDestroy {
+    faPaperclip = faPaperclip;
+    faGlobe = faGlobe;
+    faGlobeAmericas = faGlobeAmericas;
+    faLock = faLock;
+    faLockOpen = faLockOpen;
+    faEnvelope = faEnvelope;
+
+    autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
+
     private _title: string;
     set title(value: string) {
         this._title = value;
@@ -32,10 +47,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _status: string = '';
     @Input('status')
     set status(value: string) {
-        if (value) {
-            this.countStatusChar(value);
-            this._status = value;
-        }
+        this.countStatusChar(value);
+        this.detectAutosuggestion(value);
+        this._status = value;
+
+        setTimeout(() => {
+            this.autoGrow();
+        }, 0);
     }
     get status(): string {
         return this._status;
@@ -44,12 +62,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
+            this.statusLoaded = false;
             let parser = new DOMParser();
             var dom = parser.parseFromString(value.status.content, 'text/html')
             this.status = dom.body.textContent;
-            
+
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
+            this.statusLoaded = true;
 
             if (value.status.in_reply_to_id) {
                 this.isSending = true;
@@ -60,7 +80,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
                         for (const mention of mentions) {
                             const name = `@${mention.split('@')[0]}`;
-                            if(this.status.includes(name)){
+                            if (this.status.includes(name)) {
                                 this.status = this.status.replace(name, `@${mention}`);
                             } else {
                                 this.status = `@${mention} ` + this.status;
@@ -83,10 +103,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     postCounts: number = 1;
     isSending: boolean;
     mentionTooFarAwayError: boolean;
+    autosuggestData: string = null;
+    private statusLoaded: boolean;
+    private hasSuggestions: boolean;
 
     @Input() statusReplyingToWrapper: StatusWrapper;
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
+    @ViewChild('fileInput') fileInputElement: ElementRef;
+    @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
     private _isDirectMention: boolean;
     @Input('isDirectMention')
@@ -115,19 +140,22 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private statusReplyingTo: Status;
 
     selectedPrivacy = 'Public';
-    privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
+    // privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonService,
         private readonly instancesInfoService: InstancesInfoService,
-        private readonly mediaService: MediaService) {
+        private readonly mediaService: MediaService,
+        private readonly overlay: Overlay,
+        public viewContainerRef: ViewContainerRef) {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
@@ -156,20 +184,69 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.initMention();
         }
 
+        this.statusLoaded = true;
         this.focus();
+
+        this.innerHeight = window.innerHeight;
     }
 
     ngOnDestroy() {
         this.accountSub.unsubscribe();
     }
 
-    private focus() {
+    changePrivacy(value: string): boolean {
+        this.selectedPrivacy = value;
+        return false;
+    }
+
+    addMedia(): boolean {
+        this.fileInputElement.nativeElement.click();
+        return false;
+    }
+
+    handleFileInput(files: File[]): boolean {
+        const acc = this.toolsService.getSelectedAccounts()[0];
+        this.mediaService.uploadMedia(acc, files);
+        return false;
+    }
+
+    private detectAutosuggestion(status: string) {
+        if (!this.statusLoaded) return;
+
+        const caretPosition = this.replyElement.nativeElement.selectionStart;
+        const word = this.getWordByPos(status, caretPosition);
+        if (word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
+            this.autosuggestData = word;
+            return;
+        }
+        this.autosuggestData = null;
+    }
+
+    private getWordByPos(str, pos) {
+        var left = str.substr(0, pos);
+        var right = str.substr(pos);
+
+        left = left.replace(/^.+ /g, "");
+        right = right.replace(/ .+$/g, "");
+
+        return left + right;
+    }
+
+    private focus(caretPos = null) {
         setTimeout(() => {
             this.replyElement.nativeElement.focus();
+
+            if (caretPos) {
+                this.replyElement.nativeElement.setSelectionRange(caretPos, caretPos);
+            } else {
+                this.replyElement.nativeElement.setSelectionRange(this.status.length, this.status.length);
+            }
         }, 0);
     }
 
     private initMention() {
+        this.statusLoaded = false;
+
         if (!this.selectedAccount) {
             this.selectedAccount = this.toolsService.getSelectedAccounts()[0];
         }
@@ -182,6 +259,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.status = `${this.replyingUserHandle} `;
         this.countStatusChar(this.status);
 
+        this.statusLoaded = true;
         this.focus();
     }
 
@@ -277,8 +355,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         const currentStatus = parseStatus[parseStatus.length - 1];
         const statusExtraChars = this.getMentionExtraChars(status);
+        const linksExtraChars = this.getLinksExtraChars(status);
 
-        const statusLength = currentStatus.length - statusExtraChars;
+        const statusLength = [...currentStatus].length - statusExtraChars - linksExtraChars;
         this.charCountLeft = this.maxCharLength - statusLength - this.getCwLength();
         this.postCounts = parseStatus.length;
     }
@@ -286,13 +365,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private getCwLength(): number {
         let cwLength = 0;
         if (this.title) {
-            cwLength = this.title.length;
+            cwLength = [...this.title].length;
         }
         return cwLength;
     }
 
     private getMentions(status: Status, providerInfo: AccountInfo): string[] {
-        const mentions = [...status.mentions.map(x => x.acct), status.account.acct];
+        const mentions = [status.account.acct, ...status.mentions.map(x => x.acct)];
 
         let uniqueMentions = [];
         for (let mention of mentions) {
@@ -428,6 +507,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return results;
     }
 
+    private getLinksExtraChars(status: string): number {
+        let mentionExtraChars = 0;
+        let links = status.split(' ').filter(x => x.startsWith('http://') || x.startsWith('https://'));
+        for (let link of links) {
+            if(link.length > 23){
+                mentionExtraChars += link.length - 23;
+            }
+        }
+
+        return mentionExtraChars;
+    }
+
     private getMentionExtraChars(status: string): number {
         let mentionExtraChars = 0;
         let mentions = this.getMentionsFromStatus(status);
@@ -445,5 +536,158 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private getMentionsFromStatus(status: string): string[] {
         return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
+    }
+
+
+    suggestionSelected(selection: AutosuggestSelection) {
+        if (this.status.includes(selection.pattern)) {
+
+            let transformedStatus = this.status;
+            transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
+            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
+            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
+            this.status = transformedStatus;
+
+            let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
+            if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
+
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+
+            if (document.activeElement === this.replyElement.nativeElement) {
+                setTimeout(() => {
+                    this.replyElement.nativeElement.setSelectionRange(newCaretPosition, newCaretPosition);
+                }, 0);
+            } else {
+                this.focus(newCaretPosition);
+            }
+        }
+    }
+
+    suggestionsChanged(hasSuggestions: boolean) {
+        this.hasSuggestions = hasSuggestions;
+    }
+
+    handleKeyDown(event: KeyboardEvent): boolean {
+        if (this.hasSuggestions) {
+            let keycode = event.keyCode;
+            if (keycode === DOWN_ARROW || keycode === UP_ARROW || keycode === ENTER || keycode === ESCAPE) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                event.stopPropagation();
+
+                switch (keycode) {
+                    case DOWN_ARROW:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveDown);
+                        break;
+                    case UP_ARROW:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.MoveUp);
+                        break;
+                    case ENTER:
+                        this.autoSuggestUserActionsStream.next(AutosuggestUserActionEnum.Validate);
+                        break;
+                    case ESCAPE:
+                        this.autosuggestData = null;
+                        this.hasSuggestions = false;
+                        break;
+                }
+
+                return false;
+            }
+        }
+    }
+
+    statusTextEditorLostFocus(): boolean {
+        setTimeout(() => {
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+        }, 250);
+        return false;
+    }
+
+    private autoGrow() {
+        let scrolling = (this.replyElement.nativeElement.scrollHeight);
+
+        if (scrolling > 110) {
+            this.replyElement.nativeElement.style.height = `0px`;
+            this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
+        }
+    }
+
+    public onContextMenu($event: MouseEvent): void {
+        this.contextMenuService.show.next({
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.contextMenu,
+            event: $event,
+            item: null
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
+
+    //https://stackblitz.com/edit/overlay-demo
+    @ViewChild('emojiButton') emojiButtonElement: ElementRef;
+    overlayRef: OverlayRef;
+
+    public innerHeight: number;
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this.innerHeight = window.innerHeight;
+    }
+
+    private emojiCloseSub: Subscription;
+    private emojiSelectedSub: Subscription;
+    private beforeEmojiCaretPosition: number;
+    openEmojiPicker(e: MouseEvent): boolean {
+        if (this.overlayRef) return false;
+
+        this.beforeEmojiCaretPosition = this.replyElement.nativeElement.selectionStart;
+
+        let topPosition = e.pageY;
+        if (this.innerHeight - e.pageY < 360) {
+            topPosition -= 360;
+        }
+
+        let config = new OverlayConfig();
+        config.positionStrategy = this.overlay.position()
+            .global()
+            .left(`${e.pageX - 283}px`)
+            .top(`${topPosition}px`);
+        config.hasBackdrop = true;
+
+        this.overlayRef = this.overlay.create(config);
+        // this.overlayRef.backdropClick().subscribe(() => {
+        //     console.warn('wut?');
+        //     this.overlayRef.dispose();
+        // });
+
+        let comp = new ComponentPortal(EmojiPickerComponent);
+        const compRef: ComponentRef<EmojiPickerComponent> = this.overlayRef.attach(comp);
+        this.emojiCloseSub = compRef.instance.closedEvent.subscribe(() => {
+            this.closeEmojiPanel();
+        });
+        this.emojiSelectedSub = compRef.instance.emojiSelectedEvent.subscribe((emoji) => {
+            if (emoji) {
+                this.status = [this.status.slice(0, this.beforeEmojiCaretPosition), emoji, ' ', this.status.slice(this.beforeEmojiCaretPosition)].join('').replace('  ', ' ');
+                this.beforeEmojiCaretPosition += emoji.length + 1;
+
+                this.closeEmojiPanel();
+            }
+        });
+
+        return false;
+    }
+
+    private closeEmojiPanel() {
+        if (this.emojiCloseSub) this.emojiCloseSub.unsubscribe();
+        if (this.emojiSelectedSub) this.emojiSelectedSub.unsubscribe();
+        if (this.overlayRef) this.overlayRef.dispose();
+        this.overlayRef = null;
+        this.focus(this.beforeEmojiCaretPosition);
+    }
+
+    closeEmoji(): boolean {
+        this.overlayRef.dispose();
+        return false;
     }
 }

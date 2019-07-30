@@ -142,7 +142,7 @@ class AttachmentsWrapper implements Attachment {
     }
 
     id: string;
-    type: "image" | "video" | "gifv";
+    type: "image" | "video" | "gifv" | 'audio';
     url: string;
     remote_url: string;
     preview_url: string;

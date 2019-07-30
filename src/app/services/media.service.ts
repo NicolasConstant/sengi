@@ -29,7 +29,7 @@ export class MediaService {
 
         let medias = this.mediaSubject.value;
         medias.push(wrapper);
-        if(medias.length > 4){
+        if (medias.length > 4) {
             medias.splice(0, 1);
         }
         this.mediaSubject.next(medias);
@@ -104,8 +104,26 @@ export class MediaWrapper {
     constructor(
         public id: string,
         public file: File,
-        public attachment: Attachment) { }
+        attachment: Attachment) {
+            this.attachment = attachment;       
+    }
+
+    private _attachment: Attachment;
+    public get attachment(): Attachment {
+        return this._attachment;
+    }
+
+    public set attachment(value: Attachment){
+        if (value && value.meta && value.meta.audio_encode) {
+            this.audioType = `audio/${value.meta.audio_encode}`;
+        } else if (value && value.pleroma && value.pleroma.mime_type) {
+            this.audioType = value.pleroma.mime_type;
+        }
+
+        this._attachment = value;
+    }
 
     public description: string;
     public isMigrating: boolean;
+    public audioType: string;
 }
