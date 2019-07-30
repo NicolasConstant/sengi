@@ -14,3 +14,9 @@
     font-size: 19px !important;
     cursor: pointer !important;
 }
+
+::ng-deep .emoji-mart-emoji-custom span {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
