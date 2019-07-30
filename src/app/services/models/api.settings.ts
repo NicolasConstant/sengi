@@ -3,6 +3,7 @@ export class ApiRoutes {
     createApp = '/api/v1/apps';
     getToken = '/oauth/token';
     getAccount = '/api/v1/accounts/{0}';
+    getCustomEmojis = '/api/v1/custom_emojis';
     getCurrentAccount = '/api/v1/accounts/verify_credentials';
     getAccountFollowers = '/api/v1/accounts/{0}/followers';
     getAccountFollowing = '/api/v1/accounts/{0}/following';

@@ -3,14 +3,14 @@ import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
 import { MastodonService } from './mastodon.service';
-import { Account, Results, Status } from "./models/mastodon.interfaces";
+import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ToolsService {
+export class ToolsService {   
     constructor(
         private readonly mastodonService: MastodonService,
         private readonly store: Store) { }
@@ -82,6 +82,15 @@ export class ToolsService {
         }
         return `@${fullHandle}`;
     }
+    
+    getCustomEmojis(account: AccountInfo): Promise<Emoji[]> {
+        //TODO: add cache
+
+        return this.mastodonService.getCustomEmojis(account)
+            .then(emojis => {
+                return emojis.filter(x => x.visible_in_picker);             
+            });
+    }   
 }
 
 export class OpenThreadEvent {
