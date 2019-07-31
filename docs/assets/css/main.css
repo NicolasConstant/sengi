@@ -103,7 +103,8 @@ body {
     font-size: 1.4rem;
     text-decoration: none; }
     .header__old-releases:hover {
-      color: #faa424; }
+      color: #faa424;
+      text-decoration: underline; }
 
 .download-button {
   transition: all .2s;
@@ -165,10 +166,15 @@ body {
     min-height: 20rem;
     background-color: whitesmoke;
     padding: 1rem; }
+    .section-clear__big-title {
+      font-weight: 400;
+      font-size: 3rem;
+      text-align: center; }
     .section-clear__title {
       font-weight: 400;
       font-size: 2.5rem;
       color: #141414;
+      margin-top: 5rem;
       margin-left: 15vw; }
     .section-clear__subtitle {
       font-weight: 400;
@@ -180,6 +186,33 @@ body {
     height: .5rem;
     background-color: #141414;
     background-color: white; }
+
+.functionalities__row {
+  max-width: 100rem; }
+
+.functionalities__text {
+  display: block;
+  margin: auto;
+  font-weight: 400;
+  font-size: 2rem;
+  text-align: center;
+  padding: 7rem 5rem 0 5rem;
+  max-width: 50rem; }
+
+.functionalities__conclusion {
+  max-width: 60rem;
+  padding: 2rem 5rem 5rem 5rem; }
+
+.functionalities__strong {
+  font-weight: 400;
+  font-weight: bold; }
+
+.functionalities__video {
+  display: block;
+  margin: 2rem auto; }
+  .functionalities__video:focus {
+    border: none;
+    outline: none; }
 
 .footer {
   text-align: center;

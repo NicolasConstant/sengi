@@ -68,6 +68,7 @@ $link-hover-color: rgb(250, 164, 36);;
 
         &:hover {
             color: $link-hover-color;
+            text-decoration: underline;
         }
     }
 }

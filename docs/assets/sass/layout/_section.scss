@@ -18,20 +18,27 @@
 
     &-clear {
         font-weight: 300;
-        font-family: 'Open Sans', sans-serif;       
+        font-family: 'Open Sans', sans-serif;
         min-height: 20rem;
         background-color: whitesmoke;
         padding: 1rem;
+
+        &__big-title {
+            font-weight: 400;
+            font-size: 3rem;
+            text-align: center;
+        }
 
         &__title {
             font-weight: 400;
             font-size: 2.5rem;
             color: $dark-background;
+            margin-top: 5rem;
             margin-left: 15vw;
             // text-align: center;
         }
 
-        &__subtitle{
+        &__subtitle {
             font-weight: 400;
             font-size: 2rem;
             color: $dark-background;
@@ -46,4 +53,48 @@
         background-color: $dark-background;
         background-color: rgb(255, 255, 255);
     }
+}
+
+.functionalities {
+
+    &__row {
+        max-width: 100rem;
+    }
+
+    &__text {
+        display: block;
+        margin: auto;
+        font-weight: 400;
+        font-size: 2rem;     
+
+        // height: 30rem;      
+        text-align: center;
+        padding: 7rem 5rem 0 5rem;
+        max-width: 50rem;
+
+        
+
+        // outline: 1px solid greenyellow;
+    }
+
+    &__conclusion {
+        max-width: 60rem;
+        padding: 2rem 5rem 5rem 5rem;
+    }
+
+    &__strong {
+        font-weight: 400;
+        font-weight: bold;
+    }
+
+    &__video {
+        display: block;
+        margin: 2rem auto;
+
+        &:focus {
+            border: none;
+            outline: none;
+        }
+    }
+
 }
