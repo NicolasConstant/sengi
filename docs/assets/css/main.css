@@ -158,6 +158,7 @@ body {
       font-weight: 300;
       font-family: 'Open Sans', sans-serif;
       margin: auto;
+      padding: 0 3rem;
       text-align: center;
       font-size: 2.5rem; }
   .section-clear {
@@ -176,6 +177,10 @@ body {
       color: #141414;
       margin-top: 5rem;
       margin-left: 15vw; }
+      @media (max-width: 56.25em) {
+        .section-clear__title {
+          margin: 3rem auto 0 auto;
+          text-align: center; } }
     .section-clear__subtitle {
       font-weight: 400;
       font-size: 2rem;
@@ -189,7 +194,13 @@ body {
 
 .quick-overview__video {
   display: block;
-  margin: 2rem auto; }
+  margin: 2rem auto;
+  width: 800;
+  height: 492; }
+  @media (max-width: 56.25em) {
+    .quick-overview__video {
+      width: 100%;
+      height: 492; } }
 
 .functionalities__row {
   max-width: 100rem; }
@@ -202,6 +213,9 @@ body {
   text-align: center;
   padding: 7rem 5rem 0 5rem;
   max-width: 50rem; }
+  @media (max-width: 56.25em) {
+    .functionalities__text {
+      padding: 3rem 5rem 0 5rem; } }
 
 .functionalities__conclusion {
   max-width: 60rem;
@@ -213,10 +227,17 @@ body {
 
 .functionalities__video {
   display: block;
-  margin: 2rem auto; }
+  margin: 2rem auto;
+  width: 326px;
+  height: 260px; }
   .functionalities__video:focus {
     border: none;
     outline: none; }
+  @media (max-width: 56.25em) {
+    .functionalities__video {
+      width: 100%;
+      max-width: 326px;
+      height: 60%; } }
 
 .footer {
   text-align: center;

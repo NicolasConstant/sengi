@@ -11,6 +11,7 @@
             font-weight: 300;
             font-family: 'Open Sans', sans-serif;
             margin: auto;
+            padding: 0 3rem;
             text-align: center;
             font-size: 2.5rem;
         }
@@ -35,6 +36,11 @@
             color: $dark-background;
             margin-top: 5rem;
             margin-left: 15vw;
+
+            @include respond(tab-port) {
+                margin: 3rem auto 0 auto;
+                text-align: center;
+            }
         }
 
         &__subtitle {
@@ -58,6 +64,13 @@
     &__video {
         display: block;
         margin: 2rem auto;
+        width: 800;
+        height: 492;
+
+        @include respond(tab-port) {
+            width: 100%;
+            height: 492;
+        }
     }
 }
 
@@ -73,14 +86,13 @@
         font-weight: 400;
         font-size: 2rem;     
 
-        // height: 30rem;      
         text-align: center;
         padding: 7rem 5rem 0 5rem;
         max-width: 50rem;
 
-        
-
-        // outline: 1px solid greenyellow;
+        @include respond(tab-port) {
+            padding: 3rem 5rem 0 5rem;
+        }
     }
 
     &__conclusion {
@@ -100,6 +112,15 @@
         &:focus {
             border: none;
             outline: none;
+        }
+
+        width: 326px;
+        height: 260px;
+
+        @include respond(tab-port) {
+            width: 100%;
+            max-width: 326px;
+            height: 60%;
         }
     }
 
