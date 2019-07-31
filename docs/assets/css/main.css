@@ -176,6 +176,8 @@ body {
       color: #141414;
       margin-top: 5rem;
       margin-left: 15vw; }
+      .section-clear__title--no-top-margin {
+        margin-top: 0.5rem; }
     .section-clear__subtitle {
       font-weight: 400;
       font-size: 2rem;
@@ -186,6 +188,10 @@ body {
     height: .5rem;
     background-color: #141414;
     background-color: white; }
+
+.quick-overview__video {
+  display: block;
+  margin: 2rem auto; }
 
 .functionalities__row {
   max-width: 100rem; }

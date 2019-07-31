@@ -35,7 +35,6 @@
             color: $dark-background;
             margin-top: 5rem;
             margin-left: 15vw;
-            // text-align: center;
         }
 
         &__subtitle {
@@ -52,6 +51,13 @@
         height: .5rem;
         background-color: $dark-background;
         background-color: rgb(255, 255, 255);
+    }
+}
+
+.quick-overview {
+    &__video {
+        display: block;
+        margin: 2rem auto;
     }
 }
 
