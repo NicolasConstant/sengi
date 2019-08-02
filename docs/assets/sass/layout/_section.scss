@@ -1,0 +1,127 @@
+.section {
+    font-family: 'Open Sans', sans-serif;
+
+    &-about {
+        min-height: 10rem;
+        background-color: $dark-background;
+        color: whitesmoke;
+        padding: 7rem 0;
+
+        &__about {
+            font-weight: 300;
+            font-family: 'Open Sans', sans-serif;
+            margin: auto;
+            padding: 0 3rem;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+    }
+
+    &-clear {
+        font-weight: 300;
+        font-family: 'Open Sans', sans-serif;
+        min-height: 20rem;
+        background-color: whitesmoke;
+        padding: 1rem;
+
+        &__big-title {
+            font-weight: 400;
+            font-size: 3rem;
+            text-align: center;
+        }
+
+        &__title {
+            font-weight: 400;
+            font-size: 2.5rem;
+            color: $dark-background;
+            margin-top: 5rem;
+            margin-left: 15vw;
+
+            @include respond(tab-port) {
+                margin: 3rem auto 0 auto;
+                text-align: center;
+            }
+        }
+
+        &__subtitle {
+            font-weight: 400;
+            font-size: 2rem;
+            color: $dark-background;
+            margin-left: 1rem;
+            font-style: italic;
+        }
+
+    }
+
+    &-separator {
+        height: .5rem;
+        background-color: $dark-background;
+        background-color: rgb(255, 255, 255);
+    }
+}
+
+.quick-overview {
+    &__video {
+        display: block;
+        margin: 2rem auto;
+        width: 800;
+        height: 492;
+
+        @include respond(tab-port) {
+            width: 100%;
+            height: 492;
+        }
+    }
+}
+
+.functionalities {
+
+    &__row {
+        max-width: 100rem;
+    }
+
+    &__text {
+        display: block;
+        margin: auto;
+        font-weight: 400;
+        font-size: 2rem;     
+
+        text-align: center;
+        padding: 7rem 5rem 0 5rem;
+        max-width: 50rem;
+
+        @include respond(tab-port) {
+            padding: 3rem 5rem 0 5rem;
+        }
+    }
+
+    &__conclusion {
+        max-width: 60rem;
+        padding: 2rem 5rem 5rem 5rem;
+    }
+
+    &__strong {
+        font-weight: 400;
+        font-weight: bold;
+    }
+
+    &__video {
+        display: block;
+        margin: 2rem auto;
+
+        &:focus {
+            border: none;
+            outline: none;
+        }
+
+        width: 326px;
+        height: 260px;
+
+        @include respond(tab-port) {
+            width: 100%;
+            max-width: 326px;
+            height: 60%;
+        }
+    }
+
+}

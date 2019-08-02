@@ -1,3 +1,5 @@
+$link-hover-color: rgb(250, 164, 36);;
+
 .header {
     position: relative;
     background-color: rgb(247, 247, 247);
@@ -52,6 +54,22 @@
             margin-bottom: .5rem;
         }
 
+        &--buttons {
+            margin-bottom: 5px;
+        }
+    }
+
+    &__old-releases {
+        transition: all .2s;
+        color: rgb(122, 122, 122);
+        float: left;
+        font-size: 1.4rem;
+        text-decoration: none;
+
+        &:hover {
+            color: $link-hover-color;
+            text-decoration: underline;
+        }
     }
 }
 
@@ -77,26 +95,17 @@
     margin-bottom: 1rem;
 
     &:hover {
-        color: rgb(250, 164, 36);
+        color: $link-hover-color;
 
     }
 
     &__web {
         font-size: 25px;
-        background-color: rgb(4, 212, 49);
-        background-color: rgb(250, 164, 36);
-        background-color: rgb(253, 157, 13);
         background-color: rgb(63, 63, 63);;
         color: white;
-        color: rgb(32, 32, 32);
-        color: white;
-
 
         padding: 10px 20px 10px 15px;
         border-radius: 3px;
-
-        // border: 1px solid #ececec;
-        border: 1px solid #ffffff;
         border: 1px solid #e7e7e7;
 
         &--label {
@@ -107,8 +116,7 @@
 
         &:hover {
             color: rgb(61, 61, 61);
-            background-color: rgb(255, 229, 190);
-            background-color: rgb(250, 164, 36);
+            background-color: $link-hover-color;
         }
     }
 }
