@@ -84,7 +84,8 @@ export class DirectMessagesComponent implements OnInit {
     private scrolledToBottom() {
         if (this.isLoading || this.maxReached) return;
 
-        const maxId = this.conversations[this.conversations.length - 1].conversation.id;
+        const maxId = this.conversations[this.conversations.length - 1].conversation.last_status.id;
+        
         this.isLoading = true;
         this.mastodonService.getConversations(this.account.info, maxId)
             .then((conversations: Conversation[]) => {
