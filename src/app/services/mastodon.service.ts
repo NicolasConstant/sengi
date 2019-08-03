@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
@@ -26,6 +26,18 @@ export class MastodonService {
         const route = `https://${account.instance}${this.getTimelineRoute(type, max_id, since_id, limit, tag, listId)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
+    }
+
+    getConversations(account: AccountInfo, max_id: string = null, since_id: string = null, min_id = null, limit: number = 20,): Promise<Conversation[]> {        
+        let params = `?limit=${limit}`;
+        if (max_id) params += `&max_id=${max_id}`;
+        if (since_id) params += `&since_id=${since_id}`;
+        if (min_id) params += `&since_id=${min_id}`;
+
+        const route = `https://${account.instance}${this.apiRoutes.getConversations}${params}`;
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Conversation[]>(route, { headers: headers }).toPromise();
     }
 
     private getTimelineRoute(type: StreamTypeEnum, max_id: string, since_id: string, limit: number, tag: string, listId: string): string {

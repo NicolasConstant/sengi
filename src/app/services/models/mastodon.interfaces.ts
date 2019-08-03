@@ -193,6 +193,13 @@ export interface Status {
     pleroma: PleromaStatusInfo;
 }
 
+export interface Conversation {
+    id: string;
+    accounts: Account[];
+    last_status: Status;
+    unread: boolean;
+}
+
 export interface PleromaStatusInfo {
     conversation_id: number;
     local: boolean;
