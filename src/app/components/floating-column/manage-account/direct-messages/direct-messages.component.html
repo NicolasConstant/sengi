@@ -1,3 +1,23 @@
-<p>
-  direct-messages works!
-</p>
+<div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
+    <div class="stream-toots__remove-cw" *ngIf="isThread && hasContentWarnings">
+        <button class="stream-toots__remove-cw--button" (click)="removeCw()" title="remove content warnings">Remove
+            CWs</button>
+    </div>
+    <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>
+
+    <!-- data-simplebar  -->
+    <div class="stream-toots__status" *ngFor="let conversationWrapper of conversations">
+        <div class="conversation__participants" title="participants">
+            <fa-icon [icon]="faUserFriends" class="conversation__icon"></fa-icon>
+            <img class="conversation__avatar" src="{{ conversationWrapper.userAvatar }}" title="me" />
+            <div *ngFor="let acc of conversationWrapper.conversation.accounts">
+                <img class="conversation__avatar" src="{{ acc.avatar }}" title="{{ acc.acct }}" />
+            </div>
+        </div>
+        <app-status [statusWrapper]="conversationWrapper.lastStatus" [isThreadDisplay]="isThread"
+            (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+            (browseThreadEvent)="browseThread($event)"></app-status>
+    </div>
+
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+</div>
