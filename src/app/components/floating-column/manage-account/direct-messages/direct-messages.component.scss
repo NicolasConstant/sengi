@@ -1,0 +1,31 @@
+.conversation {
+    &__participants {
+        padding: 10px 0 0 10px;
+        height: 40px;
+    }
+
+    &__icon {
+        display: block;
+        margin-right: 10px;
+        margin-left: 31px;
+        padding-top: 3px;
+        float: left;
+        color: #5098eb;
+    }
+
+    &__avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+        margin-right: 5px;
+        float: left;
+    }
+}
+
+.stream-toots__status {
+    &:not(:last-child) {
+        border-bottom: 1px solid #4e5572;
+        border-bottom: 1px solid #2f3444;
+        border-bottom: 1px solid #232733;
+    }
+}
