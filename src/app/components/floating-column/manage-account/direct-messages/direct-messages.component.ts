@@ -6,8 +6,7 @@ import { OpenThreadEvent } from '../../../../services/tools.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { NotificationService } from '../../../../services/notification.service';
 import { MastodonService } from '../../../../services/mastodon.service';
-import { StreamTypeEnum } from '../../../../states/streams.state';
-import { Status, Conversation } from '../../../../services/models/mastodon.interfaces';
+import { Conversation } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
 
 @Component({
