@@ -196,8 +196,9 @@ export class UserProfileComponent implements OnInit {
         this.load(this.lastAccountName);
     }
 
-    browseAccount(accountName: string): void {
+    browseAccount(accountName: string): boolean {
         this.browseAccountEvent.next(accountName);
+        return false;
     }
 
     browseHashtag(hashtag: string): void {

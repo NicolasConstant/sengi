@@ -1,18 +1,22 @@
 <div class="profile flexcroll" #statusstream (scroll)="onScroll()">
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
+    <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
+        {{displayedAccount | accountEmoji }} has moved to <a href (click)="browseAccount(displayedAccount.moved.acct)" class="profile__moved--link" title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
+    </div>
 
     <div *ngIf="displayedAccount" class="profile-header"
         [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
         <div class="profile-header__inner">
             <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
-                <img class="profile-header__avatar" src="{{displayedAccount.avatar}}" alt="header" />
+                <img class="profile-header__avatar" [class.profile__disabled]="displayedAccount.moved"
+                    src="{{displayedAccount.avatar}}" alt="header" />
             </a>
             <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"></h2>
             <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}"
                     target="_blank">@{{displayedAccount.acct}}</a></h2>
 
-            <div class="profile-header__follow" *ngIf="relationship">
+            <div class="profile-header__follow" *ngIf="relationship && !displayedAccount.moved">
                 <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                     (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                     <fa-icon [icon]="faUserRegular"></fa-icon>
@@ -26,17 +30,18 @@
                     <fa-icon [icon]="faHourglassHalf"></fa-icon>
                 </button>
             </div>
-            <div class="profile-header__state" *ngIf="relationship">
+            <div class="profile-header__state" *ngIf="relationship && !displayedAccount.moved">
                 <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
                 <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
                 <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>
                 <div class="profile-header__state--data" *ngIf="relationship.domain_blocking">domain blocked</div>
                 <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
-                <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications muted</div>
+                <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications muted
+                </div>
             </div>
-
         </div>
     </div>
+
     <div class="profile-sub-header ">
         <div *ngIf="displayedAccount && hasNote" class="profile-description">
             <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="note"
@@ -60,18 +65,14 @@
             </div>
 
             <div *ngFor="let statusWrapper of pinnedStatuses">
-                <app-status [statusWrapper]="statusWrapper" 
-                    (browseHashtagEvent)="browseHashtag($event)"
-                    (browseAccountEvent)="browseAccount($event)" 
-                    (browseThreadEvent)="browseThread($event)">
+                <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
                 </app-status>
             </div>
 
             <div *ngFor="let statusWrapper of statuses">
-                <app-status [statusWrapper]="statusWrapper" 
-                    (browseHashtagEvent)="browseHashtag($event)"
-                    (browseAccountEvent)="browseAccount($event)" 
-                    (browseThreadEvent)="browseThread($event)">
+                <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                    (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
                 </app-status>
             </div>
 
