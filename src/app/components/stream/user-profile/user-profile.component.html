@@ -12,9 +12,8 @@
                 <img class="profile-header__avatar" [class.profile__disabled]="displayedAccount.moved"
                     src="{{displayedAccount.avatar}}" alt="header" />
             </a>
-            <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"></h2>
-            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}"
-                    target="_blank">@{{displayedAccount.acct}}</a></h2>
+            <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}" title="{{displayedAccount.display_name}}"></h2>
+            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
 
             <div class="profile-header__follow" *ngIf="relationship && !displayedAccount.moved">
                 <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"

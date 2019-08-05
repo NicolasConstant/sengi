@@ -4,6 +4,7 @@
 $validated-font-color: #4fde23;
 $validated-background: #164109;
 $header-height: 160px;
+
 .profile {
     // overflow: auto;
     height: calc(100%);
@@ -11,7 +12,7 @@ $header-height: 160px;
 
     &__moved {
         padding: 5px;
-        text-align: center;        
+        text-align: center;
 
         &--link {
             transition: .2s;
@@ -28,26 +29,32 @@ $header-height: 160px;
     }
 
     &__disabled {
-        filter: gray; 
+        filter: gray;
         -webkit-filter: grayscale(100%);
-        -moz-filter:    grayscale(100%);
-        -ms-filter:     grayscale(100%);
-        -o-filter:      grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
     }
 
     &-header {
+        background-position: center center;
+        background-repeat: no-repeat;
+
         background-size: cover;
-        position: relative; // height: 140px;
+        position: relative; 
         overflow: hidden; // background-color: black;
         border-bottom: 1px solid black;
+
         & h2 {
             font-size: $default-font-size;
         }
+
         &__inner {
             overflow: auto;
             height: $header-height;
             background-color: rgba(0, 0, 0, .45);
         }
+
         &__avatar {
             position: absolute;
             top: 12px;
@@ -55,22 +62,27 @@ $header-height: 160px;
             width: 80px;
             border-radius: 3px;
         }
+
         &__display-name {
             position: absolute;
             top: 105px;
             left: 15px;
-            width: calc(100% - 30px);
+            width: calc(100% - 20px);
+            text-overflow: ellipsis;
             overflow: hidden;
             color: white;
         }
+
         &__fullhandle a {
             position: absolute;
             top: 130px;
             left: 15px;
-            width: calc(100% - 30px);
+            width: calc(100% - 20px);
+            text-overflow: ellipsis;
             overflow: hidden;
             color: white;
         }
+
         &__follow {
             // transition: all .4s;
             position: absolute;
@@ -80,26 +92,32 @@ $header-height: 160px;
             -moz-osx-font-smoothing: grayscale;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
+
             &--button {
                 @include clearButton;
             }
+
             &--unfollowed {}
+
             &--followed {
                 color: #38abff;
                 color: #5fbcff;
                 color: #85ccff;
             }
         }
+
         &__state {
             position: absolute;
             top: 50px;
             right: 15px;
             font-size: 12px;
+
             &--data {
                 text-align: right;
             }
         }
     }
+
     &-sub-header {
         // overflow: auto;
         // height: calc(100% - #{$header-height});
@@ -108,22 +126,27 @@ $header-height: 160px;
         // height: 150px;
         // border: 1px solid greenyellow;
     }
+
     &-description {
         padding: 10px 10px 15px 10px;
         font-size: 13px;
         border-bottom: 1px solid black;
+
         &__content {
             width: calc(100%);
             word-break: break-word;
         }
     }
+
     &-fields {
         font-size: 13px;
         border-bottom: 1px solid black;
+
         &__field {
             &:not(:last-child) {
                 border-bottom: 1px solid black;
             }
+
             &--name {
                 padding: 10px;
                 border-right: 1px solid black;
@@ -133,19 +156,23 @@ $header-height: 160px;
                 white-space: nowrap;
                 overflow: hidden;
             }
+
             &--value {
                 padding: 10px;
                 width: calc(66%);
                 float: right;
                 white-space: nowrap;
             }
+
             &--validated {
                 background-color: $validated-background;
                 // border: 1px solid $validated-font-color;
             }
         }
+
         @include clearfix;
     }
+
     &-no-toots {
         text-align: center;
         margin: 15px;
@@ -157,14 +184,17 @@ $header-height: 160px;
 :host ::ng-deep .profile-fields__field--value {
     // font-size: 14px;
     color: $status-primary-color;
+
     & a,
     .mention,
     .ellipsis {
         color: $status-links-color;
     }
+
     & .invisible {
         display: none;
     }
+
     & p {
         margin: 0px; //font-size: .9em;
         // font-size: 14px;
@@ -174,14 +204,17 @@ $header-height: 160px;
 :host ::ng-deep .profile-fields__field--validated {
     // font-size: 14px;
     color: $validated-font-color;
+
     & a,
     .mention,
     .ellipsis {
         color: $validated-font-color;
     }
+
     & .invisible {
         display: none;
     }
+
     & p {
         margin: 0px; //font-size: .9em;
         // font-size: 14px;
