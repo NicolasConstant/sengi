@@ -140,6 +140,7 @@ export class UserProfileComponent implements OnInit {
         return this.mastodonService.getAccountStatuses(userAccount, account.id, false, true, false, null, null, 40)
             .then((statuses: Status[]) => {
                 for (const status of statuses) {
+                    status.pinned = true;
                     const wrapper = new StatusWrapper(status, userAccount);
                     this.pinnedStatuses.push(wrapper);
                 }
