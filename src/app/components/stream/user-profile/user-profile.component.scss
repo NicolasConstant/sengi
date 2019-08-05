@@ -104,6 +104,12 @@ $header-height: 160px;
                 color: #5fbcff;
                 color: #85ccff;
             }
+
+            &--waiting {
+                position: relative;
+                top: -5px;
+                left: 6px;
+            }
         }
 
         &__state {

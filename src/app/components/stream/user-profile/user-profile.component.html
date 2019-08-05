@@ -2,7 +2,9 @@
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
     <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
-        {{displayedAccount | accountEmoji }} has moved to <a href (click)="browseAccount(displayedAccount.moved.acct)" class="profile__moved--link" title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
+        {{displayedAccount | accountEmoji }} has moved to <a href (click)="browseAccount(displayedAccount.moved.acct)"
+            class="profile__moved--link"
+            title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
     </div>
 
     <div *ngIf="displayedAccount" class="profile-header"
@@ -12,24 +14,30 @@
                 <img class="profile-header__avatar" [class.profile__disabled]="displayedAccount.moved"
                     src="{{displayedAccount.avatar}}" alt="header" />
             </a>
-            <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}" title="{{displayedAccount.display_name}}"></h2>
-            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
+            <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
+                title="{{displayedAccount.display_name}}"></h2>
+            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank"
+                    title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
 
             <div class="profile-header__follow" *ngIf="relationship && !displayedAccount.moved">
-                <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
-                    (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
-                    <fa-icon [icon]="faUserRegular"></fa-icon>
-                </button>
-                <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
-                    (click)="unfollow()" *ngIf="relationship.following">
-                    <fa-icon [icon]="faUserCheck"></fa-icon>
-                </button>
-                <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
-                    (click)="unfollow()" *ngIf="relationship.requested">
-                    <fa-icon [icon]="faHourglassHalf"></fa-icon>
-                </button>
+                <app-waiting-animation *ngIf="loadingRelationShip" class="waiting-icon profile-header__follow--waiting"></app-waiting-animation>
+
+                <div *ngIf="!loadingRelationShip">
+                    <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
+                        (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
+                        <fa-icon [icon]="faUserRegular"></fa-icon>
+                    </button>
+                    <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
+                        (click)="unfollow()" *ngIf="relationship.following">
+                        <fa-icon [icon]="faUserCheck"></fa-icon>
+                    </button>
+                    <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
+                        (click)="unfollow()" *ngIf="relationship.requested">
+                        <fa-icon [icon]="faHourglassHalf"></fa-icon>
+                    </button>
+                </div>
             </div>
-            <div class="profile-header__state" *ngIf="relationship && !displayedAccount.moved">
+            <div class="profile-header__state" *ngIf="relationship && !displayedAccount.moved && !loadingRelationShip">
                 <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
                 <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
                 <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>

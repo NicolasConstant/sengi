@@ -33,6 +33,7 @@ export class UserProfileComponent implements OnInit {
     note: string;
 
     isLoading: boolean;
+    loadingRelationShip = false;
 
     private maxReached = false;
     private maxId: string;
@@ -76,12 +77,16 @@ export class UserProfileComponent implements OnInit {
             if (this.displayedAccount) {
                 const userAccount = accounts.filter(x => x.isSelected)[0];
 
+                this.loadingRelationShip = true;
                 this.toolsService.findAccount(userAccount, this.lastAccountName)
                     .then((account: Account) => {
-                        this.getFollowStatus(userAccount, account);
+                        return this.getFollowStatus(userAccount, account);
                     })
                     .catch((err: HttpErrorResponse) => {
                         this.notificationService.notifyHttpError(err);
+                    })
+                    .then(() => {
+                        this.loadingRelationShip = false;
                     });
             }
         });
@@ -165,10 +170,16 @@ export class UserProfileComponent implements OnInit {
     }
 
     private getFollowStatus(userAccount: AccountInfo, account: Account): Promise<void> {
-        // this.relationship = null;
+        this.loadingRelationShip = true;
         return this.mastodonService.getRelationships(userAccount, [account])
             .then((result: Relationship[]) => {
                 this.relationship = result.filter(x => x.id === account.id)[0];
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.loadingRelationShip = false;
             });
     }
 
