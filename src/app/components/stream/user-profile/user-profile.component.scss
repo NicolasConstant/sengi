@@ -7,6 +7,7 @@ $header-height: 160px;
 
 .outer-profile {
     height: calc(100%);
+    // width: $stream-column-width;
     overflow: hidden;
     position: relative;
 }
@@ -14,6 +15,7 @@ $header-height: 160px;
 .profile {
     // overflow: auto;
     height: calc(100%);
+    // width: $stream-column-width;
     overflow: auto;
 
     &__floating-header {
@@ -25,12 +27,14 @@ $header-height: 160px;
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
+        background-color: #0f111a;
 
         position: absolute;
-        top: -60px;
+        top: -66px;
         z-index: 100;
 
-        border-bottom: 1px solid #222736;
+        // border-bottom: 1px solid #222736;
+        box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .45);
 
         // opacity: 0;
 
@@ -50,7 +54,7 @@ $header-height: 160px;
         &__avatar {
             position: absolute;
             top: 6px;
-            left: 6px; 
+            left: 6px;
             width: 44px;
             border-radius: 2px;
         }
@@ -98,7 +102,7 @@ $header-height: 160px;
         background-repeat: no-repeat;
 
         background-size: cover;
-        position: relative; 
+        position: relative;
         overflow: hidden; // background-color: black;
         border-bottom: 1px solid black;
 
@@ -217,6 +221,7 @@ $header-height: 160px;
                 width: calc(33%);
                 background-color: #0b0d13;
                 white-space: nowrap;
+                text-overflow: ellipsis;
                 overflow: hidden;
             }
 
@@ -225,6 +230,8 @@ $header-height: 160px;
                 width: calc(66%);
                 float: right;
                 white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
 
             &--validated {
