@@ -35,7 +35,7 @@ $header-height: 160px;
         // opacity: 0;
 
         &__inner {
-            overflow: auto;
+            overflow: hidden;
             height: 60px;
             background-color: rgba(0, 0, 0, .45);
         }
@@ -45,6 +45,25 @@ $header-height: 160px;
             transition: all .25s;
             transition-timing-function: ease-out;
             top: 0px;
+        }
+
+        &__avatar {
+            position: absolute;
+            top: 6px;
+            left: 6px; 
+            width: 44px;
+            border-radius: 2px;
+        }
+
+        &__follow {
+            // transition: all .4s;
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            font-size: 28px;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
     }
 

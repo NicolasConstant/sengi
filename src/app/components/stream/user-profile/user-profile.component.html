@@ -3,7 +3,31 @@
         <div class="profile__floating-header" [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}"
             [class.profile__floating-header__activated]="showFloatingHeader">
             <div class="profile__floating-header__inner">
-                FLOATING HEADER
+                <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
+                    <img class="profile__floating-header__avatar" [class.profile__disabled]="displayedAccount.moved"
+                        src="{{displayedAccount.avatar}}" alt="header" />
+                </a>
+
+                <div class="profile__floating-header__follow" *ngIf="relationship && !displayedAccount.moved">
+                    <app-waiting-animation *ngIf="loadingRelationShip"
+                        class="waiting-icon profile-header__follow--waiting">
+                    </app-waiting-animation>
+
+                    <div *ngIf="!loadingRelationShip">
+                        <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
+                            (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
+                            <fa-icon [icon]="faUserRegular"></fa-icon>
+                        </button>
+                        <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
+                            (click)="unfollow()" *ngIf="relationship.following">
+                            <fa-icon [icon]="faUserCheck"></fa-icon>
+                        </button>
+                        <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
+                            (click)="unfollow()" *ngIf="relationship.requested">
+                            <fa-icon [icon]="faHourglassHalf"></fa-icon>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
