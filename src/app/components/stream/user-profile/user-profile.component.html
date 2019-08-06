@@ -1,90 +1,104 @@
-<div class="profile flexcroll" #statusstream (scroll)="onScroll()">
-    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
-
-    <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
-        {{displayedAccount | accountEmoji }} has moved to <a href (click)="browseAccount(displayedAccount.moved.acct)"
-            class="profile__moved--link"
-            title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
-    </div>
-
-    <div *ngIf="displayedAccount" class="profile-header"
-        [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
-        <div class="profile-header__inner">
-            <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
-                <img class="profile-header__avatar" [class.profile__disabled]="displayedAccount.moved"
-                    src="{{displayedAccount.avatar}}" alt="header" />
-            </a>
-            <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
-                title="{{displayedAccount.display_name}}"></h2>
-            <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank"
-                    title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
-
-            <div class="profile-header__follow" *ngIf="relationship && !displayedAccount.moved">
-                <app-waiting-animation *ngIf="loadingRelationShip" class="waiting-icon profile-header__follow--waiting"></app-waiting-animation>
-
-                <div *ngIf="!loadingRelationShip">
-                    <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
-                        (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
-                        <fa-icon [icon]="faUserRegular"></fa-icon>
-                    </button>
-                    <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
-                        (click)="unfollow()" *ngIf="relationship.following">
-                        <fa-icon [icon]="faUserCheck"></fa-icon>
-                    </button>
-                    <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
-                        (click)="unfollow()" *ngIf="relationship.requested">
-                        <fa-icon [icon]="faHourglassHalf"></fa-icon>
-                    </button>
-                </div>
-            </div>
-            <div class="profile-header__state" *ngIf="relationship && !displayedAccount.moved && !loadingRelationShip">
-                <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
-                <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
-                <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>
-                <div class="profile-header__state--data" *ngIf="relationship.domain_blocking">domain blocked</div>
-                <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
-                <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications muted
-                </div>
+<div class="outer-profile">
+    <div class="profile flexcroll" #statusstream (scroll)="onScroll()">
+        <div class="profile__floating-header" [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}"
+            [class.profile__floating-header__activated]="showFloatingHeader">
+            <div class="profile__floating-header__inner">
+                FLOATING HEADER
             </div>
         </div>
-    </div>
 
-    <div class="profile-sub-header ">
-        <div *ngIf="displayedAccount && hasNote" class="profile-description">
-            <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="note"
-                (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
-            </app-databinded-text>
+        <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+
+        <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
+            {{displayedAccount | accountEmoji }} has moved to <a href
+                (click)="browseAccount(displayedAccount.moved.acct)" class="profile__moved--link"
+                title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
         </div>
-        <div class="profile-fields" *ngIf="displayedAccount && displayedAccount.fields.length > 0">
-            <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
-                <div class="profile-fields__field--value" innerHTML="{{ displayedAccount | accountEmoji:field.value}}"
-                    [ngClass]="{'profile-fields__field--validated': field.verified_at }">
+
+        <div *ngIf="displayedAccount" class="profile-header"
+            [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
+            <div class="profile-header__inner">
+                <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
+                    <img class="profile-header__avatar" [class.profile__disabled]="displayedAccount.moved"
+                        src="{{displayedAccount.avatar}}" alt="header" />
+                </a>
+                <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
+                    title="{{displayedAccount.display_name}}"></h2>
+                <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank"
+                        title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
+
+                <div class="profile-header__follow" *ngIf="relationship && !displayedAccount.moved">
+                    <app-waiting-animation *ngIf="loadingRelationShip"
+                        class="waiting-icon profile-header__follow--waiting">
+                    </app-waiting-animation>
+
+                    <div *ngIf="!loadingRelationShip">
+                        <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
+                            (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
+                            <fa-icon [icon]="faUserRegular"></fa-icon>
+                        </button>
+                        <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
+                            (click)="unfollow()" *ngIf="relationship.following">
+                            <fa-icon [icon]="faUserCheck"></fa-icon>
+                        </button>
+                        <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
+                            (click)="unfollow()" *ngIf="relationship.requested">
+                            <fa-icon [icon]="faHourglassHalf"></fa-icon>
+                        </button>
+                    </div>
                 </div>
-                <div class="profile-fields__field--name">
-                    {{ field.name }}
+                <div class="profile-header__state"
+                    *ngIf="relationship && !displayedAccount.moved && !loadingRelationShip">
+                    <div class="profile-header__state--data" *ngIf="relationship.followed_by">follows you</div>
+                    <div class="profile-header__state--data" *ngIf="relationship.blocking">blocked</div>
+                    <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>
+                    <div class="profile-header__state--data" *ngIf="relationship.domain_blocking">domain blocked</div>
+                    <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
+                    <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications
+                        muted
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="profile-statuses">
-            <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
-                no toots found
+        <div class="profile-sub-header ">
+            <div *ngIf="displayedAccount && hasNote" class="profile-description">
+                <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="note"
+                    (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
+                </app-databinded-text>
+            </div>
+            <div class="profile-fields" *ngIf="displayedAccount && displayedAccount.fields.length > 0">
+                <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
+                    <div class="profile-fields__field--value"
+                        innerHTML="{{ displayedAccount | accountEmoji:field.value}}"
+                        [ngClass]="{'profile-fields__field--validated': field.verified_at }">
+                    </div>
+                    <div class="profile-fields__field--name">
+                        {{ field.name }}
+                    </div>
+                </div>
             </div>
 
-            <div *ngFor="let statusWrapper of pinnedStatuses">
-                <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                    (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
-                </app-status>
+            <div class="profile-statuses">
+                <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
+                    no toots found
+                </div>
+
+                <div *ngFor="let statusWrapper of pinnedStatuses">
+                    <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                        (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                    </app-status>
+                </div>
+
+                <div *ngFor="let statusWrapper of statuses">
+                    <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                        (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                    </app-status>
+                </div>
+
+
+                <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
             </div>
-
-            <div *ngFor="let statusWrapper of statuses">
-                <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                    (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
-                </app-status>
-            </div>
-
-
-            <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
         </div>
     </div>
 </div>

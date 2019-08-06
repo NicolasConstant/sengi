@@ -34,6 +34,7 @@ export class UserProfileComponent implements OnInit {
 
     isLoading: boolean;
     loadingRelationShip = false;
+    showFloatingHeader = false;
 
     private maxReached = false;
     private maxId: string;
@@ -205,6 +206,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     refresh(): any {
+        this.showFloatingHeader = false;
         this.load(this.lastAccountName);
     }
 
@@ -254,6 +256,12 @@ export class UserProfileComponent implements OnInit {
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+
+        if(element.scrollTop > 150){
+            this.showFloatingHeader = true;
+        } else {
+            this.showFloatingHeader = false;
+        }
 
         if (atBottom) {
             this.scrolledToBottom();

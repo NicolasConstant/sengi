@@ -5,10 +5,48 @@ $validated-font-color: #4fde23;
 $validated-background: #164109;
 $header-height: 160px;
 
+.outer-profile {
+    height: calc(100%);
+    overflow: hidden;
+    position: relative;
+}
+
 .profile {
     // overflow: auto;
     height: calc(100%);
     overflow: auto;
+
+    &__floating-header {
+        transition: all .2s;
+        transition-timing-function: ease-in;
+
+        height: 60px;
+        width: calc(100% - 7px);
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        position: absolute;
+        top: -60px;
+        z-index: 100;
+
+        border-bottom: 1px solid #222736;
+
+        // opacity: 0;
+
+        &__inner {
+            overflow: auto;
+            height: 60px;
+            background-color: rgba(0, 0, 0, .45);
+        }
+
+        &__activated {
+            // opacity: 1;
+            transition: all .25s;
+            transition-timing-function: ease-out;
+            top: 0px;
+        }
+    }
 
     &__moved {
         padding: 5px;
