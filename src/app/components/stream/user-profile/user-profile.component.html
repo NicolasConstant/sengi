@@ -8,6 +8,12 @@
                         src="{{displayedAccount.avatar}}" alt="header" />
                 </a>
 
+                <div class="profile__floating-header__names">
+                    <h2 class="profile__floating-header__names__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
+                        title="{{displayedAccount.display_name}}"></h2>
+                    <a class="profile__floating-header__names__fullhandle" href="{{displayedAccount.url}}" target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a>
+                </div>
+
                 <div class="profile__floating-header__follow" *ngIf="relationship && !displayedAccount.moved">
                     <app-waiting-animation *ngIf="loadingRelationShip"
                         class="waiting-icon profile-header__follow--waiting">

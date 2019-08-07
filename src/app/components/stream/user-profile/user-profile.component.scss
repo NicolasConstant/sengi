@@ -4,6 +4,8 @@
 $validated-font-color: #4fde23;
 $validated-background: #164109;
 $header-height: 160px;
+$full-alias-color: rgb(201, 201, 201);
+$full-alias-color-hover: white;
 
 .outer-profile {
     height: calc(100%);
@@ -57,6 +59,34 @@ $header-height: 160px;
             left: 6px;
             width: 44px;
             border-radius: 2px;
+        }
+
+        &__names {
+            position: absolute;
+            top: 6px;
+            left: 56px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            height: 46px;
+            width: calc(100% - 44px - 65px);
+            padding: 3px 5px 0px 3px;
+
+            &__display-name {
+                font-size: 15px;
+                color: white;
+                margin: 0 0 2px 0;
+            }
+
+            &__fullhandle {                
+                transition: all .2s;
+                font-size: 15px;
+                color: $full-alias-color;
+
+                &:hover {
+                    color: $full-alias-color-hover;
+                }
+            }
         }
 
         &__follow {
@@ -135,14 +165,19 @@ $header-height: 160px;
         }
 
         &__fullhandle a {
+            transition: all .2s;
             position: absolute;
             top: 130px;
             left: 15px;
             width: calc(100% - 20px);
             text-overflow: ellipsis;
             overflow: hidden;
-            color: white;
-        }
+            color: $full-alias-color;
+
+            &:hover {
+                color: $full-alias-color-hover;
+            }
+        }      
 
         &__follow {
             // transition: all .4s;
