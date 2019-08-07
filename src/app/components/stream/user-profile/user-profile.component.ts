@@ -143,7 +143,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     private getPinnedStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
-        return this.mastodonService.getAccountStatuses(userAccount, account.id, false, true, false, null, null, 40)
+        return this.mastodonService.getAccountStatuses(userAccount, account.id, false, true, false, null, null, 20)
             .then((statuses: Status[]) => {
                 for (const status of statuses) {
                     status.pinned = true;
@@ -158,7 +158,7 @@ export class UserProfileComponent implements OnInit {
 
     private getStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
         this.statusLoading = true;
-        return this.mastodonService.getAccountStatuses(userAccount, account.id, false, false, true, null, null, 40)
+        return this.mastodonService.getAccountStatuses(userAccount, account.id, false, false, true, null, null, 20)
             .then((statuses: Status[]) => {
                 this.loadStatus(userAccount, statuses);
             })
