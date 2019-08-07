@@ -278,7 +278,7 @@ export class UserProfileComponent implements OnInit {
 
         this.statusLoading = true;
         const userAccount = this.currentlyUsedAccount;
-        this.mastodonService.getAccountStatuses(userAccount, this.displayedAccount.id, false, false, true, this.maxId, null, 40)
+        this.mastodonService.getAccountStatuses(userAccount, this.displayedAccount.id, false, false, true, this.maxId, null, 20)
             .then((statuses: Status[]) => {
                 this.loadStatus(userAccount, statuses);
             })
