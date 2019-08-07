@@ -112,6 +112,7 @@ export class UserProfileComponent implements OnInit {
 
         this.displayedAccount = null;
         this.isLoading = true;
+        this.showFloatingHeader = false;
 
         this.lastAccountName = accountName;
         this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
