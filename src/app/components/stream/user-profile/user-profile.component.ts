@@ -210,8 +210,13 @@ export class UserProfileComponent implements OnInit {
         this.load(this.lastAccountName);
     }
 
-    browseAccount(accountName: string): boolean {
+    browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
+    }
+
+    openMigratedAccount(account: Account): boolean {
+        const handle = this.toolsService.getAccountFullHandle(account);
+        this.browseAccount(handle);
         return false;
     }
 

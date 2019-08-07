@@ -41,7 +41,7 @@
 
         <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
             {{displayedAccount | accountEmoji }} has moved to <a href
-                (click)="browseAccount(displayedAccount.moved.acct)" class="profile__moved--link"
+                (click)="openMigratedAccount(displayedAccount.moved)" class="profile__moved--link"
                 title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
         </div>
 
