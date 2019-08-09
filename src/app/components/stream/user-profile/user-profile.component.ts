@@ -165,7 +165,7 @@ export class UserProfileComponent implements OnInit {
     private getStatuses(userAccount: AccountInfo, account: Account, onlyMedia: boolean, excludeReplies: boolean, maxId: string): Promise<void> {
         this.statusLoading = true;
 
-        return this.mastodonService.getAccountStatuses(userAccount, account.id, onlyMedia, false, excludeReplies, maxId, null, 20)
+        return this.mastodonService.getAccountStatuses(userAccount, account.id, onlyMedia, false, excludeReplies, maxId, null, 40)
             .then((statuses: Status[]) => {
                 this.loadStatus(userAccount, statuses);
             })
@@ -294,17 +294,6 @@ export class UserProfileComponent implements OnInit {
         const excludeReplies = this.statusSection === 'status';
 
         this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, onlyMedia, excludeReplies, this.maxId);
-
-        // this.mastodonService.getAccountStatuses(userAccount, this.displayedAccount.id, false, false, true, this.maxId, null, 20)
-        //     .then((statuses: Status[]) => {
-        //         this.loadStatus(userAccount, statuses);
-        //     })
-        //     .catch(err => {
-        //         this.notificationService.notifyHttpError(err);
-        //     })
-        //     .then(() => {
-        //         this.statusLoading = false;
-        //     });
     }
 
     private loadStatus(userAccount: AccountInfo, statuses: Status[]) {
