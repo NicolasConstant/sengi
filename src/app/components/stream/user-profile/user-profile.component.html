@@ -1,6 +1,7 @@
 <div class="outer-profile">
     <div class="profile flexcroll" #statusstream (scroll)="onScroll()">
-        <div *ngIf="!isLoading" class="profile__floating-header" [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}"
+        <div *ngIf="!isLoading" class="profile__floating-header"
+            [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}"
             [class.profile__floating-header__activated]="showFloatingHeader">
             <div class="profile__floating-header__inner">
                 <a href (click)="showAvatar(displayedAccount.avatar)" (auxclick)="openAccount()" title="open avatar">
@@ -36,7 +37,7 @@
                     </div>
                 </div>
             </div>
-        </div>      
+        </div>
 
         <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
@@ -44,7 +45,7 @@
             {{displayedAccount | accountEmoji }} has moved to <a href
                 (click)="openMigratedAccount(displayedAccount.moved)" class="profile__moved--link"
                 title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
-        </div>       
+        </div>
 
         <div *ngIf="displayedAccount" class="profile-header"
             [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}">
@@ -101,6 +102,23 @@
                     </app-databinded-text>
                 </div>
 
+                <div class="profile__extra-info">
+                    <div class="profile__extra-info__section">
+                        <a href class="profile__extra-info__links" 
+                            (click)="switchProfileSection('fields')"
+                            [class.profile__extra-info__links--selected]="profileSection === 'fields'">Fields</a>
+                    </div>
+                    <div class="profile__extra-info__section">
+                        <a href class="profile__extra-info__links"
+                            (click)="switchProfileSection('choices')"
+                            [class.profile__extra-info__links--selected]="profileSection === 'choices'">User choices</a>
+                    </div>
+                    <div class="profile__extra-info__section">
+                        <a href class="profile__extra-info__links"
+                            (click)="switchProfileSection('hashtags')"
+                            [class.profile__extra-info__links--selected]="profileSection === 'hashtags'">Hashtags</a>
+                    </div>
+                </div>
                 <div class="profile-fields" *ngIf="displayedAccount.fields.length > 0">
                     <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
                         <div class="profile-fields__field--value"
@@ -115,6 +133,24 @@
             </div>
 
             <div class="profile-statuses">
+                <div class="profile__extra-info">
+                    <div class="profile__extra-info__section">
+                        <a href class="profile__extra-info__links"
+                            (click)="switchStatusSection('status')"
+                            [class.profile__extra-info__links--selected]="statusSection === 'status'">Status</a>
+                    </div>
+                    <div class="profile__extra-info__section">
+                        <a href class="profile__extra-info__links"
+                            (click)="switchStatusSection('replies')"
+                            [class.profile__extra-info__links--selected]="statusSection === 'replies'">Status & Replies</a>
+                    </div>
+                    <div class="profile__extra-info__section">
+                        <a href class="profile__extra-info__links"
+                            (click)="switchStatusSection('media')"
+                            [class.profile__extra-info__links--selected]="statusSection === 'media'">Media</a>
+                    </div>
+                </div>
+
                 <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
                     no status found
                 </div>

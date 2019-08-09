@@ -45,6 +45,9 @@ export class UserProfileComponent implements OnInit {
     statuses: StatusWrapper[] = [];
     pinnedStatuses: StatusWrapper[] = [];
 
+    profileSection: 'fields' | 'choices' | 'hashtags' = 'fields';
+    statusSection: 'status' | 'replies' | 'media' = 'status';
+
     private lastAccountName: string;
 
     private currentlyUsedAccount: AccountInfo;
@@ -307,6 +310,16 @@ export class UserProfileComponent implements OnInit {
 
     openAccount(): boolean {
         window.open(this.displayedAccount.url, '_blank');
+        return false;
+    }
+
+    switchProfileSection(section: 'fields' | 'choices' | 'hashtags'): boolean{
+        this.profileSection = section;
+        return false;
+    }
+
+    switchStatusSection(section: 'status' | 'replies' | 'media'): boolean{
+        this.statusSection = section;
         return false;
     }
 }

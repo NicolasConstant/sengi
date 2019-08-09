@@ -241,6 +241,32 @@ $full-alias-color-hover: white;
         }
     }
 
+    &__extra-info {       
+        background-color: #20273a;
+        background-color: #141824;
+        background-color: #1a1f2e;
+        font-size: 13px;
+        
+        &__section {
+            text-align: center;
+            display: inline-block;
+            width: calc(33.333% - 5px);
+            padding: 5px 0 7px 0;
+
+            &:not(:last-child) {
+                margin-right: 5px;
+            }
+        }
+
+        &__links {
+            color: white;
+
+            &--selected {
+                text-decoration: underline;
+            }
+        }
+    }
+
     &-fields {
         font-size: 13px;
         border-bottom: 1px solid black;
