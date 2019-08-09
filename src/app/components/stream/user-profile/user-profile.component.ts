@@ -275,7 +275,7 @@ export class UserProfileComponent implements OnInit {
             this.showFloatingHeader = false;
         }
 
-        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30;
+        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30;        
         if (element.scrollTop > menuPosition) {
             this.showFloatingStatusMenu = true;
         } else {

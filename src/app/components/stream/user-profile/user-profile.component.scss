@@ -79,7 +79,7 @@ $full-alias-color-hover: white;
                 margin: 0 0 2px 0;
             }
 
-            &__fullhandle {                
+            &__fullhandle {
                 transition: all .2s;
                 font-size: 15px;
                 color: $full-alias-color;
@@ -178,7 +178,7 @@ $full-alias-color-hover: white;
             &:hover {
                 color: $full-alias-color-hover;
             }
-        }      
+        }
 
         &__follow {
             // transition: all .4s;
@@ -241,7 +241,7 @@ $full-alias-color-hover: white;
         }
     }
 
-    &__extra-info {       
+    &__extra-info {
         background-color: #20273a;
         background-color: #141824;
         background-color: #1a1f2e;
@@ -326,17 +326,12 @@ $full-alias-color-hover: white;
 }
 
 .status-media {
-
     &__image {
-        width: calc(50%);
+        width: calc(50% - 2px);
         height: 150px;
         object-fit: cover;
-
+        margin: 1px;
         float: left;
-
-        &:nth-child(even) {
-            margin-right: 6px;
-        }
     }
 }
 
