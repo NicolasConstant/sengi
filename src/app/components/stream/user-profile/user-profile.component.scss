@@ -36,7 +36,7 @@ $full-alias-color-hover: white;
         z-index: 100;
 
         // border-bottom: 1px solid #222736;
-        box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .45);
+        box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .25);
 
         // opacity: 0;
 
@@ -246,7 +246,8 @@ $full-alias-color-hover: white;
         background-color: #141824;
         background-color: #1a1f2e;
         font-size: 13px;
-        
+        transition: all .4s;
+
         &__section {
             text-align: center;
             display: inline-block;
@@ -256,6 +257,18 @@ $full-alias-color-hover: white;
             &:not(:last-child) {
                 margin-right: 5px;
             }
+        }
+
+        &__preparefloating {
+            width: calc(100% - 7px);
+            position: absolute;
+            top: -66px;
+            z-index: 99;
+        }
+
+        &__floating {
+            top: 60px;
+            box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .45);
         }
 
         &__links {

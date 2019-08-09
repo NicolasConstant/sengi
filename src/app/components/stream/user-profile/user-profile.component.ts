@@ -35,6 +35,7 @@ export class UserProfileComponent implements OnInit {
     isLoading: boolean;
     loadingRelationShip = false;
     showFloatingHeader = false;
+    showFloatingStatusMenu = false;
 
     private maxReached = false;
     private maxId: string;
@@ -56,6 +57,7 @@ export class UserProfileComponent implements OnInit {
     private deleteStatusSubscription: Subscription;
 
     @ViewChild('statusstream') public statustream: ElementRef;
+    @ViewChild('profilestatuses') public profilestatuses: ElementRef;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -161,7 +163,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     private getStatuses(userAccount: AccountInfo, account: Account, onlyMedia: boolean, excludeReplies: boolean, maxId: string): Promise<void> {
-        this.statusLoading = true;       
+        this.statusLoading = true;
 
         return this.mastodonService.getAccountStatuses(userAccount, account.id, onlyMedia, false, excludeReplies, maxId, null, 20)
             .then((statuses: Status[]) => {
@@ -273,6 +275,13 @@ export class UserProfileComponent implements OnInit {
             this.showFloatingHeader = false;
         }
 
+        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30;
+        if (element.scrollTop > menuPosition) {
+            this.showFloatingStatusMenu = true;
+        } else {
+            this.showFloatingStatusMenu = false;
+        }
+
         if (atBottom) {
             this.scrolledToBottom();
         }
@@ -327,6 +336,9 @@ export class UserProfileComponent implements OnInit {
         this.statuses.length = 0;
         this.maxId = null;
 
+        this.showFloatingHeader = false;
+        this.showFloatingStatusMenu = false;
+
         switch (section) {
             case "status":
                 this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, true, this.maxId);
@@ -342,7 +354,7 @@ export class UserProfileComponent implements OnInit {
         return false;
     }
 
-    openAttachment(attachment: Attachment): boolean{
+    openAttachment(attachment: Attachment): boolean {
         let openMediaEvent = new OpenMediaEvent(0, [attachment], null);
         this.navigationService.openMedia(openMediaEvent);
         return false;
