@@ -312,6 +312,21 @@ $full-alias-color-hover: white;
     }
 }
 
+.status-media {
+
+    &__image {
+        width: calc(50%);
+        height: 150px;
+        object-fit: cover;
+
+        float: left;
+
+        &:nth-child(even) {
+            margin-right: 6px;
+        }
+    }
+}
+
 //Mastodon styling
 :host ::ng-deep .profile-fields__field--value {
     // font-size: 14px;

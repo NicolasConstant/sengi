@@ -10,7 +10,7 @@ import { MastodonService } from '../../../services/mastodon.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
-import { StatusWrapper } from '../../../models/common.model';
+import { StatusWrapper, OpenMediaEvent } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { NavigationService } from '../../../services/navigation.service';
 
@@ -339,6 +339,12 @@ export class UserProfileComponent implements OnInit {
                 break;
         }
 
+        return false;
+    }
+
+    openAttachment(attachment: Attachment): boolean{
+        let openMediaEvent = new OpenMediaEvent(0, [attachment], null);
+        this.navigationService.openMedia(openMediaEvent);
         return false;
     }
 }

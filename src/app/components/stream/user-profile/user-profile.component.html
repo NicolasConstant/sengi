@@ -164,9 +164,18 @@
                 </div>
 
                 <div *ngFor="let statusWrapper of statuses">
-                    <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                        (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
-                    </app-status>
+                    <div *ngIf="statusSection !== 'media'">
+                        <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                            (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                        </app-status>
+                    </div>
+                    <div *ngIf="statusSection === 'media'">
+                        <div *ngFor="let media of statusWrapper.status.media_attachments">
+                            <a href title="open image" (click)="openAttachment(media)">
+                                <img class="status-media__image" src="{{media.preview_url}}" />
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
 
