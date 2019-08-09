@@ -102,7 +102,7 @@
                     </app-databinded-text>
                 </div>
 
-                <div class="profile__extra-info">
+                <!-- <div class="profile__extra-info">
                     <div class="profile__extra-info__section">
                         <a href class="profile__extra-info__links" 
                             (click)="switchProfileSection('fields')"
@@ -118,14 +118,14 @@
                             (click)="switchProfileSection('hashtags')"
                             [class.profile__extra-info__links--selected]="profileSection === 'hashtags'">Hashtags</a>
                     </div>
-                </div>
+                </div> -->
                 <div class="profile-fields" *ngIf="displayedAccount.fields.length > 0">
                     <div class="profile-fields__field" *ngFor="let field of displayedAccount.fields">
                         <div class="profile-fields__field--value"
                             innerHTML="{{ displayedAccount | accountEmoji:field.value}}"
                             [ngClass]="{'profile-fields__field--validated': field.verified_at }">
                         </div>
-                        <div class="profile-fields__field--name">
+                        <div class="profile-fields__field--name" title="{{ field.name }}">
                             {{ field.name }}
                         </div>
                     </div>
@@ -133,20 +133,20 @@
             </div>
 
             <div class="profile-statuses">
-                <div class="profile__extra-info">
+                <div class="profile__extra-info" *ngIf="!isLoading">
                     <div class="profile__extra-info__section">
-                        <a href class="profile__extra-info__links"
-                            (click)="switchStatusSection('status')"
+                        <a href class="profile__extra-info__links" (click)="switchStatusSection('status')"
+                            title="Status"
                             [class.profile__extra-info__links--selected]="statusSection === 'status'">Status</a>
                     </div>
                     <div class="profile__extra-info__section">
-                        <a href class="profile__extra-info__links"
-                            (click)="switchStatusSection('replies')"
-                            [class.profile__extra-info__links--selected]="statusSection === 'replies'">Status & Replies</a>
+                        <a href class="profile__extra-info__links" (click)="switchStatusSection('replies')"
+                            title="Status & Replies"
+                            [class.profile__extra-info__links--selected]="statusSection === 'replies'">Status &
+                            Replies</a>
                     </div>
                     <div class="profile__extra-info__section">
-                        <a href class="profile__extra-info__links"
-                            (click)="switchStatusSection('media')"
+                        <a href class="profile__extra-info__links" (click)="switchStatusSection('media')" title="Media"
                             [class.profile__extra-info__links--selected]="statusSection === 'media'">Media</a>
                     </div>
                 </div>
@@ -155,10 +155,12 @@
                     no status found
                 </div>
 
-                <div *ngFor="let statusWrapper of pinnedStatuses">
-                    <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                        (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
-                    </app-status>
+                <div *ngIf="statusSection === 'status'">
+                    <div *ngFor="let statusWrapper of pinnedStatuses">
+                        <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                            (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                        </app-status>
+                    </div>
                 </div>
 
                 <div *ngFor="let statusWrapper of statuses">

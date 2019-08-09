@@ -132,7 +132,7 @@ export class UserProfileComponent implements OnInit {
                 }
 
                 const getFollowStatusPromise = this.getFollowStatus(this.currentlyUsedAccount, this.displayedAccount);
-                const getStatusesPromise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount);
+                const getStatusesPromise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, true, null);
                 const getPinnedStatusesPromise = this.getPinnedStatuses(this.currentlyUsedAccount, this.displayedAccount);
 
                 return Promise.all([getFollowStatusPromise, getStatusesPromise, getPinnedStatusesPromise]);
@@ -160,9 +160,10 @@ export class UserProfileComponent implements OnInit {
             });
     }
 
-    private getStatuses(userAccount: AccountInfo, account: Account): Promise<void> {
-        this.statusLoading = true;
-        return this.mastodonService.getAccountStatuses(userAccount, account.id, false, false, true, null, null, 20)
+    private getStatuses(userAccount: AccountInfo, account: Account, onlyMedia: boolean, excludeReplies: boolean, maxId: string): Promise<void> {
+        this.statusLoading = true;       
+
+        return this.mastodonService.getAccountStatuses(userAccount, account.id, onlyMedia, false, excludeReplies, maxId, null, 20)
             .then((statuses: Status[]) => {
                 this.loadStatus(userAccount, statuses);
             })
@@ -266,7 +267,7 @@ export class UserProfileComponent implements OnInit {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
 
-        if(element.scrollTop > 150){
+        if (element.scrollTop > 150) {
             this.showFloatingHeader = true;
         } else {
             this.showFloatingHeader = false;
@@ -280,18 +281,21 @@ export class UserProfileComponent implements OnInit {
     private scrolledToBottom() {
         if (this.statusLoading || this.maxReached) return;
 
-        this.statusLoading = true;
-        const userAccount = this.currentlyUsedAccount;
-        this.mastodonService.getAccountStatuses(userAccount, this.displayedAccount.id, false, false, true, this.maxId, null, 20)
-            .then((statuses: Status[]) => {
-                this.loadStatus(userAccount, statuses);
-            })
-            .catch(err => {
-                this.notificationService.notifyHttpError(err);
-            })
-            .then(() => {
-                this.statusLoading = false;
-            });
+        const onlyMedia = this.statusSection === 'media';
+        const excludeReplies = this.statusSection === 'status';
+
+        this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, onlyMedia, excludeReplies, this.maxId);
+
+        // this.mastodonService.getAccountStatuses(userAccount, this.displayedAccount.id, false, false, true, this.maxId, null, 20)
+        //     .then((statuses: Status[]) => {
+        //         this.loadStatus(userAccount, statuses);
+        //     })
+        //     .catch(err => {
+        //         this.notificationService.notifyHttpError(err);
+        //     })
+        //     .then(() => {
+        //         this.statusLoading = false;
+        //     });
     }
 
     private loadStatus(userAccount: AccountInfo, statuses: Status[]) {
@@ -313,13 +317,28 @@ export class UserProfileComponent implements OnInit {
         return false;
     }
 
-    switchProfileSection(section: 'fields' | 'choices' | 'hashtags'): boolean{
+    switchProfileSection(section: 'fields' | 'choices' | 'hashtags'): boolean {
         this.profileSection = section;
         return false;
     }
 
-    switchStatusSection(section: 'status' | 'replies' | 'media'): boolean{
+    switchStatusSection(section: 'status' | 'replies' | 'media'): boolean {
         this.statusSection = section;
+        this.statuses.length = 0;
+        this.maxId = null;
+
+        switch (section) {
+            case "status":
+                this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, true, this.maxId);
+                break;
+            case "replies":
+                this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, false, this.maxId);
+                break;
+            case "media":
+                this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, true, true, this.maxId);
+                break;
+        }
+
         return false;
     }
 }
