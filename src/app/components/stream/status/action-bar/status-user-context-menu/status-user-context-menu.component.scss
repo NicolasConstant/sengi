@@ -1,0 +1,16 @@
+@import "variables";
+@import "context-menu";
+
+.context-menu-link {
+    &__status {
+        color: $status-secondary-color;
+
+        &:hover {
+            color: $status-links-color;
+        }
+    }
+
+    &__profile {
+
+    }
+}
