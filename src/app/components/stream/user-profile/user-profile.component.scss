@@ -211,12 +211,18 @@ $full-alias-color-hover: white;
 
         &__state {
             position: absolute;
-            top: 50px;
-            right: 15px;
+            top: 13px;
+            left: 102px;
             font-size: 12px;
+            max-width: 150px;           
 
             &--data {
-                text-align: right;
+                display: inline-block;
+                background-color: rgba(0, 0, 0, .60);
+                padding: 4px 10px;
+                border-radius: 4px;
+                text-align: center;
+                margin: 0 2px 2px 0; 
             }
         }
     }
