@@ -28,7 +28,8 @@
         <fa-icon [icon]="faWindowCloseRegular"></fa-icon>
     </a>
 
-    <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event)" title="More">
+    <app-status-user-context-menu class="action-bar__link action-bar__link--more" [statusWrapper]="statusWrapper" (browseThreadEvent)="browseThread($event)"></app-status-user-context-menu>
+    <!-- <a href class="action-bar__link action-bar__link--more" (click)="onContextMenu($event)" title="More">
         <fa-icon [icon]="faEllipsisH"></fa-icon>
     </a>
     <context-menu #contextMenu>
@@ -70,5 +71,5 @@
         <ng-template contextMenuItem (execute)="delete(true)" *ngIf="isOwnerSelected">
             Delete & re-draft
         </ng-template>
-    </context-menu>
+    </context-menu> -->
 </div>

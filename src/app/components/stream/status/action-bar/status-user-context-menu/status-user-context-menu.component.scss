@@ -1,0 +1,22 @@
+@import "variables";
+@import "context-menu";
+
+.context-menu-link {
+    font-size: 18px;
+
+    &__status {
+        color: $status-secondary-color;
+
+        &:hover {
+            color: $status-links-color;
+        }
+    }
+
+    &__profile {
+        color: whitesmoke;
+
+        &:hover {
+            color: rgb(192, 192, 192);
+        }
+    }
+}

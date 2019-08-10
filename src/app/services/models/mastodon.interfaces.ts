@@ -38,7 +38,7 @@ export interface Account {
     header: string;
     header_static: string;
     emojis: Emoji[];
-    moved: boolean;
+    moved: Account;
     fields: Field[];
     bot: boolean;
     source: AccountInfo;

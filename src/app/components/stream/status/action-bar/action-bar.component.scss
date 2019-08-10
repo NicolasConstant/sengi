@@ -1,5 +1,4 @@
 @import "variables";
-@import "context-menu";
 
 .action-bar {
     // outline: 1px solid greenyellow; // height: 20px;
@@ -44,7 +43,7 @@
 
         &--more {
             position: absolute;
-            right: -5px;
+            right: 11px;
             // left: 155px;
             bottom: -2px;
         }
@@ -150,5 +149,4 @@
     -moz-animation: loadingAnimation 1s infinite;
     -o-animation: loadingAnimation 1s infinite;
     animation: loadingAnimation 1s infinite;
-
 }
