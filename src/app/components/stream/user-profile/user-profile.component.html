@@ -54,10 +54,10 @@
                     <img class="profile-header__avatar" [class.profile__disabled]="displayedAccount.moved"
                         src="{{displayedAccount.avatar}}" alt="header" />
                 </a>
-                <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
+                <!-- <h2 class="profile-header__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
                     title="{{displayedAccount.display_name}}"></h2>
                 <h2 class="profile-header__fullhandle"><a href="{{displayedAccount.url}}" target="_blank"
-                        title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
+                        title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2> -->
 
                 <div class="profile-header__follow" *ngIf="relationship && !displayedAccount.moved">
                     <app-waiting-animation *ngIf="loadingRelationShip"
@@ -86,23 +86,25 @@
                     <div class="profile-header__state--data" *ngIf="relationship.blocked_by">blocks you</div>
                     <div class="profile-header__state--data" *ngIf="relationship.domain_blocking">domain blocked</div>
                     <div class="profile-header__state--data" *ngIf="relationship.muting">muted</div>
-                    <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications
+                    <div class="profile-header__state--data" *ngIf="relationship.endorsed">endorsed</div>
+                    <!-- <div class="profile-header__state--data" *ngIf="relationship.muting_notifications">notifications
                         muted
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
-            <app-status-user-context-menu class="profile-header__more" 
-                [displayedAccount]="displayedAccount"></app-status-user-context-menu>
+            <app-status-user-context-menu class="profile-header__more" [displayedAccount]="displayedAccount">
+            </app-status-user-context-menu>
         </div>
 
         <div class="profile-sub-header">
 
             <div *ngIf="displayedAccount">
-                <div *ngIf="hasNote" class="profile-description">
-                    <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="note"
-                        (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
-                    </app-databinded-text>
+                <div class="profile-name">
+                    <h2 class="profile-name__link profile-name__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
+                        title="{{displayedAccount.display_name}}"></h2>
+                    <h2 class="profile-name__link profile-name__fullhandle"><a href="{{displayedAccount.url}}" target="_blank"
+                            title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
                 </div>
 
                 <!-- <div class="profile__extra-info">
@@ -132,6 +134,12 @@
                             {{ field.name }}
                         </div>
                     </div>
+                </div>
+
+                <div *ngIf="hasNote" class="profile-description">
+                    <app-databinded-text class="profile-description__content" [textIsSelectable]="false" [text]="note"
+                        (accountSelected)="browseAccount($event)" (hashtagSelected)="browseHashtag($event)">
+                    </app-databinded-text>
                 </div>
             </div>
 
@@ -195,10 +203,10 @@
                             <a href title="open" (click)="openAttachment(media)">
                                 <img class="status-media__image" src="{{media.preview_url}}" />
                             </a>
-                        </div>                        
-                    </div>                    
+                        </div>
+                    </div>
                 </div>
-                <div style="clear: both;"></div> 
+                <div style="clear: both;"></div>
 
                 <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
             </div>
