@@ -15,7 +15,7 @@ $floating-header-height: 60px;
     position: relative;
 }
 
-.profile {
+.profile {    
     // overflow: auto;
     height: calc(100%);
     // width: $stream-column-width;
@@ -26,7 +26,7 @@ $floating-header-height: 60px;
         transition-timing-function: ease-in;
 
         height: $floating-header-height;
-        width: calc(100% - 7px);
+        width: calc(100% - #{$scroll-bar-width});
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -285,7 +285,7 @@ $floating-header-height: 60px;
         }
 
         &__preparefloating {
-            width: calc(100% - 7px);
+            width: calc(100% - #{$scroll-bar-width});
             position: absolute;
             top: -66px;
             z-index: 99;
