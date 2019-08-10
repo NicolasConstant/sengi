@@ -24,10 +24,9 @@
     margin: 5px auto;
 }
 
-$scrollbar-color: #08090d;
-$scrollbar-color-thumb: lighten($color-primary, 5);
 .flexcroll {
     scrollbar-color:  $scrollbar-color-thumb #0f111a;
+    scrollbar-width: thin;
 
     scrollbar-face-color: $scrollbar-color;
     scrollbar-shadow-color: $scrollbar-color;
@@ -35,9 +34,7 @@ $scrollbar-color-thumb: lighten($color-primary, 5);
     scrollbar-3dlight-color: $scrollbar-color;
     scrollbar-darkshadow-color: $scrollbar-color;
     scrollbar-track-color: $scrollbar-color;
-    scrollbar-arrow-color: $scrollbar-color;
-    
-    scrollbar-width: thin;
+    scrollbar-arrow-color: $scrollbar-color;    
 
     &::-webkit-scrollbar {
         width: $scroll-bar-width;
