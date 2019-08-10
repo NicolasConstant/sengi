@@ -16,7 +16,9 @@
         </a>
     </div>
 
-    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" [streamElement]="streamElement">
+    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" 
+        [streamElement]="streamElement"
+        (closed)="streamEditionClosed()">
     </app-stream-edition>
 
     <app-stream-statuses class="stream-statuses"

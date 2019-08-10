@@ -95,5 +95,10 @@ export class StreamComponent implements OnInit {
         this.editionPanelIsOpen = !this.editionPanelIsOpen;
         return false;
     }
+
+    streamEditionClosed(): boolean {
+        this.editionPanelIsOpen = false;
+        return false;
+    }
 }
 

@@ -16,16 +16,22 @@
     }
 }
 
+
 .flexcroll {
-    scrollbar-face-color: #08090d;
-    scrollbar-shadow-color: #08090d;
-    scrollbar-highlight-color: #08090d;
-    scrollbar-3dlight-color: #08090d;
-    scrollbar-darkshadow-color: #08090d;
-    scrollbar-track-color: #08090d;
-    scrollbar-arrow-color: #08090d;
+    scrollbar-color: $scrollbar-color-thumb #0f111a;
+    scrollbar-color: #090b10 #0f111a;
+    scrollbar-width: thin;
+
+    scrollbar-face-color: $scrollbar-color;
+    scrollbar-shadow-color: $scrollbar-color;
+    scrollbar-highlight-color: $scrollbar-color;
+    scrollbar-3dlight-color: $scrollbar-color;
+    scrollbar-darkshadow-color: $scrollbar-color;
+    scrollbar-track-color: $scrollbar-color;
+    scrollbar-arrow-color: $scrollbar-color;
+
     &::-webkit-scrollbar {
-        height: 7px;
+        height: $scroll-bar-width;
     }
     &::-webkit-scrollbar-thumb {
         -webkit-border-radius: 0px;

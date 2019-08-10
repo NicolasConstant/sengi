@@ -81,7 +81,7 @@
                     *ngIf="hasReply">
                     replies
                 </div>
-                <div class="status__labels--label status__labels--old" title="this status is old" *ngIf="isOld">
+                <div class="status__labels--label status__labels--old" title="this status is old" *ngIf="isOld && !statusWrapper.status.pinned">
                     old
                 </div>
             </div>
