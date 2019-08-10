@@ -18,7 +18,7 @@ import { NotificationService } from '../../../../../services/notification.servic
     templateUrl: './status-user-context-menu.component.html',
     styleUrls: ['./status-user-context-menu.component.scss']
 })
-export class StatusUserContextMenuComponent implements OnInit, OnDestroy {    
+export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
     faEllipsisH = faEllipsisH;
 
     private fullHandle: string;
@@ -28,6 +28,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
     isOwnerSelected: boolean;
 
     @Input() statusWrapper: StatusWrapper;
+    @Input() displayedAccount: Account;
 
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
@@ -42,27 +43,35 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
         private readonly toolsService: ToolsService,
-        private readonly contextMenuService: ContextMenuService) { 
-            this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
-        }
-    
-    ngOnInit() {
-        const status = this.statusWrapper.status;
+        private readonly contextMenuService: ContextMenuService) {
+        this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+    }
 
-        if (status.reblog) {
-            this.displayedStatus = status.reblog;
+    ngOnInit() {       
+        if (this.statusWrapper) {
+
+            const status = this.statusWrapper.status;
+            if (status.reblog) {
+                this.displayedStatus = status.reblog;
+            } else {
+                this.displayedStatus = status;
+            }
+
+            this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+                this.loadedAccounts = accounts;
+                this.checkStatus(accounts);
+            });
+        }
+
+        let account: Account;
+        if(this.statusWrapper) {
+            account = this.displayedStatus.account;
         } else {
-            this.displayedStatus = status;           
+            account = this.displayedAccount;
         }
 
-        this.username = this.displayedStatus.account.acct.split('@')[0];
-        this.fullHandle = this.toolsService.getAccountFullHandle(this.displayedStatus.account);
-        
-        this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
-            this.loadedAccounts = accounts;
-            this.checkStatus(accounts);
-        });
-
+        this.username = account.acct.split('@')[0];
+        this.fullHandle = this.toolsService.getAccountFullHandle(account);
     }
 
     private checkStatus(accounts: AccountInfo[]): void {
@@ -74,7 +83,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy(): void {
-        this.accountSub.unsubscribe();
+        if(this.accountSub) this.accountSub.unsubscribe();
     }
 
     public onContextMenu($event: MouseEvent): void {
@@ -249,7 +258,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
     private getStatus(account: AccountInfo): Promise<Status> {
         let statusPromise: Promise<Status> = Promise.resolve(this.statusWrapper.status);
-        
+
         if (account.id !== this.statusWrapper.provider.id) {
             statusPromise = this.mastodonService.search(account, this.statusWrapper.status.url, true)
                 .then((result: Results) => {

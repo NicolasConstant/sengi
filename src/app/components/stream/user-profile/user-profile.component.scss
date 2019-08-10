@@ -225,6 +225,12 @@ $full-alias-color-hover: white;
                 margin: 0 2px 2px 0; 
             }
         }
+
+        &__more {
+            position: absolute;
+            bottom: 5px;
+            right: 16px;
+        }
     }
 
     &-sub-header {
