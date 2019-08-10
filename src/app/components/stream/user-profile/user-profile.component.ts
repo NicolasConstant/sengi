@@ -323,7 +323,7 @@ export class UserProfileComponent implements OnInit {
 
     isSwitchingSection: boolean;
     switchStatusSection(section: 'status' | 'replies' | 'media'): boolean {
-        this.isSwitchingSection = true;
+         this.isSwitchingSection = true;
 
         this.statusSection = section;
         this.statuses.length = 0;
@@ -346,13 +346,21 @@ export class UserProfileComponent implements OnInit {
         }
         if (promise) {
             promise
-                .catch(err => {                    
+                .catch(err => {
                 })
                 .then(() => {
                     this.isSwitchingSection = false;
                 });
         } else {
             this.isSwitchingSection = false;
+        }
+
+        if (this.showFloatingStatusMenu) {
+            setTimeout(() => {
+                var element = this.statustream.nativeElement as HTMLElement;
+                const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30 - 29;
+                element.scrollTop = menuPosition;
+            }, 0);
         }
 
         return false;

@@ -180,19 +180,19 @@
                     </div>
                 </div>
 
-                <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
-                    no status found
-                </div>
-
-                <div *ngIf="statusSection === 'status'">
-                    <div *ngFor="let statusWrapper of pinnedStatuses">
-                        <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                            (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
-                        </app-status>
-                    </div>
-                </div>
-
                 <div [class.profile__status-switching-section]="isSwitchingSection">
+                    <div *ngIf="!isLoading && !statusLoading && statuses.length == 0" class="profile-no-toots">
+                        no status found
+                    </div>
+
+                    <div *ngIf="statusSection === 'status' && !statusLoading">
+                        <div *ngFor="let statusWrapper of pinnedStatuses">
+                            <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                                (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                            </app-status>
+                        </div>
+                    </div>
+
                     <div *ngFor="let statusWrapper of statuses">
                         <div *ngIf="statusSection !== 'media'">
                             <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
@@ -209,7 +209,7 @@
                     </div>
                     <div style="clear: both;"></div>
                     <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
-                </div>                
+                </div>
             </div>
         </div>
     </div>

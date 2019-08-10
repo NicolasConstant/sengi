@@ -344,7 +344,7 @@ $floating-header-height: 60px;
     }
 
     &__status-switching-section {
-        height: calc(100vh - 35px - #{$floating-header-height} - #{$stream-header-height} - #{$stream-selector-height});
+        height: calc(100vh - 35px - #{$floating-header-height} - #{$stream-header-height} - #{$stream-selector-height});        
     }
 
     &-no-toots {
