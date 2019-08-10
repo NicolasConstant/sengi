@@ -6,6 +6,7 @@ $validated-background: #164109;
 $header-height: 140px;
 $full-alias-color: rgb(201, 201, 201);
 $full-alias-color-hover: white;
+$floating-header-height: 60px;
 
 .outer-profile {
     height: calc(100%);
@@ -24,7 +25,7 @@ $full-alias-color-hover: white;
         transition: all .2s;
         transition-timing-function: ease-in;
 
-        height: 60px;
+        height: $floating-header-height;
         width: calc(100% - 7px);
         background-position: center center;
         background-repeat: no-repeat;
@@ -42,7 +43,7 @@ $full-alias-color-hover: white;
 
         &__inner {
             overflow: hidden;
-            height: 60px;
+            height: $floating-header-height;
             background-color: rgba(0, 0, 0, .45);
         }
 
@@ -57,8 +58,8 @@ $full-alias-color-hover: white;
             position: absolute;
             top: 6px;
             left: 6px;
-            width: 46px;
-            height: 46px;
+            width: calc(#{$floating-header-height} - 14px);
+            height: calc(#{$floating-header-height} - 14px);
             border-radius: 2px;
         }
 
@@ -69,7 +70,7 @@ $full-alias-color-hover: white;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            height: 46px;
+            height: calc(#{$floating-header-height} - 14px);
             width: calc(100% - 44px - 65px);
             padding: 3px 5px 0px 3px;
 
@@ -340,6 +341,10 @@ $full-alias-color-hover: white;
         }
 
         @include clearfix;
+    }
+
+    &__status-switching-section {
+        height: calc(100vh - 35px - #{$floating-header-height} - #{$stream-header-height} - #{$stream-selector-height});
     }
 
     &-no-toots {

@@ -118,6 +118,7 @@ export class UserProfileComponent implements OnInit {
         this.displayedAccount = null;
         this.isLoading = true;
         this.showFloatingHeader = false;
+        this.isSwitchingSection = false;
 
         this.lastAccountName = accountName;
         this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
@@ -275,7 +276,7 @@ export class UserProfileComponent implements OnInit {
             this.showFloatingHeader = false;
         }
 
-        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30;        
+        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30 - 31;
         if (element.scrollTop > menuPosition) {
             this.showFloatingStatusMenu = true;
         } else {
@@ -320,24 +321,38 @@ export class UserProfileComponent implements OnInit {
         return false;
     }
 
+    isSwitchingSection: boolean;
     switchStatusSection(section: 'status' | 'replies' | 'media'): boolean {
+        this.isSwitchingSection = true;
+
         this.statusSection = section;
         this.statuses.length = 0;
         this.maxId = null;
 
-        this.showFloatingHeader = false;
-        this.showFloatingStatusMenu = false;
+        // this.showFloatingHeader = false;
+        // this.showFloatingStatusMenu = false;
 
+        let promise: Promise<any>;
         switch (section) {
             case "status":
-                this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, true, this.maxId);
+                promise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, true, this.maxId);
                 break;
             case "replies":
-                this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, false, this.maxId);
+                promise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, false, false, this.maxId);
                 break;
             case "media":
-                this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, true, true, this.maxId);
+                promise = this.getStatuses(this.currentlyUsedAccount, this.displayedAccount, true, true, this.maxId);
                 break;
+        }
+        if (promise) {
+            promise
+                .catch(err => {                    
+                })
+                .then(() => {
+                    this.isSwitchingSection = false;
+                });
+        } else {
+            this.isSwitchingSection = false;
         }
 
         return false;

@@ -101,10 +101,10 @@
 
             <div *ngIf="displayedAccount">
                 <div class="profile-name">
-                    <h2 class="profile-name__link profile-name__display-name" innerHTML="{{displayedAccount | accountEmoji }}"
-                        title="{{displayedAccount.display_name}}"></h2>
-                    <h2 class="profile-name__link profile-name__fullhandle"><a href="{{displayedAccount.url}}" target="_blank"
-                            title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
+                    <h2 class="profile-name__link profile-name__display-name"
+                        innerHTML="{{displayedAccount | accountEmoji }}" title="{{displayedAccount.display_name}}"></h2>
+                    <h2 class="profile-name__link profile-name__fullhandle"><a href="{{displayedAccount.url}}"
+                            target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
                 </div>
 
                 <!-- <div class="profile__extra-info">
@@ -192,23 +192,24 @@
                     </div>
                 </div>
 
-                <div *ngFor="let statusWrapper of statuses">
-                    <div *ngIf="statusSection !== 'media'">
-                        <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                            (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
-                        </app-status>
-                    </div>
-                    <div *ngIf="statusSection === 'media'" class="status-media">
-                        <div *ngFor="let media of statusWrapper.status.media_attachments">
-                            <a href title="open" (click)="openAttachment(media)">
-                                <img class="status-media__image" src="{{media.preview_url}}" />
-                            </a>
+                <div [class.profile__status-switching-section]="isSwitchingSection">
+                    <div *ngFor="let statusWrapper of statuses">
+                        <div *ngIf="statusSection !== 'media'">
+                            <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
+                                (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                            </app-status>
+                        </div>
+                        <div *ngIf="statusSection === 'media'" class="status-media">
+                            <div *ngFor="let media of statusWrapper.status.media_attachments">
+                                <a href title="open" (click)="openAttachment(media)">
+                                    <img class="status-media__image" src="{{media.preview_url}}" />
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div style="clear: both;"></div>
-
-                <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
+                    <div style="clear: both;"></div>
+                    <app-waiting-animation *ngIf="statusLoading" class="waiting-icon"></app-waiting-animation>
+                </div>                
             </div>
         </div>
     </div>
