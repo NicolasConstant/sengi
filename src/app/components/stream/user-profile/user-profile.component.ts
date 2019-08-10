@@ -270,7 +270,7 @@ export class UserProfileComponent implements OnInit {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
 
-        if (element.scrollTop > 150) {
+        if (element.scrollTop > 135) {
             this.showFloatingHeader = true;
         } else {
             this.showFloatingHeader = false;
