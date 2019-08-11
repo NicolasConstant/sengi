@@ -1,30 +1,30 @@
 <div class="stream-column">
+    <div class="sliding-column" [class.sliding-column__right-display]="overlayActive">
+        <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"
+            [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse"
+            [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
-    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"
-        [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse"
-        [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
+        <!-- <div> -->
+            <div class="stream-column__stream-header">
+                <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
+                    <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
+                    <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
+                    <span class="stream-column__stream-selector--subtitle"
+                        *ngIf="streamElement.instance">{{ streamElement.instance.toLowerCase() }}</span>
+                </a>
+                <a class="stream-column__open-menu" href title="edit column" (click)="openEditionMenu()">
+                    <fa-icon class="stream-column__open-menu--icon" [icon]="menuFaIcon"></fa-icon>
+                </a>
+            </div>
 
-    <div class="stream-column__stream-header">
-        <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
-            <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
-            <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
-            <span class="stream-column__stream-selector--subtitle"
-                *ngIf="streamElement.instance">{{ streamElement.instance.toLowerCase() }}</span>
-        </a>
-        <a class="stream-column__open-menu" href title="edit column" (click)="openEditionMenu()">
-            <fa-icon class="stream-column__open-menu--icon" [icon]="menuFaIcon"></fa-icon>
-        </a>
+            <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" [streamElement]="streamElement"
+                (closed)="streamEditionClosed()">
+            </app-stream-edition>
+
+            <app-stream-statuses class="stream-statuses" [streamElement]="streamElement"
+                [goToTop]="goToTopSubject.asObservable()" (browseAccountEvent)="browseAccount($event)"
+                (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+            </app-stream-statuses>
+        <!-- </div> -->
     </div>
-
-    <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" 
-        [streamElement]="streamElement"
-        (closed)="streamEditionClosed()">
-    </app-stream-edition>
-
-    <app-stream-statuses class="stream-statuses"
-        [streamElement]="streamElement"
-        [goToTop]="goToTopSubject.asObservable()" 
-        (browseAccountEvent)="browseAccount($event)"
-        (browseHashtagEvent)="browseHashtag($event)" 
-        (browseThreadEvent)="browseThread($event)"></app-stream-statuses>
 </div>
