@@ -4,29 +4,41 @@
             <fa-icon [icon]="faTimes"></fa-icon>
         </button>
 
-        <button class="overlay__button overlay-previous" [ngClass]="{'overlay__button--focus': previousElements.length > 0 }" title="previous" (click)="previous()">
+        <button class="overlay__button overlay-previous"
+            [ngClass]="{'overlay__button--focus': hasPreviousElements }" title="previous" (click)="previous()">
             <fa-icon [icon]="faAngleLeft"></fa-icon>
         </button>
-        <button class="overlay__button overlay-refresh"  [ngClass]="{'overlay__button--focus': refreshFocused }" title="refresh" (click)="refresh()">
+        <button class="overlay__button overlay-refresh" [ngClass]="{'overlay__button--focus': refreshFocused }"
+            title="refresh" (click)="refresh()">
             <fa-icon [icon]="faRedoAlt"></fa-icon>
         </button>
-        <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': nextElements.length > 0 }" title="next" (click)="next()">
+        <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements > 0 }"
+            title="next" (click)="next()">
             <fa-icon [icon]="faAngleRight"></fa-icon>
-        </button> 
-
-        <!-- <a href class="overlay-close" (click)="close()">CLOSE</a>
-        <a href class="overlay-previous" (click)="previous()">PREV</a>
-        <a href class="overlay-refresh" *ngIf="canRefresh" (click)="refresh()">REFRESH</a>
-        <a href class="overlay-next" *ngIf="canGoForward" (click)="next()">NEXT</a> -->
+        </button>
     </div>
 
-    <app-user-profile #appUserProfile *ngIf="accountName" [currentAccount]="accountName" class="stream-overlay__content"
-        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-user-profile>
-    <app-hashtag #appHashtag *ngIf="hashtagElement" [hashtagElement]="hashtagElement" class="stream-overlay__content"
-        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-hashtag>
-    <app-thread #appThread *ngIf="browseThread" [currentThread]="thread" class="stream-overlay__content"
-        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-thread>
+    <div *ngFor="let e of loadedElements" class="stream-overlay__content-wrapper" 
+        [class.stream-overlay__content-wrapper--selected]="e.isVisible">
+        <app-user-profile #appUserProfile *ngIf="e.type === 'account'" 
+            [currentAccount]="e.account"
+            [refreshEventEmitter]="e.refreshEventEmitter"
+            class="stream-overlay__content" 
+            (browseAccountEvent)="browseAccount($event)"
+            (browseHashtagEvent)="browseHashtag($event)" 
+            (browseThreadEvent)="browseThread($event)"></app-user-profile>
+        <app-hashtag #appHashtag *ngIf="e.type === 'hashtag'" 
+            [hashtagElement]="e.hashtag"
+            [refreshEventEmitter]="e.refreshEventEmitter"
+            class="stream-overlay__content" 
+            (browseAccountEvent)="browseAccount($event)"
+            (browseHashtagEvent)="browseHashtag($event)" 
+            (browseThreadEvent)="browseThread($event)"></app-hashtag>
+        <app-thread #appThread *ngIf="e.type === 'thread'" 
+            [currentThread]="e.thread" class="stream-overlay__content"
+            [refreshEventEmitter]="e.refreshEventEmitter"
+            (browseAccountEvent)="browseAccount($event)" 
+            (browseHashtagEvent)="browseHashtag($event)"
+            (browseThreadEvent)="browseThread($event)"></app-thread>
+    </div>
 </div>

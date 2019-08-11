@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnInit, Output, EventEmitter, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement, StreamTypeEnum, AddStream } from '../../../states/streams.state';
@@ -12,8 +12,9 @@ import { AccountInfo } from '../../../states/accounts.state';
     templateUrl: './hashtag.component.html',
     styleUrls: ['./hashtag.component.scss']
 })
-export class HashtagComponent implements OnInit {
- 
+export class HashtagComponent implements OnInit, OnDestroy {
+    @Input() refreshEventEmitter: EventEmitter<any>;
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
@@ -27,18 +28,29 @@ export class HashtagComponent implements OnInit {
     get hashtagElement(): StreamElement{
         return this._hashtagElement;
     }
+   
 
     @ViewChild('appStreamStatuses') appStreamStatuses: StreamStatusesComponent;
 
     goToTopSubject: Subject<void> = new Subject<void>();
 
     private lastUsedAccount: AccountInfo;
+    private refreshSubscription: Subscription;
 
     constructor(
         private readonly store: Store,
         private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
+        if(this.refreshEventEmitter) {
+            this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
+                this.refresh();
+            })
+        }
+    }
+
+    ngOnDestroy(): void {
+        if(this.refreshSubscription) this.refreshSubscription.unsubscribe();
     }
 
     goToTop(): boolean {

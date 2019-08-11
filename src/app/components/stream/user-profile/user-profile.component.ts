@@ -55,6 +55,7 @@ export class UserProfileComponent implements OnInit {
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
     private deleteStatusSubscription: Subscription;
+    private refreshSubscription: Subscription;
 
     @ViewChild('statusstream') public statustream: ElementRef;
     @ViewChild('profilestatuses') public profilestatuses: ElementRef;
@@ -62,6 +63,8 @@ export class UserProfileComponent implements OnInit {
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+
+    @Input() refreshEventEmitter: EventEmitter<any>;
 
     @Input('currentAccount')
     set currentAccount(accountName: string) {
@@ -79,6 +82,12 @@ export class UserProfileComponent implements OnInit {
     }
 
     ngOnInit() {
+        if(this.refreshEventEmitter) {
+            this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
+                this.refresh();
+            })
+        }
+
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (this.displayedAccount) {
                 const userAccount = accounts.filter(x => x.isSelected)[0];
@@ -107,8 +116,9 @@ export class UserProfileComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        this.accountSub.unsubscribe();
-        this.deleteStatusSubscription.unsubscribe();
+        if(this.accountSub) this.accountSub.unsubscribe();
+        if(this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
+        if(this.refreshSubscription) this.refreshSubscription.unsubscribe();
     }
 
     private load(accountName: string) {

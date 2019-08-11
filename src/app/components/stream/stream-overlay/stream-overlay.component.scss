@@ -3,9 +3,11 @@
 @import "commons";
 $header-content: 40px;
 .stream-overlay {
-    // width: $stream-column-width;
+    // width: $stream-column-width;    
     height: calc(100%);
     background-color: $column-color;
+    position: relative;
+
     &__header {
         width: calc(100%);
         height: $header-content;
@@ -17,6 +19,25 @@ $header-content: 40px;
             font-weight: normal;
         }
     }
+    &__content-wrapper  {
+        transition: all .2s;
+        position: absolute;
+        top: $header-content;
+        right: 0;
+        left: 0;
+        bottom: 0;
+
+        // outline: 1px solid greenyellow;
+        // background-color: salmon;
+        
+        z-index: 1;
+        opacity: 0;
+
+        &--selected {
+            z-index: 10;
+            opacity: 1;
+        }
+    }    
     &__content {
         display: block;
         width: calc(100%);

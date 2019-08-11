@@ -28,6 +28,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
+    @Input() refreshEventEmitter: EventEmitter<any>;
+
     @Input('currentThread')
     set currentThread(thread: OpenThreadEvent) {
         if (thread) {
@@ -41,6 +43,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private newPostSub: Subscription;
     private hideAccountSubscription: Subscription;
     private deleteStatusSubscription: Subscription;
+    private refreshSubscription: Subscription;
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -48,6 +51,12 @@ export class ThreadComponent implements OnInit, OnDestroy {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        if(this.refreshEventEmitter) {
+            this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
+                this.refresh();
+            })
+        }
+
         this.newPostSub = this.notificationService.newRespondPostedStream.subscribe((replyData: NewReplyData) => {
             if(replyData){
                 const repondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
@@ -97,6 +106,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (this.newPostSub) this.newPostSub.unsubscribe();
         if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
         if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
+        if(this.refreshSubscription) this.refreshSubscription.unsubscribe();
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
