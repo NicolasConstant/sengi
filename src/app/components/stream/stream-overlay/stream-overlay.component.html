@@ -12,7 +12,7 @@
             title="refresh" (click)="refresh()">
             <fa-icon [icon]="faRedoAlt"></fa-icon>
         </button>
-        <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements > 0 }"
+        <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements }"
             title="next" (click)="next()">
             <fa-icon [icon]="faAngleRight"></fa-icon>
         </button>
