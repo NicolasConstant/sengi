@@ -63,10 +63,15 @@ $header-content: 40px;
         transition: all .2s;
         margin: 8px 0 0 8px;
         &:hover {
-            color: whitesmoke;
+            color: #536599;
+            color: #7a8dc7;
         }
         &--focus {
             color: whitesmoke;
+
+            &:hover {
+                color: whitesmoke;
+            }
         }
     }
     &-previous {
