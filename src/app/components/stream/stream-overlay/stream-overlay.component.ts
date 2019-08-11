@@ -121,6 +121,11 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    goToTop(): boolean {
+        this.loadedElements[this.visibleElementIndex].goToTop();
+        return false;
+    }
+
     browseAccount(accountName: string): void {
         if (!accountName) return;
 
@@ -163,8 +168,9 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
     }
 }
 
-class OverlayBrowsing {
+class OverlayBrowsing {   
     refreshEventEmitter = new EventEmitter();
+    goToTopEventEmitter = new EventEmitter();
 
     constructor(
         public readonly hashtag: StreamElement,
@@ -190,9 +196,11 @@ class OverlayBrowsing {
     hide(): any {
         this.isVisible = false;
     }
-
     refresh(): any {
         this.refreshEventEmitter.next();
+    }
+    goToTop(): any {
+        this.goToTopEventEmitter.next();
     }
 
     isVisible: boolean;

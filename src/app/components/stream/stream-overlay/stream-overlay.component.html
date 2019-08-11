@@ -12,6 +12,11 @@
             title="refresh" (click)="refresh()">
             <fa-icon [icon]="faRedoAlt"></fa-icon>
         </button>
+
+        <a href title="return to top" class="overlay-gototop" (click)="goToTop()">
+            
+        </a>
+
         <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements }"
             title="next" (click)="next()">
             <fa-icon [icon]="faAngleRight"></fa-icon>
@@ -23,6 +28,7 @@
         <app-user-profile #appUserProfile *ngIf="e.type === 'account'" 
             [currentAccount]="e.account"
             [refreshEventEmitter]="e.refreshEventEmitter"
+            [goToTopEventEmitter]="e.goToTopEventEmitter"
             class="stream-overlay__content" 
             (browseAccountEvent)="browseAccount($event)"
             (browseHashtagEvent)="browseHashtag($event)" 
@@ -30,6 +36,7 @@
         <app-hashtag #appHashtag *ngIf="e.type === 'hashtag'" 
             [hashtagElement]="e.hashtag"
             [refreshEventEmitter]="e.refreshEventEmitter"
+            [goToTopEventEmitter]="e.goToTopEventEmitter"
             class="stream-overlay__content" 
             (browseAccountEvent)="browseAccount($event)"
             (browseHashtagEvent)="browseHashtag($event)" 
@@ -37,6 +44,7 @@
         <app-thread #appThread *ngIf="e.type === 'thread'" 
             [currentThread]="e.thread" class="stream-overlay__content"
             [refreshEventEmitter]="e.refreshEventEmitter"
+            [goToTopEventEmitter]="e.goToTopEventEmitter"
             (browseAccountEvent)="browseAccount($event)" 
             (browseHashtagEvent)="browseHashtag($event)"
             (browseThreadEvent)="browseThread($event)"></app-thread>

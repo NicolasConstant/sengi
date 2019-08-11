@@ -14,6 +14,7 @@ import { AccountInfo } from '../../../states/accounts.state';
 })
 export class HashtagComponent implements OnInit, OnDestroy {
     @Input() refreshEventEmitter: EventEmitter<any>;
+    @Input() goToTopEventEmitter: EventEmitter<any>;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -36,6 +37,7 @@ export class HashtagComponent implements OnInit, OnDestroy {
 
     private lastUsedAccount: AccountInfo;
     private refreshSubscription: Subscription;
+    private goToTopSubscription: Subscription;
 
     constructor(
         private readonly store: Store,
@@ -47,10 +49,17 @@ export class HashtagComponent implements OnInit, OnDestroy {
                 this.refresh();
             })
         }
+
+        if(this.goToTopEventEmitter) {
+            this.goToTopSubscription = this.goToTopEventEmitter.subscribe(() => {
+                this.goToTop();
+            })
+        }
     }
 
     ngOnDestroy(): void {
         if(this.refreshSubscription) this.refreshSubscription.unsubscribe();
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
     }
 
     goToTop(): boolean {

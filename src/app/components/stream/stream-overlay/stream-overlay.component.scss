@@ -1,7 +1,7 @@
 @import "variables";
 @import "mixins";
 @import "commons";
-$header-content: 40px;
+$header-content-height: 40px;
 .stream-overlay {
     // width: $stream-column-width;    
     height: calc(100%);
@@ -10,7 +10,7 @@ $header-content: 40px;
 
     &__header {
         width: calc(100%);
-        height: $header-content;
+        height: $header-content-height;
         background-color: $column-header-background-color; // padding: 6px 10px 0 10px;
         border-bottom: 1px solid #222736;
         & a {
@@ -22,7 +22,7 @@ $header-content: 40px;
     &__content-wrapper  {
         transition: all .2s;
         position: absolute;
-        top: $header-content;
+        top: $header-content-height;
         right: 0;
         left: 0;
         bottom: 0;
@@ -93,13 +93,21 @@ $header-content: 40px;
         float: left;
         font-size: 18px;
     }
+    &-gototop {
+        position: absolute;
+        top: 0;
+        left: 110px;
+        right: 40px;
+        display: block;
+        height: $header-content-height;
+    }
     &-close {
         display: block;
         float: right;
         font-size: 14px;
         color: white;
         margin-right: 8px;
-    }
+    }    
 }
 
 .not-active {

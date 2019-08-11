@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
@@ -29,6 +29,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input() refreshEventEmitter: EventEmitter<any>;
+    @Input() goToTopEventEmitter: EventEmitter<any>;
 
     @Input('currentThread')
     set currentThread(thread: OpenThreadEvent) {
@@ -44,6 +45,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private hideAccountSubscription: Subscription;
     private deleteStatusSubscription: Subscription;
     private refreshSubscription: Subscription;
+    private goToTopSubscription: Subscription;
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -57,26 +59,18 @@ export class ThreadComponent implements OnInit, OnDestroy {
             })
         }
 
+        if(this.goToTopEventEmitter) {
+            this.goToTopSubscription = this.goToTopEventEmitter.subscribe(() => {
+                this.goToTop();
+            })
+        }
+
         this.newPostSub = this.notificationService.newRespondPostedStream.subscribe((replyData: NewReplyData) => {
             if(replyData){
                 const repondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
                 const responseStatus = replyData.response;
                 if(repondingStatus && this.statuses[0]){
-                    this.statuses.push(responseStatus);
-                    
-                    // const uiProvider = this.statuses[0].provider;
-                    // if(uiProvider.id === responseStatus.provider.id){
-                        
-                    // } else {
-                    //     this.toolsService.getStatusUsableByAccount(uiProvider, responseStatus)
-                    //         .then((status: Status) => {
-                    //             this.statuses.push(new StatusWrapper(status, uiProvider));
-                    //         })
-                    //         .catch((err) => {
-                    //             this.notificationService.notifyHttpError(err);
-                    //         });
-                    // }
-                    // this.getThread(this.statuses[0].provider, this.lastThreadEvent);
+                    this.statuses.push(responseStatus);                    
                 }
             }
         });
@@ -106,7 +100,19 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (this.newPostSub) this.newPostSub.unsubscribe();
         if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
         if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
-        if(this.refreshSubscription) this.refreshSubscription.unsubscribe();
+        if (this.refreshSubscription) this.refreshSubscription.unsubscribe();
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+    }
+
+    @ViewChild('statusstream') public statustream: ElementRef;
+    goToTop(): any {
+        const stream = this.statustream.nativeElement as HTMLElement;
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }, 0);
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
