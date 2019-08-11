@@ -41,7 +41,7 @@ $header-content: 40px;
     &__content {
         display: block;
         width: calc(100%);
-        height: calc(100% - #{$header-content});
+        height: calc(100%);
     }
     &__title {
         width: calc(100%);
