@@ -1,5 +1,5 @@
 <div class="main-display flexcroll">
-  <div class="main-display__stream-column" *ngFor="let s of streamElements$ | async">
-    <app-stream [streamElement]="s" #stream></app-stream>
+  <div class="main-display__stream-column" *ngFor="let s of streamElements$ | async" #stream>
+    <app-stream [streamElement]="s"></app-stream>
   </div>
 </div>
