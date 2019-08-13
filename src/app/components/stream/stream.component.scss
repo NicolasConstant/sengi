@@ -1,26 +1,11 @@
 @import "variables";
 @import "commons";
+@import "panel";
 
 .stream-edition {
     width: $stream-column-width;
     position: absolute;
     z-index: 50;
-}
-
-.sliding-column {
-    transition: all .25s;    
-    transition-timing-function: ease-out;
-
-    width: calc(2 * #{$stream-column-width});
-    height: calc(100%);
-    position: relative;
-    left: 0;
-
-    &__right-display {
-        transition-timing-function: ease-out;
-        position: relative;
-        left: -$stream-column-width;
-    }
 }
 
 .stream-column {
@@ -94,6 +79,14 @@
     width: 320px;
 }
 
+
+// .stream-overlay {
+//     float: right;
+//     width: $stream-column-width;
+//     height: calc(100%);
+// }
+
+
 // .stream-toots {
 //     height: calc(100% - 30px);
 //     width: 320px;
@@ -103,10 +96,10 @@
 //         border-width: 0 0 1px 0;
 //     }
 // }
-.stream-overlay {
-    // position: absolute;
-    float: right;
-    //z-index: 100;
-    width: $stream-column-width;
-    height: calc(100%);
-}
+// .stream-overlay {
+//     // position: absolute;
+//     float: right;
+//     //z-index: 100;
+//     width: $stream-column-width;
+//     height: calc(100%);
+// }

@@ -1,7 +1,9 @@
 <div class="stream-column">
     <div class="sliding-column" [class.sliding-column__right-display]="overlayActive">
-        <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()"
-            [browseAccountData]="overlayAccountToBrowse" [browseHashtagData]="overlayHashtagToBrowse"
+        <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" 
+            (closeOverlay)="closeOverlay()"
+            [browseAccountData]="overlayAccountToBrowse" 
+            [browseHashtagData]="overlayHashtagToBrowse"
             [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
         <!-- <div> -->

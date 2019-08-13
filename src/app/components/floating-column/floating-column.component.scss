@@ -1,10 +1,10 @@
 @import "variables";
 @import "mixins";
+@import "panel";
 
 
 .floating-column {
-    width: calc(100%);
-    width: $floating-column-size;
+    // width: $floating-column-size;
     
     background-color: $color-secondary;
     overflow: hidden;
@@ -16,17 +16,43 @@
 
     white-space: normal;
 
+    &__inner {
+        position: relative;
+        width: $stream-column-width;
+        height: calc(100%);
+
+        margin: 0 0 0 $stream-column-separator;
+        overflow: hidden;
+
+        &--left {
+            width: $stream-column-width;            
+        }
+    }
+
     // &__header {
         
     // }
 }
 
-.stream-overlay {
-    position: absolute;
-    z-index: 50;
-    width: $floating-column-size;
-    height: calc(100%);
-}
+
+// .stream-overlay {
+//     position: absolute;
+//     top:0;
+//     bottom: $stream-selector-height;
+//     right: 0;
+//     // float: right;
+//     width: $stream-column-width;
+//     // height: calc(100%);
+// }
+
+
+
+// .stream-overlay {
+//     position: absolute;
+//     z-index: 50;
+//     width: $floating-column-size;
+//     height: calc(100%);
+// }
 
 .close-button {
     display: block;
