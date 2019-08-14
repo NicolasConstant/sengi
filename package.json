@@ -129,7 +129,9 @@
             "category": "Network"
         },
         "snap": {
-            "publish": ["github"]
+            "publish": [
+                "github"
+            ]
         }
     }
 }

@@ -1,4 +1,4 @@
-<div class="status-wrapper" [class.direct-message]="isDirectMessage">
+<div class="status-wrapper" [class.direct-message]="isDirectMessage" [class.status-selected]="isSelected">
     <div class="reblog" *ngIf="reblog">
         <a class="reblog__profile-link" href title="{{ status.account.acct }}" 
             (click)="openAccount(status.account)"
