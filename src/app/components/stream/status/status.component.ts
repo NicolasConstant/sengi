@@ -166,6 +166,8 @@ export class StatusComponent implements OnInit {
     }
 
     textSelected(): boolean {
+        if(this.isSelected) return false;
+
         const status = this._statusWrapper.status;
         const accountInfo = this._statusWrapper.provider;
 
