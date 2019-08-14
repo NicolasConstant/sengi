@@ -87,6 +87,8 @@ export class HashtagComponent implements OnInit, OnDestroy {
     }
 
     browseHashtag(hashtag: string) {
+        if(this.hashtagElement.tag === hashtag) return false;
+
         this.browseHashtagEvent.next(hashtag);
     }
 
