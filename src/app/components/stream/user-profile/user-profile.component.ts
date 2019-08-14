@@ -248,6 +248,8 @@ export class UserProfileComponent implements OnInit {
     }
 
     browseAccount(accountName: string): void {
+        if(accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;
+
         this.browseAccountEvent.next(accountName);
     }
 
