@@ -173,7 +173,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
                     const el = this.statusChildren.toArray()[position];
                     el.isSelected = true;
                     // el.elem.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                    el.elem.nativeElement.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'start' });
+                    el.elem.nativeElement.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'nearest' });
                 }, 0);
             })
             .catch((err: HttpErrorResponse) => {
