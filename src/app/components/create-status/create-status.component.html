@@ -21,7 +21,7 @@
         (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
     </app-autosuggest>
 
-    <div class="status-editor__footer">
+    <div class="status-editor__footer" #footer>
         <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">
             <span *ngIf="!isSending">REPLY!</span>
             <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
