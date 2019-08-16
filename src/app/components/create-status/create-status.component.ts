@@ -616,7 +616,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 if (this.checkVisible(this.footerElement.nativeElement)) {
-                    this.footerElement.nativeElement.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'start' });
+                    this.footerElement.nativeElement.scrollIntoViewIfNeeded({ behavior: 'instant', block: 'end', inline: 'start' });
                 }
             }, 0);
         }
