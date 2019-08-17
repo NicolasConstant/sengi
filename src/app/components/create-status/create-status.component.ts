@@ -611,14 +611,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let scrolling = (this.replyElement.nativeElement.scrollHeight);
 
         if (scrolling > 110) {
+            const isVisible = this.checkVisible(this.footerElement.nativeElement);            
             this.replyElement.nativeElement.style.height = `0px`;
             this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
 
-            setTimeout(() => {
-                if (this.checkVisible(this.footerElement.nativeElement)) {
+            if (isVisible) {
+                setTimeout(() => {
                     this.footerElement.nativeElement.scrollIntoViewIfNeeded({ behavior: 'instant', block: 'end', inline: 'start' });
-                }
-            }, 0);
+                }, 0);
+            }
         }
     }
 
