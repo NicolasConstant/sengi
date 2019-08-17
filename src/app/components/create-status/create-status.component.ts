@@ -612,7 +612,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         if (scrolling > 110) {
             const isVisible = this.checkVisible(this.footerElement.nativeElement);            
-            this.replyElement.nativeElement.style.height = `0px`;
+            //this.replyElement.nativeElement.style.height = `0px`;
             this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
 
             if (isVisible) {
