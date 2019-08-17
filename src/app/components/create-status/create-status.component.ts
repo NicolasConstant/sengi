@@ -111,6 +111,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Output() onClose = new EventEmitter();
     @ViewChild('reply') replyElement: ElementRef;
     @ViewChild('fileInput') fileInputElement: ElementRef;
+    @ViewChild('footer') footerElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
     private _isDirectMention: boolean;
@@ -223,7 +224,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private getWordByPos(str, pos) {
-        str = str.replace(/(\r\n|\n|\r)/gm,"");
+        str = str.replace(/(\r\n|\n|\r)/gm, "");
         var left = str.substr(0, pos);
         var right = str.substr(pos);
 
@@ -512,7 +513,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let mentionExtraChars = 0;
         let links = status.split(' ').filter(x => x.startsWith('http://') || x.startsWith('https://'));
         for (let link of links) {
-            if(link.length > 23){
+            if (link.length > 23) {
                 mentionExtraChars += link.length - 23;
             }
         }
@@ -610,9 +611,22 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let scrolling = (this.replyElement.nativeElement.scrollHeight);
 
         if (scrolling > 110) {
-            this.replyElement.nativeElement.style.height = `0px`;
+            const isVisible = this.checkVisible(this.footerElement.nativeElement);            
+            //this.replyElement.nativeElement.style.height = `0px`;
             this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
+
+            if (isVisible) {
+                setTimeout(() => {
+                    this.footerElement.nativeElement.scrollIntoViewIfNeeded({ behavior: 'instant', block: 'end', inline: 'start' });
+                }, 0);
+            }
         }
+    }
+
+    private checkVisible(elm) {
+        var rect = elm.getBoundingClientRect();
+        var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+        return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
     }
 
     public onContextMenu($event: MouseEvent): void {

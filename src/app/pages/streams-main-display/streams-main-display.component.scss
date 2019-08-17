@@ -6,13 +6,14 @@
     overflow-y: hidden;
     &__stream-column {
         height: calc(100%);
-        width: $stream-column-width + $stream-column-separator;
+        width: calc(#{$stream-column-width} + #{$stream-column-separator});
         display: inline-block;
         overflow-x: hidden;
         overflow-y: hidden;
         white-space: normal;
         // margin: 0 0 0 $stream-column-separator;
         margin: 0;
+        // border: 1px solid greenyellow;
     }
 }
 

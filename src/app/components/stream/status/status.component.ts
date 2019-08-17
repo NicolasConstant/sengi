@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
@@ -36,6 +36,7 @@ export class StatusComponent implements OnInit {
     hasReply: boolean;
     contentWarningText: string;
     isDirectMessage: boolean;
+    isSelected: boolean;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -49,6 +50,7 @@ export class StatusComponent implements OnInit {
 
     private _statusWrapper: StatusWrapper;
     status: Status;
+    
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
@@ -85,6 +87,7 @@ export class StatusComponent implements OnInit {
     }
 
     constructor(
+        public elem: ElementRef,
         private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
@@ -163,6 +166,8 @@ export class StatusComponent implements OnInit {
     }
 
     textSelected(): boolean {
+        if(this.isSelected) return false;
+
         const status = this._statusWrapper.status;
         const accountInfo = this._statusWrapper.provider;
 

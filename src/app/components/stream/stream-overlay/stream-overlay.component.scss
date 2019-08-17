@@ -1,14 +1,16 @@
 @import "variables";
 @import "mixins";
 @import "commons";
-$header-content: 40px;
+$header-content-height: 40px;
 .stream-overlay {
-    // width: $stream-column-width;
+    // width: $stream-column-width;    
     height: calc(100%);
     background-color: $column-color;
+    position: relative;
+
     &__header {
         width: calc(100%);
-        height: $header-content;
+        height: $header-content-height;
         background-color: $column-header-background-color; // padding: 6px 10px 0 10px;
         border-bottom: 1px solid #222736;
         & a {
@@ -17,10 +19,29 @@ $header-content: 40px;
             font-weight: normal;
         }
     }
+    &__content-wrapper  {
+        transition: all .2s;
+        position: absolute;
+        top: $header-content-height;
+        right: 0;
+        left: 0;
+        bottom: 0;
+
+        // outline: 1px solid greenyellow;
+        // background-color: salmon;
+        
+        z-index: 1;
+        opacity: 0;
+
+        &--selected {
+            z-index: 10;
+            opacity: 1;
+        }
+    }    
     &__content {
         display: block;
         width: calc(100%);
-        height: calc(100% - #{$header-content});
+        height: calc(100%);
     }
     &__title {
         width: calc(100%);
@@ -42,10 +63,15 @@ $header-content: 40px;
         transition: all .2s;
         margin: 8px 0 0 8px;
         &:hover {
-            color: whitesmoke;
+            color: #536599;
+            color: #7a8dc7;
         }
         &--focus {
             color: whitesmoke;
+
+            &:hover {
+                color: whitesmoke;
+            }
         }
     }
     &-previous {
@@ -67,13 +93,21 @@ $header-content: 40px;
         float: left;
         font-size: 18px;
     }
+    &-gototop {
+        position: absolute;
+        top: 0;
+        left: 110px;
+        right: 40px;
+        display: block;
+        height: $header-content-height;
+    }
     &-close {
         display: block;
         float: right;
         font-size: 14px;
         color: white;
         margin-right: 8px;
-    }
+    }    
 }
 
 .not-active {

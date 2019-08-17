@@ -55,6 +55,8 @@ export class UserProfileComponent implements OnInit {
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
     private deleteStatusSubscription: Subscription;
+    private refreshSubscription: Subscription;
+    private goToTopSubscription: Subscription;
 
     @ViewChild('statusstream') public statustream: ElementRef;
     @ViewChild('profilestatuses') public profilestatuses: ElementRef;
@@ -62,6 +64,9 @@ export class UserProfileComponent implements OnInit {
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+
+    @Input() refreshEventEmitter: EventEmitter<any>;
+    @Input() goToTopEventEmitter: EventEmitter<any>;
 
     @Input('currentAccount')
     set currentAccount(accountName: string) {
@@ -79,6 +84,18 @@ export class UserProfileComponent implements OnInit {
     }
 
     ngOnInit() {
+        if (this.refreshEventEmitter) {
+            this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
+                this.refresh();
+            })
+        }
+
+        if (this.goToTopEventEmitter) {
+            this.goToTopSubscription = this.goToTopEventEmitter.subscribe(() => {
+                this.goToTop();
+            })
+        }
+
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (this.displayedAccount) {
                 const userAccount = accounts.filter(x => x.isSelected)[0];
@@ -104,11 +121,23 @@ export class UserProfileComponent implements OnInit {
                 });
             }
         });
-    }
+    }   
 
     ngOnDestroy() {
-        this.accountSub.unsubscribe();
-        this.deleteStatusSubscription.unsubscribe();
+        if (this.accountSub) this.accountSub.unsubscribe();
+        if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
+        if (this.refreshSubscription) this.refreshSubscription.unsubscribe();
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+    }
+
+    goToTop(): any {
+        const stream = this.statustream.nativeElement as HTMLElement;
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }, 0);
     }
 
     private load(accountName: string) {
@@ -219,6 +248,8 @@ export class UserProfileComponent implements OnInit {
     }
 
     browseAccount(accountName: string): void {
+        if(accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;
+
         this.browseAccountEvent.next(accountName);
     }
 
@@ -323,7 +354,7 @@ export class UserProfileComponent implements OnInit {
 
     isSwitchingSection: boolean;
     switchStatusSection(section: 'status' | 'replies' | 'media'): boolean {
-         this.isSwitchingSection = true;
+        this.isSwitchingSection = true;
 
         this.statusSection = section;
         this.statuses.length = 0;
