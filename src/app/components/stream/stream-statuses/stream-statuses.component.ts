@@ -175,10 +175,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
         }
         const stream = this.statustream.nativeElement as HTMLElement;
-        stream.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }, 0);
         return false;
     }
 

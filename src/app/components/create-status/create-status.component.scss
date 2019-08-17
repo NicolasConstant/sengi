@@ -30,6 +30,7 @@ $counter-width: 90px;
 .status-editor {
     position: relative;
     font-size: $default-font-size;
+    margin-bottom: 5px;
 
     &__title {
         background-color: $status-editor-title-background;

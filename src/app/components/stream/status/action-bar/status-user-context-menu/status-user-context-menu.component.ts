@@ -49,19 +49,18 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
     ngOnInit() {       
         if (this.statusWrapper) {
-
             const status = this.statusWrapper.status;
             if (status.reblog) {
                 this.displayedStatus = status.reblog;
             } else {
                 this.displayedStatus = status;
-            }
-
-            this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
-                this.loadedAccounts = accounts;
-                this.checkStatus(accounts);
-            });
+            }           
         }
+
+        this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
+            this.loadedAccounts = accounts;
+            if (this.statusWrapper) this.checkStatus(accounts);
+        });
 
         let account: Account;
         if(this.statusWrapper) {

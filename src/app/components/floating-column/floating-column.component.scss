@@ -1,11 +1,8 @@
 @import "variables";
 @import "mixins";
+@import "panel";
 
-
-.floating-column {
-    width: calc(100%);
-    width: $floating-column-size;
-    
+.floating-column {    
     background-color: $color-secondary;
     overflow: hidden;
     z-index: 200;
@@ -16,16 +13,19 @@
 
     white-space: normal;
 
-    // &__header {
-        
-    // }
-}
+    &__inner {
+        position: relative;
+        width: $stream-column-width;
+        height: calc(100%);
 
-.stream-overlay {
-    position: absolute;
-    z-index: 50;
-    width: $floating-column-size;
-    height: calc(100%);
+        margin: 0 0 0 $stream-column-separator;
+        overflow: hidden;
+
+        &--left {
+            width: $stream-column-width;
+            height: calc(100%);
+        }
+    }
 }
 
 .close-button {
@@ -34,27 +34,4 @@
     font-size: 14px;
     color: white;
     margin: 10px 16px 0 0;
-
-    // display: inline-block;
-    // background-color: $color-primary;
-    // color: darken(white, 30);
-    // border-radius: 999px;
-    // width: 26px;
-    // height: 26px;
-    // text-align: center;
-    // text-decoration: none;
-    // padding: 1px;
-
-    // z-index: 9999;
-    // float: right;
-    // margin: 10px;
-
-    // transition: all .2s;
-
-    // &:hover {
-    //     background-color: lighten($color-primary, 20);
-    //     color: white;
-    //     // transform: scale(1.2);
-    // }
-    
 }

@@ -238,8 +238,10 @@ export class DatabindedTextComponent implements OnInit {
         this.hashtagSelected.next(hashtag);
     }
 
-    selectText() {
-        this.textSelected.next();
+    selectText(event) {
+        if (event.view.getSelection().toString().length === 0) {
+            this.textSelected.next();
+        }
     }
 
 }

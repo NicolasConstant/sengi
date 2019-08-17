@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
@@ -28,6 +28,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
+    @Input() refreshEventEmitter: EventEmitter<any>;
+    @Input() goToTopEventEmitter: EventEmitter<any>;
+
     @Input('currentThread')
     set currentThread(thread: OpenThreadEvent) {
         if (thread) {
@@ -41,6 +44,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private newPostSub: Subscription;
     private hideAccountSubscription: Subscription;
     private deleteStatusSubscription: Subscription;
+    private refreshSubscription: Subscription;
+    private goToTopSubscription: Subscription;
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -48,26 +53,24 @@ export class ThreadComponent implements OnInit, OnDestroy {
         private readonly mastodonService: MastodonService) { }
 
     ngOnInit() {
+        if (this.refreshEventEmitter) {
+            this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
+                this.refresh();
+            })
+        }
+
+        if (this.goToTopEventEmitter) {
+            this.goToTopSubscription = this.goToTopEventEmitter.subscribe(() => {
+                this.goToTop();
+            })
+        }
+
         this.newPostSub = this.notificationService.newRespondPostedStream.subscribe((replyData: NewReplyData) => {
-            if(replyData){
+            if (replyData) {
                 const repondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
                 const responseStatus = replyData.response;
-                if(repondingStatus && this.statuses[0]){
+                if (repondingStatus && this.statuses[0]) {
                     this.statuses.push(responseStatus);
-                    
-                    // const uiProvider = this.statuses[0].provider;
-                    // if(uiProvider.id === responseStatus.provider.id){
-                        
-                    // } else {
-                    //     this.toolsService.getStatusUsableByAccount(uiProvider, responseStatus)
-                    //         .then((status: Status) => {
-                    //             this.statuses.push(new StatusWrapper(status, uiProvider));
-                    //         })
-                    //         .catch((err) => {
-                    //             this.notificationService.notifyHttpError(err);
-                    //         });
-                    // }
-                    // this.getThread(this.statuses[0].provider, this.lastThreadEvent);
                 }
             }
         });
@@ -75,7 +78,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         this.hideAccountSubscription = this.notificationService.hideAccountUrlStream.subscribe((accountUrl: string) => {
             if (accountUrl) {
                 this.statuses = this.statuses.filter(x => {
-                    if(x.status.reblog){
+                    if (x.status.reblog) {
                         return x.status.reblog.account.url != accountUrl;
                     } else {
                         return x.status.account.url != accountUrl;
@@ -85,9 +88,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
         });
 
         this.deleteStatusSubscription = this.notificationService.deletedStatusStream.subscribe((status: StatusWrapper) => {
-            if(status){
+            if (status) {
                 this.statuses = this.statuses.filter(x => {
-                    return !(x.status.url.replace('https://','').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
+                    return !(x.status.url.replace('https://', '').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
                 });
             }
         });
@@ -97,6 +100,19 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (this.newPostSub) this.newPostSub.unsubscribe();
         if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
         if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
+        if (this.refreshSubscription) this.refreshSubscription.unsubscribe();
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+    }
+
+    @ViewChild('statusstream') public statustream: ElementRef;
+    goToTop(): any {
+        const stream = this.statustream.nativeElement as HTMLElement;
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }, 0);
     }
 
     private getThread(openThreadEvent: OpenThreadEvent) {
@@ -139,6 +155,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 return this.mastodonService.getStatusContext(currentAccount, status.id)
                     .then((context: Context) => {
                         let contextStatuses = [...context.ancestors, status, ...context.descendants]
+                        const position = context.ancestors.length;
 
                         for (const s of contextStatuses) {
                             const wrapper = new StatusWrapper(s, currentAccount);
@@ -146,8 +163,20 @@ export class ThreadComponent implements OnInit, OnDestroy {
                         }
 
                         this.hasContentWarnings = this.statuses.filter(x => x.status.sensitive || x.status.spoiler_text).length > 1;
+
+                        return position;
                     });
 
+            })
+            .then((position: number) => {
+                setTimeout(() => {
+                    const el = this.statusChildren.toArray()[position];
+                    el.isSelected = true;
+                    // el.elem.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                    // el.elem.nativeElement.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'nearest' });
+                    // el.elem.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                    el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
+                }, 0);
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);

@@ -11,3 +11,25 @@
         margin: 4px 0 12px 5px;
     }
 } 
+
+.sliding-column {
+    transition: all .25s;    
+    transition-timing-function: ease-out;
+
+    width: calc(2 * #{$stream-column-width});
+    height: calc(100%);
+    position: relative;
+    left: 0;
+
+    &__right-display {
+        transition-timing-function: ease-out;
+        position: relative;
+        left: -$stream-column-width;
+    }
+}
+
+.stream-overlay {
+    float: right;
+    width: $stream-column-width;
+    height: calc(100%);
+}

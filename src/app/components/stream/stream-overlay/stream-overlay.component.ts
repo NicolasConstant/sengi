@@ -5,9 +5,6 @@ import { Store } from '@ngxs/store';
 
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
-import { ThreadComponent } from '../thread/thread.component';
-import { UserProfileComponent } from '../user-profile/user-profile.component';
-import { HashtagComponent } from '../hashtag/hashtag.component';
 import { AccountInfo } from '../../../states/accounts.state';
 
 
@@ -21,18 +18,13 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
     faAngleRight = faAngleRight;
     faTimes = faTimes;
     faRedoAlt = faRedoAlt;
-   
+
     refreshFocused: boolean;
-    previousElements: OverlayBrowsing[] = [];
-    nextElements: OverlayBrowsing[] = [];
-    private currentElement: OverlayBrowsing;
+    hasPreviousElements: boolean;
+    hasNextElements: boolean;
 
-    // canRefresh: boolean = true;
-    // canGoForward: boolean;
-
-    accountName: string;
-    thread: OpenThreadEvent;
-    hashtagElement: StreamElement;
+    loadedElements: OverlayBrowsing[] = [];
+    visibleElementIndex: number = -1;
 
     @Output() closeOverlay = new EventEmitter();
 
@@ -51,17 +43,13 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
         this.browseHashtag(hashtag);
     }
 
-    @ViewChild('appUserProfile') appUserProfile: UserProfileComponent;
-    @ViewChild('appHashtag') appHashtag: HashtagComponent;
-    @ViewChild('appThread') appThread: ThreadComponent;
-
     private currentlyUsedAccount: AccountInfo;
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
 
     constructor(
         private readonly store: Store,
-        private readonly toolsService: ToolsService) { 
+        private readonly toolsService: ToolsService) {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
@@ -87,36 +75,41 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
     }
 
     next(): boolean {
-        if (this.nextElements.length === 0) {
+        if (this.visibleElementIndex >= this.loadedElements.length - 1) {
             return false;
-        }
+        }    
 
-        if (this.currentElement) {
-            this.previousElements.push(this.currentElement);
-        }
+        this.loadedElements[this.visibleElementIndex].hide();
+        let newIndex = this.visibleElementIndex + 1;
+        this.loadedElements[newIndex].show();
+        this.visibleElementIndex = newIndex;
 
-        const nextElement = this.nextElements.pop();
-        this.loadElement(nextElement);
+        console.warn(`visibleElementIndex ${this.visibleElementIndex}`);
+        console.warn(`this.loadedElements ${this.loadedElements.length}`);
 
-        //if(this.nextElements.length === 0) this.canGoForward = false;       
+        this.hasPreviousElements = true;
+        this.hasNextElements = this.visibleElementIndex < this.loadedElements.length - 1;
 
         return false;
     }
 
     previous(): boolean {
-        if (this.previousElements.length === 0) {
+        if (this.visibleElementIndex <= 0) {
             this.closeOverlay.next();
             return false;
         }
 
-        if (this.currentElement) {
-            this.nextElements.push(this.currentElement);
-        }
+        this.loadedElements[this.visibleElementIndex].hide();
+        let newIndex = this.visibleElementIndex - 1;
+        this.loadedElements[newIndex].show();
+        this.visibleElementIndex = newIndex;
 
-        const previousElement = this.previousElements.pop();
-        this.loadElement(previousElement);
+        console.warn(`visibleElementIndex ${this.visibleElementIndex}`);
+        console.warn(`this.loadedElements ${this.loadedElements.length}`);
 
-        //this.canGoForward = true;
+        this.hasPreviousElements = this.visibleElementIndex > 0;
+        this.hasNextElements = true;
+
         return false;
     }
 
@@ -124,92 +117,92 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
         this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
         this.refreshFocused = false;  
 
-        if(this.thread){
-            this.appThread.refresh();
-        } else if(this.hashtagElement){
-            this.appHashtag.refresh();
-        } else if(this.accountName){
-            this.appUserProfile.refresh();
-        }
+        this.loadedElements[this.visibleElementIndex].refresh();
+        return false;
+    }
 
+    goToTop(): boolean {
+        this.loadedElements[this.visibleElementIndex].goToTop();
         return false;
     }
 
     browseAccount(accountName: string): void {
-        if(!accountName) return;
+        if (!accountName) return;
 
-        this.nextElements.length = 0;
-        if (this.currentElement) {
-            this.previousElements.push(this.currentElement);
-        }
         const newElement = new OverlayBrowsing(null, accountName, null);
         this.loadElement(newElement);
-        //this.canGoForward = false;
     }
 
     browseHashtag(hashtag: string): void {
-        if(!hashtag) return;
-
-        this.nextElements.length = 0;
-        if (this.currentElement) {
-            this.previousElements.push(this.currentElement);
-        }
+        if (!hashtag) return;
 
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
         const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, null, selectedAccount.instance);
         const newElement = new OverlayBrowsing(hashTagElement, null, null);
         this.loadElement(newElement);
-        // this.canGoForward = false;
     }
 
     browseThread(openThread: OpenThreadEvent): any {
-        if(!openThread) return;
-
-        this.nextElements.length = 0;
-        if (this.currentElement) {
-            this.previousElements.push(this.currentElement);
-        }
+        if (!openThread) return;
 
         const newElement = new OverlayBrowsing(null, null, openThread);
         this.loadElement(newElement);
-        //this.canGoForward = false;
     }
 
     private loadElement(element: OverlayBrowsing) {
+        
         this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
-        this.refreshFocused = false;        
+        this.refreshFocused = false;
 
-        this.currentElement = element;
+        if (this.visibleElementIndex >= 0) {
+            this.loadedElements[this.visibleElementIndex].hide();
+            this.loadedElements = this.loadedElements.slice(0, this.visibleElementIndex + 1);
+        }
 
-        this.accountName = this.currentElement.account;
-        this.thread = this.currentElement.thread;
-        this.hashtagElement = this.currentElement.hashtag;
+        this.visibleElementIndex = this.visibleElementIndex + 1;
+        this.loadedElements.push(element)
+        this.loadedElements[this.visibleElementIndex].show();
+
+        this.hasPreviousElements = this.visibleElementIndex > 0;
+        this.hasNextElements = false;
     }
 }
 
-class OverlayBrowsing {
+class OverlayBrowsing {   
+    refreshEventEmitter = new EventEmitter();
+    goToTopEventEmitter = new EventEmitter();
+
     constructor(
         public readonly hashtag: StreamElement,
         public readonly account: string,
         public readonly thread: OpenThreadEvent) {
 
         if (hashtag) {
-            this.type = OverlayEnum.hashtag;
+            this.type = 'hashtag';
         } else if (account) {
-            this.type = OverlayEnum.account;
+            this.type = 'account';
         } else if (thread) {
-            this.type = OverlayEnum.thread;
+            this.type = 'thread';
         } else {
             throw Error('NotImplemented');
         }
     }
 
-    type: OverlayEnum;
-}
+    show(): any {
+        setTimeout(() => {
+            this.isVisible = true;
+        }, 200);        
+    }
+    hide(): any {
+        this.isVisible = false;
+    }
+    refresh(): any {
+        this.refreshEventEmitter.next();
+    }
+    goToTop(): any {
+        this.goToTopEventEmitter.next();
+    }
 
-enum OverlayEnum {
-    unknown = 0,
-    hashtag = 1,
-    account = 2,
-    thread = 3
+    isVisible: boolean;
+    type: 'hashtag' | 'account' | 'thread';
 }
