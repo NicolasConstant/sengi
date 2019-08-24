@@ -1,6 +1,8 @@
 <div class="poll-editor">
-    <div *ngFor="let e of entries">
-        <app-poll-entry class="poll-editor__entry" [entry]="e" (removeEvent)="removeElement(e)"></app-poll-entry>
+    <div class="poll-editor__entries">
+        <div *ngFor="let e of entries">
+            <app-poll-entry class="poll-editor__entry" [entry]="e" (removeEvent)="removeElement(e)"></app-poll-entry>
+        </div>
     </div>
 
     <div class="poll-editor__footer">

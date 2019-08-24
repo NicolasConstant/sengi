@@ -6,6 +6,10 @@
     min-height: 30px;
     margin: 0 5px;
 
+    &__entries {
+        padding: 2px 0;
+    }
+
     &__entry {
         display: block;
     }
