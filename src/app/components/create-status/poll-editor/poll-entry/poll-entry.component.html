@@ -1,3 +1,16 @@
-<p>
-  poll-entry works!
-</p>
+<div class="poll-entry">
+    <div class="poll-entry__multi">
+        <a href (click)="toogleMulti()" class="poll-entry__multi--link">
+
+        </a>
+    </div>
+    <div class="poll-entry__label">
+        <input type="text" [(ngModel)]="entry.label" />
+    </div>
+
+    <div class="poll-entry__remove">
+        <a href (click)="remove()" title="remove">
+            <fa-icon [icon]="faTimes"></fa-icon>
+        </a>
+    </div>
+</div>

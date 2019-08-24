@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-poll-entry',
@@ -6,7 +7,12 @@ import { Component, OnInit, Input } from '@angular/core';
     styleUrls: ['./poll-entry.component.scss']
 })
 export class PollEntryComponent implements OnInit {
+    faTimes = faTimes;
+
     @Input() entry: PollEntry;
+
+    @Output() removeEvent = new EventEmitter();
+    @Output() toogleMultiEvent = new EventEmitter();
 
     constructor() { }
 
@@ -14,13 +20,21 @@ export class PollEntryComponent implements OnInit {
     }
 
     remove(): boolean { 
-        
+        this.removeEvent.next();
+        return false;
+    }
+
+    toogleMulti(): boolean {
+        this.toogleMultiEvent.next();
         return false;
     }
 
 }
 
 export class PollEntry {
+    constructor(public id: number) {        
+    }
+
     public isMulti: boolean;
-    public entry: string;
+    public label: string;
 }

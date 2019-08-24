@@ -9,13 +9,14 @@ import { PollEntry } from './poll-entry/poll-entry.component';
 })
 export class PollEditorComponent implements OnInit {
 
+    private entryUuid: number = 0;
     entries: PollEntry[] = [];
     delayChoice: Delay[] = [];
     selectedId: string;
 
     constructor() {
-        this.entries.push(new PollEntry());
-        this.entries.push(new PollEntry());
+        this.entries.push(new PollEntry(this.getEntryUuid()));
+        this.entries.push(new PollEntry(this.getEntryUuid()));
 
         this.delayChoice.push(new Delay(60 * 5, "5 minutes"));
         this.delayChoice.push(new Delay(60 * 30, "30 minutes"));
@@ -34,9 +35,18 @@ export class PollEditorComponent implements OnInit {
 
     }
 
+    private getEntryUuid(): number {
+        this.entryUuid++;
+        return this.entryUuid;
+    }
+
     addEntry(): boolean {
-        this.entries.push(new PollEntry());
+        this.entries.push(new PollEntry(this.getEntryUuid()));
         return false;
+    }
+
+    removeElement(entry: PollEntry){
+        this.entries = this.entries.filter(x => x.id != entry.id);
     }
 }
 

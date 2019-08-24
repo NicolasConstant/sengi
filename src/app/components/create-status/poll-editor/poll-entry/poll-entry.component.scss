@@ -1,0 +1,19 @@
+.poll-entry {
+
+    &__multi {
+        &--link {
+            display: block;
+            width: 20px;
+            height: 20px;
+            outline: 1px solid greenyellow;
+        }
+    }
+
+    &__label {
+
+    }
+
+    &__remove {
+
+    }
+}
