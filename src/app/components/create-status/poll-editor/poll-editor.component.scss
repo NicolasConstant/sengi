@@ -1,0 +1,17 @@
+@import "variables";
+
+.poll-editor {
+    background-color: $poll-editor-background;
+    border-top: 1px solid $poll-editor-separator;
+    min-height: 30px;
+    margin: 0 5px;
+
+    &__entry {
+        display: block;
+    }
+
+    &__footer {
+        border-top: 1px solid $poll-editor-separator;
+        min-height: 30px;
+    }
+}

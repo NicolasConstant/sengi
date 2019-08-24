@@ -70,6 +70,7 @@ import { EmojiPickerComponent } from './components/create-status/emoji-picker/em
 import { StatusUserContextMenuComponent } from './components/stream/status/action-bar/status-user-context-menu/status-user-context-menu.component';
 import { StatusSchedulerComponent } from './components/create-status/status-scheduler/status-scheduler.component';
 import { PollEditorComponent } from './components/create-status/poll-editor/poll-editor.component';
+import { PollEntryComponent } from './components/create-status/poll-editor/poll-entry/poll-entry.component';
 
 
 const routes: Routes = [
@@ -126,7 +127,8 @@ const routes: Routes = [
         EmojiPickerComponent,
         StatusUserContextMenuComponent,
         StatusSchedulerComponent,
-        PollEditorComponent
+        PollEditorComponent,
+        PollEntryComponent
     ],
     entryComponents: [
         EmojiPickerComponent

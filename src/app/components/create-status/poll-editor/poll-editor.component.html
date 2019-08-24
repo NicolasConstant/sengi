@@ -1,3 +1,15 @@
-<p>
-  poll-editor works!
-</p>
+<div class="poll-editor">
+    <div *ngFor="let e of entries">
+        <app-poll-entry class="poll-editor__entry" [entry]="e"></app-poll-entry>
+    </div>
+
+    <div class="poll-editor__footer">
+        <a href (click)="addEntry()">
+            Add entry
+        </a>
+
+        <select [(ngModel)]="selectedId">
+            <option *ngFor="let d of delayChoice" [ngValue]="d.id">{{d.label}}</option>
+        </select>
+    </div>
+</div>
