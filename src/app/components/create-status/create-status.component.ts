@@ -3,8 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
-import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope, faPollH } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
 import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
@@ -32,6 +32,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     faLock = faLock;
     faLockOpen = faLockOpen;
     faEnvelope = faEnvelope;
+    faPollH = faPollH;
+    faClock = faClock;
 
     autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
 
@@ -703,6 +705,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     closeEmoji(): boolean {
         this.overlayRef.dispose();
+        return false;
+    }
+
+    pollIsActive: boolean;
+    addPoll(): boolean {
+        this.pollIsActive = !this.pollIsActive;
+        return false;
+    }
+
+    scheduleIsActive: boolean;
+    schedule(): boolean {
+        this.scheduleIsActive = !this.scheduleIsActive;
         return false;
     }
 }

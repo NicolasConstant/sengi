@@ -21,6 +21,10 @@
         (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
     </app-autosuggest>
 
+    <app-poll-editor *ngIf="pollIsActive"></app-poll-editor>
+
+    <app-status-scheduler *ngIf="scheduleIsActive"></app-status-scheduler>
+
     <div class="status-editor__footer" #footer>
         <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">
             <span *ngIf="!isSending">REPLY!</span>
@@ -46,6 +50,14 @@
             <fa-icon [icon]="faLockOpen" *ngIf="selectedPrivacy === 'Unlisted'"></fa-icon>
             <fa-icon [icon]="faLock" *ngIf="selectedPrivacy === 'Follows-only'"></fa-icon>
             <fa-icon [icon]="faEnvelope" *ngIf="selectedPrivacy === 'DM'"></fa-icon>
+        </a>
+
+        <a href class="status-editor__footer--link status-editor__footer--add-poll" title="add poll" (click)="addPoll()">
+            <fa-icon [icon]="faPollH"></fa-icon>
+        </a>
+
+        <a href class="status-editor__footer--link" title="schedule" (click)="schedule()">
+            <fa-icon [icon]="faClock"></fa-icon>
         </a>
     </div>
 
