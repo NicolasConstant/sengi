@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {           
+export class MastodonService {             
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -387,6 +387,25 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.getCustomEmojis}`;
         return this.httpClient.get<Emoji[]>(route).toPromise();
     }   
+
+    getScheduledStatuses(account: AccountInfo): Promise<ScheduledStatus[]> {
+        let route = `https://${account.instance}${this.apiRoutes.getScheduledStatuses}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<ScheduledStatus[]>(route, { headers: headers }).toPromise();
+    }
+
+    changeScheduledStatus(account: AccountInfo, statusId: string, scheduled_at: string): Promise<ScheduledStatus>{
+        let route = `https://${account.instance}${this.apiRoutes.putScheduleStatus}`.replace('{0}', statusId);
+        route = `${route}?scheduled_at=${scheduled_at}`
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.put<ScheduledStatus>(route, null, { headers: headers }).toPromise();
+    }
+
+    deleteScheduledStatus(account: AccountInfo, statusId: string): Promise<any> {
+        let route = `https://${account.instance}${this.apiRoutes.deleteScheduleStatus}`.replace('{0}', statusId);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.delete<ScheduledStatus>(route, { headers: headers }).toPromise();
+    }
 }
 
 export enum VisibilityEnum {
