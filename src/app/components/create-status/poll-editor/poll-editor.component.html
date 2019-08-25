@@ -1,17 +1,20 @@
 <div class="poll-editor">
     <div class="poll-editor__entries">
         <div *ngFor="let e of entries">
-            <app-poll-entry class="poll-editor__entry" [entry]="e" (removeEvent)="removeElement(e)"></app-poll-entry>
+            <app-poll-entry class="poll-editor__entry" [entry]="e" (removeEvent)="removeElement(e)"
+                (toogleMultiEvent)="toogleMulti()"></app-poll-entry>
         </div>
     </div>
 
     <div class="poll-editor__footer">
-        <a href (click)="addEntry()">
-            Add entry
-        </a>
-
-        <select [(ngModel)]="selectedId">
+        <select [(ngModel)]="selectedId" class="poll-editor__footer--select-duration">
             <option *ngFor="let d of delayChoice" [ngValue]="d.id">{{d.label}}</option>
         </select>
+
+        <a href (click)="addEntry()" class="poll-editor__footer--add-choice">
+            <fa-icon [icon]="faPlus"></fa-icon> Add a choice
+        </a>
+
+
     </div>
 </div>

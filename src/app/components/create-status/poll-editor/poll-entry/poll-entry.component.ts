@@ -32,9 +32,8 @@ export class PollEntryComponent implements OnInit {
 }
 
 export class PollEntry {
-    constructor(public id: number) {        
+    constructor(public id: number, public isMulti: boolean) {        
     }
-
-    public isMulti: boolean;
+    
     public label: string;
 }

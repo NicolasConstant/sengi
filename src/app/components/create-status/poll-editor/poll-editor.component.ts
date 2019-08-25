@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { PollEntry } from './poll-entry/poll-entry.component';
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-poll-editor',
@@ -8,15 +9,17 @@ import { PollEntry } from './poll-entry/poll-entry.component';
     styleUrls: ['./poll-editor.component.scss']
 })
 export class PollEditorComponent implements OnInit {
+    faPlus = faPlus;
 
     private entryUuid: number = 0;
     entries: PollEntry[] = [];
     delayChoice: Delay[] = [];
     selectedId: string;
+    private multiSelected: boolean;
 
     constructor() {
-        this.entries.push(new PollEntry(this.getEntryUuid()));
-        this.entries.push(new PollEntry(this.getEntryUuid()));
+        this.entries.push(new PollEntry(this.getEntryUuid(), this.multiSelected));
+        this.entries.push(new PollEntry(this.getEntryUuid(), this.multiSelected));
 
         this.delayChoice.push(new Delay(60 * 5, "5 minutes"));
         this.delayChoice.push(new Delay(60 * 30, "30 minutes"));
@@ -41,12 +44,19 @@ export class PollEditorComponent implements OnInit {
     }
 
     addEntry(): boolean {
-        this.entries.push(new PollEntry(this.getEntryUuid()));
+        this.entries.push(new PollEntry(this.getEntryUuid(), this.multiSelected));
         return false;
     }
 
     removeElement(entry: PollEntry){
         this.entries = this.entries.filter(x => x.id != entry.id);
+    }
+
+    toogleMulti() {
+        this.multiSelected = !this.multiSelected;
+        this.entries.forEach((e: PollEntry) => {
+            e.isMulti = this.multiSelected;
+        });
     }
 }
 

@@ -15,7 +15,23 @@
     }
 
     &__footer {
+        transition: all .2s;
         border-top: 1px solid $poll-editor-separator;
         min-height: 30px;
+        padding: 5px;
+
+        &--add-choice {
+            color: rgb(49, 49, 49);
+            padding: 0 5px 0 5px;
+
+            &:hover {
+                text-decoration: none;
+                color: rgb(122, 122, 122);
+            }
+        }
+
+        &--select-duration {
+            float: right;
+        }
     }
 }
