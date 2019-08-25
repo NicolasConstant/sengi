@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { PollEntry } from './poll-entry/poll-entry.component';
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { PollParameters } from '../../../services/mastodon.service';
+import { retry } from 'rxjs/operators';
 
 @Component({
     selector: 'app-poll-editor',
@@ -57,6 +59,15 @@ export class PollEditorComponent implements OnInit {
         this.entries.forEach((e: PollEntry) => {
             e.isMulti = this.multiSelected;
         });
+    }
+
+    getPollParameters(): PollParameters {
+        let params = new PollParameters();
+        params.expires_in = this.delayChoice.find(x => x.id === this.selectedId).delayInSeconds;
+        params.multiple = this.multiSelected;
+        params.options = this.entries.map(x => x.label);
+        params.hide_totals = false;
+        return params;
     }
 }
 

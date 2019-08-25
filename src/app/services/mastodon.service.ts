@@ -84,12 +84,13 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[]): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
         const statusData = new StatusData();
         statusData.status = status;
         statusData.media_ids = mediaIds;
+        statusData.poll = poll;
 
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
@@ -397,11 +398,20 @@ export enum VisibilityEnum {
 
 class StatusData {
     status: string;
-    media_ids: string[];
     in_reply_to_id: string;
+    media_ids: string[];
+    poll: PollParameters;
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
+    scheduled_at: string;
+}
+
+export class PollParameters {
+    options: string [] = [];
+    expires_in: number;
+    multiple: boolean;
+    hide_totals: boolean;
 }
 
 export class FavoriteResult {

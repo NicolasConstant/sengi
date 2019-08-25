@@ -7,7 +7,7 @@ import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope, 
 import { faClock, faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
-import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
+import { MastodonService, VisibilityEnum, PollParameters } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
@@ -19,6 +19,7 @@ import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/a
 import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
+import { PollEditorComponent } from './poll-editor/poll-editor.component';
 
 @Component({
     selector: 'app-create-status',
@@ -115,6 +116,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @ViewChild('fileInput') fileInputElement: ElementRef;
     @ViewChild('footer') footerElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+    @ViewChild(PollEditorComponent) pollEditor: PollEditorComponent;
 
     private _isDirectMention: boolean;
     @Input('isDirectMention')
@@ -434,9 +436,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             usableStatus = Promise.resolve(null);
         }
 
+        let poll: PollParameters = null;
+        if (this.pollIsActive) {
+            poll = this.pollEditor.getPollParameters();
+        }
+
         usableStatus
             .then((status: Status) => {
-                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
+                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll);
             })
             .then((res: Status) => {
                 this.title = '';
@@ -453,7 +460,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[]): Promise<Status> {
+
+    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
 
@@ -467,7 +475,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     }
 
                     if (i === 0) {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll)
                             .then((status: Status) => {
                                 this.mediaService.clearMedia();
                                 return status;
@@ -613,7 +621,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let scrolling = (this.replyElement.nativeElement.scrollHeight);
 
         if (scrolling > 110) {
-            const isVisible = this.checkVisible(this.footerElement.nativeElement);            
+            const isVisible = this.checkVisible(this.footerElement.nativeElement);
             //this.replyElement.nativeElement.style.height = `0px`;
             this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
 
