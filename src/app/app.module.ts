@@ -74,6 +74,7 @@ import { StatusSchedulerComponent } from './components/create-status/status-sche
 import { PollEditorComponent } from './components/create-status/poll-editor/poll-editor.component';
 import { PollEntryComponent } from './components/create-status/poll-editor/poll-entry/poll-entry.component';
 import { ScheduledStatusesComponent } from './components/floating-column/scheduled-statuses/scheduled-statuses.component';
+import { ScheduledStatusComponent } from './components/floating-column/scheduled-statuses/scheduled-status/scheduled-status.component';
 
 
 const routes: Routes = [
@@ -132,7 +133,8 @@ const routes: Routes = [
         StatusSchedulerComponent,
         PollEditorComponent,
         PollEntryComponent,
-        ScheduledStatusesComponent
+        ScheduledStatusesComponent,
+        ScheduledStatusComponent
     ],
     entryComponents: [
         EmojiPickerComponent

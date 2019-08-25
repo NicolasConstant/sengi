@@ -1,0 +1,9 @@
+@import "variables";
+@import "panel";
+@import "commons";
+
+
+.scheduled-statuses-display {
+    overflow: auto;
+    height: calc(100%);
+}

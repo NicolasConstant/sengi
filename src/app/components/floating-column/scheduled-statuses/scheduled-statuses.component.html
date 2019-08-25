@@ -1,3 +1,11 @@
-<p>
-  scheduled-statuses works!
-</p>
+<div class="panel">
+    <h3 class="panel__title">Scheduled Statuses</h3>
+
+    <div class="scheduled-statuses-display flexcroll">
+        <div *ngFor="let n of scheduledStatuses">
+            <div *ngFor="let s of n.statuses">
+                <app-scheduled-status [account]="n.account" [status]="s" ></app-scheduled-status>
+            </div>
+        </div>
+    </div>
+</div>

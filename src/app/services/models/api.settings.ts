@@ -67,7 +67,7 @@ export class ApiRoutes {
     voteOnPoll = '/api/v1/polls/{0}/votes';
     getPoll = '/api/v1/polls/{0}';
     getConversations = '/api/v1/conversations';
-    getScheduledStatuses: '/api/v1/scheduled_statuses';
-    putScheduleStatus: '/api/v1/scheduled_statuses/{0}';
-    deleteScheduleStatus: '/api/v1/scheduled_statuses/{0}';
+    getScheduledStatuses = '/api/v1/scheduled_statuses';
+    putScheduleStatus = '/api/v1/scheduled_statuses/{0}';
+    deleteScheduleStatus = '/api/v1/scheduled_statuses/{0}';
 }
