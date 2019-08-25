@@ -84,13 +84,14 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
         const statusData = new StatusData();
         statusData.status = status;
         statusData.media_ids = mediaIds;
         statusData.poll = poll;
+        statusData.scheduled_at = scheduled_at;
 
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;

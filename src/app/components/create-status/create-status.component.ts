@@ -20,6 +20,7 @@ import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
 import { PollEditorComponent } from './poll-editor/poll-editor.component';
+import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.component';
 
 @Component({
     selector: 'app-create-status',
@@ -117,6 +118,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @ViewChild('footer') footerElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
     @ViewChild(PollEditorComponent) pollEditor: PollEditorComponent;
+    @ViewChild(StatusSchedulerComponent) statusScheduler: StatusSchedulerComponent;
 
     private _isDirectMention: boolean;
     @Input('isDirectMention')
@@ -441,9 +443,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             poll = this.pollEditor.getPollParameters();
         }
 
+        let scheduledTime = null;
+        if(this.scheduleIsActive){
+            scheduledTime = this.statusScheduler.getScheduledDate();
+            if(!scheduledTime || scheduledTime === '') {
+                this.isSending = false;
+                return;
+            }
+        }
+
         usableStatus
             .then((status: Status) => {
-                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll);
+                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
             })
             .then((res: Status) => {
                 this.title = '';
@@ -461,7 +472,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
 
-    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters): Promise<Status> {
+    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
 
@@ -475,13 +486,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     }
 
                     if (i === 0) {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll)
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt)
                             .then((status: Status) => {
                                 this.mediaService.clearMedia();
                                 return status;
                             });
                     } else {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt);
                     }
                 })
                 .then((status: Status) => {

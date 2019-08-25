@@ -2,6 +2,27 @@
 
 .scheduler {
     background-color: $scheduler-background;
-    min-height: 30px;
     margin: 0 5px;
+    border-bottom: 1px solid whitesmoke;
+
+    &__input {
+        color: whitesmoke;
+        padding: 3px;
+        width: calc(100% - 25px);
+        border: 1px solid $scheduler-background;
+        outline: 0;
+        background-color: $scheduler-background;
+        &:focus{
+            border: 1px solid $scheduler-background;
+            outline: 0;            
+        }
+    }
+
+    &__icon {
+        color: whitesmoke;
+        &:hover {
+            color:rgb(204, 204, 204);
+        }
+        margin-left: 5px;        
+    }
 }

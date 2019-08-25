@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +15,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
@@ -136,10 +138,13 @@ const routes: Routes = [
     imports: [
         FontAwesomeModule,
         BrowserModule,
+        BrowserAnimationsModule,
         HttpModule,
         HttpClientModule,
         FormsModule,
         PickerModule,
+        OwlDateTimeModule, 
+        OwlNativeDateTimeModule,
         OverlayModule,
         RouterModule.forRoot(routes),
 

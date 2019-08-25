@@ -28,12 +28,12 @@
     <div class="status-editor__footer" #footer>
         <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">
             <span *ngIf="!isSending && !scheduleIsActive">REPLY!</span>
-            <span *ngIf="!isSending && scheduleIsActive">SAVE!</span>
+            <span *ngIf="!isSending && scheduleIsActive">PLAN!</span>
             <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
         </button>
         <button type="submit" title="post" class="status-editor__footer--send-button" *ngIf="!statusReplyingToWrapper">
             <span *ngIf="!isSending && !scheduleIsActive">POST!</span>
-            <span *ngIf="!isSending && scheduleIsActive">SAVE!</span>
+            <span *ngIf="!isSending && scheduleIsActive">PLAN!</span>
             <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
         </button>
         <div class="status-editor__footer__counter">
