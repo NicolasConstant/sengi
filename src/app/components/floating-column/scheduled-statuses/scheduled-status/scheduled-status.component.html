@@ -1,3 +1,18 @@
-<p>
-  scheduled-status works!
-</p>
+<div class="scheduled-status">
+    <div class="scheduled-status__avatar">      
+    </div>
+
+    <div class="scheduled-status__content">
+
+        <div>
+            {{ status.params.spoiler_text }}
+        </div>
+        <div>
+            {{ status.params.text }}
+        </div>
+        <div>
+            {{ status.scheduled_at }}
+        </div>
+
+    </div>
+</div>
