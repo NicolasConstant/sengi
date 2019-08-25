@@ -3,7 +3,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
 import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
+import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 
 import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
@@ -23,7 +23,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     faSearch = faSearch;
     faPlus = faPlus;    
     faCog = faCog;
-    
+    faCalendarAlt = faCalendarAlt;
 
     accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;
@@ -117,6 +117,11 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
     openSettings(): boolean {
         this.navigationService.openPanel(LeftPanelType.Settings);
+        return false;
+    }
+
+    openScheduledStatuses(): boolean {
+        this.navigationService.openPanel(LeftPanelType.ScheduledStatuses);
         return false;
     }
 }
