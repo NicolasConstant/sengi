@@ -73,20 +73,22 @@ export class AutosuggestComponent implements OnInit, OnDestroy {
 
                 if (isAccount) {
                     for (let account of results.accounts) {
-                        if (account.acct != this.lastPatternUsed) {
+                        //if (account.acct != this.lastPatternUsed) {
                             this.accounts.push(new SelectableAccount(account));
                             this.accounts[0].selected = true;
                             if (this.accounts.length > 7) return;
-                        }
+                        //}
                     }
                 }
                 else {
                     for (let hashtag of results.hashtags) {
-                        if (hashtag.includes(this.lastPatternUsed) && hashtag !== this.lastPatternUsed) {
+                        //if (hashtag !== this.lastPatternUsed) {
+                        //if (hashtag.includes(this.lastPatternUsed.toLocaleLowerCase()) && hashtag !== this.lastPatternUsed) {
+                        //if (hashtag.includes(this.lastPatternUsed) && hashtag !== this.lastPatternUsed) {
                             this.hashtags.push(new SelectableHashtag(hashtag));
                             this.hashtags[0].selected = true;
                             if (this.hashtags.length > 7) return;
-                        }
+                        //}
                     }
                 }
             })
