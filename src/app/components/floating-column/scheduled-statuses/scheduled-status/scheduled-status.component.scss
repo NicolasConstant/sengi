@@ -1,0 +1,16 @@
+.scheduled-status {
+    padding: 5px 5px 0 5px;
+
+    outline: 1px solid greenyellow;
+
+    &__avatar {
+        &--image {
+            width: 40px;
+        }
+    }
+
+    &__content {
+
+    }
+
+}

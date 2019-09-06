@@ -12,6 +12,7 @@ import { NavigationService, LeftPanelType } from "../../services/navigation.serv
 import { MastodonService } from "../../services/mastodon.service";
 import { NotificationService } from "../../services/notification.service";
 import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
+import { ToolsService } from '../../services/tools.service';
 
 @Component({
     selector: "app-left-side-bar",
@@ -33,6 +34,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private notificationSub: Subscription;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly userNotificationServiceService: UserNotificationService,
         private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
@@ -56,14 +58,19 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                         accWrapper.info = acc;
 
                         this.accounts.push(accWrapper);
+                        
+                        this.toolsService.getAvatar(acc)
+                            .then((avatar: string) => {
+                                accWrapper.avatar = avatar;
+                            });                            
 
-                        this.mastodonService.retrieveAccountDetails(acc)
-                            .then((result: Account) => {
-                                accWrapper.avatar = result.avatar;
-                            })
-                            .catch((err: HttpErrorResponse) => {
-                                this.notificationService.notifyHttpError(err);
-                            });
+                        // this.mastodonService.retrieveAccountDetails(acc)
+                        //     .then((result: Account) => {
+                        //         accWrapper.avatar = result.avatar;
+                        //     })
+                        //     .catch((err: HttpErrorResponse) => {
+                        //         this.notificationService.notifyHttpError(err);
+                        //     });
                     }
                 }
 
