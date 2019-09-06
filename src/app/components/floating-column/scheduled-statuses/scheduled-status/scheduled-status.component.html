@@ -1,19 +1,23 @@
 <div class="scheduled-status">
-    <div class="scheduled-status__avatar">      
+    <div>
+        {{ status.scheduled_at | date: 'MMM d, y, h:mm:ss a' }}
+    </div>
+
+
+    <div class="scheduled-status__avatar">
         <img class="scheduled-status__avatar--image" src="{{avatar}}" />
     </div>
 
     <div class="scheduled-status__content">
 
-        <div>
-            {{ status.params.spoiler_text }}
+        <div class="scheduled-status__content--text scheduled-status__content--spoiler"
+            *ngIf="status.params.spoiler_text">
+            spoiler text: {{ status.params.spoiler_text }}
         </div>
-        <div>
+        <div class="scheduled-status__content--text">
             {{ status.params.text }}
         </div>
-        <div>
-            {{ status.scheduled_at }}
-        </div>
+
 
     </div>
 </div>

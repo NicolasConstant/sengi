@@ -1,16 +1,28 @@
-.scheduled-status {
-    padding: 5px 5px 0 5px;
 
-    outline: 1px solid greenyellow;
+$avatar-size: 40px;
+
+.scheduled-status {
+    padding: 0 5px 10px 5px;
 
     &__avatar {
+        float: left;
         &--image {
-            width: 40px;
+            width: $avatar-size;
         }
     }
 
     &__content {
+        &--text {
+            width: calc(100% - #{$avatar-size});
+            margin-left: $avatar-size;
+            padding: 0 5px;
+            min-height: 40px;
+        }
 
+        &--spoiler {
+            color: gray;
+            min-height: 0px;
+        }
     }
 
 }
