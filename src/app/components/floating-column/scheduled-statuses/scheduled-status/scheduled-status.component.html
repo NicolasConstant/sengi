@@ -43,5 +43,7 @@
                 (click)="confirmReschedule()" title="confirm rescheduling">REPLAN</button>
 
         </div>
+
+        <app-waiting-animation class="waiting-icon" *ngIf="isLoading"></app-waiting-animation>
     </div>
 </div>

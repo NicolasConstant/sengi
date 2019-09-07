@@ -16,6 +16,7 @@ import { StatusSchedulerComponent } from '../../../../components/create-status/s
 export class ScheduledStatusComponent implements OnInit {
     deleting: boolean = false;
     rescheduling: boolean = false;
+    isLoading: boolean = false;
 
     @ViewChild(StatusSchedulerComponent) statusScheduler: StatusSchedulerComponent;
 
@@ -47,6 +48,9 @@ export class ScheduledStatusComponent implements OnInit {
     }
 
     confirmDeletion(): boolean {
+        if(this.isLoading) return false;
+        this.isLoading = true;
+
         this.mastodonService.deleteScheduledStatus(this.account, this.status.id)
             .then(() => {
                 this.scheduledStatusService.removeStatus(this.account, this.status.id);
@@ -54,6 +58,9 @@ export class ScheduledStatusComponent implements OnInit {
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
             })
+            .then(() => {
+                this.isLoading = false;
+            });
         return false;
     }
 
@@ -68,6 +75,9 @@ export class ScheduledStatusComponent implements OnInit {
     }
 
     confirmReschedule(): boolean {
+        if(this.isLoading) return false;
+        this.isLoading = true;
+
         let scheduledTime = this.statusScheduler.getScheduledDate();
         this.mastodonService.changeScheduledStatus(this.account, this.status.id, scheduledTime)
             .then(() => {
@@ -76,6 +86,9 @@ export class ScheduledStatusComponent implements OnInit {
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);
+            })
+            .then(() => {
+                this.isLoading = false;
             });
         return false;
     }
