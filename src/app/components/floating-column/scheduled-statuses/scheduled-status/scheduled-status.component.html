@@ -19,8 +19,20 @@
     </div>
 
     <div class="scheduled-status__edition">
-        <button class="scheduled-status__edition--button" title="delete status">Delete</button>
-        <button class="scheduled-status__edition--button" title="reschedule status">Reschedule</button>
+        <div *ngIf="!deleting">
+            <button class="scheduled-status__edition--button" (click)="delete()" title="delete status">Delete</button>
+            <button class="scheduled-status__edition--button" (click)="reschedule()"
+                title="reschedule status">Reschedule</button>
+        </div>
 
+        <div *ngIf="deleting">
+            <button class="scheduled-status__edition--button" (click)="cancelDeletion()" title="cancel">CANCEL</button>
+            <button class="scheduled-status__edition--button scheduled-status__edition--delete"
+                (click)="confirmDeletion()" title="confirm status deletion">DO IT</button>
+
+            <div class="scheduled-status__edition--label">
+                Delete the status?
+            </div>
+        </div>
     </div>
 </div>

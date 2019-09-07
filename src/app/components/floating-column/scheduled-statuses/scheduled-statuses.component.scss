@@ -9,8 +9,7 @@
 
 .scheduled-statuses-display {
     overflow: auto;
-    // height: calc(100%);
-    height: calc(100% - 40px);
+    height: calc(100% - #{$stream-header-height});
 }
 
 .scheduled-status {

@@ -47,5 +47,19 @@ $avatar-size: 40px;
                 background-color: #3b4769;
             }
         }
+
+        &--delete {
+            background-color: rgb(95, 5, 5);
+
+            &:hover {
+                background-color: rgb(163, 4, 4);
+            }
+        }
+
+        &--label{
+            height: 30px;
+            float: right;
+            padding: 9px 5px 0 5px;            
+        }
     }
 }

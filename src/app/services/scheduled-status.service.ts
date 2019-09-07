@@ -26,15 +26,7 @@ export class ScheduledStatusService {
         let promises: Promise<any>[] = [];
 
         accounts.forEach((account: AccountInfo) => {
-            let promise = this.mastodonService.getScheduledStatuses(account)
-                .then((statuses: ScheduledStatus[]) => {
-                    if (statuses) {
-                        this.processStatuses(account, statuses);
-                    }
-                })
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err);
-                });
+            let promise = this.getStatusFromAccount(account);
             promises.push(promise);
         });
 
@@ -43,6 +35,18 @@ export class ScheduledStatusService {
                 setTimeout(() => {
                     this.fetchScheduledStatus();
                 }, 70 * 1000);
+            });
+    }
+
+    private getStatusFromAccount(account: AccountInfo): Promise<any> {
+        return this.mastodonService.getScheduledStatuses(account)
+            .then((statuses: ScheduledStatus[]) => {
+                if (statuses) {
+                    this.processStatuses(account, statuses);
+                }
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
             });
     }
 
@@ -66,6 +70,19 @@ export class ScheduledStatusService {
 
             this.scheduledStatuses.next(currentNotifications);
         }
+    }
+
+    statusAdded(account: AccountInfo) {
+        this.getStatusFromAccount(account);
+    }
+
+    removeStatus(account: AccountInfo, statusId: string) {
+        const notification = this.scheduledStatuses.value.find(x => x.account.id === account.id);
+        notification.statuses = notification.statuses.filter(x => x.id !== statusId);
+
+        const otherNotifications = this.scheduledStatuses.value.filter(x => x.account.id !== account.id);
+        const currentNotifications = [...otherNotifications, notification];
+        this.scheduledStatuses.next(currentNotifications);
     }
 }
 

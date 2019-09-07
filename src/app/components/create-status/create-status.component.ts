@@ -21,6 +21,7 @@ import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
 import { PollEditorComponent } from './poll-editor/poll-editor.component';
 import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.component';
+import { ScheduledStatusService } from '../../services/scheduled-status.service';
 
 @Component({
     selector: 'app-create-status',
@@ -154,6 +155,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly scheduledStatusService: ScheduledStatusService,
         private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly notificationService: NotificationService,
@@ -460,6 +462,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
+
+                if(this.scheduleIsActive){
+                    this.scheduledStatusService.statusAdded(acc);
+                }
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err);
