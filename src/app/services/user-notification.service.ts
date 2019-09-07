@@ -40,7 +40,7 @@ export class UserNotificationService {
                     this.processNotifications(account, notifications);
                 })
                 .catch(err => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, account);
                 });
             promises.push(getNotificationPromise);
         });

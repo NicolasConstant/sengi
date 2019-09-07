@@ -106,7 +106,7 @@ export class UserProfileComponent implements OnInit {
                         return this.getFollowStatus(userAccount, account);
                     })
                     .catch((err: HttpErrorResponse) => {
-                        this.notificationService.notifyHttpError(err);
+                        this.notificationService.notifyHttpError(err, userAccount);
                     })
                     .then(() => {
                         this.loadingRelationShip = false;
@@ -170,7 +170,7 @@ export class UserProfileComponent implements OnInit {
                 return Promise.all([getFollowStatusPromise, getStatusesPromise, getPinnedStatusesPromise]);
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.currentlyUsedAccount);
             })
             .then(() => {
                 this.isLoading = false;
@@ -188,7 +188,7 @@ export class UserProfileComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, userAccount);
             });
     }
 
@@ -200,7 +200,7 @@ export class UserProfileComponent implements OnInit {
                 this.loadStatus(userAccount, statuses);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, userAccount);
             })
             .then(() => {
                 this.statusLoading = false;
@@ -214,7 +214,7 @@ export class UserProfileComponent implements OnInit {
                 this.relationship = result.filter(x => x.id === account.id)[0];
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, userAccount);
             })
             .then(() => {
                 this.loadingRelationShip = false;
@@ -277,7 +277,7 @@ export class UserProfileComponent implements OnInit {
                 this.relationship = relationship;
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, userAccount);
             });
         return false;
     }
@@ -292,7 +292,7 @@ export class UserProfileComponent implements OnInit {
                 this.relationship = relationship;
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, userAccount);
             });
         return false;
     }

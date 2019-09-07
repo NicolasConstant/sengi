@@ -58,7 +58,7 @@ export class RegisterNewAccountComponent implements OnInit {
                     var instance = appDataWrapper.instance.toLowerCase();
 
                     if(this.isAccountAlreadyPresent(username, instance)){
-                        this.notificationService.notify(`Account @${username}@${instance} is already registered`, true);
+                        this.notificationService.notify(null, null, `Account @${username}@${instance} is already registered`, true);
                         this.router.navigate(['/home']);
                         return;
                     }
@@ -75,7 +75,7 @@ export class RegisterNewAccountComponent implements OnInit {
                         });
                 })
                 .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, null);
                 });
         });
     }

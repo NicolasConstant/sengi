@@ -1,5 +1,13 @@
 <div class="notification-hub">
-    <div class="notification-hub__notification" [ngClass]="{'notification-hub__notification--error':notification.isError}" *ngFor="let notification of notifications" (click)="onClick(notification)" title="close">
-        {{ notification.message }}
+    <div class="notification-hub__notification"
+        [ngClass]="{'notification-hub__notification--error':notification.isError}"
+        *ngFor="let notification of notifications" (click)="onClick(notification)" title="close">
+        <img class="notification-hub__notification--avatar" *ngIf="notification.avatar"
+            src="{{ notification.avatar }}" />
+
+        <div class="notification-hub__notification--message">
+            <span *ngIf="!notification.message">Error {{ notification.errorCode }}</span>
+            <span *ngIf="notification.message">{{ notification.message }}</span>
+        </div>
     </div>
-</div>  
+</div>

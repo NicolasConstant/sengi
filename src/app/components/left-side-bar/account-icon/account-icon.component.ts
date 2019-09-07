@@ -45,7 +45,7 @@ export class AccountIconComponent implements OnInit {
                     window.open(account.url, '_blank');
                 })
                 .catch(err => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, null);
                 });
             return false;
         }

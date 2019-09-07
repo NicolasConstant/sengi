@@ -1,0 +1,49 @@
+<div class="scheduled-status">
+    <div class="scheduled-status__date">
+        {{ status.scheduled_at | date: 'MMM d, y, h:mm a' }}
+    </div>
+
+
+    <div class="scheduled-status__avatar">
+        <img class="scheduled-status__avatar--image" src="{{avatar}}" />
+    </div>
+
+    <div class="scheduled-status__content">
+        <div class="scheduled-status__content--text scheduled-status__content--spoiler"
+            *ngIf="status.params.spoiler_text" title="spoiler">
+            {{ status.params.spoiler_text }}
+        </div>
+        <div class="scheduled-status__content--text" title="status text">
+            {{ status.params.text }}
+        </div>
+    </div>
+
+    <div class="scheduled-status__edition">
+        <div *ngIf="!deleting && !rescheduling">
+            <button class="scheduled-status__edition--button" (click)="delete()" title="delete status">Delete</button>
+            <button class="scheduled-status__edition--button" (click)="reschedule()"
+                title="reschedule status">Reschedule</button>
+        </div>
+
+        <div *ngIf="deleting">
+            <button class="scheduled-status__edition--button" (click)="cancelDeletion()" title="cancel">CANCEL</button>
+            <button class="scheduled-status__edition--button scheduled-status__edition--delete"
+                (click)="confirmDeletion()" title="confirm status deletion">DO IT</button>
+
+            <div class="scheduled-status__edition--label">
+                Delete the status?
+            </div>
+        </div>
+
+        <div *ngIf="rescheduling">
+            <app-status-scheduler [scheduledDate]="status.scheduled_at" class="scheduled-status__edition--scheduler" #statusScheduler></app-status-scheduler>
+
+            <button class="scheduled-status__edition--button" (click)="cancelReschedule()" title="cancel">CANCEL</button>
+            <button class="scheduled-status__edition--button"
+                (click)="confirmReschedule()" title="confirm rescheduling">REPLAN</button>
+
+        </div>
+
+        <app-waiting-animation class="waiting-icon" *ngIf="isLoading"></app-waiting-animation>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+@import "commons";
+@import "variables";
+@import "mixins";
+
+$avatar-size: 40px;
+
+.scheduled-status {
+    margin: 0 5px;
+    padding: 5px 5px 5px 5px;
+
+    &__date {
+        margin-bottom: 1px;
+    }
+
+    &__avatar {
+        float: left;
+        &--image {
+            width: $avatar-size;
+        }
+    }
+
+    &__content {
+        &--text {
+            width: calc(100% - #{$avatar-size});
+            margin-left: $avatar-size;
+            padding: 0 5px;
+            min-height: 40px;
+        }
+
+        &--spoiler {
+            color: gray;
+            min-height: 0px;
+        }
+    }
+
+    &__edition {
+        @include clearfix;      
+
+        &--button {
+            @include clearButton;
+            transition: all .2s;
+            float: right;
+            margin: 5px 0 5px 5px;
+            padding: 5px 10px;
+
+            background-color: #273047;
+            background-color: $scheduler-background;
+
+            &:hover {
+                background-color: #3b4769;
+                background-color: #3d4b7c;
+            }
+        }
+
+        &--delete {
+            background-color: rgb(95, 5, 5);
+
+            &:hover {
+                background-color: rgb(163, 4, 4);
+            }
+        }
+
+        &--label{
+            height: 30px;
+            float: right;
+            padding: 9px 5px 0 5px;            
+        }
+
+        &--scheduler {
+            display: block;
+            margin: 5px 0 0 0;
+        }
+    }
+}

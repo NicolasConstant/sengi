@@ -229,3 +229,21 @@ export interface PollOption {
     title: string;
     votes_count: number;
 }
+
+export interface ScheduledStatus {
+    id: string;
+    scheduled_at: string;
+    params: StatusParams;
+    media_attachments: Attachment[];
+}
+
+export interface StatusParams {
+    text: string;
+    in_reply_to_id: string;
+    media_ids: string[];
+    sensitive: boolean;
+    spoiler_text: string;
+    visibility: 'public' | 'unlisted' | 'private' | 'direct';
+    scheduled_at: string;
+    application_id: string;
+}

@@ -1,0 +1,5 @@
+<div class="scheduler">
+    <input class="scheduler__input" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" placeholder="" [min]="min" [(ngModel)]="scheduledDate">
+    <a class="scheduler__icon" href (click)="openScheduler()" [owlDateTimeTrigger]="dt2" title="open datetime picker"><fa-icon [icon]="faCalendarAlt"></fa-icon></a>
+    <owl-date-time #dt2></owl-date-time>
+</div>

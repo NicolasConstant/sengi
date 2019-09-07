@@ -72,9 +72,10 @@ export enum LeftPanelAction {
 
 export enum LeftPanelType {
     Closed = 0,
-    ManageAccount = 1,  
-    CreateNewStatus = 2, 
+    ManageAccount = 1,
+    CreateNewStatus = 2,
     Search = 3,
     AddNewAccount = 4,
-    Settings = 5
+    Settings = 5,
+    ScheduledStatuses = 6
 }

@@ -118,7 +118,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
                 this.lastId = result[result.length - 1].id;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;

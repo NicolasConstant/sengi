@@ -1,4 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
@@ -14,6 +15,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
@@ -68,6 +70,11 @@ import { TimeLeftPipe } from './pipes/time-left.pipe';
 import { AutosuggestComponent } from './components/create-status/autosuggest/autosuggest.component';
 import { EmojiPickerComponent } from './components/create-status/emoji-picker/emoji-picker.component';
 import { StatusUserContextMenuComponent } from './components/stream/status/action-bar/status-user-context-menu/status-user-context-menu.component';
+import { StatusSchedulerComponent } from './components/create-status/status-scheduler/status-scheduler.component';
+import { PollEditorComponent } from './components/create-status/poll-editor/poll-editor.component';
+import { PollEntryComponent } from './components/create-status/poll-editor/poll-entry/poll-entry.component';
+import { ScheduledStatusesComponent } from './components/floating-column/scheduled-statuses/scheduled-statuses.component';
+import { ScheduledStatusComponent } from './components/floating-column/scheduled-statuses/scheduled-status/scheduled-status.component';
 
 
 const routes: Routes = [
@@ -122,7 +129,12 @@ const routes: Routes = [
         TimeLeftPipe,
         AutosuggestComponent,
         EmojiPickerComponent,
-        StatusUserContextMenuComponent
+        StatusUserContextMenuComponent,
+        StatusSchedulerComponent,
+        PollEditorComponent,
+        PollEntryComponent,
+        ScheduledStatusesComponent,
+        ScheduledStatusComponent
     ],
     entryComponents: [
         EmojiPickerComponent
@@ -130,10 +142,13 @@ const routes: Routes = [
     imports: [
         FontAwesomeModule,
         BrowserModule,
+        BrowserAnimationsModule,
         HttpModule,
         HttpClientModule,
         FormsModule,
         PickerModule,
+        OwlDateTimeModule, 
+        OwlNativeDateTimeModule,
         OverlayModule,
         RouterModule.forRoot(routes),
 

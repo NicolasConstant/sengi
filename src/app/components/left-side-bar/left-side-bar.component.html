@@ -19,7 +19,15 @@
         <fa-icon [icon]="faPlus"></fa-icon>
     </a>
 
-    <a class="left-bar-button left-bar-button--cog left-bar-link" href title="settings" (click)="openSettings()"
+
+    <a class="left-bar-button left-bar-button--scheduled left-bar-button--bottom left-bar-link" href title="scheduled statuses" 
+        *ngIf="hasAccounts && hasScheduledStatuses"
+        (click)="openScheduledStatuses()"
+        (contextmenu)="openScheduledStatuses()">
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+    </a>
+
+    <a class="left-bar-button left-bar-button--cog left-bar-button--bottom left-bar-link" href title="settings" (click)="openSettings()"
         (contextmenu)="openSettings()" *ngIf="hasAccounts">
         <fa-icon [icon]="faCog"></fa-icon>
     </a>

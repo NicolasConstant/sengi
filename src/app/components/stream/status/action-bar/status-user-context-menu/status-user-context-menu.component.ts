@@ -139,7 +139,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                     this.notificationService.hideAccount(target);
                 })
                 .catch(err => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, acc);
                 });
         });
 
@@ -157,7 +157,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                     this.notificationService.hideAccount(target);
                 })
                 .catch(err => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, acc);
                 });
         });
 
@@ -175,7 +175,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.displayedStatus.muted = status.muted;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, selectedAccount);
             });
 
         return false;
@@ -192,7 +192,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.displayedStatus.muted = status.muted;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, selectedAccount);
             });
 
         return false;
@@ -210,7 +210,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.displayedStatus.pinned = status.pinned;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, selectedAccount);
             });
 
         return false;
@@ -227,7 +227,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.displayedStatus.pinned = status.pinned;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, selectedAccount);
             });
 
         return false;
@@ -249,7 +249,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.notificationService.deleteStatus(deletedStatus);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, selectedAccount);
             });
 
         return false;

@@ -24,6 +24,7 @@
                     (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
                 </app-search>
                 <app-settings *ngIf="openPanel === 'settings'"></app-settings>
+                <app-scheduled-statuses *ngIf="openPanel === 'scheduledStatuses'"></app-scheduled-statuses>
             </div>
         </div>
     </div>

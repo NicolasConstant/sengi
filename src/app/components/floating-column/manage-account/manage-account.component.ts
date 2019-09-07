@@ -67,7 +67,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
                 this.userAccount = acc;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             });
     }
 
