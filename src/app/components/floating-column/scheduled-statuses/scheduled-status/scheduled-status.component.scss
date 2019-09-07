@@ -1,4 +1,5 @@
 @import "commons";
+@import "variables";
 @import "mixins";
 
 $avatar-size: 40px;
@@ -43,9 +44,11 @@ $avatar-size: 40px;
             padding: 5px 10px;
 
             background-color: #273047;
+            background-color: $scheduler-background;
 
             &:hover {
                 background-color: #3b4769;
+                background-color: #3d4b7c;
             }
         }
 
