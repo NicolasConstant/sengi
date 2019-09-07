@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 import { AccountInfo } from '../../../../states/accounts.state';
 import { ScheduledStatus } from '../../../../services/models/mastodon.interfaces';
@@ -6,6 +6,7 @@ import { ToolsService } from '../../../../services/tools.service';
 import { MastodonService } from '../../../../services/mastodon.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { ScheduledStatusService } from '../../../../services/scheduled-status.service';
+import { StatusSchedulerComponent } from '../../../../components/create-status/status-scheduler/status-scheduler.component';
 
 @Component({
     selector: 'app-scheduled-status',
@@ -15,6 +16,8 @@ import { ScheduledStatusService } from '../../../../services/scheduled-status.se
 export class ScheduledStatusComponent implements OnInit {
     deleting: boolean = false;
     rescheduling: boolean = false;
+
+    @ViewChild(StatusSchedulerComponent) statusScheduler: StatusSchedulerComponent;
 
     avatar: string;
     @Input() account: AccountInfo;
@@ -56,6 +59,24 @@ export class ScheduledStatusComponent implements OnInit {
 
     reschedule(): boolean {
         this.rescheduling = !this.rescheduling;
+        return false;
+    }
+
+    cancelReschedule(): boolean {
+        this.rescheduling = false;
+        return false;
+    }
+
+    confirmReschedule(): boolean {
+        let scheduledTime = this.statusScheduler.getScheduledDate();
+        this.mastodonService.changeScheduledStatus(this.account, this.status.id, scheduledTime)
+            .then(() => {
+                this.status.scheduled_at = scheduledTime;
+                this.rescheduling = false;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err);
+            });
         return false;
     }
 }

@@ -23,7 +23,7 @@
 
     <app-poll-editor *ngIf="pollIsActive"></app-poll-editor>
 
-    <app-status-scheduler *ngIf="scheduleIsActive"></app-status-scheduler>
+    <app-status-scheduler class="scheduler" *ngIf="scheduleIsActive"></app-status-scheduler>
 
     <div class="status-editor__footer" #footer>
         <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">

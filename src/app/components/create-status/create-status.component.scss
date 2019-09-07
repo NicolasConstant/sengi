@@ -190,11 +190,12 @@ $counter-width: 90px;
 }
 
 .emojipicker {
-
     font-size: $default-font-size !important;
+}
 
-
-
+.scheduler {
+    display: block;
+    margin: 0 5px;
 }
 
 @import '~@angular/cdk/overlay-prebuilt.css';

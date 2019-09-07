@@ -19,7 +19,7 @@
     </div>
 
     <div class="scheduled-status__edition">
-        <div *ngIf="!deleting">
+        <div *ngIf="!deleting && !rescheduling">
             <button class="scheduled-status__edition--button" (click)="delete()" title="delete status">Delete</button>
             <button class="scheduled-status__edition--button" (click)="reschedule()"
                 title="reschedule status">Reschedule</button>
@@ -33,6 +33,15 @@
             <div class="scheduled-status__edition--label">
                 Delete the status?
             </div>
+        </div>
+
+        <div *ngIf="rescheduling">
+            <app-status-scheduler [scheduledDate]="status.scheduled_at" class="scheduled-status__edition--scheduler" #statusScheduler></app-status-scheduler>
+
+            <button class="scheduled-status__edition--button" (click)="cancelReschedule()" title="cancel">CANCEL</button>
+            <button class="scheduled-status__edition--button"
+                (click)="confirmReschedule()" title="confirm rescheduling">REPLAN</button>
+
         </div>
     </div>
 </div>
