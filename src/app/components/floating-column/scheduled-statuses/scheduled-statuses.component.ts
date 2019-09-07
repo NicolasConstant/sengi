@@ -12,7 +12,6 @@ import { AccountInfo } from '../../../states/accounts.state';
 })
 export class ScheduledStatusesComponent implements OnInit, OnDestroy {
     private statusSub: Subscription;
-    // scheduledStatuses: ScheduledStatusNotification[] = [];
     scheduledStatuses: ScheduledStatusWrapper[] = [];
 
     constructor(
