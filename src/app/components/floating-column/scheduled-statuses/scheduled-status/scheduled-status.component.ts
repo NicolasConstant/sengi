@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 
 import { AccountInfo } from '../../../../states/accounts.state';
 import { ScheduledStatus } from '../../../../services/models/mastodon.interfaces';
@@ -23,6 +23,7 @@ export class ScheduledStatusComponent implements OnInit {
     avatar: string;
     @Input() account: AccountInfo;
     @Input() status: ScheduledStatus;
+    @Output() rescheduledEvent = new EventEmitter();
 
     constructor(
         private readonly scheduledStatusService: ScheduledStatusService,
@@ -83,6 +84,7 @@ export class ScheduledStatusComponent implements OnInit {
             .then(() => {
                 this.status.scheduled_at = scheduledTime;
                 this.rescheduling = false;
+                this.rescheduledEvent.next();
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err);

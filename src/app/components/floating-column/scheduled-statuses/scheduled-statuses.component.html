@@ -3,7 +3,10 @@
 
     <div class="scheduled-statuses-display flexcroll">
         <div *ngFor="let n of scheduledStatuses" class="scheduled-status">
-            <app-scheduled-status [account]="n.account" [status]="n.status"></app-scheduled-status>
+            <app-scheduled-status 
+                (rescheduledEvent)="statusRescheduled()"
+                [account]="n.account" 
+                [status]="n.status"></app-scheduled-status>
         </div>
     </div>
 </div>

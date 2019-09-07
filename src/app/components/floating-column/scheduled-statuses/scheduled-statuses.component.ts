@@ -16,7 +16,7 @@ export class ScheduledStatusesComponent implements OnInit, OnDestroy {
     scheduledStatuses: ScheduledStatusWrapper[] = [];
 
     constructor(
-        private readonly scheduledStatusService: ScheduledStatusService) {            
+        private readonly scheduledStatusService: ScheduledStatusService) {
     }
 
     ngOnInit() {
@@ -27,20 +27,28 @@ export class ScheduledStatusesComponent implements OnInit, OnDestroy {
                 notification.statuses.forEach(status => {
                     let wrapper = new ScheduledStatusWrapper(notification.account, status);
                     this.scheduledStatuses.push(wrapper);
-                });              
+                });
             });
 
-            this.scheduledStatuses.sort((x, y) => new Date(x.status.scheduled_at).getTime() -new Date(y.status.scheduled_at).getTime());
+            this.sortStatuses();
         });
     }
 
     ngOnDestroy(): void {
         if (this.statusSub) this.statusSub.unsubscribe();
     }
+
+    private sortStatuses() {
+        this.scheduledStatuses.sort((x, y) => new Date(x.status.scheduled_at).getTime() - new Date(y.status.scheduled_at).getTime());
+    }
+
+    statusRescheduled() {
+        this.sortStatuses();
+    }
 }
 
 class ScheduledStatusWrapper {
-    constructor( 
+    constructor(
         public readonly account: AccountInfo,
         public status: ScheduledStatus) {
     }
