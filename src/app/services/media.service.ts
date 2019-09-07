@@ -45,7 +45,7 @@ export class MediaService {
             })
             .catch((err) => {
                 this.remove(wrapper);
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             });
     }
 
@@ -60,7 +60,7 @@ export class MediaService {
                 this.mediaSubject.next(medias);
             })
             .catch((err) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             });
     }
 
@@ -94,7 +94,7 @@ export class MediaService {
                 })
                 .catch((err) => {
                     this.remove(media);
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, account);
                 });
         }
     }

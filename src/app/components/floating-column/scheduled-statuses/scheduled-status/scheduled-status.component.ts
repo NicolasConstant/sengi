@@ -57,7 +57,7 @@ export class ScheduledStatusComponent implements OnInit {
                 this.scheduledStatusService.removeStatus(this.account, this.status.id);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {
                 this.isLoading = false;
@@ -87,7 +87,7 @@ export class ScheduledStatusComponent implements OnInit {
                 this.rescheduledEvent.next();
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {
                 this.isLoading = false;

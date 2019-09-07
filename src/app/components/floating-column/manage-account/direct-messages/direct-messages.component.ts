@@ -65,7 +65,7 @@ export class DirectMessagesComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;
@@ -100,7 +100,7 @@ export class DirectMessagesComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;

@@ -115,7 +115,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 }                
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             });
     }
 
@@ -149,7 +149,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 this.availableLists.push(wrappedStream);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.creationLoading = false;
@@ -178,7 +178,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 this.availableLists = this.availableLists.filter(x => x.id !== list.id);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             });
 
         return false;

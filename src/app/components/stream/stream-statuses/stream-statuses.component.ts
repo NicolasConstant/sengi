@@ -259,7 +259,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 }
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {
                 this.isLoading = false;
@@ -287,7 +287,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 }
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account);
             });
     }
 

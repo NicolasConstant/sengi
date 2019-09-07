@@ -99,7 +99,7 @@ export class PollComponent implements OnInit {
                     return poll;
                 })
                 .catch(err => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, newSelectedAccount);
                     return null;
                 });
         } else if (this.statusWrapper.status.visibility !== 'public' && this.statusWrapper.status.visibility !== 'unlisted' && this.statusWrapper.provider.id !== newSelectedAccount.id) {
@@ -109,7 +109,7 @@ export class PollComponent implements OnInit {
                 .then((poll: Poll) => {
                     this.poll = poll;
                 })
-                .catch(err => this.notificationService.notifyHttpError(err));
+                .catch(err => this.notificationService.notifyHttpError(err, newSelectedAccount));
         }
         this.selectedAccount = newSelectedAccount;
     }
@@ -127,7 +127,7 @@ export class PollComponent implements OnInit {
                 this.poll = poll;
                 this.pollPerAccountId[selectedAccount.id] = Promise.resolve(poll);
             })
-            .catch(err => this.notificationService.notifyHttpError(err));
+            .catch(err => this.notificationService.notifyHttpError(err, selectedAccount));
         return false;
     }
 
@@ -152,7 +152,7 @@ export class PollComponent implements OnInit {
                 this.poll = poll;
                 this.pollPerAccountId[selectedAccount.id] = Promise.resolve(poll);
             })
-            .catch(err => this.notificationService.notifyHttpError(err));
+            .catch(err => this.notificationService.notifyHttpError(err, selectedAccount));
 
         return false;
     }

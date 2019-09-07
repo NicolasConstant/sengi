@@ -179,7 +179,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 }, 0);
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, currentAccount);
             })
             .then(() => {
                 this.isLoading = false;

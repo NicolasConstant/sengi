@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+
 import { StatusWrapper } from '../models/common.model';
 import { Account } from './models/mastodon.interfaces';
+import { AccountInfo } from '../states/accounts.state';
+import { ToolsService } from './tools.service';
 
 @Injectable()
 export class NotificationService {
@@ -11,34 +14,52 @@ export class NotificationService {
     public hideAccountUrlStream = new Subject<string>();
     public deletedStatusStream = new Subject<StatusWrapper>();
 
-    constructor() {
+    constructor(private readonly toolsService: ToolsService) {
     }
 
-    public notify(message: string, isError: boolean){
-        let newNotification = new NotificatioData(message, isError);
+    public notify(avatar: string, errorCode: number, message: string, isError: boolean) {
+        let newNotification = new NotificatioData(avatar, errorCode, message, isError);
         this.notifactionStream.next(newNotification);
     }
 
-    public notifyHttpError(err: HttpErrorResponse){    
-        let message = 'Oops, Unknown Error'  ;
-        try{  
-            message = `Oops, Error ${err.status}`;
-            console.error(err.message);
-        } catch(err){}
-        this.notify(message, true);
+    public notifyHttpError(err: HttpErrorResponse, account: AccountInfo) {
+        let message = 'Oops, Unknown Error';
+        let code: number;
+
+        console.warn(err);
+
+        try {
+            code = err.status;
+            message = err.error.error; //Mastodon
+            if (!message) {
+                message = err.error.errors.detail; //Pleroma
+            }
+        } catch (err) { }
+
+        if (account) {
+            this.toolsService.getAvatar(account)
+                .then((avatar: string) => {
+                    this.notify(avatar, code, message, true);
+                })
+                .catch(err => {
+
+                });
+        } else {
+            this.notify(null, code, message, true);
+        }
     }
 
     // public newStatusPosted(status: StatusWrapper){
-    public newStatusPosted(uiStatusRepliedToId: string, response: StatusWrapper){
+    public newStatusPosted(uiStatusRepliedToId: string, response: StatusWrapper) {
         const notification = new NewReplyData(uiStatusRepliedToId, response);
         this.newRespondPostedStream.next(notification);
     }
 
-    public hideAccount(account: Account){
+    public hideAccount(account: Account) {
         this.hideAccountUrlStream.next(account.url);
     }
 
-    public deleteStatus(status: StatusWrapper){
+    public deleteStatus(status: StatusWrapper) {
         this.deletedStatusStream.next(status);
     }
 }
@@ -47,15 +68,17 @@ export class NotificatioData {
     public id: string;
 
     constructor(
+        public avatar: string,
+        public errorCode: number,
         public message: string,
         public isError: boolean
-    ) { 
+    ) {
         this.id = `${message}${new Date().getTime()}`;
     }
 }
 
 export class NewReplyData {
-    constructor(public uiStatusId: string, public response: StatusWrapper){
+    constructor(public uiStatusId: string, public response: StatusWrapper) {
 
     }
 }

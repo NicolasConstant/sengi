@@ -38,7 +38,7 @@ export class ListEditorComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             });
     }
 
@@ -57,7 +57,7 @@ export class ListEditorComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             });
     }
 
@@ -89,7 +89,7 @@ export class ListEditorComponent implements OnInit {
                 this.accountsInList.push(accountWrapper);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 accountWrapper.isLoading = false;
@@ -131,7 +131,7 @@ export class ListEditorComponent implements OnInit {
                 this.accountsInList = this.accountsInList.filter(x => x.account.id !== accountWrapper.account.id);
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 accountWrapper.isLoading = false;

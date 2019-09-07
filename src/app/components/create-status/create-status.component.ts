@@ -94,7 +94,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
                     })
                     .catch(err => {
-                        this.notificationService.notifyHttpError(err);
+                        this.notificationService.notifyHttpError(err, value.provider);
                     })
                     .then(() => {
                         this.isSending = false;
@@ -288,7 +288,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         this.countStatusChar(this.status);
                     })
                     .catch((err: HttpErrorResponse) => {
-                        this.notificationService.notifyHttpError(err);
+                        this.notificationService.notifyHttpError(err, this.selectedAccount);
                     });
             }
 
@@ -304,7 +304,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.setVisibility(defaultPrivacy);
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.selectedAccount);
             });
     }
 
@@ -468,7 +468,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 }
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, acc);
             })
             .then(() => {
                 this.isSending = false;

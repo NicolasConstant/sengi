@@ -100,7 +100,7 @@ export class AutosuggestComponent implements OnInit, OnDestroy {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, selectedAccount);
             });
     }
 

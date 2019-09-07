@@ -82,7 +82,7 @@ export class SearchComponent implements OnInit {
                 }
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.lastAccountUsed);
             })
             .then(() => { this.isLoading = false; });
     }
