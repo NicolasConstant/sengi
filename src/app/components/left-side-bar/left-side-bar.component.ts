@@ -1,18 +1,15 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
 import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 
-import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
 import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
-import { MastodonService } from "../../services/mastodon.service";
-import { NotificationService } from "../../services/notification.service";
 import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
 import { ToolsService } from '../../services/tools.service';
+import { ScheduledStatusService, ScheduledStatusNotification } from '../../services/scheduled-status.service';
 
 @Component({
     selector: "app-left-side-bar",
@@ -22,29 +19,29 @@ import { ToolsService } from '../../services/tools.service';
 export class LeftSideBarComponent implements OnInit, OnDestroy {
     faCommentAlt = faCommentAlt;
     faSearch = faSearch;
-    faPlus = faPlus;    
+    faPlus = faPlus;
     faCog = faCog;
     faCalendarAlt = faCalendarAlt;
 
     accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;
+    hasScheduledStatuses: boolean;
     private accounts$: Observable<AccountInfo[]>;
 
     private accountSub: Subscription;
+    private scheduledSub: Subscription;
     private notificationSub: Subscription;
 
     constructor(
+        private readonly scheduledStatusService: ScheduledStatusService,
         private readonly toolsService: ToolsService,
         private readonly userNotificationServiceService: UserNotificationService,
-        private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
-        private readonly mastodonService: MastodonService,
         private readonly store: Store) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
-    private currentLoading: number;
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
@@ -58,19 +55,11 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
                         accWrapper.info = acc;
 
                         this.accounts.push(accWrapper);
-                        
+
                         this.toolsService.getAvatar(acc)
                             .then((avatar: string) => {
                                 accWrapper.avatar = avatar;
-                            });                            
-
-                        // this.mastodonService.retrieveAccountDetails(acc)
-                        //     .then((result: Account) => {
-                        //         accWrapper.avatar = result.avatar;
-                        //     })
-                        //     .catch((err: HttpErrorResponse) => {
-                        //         this.notificationService.notifyHttpError(err);
-                        //     });
+                            });
                     }
                 }
 
@@ -87,10 +76,24 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.notificationSub = this.userNotificationServiceService.userNotifications.subscribe((notifications: UserNotification[]) => {
             notifications.forEach((notification: UserNotification) => {
                 const acc = this.accounts.find(x => x.info.id === notification.account.id);
-                if(acc){
+                if (acc) {
                     acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
                 }
             });
+        });
+
+        this.scheduledSub = this.scheduledStatusService.scheduledStatuses.subscribe((notifications: ScheduledStatusNotification[]) => {
+            console.warn(notifications);
+
+            let statuses = [];
+            notifications.forEach(n => {
+                n.statuses.forEach(x => {
+                    statuses.push(x);
+                })
+            })
+
+            this.hasScheduledStatuses = statuses.length > 0;
+            console.warn(`hasScheduledStatuses ${this.hasScheduledStatuses}`);
         });
     }
 
@@ -134,12 +137,5 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 }
 
 export class AccountWithNotificationWrapper extends AccountWrapper {
-    // constructor(accountWrapper: AccountWrapper) {
-    //     super();
-
-    //     this.avatar = accountWrapper.avatar;
-    //     this.info = accountWrapper.info;
-    // }
-
     hasActivityNotifications: boolean;
 }

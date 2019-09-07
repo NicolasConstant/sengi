@@ -34,7 +34,7 @@ export class ScheduledStatusService {
             .then(() => {
                 setTimeout(() => {
                     this.fetchScheduledStatus();
-                }, 70 * 1000);
+                }, 130 * 1000);
             });
     }
 

@@ -21,8 +21,9 @@
 
 
     <a class="left-bar-button left-bar-button--scheduled left-bar-button--bottom left-bar-link" href title="scheduled statuses" 
+        *ngIf="hasAccounts && hasScheduledStatuses"
         (click)="openScheduledStatuses()"
-        (contextmenu)="openScheduledStatuses()" *ngIf="hasAccounts">
+        (contextmenu)="openScheduledStatuses()">
         <fa-icon [icon]="faCalendarAlt"></fa-icon>
     </a>
 
