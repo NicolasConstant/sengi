@@ -1,8 +1,14 @@
+@import "mixins";
 
 $avatar-size: 40px;
 
 .scheduled-status {
-    padding: 0 5px 10px 5px;
+    margin: 0 5px;
+    padding: 5px 5px 5px 5px;
+
+    &__date {
+        margin-bottom: 1px;
+    }
 
     &__avatar {
         float: left;
@@ -25,4 +31,21 @@ $avatar-size: 40px;
         }
     }
 
+    &__edition {
+        @include clearfix;      
+
+        &--button {
+            @include clearButton;
+            transition: all .2s;
+            float: right;
+            margin: 5px 0 5px 5px;
+            padding: 5px 10px;
+
+            background-color: #273047;
+
+            &:hover {
+                background-color: #3b4769;
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 <div class="scheduled-status">
-    <div>
+    <div class="scheduled-status__date">
         {{ status.scheduled_at | date: 'MMM d, y, h:mm a' }}
     </div>
 
@@ -9,15 +9,18 @@
     </div>
 
     <div class="scheduled-status__content">
-
         <div class="scheduled-status__content--text scheduled-status__content--spoiler"
-            *ngIf="status.params.spoiler_text">
-            spoiler text: {{ status.params.spoiler_text }}
+            *ngIf="status.params.spoiler_text" title="spoiler">
+            {{ status.params.spoiler_text }}
         </div>
-        <div class="scheduled-status__content--text">
+        <div class="scheduled-status__content--text" title="status text">
             {{ status.params.text }}
         </div>
+    </div>
 
+    <div class="scheduled-status__edition">
+        <button class="scheduled-status__edition--button" title="delete status">Delete</button>
+        <button class="scheduled-status__edition--button" title="reschedule status">Reschedule</button>
 
     </div>
 </div>
