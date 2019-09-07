@@ -42,7 +42,7 @@
         <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
         <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
-            {{displayedAccount | accountEmoji }} has moved to <a href
+            <span innerHTML="{{displayedAccount | accountEmoji }}"></span> has moved to <br/><a href
                 (click)="openMigratedAccount(displayedAccount.moved)" class="profile__moved--link"
                 title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
         </div>

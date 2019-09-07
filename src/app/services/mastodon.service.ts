@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {           
+export class MastodonService {             
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -84,12 +84,14 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[]): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
         const statusData = new StatusData();
         statusData.status = status;
         statusData.media_ids = mediaIds;
+        statusData.poll = poll;
+        statusData.scheduled_at = scheduled_at;
 
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
@@ -385,6 +387,25 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.getCustomEmojis}`;
         return this.httpClient.get<Emoji[]>(route).toPromise();
     }   
+
+    getScheduledStatuses(account: AccountInfo): Promise<ScheduledStatus[]> {
+        let route = `https://${account.instance}${this.apiRoutes.getScheduledStatuses}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<ScheduledStatus[]>(route, { headers: headers }).toPromise();
+    }
+
+    changeScheduledStatus(account: AccountInfo, statusId: string, scheduled_at: string): Promise<ScheduledStatus>{
+        let route = `https://${account.instance}${this.apiRoutes.putScheduleStatus}`.replace('{0}', statusId);
+        route = `${route}?scheduled_at=${scheduled_at}`
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.put<ScheduledStatus>(route, null, { headers: headers }).toPromise();
+    }
+
+    deleteScheduledStatus(account: AccountInfo, statusId: string): Promise<any> {
+        let route = `https://${account.instance}${this.apiRoutes.deleteScheduleStatus}`.replace('{0}', statusId);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.delete<ScheduledStatus>(route, { headers: headers }).toPromise();
+    }
 }
 
 export enum VisibilityEnum {
@@ -397,11 +418,20 @@ export enum VisibilityEnum {
 
 class StatusData {
     status: string;
-    media_ids: string[];
     in_reply_to_id: string;
+    media_ids: string[];
+    poll: PollParameters;
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
+    scheduled_at: string;
+}
+
+export class PollParameters {
+    options: string [] = [];
+    expires_in: number;
+    multiple: boolean;
+    hide_totals: boolean;
 }
 
 export class FavoriteResult {

@@ -40,7 +40,7 @@ export class EmojiPickerComponent implements OnInit {
                 this.customEmojis = emojis.map(x => this.convertEmoji(x));
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, currentAccount);
             })
             .then(() => {
                 this.loaded = true;

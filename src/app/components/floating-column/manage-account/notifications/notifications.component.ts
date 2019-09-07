@@ -119,7 +119,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.lastId = notifications[notifications.length - 1].id;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;

@@ -161,7 +161,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 this.checkIfBoosted();
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             })
             .then(() => {
                 this.boostIsLoading = false;
@@ -192,7 +192,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 // this.isFavorited = !this.isFavorited;
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             })
             .then(() => {
                 this.favoriteIsLoading = false;

@@ -13,7 +13,7 @@ import { StatusWrapper } from '../../models/common.model';
     styleUrls: ['./floating-column.component.scss']
 })
 export class FloatingColumnComponent implements OnInit, OnDestroy {
-   
+
     faTimes = faTimes;
     overlayActive: boolean;
     overlayAccountToBrowse: string;
@@ -85,6 +85,13 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
                         this.openPanel = 'settings';
                     }
                     break;
+                case LeftPanelType.ScheduledStatuses:
+                    if (this.openPanel === 'scheduledStatuses') {
+                        this.closePanel();
+                    } else {
+                        this.openPanel = 'scheduledStatuses';
+                    }
+                    break;
                 default:
                     this.openPanel = '';
             }
@@ -92,7 +99,7 @@ export class FloatingColumnComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if(this.activatedPanelSub) {
+        if (this.activatedPanelSub) {
             this.activatedPanelSub.unsubscribe();
         }
     }

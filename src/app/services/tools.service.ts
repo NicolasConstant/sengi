@@ -11,10 +11,27 @@ import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
     providedIn: 'root'
 })
 export class ToolsService {
+    private accountAvatar: { [id: string]: string; } = {};
+
     constructor(
         private readonly mastodonService: MastodonService,
         private readonly store: Store) { }
 
+
+    getAvatar(acc: AccountInfo): Promise<string> {
+        if (this.accountAvatar[acc.id]) {
+            return Promise.resolve(this.accountAvatar[acc.id]);
+        } else {
+            return this.mastodonService.retrieveAccountDetails(acc)
+                .then((result: Account) => {
+                    this.accountAvatar[acc.id] = result.avatar;
+                    return result.avatar;
+                })
+                .catch((err) => {
+                    return "";
+                });
+        }
+    }
 
     getSelectedAccounts(): AccountInfo[] {
         var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;

@@ -3,11 +3,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
-import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
+import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope, faPollH } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
-import { MastodonService, VisibilityEnum } from '../../services/mastodon.service';
+import { MastodonService, VisibilityEnum, PollParameters } from '../../services/mastodon.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
@@ -19,6 +19,9 @@ import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/a
 import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
+import { PollEditorComponent } from './poll-editor/poll-editor.component';
+import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.component';
+import { ScheduledStatusService } from '../../services/scheduled-status.service';
 
 @Component({
     selector: 'app-create-status',
@@ -32,6 +35,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     faLock = faLock;
     faLockOpen = faLockOpen;
     faEnvelope = faEnvelope;
+    faPollH = faPollH;
+    faClock = faClock;
 
     autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
 
@@ -89,7 +94,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
                     })
                     .catch(err => {
-                        this.notificationService.notifyHttpError(err);
+                        this.notificationService.notifyHttpError(err, value.provider);
                     })
                     .then(() => {
                         this.isSending = false;
@@ -113,6 +118,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @ViewChild('fileInput') fileInputElement: ElementRef;
     @ViewChild('footer') footerElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+    @ViewChild(PollEditorComponent) pollEditor: PollEditorComponent;
+    @ViewChild(StatusSchedulerComponent) statusScheduler: StatusSchedulerComponent;
 
     private _isDirectMention: boolean;
     @Input('isDirectMention')
@@ -148,6 +155,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly scheduledStatusService: ScheduledStatusService,
         private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
         private readonly notificationService: NotificationService,
@@ -280,7 +288,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         this.countStatusChar(this.status);
                     })
                     .catch((err: HttpErrorResponse) => {
-                        this.notificationService.notifyHttpError(err);
+                        this.notificationService.notifyHttpError(err, this.selectedAccount);
                     });
             }
 
@@ -296,7 +304,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.setVisibility(defaultPrivacy);
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.selectedAccount);
             });
     }
 
@@ -432,17 +440,35 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             usableStatus = Promise.resolve(null);
         }
 
+        let poll: PollParameters = null;
+        if (this.pollIsActive) {
+            poll = this.pollEditor.getPollParameters();
+        }
+
+        let scheduledTime = null;
+        if(this.scheduleIsActive){
+            scheduledTime = this.statusScheduler.getScheduledDate();
+            if(!scheduledTime || scheduledTime === '') {
+                this.isSending = false;
+                return;
+            }
+        }
+
         usableStatus
             .then((status: Status) => {
-                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments);
+                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
             })
             .then((res: Status) => {
                 this.title = '';
                 this.status = '';
                 this.onClose.emit();
+
+                if(this.scheduleIsActive){
+                    this.scheduledStatusService.statusAdded(acc);
+                }
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, acc);
             })
             .then(() => {
                 this.isSending = false;
@@ -451,7 +477,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[]): Promise<Status> {
+
+    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
 
@@ -465,13 +492,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     }
 
                     if (i === 0) {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id))
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt)
                             .then((status: Status) => {
                                 this.mediaService.clearMedia();
                                 return status;
                             });
                     } else {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, []);
+                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt);
                     }
                 })
                 .then((status: Status) => {
@@ -611,7 +638,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let scrolling = (this.replyElement.nativeElement.scrollHeight);
 
         if (scrolling > 110) {
-            const isVisible = this.checkVisible(this.footerElement.nativeElement);            
+            const isVisible = this.checkVisible(this.footerElement.nativeElement);
             //this.replyElement.nativeElement.style.height = `0px`;
             this.replyElement.nativeElement.style.height = `${this.replyElement.nativeElement.scrollHeight}px`;
 
@@ -703,6 +730,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     closeEmoji(): boolean {
         this.overlayRef.dispose();
+        return false;
+    }
+
+    pollIsActive: boolean;
+    addPoll(): boolean {
+        this.pollIsActive = !this.pollIsActive;
+        return false;
+    }
+
+    scheduleIsActive: boolean;
+    schedule(): boolean {
+        this.scheduleIsActive = !this.scheduleIsActive;
         return false;
     }
 }

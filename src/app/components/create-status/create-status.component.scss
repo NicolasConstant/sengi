@@ -128,6 +128,13 @@ $counter-width: 90px;
             margin: 2px 0 0 5px;
         }
 
+        &--add-poll {
+            font-size: 16px;
+            margin: 0 0 0 5px;
+            position: relative;
+            top: 0px;
+        }
+
         &--send-button {
             @include clearButton;
             transition: all .2s;
@@ -183,11 +190,12 @@ $counter-width: 90px;
 }
 
 .emojipicker {
-
     font-size: $default-font-size !important;
+}
 
-
-
+.scheduler {
+    display: block;
+    margin: 0 5px;
 }
 
 @import '~@angular/cdk/overlay-prebuilt.css';
