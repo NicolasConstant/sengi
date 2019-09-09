@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PollEditorComponent } from './poll-editor.component';
 
-describe('PollEditorComponent', () => {
+xdescribe('PollEditorComponent', () => {
   let component: PollEditorComponent;
   let fixture: ComponentFixture<PollEditorComponent>;
 
