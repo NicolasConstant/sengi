@@ -16,6 +16,10 @@ export class StreamingService {
         private readonly mastodonService: MastodonService) { }
 
     getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
+
+        console.warn('EventSourceStreaminWrapper');
+        new EventSourceStreaminWrapper(accountInfo, stream);
+
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
     }
 }
@@ -138,6 +142,83 @@ export class StreamingWrapper {
                 return 'hashtag';
             case StreamTypeEnum.list:
                 return 'list';
+            default:
+                throw Error('Not supported');
+        }
+    }
+}
+
+export class EventSourceStreaminWrapper {
+    eventSource: EventSource;
+    private apiRoutes = new ApiRoutes();
+
+    constructor(
+        private readonly account: AccountInfo,
+        private readonly stream: StreamElement
+    ){
+        this.start();
+    }
+
+    private start(){
+        const route = this.getRoute();
+        this.eventSource = new EventSource(route);
+        this.eventSource.addEventListener('update', u => {
+            console.warn('update');
+            console.warn(u);
+        });
+        this.eventSource.addEventListener('delete', d => {
+            console.warn('delete');
+            console.warn(d);
+        });
+        this.eventSource.onmessage = x => {
+            console.log(x);
+            if(x.data !== ''){
+                this.onMessage(JSON.parse(x.data));
+            }
+        };
+        this.eventSource.onerror = x => {
+            this.onError(x);
+        };    
+        
+        console.warn('this.eventSource.CONNECTING');
+        console.warn(this.eventSource.CONNECTING);
+        console.warn('this.eventSource.OPEN');
+        console.warn(this.eventSource.OPEN);
+
+    }   
+
+    private onMessage(data) {
+        console.warn('onMessage');
+        console.warn(data);
+    }
+
+    private onError(data) {
+        console.warn('onError');
+        console.warn(data);
+    }
+
+    private getRoute(): string {
+        const streamingRouteType = this.getStreamingRouteType(this.stream.type);
+        let route = `https://${this.account.instance}/api/v1/streaming/${streamingRouteType}?access_token=${this.account.token.access_token}`;
+        return route;
+    }
+
+    private getStreamingRouteType(type: StreamTypeEnum): string {
+        switch (type) {
+            case StreamTypeEnum.global:
+                return 'public';
+            case StreamTypeEnum.local:
+                return 'public/local';
+            case StreamTypeEnum.personnal:
+                return 'user';
+            case StreamTypeEnum.directmessages:
+                return 'direct';
+            case StreamTypeEnum.tag:
+                return 'hashtag?tag={0}';
+            case StreamTypeEnum.list:
+                return 'list?list={0}';
+            case StreamTypeEnum.directmessages:
+                return 'direct';
             default:
                 throw Error('Not supported');
         }
