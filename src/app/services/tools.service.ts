@@ -12,11 +12,37 @@ import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
 })
 export class ToolsService {
     private accountAvatar: { [id: string]: string; } = {};
+    private instanceInfos: { [id: string]: InstanceInfo } = {};
 
     constructor(
         private readonly mastodonService: MastodonService,
         private readonly store: Store) { }
 
+    getInstanceInfo(acc: AccountInfo): Promise<InstanceInfo> {
+        if (this.instanceInfos[acc.instance]) {
+            return Promise.resolve(this.instanceInfos[acc.instance]);
+        } else {
+            return this.mastodonService.getInstance(acc.instance)
+                .then(instance => {
+                    var type = InstanceType.Mastodon;
+                    if (instance.version.toLowerCase().includes('pleroma')) {
+                        type = InstanceType.Pleroma;
+                    } else if (instance.version.toLowerCase().includes('+glitch')) {
+                        type = InstanceType.GlitchSoc;
+                    } else if (instance.version.toLowerCase().includes('+florence')) {
+                        type = InstanceType.Florence;
+                    }
+
+                    var splittedVersion = instance.version.split('.');
+                    var major = +splittedVersion[0];
+                    var minor = +splittedVersion[1];
+
+                    var instanceInfo = new InstanceInfo(type, major, minor);
+                    this.instanceInfos[acc.instance] = instanceInfo;
+                    return instanceInfo;
+                });
+        }
+    }
 
     getAvatar(acc: AccountInfo): Promise<string> {
         if (this.accountAvatar[acc.id]) {
@@ -60,7 +86,12 @@ export class ToolsService {
     }
 
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {
-        return this.mastodonService.search(account, accountName, true)
+        return this.getInstanceInfo(account)
+            .then(instance => {
+                let version: 'v1' | 'v2' = 'v1';
+                if (instance.major >= 3) version = 'v2';
+                return this.mastodonService.search(account, accountName, version, true);
+            })
             .then((result: Results) => {
                 if (accountName[0] === '@') accountName = accountName.substr(1);
 
@@ -80,13 +111,19 @@ export class ToolsService {
         let statusPromise: Promise<Status> = Promise.resolve(originalStatus.status);
 
         if (!isProvider) {
-            statusPromise = statusPromise.then((foreignStatus: Status) => {
-                const statusUrl = foreignStatus.url;
-                return this.mastodonService.search(account, statusUrl, true)
-                    .then((results: Results) => {
-                        return results.statuses[0];
-                    });
-            });
+            statusPromise = statusPromise
+                .then((foreignStatus: Status) => {
+                    const statusUrl = foreignStatus.url;
+                    return this.getInstanceInfo(account)
+                        .then(instance => {
+                            let version: 'v1' | 'v2' = 'v1';
+                            if (instance.major >= 3) version = 'v2';
+                            return this.mastodonService.search(account, statusUrl, version, true);
+                        })
+                        .then((results: Results) => {
+                            return results.statuses[0];
+                        });
+                });
         }
 
         return statusPromise;
@@ -120,4 +157,19 @@ export class OpenThreadEvent {
         public sourceAccount: AccountInfo
     ) {
     }
+}
+
+export class InstanceInfo {
+    constructor(
+        public readonly type: InstanceType,
+        public readonly major: number,
+        public readonly minor: number) {
+    }
+}
+
+export enum InstanceType {
+    Mastodon = 1,
+    Pleroma = 2,
+    GlitchSoc = 3,
+    Florence = 4
 }
