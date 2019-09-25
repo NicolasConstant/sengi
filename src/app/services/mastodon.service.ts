@@ -136,6 +136,16 @@ export class MastodonService {
         const route = `https://${account.instance}${searchRoute}?q=${query}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
+            .then((result: Results) => {
+                if(version === 'v2'){
+                    result = { 
+                        accounts: result.accounts,
+                        statuses: result.statuses,
+                        hashtags: result.hashtags.map(x => (<any>x).name)
+                    }
+                }
+                return result;
+            });
     }
 
     getAccountStatuses(account: AccountInfo, targetAccountId: number, onlyMedia: boolean, onlyPinned: boolean, excludeReplies: boolean, maxId: string, sinceId: string, limit: number = 20): Promise<Status[]> {
