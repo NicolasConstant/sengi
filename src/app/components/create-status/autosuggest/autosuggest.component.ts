@@ -64,7 +64,12 @@ export class AutosuggestComponent implements OnInit, OnDestroy {
         this.lastPatternUsed = pattern;
         this.lastPatternUsedWtType = value;
 
-        this.mastodonService.search(selectedAccount, pattern, false)
+        this.toolsService.getInstanceInfo(selectedAccount)
+            .then(instance => {
+                let version: 'v1' | 'v2' = 'v1';
+                if(instance.major >= 3) version = 'v2';
+                return this.mastodonService.search(selectedAccount, pattern, version, false);
+            })        
             .then((results: Results) => {
                 if (this.lastPatternUsed !== pattern) return;
 
