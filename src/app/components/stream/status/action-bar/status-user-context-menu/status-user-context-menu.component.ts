@@ -47,14 +47,14 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
-    ngOnInit() {       
+    ngOnInit() {
         if (this.statusWrapper) {
             const status = this.statusWrapper.status;
             if (status.reblog) {
                 this.displayedStatus = status.reblog;
             } else {
                 this.displayedStatus = status;
-            }           
+            }
         }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
@@ -63,7 +63,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         });
 
         let account: Account;
-        if(this.statusWrapper) {
+        if (this.statusWrapper) {
             account = this.displayedStatus.account;
         } else {
             account = this.displayedAccount;
@@ -82,7 +82,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy(): void {
-        if(this.accountSub) this.accountSub.unsubscribe();
+        if (this.accountSub) this.accountSub.unsubscribe();
     }
 
     public onContextMenu($event: MouseEvent): void {
@@ -259,10 +259,16 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         let statusPromise: Promise<Status> = Promise.resolve(this.statusWrapper.status);
 
         if (account.id !== this.statusWrapper.provider.id) {
-            statusPromise = this.mastodonService.search(account, this.statusWrapper.status.url, true)
-                .then((result: Results) => {
-                    return result.statuses[0];
-                });
+            statusPromise =
+                this.toolsService.getInstanceInfo(account)
+                    .then(instance => {
+                        let version: 'v1' | 'v2' = 'v1';
+                        if (instance.major >= 3) version = 'v2';
+                        return this.mastodonService.search(account, this.statusWrapper.status.url, version, true);
+                    })
+                    .then((result: Results) => {
+                        return result.statuses[0];
+                    });
         }
 
         return statusPromise;
