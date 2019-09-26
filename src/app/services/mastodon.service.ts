@@ -128,11 +128,24 @@ export class MastodonService {
         return this.httpClient.get<Status>(route, { headers: headers }).toPromise()
     }
 
-    search(account: AccountInfo, query: string, resolve: boolean = false): Promise<Results> {
+    search(account: AccountInfo, query: string, version: 'v1' | 'v2', resolve: boolean = false): Promise<Results> {
         if (query[0] === '#') query = query.substr(1);
-        const route = `https://${account.instance}${this.apiRoutes.search}?q=${query}&resolve=${resolve}`;
+        let searchRoute = this.apiRoutes.search;
+        if(version === 'v2') searchRoute = this.apiRoutes.searchV2;
+
+        const route = `https://${account.instance}${searchRoute}?q=${query}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
+            .then((result: Results) => {
+                if(version === 'v2'){
+                    result = { 
+                        accounts: result.accounts,
+                        statuses: result.statuses,
+                        hashtags: result.hashtags.map(x => (<any>x).name)
+                    }
+                }
+                return result;
+            });
     }
 
     getAccountStatuses(account: AccountInfo, targetAccountId: number, onlyMedia: boolean, onlyPinned: boolean, excludeReplies: boolean, maxId: string, sinceId: string, limit: number = 20): Promise<Status[]> {
