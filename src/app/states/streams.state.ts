@@ -129,7 +129,7 @@ export class StreamElement {
   
   export enum StreamTypeEnum {
     unknown = 0,
-    global = 1,
+    global = 1, //public    
     local = 2,
     personnal = 3,
     favorites = 4,
@@ -137,5 +137,6 @@ export class StreamElement {
     list = 6,
     directmessages = 7,
     tag = 8,
+    health = 9
 }
   
