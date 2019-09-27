@@ -69,7 +69,12 @@ export class SearchComponent implements OnInit {
 
         this.lastAccountUsed = this.toolsService.getSelectedAccounts()[0];
 
-        this.mastodonService.search(this.lastAccountUsed, data, true)
+        this.toolsService.getInstanceInfo(this.lastAccountUsed)
+            .then(instance => {
+                let version: 'v1' | 'v2' = 'v1';
+                if (instance.major >= 3) version = 'v2';
+                return this.mastodonService.search(this.lastAccountUsed, data, version, true)
+            })
             .then((results: Results) => {
                 if (results) {
                     this.accounts = results.accounts.slice(0, 5);
