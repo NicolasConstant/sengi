@@ -4,6 +4,7 @@ import { Select } from "@ngxs/store";
 
 import { StreamElement } from "../../states/streams.state";
 import { NavigationService } from "../../services/navigation.service";
+import { StreamComponent } from '../../components/stream/stream.component';
 
 @Component({
     selector: "app-streams-main-display",
@@ -12,6 +13,7 @@ import { NavigationService } from "../../services/navigation.service";
 })
 export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
 
+    @ViewChildren(StreamComponent) private streamComponents: QueryList<StreamComponent>;
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
     private columnSelectedSub: Subscription;
 
@@ -34,6 +36,9 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
         if (columnIndex > -1) {
             setTimeout(() => {
                 this.streamsElementRef.toArray()[columnIndex].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+
+                console.warn(this.streamComponents);
+                this.streamComponents.toArray()[columnIndex].focus();
             });
         }
     }

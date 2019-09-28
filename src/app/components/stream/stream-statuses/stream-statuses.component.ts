@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output, ViewChildren, QueryList } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
@@ -17,7 +17,7 @@ import { StatusWrapper } from '../../../models/common.model';
     templateUrl: './stream-statuses.component.html',
     styleUrls: ['./stream-statuses.component.scss']
 })
-export class StreamStatusesComponent implements OnInit, OnDestroy {
+export class StreamStatusesComponent implements OnInit, OnDestroy {   
     isLoading = true;
     isThread = false;
     displayError: string;
@@ -272,6 +272,22 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return regAccounts;
     }
 
+    @ViewChildren('status') private statusEls: QueryList<ElementRef>;
+    focus(): boolean {
+        // var element = this.statustream.nativeElement as HTMLElement;
+        // element.click();
+        console.warn(this.statusEls);
+        console.warn(this.statusEls.toArray()[0].nativeElement);
+        // this.statusEls.toArray()[0].elem.nativeElement.click();
+        // this.statusEls.toArray()[0].nativeElement.focus();
+        var element = this.statustream.nativeElement as HTMLElement;
+        element.focus();
+        element.click();
+        element.dispatchEvent(new Event('click'));
+        element.dispatchEvent(new Event('focus'));
+        this.statusEls.toArray()[0].nativeElement.dispatchEvent(new Event('click'));
+        return false;
+    }
 
     private retrieveToots(): void {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
