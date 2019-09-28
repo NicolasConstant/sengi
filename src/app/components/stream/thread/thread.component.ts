@@ -214,11 +214,12 @@ export class ThreadComponent implements OnInit, OnDestroy {
         this.browseThreadEvent.next(openThreadEvent);
     }
 
-    removeCw() {
+    removeCw(): boolean {
         const statuses = this.statusChildren.toArray();
         statuses.forEach(x => {
             x.removeContentWarning();
         });
         this.hasContentWarnings = false;
+        return false;
     }
 }

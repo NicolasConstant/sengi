@@ -1,19 +1,20 @@
-<div class="stream-toots flexcroll" #statusstream (scroll)="onScroll()">
+<div class="stream-toots">
     <div class="stream-toots__remove-cw" *ngIf="isThread && hasContentWarnings">
-        <button class="stream-toots__remove-cw--button" (click)="removeCw()"
-            title="remove content warnings">Remove CWs</button>
-    </div>
-    <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>
-
-    <!-- data-simplebar  -->
-    <div class="stream-toots__status" *ngFor="let statusWrapper of statuses" #status>
-        <app-status  
-            [statusWrapper]="statusWrapper" 
-            [isThreadDisplay]="isThread"
-            (browseAccountEvent)="browseAccount($event)"
-            (browseHashtagEvent)="browseHashtag($event)"
-            (browseThreadEvent)="browseThread($event)"></app-status>
+        <a href class="stream-toots__remove-cw--button" (click)="removeCw()" title="remove content warnings">
+            Remove CWs
+        </a>
     </div>
 
-    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+    <div class="stream-toots__content flexcroll" #statusstream (scroll)="onScroll()">
+        <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>
+
+        <!-- data-simplebar  -->
+        <div class="stream-toots__status" *ngFor="let statusWrapper of statuses" #status>
+            <app-status [statusWrapper]="statusWrapper" [isThreadDisplay]="isThread"
+                (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+                (browseThreadEvent)="browseThread($event)"></app-status>
+        </div>
+
+        <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+    </div>
 </div>
