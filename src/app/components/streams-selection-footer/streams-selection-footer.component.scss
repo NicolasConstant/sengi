@@ -1,29 +1,37 @@
 @import "variables";
 
 .streams-selection-footer {
-  width: calc(100%);
-  height: $stream-selector-height;
-  text-align: center;
+    width: calc(100%);
+    height: $stream-selector-height;
+    text-align: center;
 
-  background-color: $color-secondary;
+    background-color: $color-secondary;
 }
 
 .stream-selection {
-  display: inline-block;
-  width: 9px;
-  padding: 4px 5px 0 5px;
-  height: $stream-selector-height;
-  
-  &__column-reprensentation {
     display: inline-block;
-    width: 5px;
-    height: $stream-selector-height - 8px;
-    background-color:$font-link-primary;
+    width: 9px;
+    padding: 4px 5px 0 5px;
+    height: $stream-selector-height;
 
-   
-  }
+    &__column-reprensentation {
+        transition: all .2s;
+        display: inline-block;
+        width: 5px;
+        height: $stream-selector-height - 8px;
+        background-color: $font-link-primary;
 
-  &:hover  &__column-reprensentation{
-    background-color:$font-link-primary-hover;
-  }
+        &--selected {
+            height: ($stream-selector-height - 8px)/1.75;
+            background-color: rgb(168, 168, 168);
+        }
+    }
+
+    &:hover &__column-reprensentation {
+        background-color: $font-link-primary-hover;
+
+        &--selected {
+            background-color: rgb(255, 255, 255);
+        }
+    }
 }

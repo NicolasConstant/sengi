@@ -10,7 +10,7 @@ import { NavigationService } from '../../services/navigation.service';
     styleUrls: ['./streams-selection-footer.component.scss']
 })
 export class StreamsSelectionFooterComponent implements OnInit {
-    streams: StreamElement[] = [];
+    streams: SelectableStream[] = [];
     private streams$: Observable<StreamElement[]>;
 
     constructor(
@@ -21,11 +21,16 @@ export class StreamsSelectionFooterComponent implements OnInit {
 
     ngOnInit() {
         this.streams$.subscribe((streams: StreamElement[]) => {
-            this.streams = streams;
+            this.streams = streams.map(x => new SelectableStream(x));
         });
     }
 
     onColumnSelection(index: number): boolean {
+        this.streams.forEach(x => x.isSelected = false);
+        
+        const selectedStream = this.streams[index];
+        selectedStream.isSelected = true;
+
         this.navigationService.columnSelected(index);
         return false;
     }
@@ -51,4 +56,11 @@ export class StreamsSelectionFooterComponent implements OnInit {
         }
         return `${prefix}@${stream.instance}`;
     }
+}
+
+class SelectableStream {
+    constructor(public readonly stream: StreamElement){
+    }
+
+    isSelected: boolean;
 }
