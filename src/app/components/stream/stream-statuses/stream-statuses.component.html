@@ -5,12 +5,13 @@
         </a>
     </div>
 
-    <div class="stream-toots__content flexcroll" #statusstream (scroll)="onScroll()">
+    <div class="stream-toots__content flexcroll" #statusstream (scroll)="onScroll()" tabindex="0">
         <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>
 
         <!-- data-simplebar  -->
         <div class="stream-toots__status" *ngFor="let statusWrapper of statuses" #status>
-            <app-status [statusWrapper]="statusWrapper" [isThreadDisplay]="isThread"
+            <app-status 
+                [statusWrapper]="statusWrapper" [isThreadDisplay]="isThread"
                 (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
                 (browseThreadEvent)="browseThread($event)"></app-status>
         </div>

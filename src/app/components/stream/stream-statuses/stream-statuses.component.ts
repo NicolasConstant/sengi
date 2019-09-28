@@ -17,7 +17,7 @@ import { StatusWrapper } from '../../../models/common.model';
     templateUrl: './stream-statuses.component.html',
     styleUrls: ['./stream-statuses.component.scss']
 })
-export class StreamStatusesComponent implements OnInit, OnDestroy {   
+export class StreamStatusesComponent implements OnInit, OnDestroy {
     isLoading = true;
     isThread = false;
     displayError: string;
@@ -79,7 +79,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
         this.streamsSubscription = this.streams$.subscribe((streams: StreamElement[]) => {
             let updatedStream = streams.find(x => x.id === this.streamElement.id);
-            if(!updatedStream) return;
+            if (!updatedStream) return;
 
             if (this.hideBoosts !== updatedStream.hideBoosts
                 || this.hideBots !== updatedStream.hideBots
@@ -272,20 +272,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return regAccounts;
     }
 
-    @ViewChildren('status') private statusEls: QueryList<ElementRef>;
+    // @ViewChildren('status') private statusEls: QueryList<ElementRef>;
     focus(): boolean {
-        // var element = this.statustream.nativeElement as HTMLElement;
-        // element.click();
-        console.warn(this.statusEls);
-        console.warn(this.statusEls.toArray()[0].nativeElement);
-        // this.statusEls.toArray()[0].elem.nativeElement.click();
-        // this.statusEls.toArray()[0].nativeElement.focus();
-        var element = this.statustream.nativeElement as HTMLElement;
-        element.focus();
-        element.click();
-        element.dispatchEvent(new Event('click'));
-        element.dispatchEvent(new Event('focus'));
-        this.statusEls.toArray()[0].nativeElement.dispatchEvent(new Event('click'));
+        setTimeout(() => {
+            var element = this.statustream.nativeElement as HTMLElement;
+            element.focus();
+        }, 500);
         return false;
     }
 

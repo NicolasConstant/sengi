@@ -16,6 +16,10 @@
     &__content {
         height: calc(100%);
         overflow: auto;
+        outline: none; 
+        :focus {
+            outline: none; 
+        }
     }
 
     &__status:not(:last-child) {
