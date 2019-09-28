@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StreamElement, StreamTypeEnum } from '../../states/streams.state';
 import { Store } from '@ngxs/store';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+
+import { StreamElement, StreamTypeEnum } from '../../states/streams.state';
 import { NavigationService } from '../../services/navigation.service';
 
 @Component({
@@ -14,9 +16,20 @@ export class StreamsSelectionFooterComponent implements OnInit {
     private streams$: Observable<StreamElement[]>;
 
     constructor(
+        private readonly hotkeysService: HotkeysService,
         private readonly navigationService: NavigationService,
         private readonly store: Store) {
         this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
+
+        this.hotkeysService.add(new Hotkey('ctrl+right', (event: KeyboardEvent): boolean => {
+            this.nextColumnSelected();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('ctrl+left', (event: KeyboardEvent): boolean => {
+            this.previousColumnSelected();
+            return false;
+        }));
     }
 
     ngOnInit() {
@@ -25,9 +38,36 @@ export class StreamsSelectionFooterComponent implements OnInit {
         });
     }
 
+    private nextColumnSelected() {
+        const nbStreams =  this.streams.length;
+        const selectedElement = this.streams.find(x => x.isSelected);
+        let currentSelectionIndex = 0;
+        if (selectedElement) {
+            currentSelectionIndex = this.streams.indexOf(selectedElement);
+        }
+
+        if(currentSelectionIndex < nbStreams - 1){
+            this.onColumnSelection(currentSelectionIndex + 1);
+        }
+    }
+
+    private previousColumnSelected() {
+        const selectedElement = this.streams.find(x => x.isSelected);
+        let currentSelectionIndex = 0;
+        if (selectedElement) {
+            currentSelectionIndex = this.streams.indexOf(selectedElement);
+        }
+
+        if(currentSelectionIndex > 0){
+            this.onColumnSelection(currentSelectionIndex - 1);
+        } else {
+            this.onColumnSelection(0);
+        }
+    }
+
     onColumnSelection(index: number): boolean {
         this.streams.forEach(x => x.isSelected = false);
-        
+
         const selectedStream = this.streams[index];
         selectedStream.isSelected = true;
 
@@ -59,7 +99,7 @@ export class StreamsSelectionFooterComponent implements OnInit {
 }
 
 class SelectableStream {
-    constructor(public readonly stream: StreamElement){
+    constructor(public readonly stream: StreamElement) {
     }
 
     isSelected: boolean;
