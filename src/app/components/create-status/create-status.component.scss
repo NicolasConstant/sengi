@@ -148,6 +148,11 @@ $counter-width: 90px;
                 background-color: darken($status-editor-footer-background, 20%);
             }
 
+            outline: inherit;
+            &:focus {
+                background-color: darken($status-editor-footer-background, 20%);
+            }
+
             & span {
                 margin: 0;
                 padding: 0;

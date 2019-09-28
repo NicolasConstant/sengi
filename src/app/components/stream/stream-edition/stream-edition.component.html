@@ -1,12 +1,12 @@
 <div class="stream-edition">
     <div class="stream-edition__settings">
         <div class="stream-edition__setting">
-            <input [(ngModel)]="hideBoosts" (change)="settingsChanged()"
+            <input [(ngModel)]="hideBoosts" (change)="settingsChanged()" 
             class="stream-edition__setting--checkbox" type="checkbox" id="hideBoosts"> <label for="hideBoosts" class="noselect">hide
                 boosts</label><br />
         </div>
         <div class="stream-edition__setting">
-            <input [(ngModel)]="hideReplies" (change)="settingsChanged()"
+            <input [(ngModel)]="hideReplies" (change)="settingsChanged()" 
             class="stream-edition__setting--checkbox" type="checkbox" id="hideReplies"> <label for="hideReplies" class="noselect">hide
                 replies</label><br />
         </div>
@@ -17,7 +17,8 @@
         </div>
     </div>
     <div>
-        <button (click)="delete()" class="stream-edition__button stream-edition__button--delete" title="remove column">
+        <button (click)="delete()"
+            class="stream-edition__button stream-edition__button--delete" title="remove column" >
             <fa-icon [icon]="faTimes"></fa-icon> <span class="stream-edition__button--delete--label">remove</span>
         </button>
 
@@ -26,7 +27,8 @@
             title="move right">
             <fa-icon [icon]="faChevronRight"></fa-icon>
         </button>
-        <button (click)="moveLeft()" class="stream-edition__button stream-edition__button--move" title="move left">
+        <button (click)="moveLeft()"
+            class="stream-edition__button stream-edition__button--move" title="move left">
             <fa-icon [icon]="faChevronLeft"></fa-icon>
         </button>
     </div>
