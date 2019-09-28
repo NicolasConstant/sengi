@@ -64,7 +64,7 @@ export class AttachementsComponent implements OnInit {
         return this.videoplayer.nativeElement;
     }
 
-    onPlay() {
+    onPlay(): boolean {
         if (!this.isPlaying) {
             this.getVideo().play();
         } else {
@@ -72,10 +72,10 @@ export class AttachementsComponent implements OnInit {
         }
 
         this.isPlaying = !this.isPlaying;
-
+        return false;
     }
 
-    onExpand() {
+    onExpand(): boolean {
         if (!this.isMuted) {
             this.onMute();
         }
@@ -85,11 +85,13 @@ export class AttachementsComponent implements OnInit {
         }
 
         this.attachmentSelected(0);
+        return false;
     }
 
-    onMute() {        
+    onMute(): boolean {        
         this.isMuted = !this.isMuted;
         this.getVideo().muted = this.isMuted;
+        return false;
     }
 
     setAudioData(att: Attachment): any {
