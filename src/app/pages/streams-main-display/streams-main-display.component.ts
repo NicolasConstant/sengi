@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, QueryList, ViewChildren, ElementRef } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
 import { Select } from "@ngxs/store";
+import scrollIntoView from "smooth-scroll-into-view-if-needed";
 
 import { StreamElement } from "../../states/streams.state";
 import { NavigationService } from "../../services/navigation.service";
@@ -35,11 +36,21 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
     private focusOnColumn(columnIndex: number): void {
         if (columnIndex > -1) {
             setTimeout(() => {
-                this.streamsElementRef.toArray()[columnIndex].nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                let element = this.streamsElementRef.toArray()[columnIndex].nativeElement;
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 
-                console.warn(this.streamComponents);
-                this.streamComponents.toArray()[columnIndex].focus();
-            });
+                const scrolling = <Promise<any>><any>scrollIntoView(element, { behavior: 'smooth', block: 'nearest'});
+                scrolling
+                    .then(() => {
+                        this.streamComponents.toArray()[columnIndex].focus();
+                    });
+
+                // setTimeout(() => {
+                //     this.streamComponents.toArray()[columnIndex].focus();
+                // }, 500);
+            }, 0);
+
+
         }
     }
 }

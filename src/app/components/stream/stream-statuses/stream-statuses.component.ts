@@ -277,7 +277,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             var element = this.statustream.nativeElement as HTMLElement;
             element.focus();
-        }, 500);
+        }, 0);
         return false;
     }
 

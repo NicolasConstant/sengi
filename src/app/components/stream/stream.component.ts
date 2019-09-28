@@ -61,7 +61,9 @@ export class StreamComponent implements OnInit {
     }
 
     focus(): boolean {
-        this.streamStatusesComponent.focus();
+        if (!this.overlayActive) {
+            this.streamStatusesComponent.focus();
+        }
         return false;
     }
 
