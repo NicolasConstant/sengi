@@ -2,8 +2,7 @@
 @import "mixins";
 @import "commons";
 $header-content-height: 40px;
-.stream-overlay {
-    // width: $stream-column-width;    
+.overlay {
     height: calc(100%);
     background-color: $column-color;
     position: relative;
@@ -11,13 +10,8 @@ $header-content-height: 40px;
     &__header {
         width: calc(100%);
         height: $header-content-height;
-        background-color: $column-header-background-color; // padding: 6px 10px 0 10px;
-        border-bottom: 1px solid #222736;
-        & a {
-            color: whitesmoke;
-            font-size: 0.8em;
-            font-weight: normal;
-        }
+        background-color: $column-header-background-color; 
+        border-bottom: 1px solid #222736;        
     }
     &__content-wrapper  {
         transition: all .2s;
@@ -26,9 +20,6 @@ $header-content-height: 40px;
         right: 0;
         left: 0;
         bottom: 0;
-
-        // outline: 1px solid greenyellow;
-        // background-color: salmon;
         
         z-index: 1;
         opacity: 0;
@@ -51,12 +42,8 @@ $header-content-height: 40px;
         border-bottom: 1px solid whitesmoke;
         padding: 3px 10px 0 10px;
     }
-}
 
-.overlay {
-    margin: 0;
     &__button {
-        @include clearButton;
         width: 25px;
         height: 25px;
         color: #354060;
@@ -78,21 +65,35 @@ $header-content-height: 40px;
         display: block;
         float: left;
         font-size: 18px;
-        & fa-icon {
+
+        &__icon {
             position: relative;
-            left: -1px;
+            left: 7px;
+            top: -1px
+        }
+    }
+    &-next {
+        display: block;
+        float: left;
+        font-size: 18px;
+
+        &__icon {
+            position: relative;
+            left: 8px;
+            top: -1px
         }
     }
     &-refresh {
         display: block;
         float: left;
         font-size: 14px;
-    }
-    &-next {
-        display: block;
-        float: left;
-        font-size: 18px;
-    }
+
+        &__icon {
+            position: relative;
+            left: 5px;
+            top: 1px
+        }
+    }   
     &-gototop {
         position: absolute;
         top: 0;
@@ -104,9 +105,15 @@ $header-content-height: 40px;
     &-close {
         display: block;
         float: right;
-        font-size: 14px;
+        font-size: 13px;
         color: white;
         margin-right: 8px;
+
+        &__icon {
+            position: relative;
+            left: 7px;
+            top: 1px
+        }
     }    
 }
 
