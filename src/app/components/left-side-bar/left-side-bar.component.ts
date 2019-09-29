@@ -3,6 +3,7 @@ import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
 import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { AccountWrapper } from "../../models/account.models";
 import { AccountInfo, SelectAccount } from "../../states/accounts.state";
@@ -33,6 +34,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private notificationSub: Subscription;
 
     constructor(
+        private readonly hotkeysService: HotkeysService,
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly toolsService: ToolsService,
         private readonly userNotificationServiceService: UserNotificationService,
@@ -40,6 +42,63 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         private readonly store: Store) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+
+        this.hotkeysService.add(new Hotkey('n', (event: KeyboardEvent): boolean => {
+            this.createNewStatus();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('s', (event: KeyboardEvent): boolean => {
+            this.openSearch();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('a', (event: KeyboardEvent): boolean => {
+            this.addNewAccount();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('c', (event: KeyboardEvent): boolean => {
+            this.navigationService.openPanel(LeftPanelType.Closed);
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('escape', (event: KeyboardEvent): boolean => {
+            this.navigationService.openPanel(LeftPanelType.Closed);
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('ctrl+up', (event: KeyboardEvent): boolean => {
+            this.selectPreviousAccount();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('ctrl+down', (event: KeyboardEvent): boolean => {
+            this.selectNextAccount();
+            return false;
+        }));
+    }
+
+    private selectPreviousAccount(){
+        let accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        let selectedAccount = accounts.find(x => x.isSelected);
+        let selectedIndex = accounts.indexOf(selectedAccount);
+
+        if(selectedIndex > 0){
+            let previousAccount = accounts[selectedIndex - 1];
+            this.store.dispatch([new SelectAccount(previousAccount)]);
+        }        
+    }
+
+    private selectNextAccount(){
+        let accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        let selectedAccount = accounts.find(x => x.isSelected);
+        let selectedIndex = accounts.indexOf(selectedAccount);
+
+        if(selectedIndex < accounts.length - 1){
+            let nextAccount = accounts[selectedIndex + 1];
+            this.store.dispatch([new SelectAccount(nextAccount)]);
+        }
     }
 
     ngOnInit() {
@@ -100,6 +159,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.accountSub.unsubscribe();
         this.notificationSub.unsubscribe();
+        this.scheduledSub.unsubscribe();
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
