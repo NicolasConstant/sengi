@@ -181,6 +181,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 behavior: 'smooth'
             });
         }, 0);
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'auto'
+            });
+        }, 250);
         return false;
     }
 
