@@ -16,6 +16,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { HotkeyModule } from 'angular2-hotkeys';
 
 import { AppComponent } from "./app.component";
 import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.component";
@@ -159,7 +160,8 @@ const routes: Routes = [
             SettingsState
         ]),
         NgxsStoragePluginModule.forRoot(),
-        ContextMenuModule.forRoot()
+        ContextMenuModule.forRoot(),
+        HotkeyModule.forRoot()
     ],
     providers: [AuthService, NavigationService, NotificationService, MastodonService, StreamingService],
     bootstrap: [AppComponent],

@@ -1,19 +1,19 @@
 <div class="media-viewer-canvas noselect">
     <div class="background__close" (click)="close()"></div>
 
-    <button class="media-viewer-canvas__close media-viewer-canvas__button" title="close" (click)="close()">
+    <a href class="media-viewer-canvas__close media-viewer-canvas__button" title="close" (click)="close()">
         <fa-icon [icon]="faTimes"></fa-icon>
-    </button>
+    </a>
 
-    <button class="media-viewer-canvas__previous media-viewer-canvas__button" title="previous"
+    <a href class="media-viewer-canvas__previous media-viewer-canvas__button" title="previous"
         (click)="previous($event)" *ngIf="previousAvailable">
         <fa-icon [icon]="faAngleLeft"></fa-icon>
-    </button>
+    </a>
 
-    <button class="media-viewer-canvas__next media-viewer-canvas__button" title="next" (click)="next($event)"
+    <a href class="media-viewer-canvas__next media-viewer-canvas__button" title="next" (click)="next($event)"
         *ngIf="nextAvailable">
         <fa-icon [icon]="faAngleRight"></fa-icon>
-    </button>
+    </a>
 
     <div *ngFor="let att of attachments" class="media-viewer-canvas__attachement"
         [class.collapsed]="currentIndex !== att.index">

@@ -60,12 +60,12 @@ export class ToolsService {
     }
 
     getSelectedAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        let regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         return regAccounts.filter(x => x.isSelected);
     }
 
     getAccountSettings(account: AccountInfo): AccountSettings {
-        var accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
+        let accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
         let accountSettings = accountsSettings.find(x => x.accountId === account.id);
         if (!accountSettings) {
             accountSettings = new AccountSettings();

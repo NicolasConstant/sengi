@@ -124,8 +124,8 @@
         padding-top: 55px;
 
         &--button {
-            @include clearButton;
-            color: rgb(211, 211, 211);
+            display: inline-block;
+            color: rgb(211, 211, 211);            
             font-size: 16px;
             padding: 10px 15px;
 

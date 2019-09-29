@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output, ViewChildren, QueryList } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
@@ -79,7 +79,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
         this.streamsSubscription = this.streams$.subscribe((streams: StreamElement[]) => {
             let updatedStream = streams.find(x => x.id === this.streamElement.id);
-            if(!updatedStream) return;
+            if (!updatedStream) return;
 
             if (this.hideBoosts !== updatedStream.hideBoosts
                 || this.hideBots !== updatedStream.hideBots
@@ -181,6 +181,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 behavior: 'smooth'
             });
         }, 0);
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'auto'
+            });
+        }, 250);
         return false;
     }
 
@@ -272,6 +278,14 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return regAccounts;
     }
 
+    // @ViewChildren('status') private statusEls: QueryList<ElementRef>;
+    focus(): boolean {
+        setTimeout(() => {
+            var element = this.statustream.nativeElement as HTMLElement;
+            element.focus();
+        }, 0);
+        return false;
+    }
 
     private retrieveToots(): void {
         this.mastodonService.getTimeline(this.account, this._streamElement.type, null, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)

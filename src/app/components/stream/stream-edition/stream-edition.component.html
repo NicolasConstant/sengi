@@ -1,33 +1,33 @@
 <div class="stream-edition">
     <div class="stream-edition__settings">
         <div class="stream-edition__setting">
-            <input [(ngModel)]="hideBoosts" (change)="settingsChanged()"
-            class="stream-edition__setting--checkbox" type="checkbox" id="hideBoosts"> <label for="hideBoosts" class="noselect">hide
+            <input [(ngModel)]="hideBoosts" (change)="settingsChanged()" class="stream-edition__setting--checkbox"
+                type="checkbox" id="hideBoosts"> <label for="hideBoosts" class="noselect">hide
                 boosts</label><br />
         </div>
         <div class="stream-edition__setting">
-            <input [(ngModel)]="hideReplies" (change)="settingsChanged()"
-            class="stream-edition__setting--checkbox" type="checkbox" id="hideReplies"> <label for="hideReplies" class="noselect">hide
+            <input [(ngModel)]="hideReplies" (change)="settingsChanged()" class="stream-edition__setting--checkbox"
+                type="checkbox" id="hideReplies"> <label for="hideReplies" class="noselect">hide
                 replies</label><br />
         </div>
         <div class="stream-edition__setting">
-            <input [(ngModel)]="hideBots" (change)="settingsChanged()"
-            class="stream-edition__setting--checkbox" type="checkbox" id="hideBots" > <label for="hideBots" class="noselect">hide
+            <input [(ngModel)]="hideBots" (change)="settingsChanged()" class="stream-edition__setting--checkbox"
+                type="checkbox" id="hideBots"> <label for="hideBots" class="noselect">hide
                 bots</label><br />
         </div>
     </div>
     <div>
-        <button (click)="delete()" class="stream-edition__button stream-edition__button--delete" title="remove column">
+        <a href (click)="delete()" class="stream-edition__button stream-edition__button--delete" title="remove column">
             <fa-icon [icon]="faTimes"></fa-icon> <span class="stream-edition__button--delete--label">remove</span>
-        </button>
+        </a>
 
-        <button (click)="moveRight()"
+        <a href (click)="moveRight()"
             class="stream-edition__button stream-edition__button--move stream-edition__button--move--right"
             title="move right">
             <fa-icon [icon]="faChevronRight"></fa-icon>
-        </button>
-        <button (click)="moveLeft()" class="stream-edition__button stream-edition__button--move" title="move left">
+        </a>
+        <a href (click)="moveLeft()" class="stream-edition__button stream-edition__button--move" title="move left">
             <fa-icon [icon]="faChevronLeft"></fa-icon>
-        </button>
+        </a>
     </div>
 </div>

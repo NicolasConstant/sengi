@@ -43,7 +43,7 @@
     &__stream-selector {
         display: block;
         width: $stream-column-width;
-        height: $stream-header-height;
+        height: calc(#{$stream-header-height} - 1px);
         background-color: $column-header-background-color;
         text-decoration: none; 
         color: whitesmoke;
