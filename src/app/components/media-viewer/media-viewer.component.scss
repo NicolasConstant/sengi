@@ -10,7 +10,7 @@
     position: relative;   
     
     &__button {
-        @include clearButton;
+        display: block;
         padding: 5px;
         position: absolute;
     }

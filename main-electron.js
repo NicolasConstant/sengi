@@ -70,6 +70,18 @@ function createWindow() {
         Menu.setApplicationMenu(
             Menu.buildFromTemplate([
                 {
+                    label: "Sengi",
+                    submenu: [                        
+                        { role: "close" },
+                        { role: 'quit' }
+                    ]
+                },
+                // {
+                //     label: "File",
+                //     submenu: [                       
+                //     ]
+                // },
+                {
                     label: "Edit",
                     submenu: [
                         { role: "undo" },
@@ -80,12 +92,14 @@ function createWindow() {
                         { role: "paste" },
                         { role: "pasteandmatchstyle" },
                         { role: "delete" },
-                        { role: "selectall" },
-                        { type: "separator" },
-                        { role: "close" },
-                        { role: 'quit' }
+                        { role: "selectall" }
                     ]
                 },
+                // {
+                //     label: "Format",
+                //     submenu: [
+                //     ]
+                // },
                 {
                     label: "View",
                     submenu: [
@@ -102,8 +116,13 @@ function createWindow() {
                         { role: 'togglefullscreen' }
                     ]
                 },
+                // {
+                //     label: "Window",
+                //     submenu: [
+                //     ]
+                // },
                 {
-                    role: "help",
+                    role: "Help",
                     submenu: [
                         { role: "toggledevtools" },
                         {

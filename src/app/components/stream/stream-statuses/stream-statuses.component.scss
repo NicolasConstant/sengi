@@ -4,45 +4,64 @@
 .stream-toots {
     height: calc(100%);
     width: calc(100%);
-    overflow: auto;
+    
+    // overflow: auto;
+    position: relative;
+
     &__error {
         padding: 20px 20px 0 20px;
         color: rgb(255, 113, 113);
     }
+
+    &__content {
+        height: calc(100%);
+        overflow: auto;
+        outline: none; 
+        :focus {
+            outline: none; 
+        }
+    }
+
     &__status:not(:last-child) {
         border: solid #06070b;
         border-width: 0 0 1px 0;
     }
-    &__remove-cw {       
+    &__remove-cw {   
+        z-index: 100;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        
         padding: 5px;
-        // border: solid #06070b;
-        // border-width: 0 0 1px 0;
         height: 45px;
-        // width: calc(100%);
-        // position: relative;
 
-        &--button {
-            @include clearButton;
+        &--button {          
 
-            // position: absolute;
+          
             // width: calc(80%);
             // margin-left: 40%;
             // transform: translateX(-40%);
-
-            width: calc(100%);
-            padding: 5px 0;
-
-            z-index: 10;            
-            text-align: center;
-            border: 3px $status-secondary-color double;            
+            
             transition: all .2s;
+            text-decoration: none;            
+            padding: 5px 5px;   
+            padding: 5px 10px;       
+            text-align: center;
+
+            border: 3px $status-secondary-color double;    
+            border: 0;           
+            
             background-color: $color-secondary;
+            background-color: $status-secondary-color;
+            // background-color: rgb(238, 238, 238);
+            color: white;
 
             &:hover{
-                $hover-color: $status-secondary-color;
-                background-color: $hover-color;
-                color: white;
-                border: 3px $hover-color double;
+                background-color: $status-secondary-color;
+                background-color: rgb(238, 238, 238);
+                color: black;
+                
+                //border: 3px $hover-color double;                
             }
         }
     }
