@@ -1,15 +1,12 @@
 @import "variables";
 
-.card {    
+.card-data {    
     border-radius: 3px;
     border: 0px;
     
     transition: all .2s;
     white-space: nowrap;
-    overflow: hidden;
-    
-    background-color: $column-background;
-    // background-color: red;
+    overflow: hidden;    
 
     &:hover {
         background-color: lighten($column-background, 5);
@@ -19,6 +16,7 @@
         display: block;
         text-decoration: none;
         color: whitesmoke;
+        overflow: auto;
 
         border: 1px solid $card-border-color;
 
