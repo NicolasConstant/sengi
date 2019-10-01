@@ -29,10 +29,6 @@
         <div #video *ngIf="showHtml" class="card__video--content" [innerHTML]="html">
 
         </div>
-        <!-- {{ card.html }} -->
-        <!-- <div [innerHTML]="html">
-
-        </div> -->
     </div>
     <div *ngIf="card.type === 'rich'" class="card__rich" [innerHTML]="html"></div>
 </div>
