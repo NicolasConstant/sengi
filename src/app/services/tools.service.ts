@@ -31,6 +31,8 @@ export class ToolsService {
                         type = InstanceType.GlitchSoc;
                     } else if (instance.version.toLowerCase().includes('+florence')) {
                         type = InstanceType.Florence;
+                    } else if (instance.version.toLowerCase().includes('pixelfed')) {
+                        type = InstanceType.Pixelfed;
                     }
 
                     var splittedVersion = instance.version.split('.');
@@ -39,6 +41,7 @@ export class ToolsService {
 
                     var instanceInfo = new InstanceInfo(type, major, minor);
                     this.instanceInfos[acc.instance] = instanceInfo;
+
                     return instanceInfo;
                 });
         }
@@ -171,5 +174,6 @@ export enum InstanceType {
     Mastodon = 1,
     Pleroma = 2,
     GlitchSoc = 3,
-    Florence = 4
+    Florence = 4,
+    Pixelfed = 5
 }
