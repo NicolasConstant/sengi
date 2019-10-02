@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
-import { MastodonService } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
@@ -15,7 +15,7 @@ export class ToolsService {
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
     constructor(
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) { }
 
     getInstanceInfo(acc: AccountInfo): Promise<InstanceInfo> {

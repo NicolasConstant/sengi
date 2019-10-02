@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { AccountWrapper } from '../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 import { OpenThreadEvent } from '../../../services/tools.service';
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { Account } from "../../../services/models/mastodon.interfaces";
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
@@ -49,7 +49,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     private _account: AccountWrapper;
 
     constructor(
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService) { }
 

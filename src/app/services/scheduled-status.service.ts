@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject } from 'rxjs';
 
-import { MastodonService } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { AccountInfo } from '../states/accounts.state';
 import { ScheduledStatus } from './models/mastodon.interfaces';
 import { NotificationService } from './notification.service';
@@ -15,7 +15,7 @@ export class ScheduledStatusService {
 
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) {
 
         this.fetchScheduledStatus();

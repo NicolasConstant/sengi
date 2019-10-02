@@ -28,7 +28,7 @@ export class MastodonService {
         return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
     }
 
-    getConversations(account: AccountInfo, max_id: string = null, since_id: string = null, min_id = null, limit: number = 20,): Promise<Conversation[]> {        
+    getConversations(account: AccountInfo, max_id: string = null, since_id: string = null, min_id = null, limit: number = 20): Promise<Conversation[]> {        
         let params = `?limit=${limit}`;
         if (max_id) params += `&max_id=${max_id}`;
         if (since_id) params += `&since_id=${since_id}`;

@@ -4,7 +4,7 @@ import { BehaviorSubject } from "rxjs";
 import { Status } from "./models/mastodon.interfaces";
 import { ApiRoutes } from "./models/api.settings";
 import { StreamTypeEnum, StreamElement } from "../states/streams.state";
-import { MastodonService } from "./mastodon.service";
+import { MastodonWrapperService } from "./mastodon-wrapper.service";
 import { AccountInfo } from "../states/accounts.state";
 
 @Injectable()
@@ -13,7 +13,7 @@ export class StreamingService {
     public readonly nbStatusPerIteration: number = 20;
 
     constructor(
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
@@ -29,7 +29,7 @@ export class StreamingWrapper {
     private disposed: boolean;
 
     constructor(
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly account: AccountInfo,
         private readonly stream: StreamElement,
         private readonly nbStatusPerIteration: number) {

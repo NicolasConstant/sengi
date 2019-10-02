@@ -5,7 +5,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 import { Poll, PollOption, Status } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { ToolsService } from '../../../../services/tools.service';
 import { StatusWrapper } from '../../../../models/common.model';
@@ -67,7 +67,7 @@ export class PollComponent implements OnInit {
         private readonly store: Store,
         private notificationService: NotificationService,
         private toolsService: ToolsService,
-        private mastodonService: MastodonService) {
+        private mastodonService: MastodonWrapperService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }

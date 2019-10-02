@@ -9,7 +9,7 @@ import { StreamElement, StreamTypeEnum, AddStream, RemoveAllStreams, RemoveStrea
 import { AccountWrapper } from '../../../../models/account.models';
 import { RemoveAccount } from '../../../../states/accounts.state';
 import { NavigationService } from '../../../../services/navigation.service';
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { ToolsService } from '../../../../services/tools.service';
 import { AccountSettings } from '../../../../states/settings.state';
 
@@ -51,7 +51,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         private readonly store: Store,
         private readonly toolsService: ToolsService,
         private readonly navigationService: NavigationService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService) { }
 
     ngOnInit() {

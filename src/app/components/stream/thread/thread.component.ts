@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { Results, Context, Status } from '../../../services/models/mastodon.interfaces';
 import { NotificationService, NewReplyData } from '../../../services/notification.service';
@@ -50,7 +50,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
         if (this.refreshEventEmitter) {

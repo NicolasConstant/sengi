@@ -8,7 +8,7 @@ import { TokenData, Account } from "../../services/models/mastodon.interfaces";
 import { RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
 import { AccountInfo, AddAccount, AccountsStateModel } from "../../states/accounts.state";
 import { NotificationService } from "../../services/notification.service";
-import { MastodonService } from '../../services/mastodon.service';
+import { MastodonWrapperService } from '../../services/mastodon-wrapper.service';
 
 @Component({
     selector: "app-register-new-account",
@@ -24,7 +24,7 @@ export class RegisterNewAccountComponent implements OnInit {
     private authStorageKey: string = 'tempAuth';
 
     constructor(
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly store: Store,

@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Status, Account, Results } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
@@ -59,7 +59,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     constructor(        
         private readonly store: Store,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);

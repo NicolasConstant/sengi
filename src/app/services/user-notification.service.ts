@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { Status, Notification } from './models/mastodon.interfaces';
-import { MastodonService } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { AccountInfo } from '../states/accounts.state';
 import { NotificationService } from './notification.service';
 import { ToolsService } from './tools.service';
@@ -19,7 +19,7 @@ export class UserNotificationService {
     constructor(
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) {
 
         this.fetchNotifications();

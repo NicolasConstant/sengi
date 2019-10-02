@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { Account, Status, Relationship, Attachment } from "../../../services/models/mastodon.interfaces";
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
@@ -77,7 +77,7 @@ export class UserProfileComponent implements OnInit {
         private readonly store: Store,
         private readonly navigationService: NavigationService,
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly toolsService: ToolsService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
