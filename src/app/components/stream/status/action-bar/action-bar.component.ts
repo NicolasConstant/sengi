@@ -155,7 +155,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 if (boostedStatus.pleroma) {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblog !== null; //FIXME: when Pleroma will return the good status
                 } else {
-                    this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
+                    let reblogged = boostedStatus.reblogged; //FIXME: when pixelfed will return the good status
+                    if(reblogged === null){  
+                        reblogged = !this.bootedStatePerAccountId[account.id];
+                    }
+                    this.bootedStatePerAccountId[account.id] = reblogged;
                 }
 
                 this.checkIfBoosted();
@@ -187,9 +191,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 }
             })
             .then((favoritedStatus: Status) => {
-                this.favoriteStatePerAccountId[account.id] = favoritedStatus.favourited;
+                let favourited = favoritedStatus.favourited; //FIXME: when pixelfed will return the good status
+                if(favourited === null){                   
+                    favourited = !this.favoriteStatePerAccountId[account.id];
+                }
+                this.favoriteStatePerAccountId[account.id] = favourited;
                 this.checkIfFavorited();
-                // this.isFavorited = !this.isFavorited;
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err, account);
