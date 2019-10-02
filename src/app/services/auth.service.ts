@@ -31,6 +31,20 @@ export class AuthService {
         return this.httpClient.post<TokenData>(url, bodyLoad).toPromise();
     }
 
+    refreshToken(instance: string, client_id: string, client_secret: string, refresh_token: string): Promise<TokenData>  {
+        const url = `https://${instance}/oauth/token?client_id=${client_id}&client_secret=${client_secret}&grant_type=refresh_token&refresh_token=${refresh_token}&scope=${encodeURIComponent('read write follow')}`;
+
+        const bodyLoad = {
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'grant_type': 'refresh_token',
+            'refresh_token': refresh_token,
+            'scope': 'read write follow'
+        };
+
+        return this.httpClient.post<TokenData>(url, bodyLoad).toPromise();
+    }
+
     createNewApplication(instance: string, appName: string, redirectUrl: string, scopes: string, website: string): Promise<AppData> {
         const url = 'https://' + instance + this.apiRoutes.createApp;
 
