@@ -46,7 +46,7 @@ export class ScheduledStatusService {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err, account);
+                //this.notificationService.notifyHttpError(err, account);
             });
     }
 
