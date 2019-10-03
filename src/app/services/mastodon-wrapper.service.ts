@@ -18,7 +18,7 @@ export class MastodonWrapperService {
         private readonly authService: AuthService,
         private readonly mastodonService: MastodonService) { }
 
-    private refreshAccountIfNeeded(accountInfo: AccountInfo): Promise<AccountInfo> {
+    refreshAccountIfNeeded(accountInfo: AccountInfo): Promise<AccountInfo> {
         let isExpired = false;
         let storedAccountInfo = this.getStoreAccountInfo(accountInfo.id);
 
@@ -28,13 +28,17 @@ export class MastodonWrapperService {
                     isExpired = true;
                 } else {
                     const nowEpoch = Date.now() / 1000 | 0;
-                    let expire_on = storedAccountInfo.token.expires_in + storedAccountInfo.token.created_at;
+
+                    //Pleroma workaround 
+                    let expire_in = storedAccountInfo.token.expires_in;
+                    if(expire_in < 3600) {
+                        expire_in = 3600;
+                    }
+
+                    let expire_on = expire_in + storedAccountInfo.token.created_at;
                     isExpired = expire_on - nowEpoch <= 60 * 2;
 
-                    // console.warn(`expire in ${storedAccountInfo.token.expires_in} ${storedAccountInfo.token.expires_in / 1000 / 60}`);
-                    // console.warn(`epoch comparison: ${nowEpoch} / ${expire_on} : ${isExpired}`);
-                    // console.warn(`expiring in ${storedAccountInfo.token.expires_in} ${storedAccountInfo.token.expires_in/24/60/60} days`);
-                    console.warn(`expiring in ${Math.round((expire_on - nowEpoch)/24/60/60)}days ${Math.round((expire_on - nowEpoch)/60/60)}h ${Math.round((expire_on - nowEpoch)/60)} mins`);
+                    //console.warn(`expiring in ${Math.round((expire_on - nowEpoch)/24/60/60)}days ${Math.round((expire_on - nowEpoch)/60/60)}h ${Math.round((expire_on - nowEpoch)/60)} mins`);
                 }
             }
         } catch (err) {
