@@ -6,6 +6,7 @@ import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
+import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
     providedIn: 'root'

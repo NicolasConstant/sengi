@@ -50,7 +50,14 @@ export class RegisterNewAccountComponent implements OnInit {
             let usedTokenData: TokenData;
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
+                    
+                    if(tokenData.refresh_token && !tokenData.created_at){
+                        const nowEpoch = Date.now() / 1000 | 0;
+                        tokenData.created_at = nowEpoch;                        
+                    }
+
                     usedTokenData = tokenData;
+
                     return this.mastodonService.retrieveAccountDetails({ 'instance': appDataWrapper.instance, 'id': '', 'username': '', 'order': 0, 'isSelected': true, 'token': tokenData });
                 })
                 .then((account: Account) => {
@@ -103,7 +110,7 @@ export class RegisterNewAccountComponent implements OnInit {
                 this.errorMessage = 'No authentication code returned. Please retry.'
                 break;
         }
-    }
+    }   
 
     private getAllSavedApps(): AppInfo[] {
         const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;

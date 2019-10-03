@@ -1,19 +1,81 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngxs/store';
 
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus } from "./models/mastodon.interfaces";
-import { AccountInfo } from '../states/accounts.state';
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData } from "./models/mastodon.interfaces";
+import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService } from './mastodon.service';
+import { AuthService } from './auth.service';
+import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MastodonWrapperService {
 
-    constructor(private readonly mastodonService: MastodonService) { }
+    constructor(
+        private readonly store: Store,
+        private readonly authService: AuthService,
+        private readonly mastodonService: MastodonService) { }
 
     private refreshAccountIfNeeded(accountInfo: AccountInfo): Promise<AccountInfo> {
-        return Promise.resolve(accountInfo);
+        let isExpired = false;
+        let storedAccountInfo = this.getStoreAccountInfo(accountInfo.id);
+
+        try {
+            if (storedAccountInfo.token.refresh_token) {
+                if (!storedAccountInfo.token.created_at || !storedAccountInfo.token.expires_in) {
+                    isExpired = true;
+                } else {
+                    const nowEpoch = Date.now() / 1000 | 0;
+                    let expire_on = storedAccountInfo.token.expires_in + storedAccountInfo.token.created_at;
+                    isExpired = expire_on - nowEpoch <= 60 * 2;
+
+                    // console.warn(`expire in ${storedAccountInfo.token.expires_in} ${storedAccountInfo.token.expires_in / 1000 / 60}`);
+                    // console.warn(`epoch comparison: ${nowEpoch} / ${expire_on} : ${isExpired}`);
+                    // console.warn(`expiring in ${storedAccountInfo.token.expires_in} ${storedAccountInfo.token.expires_in/24/60/60} days`);
+                    console.warn(`expiring in ${Math.round((expire_on - nowEpoch)/24/60/60)}days ${Math.round((expire_on - nowEpoch)/60/60)}h ${Math.round((expire_on - nowEpoch)/60)} mins`);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+
+        if (storedAccountInfo.token.refresh_token && isExpired) {
+            console.warn('--------------------------');
+            console.warn('-------->> MARTY!! -------');
+            console.warn('-------->> RENEW TOKEN FFS');
+            console.warn('--------------------------');
+
+            const app = this.getAllSavedApps().find(x => x.instance === storedAccountInfo.instance);
+            return this.authService.refreshToken(storedAccountInfo.instance, app.app.client_id, app.app.client_secret, storedAccountInfo.token.refresh_token)
+                .then((tokenData: TokenData) => {
+                    if (tokenData.refresh_token && !tokenData.created_at) {
+                        const nowEpoch = Date.now() / 1000 | 0;
+                        tokenData.created_at = nowEpoch;
+                    }
+
+                    storedAccountInfo.token = tokenData;
+                    this.store.dispatch([new UpdateAccount(storedAccountInfo)]);
+
+                    return storedAccountInfo;
+                })
+                .catch(err => {
+                    return Promise.resolve(storedAccountInfo);
+                });
+        } else {
+            return Promise.resolve(storedAccountInfo);
+        }
+    }
+
+    private getAllSavedApps(): AppInfo[] {
+        const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;
+        return snapshot.apps;
+    }
+
+    private getStoreAccountInfo(accountId: string): AccountInfo {
+        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        return regAccounts.find(x => x.id === accountId);
     }
 
     getInstance(instance: string): Promise<Instance> {
@@ -21,10 +83,7 @@ export class MastodonWrapperService {
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
-        return this.refreshAccountIfNeeded(account)
-            .then((refreshedAccount: AccountInfo) => {
-                return this.mastodonService.retrieveAccountDetails(refreshedAccount);
-            });
+        return this.mastodonService.retrieveAccountDetails(account);
     }
 
     getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20, tag: string = null, listId: string = null): Promise<Status[]> {
