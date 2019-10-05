@@ -223,23 +223,50 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if (!this.statusLoaded) return;
 
         const caretPosition = this.replyElement.nativeElement.selectionStart;
-        const word = this.getWordByPos(status, caretPosition);
-        if (word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
+        
+        const lastChar = status.substr(caretPosition - 1, 1);
+        const lastCharIsSpace = lastChar === ' ';
+        
+        const splitedStatus = status.split(/(\r\n|\n|\r)/);
+        let offset = 0;
+        let currentSection = '';                
+        for(let x of splitedStatus){
+            const sectionLength = [...x].length;
+            if(offset + sectionLength >= caretPosition){
+                currentSection = x;
+                break;
+            } else {
+                offset += sectionLength;
+            }
+        };
+
+        const word = this.getWordByPos(currentSection, caretPosition - offset);
+        if (!lastCharIsSpace && word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
             this.autosuggestData = word;
             return;
         }
         this.autosuggestData = null;
+        this.hasSuggestions = false;
     }
 
     private getWordByPos(str, pos) {
-        str = str.replace(/(\r\n|\n|\r)/gm, "");
-        var left = str.substr(0, pos);
-        var right = str.substr(pos);
+        var preText = str.substring(0, pos);
+        if (preText.indexOf(" ") > 0) {
+            var words = preText.split(" ");
+            return words[words.length - 1]; //return last word
+        }
+        else {
+            return preText;
+        }
 
-        left = left.replace(/^.+ /g, "");
-        right = right.replace(/ .+$/g, "");
+        // // str = str.replace(/(\r\n|\n|\r)/gm, "");
+        // var left = str.substr(0, pos);
+        // var right = str.substr(pos);
 
-        return left + right;
+        // left = left.replace(/^.+ /g, "");
+        // right = right.replace(/ .+$/g, "");
+
+        // return left + right;
     }
 
     private focus(caretPos = null) {
@@ -477,7 +504,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-
     private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
@@ -566,7 +592,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private getMentionsFromStatus(status: string): string[] {
         return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
     }
-
 
     suggestionSelected(selection: AutosuggestSelection) {
         if (this.status.includes(selection.pattern)) {
