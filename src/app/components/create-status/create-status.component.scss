@@ -200,7 +200,8 @@ $counter-width: 90px;
 
 .scheduler {
     display: block;
-    margin: 0 5px;
+    margin: 0 5px; 
+    border-bottom: 1px solid whitesmoke;
 }
 
 @import '~@angular/cdk/overlay-prebuilt.css';
