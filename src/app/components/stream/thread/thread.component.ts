@@ -219,6 +219,11 @@ export class ThreadComponent implements OnInit, OnDestroy {
         const statuses = this.statusChildren.toArray();
         statuses.forEach(x => {
             x.removeContentWarning();
+            if(x.isSelected){
+                setTimeout(() => {
+                    scrollIntoView(x.elem.nativeElement, { behavior: 'auto', block: 'nearest'});
+                }, 0);
+            }
         });
         this.hasContentWarnings = false;
         return false;
