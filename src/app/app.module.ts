@@ -34,6 +34,7 @@ import { FloatingColumnComponent } from './components/floating-column/floating-c
 import { StreamsState } from "./states/streams.state";
 import { StatusComponent } from "./components/stream/status/status.component";
 import { MastodonService } from "./services/mastodon.service";
+import { MastodonWrapperService } from "./services/mastodon-wrapper.service";
 import { AttachementsComponent } from './components/stream/status/attachements/attachements.component';
 import { SettingsComponent } from './components/floating-column/settings/settings.component';
 import { AddNewAccountComponent } from './components/floating-column/add-new-account/add-new-account.component';
@@ -163,7 +164,7 @@ const routes: Routes = [
         ContextMenuModule.forRoot(),
         HotkeyModule.forRoot()
     ],
-    providers: [AuthService, NavigationService, NotificationService, MastodonService, StreamingService],
+    providers: [AuthService, NavigationService, NotificationService, MastodonWrapperService, MastodonService, StreamingService],
     bootstrap: [AppComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

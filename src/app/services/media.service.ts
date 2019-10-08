@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { AccountInfo } from '../states/accounts.state';
 import { Attachment } from './models/mastodon.interfaces';
-import { MastodonService } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { NotificationService } from './notification.service';
 
 
@@ -15,7 +15,7 @@ export class MediaService {
 
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     uploadMedia(account: AccountInfo, files: File[]) {
         for (let file of files) {

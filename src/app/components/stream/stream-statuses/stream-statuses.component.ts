@@ -7,7 +7,7 @@ import { StreamElement } from '../../../states/streams.state';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StreamingService, EventEnum, StreamingWrapper, StatusUpdate } from '../../../services/streaming.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../services/notification.service';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../../models/common.model';
@@ -67,7 +67,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly streamingService: StreamingService,
-        private readonly mastodonService: MastodonService) {
+        private readonly mastodonService: MastodonWrapperService) {
 
         this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
     }

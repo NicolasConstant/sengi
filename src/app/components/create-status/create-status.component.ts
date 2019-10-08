@@ -7,9 +7,10 @@ import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope, 
 import { faClock, faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
-import { MastodonService, VisibilityEnum, PollParameters } from '../../services/mastodon.service';
+import { VisibilityEnum, PollParameters } from '../../services/mastodon.service';
+import { MastodonWrapperService } from '../../services/mastodon-wrapper.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
-import { ToolsService } from '../../services/tools.service';
+import { ToolsService, InstanceInfo, InstanceType } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
@@ -109,6 +110,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     isSending: boolean;
     mentionTooFarAwayError: boolean;
     autosuggestData: string = null;
+    instanceSupportsPoll = true;
+    instanceSupportsScheduling = true;
     private statusLoaded: boolean;
     private hasSuggestions: boolean;
 
@@ -160,7 +163,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly store: Store,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly instancesInfoService: InstancesInfoService,
         private readonly mediaService: MediaService,
         private readonly overlay: Overlay,
@@ -322,6 +325,19 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             if (!this.statusReplyingToWrapper && !this.replyingUserHandle) {
                 this.getDefaultPrivacy();
             }
+
+            this.toolsService.getInstanceInfo(this.selectedAccount)
+                .then((instance: InstanceInfo) => {
+                    if(instance.type === InstanceType.Pixelfed){
+                        this.instanceSupportsPoll = false;
+                        this.instanceSupportsScheduling = false;
+                        this.pollIsActive = false;
+                        this.scheduleIsActive = false;
+                    } else {
+                        this.instanceSupportsPoll = true;
+                        this.instanceSupportsScheduling = true;
+                    }
+                });            
         }
     }
 

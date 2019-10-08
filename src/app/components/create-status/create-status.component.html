@@ -21,9 +21,9 @@
         (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
     </app-autosuggest>
 
-    <app-poll-editor *ngIf="pollIsActive"></app-poll-editor>
+    <app-poll-editor *ngIf="instanceSupportsPoll && pollIsActive"></app-poll-editor>
 
-    <app-status-scheduler class="scheduler" *ngIf="scheduleIsActive"></app-status-scheduler>
+    <app-status-scheduler class="scheduler" *ngIf="instanceSupportsScheduling && scheduleIsActive"></app-status-scheduler>
 
     <div class="status-editor__footer" #footer>
         <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">
@@ -54,11 +54,13 @@
             <fa-icon [icon]="faEnvelope" *ngIf="selectedPrivacy === 'DM'"></fa-icon>
         </a>
 
-        <a href class="status-editor__footer--link status-editor__footer--add-poll" title="add poll" (click)="addPoll()">
+        <a href *ngIf="instanceSupportsPoll"
+            class="status-editor__footer--link status-editor__footer--add-poll" title="add poll" (click)="addPoll()">
             <fa-icon [icon]="faPollH"></fa-icon>
         </a>
 
-        <a href class="status-editor__footer--link" title="schedule" (click)="schedule()">
+        <a href *ngIf="instanceSupportsScheduling"
+            class="status-editor__footer--link" title="schedule" (click)="schedule()">
             <fa-icon [icon]="faClock"></fa-icon>
         </a>
     </div>
