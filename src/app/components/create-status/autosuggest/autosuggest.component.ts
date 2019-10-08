@@ -29,6 +29,7 @@ export class AutosuggestComponent implements OnInit, OnDestroy {
             this._pattern = value;
             this.analysePattern(value);
         } else {
+            this._pattern = null;
             this.accounts.length = 0;
             this.hashtags.length = 0;
         }
