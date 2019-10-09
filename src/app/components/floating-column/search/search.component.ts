@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account } from '../../../services/models/mastodon.interfaces';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
@@ -29,7 +29,7 @@ export class SearchComponent implements OnInit {
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
     }

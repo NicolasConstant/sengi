@@ -11,6 +11,11 @@ export class SelectAccount {
     constructor(public account: AccountInfo, public multiselection: boolean = false) {}
 }
 
+export class UpdateAccount {
+    static readonly type = '[Accounts] Update account';
+    constructor(public account: AccountInfo) {}
+}
+
 export class RemoveAccount {
     static readonly type = '[Accounts] Remove account';
     constructor(public accountId: string) {}
@@ -38,6 +43,18 @@ export class AccountsState {
 
         ctx.patchState({
             accounts: [...state.accounts, newAcc]
+        });
+    }
+
+    @Action(UpdateAccount)
+    UpdateAccount(ctx: StateContext<AccountsStateModel>, action: UpdateAccount){
+        const state = ctx.getState();
+        
+        let editedAcc = state.accounts.find(x => x.id === action.account.id);
+        editedAcc.token = action.account.token;
+
+        ctx.patchState({
+            accounts: [...state.accounts]
         });
     }
 
