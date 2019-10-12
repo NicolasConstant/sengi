@@ -224,18 +224,24 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private detectAutosuggestion(status: string) {
         if (!this.statusLoaded) return;
+        
+        if(!status.includes('@') && !status.includes('#')){
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+            return;
+        }
 
         const caretPosition = this.replyElement.nativeElement.selectionStart;
-        
+
         const lastChar = status.substr(caretPosition - 1, 1);
         const lastCharIsSpace = lastChar === ' ';
-        
+
         const splitedStatus = status.split(/(\r\n|\n|\r)/);
         let offset = 0;
-        let currentSection = '';                
-        for(let x of splitedStatus){
-            const sectionLength = [...x].length;
-            if(offset + sectionLength >= caretPosition){
+        let currentSection = '';
+        for (let x of splitedStatus) {
+            const sectionLength = x.length;
+            if (offset + sectionLength >= caretPosition) {
                 currentSection = x;
                 break;
             } else {
@@ -248,6 +254,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.autosuggestData = word;
             return;
         }
+
         this.autosuggestData = null;
         this.hasSuggestions = false;
     }
@@ -328,7 +335,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
             this.toolsService.getInstanceInfo(this.selectedAccount)
                 .then((instance: InstanceInfo) => {
-                    if(instance.type === InstanceType.Pixelfed){
+                    if (instance.type === InstanceType.Pixelfed) {
                         this.instanceSupportsPoll = false;
                         this.instanceSupportsScheduling = false;
                         this.pollIsActive = false;
@@ -337,7 +344,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         this.instanceSupportsPoll = true;
                         this.instanceSupportsScheduling = true;
                     }
-                });            
+                });
         }
     }
 
@@ -489,9 +496,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
 
         let scheduledTime = null;
-        if(this.scheduleIsActive){
+        if (this.scheduleIsActive) {
             scheduledTime = this.statusScheduler.getScheduledDate();
-            if(!scheduledTime || scheduledTime === '') {
+            if (!scheduledTime || scheduledTime === '') {
                 this.isSending = false;
                 return;
             }
@@ -506,7 +513,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.status = '';
                 this.onClose.emit();
 
-                if(this.scheduleIsActive){
+                if (this.scheduleIsActive) {
                     this.scheduledStatusService.statusAdded(acc);
                 }
             })

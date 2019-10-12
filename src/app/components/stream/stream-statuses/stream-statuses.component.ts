@@ -170,17 +170,19 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
     @ViewChild('statusstream') public statustream: ElementRef;
     private applyGoToTop(): boolean {
-        this.loadBuffer();
+        // this.loadBuffer();
         if (this.statuses.length > 2 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
         }
+
         const stream = this.statustream.nativeElement as HTMLElement;
         setTimeout(() => {
             stream.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
-        }, 10);
+        }, 0);
+
         return false;
     }
 
