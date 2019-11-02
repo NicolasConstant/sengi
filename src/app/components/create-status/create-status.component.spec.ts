@@ -14,6 +14,7 @@ import { StreamsState } from '../../states/streams.state';
 import { NavigationService } from '../../services/navigation.service';
 import { NotificationService } from '../../services/notification.service';
 import { MastodonService } from '../../services/mastodon.service';
+import { AuthService } from '../../services/auth.service';
 
 
 describe('CreateStatusComponent', () => {
@@ -35,7 +36,7 @@ describe('CreateStatusComponent', () => {
                     StreamsState
                   ]),                  
            ],
-           providers: [NavigationService, NotificationService, MastodonService], 
+           providers: [NavigationService, NotificationService, MastodonService, AuthService], 
            schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
         }).compileComponents();
     }));

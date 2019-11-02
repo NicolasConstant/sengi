@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, QueryList, ViewChildren, ElementRef } from "@angular/core";
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from "rxjs";
 import { Select } from "@ngxs/store";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
@@ -19,10 +20,20 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
     private columnSelectedSub: Subscription;
 
     constructor(
+        private readonly router: Router,
+        private readonly activatedRoute: ActivatedRoute,
         private readonly navigationService: NavigationService) {
     }
 
     ngOnInit() {
+        this.activatedRoute.queryParams.subscribe(params => {
+            const code = params['code'];
+            if (code) {
+                this.router.navigate(['/register'], { queryParams: { code: code} });
+                return;
+            }
+        });
+
         this.columnSelectedSub = this.navigationService.columnSelectedSubject.subscribe((columnIndex: number) => {
             this.focusOnColumn(columnIndex);
         });
