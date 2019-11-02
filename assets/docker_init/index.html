@@ -1,1 +1,29 @@
-<h2>TEST</h2>
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="main.css">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+
+    <title>Sengi Launcher</title>
+</head>
+
+<body>
+    <div class="launcher-wrapper">
+    <div class="launcher">
+        <a href="#" class="button" title="launch sengi in popup"
+            onClick="window.open('/sengi/'+'?qt='+ (new Date()).getTime(),'Sengi','toolbar=no,location=no,status=no,menubar=no,scrollbars=no, resizable=yes,width=377,height=800'); return false;">
+            <span class="download-button__web--label">Launch Sengi Popup</span>
+        </a><br />
+
+        <a href="/sengi/" class="button" title="launch sengi">
+            <span class="download-button__web--label">Open Sengi</span>
+        </a><br />
+    </div>
+    </div>
+</body>
+
+</html>
