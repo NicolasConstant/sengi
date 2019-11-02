@@ -6,7 +6,6 @@ import { RegisteredAppsStateModel, AppInfo, AddRegisteredApp } from '../../../st
 import { AuthService, CurrentAuthProcess } from '../../../services/auth.service';
 import { AppData } from '../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../services/notification.service';
-import { HttpXsrfInterceptor } from '@angular/common/http/src/xsrf';
 
 @Component({
     selector: 'app-add-new-account',
