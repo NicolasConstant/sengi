@@ -85,7 +85,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.lastId = userNotification.lastId;
+        this.lastId = userNotification.lastNotificationsId;
         this.userNotificationService.markNotificationAsRead(this.account.info);
     }
 
