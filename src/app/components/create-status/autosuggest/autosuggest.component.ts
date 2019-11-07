@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 
 import { ToolsService } from '../../../services/tools.service';
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../services/notification.service';
 import { Results, Account } from '../../../services/models/mastodon.interfaces';
 import { Actions } from '@ngxs/store';
@@ -29,6 +29,7 @@ export class AutosuggestComponent implements OnInit, OnDestroy {
             this._pattern = value;
             this.analysePattern(value);
         } else {
+            this._pattern = null;
             this.accounts.length = 0;
             this.hashtags.length = 0;
         }
@@ -43,7 +44,7 @@ export class AutosuggestComponent implements OnInit, OnDestroy {
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
         if (this.autoSuggestUserActionsStream) {

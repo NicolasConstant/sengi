@@ -7,7 +7,7 @@ import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { Notification, Account } from '../../../../services/models/mastodon.interfaces';
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
@@ -49,7 +49,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
     }

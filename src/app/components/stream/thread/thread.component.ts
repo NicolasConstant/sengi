@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
 import { Results, Context, Status } from '../../../services/models/mastodon.interfaces';
 import { NotificationService, NewReplyData } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper } from '../../../models/common.model';
 import { StatusComponent } from '../status/status.component';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 @Component({
     selector: 'app-thread',
@@ -50,7 +51,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
         if (this.refreshEventEmitter) {
@@ -177,11 +178,11 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     const el = this.statusChildren.toArray()[position];
                     el.isSelected = true;
-                    // el.elem.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                    // el.elem.nativeElement.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'nearest' });
-                    // el.elem.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                    el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
-                }, 0);
+                    
+                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
+
+                    scrollIntoView(el.elem.nativeElement, { behavior: 'smooth', block: 'nearest'});
+                }, 250);
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err, currentAccount);
@@ -214,11 +215,17 @@ export class ThreadComponent implements OnInit, OnDestroy {
         this.browseThreadEvent.next(openThreadEvent);
     }
 
-    removeCw() {
+    removeCw(): boolean {
         const statuses = this.statusChildren.toArray();
         statuses.forEach(x => {
             x.removeContentWarning();
+            if(x.isSelected){
+                setTimeout(() => {
+                    scrollIntoView(x.elem.nativeElement, { behavior: 'auto', block: 'nearest'});
+                }, 0);
+            }
         });
         this.hasContentWarnings = false;
+        return false;
     }
 }

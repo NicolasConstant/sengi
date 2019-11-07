@@ -8,18 +8,18 @@
             <app-waiting-animation class="waiting-icon"></app-waiting-animation>
         </div>
         <div class="media__loaded--hover">
-            <button class="media__loaded--button" title="remove" (click)="removeMedia(m)">
+            <a href class="media__loaded--button" title="remove" (click)="removeMedia(m)">
                 <fa-icon [icon]="faTimes"></fa-icon>
-            </button>
+            </a>
             <input class="media__loaded--description" [(ngModel)]="m.description" autocomplete="off"
                 placeholder="Describe for the visually impaired" />
         </div>
         <img class="media__loaded--preview" src="{{m.attachment.preview_url}}" />
     </div>
     <div *ngIf="m.attachment !== null && m.attachment.type === 'audio'" class="audio">
-        <button class="audio__button" title="remove" (click)="removeMedia(m)">
+        <a href class="audio__button" title="remove" (click)="removeMedia(m)">
             <fa-icon [icon]="faTimes"></fa-icon>
-        </button>
+        </a>
 
         <div *ngIf="m.isMigrating">
             <app-waiting-animation class="waiting-icon"></app-waiting-animation>

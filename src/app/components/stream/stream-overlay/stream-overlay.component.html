@@ -1,35 +1,34 @@
-<div class="stream-overlay">
-    <div class="stream-overlay__header">
-        <button class="overlay__button overlay-close" title="close" (click)="close()">
-            <fa-icon [icon]="faTimes"></fa-icon>
-        </button>
-
-        <button class="overlay__button overlay-previous"
-            [ngClass]="{'overlay__button--focus': hasPreviousElements }" title="previous" (click)="previous()">
-            <fa-icon [icon]="faAngleLeft"></fa-icon>
-        </button>
-        <button class="overlay__button overlay-refresh" [ngClass]="{'overlay__button--focus': refreshFocused }"
-            title="refresh" (click)="refresh()">
-            <fa-icon [icon]="faRedoAlt"></fa-icon>
-        </button>
-
-        <a href title="return to top" class="overlay-gototop" (click)="goToTop()">
-            
+<div class="overlay">
+    <div class="overlay__header">
+        <a href class="overlay__button overlay-close" title="close" (click)="close()">
+            <fa-icon class="overlay-close__icon" [icon]="faTimes"></fa-icon>
         </a>
 
-        <button class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements }"
+        <a href class="overlay__button overlay-previous"
+            [ngClass]="{'overlay__button--focus': hasPreviousElements }" title="previous" (click)="previous()">
+            <fa-icon class="overlay-previous__icon" [icon]="faAngleLeft"></fa-icon>
+        </a>
+        <a href class="overlay__button overlay-refresh" [ngClass]="{'overlay__button--focus': refreshFocused }"
+            title="refresh" (click)="refresh()">
+            <fa-icon class="overlay-refresh__icon" [icon]="faRedoAlt"></fa-icon>
+        </a>
+
+        <a href title="return to top" class="overlay-gototop" (click)="goToTop()">            
+        </a>
+
+        <a href class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements }"
             title="next" (click)="next()">
-            <fa-icon [icon]="faAngleRight"></fa-icon>
-        </button>
+            <fa-icon class="overlay-next__icon" [icon]="faAngleRight"></fa-icon>
+        </a>
     </div>
 
-    <div *ngFor="let e of loadedElements" class="stream-overlay__content-wrapper" 
-        [class.stream-overlay__content-wrapper--selected]="e.isVisible">
+    <div *ngFor="let e of loadedElements" class="overlay__content-wrapper" 
+        [class.overlay__content-wrapper--selected]="e.isVisible">
         <app-user-profile #appUserProfile *ngIf="e.type === 'account'" 
             [currentAccount]="e.account"
             [refreshEventEmitter]="e.refreshEventEmitter"
             [goToTopEventEmitter]="e.goToTopEventEmitter"
-            class="stream-overlay__content" 
+            class="overlay__content" 
             (browseAccountEvent)="browseAccount($event)"
             (browseHashtagEvent)="browseHashtag($event)" 
             (browseThreadEvent)="browseThread($event)"></app-user-profile>
@@ -37,12 +36,12 @@
             [hashtagElement]="e.hashtag"
             [refreshEventEmitter]="e.refreshEventEmitter"
             [goToTopEventEmitter]="e.goToTopEventEmitter"
-            class="stream-overlay__content" 
+            class="overlay__content" 
             (browseAccountEvent)="browseAccount($event)"
             (browseHashtagEvent)="browseHashtag($event)" 
             (browseThreadEvent)="browseThread($event)"></app-hashtag>
         <app-thread #appThread *ngIf="e.type === 'thread'" 
-            [currentThread]="e.thread" class="stream-overlay__content"
+            [currentThread]="e.thread" class="overlay__content"
             [refreshEventEmitter]="e.refreshEventEmitter"
             [goToTopEventEmitter]="e.goToTopEventEmitter"
             (browseAccountEvent)="browseAccount($event)" 

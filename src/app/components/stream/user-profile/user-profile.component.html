@@ -22,18 +22,18 @@
                     </app-waiting-animation>
 
                     <div *ngIf="!loadingRelationShip">
-                        <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
+                        <a href class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                             (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                             <fa-icon [icon]="faUserRegular"></fa-icon>
-                        </button>
-                        <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
+                        </a>
+                        <a href class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
                             (click)="unfollow()" *ngIf="relationship.following">
                             <fa-icon [icon]="faUserCheck"></fa-icon>
-                        </button>
-                        <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
+                        </a>
+                        <a href class="profile-header__follow--button profile-header__follow--followed" title="pending"
                             (click)="unfollow()" *ngIf="relationship.requested">
                             <fa-icon [icon]="faHourglassHalf"></fa-icon>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 
         <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
-            <span innerHTML="{{displayedAccount | accountEmoji }}"></span> has moved to <br/><a href
+            <span innerHTML="{{displayedAccount | accountEmoji }}"></span> has moved to <br /><a href
                 (click)="openMigratedAccount(displayedAccount.moved)" class="profile__moved--link"
                 title="open @{{displayedAccount.moved.acct }}">@{{displayedAccount.moved.acct }}</a>
         </div>
@@ -65,18 +65,18 @@
                     </app-waiting-animation>
 
                     <div *ngIf="!loadingRelationShip">
-                        <button class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
+                        <a href class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                             (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                             <fa-icon [icon]="faUserRegular"></fa-icon>
-                        </button>
-                        <button class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
+                        </a>
+                        <a href class="profile-header__follow--button profile-header__follow--followed" title="unfollow"
                             (click)="unfollow()" *ngIf="relationship.following">
                             <fa-icon [icon]="faUserCheck"></fa-icon>
-                        </button>
-                        <button class="profile-header__follow--button profile-header__follow--followed" title="pending"
+                        </a>
+                        <a href class="profile-header__follow--button profile-header__follow--followed" title="pending"
                             (click)="unfollow()" *ngIf="relationship.requested">
                             <fa-icon [icon]="faHourglassHalf"></fa-icon>
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <div class="profile-header__state"

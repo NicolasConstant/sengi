@@ -5,7 +5,7 @@ import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { Status, Notification } from '../../../../services/models/mastodon.interfaces';
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { OpenThreadEvent } from '../../../../services/tools.service';
 
@@ -45,7 +45,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
     constructor(
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
-        private readonly mastodonService: MastodonService) {
+        private readonly mastodonService: MastodonWrapperService) {
 
     }
 

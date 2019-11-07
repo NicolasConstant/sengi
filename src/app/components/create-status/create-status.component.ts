@@ -7,9 +7,10 @@ import { faPaperclip, faGlobe, faGlobeAmericas, faLock, faLockOpen, faEnvelope, 
 import { faClock, faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
-import { MastodonService, VisibilityEnum, PollParameters } from '../../services/mastodon.service';
+import { VisibilityEnum, PollParameters } from '../../services/mastodon.service';
+import { MastodonWrapperService } from '../../services/mastodon-wrapper.service';
 import { Status, Attachment } from '../../services/models/mastodon.interfaces';
-import { ToolsService } from '../../services/tools.service';
+import { ToolsService, InstanceInfo, InstanceType } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
@@ -109,6 +110,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     isSending: boolean;
     mentionTooFarAwayError: boolean;
     autosuggestData: string = null;
+    instanceSupportsPoll = true;
+    instanceSupportsScheduling = true;
     private statusLoaded: boolean;
     private hasSuggestions: boolean;
 
@@ -160,7 +163,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly store: Store,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly instancesInfoService: InstancesInfoService,
         private readonly mediaService: MediaService,
         private readonly overlay: Overlay,
@@ -221,25 +224,59 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private detectAutosuggestion(status: string) {
         if (!this.statusLoaded) return;
+        
+        if(!status.includes('@') && !status.includes('#')){
+            this.autosuggestData = null;
+            this.hasSuggestions = false;
+            return;
+        }
 
         const caretPosition = this.replyElement.nativeElement.selectionStart;
-        const word = this.getWordByPos(status, caretPosition);
-        if (word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
+
+        const lastChar = status.substr(caretPosition - 1, 1);
+        const lastCharIsSpace = lastChar === ' ';
+
+        const splitedStatus = status.split(/(\r\n|\n|\r)/);
+        let offset = 0;
+        let currentSection = '';
+        for (let x of splitedStatus) {
+            const sectionLength = x.length;
+            if (offset + sectionLength >= caretPosition) {
+                currentSection = x;
+                break;
+            } else {
+                offset += sectionLength;
+            }
+        };
+
+        const word = this.getWordByPos(currentSection, caretPosition - offset);
+        if (!lastCharIsSpace && word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
             this.autosuggestData = word;
             return;
         }
+
         this.autosuggestData = null;
+        this.hasSuggestions = false;
     }
 
     private getWordByPos(str, pos) {
-        str = str.replace(/(\r\n|\n|\r)/gm, "");
-        var left = str.substr(0, pos);
-        var right = str.substr(pos);
+        var preText = str.substring(0, pos);
+        if (preText.indexOf(" ") > 0) {
+            var words = preText.split(" ");
+            return words[words.length - 1]; //return last word
+        }
+        else {
+            return preText;
+        }
 
-        left = left.replace(/^.+ /g, "");
-        right = right.replace(/ .+$/g, "");
+        // // str = str.replace(/(\r\n|\n|\r)/gm, "");
+        // var left = str.substr(0, pos);
+        // var right = str.substr(pos);
 
-        return left + right;
+        // left = left.replace(/^.+ /g, "");
+        // right = right.replace(/ .+$/g, "");
+
+        // return left + right;
     }
 
     private focus(caretPos = null) {
@@ -295,6 +332,19 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             if (!this.statusReplyingToWrapper && !this.replyingUserHandle) {
                 this.getDefaultPrivacy();
             }
+
+            this.toolsService.getInstanceInfo(this.selectedAccount)
+                .then((instance: InstanceInfo) => {
+                    if (instance.type === InstanceType.Pixelfed) {
+                        this.instanceSupportsPoll = false;
+                        this.instanceSupportsScheduling = false;
+                        this.pollIsActive = false;
+                        this.scheduleIsActive = false;
+                    } else {
+                        this.instanceSupportsPoll = true;
+                        this.instanceSupportsScheduling = true;
+                    }
+                });
         }
     }
 
@@ -446,9 +496,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
 
         let scheduledTime = null;
-        if(this.scheduleIsActive){
+        if (this.scheduleIsActive) {
             scheduledTime = this.statusScheduler.getScheduledDate();
-            if(!scheduledTime || scheduledTime === '') {
+            if (!scheduledTime || scheduledTime === '') {
                 this.isSending = false;
                 return;
             }
@@ -463,7 +513,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.status = '';
                 this.onClose.emit();
 
-                if(this.scheduleIsActive){
+                if (this.scheduleIsActive) {
                     this.scheduledStatusService.statusAdded(acc);
                 }
             })
@@ -476,7 +526,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         return false;
     }
-
 
     private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
@@ -566,7 +615,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private getMentionsFromStatus(status: string): string[] {
         return status.split(' ').filter(x => x.indexOf('@') === 0 && x.length > 1);
     }
-
 
     suggestionSelected(selection: AutosuggestSelection) {
         if (this.status.includes(selection.pattern)) {

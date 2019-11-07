@@ -167,15 +167,26 @@ $floating-header-height: 60px;
             text-rendering: optimizeLegibility;
 
             &--button {
-                @include clearButton;
+                display: inline-block;
+                transition: all .2s;
+                color: white;
+                &:hover{
+                    color: rgb(216, 216, 216);
+                }
             }
 
             &--unfollowed {}
 
             &--followed {
+                transition: all .2s;
                 color: #38abff;
                 color: #5fbcff;
                 color: #85ccff;
+
+                &:hover{
+                    color: #85ccff;
+                    color: #38abff;
+                }
             }
 
             &--waiting {

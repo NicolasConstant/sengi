@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamWrapper } from '../my-account.component';
-import { MastodonService } from '../../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../../services/mastodon-wrapper.service';
 import { AccountWrapper } from '../../../../../models/account.models';
 import { NotificationService } from '../../../../../services/notification.service';
 import { Account, Relationship, Instance } from "../../../../../services/models/mastodon.interfaces";
@@ -26,7 +26,7 @@ export class ListEditorComponent implements OnInit {
 
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
         this.accountsInList.length = 0;

@@ -1,13 +1,12 @@
 @import "variables";
-// @import "mixins";
 
-.card {
-    border: 1px solid $card-border-color;
-    background-color: $column-background;
+.card-data {    
     border-radius: 3px;
+    border: 0px;
+    
     transition: all .2s;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: hidden;    
 
     &:hover {
         background-color: lighten($column-background, 5);
@@ -17,6 +16,9 @@
         display: block;
         text-decoration: none;
         color: whitesmoke;
+        overflow: auto;
+
+        border: 1px solid $card-border-color;
 
         &--image {
             width: 55px;

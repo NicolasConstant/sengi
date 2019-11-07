@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
-import { MastodonService } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
+import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,7 @@ export class ToolsService {
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
     constructor(
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) { }
 
     getInstanceInfo(acc: AccountInfo): Promise<InstanceInfo> {
@@ -31,6 +32,8 @@ export class ToolsService {
                         type = InstanceType.GlitchSoc;
                     } else if (instance.version.toLowerCase().includes('+florence')) {
                         type = InstanceType.Florence;
+                    } else if (instance.version.toLowerCase().includes('pixelfed')) {
+                        type = InstanceType.Pixelfed;
                     }
 
                     var splittedVersion = instance.version.split('.');
@@ -39,6 +42,7 @@ export class ToolsService {
 
                     var instanceInfo = new InstanceInfo(type, major, minor);
                     this.instanceInfos[acc.instance] = instanceInfo;
+
                     return instanceInfo;
                 });
         }
@@ -60,12 +64,12 @@ export class ToolsService {
     }
 
     getSelectedAccounts(): AccountInfo[] {
-        var regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        let regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         return regAccounts.filter(x => x.isSelected);
     }
 
     getAccountSettings(account: AccountInfo): AccountSettings {
-        var accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
+        let accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
         let accountSettings = accountsSettings.find(x => x.accountId === account.id);
         if (!accountSettings) {
             accountSettings = new AccountSettings();
@@ -171,5 +175,6 @@ export enum InstanceType {
     Mastodon = 1,
     Pleroma = 2,
     GlitchSoc = 3,
-    Florence = 4
+    Florence = 4,
+    Pixelfed = 5
 }

@@ -6,6 +6,7 @@ import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { Status } from "../../services/models/mastodon.interfaces";
 import { AccountInfo } from "../../states/accounts.state";
 import { OpenThreadEvent } from "../../services/tools.service";
+import { StreamStatusesComponent } from './stream-statuses/stream-statuses.component';
 
 @Component({
     selector: "app-stream",
@@ -24,6 +25,8 @@ export class StreamComponent implements OnInit {
     goToTopSubject: Subject<void> = new Subject<void>();
 
     private _streamElement: StreamElement;
+
+    @ViewChild(StreamStatusesComponent) private streamStatusesComponent: StreamStatusesComponent;
 
     @Input('streamElement')
     set streamElement(stream: StreamElement) {
@@ -55,6 +58,13 @@ export class StreamComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
+    }
+
+    focus(): boolean {
+        if (!this.overlayActive) {
+            this.streamStatusesComponent.focus();
+        }
+        return false;
     }
 
     goToTop(): boolean {

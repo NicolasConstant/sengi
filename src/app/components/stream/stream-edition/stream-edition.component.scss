@@ -26,9 +26,10 @@
     }
 
     &__button {
-        @include clearButton;
+        display: inline-block;
         padding: 5px 10px 5px 10px;
         margin: 3px 0;
+        color: $font-color-primary;
 
         &--delete {
             // float: right;

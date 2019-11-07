@@ -46,12 +46,11 @@
             opacity: 100;
         }
 
-        &--button {           
-            @include clearButton;
+        &--button {
             width: 10px;
             height: 10px;
             position: absolute;
-            top:5px;
+            top:0px;
             right:8px;
             color: white;
         }
@@ -61,13 +60,9 @@
             bottom:5px;
             left: 5px;
             width: calc(100% - 10px);
-            // background: black;
-            // color: white;
         }
 
         &--preview {
-            // display: block;
-
             width: calc(100%);
             height: calc(100%);
          
@@ -87,16 +82,12 @@
     }
 
     &__button {
-        @include clearButton;
         display: block;
         width: 10px;
         height: 10px;
         color: white;
         float: right;
-
-        // position: absolute;
-        // top:5px;
-        // right:8px;
-        
+        margin-top: 0px;
+        margin-right: 5px;            
     }
 }

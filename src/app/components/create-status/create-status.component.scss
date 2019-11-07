@@ -148,6 +148,11 @@ $counter-width: 90px;
                 background-color: darken($status-editor-footer-background, 20%);
             }
 
+            outline: inherit;
+            &:focus {
+                background-color: darken($status-editor-footer-background, 20%);
+            }
+
             & span {
                 margin: 0;
                 padding: 0;
@@ -195,7 +200,8 @@ $counter-width: 90px;
 
 .scheduler {
     display: block;
-    margin: 0 5px;
+    margin: 0 5px; 
+    border-bottom: 1px solid whitesmoke;
 }
 
 @import '~@angular/cdk/overlay-prebuilt.css';

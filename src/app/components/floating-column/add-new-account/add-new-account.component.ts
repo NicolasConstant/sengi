@@ -101,7 +101,7 @@ export class AddNewAccountComponent implements OnInit {
         if (instanceApps.length !== 0) {
             return Promise.resolve(instanceApps[0].app);
         } else {
-            const redirect_uri = this.getLocalHostname() + '/register';
+            const redirect_uri = this.getLocalHostname();
             return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://nicolasconstant.github.io/sengi/')
                 .then((appData: AppData) => {
                     return this.saveNewApp(instance, appData)
@@ -132,8 +132,12 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     private getLocalHostname(): string {
-        let localHostname = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
-        return localHostname;
+        let href = window.location.href;
+        if(href.includes('/home')){
+            return href.split('/home')[0];
+        } else {
+            return location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '');
+        }
     }
 
     private saveNewApp(instance: string, app: AppData): Promise<any> {

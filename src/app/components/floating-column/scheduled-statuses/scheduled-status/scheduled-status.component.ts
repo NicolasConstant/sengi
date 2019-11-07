@@ -3,7 +3,7 @@ import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angu
 import { AccountInfo } from '../../../../states/accounts.state';
 import { ScheduledStatus } from '../../../../services/models/mastodon.interfaces';
 import { ToolsService } from '../../../../services/tools.service';
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { ScheduledStatusService } from '../../../../services/scheduled-status.service';
 import { StatusSchedulerComponent } from '../../../../components/create-status/status-scheduler/status-scheduler.component';
@@ -28,7 +28,7 @@ export class ScheduledStatusComponent implements OnInit {
     constructor(
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly toolsService: ToolsService) { }
 
     ngOnInit() {

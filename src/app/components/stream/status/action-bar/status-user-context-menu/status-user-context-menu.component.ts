@@ -9,7 +9,7 @@ import { ToolsService, OpenThreadEvent } from '../../../../../services/tools.ser
 import { StatusWrapper } from '../../../../../models/common.model';
 import { NavigationService } from '../../../../../services/navigation.service';
 import { AccountInfo } from '../../../../../states/accounts.state';
-import { MastodonService } from '../../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../../services/notification.service';
 
 
@@ -39,7 +39,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
     constructor(
         private readonly store: Store,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
         private readonly toolsService: ToolsService,

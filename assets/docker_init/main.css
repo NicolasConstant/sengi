@@ -1,0 +1,45 @@
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    background-color: #141824;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+body {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.launcher-wrapper{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+} 
+
+.launcher {   
+    height: 15rem;
+    width: 30rem;
+    margin: 35vh auto;
+}
+
+.button {
+    background-color: #090b10;
+    display: block;
+    width: 30rem;
+    padding: 1.5rem 2rem 1.75rem 2rem;    
+    color: white;
+    border-radius: 3px;
+    font-size: 1.8rem;
+    font-weight: lighter;
+    text-decoration: none;
+    transition: all .2s;    
+}
+
+.button:hover {
+    background-color: #1e2433;
+}
