@@ -39,7 +39,7 @@ export class UserNotificationService {
             //     sinceId = this.sinceIds[account.id];
             // }
 
-            this.mastodonService.getNotifications(account, ['follow', 'follow', 'reblog'], null, null, 10)
+            this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog'], null, null, 10)
                 .then((notifications: Notification[]) => {
                     this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
                 })
@@ -112,13 +112,18 @@ export class UserNotificationService {
         }
     }
 
-    private hasNewNotifications(lastNotification: Notification, lastCreationDate: string): boolean {
+    private hasNewNotifications(lastNotification: Notification, lastCreationDate: string): boolean {    
+
         if(!lastNotification) return false;
         if(!lastCreationDate) return false;
         return new Date(lastNotification.created_at) > new Date(lastCreationDate);
     }
 
     private analyseNotifications(account: AccountInfo, userNotification: UserNotification, newNotifications: Notification[], type: NotificationTypeEnum): UserNotification {
+        console.group();
+        console.warn(account.username);
+        console.warn(newNotifications);
+        console.groupEnd();
         // if (userNotification.allNotifications.length > 30) {
         //     userNotification.allNotifications.length = 30;
         // }
