@@ -22,6 +22,8 @@ export class UserNotificationService {
     private mentionsSinceIds: { [id: string]: string } = {};
     private notificationsSinceIds: { [id: string]: string } = {};
 
+    private sound: Howl;
+
     constructor(
         private readonly streamingService: StreamingService,
         private readonly toolsService: ToolsService,
@@ -31,10 +33,20 @@ export class UserNotificationService {
 
         this.fetchNotifications();
 
-        this.playSoundNotification();
+        // this.playSoundNotification();
     }
 
     private fetchNotifications() {
+        this.sound = new Howl({
+            // src: ['assets/audio/exquisite.mp3']
+            //src: ['assets/audio/all-eyes-on-me.mp3']
+            //src: ['assets/audio/appointed.mp3']
+            src: ['assets/audio/boop.mp3']
+        });
+
+
+
+
         let accounts = this.store.snapshot().registeredaccounts.accounts;
         // let promises: Promise<any>[] = [];
 
@@ -104,15 +116,9 @@ export class UserNotificationService {
         // let audio = new Audio();
         // audio.src = "assets/audio/exquisite.mp3";
         // audio.load();
-        // audio.play();
+        // audio.play();      
 
-        var sound = new Howl({
-            // src: ['assets/audio/exquisite.mp3']
-            src: ['assets/audio/all-eyes-on-me.mp3']
-            //src: ['assets/audio/appointed.mp3']
-        });
-
-        sound.play();
+        this.sound.play();
     }
 
     private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
