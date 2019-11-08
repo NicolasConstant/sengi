@@ -87,9 +87,10 @@ export class StreamingWrapper {
     }
 
     private pullNewNotifications(){
-        this.mastodonService.getNotifications(this.account, null, null, this.since_id, 10)
+        this.mastodonService.getNotifications(this.account, null, this.since_id, null, 10)
             .then((notifications: Notification[]) => {
-                notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
+                //notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
+                notifications = notifications.reverse();
                 for (const n of notifications) {
                     const update = new StatusUpdate();
                     update.notification = n;

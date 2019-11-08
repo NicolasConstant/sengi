@@ -110,19 +110,23 @@ export class UserNotificationService {
         //     });
     }
 
+    private soundJustPlayed = false;
     private playSoundNotification() {
+        if(this.soundJustPlayed) return;
+
+
+
         console.warn('play audio');
-
-        // let audio = new Audio();
-        // audio.src = "assets/audio/exquisite.mp3";
-        // audio.load();
-        // audio.play();      
-
         this.sound.play();
     }
 
     private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
+        if(!notification && !notification.notification) return;
+
         this.playSoundNotification();
+        console.warn(account);
+        console.warn(notification);
+        
 
         if (notification.notification.type === 'mention') {
             this.processMentionsAndNotifications(account, [notification.notification], NotificationTypeEnum.UserMention);
