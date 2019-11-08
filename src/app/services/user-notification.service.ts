@@ -39,7 +39,7 @@ export class UserNotificationService {
             //     sinceId = this.sinceIds[account.id];
             // }
 
-            this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog'], null, null, 10)
+            this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll'], null, null, 10)
                 .then((notifications: Notification[]) => {
                     this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
                 })
