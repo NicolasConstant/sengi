@@ -15,7 +15,7 @@ export class StreamingService {
     constructor(
         private readonly mastodonService: MastodonWrapperService) { }
 
-    getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
+    getStreaming(accountInfo: AccountInfo, stream: StreamElement, since_id: string = null): StreamingWrapper {
 
         //console.warn('EventSourceStreaminWrapper');
         //new EventSourceStreaminWrapper(accountInfo, stream);
@@ -36,8 +36,10 @@ export class StreamingWrapper {
         private readonly mastodonService: MastodonWrapperService,
         private readonly account: AccountInfo,
         private readonly stream: StreamElement,
-        private readonly nbStatusPerIteration: number) {
+        private readonly nbStatusPerIteration: number,
+        since_id: string = null) {
 
+        this.since_id = since_id;
         this.start(account, stream);
     }
 
@@ -72,12 +74,38 @@ export class StreamingWrapper {
     private webSocketClosed(account: AccountInfo, stream: StreamElement, x: Event) {
         if (this.errorClosing) {
             setTimeout(() => {
-                this.pullNewStatuses();
+                if(stream.type === StreamTypeEnum.personnal) {
+                    this.pullNewNotifications();
+                } else {
+                    this.pullNewStatuses();
+                }                
                 this.errorClosing = false;
             }, 60 * 1000);
         } else if (!this.disposed) {
             setTimeout(() => { this.start(account, stream) }, 60 * 1000);
         }
+    }
+
+    private pullNewNotifications(){
+        this.mastodonService.getNotifications(this.account, null, null, this.since_id, 10)
+            .then((notifications: Notification[]) => {
+                notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
+                for (const n of notifications) {
+                    const update = new StatusUpdate();
+                    update.notification = n;
+                    update.type = EventEnum.notification;
+                    this.since_id = n.id;
+                    this.statusUpdateSubjet.next(update);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .then(() => {
+                if (!this.disposed) {
+                    setTimeout(() => { this.pullNewNotifications() }, 60 * 1000);
+                }
+            });
     }
 
     private pullNewStatuses() {

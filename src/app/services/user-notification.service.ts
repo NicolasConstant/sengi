@@ -40,7 +40,7 @@ export class UserNotificationService {
             //     sinceId = this.sinceIds[account.id];
             // }
 
-            this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll'], null, null, 10)
+            let getMentionsPromise = this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll'], null, null, 10)
                 .then((notifications: Notification[]) => {
                     this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
                 })
@@ -48,7 +48,7 @@ export class UserNotificationService {
                     this.notificationService.notifyHttpError(err, account);
                 });;
 
-            this.mastodonService.getNotifications(account, ['mention'], null, null, 10)
+            let getNotificationPromise = this.mastodonService.getNotifications(account, ['mention'], null, null, 10)
                 .then((notifications: Notification[]) => {
                     this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserNotification);
                 })
@@ -56,14 +56,22 @@ export class UserNotificationService {
                     this.notificationService.notifyHttpError(err, account);
                 });;
 
-            //TODO: start streaming services
-            let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
-            let streaming = this.streamingService.getStreaming(account, streamElement);
-            streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
-                if (notification && notification.type === EventEnum.notification) {
-                    this.processNewUpdate(account, notification);
-                }
-            });
+            Promise.all([getMentionsPromise, getNotificationPromise])
+                .then(() => {
+                    let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
+
+                    let mentionId = parseInt(this.mentionsSinceIds[account.id]);
+                    let notificationId = parseInt(this.mentionsSinceIds[account.id]);
+                    let lastId = Math.max(mentionId, notificationId).toString();
+
+                    let streaming = this.streamingService.getStreaming(account, streamElement, lastId);
+                    streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
+                        if (notification && notification.type === EventEnum.notification) {
+                            this.processNewUpdate(account, notification);
+                        }
+                    });
+                })
+                .catch(err => {});           
 
 
 
