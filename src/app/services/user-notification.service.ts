@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
+import { Howl } from 'howler';
 
 import { Status, Notification } from './models/mastodon.interfaces';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
@@ -10,6 +11,7 @@ import { ToolsService } from './tools.service';
 import { StreamingService, StatusUpdate, EventEnum } from './streaming.service';
 import { NotificationsComponent } from '../components/floating-column/manage-account/notifications/notifications.component';
 import { StreamElement, StreamTypeEnum } from '../states/streams.state';
+
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +30,8 @@ export class UserNotificationService {
         private readonly store: Store) {
 
         this.fetchNotifications();
+
+        this.playSoundNotification();
     }
 
     private fetchNotifications() {
@@ -71,7 +75,7 @@ export class UserNotificationService {
                         }
                     });
                 })
-                .catch(err => {});           
+                .catch(err => { });
 
 
 
@@ -94,7 +98,26 @@ export class UserNotificationService {
         //     });
     }
 
+    private playSoundNotification() {
+        console.warn('play audio');
+
+        // let audio = new Audio();
+        // audio.src = "assets/audio/exquisite.mp3";
+        // audio.load();
+        // audio.play();
+
+        var sound = new Howl({
+            // src: ['assets/audio/exquisite.mp3']
+            src: ['assets/audio/all-eyes-on-me.mp3']
+            //src: ['assets/audio/appointed.mp3']
+        });
+
+        sound.play();
+    }
+
     private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
+        this.playSoundNotification();
+
         if (notification.notification.type === 'mention') {
             this.processMentionsAndNotifications(account, [notification.notification], NotificationTypeEnum.UserMention);
         } else {
