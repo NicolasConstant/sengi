@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-import { Status } from "./models/mastodon.interfaces";
+import { Status, Notification } from "./models/mastodon.interfaces";
 import { ApiRoutes } from "./models/api.settings";
 import { StreamTypeEnum, StreamElement } from "../states/streams.state";
 import { MastodonWrapperService } from "./mastodon-wrapper.service";
 import { AccountInfo } from "../states/accounts.state";
-import { AccountIconComponent } from '../components/left-side-bar/account-icon/account-icon.component';
 
 @Injectable()
 export class StreamingService {
@@ -18,8 +17,8 @@ export class StreamingService {
 
     getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
 
-        console.warn('EventSourceStreaminWrapper');
-        new EventSourceStreaminWrapper(accountInfo, stream);
+        //console.warn('EventSourceStreaminWrapper');
+        //new EventSourceStreaminWrapper(accountInfo, stream);
 
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
     }
@@ -118,6 +117,10 @@ export class StreamingWrapper {
                 newUpdate.messageId = event.payload;
                 newUpdate.account = this.account;
                 break;
+            case 'notification':
+                newUpdate.type = EventEnum.notification;
+                newUpdate.notification = <Notification>JSON.parse(event.payload);  
+                break;              
             default:
                 newUpdate.type = EventEnum.unknow;
         }
@@ -242,10 +245,12 @@ export class StatusUpdate {
     status: Status;
     messageId: string;
     account: AccountInfo;
+    notification: Notification;
 }
 
 export enum EventEnum {
     unknow = 0,
     update = 1,
-    delete = 2
+    delete = 2,
+    notification = 3
 }

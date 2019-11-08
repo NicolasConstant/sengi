@@ -7,8 +7,9 @@ import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { AccountInfo } from '../states/accounts.state';
 import { NotificationService } from './notification.service';
 import { ToolsService } from './tools.service';
-import { StreamingService } from './streaming.service';
+import { StreamingService, StatusUpdate, EventEnum } from './streaming.service';
 import { NotificationsComponent } from '../components/floating-column/manage-account/notifications/notifications.component';
+import { StreamElement, StreamTypeEnum } from '../states/streams.state';
 
 @Injectable({
     providedIn: 'root'
@@ -56,7 +57,13 @@ export class UserNotificationService {
                 });;
 
             //TODO: start streaming services
-
+            let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
+            let streaming = this.streamingService.getStreaming(account, streamElement);
+            streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
+                if (notification && notification.type === EventEnum.notification) {
+                    this.processNewUpdate(account, notification);
+                }
+            });
 
 
 
@@ -77,6 +84,14 @@ export class UserNotificationService {
         //             this.fetchNotifications();
         //         }, 15 * 1000);
         //     });
+    }
+
+    private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
+        if (notification.notification.type === 'mention') {
+            this.processMentionsAndNotifications(account, [notification.notification], NotificationTypeEnum.UserMention);
+        } else {
+            this.processMentionsAndNotifications(account, [notification.notification], NotificationTypeEnum.UserNotification);
+        }
     }
 
 
@@ -112,24 +127,15 @@ export class UserNotificationService {
         }
     }
 
-    private hasNewNotifications(lastNotification: Notification, lastCreationDate: string): boolean {    
-
-        if(!lastNotification) return false;
-        if(!lastCreationDate) return false;
+    private hasNewNotifications(lastNotification: Notification, lastCreationDate: string): boolean {
+        if (!lastNotification) return false;
+        if (!lastCreationDate) return false;
         return new Date(lastNotification.created_at) > new Date(lastCreationDate);
     }
 
     private analyseNotifications(account: AccountInfo, userNotification: UserNotification, newNotifications: Notification[], type: NotificationTypeEnum): UserNotification {
-        console.group();
-        console.warn(account.username);
-        console.warn(newNotifications);
-        console.groupEnd();
-        // if (userNotification.allNotifications.length > 30) {
-        //     userNotification.allNotifications.length = 30;
-        // }
-        
-        let lastNotificationId = newNotifications[newNotifications.length - 1].id; //FIXME: wtf? check the id retrieval
-        //let lastNotificationId = newNotifications[0].id; //FIXME: wtf? check the id retrieval
+
+        let lastNotificationId = newNotifications[newNotifications.length - 1].id;
 
         const accountSettings = this.toolsService.getAccountSettings(account);
 
@@ -160,7 +166,7 @@ export class UserNotificationService {
         // userNotification.notifications = [...newNotifications, ...currentNotifications];
         // userNotification.mentions = [...newMentions, ...currentMentions];
 
-        
+
 
         if (type === NotificationTypeEnum.UserMention && !accountSettings.lastMentionCreationDate && newNotifications.length > 0) {
             accountSettings.lastMentionCreationDate = newNotifications[0].created_at;
