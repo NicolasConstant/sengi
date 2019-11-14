@@ -9,7 +9,6 @@ import { AccountInfo } from '../states/accounts.state';
 import { NotificationService } from './notification.service';
 import { ToolsService } from './tools.service';
 import { StreamingService, StatusUpdate, EventEnum } from './streaming.service';
-import { NotificationsComponent } from '../components/floating-column/manage-account/notifications/notifications.component';
 import { StreamElement, StreamTypeEnum } from '../states/streams.state';
 
 
@@ -31,22 +30,30 @@ export class UserNotificationService {
         private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) {
 
+        this.setNotificationSound();
         this.fetchNotifications();
 
         // this.playSoundNotification();
     }
 
-    private fetchNotifications() {
+    private setNotificationSound() {
+        let settings = this.toolsService.getSettings();
+        let soundId = settings.notificationSoundFileId;
+        
+        if(!soundId){
+            soundId = 0;
+            settings.notificationSoundFileId = 0;
+            this.toolsService.saveSettings(settings);
+        }
+
+        var sound = this.getAllNotificationSounds().find(x => x.id === soundId);
+
         this.sound = new Howl({
-            // src: ['assets/audio/exquisite.mp3']
-            src: ['assets/audio/all-eyes-on-me.mp3']
-            //src: ['assets/audio/appointed.mp3']
-            //src: ['assets/audio/boop.mp3']
+            src: [sound.path]
         });
+    }
 
-
-
-
+    private fetchNotifications() {
         let accounts = this.store.snapshot().registeredaccounts.accounts;
         // let promises: Promise<any>[] = [];
 
@@ -215,6 +222,17 @@ export class UserNotificationService {
             this.userNotifications.next(currentNotifications);
         }
     }
+
+    getAllNotificationSounds(): NotificationSoundDefinition[] {
+        let defs: NotificationSoundDefinition[] = [
+            new NotificationSoundDefinition(0, 'assets/audio/all-eyes-on-me.mp3', 'All eyes on me'),
+            new NotificationSoundDefinition(1, 'assets/audio/exquisite.mp3', 'Exquisite'),
+            new NotificationSoundDefinition(2, 'assets/audio/appointed.mp3', 'Appointed'),
+            new NotificationSoundDefinition(3, 'assets/audio/boop.mp3', 'Mastodon boop'),            
+        ];
+        return defs;
+    }
+
 }
 
 export class UserNotification {
@@ -234,4 +252,12 @@ export class UserNotification {
 enum NotificationTypeEnum {
     UserNotification,
     UserMention
+}
+
+export class NotificationSoundDefinition {
+
+    constructor(
+        public readonly id: number,
+        public readonly path: string,
+        public readonly name: string) {}
 }
