@@ -5,7 +5,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
-import { AccountSettings, SaveAccountSettings } from '../states/settings.state';
+import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings } from '../states/settings.state';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
@@ -86,7 +86,18 @@ export class ToolsService {
     saveAccountSettings(accountSettings: AccountSettings) {
         this.store.dispatch([
             new SaveAccountSettings(accountSettings)
-        ])
+        ]);
+    }
+
+    getSettings(): GlobalSettings {
+        let settings = <GlobalSettings>this.store.snapshot().globalsettings.settings;
+        return settings;
+    }
+
+    saveSettings(settings: GlobalSettings){
+        this.store.dispatch([
+            new SaveSettings(settings)
+        ]);
     }
 
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {

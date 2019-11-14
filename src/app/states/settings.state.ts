@@ -28,6 +28,7 @@ export class AccountSettings {
 
 export class GlobalSettings {
     disableAllNotifications = false;
+    notificationSoundFileId: number = 0;
     accountSettings: AccountSettings[] = [];
 }
 
@@ -48,7 +49,6 @@ export class SettingsState {
             return state.accountSettings.find(x => x.accountId === accountId);
         });
     }
-
 
     @Action(RemoveAccountSettings)
     RemoveAccountSettings(ctx: StateContext<SettingsStateModel>, action: RemoveAccountSettings){
@@ -82,7 +82,8 @@ export class SettingsState {
         const newSettings = new GlobalSettings();
 
         newSettings.disableAllNotifications = action.settings.disableAllNotifications;
-        newSettings.accountSettings = [...state.settings.accountSettings];
+        newSettings.notificationSoundFileId = action.settings.notificationSoundFileId;
+        newSettings.accountSettings = [...state.settings.accountSettings];        
         
         ctx.patchState({
             settings: newSettings
