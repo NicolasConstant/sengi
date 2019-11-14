@@ -64,7 +64,7 @@ export class StreamingWrapper {
                 this.eventSource.onerror = x => this.webSocketGotError(x);
                 this.eventSource.onopen = x => { };
                 this.eventSource.onclose = x => this.webSocketClosed(refreshedAccount, stream, x);
-            });       
+            });
     }
 
     private webSocketGotError(x: Event) {
@@ -74,11 +74,11 @@ export class StreamingWrapper {
     private webSocketClosed(account: AccountInfo, stream: StreamElement, x: Event) {
         if (this.errorClosing) {
             setTimeout(() => {
-                if(stream.type === StreamTypeEnum.personnal) {
+                if (stream.type === StreamTypeEnum.personnal) {
                     this.pullNewNotifications();
                 } else {
                     this.pullNewStatuses();
-                }                
+                }
                 this.errorClosing = false;
             }, 60 * 1000);
         } else if (!this.disposed) {
@@ -86,15 +86,20 @@ export class StreamingWrapper {
         }
     }
 
-    private pullNewNotifications(){
-        this.mastodonService.getNotifications(this.account, null, this.since_id, null, 10)
+    private pullNewNotifications() {
+        this.mastodonService.getNotifications(this.account, null, null, this.since_id, 10)
             .then((notifications: Notification[]) => {
                 //notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
+                let soundMuted = !this.since_id;
+
                 notifications = notifications.reverse();
                 for (const n of notifications) {
+
                     const update = new StatusUpdate();
                     update.notification = n;
                     update.type = EventEnum.notification;
+                    update.muteSound = soundMuted;
+
                     this.since_id = n.id;
                     this.statusUpdateSubjet.next(update);
                 }
@@ -148,8 +153,8 @@ export class StreamingWrapper {
                 break;
             case 'notification':
                 newUpdate.type = EventEnum.notification;
-                newUpdate.notification = <Notification>JSON.parse(event.payload);  
-                break;              
+                newUpdate.notification = <Notification>JSON.parse(event.payload);
+                break;
             default:
                 newUpdate.type = EventEnum.unknow;
         }
@@ -194,11 +199,11 @@ export class EventSourceStreaminWrapper {
     constructor(
         private readonly account: AccountInfo,
         private readonly stream: StreamElement
-    ){
+    ) {
         this.start();
     }
 
-    private start(){
+    private start() {
         const route = this.getRoute();
         this.eventSource = new EventSource(route);
         this.eventSource.addEventListener('update', u => {
@@ -211,20 +216,20 @@ export class EventSourceStreaminWrapper {
         });
         this.eventSource.onmessage = x => {
             console.log(x);
-            if(x.data !== ''){
+            if (x.data !== '') {
                 this.onMessage(JSON.parse(x.data));
             }
         };
         this.eventSource.onerror = x => {
             this.onError(x);
-        };    
-        
+        };
+
         console.warn('this.eventSource.CONNECTING');
         console.warn(this.eventSource.CONNECTING);
         console.warn('this.eventSource.OPEN');
         console.warn(this.eventSource.OPEN);
 
-    }   
+    }
 
     private onMessage(data) {
         console.warn('onMessage');
@@ -275,6 +280,7 @@ export class StatusUpdate {
     messageId: string;
     account: AccountInfo;
     notification: Notification;
+    muteSound: boolean;
 }
 
 export enum EventEnum {

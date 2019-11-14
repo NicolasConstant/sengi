@@ -19,8 +19,8 @@ import { StreamElement, StreamTypeEnum } from '../states/streams.state';
 export class UserNotificationService {
     userNotifications = new BehaviorSubject<UserNotification[]>([]);
 
-    private mentionsSinceIds: { [id: string]: string } = {};
-    private notificationsSinceIds: { [id: string]: string } = {};
+    // private mentionsSinceIds: { [id: string]: string } = {};
+    // private notificationsSinceIds: { [id: string]: string } = {};
 
     private sound: Howl;
 
@@ -39,9 +39,9 @@ export class UserNotificationService {
     private fetchNotifications() {
         this.sound = new Howl({
             // src: ['assets/audio/exquisite.mp3']
-            //src: ['assets/audio/all-eyes-on-me.mp3']
+            src: ['assets/audio/all-eyes-on-me.mp3']
             //src: ['assets/audio/appointed.mp3']
-            src: ['assets/audio/boop.mp3']
+            //src: ['assets/audio/boop.mp3']
         });
 
 
@@ -62,7 +62,7 @@ export class UserNotificationService {
                 })
                 .catch(err => {
                     this.notificationService.notifyHttpError(err, account);
-                });;
+                });
 
             let getNotificationPromise = this.mastodonService.getNotifications(account, ['mention'], null, null, 10)
                 .then((notifications: Notification[]) => {
@@ -70,17 +70,13 @@ export class UserNotificationService {
                 })
                 .catch(err => {
                     this.notificationService.notifyHttpError(err, account);
-                });;
+                });
 
             Promise.all([getMentionsPromise, getNotificationPromise])
                 .then(() => {
                     let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
 
-                    let mentionId = parseInt(this.mentionsSinceIds[account.id]);
-                    let notificationId = parseInt(this.mentionsSinceIds[account.id]);
-                    let lastId = Math.max(mentionId, notificationId).toString();
-
-                    let streaming = this.streamingService.getStreaming(account, streamElement, lastId);
+                    let streaming = this.streamingService.getStreaming(account, streamElement); 
                     streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
                         if (notification && notification.type === EventEnum.notification) {
                             this.processNewUpdate(account, notification);
@@ -88,45 +84,28 @@ export class UserNotificationService {
                     });
                 })
                 .catch(err => { });
-
-
-
-
-            // let getNotificationPromise = this.mastodonService.getNotifications(account, null, null, sinceId, 30)
-            //     .then((notifications: Notification[]) => {
-            //         this.processNotifications(account, notifications);
-            //     })
-            //     .catch(err => {
-            //         this.notificationService.notifyHttpError(err, account);
-            //     });
-            // promises.push(getNotificationPromise);
         });
-
-        // Promise.all(promises)
-        //     .then(() => {
-        //         setTimeout(() => {
-        //             this.fetchNotifications();
-        //         }, 15 * 1000);
-        //     });
     }
 
     private soundJustPlayed = false;
     private playSoundNotification() {
         if(this.soundJustPlayed) return;
-
-
+        this.soundJustPlayed = true;
 
         console.warn('play audio');
         this.sound.play();
+
+        setTimeout(() => { 
+            this.soundJustPlayed = false;
+        }, 2000);
     }
 
     private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
         if(!notification && !notification.notification) return;
 
-        this.playSoundNotification();
-        console.warn(account);
-        console.warn(notification);
-        
+        if(!notification.muteSound){
+            this.playSoundNotification();
+        }
 
         if (notification.notification.type === 'mention') {
             this.processMentionsAndNotifications(account, [notification.notification], NotificationTypeEnum.UserMention);
@@ -135,17 +114,13 @@ export class UserNotificationService {
         }
     }
 
-
     private processMentionsAndNotifications(account: AccountInfo, notifications: Notification[], type: NotificationTypeEnum) {
         if (notifications.length === 0) {
             return;
         }
 
         let currentNotifications = this.userNotifications.value;
-        let currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
-
-        const sinceId = notifications[0].id;
-        this.notificationsSinceIds[account.id] = sinceId;
+        let currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);       
 
         if (currentAccountNotifications) {
             currentAccountNotifications = this.analyseNotifications(account, currentAccountNotifications, notifications, type);
@@ -191,24 +166,7 @@ export class UserNotificationService {
             userNotification.hasNewNotifications = this.hasNewNotifications(userNotification.notifications[0], accountSettings.lastNotificationCreationDate);
         }
 
-        // userNotification.lastId = userNotification.allNotifications[userNotification.allNotifications.length - 1].id;
-        // const newNotifications = userNotification.allNotifications.filter(x => x.type !== 'mention');
-        // const newMentions = userNotification.allNotifications.filter(x => x.type === 'mention').map(x => x.status);
-
-        // const currentNotifications = userNotification.notifications;
-        // const currentMentions = userNotification.mentions;
-
-        // const lastMention = newMentions[0];
-        // let lastMentionNotification: Notification;
-        // if (lastMention) {
-        //     lastMentionNotification = userNotification.allNotifications.find(x => x.type === 'mention' && x.status.id === lastMention.id);
-        // }
-        // const lastNotification = newNotifications[0];
-        // userNotification.notifications = [...newNotifications, ...currentNotifications];
-        // userNotification.mentions = [...newMentions, ...currentMentions];
-
-
-
+        // Set settings if needed
         if (type === NotificationTypeEnum.UserMention && !accountSettings.lastMentionCreationDate && newNotifications.length > 0) {
             accountSettings.lastMentionCreationDate = newNotifications[0].created_at;
             this.toolsService.saveAccountSettings(accountSettings);
@@ -218,29 +176,6 @@ export class UserNotificationService {
             accountSettings.lastNotificationCreationDate = newNotifications[0].created_at;
             this.toolsService.saveAccountSettings(accountSettings);
         }
-
-
-        // if (lastMentionNotification && accountSettings.lastMentionCreationDate && new Date(lastMentionNotification.created_at) > new Date(accountSettings.lastMentionCreationDate)) {
-        //     userNotification.hasNewMentions = true;
-        // } else {
-        //     userNotification.hasNewMentions = false;
-        // }
-
-        // if (lastNotification && accountSettings.lastNotificationCreationDate && (new Date(lastNotification.created_at)) > new Date(accountSettings.lastNotificationCreationDate)) {
-        //     userNotification.hasNewNotifications = true;
-        // } else {
-        //     userNotification.hasNewNotifications = false;
-        // }
-
-        // if (!accountSettings.lastMentionCreationDate && lastMentionNotification) {
-        //     accountSettings.lastMentionCreationDate = lastMentionNotification.created_at;
-        //     this.toolsService.saveAccountSettings(accountSettings);
-        // }
-
-        // if (!accountSettings.lastNotificationCreationDate && lastNotification) {
-        //     accountSettings.lastNotificationCreationDate = lastNotification.created_at;
-        //     this.toolsService.saveAccountSettings(accountSettings);
-        // }
 
         return userNotification;
     }
