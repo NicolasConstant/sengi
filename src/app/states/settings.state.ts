@@ -28,7 +28,7 @@ export class AccountSettings {
 
 export class GlobalSettings {
     disableAllNotifications = false;
-    notificationSoundFileId: number = 0;
+    notificationSoundFileId: string = '0';
     accountSettings: AccountSettings[] = [];
 }
 

@@ -39,14 +39,19 @@ export class UserNotificationService {
     private setNotificationSound() {
         let settings = this.toolsService.getSettings();
         let soundId = settings.notificationSoundFileId;
+
+        console.warn(`soundId: ${soundId}`);
         
         if(!soundId){
-            soundId = 0;
-            settings.notificationSoundFileId = 0;
+            soundId = '0';
+            settings.notificationSoundFileId = '0';
             this.toolsService.saveSettings(settings);
         }
 
         var sound = this.getAllNotificationSounds().find(x => x.id === soundId);
+
+        console.warn(this.getAllNotificationSounds());
+        console.warn(sound);
 
         this.sound = new Howl({
             src: [sound.path]
@@ -225,10 +230,10 @@ export class UserNotificationService {
 
     getAllNotificationSounds(): NotificationSoundDefinition[] {
         let defs: NotificationSoundDefinition[] = [
-            new NotificationSoundDefinition(0, 'assets/audio/all-eyes-on-me.mp3', 'All eyes on me'),
-            new NotificationSoundDefinition(1, 'assets/audio/exquisite.mp3', 'Exquisite'),
-            new NotificationSoundDefinition(2, 'assets/audio/appointed.mp3', 'Appointed'),
-            new NotificationSoundDefinition(3, 'assets/audio/boop.mp3', 'Mastodon boop'),            
+            new NotificationSoundDefinition('0', 'assets/audio/all-eyes-on-me.mp3', 'All eyes on me'),
+            new NotificationSoundDefinition('1', 'assets/audio/exquisite.mp3', 'Exquisite'),
+            new NotificationSoundDefinition('2', 'assets/audio/appointed.mp3', 'Appointed'),
+            new NotificationSoundDefinition('3', 'assets/audio/boop.mp3', 'Mastodon boop'),            
         ];
         return defs;
     }
@@ -257,7 +262,7 @@ enum NotificationTypeEnum {
 export class NotificationSoundDefinition {
 
     constructor(
-        public readonly id: number,
+        public readonly id: string,
         public readonly path: string,
         public readonly name: string) {}
 }
