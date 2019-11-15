@@ -12,11 +12,16 @@ import { UserNotificationService, NotificationSoundDefinition } from '../../../s
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-
-    version: string;
+    
     notificationSounds: NotificationSoundDefinition[];
     notificationSoundId: string;
     notificationForm: FormGroup;
+
+    disableAutofocusEnabled: boolean;
+    disableAvatarNotificationsEnabled: boolean;
+    disableSoundsEnabled: boolean;
+    version: string;
+
 
     constructor(
         private formBuilder: FormBuilder,
@@ -50,4 +55,17 @@ export class SettingsComponent implements OnInit {
 
         return false;
     }
+
+    onDisableAutofocusChanged(){
+
+    }
+
+    onDisableAvatarNotificationsChanged(){
+
+    }
+
+    onDisableSoundsEnabledChanged(){
+
+    }
+
 }
