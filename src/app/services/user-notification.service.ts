@@ -22,6 +22,8 @@ export class UserNotificationService {
     // private notificationsSinceIds: { [id: string]: string } = {};
 
     private sound: Howl;
+    private soundJustPlayed = false;
+    private soundFileId: string;
 
     constructor(
         private readonly streamingService: StreamingService,
@@ -29,34 +31,9 @@ export class UserNotificationService {
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) {
-
-        this.setNotificationSound();
-        this.fetchNotifications();
-
-        // this.playSoundNotification();
-    }
-
-    private setNotificationSound() {
-        let settings = this.toolsService.getSettings();
-        let soundId = settings.notificationSoundFileId;
-
-        console.warn(`soundId: ${soundId}`);
         
-        if(!soundId){
-            soundId = '0';
-            settings.notificationSoundFileId = '0';
-            this.toolsService.saveSettings(settings);
-        }
-
-        var sound = this.getAllNotificationSounds().find(x => x.id === soundId);
-
-        console.warn(this.getAllNotificationSounds());
-        console.warn(sound);
-
-        this.sound = new Howl({
-            src: [sound.path]
-        });
-    }
+        this.fetchNotifications();
+    }   
 
     private fetchNotifications() {
         let accounts = this.store.snapshot().registeredaccounts.accounts;
@@ -99,17 +76,37 @@ export class UserNotificationService {
         });
     }
 
-    private soundJustPlayed = false;
     private playSoundNotification() {
+        this.setNotificationSound()
+
         if(this.soundJustPlayed) return;
         this.soundJustPlayed = true;
 
-        console.warn('play audio');
+        console.log('play audio');
         this.sound.play();
 
         setTimeout(() => { 
             this.soundJustPlayed = false;
         }, 2000);
+    }
+
+    private setNotificationSound() {
+        let settings = this.toolsService.getSettings();
+        let soundId = settings.notificationSoundFileId;
+
+        if(this.soundFileId === soundId) return;
+        
+        if(!soundId){
+            soundId = '0';
+            settings.notificationSoundFileId = '0';
+            this.toolsService.saveSettings(settings);
+        }
+
+        var sound = this.getAllNotificationSounds().find(x => x.id === soundId);
+        this.sound = new Howl({
+            src: [sound.path]
+        });
+        this.soundFileId = soundId;
     }
 
     private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
