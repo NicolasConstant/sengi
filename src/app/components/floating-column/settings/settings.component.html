@@ -26,7 +26,7 @@
             <label class="noselect sub-section__label" for="disableSounds">disable sounds</label>
             <br>
 
-            notification sound:<br/>
+            <span class="sound__title">notification sound:</span><br/>
             <form [formGroup]="notificationForm">
                 <select formControlName="countryControl" (change)="onChange($event.target.value)" class="sound__select">
                     <option [value]="s.id" *ngFor="let s of notificationSounds"> {{s.name}}</option>

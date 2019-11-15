@@ -1,6 +1,7 @@
 @import "variables";
 @import "commons";
 @import "panel";
+@import "mixins";
 
 .panel {
     padding-left: 0px;
@@ -40,17 +41,37 @@
 }
 
 .sound {
+    &__title {
+        display: inline-block;
+        margin: 0 0 5px 5px;
+    }
+
     &__select {
         float: left;
-        width: calc(100% - 70px);
+        width: calc(100% - 75px);
         padding: 3px 0;
+        margin-left: 5px;
+
+        background-color: #32384d;
+        color: white;        
+        border: 1px solid #32384d;
     }
 
     &__play {
+        transition: all .2s;
         display: inline-block;
         width: calc(60px);
         padding: 3px 0;
         text-align: center;
+        text-decoration: none;
+
+        background-color: #1f2330;
+        color: white;
+        -webkit-appearance: none;
+
+        &:hover {
+            background-color: #32384d;
+        }
     }
 }
 
