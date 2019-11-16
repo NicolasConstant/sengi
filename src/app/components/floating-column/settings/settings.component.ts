@@ -31,11 +31,17 @@ export class SettingsComponent implements OnInit {
     ngOnInit() {
         this.version = environment.VERSION;
 
+        const settings =  this.toolsService.getSettings();
+
         this.notificationSounds = this.userNotificationsService.getAllNotificationSounds();
-        this.notificationSoundId = this.toolsService.getSettings().notificationSoundFileId;
+        this.notificationSoundId = settings.notificationSoundFileId;
         this.notificationForm = this.formBuilder.group({
             countryControl: [this.notificationSounds[this.notificationSoundId].id]
         });
+
+        this.disableAutofocusEnabled = settings.disableAutofocus;
+        this.disableAvatarNotificationsEnabled = settings.disableAvatarNotifications;
+        this.disableSoundsEnabled = settings.disableSounds;
     }
 
     onChange(soundId: string) {
@@ -57,15 +63,21 @@ export class SettingsComponent implements OnInit {
     }
 
     onDisableAutofocusChanged(){
-
+        let settings = this.toolsService.getSettings();
+        settings.disableAutofocus = this.disableAutofocusEnabled;
+        this.toolsService.saveSettings(settings);        
     }
 
     onDisableAvatarNotificationsChanged(){
-
+        let settings = this.toolsService.getSettings();
+        settings.disableAvatarNotifications = this.disableAvatarNotificationsEnabled;
+        this.toolsService.saveSettings(settings);
     }
 
     onDisableSoundsEnabledChanged(){
-
+        let settings = this.toolsService.getSettings();
+        settings.disableSounds = this.disableSoundsEnabled;
+        this.toolsService.saveSettings(settings);
     }
 
 }
