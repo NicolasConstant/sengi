@@ -77,12 +77,12 @@ export class UserNotificationService {
     }
 
     private playSoundNotification() {
-        this.setNotificationSound()
-
+        const settings = this.toolsService.getSettings();
+        if(settings.disableSounds) return;
         if(this.soundJustPlayed) return;
         this.soundJustPlayed = true;
-
-        console.log('play audio');
+        
+        this.setNotificationSound();
         this.sound.play();
 
         setTimeout(() => { 
