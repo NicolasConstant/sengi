@@ -26,6 +26,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     faCheck = faCheck;
     faTimes = faTimes;
 
+    avatarNotificationDisabled: boolean;
     customStatusLengthEnabled: boolean;
     customStatusLength: number;
     private accountSettings: AccountSettings;
@@ -69,7 +70,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     private loadAccountSettings(){
         this.accountSettings = this.toolsService.getAccountSettings(this.account.info);
 
-        this.customStatusLengthEnabled = this.accountSettings.customStatusCharLengthEnabled;          this.customStatusLength = this.accountSettings.customStatusCharLength;
+        this.customStatusLengthEnabled = this.accountSettings.customStatusCharLengthEnabled;          
+        this.customStatusLength = this.accountSettings.customStatusCharLength;
+        this.avatarNotificationDisabled = this.accountSettings.disableAvatarNotifications;
     }
 
     onCustomLengthEnabledChanged(): boolean {
@@ -182,6 +185,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             });
 
         return false;
+    }
+
+    onDisableAvatarNotificationChanged() {
+        let settings = this.toolsService.getAccountSettings(this.account.info);
+        settings.disableAvatarNotifications = this.avatarNotificationDisabled;
+        this.toolsService.saveAccountSettings(settings);
     }
 }
 
