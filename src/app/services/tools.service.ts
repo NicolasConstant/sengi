@@ -11,7 +11,7 @@ import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.sta
 @Injectable({
     providedIn: 'root'
 })
-export class ToolsService {
+export class ToolsService {    
     private accountAvatar: { [id: string]: string; } = {};
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
@@ -68,6 +68,11 @@ export class ToolsService {
         return regAccounts.filter(x => x.isSelected);
     }
 
+    getAccountById(accountId: string): AccountInfo {
+        let regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        return regAccounts.find(x => x.id === accountId);
+    }
+
     getAccountSettings(account: AccountInfo): AccountSettings {
         let accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
         let accountSettings = accountsSettings.find(x => x.accountId === account.id);
@@ -118,7 +123,7 @@ export class ToolsService {
                 );
                 return foundAccount;
             });
-    }
+    }    
 
     getStatusUsableByAccount(account: AccountInfo, originalStatus: StatusWrapper): Promise<Status> {
         const isProvider = originalStatus.provider.id === account.id;
