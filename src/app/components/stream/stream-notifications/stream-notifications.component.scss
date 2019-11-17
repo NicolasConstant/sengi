@@ -1,0 +1,45 @@
+@import "variables";
+@import "commons";
+
+$selector-height: 30px;
+
+.notifications {
+    height: calc(100%);
+    width: calc(100%);
+    position: relative;
+
+    &__selector {
+        height: $selector-height;
+        background-color: $notification-column-selector-background;
+        width: calc(100%);
+
+        &__button {
+            text-decoration: none;
+            display: inline-block;
+            width: 50%;
+            height: 100%;
+            text-align: center;
+            padding-top: 3px;
+            color: $notification-column-selector-color;
+
+            &--selected {
+                color: $notification-column-selector-color-hover;
+            }
+
+
+        }
+    }
+
+    &__elements {
+        height: calc(100% - #{$selector-height});
+        width: calc(100%);
+        position: relative;
+        
+        overflow: auto;
+        outline: none; 
+        :focus {
+            outline: none; 
+        }
+        
+    }
+}

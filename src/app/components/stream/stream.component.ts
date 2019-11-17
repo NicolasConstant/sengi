@@ -1,10 +1,8 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
-import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition, faBell } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
-import { Status } from "../../services/models/mastodon.interfaces";
-import { AccountInfo } from "../../states/accounts.state";
 import { OpenThreadEvent } from "../../services/tools.service";
 import { StreamStatusesComponent } from './stream-statuses/stream-statuses.component';
 
@@ -49,7 +47,7 @@ export class StreamComponent implements OnInit {
                 this.columnFaIcon = faListUl;
                 break;
             case StreamTypeEnum.activity: 
-                
+                this.columnFaIcon = faBell;
                 this.displayingNotifications = true;
                 break;
         }

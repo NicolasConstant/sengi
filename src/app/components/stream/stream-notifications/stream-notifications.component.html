@@ -1,3 +1,17 @@
-<p>
-  stream-notifications works!
-</p>
+<div class="notifications">
+    <div class="notifications__selector">
+        <a href class="notifications__selector__button" 
+            title="display all notifications"
+            (click)="select('all')" 
+            [class.notifications__selector__button--selected]="displayingAll">All</a>
+        <a href class="notifications__selector__button"
+            title="display mentions"
+            (click)="select('mentions')"
+            [class.notifications__selector__button--selected]="!displayingAll">Mentions</a>
+    </div>
+
+    <div class="notifications__elements flexcroll" #statusstream (scroll)="onScroll()" tabindex="0">
+
+        
+    </div>
+</div>

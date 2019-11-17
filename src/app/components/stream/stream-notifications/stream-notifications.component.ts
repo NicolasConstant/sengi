@@ -1,15 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-stream-notifications',
-  templateUrl: './stream-notifications.component.html',
-  styleUrls: ['./stream-notifications.component.scss']
+    selector: 'app-stream-notifications',
+    templateUrl: './stream-notifications.component.html',
+    styleUrls: ['./stream-notifications.component.scss']
 })
 export class StreamNotificationsComponent implements OnInit {
+    displayingAll = true;
 
-  constructor() { }
+    constructor() { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
+    select(value: 'all' | 'mentions'): boolean {
+        if(value === 'all'){
+            this.displayingAll = true;
+        } else {
+            this.displayingAll = false;
+        }
+        return false;
+    }
 }
