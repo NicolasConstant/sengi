@@ -22,6 +22,8 @@ export class StreamComponent implements OnInit {
     overlayHashtagToBrowse: string;
     overlayThreadToBrowse: OpenThreadEvent;
 
+    displayingNotifications: boolean;
+
     goToTopSubject: Subject<void> = new Subject<void>();
 
     private _streamElement: StreamElement;
@@ -45,6 +47,10 @@ export class StreamComponent implements OnInit {
                 break;
             case StreamTypeEnum.list:
                 this.columnFaIcon = faListUl;
+                break;
+            case StreamTypeEnum.activity: 
+                
+                this.displayingNotifications = true;
                 break;
         }
 

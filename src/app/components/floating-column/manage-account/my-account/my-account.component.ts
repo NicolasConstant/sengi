@@ -93,6 +93,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', account.info.id, null, null, null, instance)));
         this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.local, 'Local Timeline', account.info.id, null, null, null, instance)));
         this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.personnal, 'Home', account.info.id, null, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.activity, 'Notifications', account.info.id, null, null, null, instance)));
 
         const loadedStreams = <StreamElement[]>this.store.snapshot().streamsstatemodel.streams;
         this.availableStreams.forEach(s => {
