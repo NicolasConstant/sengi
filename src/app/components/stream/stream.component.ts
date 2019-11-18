@@ -5,6 +5,7 @@ import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition, f
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
 import { OpenThreadEvent } from "../../services/tools.service";
 import { StreamStatusesComponent } from './stream-statuses/stream-statuses.component';
+import { StreamNotificationsComponent } from './stream-notifications/stream-notifications.component';
 
 @Component({
     selector: "app-stream",
@@ -27,6 +28,7 @@ export class StreamComponent implements OnInit {
     private _streamElement: StreamElement;
 
     @ViewChild(StreamStatusesComponent) private streamStatusesComponent: StreamStatusesComponent;
+    @ViewChild(StreamNotificationsComponent) private streamNotificationsComponent: StreamNotificationsComponent;
 
     @Input('streamElement')
     set streamElement(stream: StreamElement) {
@@ -65,8 +67,12 @@ export class StreamComponent implements OnInit {
     }
 
     focus(): boolean {
-        if (!this.overlayActive) {
+        if(this.overlayActive) return false;
+
+        if (!this.displayingNotifications) {
             this.streamStatusesComponent.focus();
+        } else {
+            this.streamNotificationsComponent.focus();
         }
         return false;
     }
