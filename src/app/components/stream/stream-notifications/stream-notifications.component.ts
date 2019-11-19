@@ -6,6 +6,7 @@ import { StreamElement } from '../../../states/streams.state';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { MastodonService } from '../../../services/mastodon.service';
 import { UserNotificationService } from '../../../services/user-notification.service';
+import { NotificationWrapper } from '../../floating-column/manage-account/notifications/notifications.component';
 
 @Component({
     selector: 'app-stream-notifications',
@@ -16,8 +17,8 @@ export class StreamNotificationsComponent implements OnInit {
     
     displayingAll = true;
 
-    notifications: Notification[] = [];
-    mentions: Notification[] = [];
+    notifications: NotificationWrapper[] = [];
+    mentions: NotificationWrapper[] = [];
 
     @Input() streamElement: StreamElement;
     @Input() goToTop: Observable<void>;
@@ -50,7 +51,7 @@ export class StreamNotificationsComponent implements OnInit {
 
         let getNotificationPromise = this.mastodonService.getNotifications(account, null, null, null, 10)
                 .then((notifications: Notification[]) => {
-                    this.notifications = notifications;
+                    this.notifications = notifications.map(x => new NotificationWrapper(x, account));
                 })
                 .catch(err => {                    
                 });
