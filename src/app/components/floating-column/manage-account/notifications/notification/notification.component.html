@@ -1,0 +1,26 @@
+<div class="notification">
+    <div *ngIf="notification.type === 'follow'">
+        <div class="stream__notification--icon" title="{{notification.account.acct}}">
+            <fa-icon class="followed" [icon]="faUserPlus"></fa-icon>
+        </div>
+        <div class="stream__notification--label">
+            <a href class="stream__link" title="{{notification.account.acct}}"
+                (click)="openAccount(notification.account)" (auxclick)="openUrl(notification.account.url)"
+                innerHTML="{{ notification.account | accountEmoji }}"></a>
+            followed
+            you!
+        </div>
+
+        <a href (click)="openAccount(notification.account)" (auxclick)="openUrl(notification.account.url)"
+            class="follow-account" title="{{notification.account.acct}}">
+            <img class="follow-account__avatar" src="{{ notification.account.avatar }}" />
+            <span class="follow-account__display-name" innerHTML="{{ notification.account | accountEmoji }}"></span>
+            <span class="follow-account__acct">@{{ notification.account.acct }}</span>
+        </a>
+    </div>
+
+    <app-status *ngIf="notification.status" class="stream__status" [statusWrapper]="notification.status"
+        [notificationAccount]="notification.account" [notificationType]="notification.type"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-status>
+</div>

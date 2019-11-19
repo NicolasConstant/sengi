@@ -78,6 +78,7 @@ import { PollEntryComponent } from './components/create-status/poll-editor/poll-
 import { ScheduledStatusesComponent } from './components/floating-column/scheduled-statuses/scheduled-statuses.component';
 import { ScheduledStatusComponent } from './components/floating-column/scheduled-statuses/scheduled-status/scheduled-status.component';
 import { StreamNotificationsComponent } from './components/stream/stream-notifications/stream-notifications.component';
+import { NotificationComponent } from './components/floating-column/manage-account/notifications/notification/notification.component';
 
 
 const routes: Routes = [
@@ -138,7 +139,8 @@ const routes: Routes = [
         PollEntryComponent,
         ScheduledStatusesComponent,
         ScheduledStatusComponent,
-        StreamNotificationsComponent
+        StreamNotificationsComponent,
+        NotificationComponent
     ],
     entryComponents: [
         EmojiPickerComponent

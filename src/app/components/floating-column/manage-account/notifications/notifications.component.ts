@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { faStar, faUserPlus, faRetweet } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStar2 } from "@fortawesome/free-regular-svg-icons";
 
 import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
@@ -18,10 +16,6 @@ import { OpenThreadEvent, ToolsService } from '../../../../services/tools.servic
     styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
-    faUserPlus = faUserPlus;
-    // faStar = faStar;
-    // faRetweet = faRetweet;
-
     notifications: NotificationWrapper[] = [];
     isLoading = false;
 
@@ -45,8 +39,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private userNotificationServiceSub: Subscription;
     private lastId: string;
 
-    constructor(
-        private readonly toolsService: ToolsService,
+    constructor(        
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonWrapperService) { }
@@ -125,17 +118,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
             });
     }
-    
-    openAccount(account: Account): boolean {
-        let accountName = this.toolsService.getAccountFullHandle(account);
-        this.browseAccountEvent.next(accountName);
-        return false;
-    }
-    
-    openUrl(url: string): boolean {
-        window.open(url, '_blank');
-        return false;
-    }
 
     browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
@@ -150,7 +132,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
 }
 
-class NotificationWrapper {
+export class NotificationWrapper {
     constructor(notification: Notification,  provider: AccountInfo) {
         this.type = notification.type;
         switch(this.type){            

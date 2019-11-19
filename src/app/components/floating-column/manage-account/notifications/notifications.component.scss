@@ -13,78 +13,78 @@
         color: rgb(255, 113, 113);
     }
 
-    &__notification {
-        position: relative;
+    // &__notification {
+    //     position: relative;
 
-        &--icon {
-            position: absolute;
-            top: 5px;
-            left: 43px;
-            text-align: center;
-            width: 20px;
-            // outline: 1px dotted greenyellow;
-        }
+    //     &--icon {
+    //         position: absolute;
+    //         top: 5px;
+    //         left: 43px;
+    //         text-align: center;
+    //         width: 20px;
+    //         // outline: 1px dotted greenyellow;
+    //     }
 
-        &--label {
-            margin: 0 10px 0 $avatar-column-space;
-            padding-top: 5px;
-        }
+    //     &--label {
+    //         margin: 0 10px 0 $avatar-column-space;
+    //         padding-top: 5px;
+    //     }
 
 
-        &:not(:last-child) {
-            border: solid #06070b;
-            border-width: 0 0 1px 0;
-        }
-    }
+    //     &:not(:last-child) {
+    //         border: solid #06070b;
+    //         border-width: 0 0 1px 0;
+    //     }
+    // }
 
-    &__link {
-        color: $status-links-color;
-    }
+    // &__link {
+    //     color: $status-links-color;
+    // }
 
-    &__status {
-        display: block;
-        // opacity: 0.65;
-    }
+    // &__status {
+    //     display: block;
+    //     // opacity: 0.65;
+    // }
 }
 
-.followed {
-    color: $boost-color;
-}
+// .followed {
+//     color: $boost-color;
+// }
 
-.follow-account {
-    padding: 5px;
-    height: 60px;
-    width: calc(100%);
-    overflow: hidden;
-    display: block;
-    position: relative;
-    text-decoration: none;
+// .follow-account {
+//     padding: 5px;
+//     height: 60px;
+//     width: calc(100%);
+//     overflow: hidden;
+//     display: block;
+//     position: relative;
+//     text-decoration: none;
 
-    &__avatar {
-        float: left;
-        margin: 0 0 0 10px;
-        width: 45px;
-        height: 45px;
-        border-radius: 2px;
-    }
+//     &__avatar {
+//         float: left;
+//         margin: 0 0 0 10px;
+//         width: 45px;
+//         height: 45px;
+//         border-radius: 2px;
+//     }
 
-    $acccount-info-left: 70px;
-    &__display-name {
-        position: absolute;
-        top: 7px;
-        left:  $acccount-info-left;
-        color: whitesmoke;      
-    }
+//     $acccount-info-left: 70px;
+//     &__display-name {
+//         position: absolute;
+//         top: 7px;
+//         left:  $acccount-info-left;
+//         color: whitesmoke;      
+//     }
 
-    &:hover &__display-name {
-        text-decoration: underline;
-    }
+//     &:hover &__display-name {
+//         text-decoration: underline;
+//     }
 
-    &__acct {
-        position: absolute;
-        top: 27px;
-        left: $acccount-info-left;
-        font-size: 13px;
-        color: $status-links-color;
-    }
-}
+//     &__acct {
+//         position: absolute;
+//         top: 27px;
+//         left: $acccount-info-left;
+//         font-size: 13px;
+//         color: $status-links-color;
+//     }
+// }
