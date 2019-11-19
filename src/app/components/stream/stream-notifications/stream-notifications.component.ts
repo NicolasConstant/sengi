@@ -78,4 +78,16 @@ export class StreamNotificationsComponent implements OnInit {
         }, 0);
         return false;
     }
+
+    browseAccount(accountName: string): void {
+        this.browseAccountEvent.next(accountName);
+    }
+
+    browseHashtag(hashtag: string): void {
+        this.browseHashtagEvent.next(hashtag);
+    }
+
+    browseThread(openThreadEvent: OpenThreadEvent): void {
+        this.browseThreadEvent.next(openThreadEvent);
+    }
 }
