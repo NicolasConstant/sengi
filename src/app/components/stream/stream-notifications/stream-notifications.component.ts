@@ -2,13 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { Observable, Subscription } from 'rxjs';
 
 import { Notification } from '../../../services/models/mastodon.interfaces';
-import { StreamElement } from '../../../states/streams.state';
+import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { MastodonService } from '../../../services/mastodon.service';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 import { NotificationWrapper } from '../../floating-column/manage-account/notifications/notifications.component';
 import { AccountInfo } from '../../../states/accounts.state';
 import { NotificationService } from '../../../services/notification.service';
+import { StreamingService, StatusUpdate, EventEnum } from '../../../services/streaming.service';
 
 @Component({
     selector: 'app-stream-notifications',
@@ -37,6 +38,7 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
 
     private goToTopSubscription: Subscription;
     private mentionsSubscription: Subscription;
+    private notificationSubscription: Subscription;
 
     isMentionsLoading: boolean;
     mentionsMaxReached: boolean;
@@ -47,6 +49,7 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     lastNotificationId: string;
 
     constructor(
+        private readonly streamingService: StreamingService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonService,
@@ -62,8 +65,9 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.goToTopSubscription.unsubscribe();
-        this.mentionsSubscription.unsubscribe();
+        if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+        if (this.mentionsSubscription) this.mentionsSubscription.unsubscribe();
+        if (this.notificationSubscription) this.notificationSubscription.unsubscribe();
     }
 
     private reduceSize(elements: NotificationWrapper[]) {
@@ -126,21 +130,40 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
                 this.lastNotificationId = this.notifications[this.notifications.length - 1].notification.id;
             })
             .catch(err => {
-            });
+            })
+            .then(() => {
+                let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', this.account.id, null, null, null, this.account.instance);
 
+                let streaming = this.streamingService.getStreaming(this.account, streamElement);
+                this.notificationSubscription = streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
+                    if (notification && notification.type === EventEnum.notification) {
+                        const n = new NotificationWrapper(notification.notification, this.account);
+                        this.notifications.unshift(n);
+                    }
+                });
+            })
+            .catch(err => { });
     }
 
     select(value: 'all' | 'mentions'): boolean {
         if (value === 'all') {
-            this.displayingMentions = false;
-            setTimeout(() => {
-                this.displayingNotifications = true;
-            }, 150);
+            if (this.displayingNotifications === true) {
+                this.applyGoToTop();
+            } else {
+                this.displayingMentions = false;
+                setTimeout(() => {
+                    this.displayingNotifications = true;
+                }, 150);
+            }
         } else {
-            this.displayingNotifications = false;
-            setTimeout(() => {
-                this.displayingMentions = true;
-            }, 150);
+            if (this.displayingMentions === true) {
+                this.applyGoToTop();
+            } else {
+                this.displayingNotifications = false;
+                setTimeout(() => {
+                    this.displayingMentions = true;
+                }, 150);
+            }
         }
         return false;
     }
