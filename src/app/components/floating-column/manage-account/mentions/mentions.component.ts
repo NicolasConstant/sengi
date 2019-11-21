@@ -101,7 +101,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
         this.isLoading = true;
 
-        this.mastodonService.getNotifications(this.account.info, ['follow', 'favourite', 'reblog'], this.lastId)
+        this.mastodonService.getNotifications(this.account.info, ['follow', 'favourite', 'reblog', 'poll'], this.lastId)
             .then((result: Notification[]) => {
 
                 const statuses = result.map(x => x.status);

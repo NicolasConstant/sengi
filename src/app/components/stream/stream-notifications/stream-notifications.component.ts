@@ -7,7 +7,8 @@ import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { MastodonService } from '../../../services/mastodon.service';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 import { NotificationWrapper } from '../../floating-column/manage-account/notifications/notifications.component';
-import { AccountInfo } from 'src/app/states/accounts.state';
+import { AccountInfo } from '../../../states/accounts.state';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-stream-notifications',
@@ -31,12 +32,22 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     @ViewChild('notificationstream') public notificationstream: ElementRef;
     @ViewChild('mentionstream') public mentionstream: ElementRef;
 
-    private nbStatusPerIteration: number = 10;
+    private nbStatusPerIteration: number = 20;
+    private account: AccountInfo;
 
     private goToTopSubscription: Subscription;
     private mentionsSubscription: Subscription;
 
+    isMentionsLoading: boolean;
+    mentionsMaxReached: boolean;
+    lastMentionId: string;
+
+    isNotificationsLoading: boolean;
+    notificationsMaxReached: boolean;
+    lastNotificationId: string;
+
     constructor(
+        private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonService,
         private readonly toolsService: ToolsService) { }
@@ -81,16 +92,17 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private loadMentions(account: AccountInfo, userNotifications: UserNotification[]) {
-        if(!userNotifications) return;
+    private loadMentions(userNotifications: UserNotification[]) {
+        if (!userNotifications) return;
 
-        let userNotification = userNotifications.find(x => x.account.id === account.id);
-        
-        if(!userNotification) return;
-        
-        let mentions = userNotification.mentions.map(x => new NotificationWrapper(x, account)).reverse();
+        let userNotification = userNotifications.find(x => x.account.id === this.account.id);
 
-        if(!mentions) return;
+        if (!userNotification) return;
+
+        let mentions = userNotification.mentions.map(x => new NotificationWrapper(x, this.account)).reverse();
+        this.lastMentionId = userNotification.lastMentionsId;
+
+        if (!mentions) return;
 
         mentions.forEach(mention => {
             if (!this.mentions.find(x => x.wrapperId === mention.wrapperId)) {
@@ -100,16 +112,18 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     }
 
     loadNotifications(): any {
-        const account = this.toolsService.getAccountById(this.streamElement.accountId);
+        this.account = this.toolsService.getAccountById(this.streamElement.accountId);
 
         this.mentionsSubscription = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             console.warn(userNotifications);
-            this.loadMentions(account, userNotifications);
+            this.loadMentions(userNotifications);
         });
 
-        let getNotificationPromise = this.mastodonService.getNotifications(account, null, null, null, 10)
+        this.mastodonService.getNotifications(this.account, null, null, null, 10)
             .then((notifications: Notification[]) => {
-                this.notifications = notifications.map(x => new NotificationWrapper(x, account));
+                this.notifications = notifications.map(x => new NotificationWrapper(x, this.account));
+
+                this.lastNotificationId = this.notifications[this.notifications.length - 1].notification.id;
             })
             .catch(err => {
             });
@@ -132,7 +146,76 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     }
 
     onScroll() {
+        var element = this.notificationstream.nativeElement as HTMLElement;
+        if (this.displayingMentions) {
+            element = this.mentionstream.nativeElement as HTMLElement;
+        }
 
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+
+        if (atBottom) {
+            if (this.displayingMentions) {
+                this.mentionsScrolledToBottom();
+            } else {
+                this.notificationsScrolledToBottom();
+            }
+        }
+    }
+
+    notificationsScrolledToBottom(): any {
+        if (this.isNotificationsLoading || this.notificationsMaxReached || this.notifications.length === 0)
+            return;
+
+        this.isNotificationsLoading = true;
+
+        this.mastodonService.getNotifications(this.account, null, this.lastNotificationId)
+            .then((result: Notification[]) => {
+                if (result.length === 0) {
+                    this.notificationsMaxReached = true;
+                    return;
+                }
+
+                for (const s of result) {
+                    const wrapper = new NotificationWrapper(s, this.account);
+                    this.notifications.push(wrapper);
+                }
+
+                this.lastNotificationId = result[result.length - 1].id;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, this.account);
+            })
+            .then(() => {
+                this.isNotificationsLoading = false;
+            });
+    }
+
+    mentionsScrolledToBottom(): any {
+        if (this.isMentionsLoading || this.mentionsMaxReached || this.mentions.length === 0)
+            return;
+
+        this.isMentionsLoading = true;
+
+        this.mastodonService.getNotifications(this.account, ['follow', 'favourite', 'reblog', 'poll'], this.lastMentionId)
+            .then((result: Notification[]) => {
+                if (result.length === 0) {
+                    this.mentionsMaxReached = true;
+                    return;
+                }
+
+                for (const s of result) {
+                    const wrapper = new NotificationWrapper(s, this.account);
+                    this.mentions.push(wrapper);
+                }
+
+                this.lastMentionId = result[result.length - 1].id;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, this.account);
+            })
+            .then(() => {
+                this.isMentionsLoading = false;
+            });
     }
 
     focus(): boolean {
