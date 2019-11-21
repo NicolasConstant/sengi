@@ -118,8 +118,7 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     loadNotifications(): any {
         this.account = this.toolsService.getAccountById(this.streamElement.accountId);
 
-        this.mentionsSubscription = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
-            console.warn(userNotifications);
+        this.mentionsSubscription = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {            
             this.loadMentions(userNotifications);
         });
 

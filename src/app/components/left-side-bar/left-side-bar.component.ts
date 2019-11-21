@@ -147,8 +147,6 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         });
 
         this.scheduledSub = this.scheduledStatusService.scheduledStatuses.subscribe((notifications: ScheduledStatusNotification[]) => {
-            console.warn(notifications);
-
             let statuses = [];
             notifications.forEach(n => {
                 n.statuses.forEach(x => {
@@ -157,7 +155,6 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
             })
 
             this.hasScheduledStatuses = statuses.length > 0;
-            console.warn(`hasScheduledStatuses ${this.hasScheduledStatuses}`);
         });
     }
 
