@@ -14,7 +14,7 @@
                     (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
                 </app-notification>
             </div>
-
+            <app-waiting-animation *ngIf="isNotificationsLoading" class="waiting-icon"></app-waiting-animation>
         </div>
         <div [class.notifications__elements__wrapper--selected]="displayingMentions"  
             class="notifications__elements__wrapper flexcroll" #mentionstream (scroll)="onScroll()" tabindex="0">
@@ -23,6 +23,7 @@
                     (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
                 </app-notification>
             </div>
+            <app-waiting-animation *ngIf="isMentionsLoading" class="waiting-icon"></app-waiting-animation>
         </div>
     </div>
 </div>

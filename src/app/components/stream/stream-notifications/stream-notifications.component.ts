@@ -44,7 +44,7 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
     mentionsMaxReached: boolean;
     lastMentionId: string;
 
-    isNotificationsLoading: boolean;
+    isNotificationsLoading: boolean = true;
     notificationsMaxReached: boolean;
     lastNotificationId: string;
 
@@ -124,11 +124,13 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
 
         this.mastodonService.getNotifications(this.account, null, null, null, 10)
             .then((notifications: Notification[]) => {
-                this.notifications = notifications.map(x => new NotificationWrapper(x, this.account));
+                this.isNotificationsLoading = false;
 
+                this.notifications = notifications.map(x => new NotificationWrapper(x, this.account));
                 this.lastNotificationId = this.notifications[this.notifications.length - 1].notification.id;
             })
             .catch(err => {
+                this.isNotificationsLoading = false;
             })
             .then(() => {
                 let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', this.account.id, null, null, null, this.account.instance);
