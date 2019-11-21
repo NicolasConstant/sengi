@@ -34,13 +34,36 @@ $selector-height: 30px;
         height: calc(100% - #{$selector-height});
         width: calc(100%);
         position: relative;
-        
-        overflow: auto;
-        outline: none; 
-        :focus {
-            outline: none; 
+
+        &__wrapper {
+            transition: all .15s;
+            position: absolute;
+            height: calc(100%);
+            width: calc(100%);
+
+            // right: 0;
+            // left: 0;
+            // bottom: 0;
+
+            z-index: 1;
+            opacity: 0;
+
+            overflow: auto;
+            outline: none;
+
+            &--selected {
+                z-index: 10;
+                opacity: 1;
+            }
         }
-        
+
+
+        :focus {
+            outline: none;
+        }
+
+
+
     }
 }
 
