@@ -1,5 +1,5 @@
 <div class="stream-edition">
-    <div class="stream-edition__settings">
+    <div class="stream-edition__settings" *ngIf="!displayingNotifications">
         <div class="stream-edition__setting">
             <input [(ngModel)]="hideBoosts" (change)="settingsChanged()" class="stream-edition__setting--checkbox"
                 type="checkbox" id="hideBoosts"> <label for="hideBoosts" class="noselect">hide

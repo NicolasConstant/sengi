@@ -21,6 +21,7 @@ export class StreamEditionComponent implements OnInit {
     private init: boolean;
 
     @Input() streamElement: StreamElement;
+    @Input() displayingNotifications: boolean;
 
     @Output('closed') public closedEvent = new EventEmitter();
 
