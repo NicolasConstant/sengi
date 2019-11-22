@@ -79,23 +79,23 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         }));
     }
 
-    private selectPreviousAccount(){
+    private selectPreviousAccount() {
         let accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         let selectedAccount = accounts.find(x => x.isSelected);
         let selectedIndex = accounts.indexOf(selectedAccount);
 
-        if(selectedIndex > 0){
+        if (selectedIndex > 0) {
             let previousAccount = accounts[selectedIndex - 1];
             this.store.dispatch([new SelectAccount(previousAccount)]);
-        }        
+        }
     }
 
-    private selectNextAccount(){
+    private selectNextAccount() {
         let accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         let selectedAccount = accounts.find(x => x.isSelected);
         let selectedIndex = accounts.indexOf(selectedAccount);
 
-        if(selectedIndex < accounts.length - 1){
+        if (selectedIndex < accounts.length - 1) {
             let nextAccount = accounts[selectedIndex + 1];
             this.store.dispatch([new SelectAccount(nextAccount)]);
         }
@@ -133,17 +133,20 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         });
 
         this.notificationSub = this.userNotificationServiceService.userNotifications.subscribe((notifications: UserNotification[]) => {
+            const settings = this.toolsService.getSettings();
             notifications.forEach((notification: UserNotification) => {
                 const acc = this.accounts.find(x => x.info.id === notification.account.id);
+
                 if (acc) {
-                    acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
+                    const accSettings = settings.accountSettings.find(x => x.accountId === acc.info.id);
+                    if (!settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
+                        acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
+                    }
                 }
             });
         });
 
         this.scheduledSub = this.scheduledStatusService.scheduledStatuses.subscribe((notifications: ScheduledStatusNotification[]) => {
-            console.warn(notifications);
-
             let statuses = [];
             notifications.forEach(n => {
                 n.statuses.forEach(x => {
@@ -152,7 +155,6 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
             })
 
             this.hasScheduledStatuses = statuses.length > 0;
-            console.warn(`hasScheduledStatuses ${this.hasScheduledStatuses}`);
         });
     }
 

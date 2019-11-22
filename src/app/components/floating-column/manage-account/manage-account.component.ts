@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
-import { OpenThreadEvent } from '../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { Account } from "../../../services/models/mastodon.interfaces";
 import { NotificationService } from '../../../services/notification.service';
@@ -17,7 +17,7 @@ import { AccountInfo } from '../../../states/accounts.state';
     templateUrl: './manage-account.component.html',
     styleUrls: ['./manage-account.component.scss']
 })
-export class ManageAccountComponent implements OnInit, OnDestroy {   
+export class ManageAccountComponent implements OnInit, OnDestroy {
     faAt = faAt;
     faBell = faBell;
     faEnvelope = faEnvelope;
@@ -25,7 +25,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     faStar = faStar;
     faUserPlus = faUserPlus;
 
-    subPanel = 'account';
+    subPanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' = 'account';
     hasNotifications = false;
     hasMentions = false;
 
@@ -49,19 +49,19 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     private _account: AccountWrapper;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService) { }
 
     ngOnInit() {
-      
     }
 
     ngOnDestroy(): void {
         this.userNotificationServiceSub.unsubscribe();
     }
 
-    private getUserUrl(account: AccountInfo){
+    private getUserUrl(account: AccountInfo) {
         this.mastodonService.retrieveAccountDetails(this.account.info)
             .then((acc: Account) => {
                 this.userAccount = acc;
@@ -71,21 +71,41 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
             });
     }
 
-    private checkNotifications(){
-        if(this.userNotificationServiceSub){
+    private checkNotifications() {
+        if (this.userNotificationServiceSub) {
             this.userNotificationServiceSub.unsubscribe();
         }
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
-            if(userNotification){
-                this.hasNotifications = userNotification.hasNewNotifications;
-                this.hasMentions = userNotification.hasNewMentions;
+            if (userNotification) {
+                let settings = this.toolsService.getSettings();
+                let accSettings = this.toolsService.getAccountSettings(this.account.info);
+
+                if (!settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
+                    this.hasNotifications = userNotification.hasNewNotifications;
+                    this.hasMentions = userNotification.hasNewMentions;
+                }
             }
         });
+
+        let current = this.userNotificationService.userNotifications.value;
+        const userNotification = current.find(x => x.account.id === this.account.info.id);
+        if (userNotification) {
+            let settings = this.toolsService.getSettings();
+            let accSettings = this.toolsService.getAccountSettings(this.account.info);
+
+            if (!settings.disableAutofocus && !settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
+                if (userNotification.hasNewNotifications) {
+                    this.loadSubPanel('notifications');
+                } else if (userNotification.hasNewMentions) {
+                    this.loadSubPanel('mentions');
+                }
+            }
+        }
     }
 
-    loadSubPanel(subpanel: string): boolean {
+    loadSubPanel(subpanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites'): boolean {
         this.subPanel = subpanel;
         return false;
     }

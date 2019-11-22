@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
@@ -77,6 +77,8 @@ import { PollEditorComponent } from './components/create-status/poll-editor/poll
 import { PollEntryComponent } from './components/create-status/poll-editor/poll-entry/poll-entry.component';
 import { ScheduledStatusesComponent } from './components/floating-column/scheduled-statuses/scheduled-statuses.component';
 import { ScheduledStatusComponent } from './components/floating-column/scheduled-statuses/scheduled-status/scheduled-status.component';
+import { StreamNotificationsComponent } from './components/stream/stream-notifications/stream-notifications.component';
+import { NotificationComponent } from './components/floating-column/manage-account/notifications/notification/notification.component';
 
 
 const routes: Routes = [
@@ -136,7 +138,9 @@ const routes: Routes = [
         PollEditorComponent,
         PollEntryComponent,
         ScheduledStatusesComponent,
-        ScheduledStatusComponent
+        ScheduledStatusComponent,
+        StreamNotificationsComponent,
+        NotificationComponent
     ],
     entryComponents: [
         EmojiPickerComponent
@@ -148,6 +152,7 @@ const routes: Routes = [
         HttpModule,
         HttpClientModule,
         FormsModule,
+        ReactiveFormsModule,
         PickerModule,
         OwlDateTimeModule, 
         OwlNativeDateTimeModule,

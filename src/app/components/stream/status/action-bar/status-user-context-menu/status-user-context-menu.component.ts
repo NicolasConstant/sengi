@@ -203,7 +203,6 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
         this.getStatus(selectedAccount)
             .then((status: Status) => {
-                console.warn(status);
                 return this.mastodonService.pinOnProfile(selectedAccount, status.id)
             })
             .then((status: Status) => {

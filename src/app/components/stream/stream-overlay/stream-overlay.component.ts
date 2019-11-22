@@ -84,9 +84,6 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
         this.loadedElements[newIndex].show();
         this.visibleElementIndex = newIndex;
 
-        console.warn(`visibleElementIndex ${this.visibleElementIndex}`);
-        console.warn(`this.loadedElements ${this.loadedElements.length}`);
-
         this.hasPreviousElements = true;
         this.hasNextElements = this.visibleElementIndex < this.loadedElements.length - 1;
 
@@ -103,9 +100,6 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
         let newIndex = this.visibleElementIndex - 1;
         this.loadedElements[newIndex].show();
         this.visibleElementIndex = newIndex;
-
-        console.warn(`visibleElementIndex ${this.visibleElementIndex}`);
-        console.warn(`this.loadedElements ${this.loadedElements.length}`);
 
         this.hasPreviousElements = this.visibleElementIndex > 0;
         this.hasNextElements = true;

@@ -35,8 +35,7 @@ export class EmojiPickerComponent implements OnInit {
     ngOnInit() {
         let currentAccount = this.toolsService.getSelectedAccounts()[0];
         this.toolsService.getCustomEmojis(currentAccount)
-            .then(emojis => {
-                console.warn(emojis);
+            .then(emojis => {                
                 this.customEmojis = emojis.map(x => this.convertEmoji(x));
             })
             .catch(err => {
