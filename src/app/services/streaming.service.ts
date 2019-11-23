@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-import { Status } from "./models/mastodon.interfaces";
+import { Status, Notification } from "./models/mastodon.interfaces";
 import { ApiRoutes } from "./models/api.settings";
 import { StreamTypeEnum, StreamElement } from "../states/streams.state";
 import { MastodonWrapperService } from "./mastodon-wrapper.service";
 import { AccountInfo } from "../states/accounts.state";
-import { AccountIconComponent } from '../components/left-side-bar/account-icon/account-icon.component';
 
 @Injectable()
 export class StreamingService {
@@ -16,7 +15,11 @@ export class StreamingService {
     constructor(
         private readonly mastodonService: MastodonWrapperService) { }
 
-    getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
+    getStreaming(accountInfo: AccountInfo, stream: StreamElement, since_id: string = null): StreamingWrapper {
+
+        //console.warn('EventSourceStreaminWrapper');
+        //new EventSourceStreaminWrapper(accountInfo, stream);
+
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
     }
 }
@@ -33,8 +36,10 @@ export class StreamingWrapper {
         private readonly mastodonService: MastodonWrapperService,
         private readonly account: AccountInfo,
         private readonly stream: StreamElement,
-        private readonly nbStatusPerIteration: number) {
+        private readonly nbStatusPerIteration: number,
+        since_id: string = null) {
 
+        this.since_id = since_id;
         this.start(account, stream);
     }
 
@@ -59,7 +64,7 @@ export class StreamingWrapper {
                 this.eventSource.onerror = x => this.webSocketGotError(x);
                 this.eventSource.onopen = x => { };
                 this.eventSource.onclose = x => this.webSocketClosed(refreshedAccount, stream, x);
-            });       
+            });
     }
 
     private webSocketGotError(x: Event) {
@@ -69,12 +74,44 @@ export class StreamingWrapper {
     private webSocketClosed(account: AccountInfo, stream: StreamElement, x: Event) {
         if (this.errorClosing) {
             setTimeout(() => {
-                this.pullNewStatuses();
+                if (stream.type === StreamTypeEnum.personnal) {
+                    this.pullNewNotifications();
+                } else {
+                    this.pullNewStatuses();
+                }
                 this.errorClosing = false;
             }, 60 * 1000);
         } else if (!this.disposed) {
             setTimeout(() => { this.start(account, stream) }, 60 * 1000);
         }
+    }
+
+    private pullNewNotifications() {
+        this.mastodonService.getNotifications(this.account, null, null, this.since_id, 10)
+            .then((notifications: Notification[]) => {
+                //notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
+                let soundMuted = !this.since_id;
+
+                notifications = notifications.reverse();
+                for (const n of notifications) {
+
+                    const update = new StatusUpdate();
+                    update.notification = n;
+                    update.type = EventEnum.notification;
+                    update.muteSound = soundMuted;
+
+                    this.since_id = n.id;
+                    this.statusUpdateSubjet.next(update);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .then(() => {
+                if (!this.disposed) {
+                    setTimeout(() => { this.pullNewNotifications() }, 60 * 1000);
+                }
+            });
     }
 
     private pullNewStatuses() {
@@ -114,6 +151,10 @@ export class StreamingWrapper {
                 newUpdate.messageId = event.payload;
                 newUpdate.account = this.account;
                 break;
+            case 'notification':
+                newUpdate.type = EventEnum.notification;
+                newUpdate.notification = <Notification>JSON.parse(event.payload);
+                break;
             default:
                 newUpdate.type = EventEnum.unknow;
         }
@@ -151,6 +192,83 @@ export class StreamingWrapper {
     }
 }
 
+export class EventSourceStreaminWrapper {
+    eventSource: EventSource;
+    private apiRoutes = new ApiRoutes();
+
+    constructor(
+        private readonly account: AccountInfo,
+        private readonly stream: StreamElement
+    ) {
+        this.start();
+    }
+
+    private start() {
+        const route = this.getRoute();
+        this.eventSource = new EventSource(route);
+        this.eventSource.addEventListener('update', u => {
+            console.warn('update');
+            console.warn(u);
+        });
+        this.eventSource.addEventListener('delete', d => {
+            console.warn('delete');
+            console.warn(d);
+        });
+        this.eventSource.onmessage = x => {
+            console.log(x);
+            if (x.data !== '') {
+                this.onMessage(JSON.parse(x.data));
+            }
+        };
+        this.eventSource.onerror = x => {
+            this.onError(x);
+        };
+
+        console.warn('this.eventSource.CONNECTING');
+        console.warn(this.eventSource.CONNECTING);
+        console.warn('this.eventSource.OPEN');
+        console.warn(this.eventSource.OPEN);
+
+    }
+
+    private onMessage(data) {
+        console.warn('onMessage');
+        console.warn(data);
+    }
+
+    private onError(data) {
+        console.warn('onError');
+        console.warn(data);
+    }
+
+    private getRoute(): string {
+        const streamingRouteType = this.getStreamingRouteType(this.stream.type);
+        let route = `https://${this.account.instance}/api/v1/streaming/${streamingRouteType}?access_token=${this.account.token.access_token}`;
+        return route;
+    }
+
+    private getStreamingRouteType(type: StreamTypeEnum): string {
+        switch (type) {
+            case StreamTypeEnum.global:
+                return 'public';
+            case StreamTypeEnum.local:
+                return 'public/local';
+            case StreamTypeEnum.personnal:
+                return 'user';
+            case StreamTypeEnum.directmessages:
+                return 'direct';
+            case StreamTypeEnum.tag:
+                return 'hashtag?tag={0}';
+            case StreamTypeEnum.list:
+                return 'list?list={0}';
+            case StreamTypeEnum.directmessages:
+                return 'direct';
+            default:
+                throw Error('Not supported');
+        }
+    }
+}
+
 class WebSocketEvent {
     event: string;
     payload: any;
@@ -161,10 +279,13 @@ export class StatusUpdate {
     status: Status;
     messageId: string;
     account: AccountInfo;
+    notification: Notification;
+    muteSound: boolean;
 }
 
 export enum EventEnum {
     unknow = 0,
     update = 1,
-    delete = 2
+    delete = 2,
+    notification = 3
 }

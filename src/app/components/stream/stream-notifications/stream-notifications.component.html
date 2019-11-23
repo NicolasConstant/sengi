@@ -1,0 +1,29 @@
+<div class="notifications">
+    <div class="notifications__selector">
+        <a href class="notifications__selector__button" title="display all notifications" (click)="select('all')"
+            [class.notifications__selector__button--selected]="displayingNotifications">All</a>
+        <a href class="notifications__selector__button" title="display mentions" (click)="select('mentions')"
+            [class.notifications__selector__button--selected]="displayingMentions">Mentions</a>
+    </div>
+
+    <div class="notifications__elements">
+        <div [class.notifications__elements__wrapper--selected]="displayingNotifications" 
+            class="notifications__elements__wrapper flexcroll" #notificationstream (scroll)="onScroll()" tabindex="0">
+            <div class="notification" *ngFor="let notification of notifications">
+                <app-notification [notification]="notification" (browseAccountEvent)="browseAccount($event)"
+                    (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+                </app-notification>
+            </div>
+            <app-waiting-animation *ngIf="isNotificationsLoading" class="waiting-icon"></app-waiting-animation>
+        </div>
+        <div [class.notifications__elements__wrapper--selected]="displayingMentions"  
+            class="notifications__elements__wrapper flexcroll" #mentionstream (scroll)="onScroll()" tabindex="0">
+            <div class="notification" *ngFor="let notification of mentions">
+                <app-notification [notification]="notification" (browseAccountEvent)="browseAccount($event)"
+                    (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+                </app-notification>
+            </div>
+            <app-waiting-animation *ngIf="isMentionsLoading" class="waiting-icon"></app-waiting-animation>
+        </div>
+    </div>
+</div>

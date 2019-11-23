@@ -26,6 +26,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     faCheck = faCheck;
     faTimes = faTimes;
 
+    avatarNotificationDisabled: boolean;
     customStatusLengthEnabled: boolean;
     customStatusLength: number;
     private accountSettings: AccountSettings;
@@ -69,7 +70,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     private loadAccountSettings(){
         this.accountSettings = this.toolsService.getAccountSettings(this.account.info);
 
-        this.customStatusLengthEnabled = this.accountSettings.customStatusCharLengthEnabled;          this.customStatusLength = this.accountSettings.customStatusCharLength;
+        this.customStatusLengthEnabled = this.accountSettings.customStatusCharLengthEnabled;          
+        this.customStatusLength = this.accountSettings.customStatusCharLength;
+        this.avatarNotificationDisabled = this.accountSettings.disableAvatarNotifications;
     }
 
     onCustomLengthEnabledChanged(): boolean {
@@ -90,6 +93,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.global, 'Federated Timeline', account.info.id, null, null, null, instance)));
         this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.local, 'Local Timeline', account.info.id, null, null, null, instance)));
         this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.personnal, 'Home', account.info.id, null, null, null, instance)));
+        this.availableStreams.push(new StreamWrapper(new StreamElement(StreamTypeEnum.activity, 'Notifications', account.info.id, null, null, null, instance)));
 
         const loadedStreams = <StreamElement[]>this.store.snapshot().streamsstatemodel.streams;
         this.availableStreams.forEach(s => {
@@ -182,6 +186,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             });
 
         return false;
+    }
+
+    onDisableAvatarNotificationChanged() {
+        let settings = this.toolsService.getAccountSettings(this.account.info);
+        settings.disableAvatarNotifications = this.avatarNotificationDisabled;
+        this.toolsService.saveAccountSettings(settings);
     }
 }
 

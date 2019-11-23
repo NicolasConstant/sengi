@@ -43,10 +43,16 @@
 
     <h4 class="my-account__label my-account__margin-top">advanced settings:</h4>
     <div class="advanced-settings">
-        <input class="advanced-settings__checkbox" [(ngModel)]="customStatusLengthEnabled" (change)="onCustomLengthEnabledChanged()"
-            type="checkbox" name="customCharLength" value="customCharLength" id="customCharLength"> <label class="noselect advanced-settings__label" for="customCharLength">custom char limit</label><br>
-        <p *ngIf="customStatusLengthEnabled" class="advanced-settings__text">use this only if your instance doesn't support status custom length detection (i.e. not a Pleroma or glitch-soc instance)</p>
-        <input *ngIf="customStatusLengthEnabled" [(ngModel)]="customStatusLength" class="themed-form advanced-settings__input" type="number" (keyup)="customStatusLengthChanged($event)" />
+        <input class="advanced-settings__checkbox" [(ngModel)]="avatarNotificationDisabled"
+            (change)="onDisableAvatarNotificationChanged()" type="checkbox" name="avatarNotification" value="avatarNotification" id="avatarNotification"> <label class="noselect advanced-settings__label" for="avatarNotification">disable avatar notifications</label><br>
+        <input class="advanced-settings__checkbox" [(ngModel)]="customStatusLengthEnabled"
+            (change)="onCustomLengthEnabledChanged()" type="checkbox" name="customCharLength" value="customCharLength"
+            id="customCharLength"> <label class="noselect advanced-settings__label" for="customCharLength">custom char
+            limit</label><br>
+        <p *ngIf="customStatusLengthEnabled" class="advanced-settings__text">use this only if your instance doesn't
+            support status custom length detection (i.e. not a Pleroma or glitch-soc instance)</p>
+        <input *ngIf="customStatusLengthEnabled" [(ngModel)]="customStatusLength"
+            class="themed-form advanced-settings__input" type="number" (keyup)="customStatusLengthChanged($event)" />
     </div>
 
     <h4 class="my-account__label my-account__margin-top">remove account from sengi:</h4>

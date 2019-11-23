@@ -262,7 +262,7 @@ export class MastodonService {
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
     }
 
-    getNotifications(account: AccountInfo, excludeTypes: string[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         let route = `https://${account.instance}${this.apiRoutes.getNotifications}?limit=${limit}`;
 
         if(maxId){

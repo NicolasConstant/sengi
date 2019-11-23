@@ -1,6 +1,43 @@
 <div class="panel">
     <h3 class="panel__title">settings</h3>
 
-    <p class="version">Sengi version: {{version}}</p>
-</div>
+    <!-- <select name="notification-sound" class="form-control" [(ngModel)]="branch.PhysicalProvince">
+        <option *ngFor="let p of branchService.provinces" [value]="p">{{p}}</option>
+    </select> -->
 
+    <div class="content flexcroll">
+        <h4 class="panel__subtitle">Notifications</h4>
+        <div class="sub-section">
+            <input class="sub-section__checkbox" [(ngModel)]="disableAutofocusEnabled"
+                (change)="onDisableAutofocusChanged()" type="checkbox" name="disableAutofocus"
+                value="disableAutofocus" id="disableAutofocus">
+            <label class="noselect sub-section__label" for="disableAutofocus">disable account's panel autofocus</label>
+            <br>
+
+            <input class="sub-section__checkbox" [(ngModel)]="disableAvatarNotificationsEnabled"
+                (change)="onDisableAvatarNotificationsChanged()" type="checkbox" name="disableAvatarNotifications"
+                value="disableAvatarNotifications" id="disableAvatarNotifications">
+            <label class="noselect sub-section__label" for="disableAvatarNotifications">disable all avatar(s) notifications</label>
+            <br>
+
+            <input class="sub-section__checkbox" [(ngModel)]="disableSoundsEnabled"
+                (change)="onDisableSoundsEnabledChanged()" type="checkbox" name="disableSounds"
+                value="disableSounds" id="disableSounds">
+            <label class="noselect sub-section__label" for="disableSounds">disable sounds</label>
+            <br>
+
+            <span class="sound__title">notification sound:</span><br/>
+            <form [formGroup]="notificationForm">
+                <select formControlName="countryControl" (change)="onChange($event.target.value)" class="sound__select">
+                    <option [value]="s.id" *ngFor="let s of notificationSounds"> {{s.name}}</option>
+                </select>
+            </form>
+            <a href class="form-button sound__play" type="submit" (click)="playNotificationSound()">play</a>
+        </div>
+
+        <h4 class="panel__subtitle">About</h4>
+        <p class="version">Sengi version: {{version}}</p>
+
+
+    </div>
+</div>

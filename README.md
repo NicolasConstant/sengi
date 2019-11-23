@@ -36,11 +36,15 @@ It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) fro
 
 ## Contribute
 
-Please see the [contributing guidelines](CONTRIBUTING.md).
+Please see the [contributing guidelines](CONTRIBUTING.md)
 
 ## License
 
 This project is licensed under the AGPLv3 License - see [LICENSE](LICENSE) for details
+
+## Credits
+
+See [credits](CREDITS.md)
 
 ## Dependencies 
 

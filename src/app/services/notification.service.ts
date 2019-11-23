@@ -26,8 +26,6 @@ export class NotificationService {
         let message = 'Oops, Unknown Error';
         let code: number;
 
-        console.warn(err);
-
         try {
             code = err.status;
             message = err.error.error; //Mastodon

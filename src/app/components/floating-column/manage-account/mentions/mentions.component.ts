@@ -72,10 +72,10 @@ export class MentionsComponent implements OnInit, OnDestroy {
         });
     }
 
-    private processNewMentions(userNotifications: UserNotification[]) {
+    private processNewMentions(userNotifications: UserNotification[]) {        
         const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
         if (userNotification && userNotification.mentions) {
-            let orderedMentions = [...userNotification.mentions].reverse();
+            let orderedMentions = [...userNotification.mentions.map(x => x.status)].reverse();
             for (let m of orderedMentions) {
                 if (!this.statuses.find(x => x.status.id === m.id)) {
                     const statusWrapper = new StatusWrapper(m, this.account.info);
@@ -83,7 +83,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.lastId = userNotification.lastId;
+        this.lastId = userNotification.lastMentionsId;
         this.userNotificationService.markMentionsAsRead(this.account.info);
     }
 
@@ -101,7 +101,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
         this.isLoading = true;
 
-        this.mastodonService.getNotifications(this.account.info, ['follow', 'favourite', 'reblog'], this.lastId)
+        this.mastodonService.getNotifications(this.account.info, ['follow', 'favourite', 'reblog', 'poll'], this.lastId)
             .then((result: Notification[]) => {
 
                 const statuses = result.map(x => x.status);

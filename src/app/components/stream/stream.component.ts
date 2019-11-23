@@ -1,12 +1,11 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
-import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition, faBell } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
-import { Status } from "../../services/models/mastodon.interfaces";
-import { AccountInfo } from "../../states/accounts.state";
 import { OpenThreadEvent } from "../../services/tools.service";
 import { StreamStatusesComponent } from './stream-statuses/stream-statuses.component';
+import { StreamNotificationsComponent } from './stream-notifications/stream-notifications.component';
 
 @Component({
     selector: "app-stream",
@@ -22,11 +21,14 @@ export class StreamComponent implements OnInit {
     overlayHashtagToBrowse: string;
     overlayThreadToBrowse: OpenThreadEvent;
 
+    displayingNotifications: boolean;
+
     goToTopSubject: Subject<void> = new Subject<void>();
 
     private _streamElement: StreamElement;
 
     @ViewChild(StreamStatusesComponent) private streamStatusesComponent: StreamStatusesComponent;
+    @ViewChild(StreamNotificationsComponent) private streamNotificationsComponent: StreamNotificationsComponent;
 
     @Input('streamElement')
     set streamElement(stream: StreamElement) {
@@ -46,6 +48,10 @@ export class StreamComponent implements OnInit {
             case StreamTypeEnum.list:
                 this.columnFaIcon = faListUl;
                 break;
+            case StreamTypeEnum.activity: 
+                this.columnFaIcon = faBell;
+                this.displayingNotifications = true;
+                break;
         }
 
         this._streamElement = stream;
@@ -61,8 +67,12 @@ export class StreamComponent implements OnInit {
     }
 
     focus(): boolean {
-        if (!this.overlayActive) {
+        if(this.overlayActive) return false;
+
+        if (!this.displayingNotifications) {
             this.streamStatusesComponent.focus();
+        } else {
+            this.streamNotificationsComponent.focus();
         }
         return false;
     }
