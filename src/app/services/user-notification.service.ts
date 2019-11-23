@@ -92,15 +92,15 @@ export class UserNotificationService {
 
     private setNotificationSound() {
         let settings = this.toolsService.getSettings();
-        let soundId = settings.notificationSoundFileId;
-
-        if(this.soundFileId === soundId) return;
+        let soundId = settings.notificationSoundFileId;       
         
         if(!soundId){
             soundId = '0';
             settings.notificationSoundFileId = '0';
             this.toolsService.saveSettings(settings);
         }
+
+        if(this.soundFileId === soundId) return;
 
         var sound = this.getAllNotificationSounds().find(x => x.id === soundId);
         this.sound = new Howl({
