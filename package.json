@@ -12,7 +12,7 @@
         "type": "git",
         "url": "https://github.com/NicolasConstant/sengi.git"
     },
-    "scripts": {
+    "scripts": { 
         "ng": "ng",
         "start": "ng serve",
         "start-mem": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",
