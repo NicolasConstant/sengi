@@ -101,7 +101,11 @@ export class AddNewAccountComponent implements OnInit {
         if (instanceApps.length !== 0) {
             return Promise.resolve(instanceApps[0].app);
         } else {
-            const redirect_uri = this.getLocalHostname();
+            let redirect_uri = this.getLocalHostname();
+            if (process && process.versions && typeof((<any>process.versions).electron) === 'string') {
+                redirect_uri += '/register';
+            }
+
             return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://nicolasconstant.github.io/sengi/')
                 .then((appData: AppData) => {
                     return this.saveNewApp(instance, appData)

@@ -80,4 +80,21 @@ export class SettingsComponent implements OnInit {
         this.toolsService.saveSettings(settings);
     }
 
+    isCleanningAll: boolean = false;
+    startClearAllLocalData(): boolean {
+        this.isCleanningAll = !this.isCleanningAll;
+        return false;
+    }
+
+    confirmClearAll(): boolean{
+        localStorage.clear();
+        location.reload();
+        return false;
+    }
+
+    cancelClearAll(): boolean {
+        this.isCleanningAll = false;
+        return false;
+    }
+
 }
