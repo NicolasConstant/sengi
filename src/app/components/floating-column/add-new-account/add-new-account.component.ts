@@ -13,7 +13,6 @@ import { NotificationService } from '../../../services/notification.service';
     styleUrls: ['./add-new-account.component.scss']
 })
 export class AddNewAccountComponent implements OnInit {
-    private blockList = ['gab.com', 'gab.ai', 'cyzed.com'];
     private comradeList = ['juche.town'];
 
     private username: string;
@@ -61,8 +60,6 @@ export class AddNewAccountComponent implements OnInit {
         // const username = fullHandle[0];
         // const instance = fullHandle[1];
 
-        this.checkBlockList(this.instance);
-
         this.checkAndCreateApplication(this.instance)
             .then((appData: AppData) => {
                 this.redirectToInstanceAuthPage(this.username, this.instance, appData);
@@ -78,20 +75,6 @@ export class AddNewAccountComponent implements OnInit {
             });
 
         return false;
-    }
-
-    private checkBlockList(instance: string) {
-        let cleanInstance = instance.replace('http://', '').replace('https://', '').toLowerCase();
-        for (let b of this.blockList) {
-            if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {
-                let content = '<div style="width:100%; height:100%; background-color: black;"><iframe style="pointer-events: none;" width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&autoplay=1&showinfo=0&controls=0" allow="autoplay; fullscreen"></div>';
-
-                document.open();
-                document.write(content);
-                document.close();
-                throw Error('Oh Noz!');
-            }
-        }
     }
 
     private checkAndCreateApplication(instance: string): Promise<AppData> {
