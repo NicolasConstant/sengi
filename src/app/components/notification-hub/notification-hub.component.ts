@@ -23,13 +23,13 @@ export class NotificationHubComponent implements OnInit {
         //this.autoSubmit();       
     }
     
-    autoSubmit(): any {
-        this.notificationService.notify("test message", true);
+    // autoSubmit(): any {
+    //     //this.notificationService.notify("test message", true);
 
-        setTimeout(() => {
-            this.autoSubmit();
-        }, 1500);
-    }
+    //     setTimeout(() => {
+    //         this.autoSubmit();
+    //     }, 1500);
+    // }
 
     onClick(notification: NotificatioData): void{
         this.notifications = this.notifications.filter(x => x.id !== notification.id);

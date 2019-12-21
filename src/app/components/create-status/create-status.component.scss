@@ -2,21 +2,179 @@
 @import "commons";
 @import "panel";
 @import "buttons";
+@import "mixins";
 $btn-send-status-width: 60px;
 $counter-width: 90px;
+
+// @import "~@ctrl/ngx-emoji-mart/picker";
+
 .form-control {
     margin: 0 0 5px 5px;
     width: calc(100% - 10px);
     background-color: $column-color;
+    background-color: $status-editor-background;
     border-color: $status-secondary-color;
-    color: #fff;
+    color: $status-editor-color;
     font-size: $default-font-size;
+
     &:focus {
         box-shadow: none;
     }
+
     &--privacy {
         display: inline-block;
         width: calc(100% - 15px - #{$btn-send-status-width} - #{$counter-width});
+    }
+}
+
+.status-editor {
+    position: relative;
+    font-size: $default-font-size;
+    margin-bottom: 5px;
+
+    &__title {
+        background-color: $status-editor-title-background;
+        color: $status-editor-color;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+        border-width: 0;
+        margin-bottom: 0;
+    }
+
+    &__emoji {
+        position: absolute;
+        top: 37px;
+        right: 10px;
+
+        &--image {
+            transition: all .2s;
+
+            width: 24px;
+            height: 24px;
+
+            -webkit-filter: grayscale(100%);
+            -moz-filter: grayscale(100%);
+            -ms-filter: grayscale(100%);
+            -o-filter: grayscale(100%);
+            filter: gray;
+            opacity: .7;
+
+            &:hover {
+                filter: none;
+                -webkit-filter: grayscale(0%);
+                -moz-filter: grayscale(0%);
+                -ms-filter: grayscale(0%);
+                -o-filter: grayscale(0%);
+                opacity: 1;
+            }
+        }
+    }
+
+    &__content {
+        border-width: 0;
+        background-color: $status-editor-background;
+        color: $status-editor-color;
+        margin-bottom: 0;
+
+        resize: none;
+        border: none;
+        overflow: auto;
+        outline: none;
+
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+
+        min-height: 110px;
+        height: 110px;
+
+        padding-bottom: 10px;
+        padding-right: 30px;
+        //border-bottom: 1px solid black;
+
+        &::-webkit-resizer {
+            width: 0px;
+            height: 0px;
+        }
+
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
+    }
+
+    &__mention-error {
+        background-color: $status-editor-background;
+        color: rgb(255, 34, 34);
+        padding: 5px 10px;
+        margin: 0 5px;
+    }
+
+    &__autosuggest {
+        display: block;
+        margin: 0 5px;
+    }
+
+    &__footer {
+        height: 34px;
+        margin: 0 5px;
+        border-width: 0;
+
+        background-color: $status-editor-footer-background;
+
+        &--link {
+            color: $status-editor-footer-link-color;
+            display: inline-block;
+            padding: 5px;
+            margin: 2px 0 0 5px;
+        }
+
+        &--add-poll {
+            font-size: 16px;
+            margin: 0 0 0 5px;
+            position: relative;
+            top: 0px;
+        }
+
+        &--send-button {
+            @include clearButton;
+            transition: all .2s;
+            float: right;
+            padding: 0 15px 0 15px;
+            height: 34px;
+            background-color: $status-editor-footer-background;
+
+            &:hover {
+                background-color: lighten($status-editor-footer-background, 20%);
+                background-color: darken($status-editor-footer-background, 20%);
+            }
+
+            outline: inherit;
+            &:focus {
+                background-color: darken($status-editor-footer-background, 20%);
+            }
+
+            & span {
+                margin: 0;
+                padding: 0;
+            }
+        }
+
+        &__counter {
+            float: right;
+            height: 34px;
+            padding: 6px 7px 0 7px;
+            vertical-align: center;
+
+            &--count {
+                display: block;
+                margin-right: 40px
+            }
+
+            &--posts {
+                display: block;
+                float: right;
+            }
+        }
     }
 }
 
@@ -25,73 +183,32 @@ $counter-width: 90px;
     width: $btn-send-status-width;
     position: relative;
     top: -1px;
-    left: 5px; // background-color: orange;
-    // border-color: orange;
-    // color: black;
-    font-weight: 500; // &:hover {
-    // }
-    // &:focus {
-    //     border-color: darkblue;
-    // }
+    left: 5px;
+    font-weight: 500;
 }
 
-.status-form {
+.context-menu-icon {
     position: relative;
-    font-size: $default-font-size;
-    &__sending {
-        position: absolute;
-        top: 0px;
-        left: 4px;
-        right: 4px;
-        bottom: 4px;
-        background-color: rgba($column-color, .75);
-        z-index: 2;
-        &--waiting {
-            margin-top: calc(25%);
-        }
-    }
-    &__counter {
-        display: inline-block;
-        border: 1px solid $status-secondary-color;
-        margin-left: 5px;
-        width: calc(#{$counter-width} - 5px);
-        height: 32px;
-        position: relative;
-        top: 0px;
-        padding: 4px 7px 0 7px; // color: lighten($font-link-primary-hover, 10);
-        // position: relative;
-        // overflow: hidden;
-        &--count {
-            // position: absolute;
-            // left: 0;
-            // overflow: hidden;
-            // outline: 1px solid greenyellow;
-        }
-        &--posts {
-            // position: absolute;
-            // right: 0;
-            margin-left: 10px;
-            float: right;
-        }
-    }
-    &__status {
-        &::-webkit-resizer {
-            // border: 2px solid black;
-            background: $font-link-primary-hover;
-            width: 10px;
-            height: 10px;
-            // box-shadow: 0 0 5px 5px blue;
-            // outline: 2px solid yellow;
-        }
-
-        &::-webkit-scrollbar {
-            width: 12px;
-        }
-    }
-
-    &__mention-error {
-        border: 2px dashed red;
-        padding: 5px 10px;
-        margin: 5px;
-    }
+    left: -3px;
+    font-size: 12px;
+    color: #1f1f1f;
 }
+
+.emojipicker {
+    font-size: $default-font-size !important;
+}
+
+.scheduler {
+    display: block;
+    margin: 0 5px; 
+    border-bottom: 1px solid whitesmoke;
+}
+
+@import '~@angular/cdk/overlay-prebuilt.css';
+// ::ng-deep .cdk-overlay-backdrop  {
+//     // width: 100%;
+//     // height: 100%;
+//     border: 3px solid greenyellow;
+//     background-color: black;
+//     min-height: 20px;
+// }

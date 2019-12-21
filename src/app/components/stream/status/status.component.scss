@@ -1,5 +1,10 @@
 @import "variables";
 @import "commons";
+
+.status-wrapper {
+    position: relative;
+}
+
 .reblog {
     position: relative;
     margin: 5px 0 0 10px;
@@ -22,6 +27,17 @@
         border-radius: 2px;
         z-index: 10;
     }
+}
+
+.direct-message {
+    background-color: $direct-message-background;
+}
+
+.status-selected {
+    background-color: #0f111a;
+    background-color: desaturate(lighten(#0f111a, 5%), 4%);
+    background-color: #0a0a10;
+    background-color: #1e2734;
 }
 
 .status {
@@ -80,6 +96,9 @@
         &--discuss {
             background-color: rgb(90, 0, 143);
         }
+        &--old {
+            background-color: rgb(150, 0, 0);
+        }
     }
     &__name {
         display: inline-block;
@@ -111,11 +130,21 @@
         margin: 0 10px 0 $avatar-column-space;
         display: block;
     }
+    &__card {
+        word-wrap: break-word;
+        margin: 10px 10px 0 $avatar-column-space;
+        display: block;
+    }
+    &__poll {
+        word-wrap: break-word;
+        margin: 10px 10px 0 $avatar-column-space;
+        display: block;
+    }
     &__content-warning {
         min-height: 80px;
-        display: block; // border: 1px solid greenyellow;
+        display: block;
         margin: 0 10px 0 $avatar-column-space;
-        padding: 3px 5px 3px 5px;
+        padding: 3px 5px 12px 5px;
         
         text-decoration: none;
         text-align: center;
@@ -148,6 +177,16 @@
                 color: lighten($status-secondary-color, 20);
             }
         }
+    }
+
+    &__navigation{
+        display: block;
+        position: absolute;
+        top:65px;
+        bottom: 40px;
+        width: 65px;
+        min-height: 40px;
+        // outline: 1px solid greenyellow;
     }
 }
 
@@ -203,4 +242,16 @@
 
 .favorite {
     color: $favorite-color;
+}
+
+.pinned {
+    &__icon{
+        position: absolute;
+        top: 2px;
+        color: $status-secondary-color;
+        font-size: 12px;
+    }
+    &__label{
+        color: $status-secondary-color;
+    }
 }

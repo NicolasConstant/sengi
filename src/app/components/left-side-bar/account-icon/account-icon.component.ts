@@ -1,7 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { AccountWrapper } from '../../../models/account.models';
+import { Account } from "../../../services/models/mastodon.interfaces";
 import { AccountWithNotificationWrapper } from '../left-side-bar.component';
+import { ToolsService } from '../../../services/tools.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-account-icon',
@@ -13,9 +16,14 @@ export class AccountIconComponent implements OnInit {
     @Output() toogleAccountNotify = new EventEmitter<AccountWrapper>();
     @Output() openMenuNotify = new EventEmitter<AccountWrapper>();
 
-    constructor() { }
+    private promiseGetUser: Promise<Account>;
+
+    constructor(
+        private readonly notificationService: NotificationService,
+        private readonly mastodonTools: ToolsService) { }
 
     ngOnInit() {
+        this.promiseGetUser = this.mastodonTools.findAccount(this.account.info, `@${this.account.info.username}@${this.account.info.instance}`);
     }
 
     toogleAccount(): boolean {
@@ -26,5 +34,20 @@ export class AccountIconComponent implements OnInit {
     openMenu(): boolean {
         this.openMenuNotify.emit(this.account);
         return false;
+    }
+
+    openLocalAccount(e): boolean {
+        e.preventDefault();
+
+        if (e.which == 2) {
+            this.promiseGetUser
+                .then((account: Account) => {
+                    window.open(account.url, '_blank');
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err, null);
+                });
+            return false;
+        }
     }
 }

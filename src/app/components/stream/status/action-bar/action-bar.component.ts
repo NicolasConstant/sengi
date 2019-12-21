@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { faWindowClose, faReply, faRetweet, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { Status } from '../../../../services/models/mastodon.interfaces';
-import { ToolsService } from '../../../../services/tools.service';
+import { Status, Account, Results } from '../../../../services/models/mastodon.interfaces';
+import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 
@@ -23,13 +23,19 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faRetweet = faRetweet;
     faStar = faStar;
     faWindowCloseRegular = faWindowCloseRegular;
+    faEllipsisH = faEllipsisH;
+    faLock = faLock;
+    faEnvelope = faEnvelope;
 
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
     @Output() cwIsActiveEvent = new EventEmitter<boolean>();
 
+    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+
     isFavorited: boolean;
     isBoosted: boolean;
+    isDM: boolean;
 
     isBoostLocked: boolean;
     isLocked: boolean;
@@ -37,7 +43,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     favoriteIsLoading: boolean;
     boostIsLoading: boolean;
 
-    isContentWarningActive: boolean = false;
+    isContentWarningActive: boolean = false; 
+
+    displayedStatus: Status;
 
     private isProviderSelected: boolean;
     private selectedAccounts: AccountInfo[];
@@ -48,10 +56,10 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
 
-    constructor(
+    constructor(        
         private readonly store: Store,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
@@ -61,13 +69,19 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         const status = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
 
-        if(status.reblog){
+        if (status.reblog) {
             this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
+            this.displayedStatus = status.reblog;
         } else {
             this.favoriteStatePerAccountId[account.id] = status.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblogged;
-        }        
+            this.displayedStatus = status;
+        }
+
+        if (this.displayedStatus.visibility === 'direct') {
+            this.isDM = true;
+        }
 
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.checkStatus(accounts);
@@ -122,7 +136,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
-        if(this.boostIsLoading) return;
+        if (this.boostIsLoading) return;
 
         this.boostIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -138,16 +152,20 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 }
             })
             .then((boostedStatus: Status) => {
-                if(boostedStatus.pleroma){
+                if (boostedStatus.pleroma) {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblog !== null; //FIXME: when Pleroma will return the good status
                 } else {
-                    this.bootedStatePerAccountId[account.id] = boostedStatus.reblogged;
-                }                
-               
+                    let reblogged = boostedStatus.reblogged; //FIXME: when pixelfed will return the good status
+                    if(reblogged === null){  
+                        reblogged = !this.bootedStatePerAccountId[account.id];
+                    }
+                    this.bootedStatePerAccountId[account.id] = reblogged;
+                }
+
                 this.checkIfBoosted();
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             })
             .then(() => {
                 this.boostIsLoading = false;
@@ -157,7 +175,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     favorite(): boolean {
-        if(this.favoriteIsLoading) return;
+        if (this.favoriteIsLoading) return;
 
         this.favoriteIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -173,12 +191,15 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 }
             })
             .then((favoritedStatus: Status) => {
-                this.favoriteStatePerAccountId[account.id] = favoritedStatus.favourited;
+                let favourited = favoritedStatus.favourited; //FIXME: when pixelfed will return the good status
+                if(favourited === null){                   
+                    favourited = !this.favoriteStatePerAccountId[account.id];
+                }
+                this.favoriteStatePerAccountId[account.id] = favourited;
                 this.checkIfFavorited();
-                // this.isFavorited = !this.isFavorited;
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             })
             .then(() => {
                 this.favoriteIsLoading = false;
@@ -204,10 +225,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         } else {
             this.isFavorited = false;
         }
-    }
+    }  
 
-    more(): boolean {
-        console.warn('more'); //TODO
-        return false;
+    browseThread(event: OpenThreadEvent){
+        this.browseThreadEvent.next(event);
     }
 }

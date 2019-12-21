@@ -5,7 +5,11 @@ import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
-import { OpenThreadEvent } from '../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
+import { Account } from "../../../services/models/mastodon.interfaces";
+import { NotificationService } from '../../../services/notification.service';
+import { AccountInfo } from '../../../states/accounts.state';
 
 
 @Component({
@@ -13,7 +17,7 @@ import { OpenThreadEvent } from '../../../services/tools.service';
     templateUrl: './manage-account.component.html',
     styleUrls: ['./manage-account.component.scss']
 })
-export class ManageAccountComponent implements OnInit, OnDestroy {   
+export class ManageAccountComponent implements OnInit, OnDestroy {
     faAt = faAt;
     faBell = faBell;
     faEnvelope = faEnvelope;
@@ -21,9 +25,11 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     faStar = faStar;
     faUserPlus = faUserPlus;
 
-    subPanel = 'account';
+    subPanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' = 'account';
     hasNotifications = false;
     hasMentions = false;
+
+    userAccount: Account;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -33,6 +39,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     set account(acc: AccountWrapper) {
         this._account = acc;
         this.checkNotifications();
+        this.getUserUrl(acc.info);
     }
     get account(): AccountWrapper {
         return this._account;
@@ -42,37 +49,80 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     private _account: AccountWrapper;
 
     constructor(
+        private readonly toolsService: ToolsService,
+        private readonly mastodonService: MastodonWrapperService,
+        private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService) { }
 
     ngOnInit() {
-      
     }
 
     ngOnDestroy(): void {
         this.userNotificationServiceSub.unsubscribe();
     }
 
-    private checkNotifications(){
-        if(this.userNotificationServiceSub){
+    private getUserUrl(account: AccountInfo) {
+        this.mastodonService.retrieveAccountDetails(this.account.info)
+            .then((acc: Account) => {
+                this.userAccount = acc;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, this.account.info);
+            });
+    }
+
+    private checkNotifications() {
+        if (this.userNotificationServiceSub) {
             this.userNotificationServiceSub.unsubscribe();
         }
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
-            if(userNotification){
-                this.hasNotifications = userNotification.hasNewNotifications;
-                this.hasMentions = userNotification.hasNewMentions;
+            if (userNotification) {
+                let settings = this.toolsService.getSettings();
+                let accSettings = this.toolsService.getAccountSettings(this.account.info);
+
+                if (!settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
+                    this.hasNotifications = userNotification.hasNewNotifications;
+                    this.hasMentions = userNotification.hasNewMentions;
+                }
             }
         });
+
+        let current = this.userNotificationService.userNotifications.value;
+        const userNotification = current.find(x => x.account.id === this.account.info.id);
+        if (userNotification) {
+            let settings = this.toolsService.getSettings();
+            let accSettings = this.toolsService.getAccountSettings(this.account.info);
+
+            if (!settings.disableAutofocus && !settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
+                if (userNotification.hasNewNotifications) {
+                    this.loadSubPanel('notifications');
+                } else if (userNotification.hasNewMentions) {
+                    this.loadSubPanel('mentions');
+                }
+            }
+        }
     }
 
-    loadSubPanel(subpanel: string): boolean {
+    loadSubPanel(subpanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites'): boolean {
         this.subPanel = subpanel;
         return false;
     }
 
     browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
+    }
+
+    browseLocalAccount(): boolean {
+        var accountName = `@${this.account.info.username}@${this.account.info.instance}`;
+        this.browseAccountEvent.next(accountName);
+        return false;
+    }
+
+    openLocalAccount(): boolean {
+        window.open(this.userAccount.url, '_blank');
+        return false;
     }
 
     browseHashtag(hashtag: string): void {

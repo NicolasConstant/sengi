@@ -1,30 +1,108 @@
 @import "variables";
+@import "commons";
 @import "mixins";
 
 .media-viewer-canvas {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    // background-color: rgba(0, 0, 0, 0.8);
     overflow: hidden;
-    position: relative;
+    position: relative;   
+    
+    &__button {
+        display: block;
+        padding: 5px;
+        position: absolute;
+    }
 
     &__close {
-        @include clearButton;
-        position: absolute;
         top: 15px;
         right: 20px;
         font-size: 24px;
-        color: $font-link-primary; 
+        color: $font-link-primary;
+
         &:hover {
             color: $font-link-primary-hover;
         }
     }
 
+    $browsing-icon-size: 30px;
+    $browsing-icon-top-position: calc(50vh - #{$browsing-icon-size/2});
+    $browsing-icon-bottom-position-mini: 0px;
+    $screen-break: 800px;
+
+    &__previous {
+        @media screen and (min-width: $screen-break) {
+            top: $browsing-icon-top-position;
+            left: 5px;
+        }
+        @media screen and (max-width: $screen-break) {
+            bottom: $browsing-icon-bottom-position-mini;
+            left:  40vw;
+        }        
+      
+        font-size: $browsing-icon-size;
+        color: whitesmoke;
+        padding: 10px;
+    }
+
+    &__next {    
+        @media screen and (min-width: 800px) {
+            top: $browsing-icon-top-position;
+            right: 5px;
+        }
+        @media screen and (max-width: 800px) {
+            bottom: $browsing-icon-bottom-position-mini;
+            right: 40vw;
+        }       
+        
+        font-size: $browsing-icon-size;
+        color: whitesmoke;
+        padding: 10px;
+    }
+
+    &__attachement {
+        // max-width: 100%;
+        // height: 100vh;    
+    }
+
     &__image {
-        max-width: 95%;
-        max-height: calc(100% - 120px);
+        z-index: 10;
+
+        @media screen and (min-width: $screen-break) {
+            max-width: 85%;
+        }
+        @media screen and (max-width: $screen-break) {
+            max-width: 95%;
+        }   
+
+        max-height: 90vh;
         margin-top: 50vh;
         margin-left: 50vw;
         transform: translate(-50%, -50%);
+
+        visibility: visible;
     }
+
+    &__iframe {
+        height: 60vw;
+        width: 95vw;
+        max-height: 600px;
+        max-width: 950px;
+    }
+}
+
+.background__close {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.collapsed {
+    height: 0;
+    max-height: 0;
 }

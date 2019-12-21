@@ -1,20 +1,21 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
 import { Attachment } from '../../../../services/models/mastodon.interfaces';
 import { NavigationService } from '../../../../services/navigation.service';
 import { OpenMediaEvent } from '../../../../models/common.model';
-import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
     selector: 'app-attachements',
     templateUrl: './attachements.component.html',
     styleUrls: ['./attachements.component.scss']
 })
-export class AttachementsComponent implements OnInit {
+export class AttachementsComponent implements OnInit {    
     private _attachments: Attachment[];
     isImage: boolean;
     isGifv: boolean;
     isVideo: boolean;
+    isAudio: boolean;
 
     faPlay = faPlay;
     faPause = faPause;
@@ -25,7 +26,7 @@ export class AttachementsComponent implements OnInit {
     isPlaying: boolean = false;
     isMuted: boolean = false;
 
-    // imageUrls: string[];
+    audioType: string;
 
     @Input('attachments')
     set attachments(value: Attachment[]) {
@@ -37,6 +38,9 @@ export class AttachementsComponent implements OnInit {
             this.isGifv = true;
         } else if (this._attachments[0].type === 'video') {
             this.isVideo = true;
+        } else if (this._attachments[0].type === 'audio') {
+            this.isAudio = true;
+            this.setAudioData(this._attachments[0]);
         }
     }
     get attachments(): Attachment[] {
@@ -51,7 +55,7 @@ export class AttachementsComponent implements OnInit {
     }
 
     attachmentSelected(index: number): boolean {
-        let openMediaEvent = new OpenMediaEvent(index, this.attachments);
+        let openMediaEvent = new OpenMediaEvent(index, this.attachments, null);
         this.navigationService.openMedia(openMediaEvent);
         return false;
     }
@@ -60,7 +64,7 @@ export class AttachementsComponent implements OnInit {
         return this.videoplayer.nativeElement;
     }
 
-    onPlay() {
+    onPlay(): boolean {
         if (!this.isPlaying) {
             this.getVideo().play();
         } else {
@@ -68,10 +72,10 @@ export class AttachementsComponent implements OnInit {
         }
 
         this.isPlaying = !this.isPlaying;
-
+        return false;
     }
 
-    onExpand() {
+    onExpand(): boolean {
         if (!this.isMuted) {
             this.onMute();
         }
@@ -81,10 +85,20 @@ export class AttachementsComponent implements OnInit {
         }
 
         this.attachmentSelected(0);
+        return false;
     }
 
-    onMute() {        
+    onMute(): boolean {        
         this.isMuted = !this.isMuted;
         this.getVideo().muted = this.isMuted;
+        return false;
+    }
+
+    setAudioData(att: Attachment): any {
+        if(att.meta && att.meta.audio_encode){
+            this.audioType = `audio/${att.meta.audio_encode}`;
+        } else if(att.pleroma && att.pleroma.mime_type){
+            this.audioType = att.pleroma.mime_type;
+        }
     }
 }

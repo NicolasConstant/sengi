@@ -1,0 +1,174 @@
+@import "variables";
+@import "commons";
+// @import "panel";
+@import "buttons";
+
+.poll {
+
+    color: white;
+    color: rgb(228, 228, 228);
+
+    &__btn-vote {
+        margin: 0 10px 0 0;
+        padding: 4px 15px;
+    }
+
+    &__statistics {
+        display: inline-block;
+        font-size: 0.8em;
+        color: rgb(101, 121, 160);
+    }
+
+    &__label {
+        cursor: pointer;
+    }
+
+    &__voting {
+        margin-top: 10px;
+    }
+
+    &__refresh {
+        font-size: 0.8em;
+        color: rgb(101, 121, 160);
+    }
+
+    &__container {
+        display: block;
+        position: relative;
+        padding-left: 25px;
+        margin: 0 0 5px 5px;
+        cursor: pointer;
+        // font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        &__title {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &:hover &__input~&__checkmark {
+            background-color: #ccc;
+        }
+
+        & &__input:checked~&__checkmark {
+            background-color: rgb(62, 75, 100);
+        }
+
+        &__input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        &__lock {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        &__checkmark--box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+
+            &:after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+        }
+
+        &__checkmark--round {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 50%;
+        }
+
+        & &__input:checked:checked~&__checkmark:after {
+            display: block;
+        }
+
+        & &__checkmark--box:after {
+            left: 7px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        &__checkmark--round:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        & &__checkmark--round:after {
+            top: 6px;
+            left: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+    }
+
+    &__result {
+        transition: width 2s;
+
+        margin: 0 0 5px 5px;
+        padding: 0 5px 0 5px;
+        position: relative;
+        height: 27px;
+
+        &--data {
+            position: absolute;
+            z-index: 10;
+        }
+
+        &--percentage {
+            color: rgb(228, 228, 228);
+            color: white;
+            display: inline;
+            margin-right: 10px;
+
+        }
+
+        &--progress-bar {
+            position: absolute;
+            background-color: rgb(47, 68, 100);
+            // background-color: rgb(43, 62, 92);
+            top: 0;
+            left: 0;
+            width: calc(100%);
+            height: 22px;
+            z-index: 1;
+            float: left;
+            border-radius: 2px;
+
+            &--most-votes {
+                background-color: rgb(18, 118, 158);
+            }
+        }
+    }
+
+    &__separator {
+        display: inline-block;
+        margin: 0 5px;
+    }
+}

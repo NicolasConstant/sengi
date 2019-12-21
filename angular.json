@@ -21,7 +21,8 @@
                             "src/favicon.ico"
                         ],
                         "styles": [
-                            "src/sass/styles.scss"
+                            "src/sass/styles.scss",
+                            "node_modules/@ctrl/ngx-emoji-mart/picker.css"
                         ],
                         "stylePreprocessorOptions": {
                             "includePaths": [

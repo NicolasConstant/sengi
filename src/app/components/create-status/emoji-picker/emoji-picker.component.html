@@ -1,0 +1,5 @@
+<emoji-mart 
+    *ngIf="loaded"
+    [showPreview]="false" [perLine]="7" [isNative]="true" [sheetSize]="16" [emojiTooltip]="true"
+    [custom]="customEmojis" (emojiSelect)="emojiSelected($event)" class="emojipicker" title="Pick your emoji…"
+    emoji="point_up"></emoji-mart>

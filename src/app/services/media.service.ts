@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { AccountInfo } from '../states/accounts.state';
 import { Attachment } from './models/mastodon.interfaces';
-import { MastodonService } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { NotificationService } from './notification.service';
 
 
@@ -15,7 +15,7 @@ export class MediaService {
 
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     uploadMedia(account: AccountInfo, files: File[]) {
         for (let file of files) {
@@ -29,7 +29,7 @@ export class MediaService {
 
         let medias = this.mediaSubject.value;
         medias.push(wrapper);
-        if(medias.length > 4){
+        if (medias.length > 4) {
             medias.splice(0, 1);
         }
         this.mediaSubject.next(medias);
@@ -45,7 +45,7 @@ export class MediaService {
             })
             .catch((err) => {
                 this.remove(wrapper);
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             });
     }
 
@@ -60,7 +60,7 @@ export class MediaService {
                 this.mediaSubject.next(medias);
             })
             .catch((err) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, account);
             });
     }
 
@@ -94,7 +94,7 @@ export class MediaService {
                 })
                 .catch((err) => {
                     this.remove(media);
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, account);
                 });
         }
     }
@@ -104,8 +104,26 @@ export class MediaWrapper {
     constructor(
         public id: string,
         public file: File,
-        public attachment: Attachment) { }
+        attachment: Attachment) {
+            this.attachment = attachment;       
+    }
+
+    private _attachment: Attachment;
+    public get attachment(): Attachment {
+        return this._attachment;
+    }
+
+    public set attachment(value: Attachment){
+        if (value && value.meta && value.meta.audio_encode) {
+            this.audioType = `audio/${value.meta.audio_encode}`;
+        } else if (value && value.pleroma && value.pleroma.mime_type) {
+            this.audioType = value.pleroma.mime_type;
+        }
+
+        this._attachment = value;
+    }
 
     public description: string;
     public isMigrating: boolean;
+    public audioType: string;
 }

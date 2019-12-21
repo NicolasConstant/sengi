@@ -1,2 +1,59 @@
 @import "variables";
-@import "panel";
+@import "panel"; 
+
+.panel {
+    
+    background-position: 0 100%;
+}
+
+.form-color {
+    background-color: $column-color;
+    border-color: $button-border-color;
+    color: #fff;
+    font-size: $default-font-size;
+    &:focus {
+        box-shadow: none;
+    }
+    height: 29px;
+    padding: 0 5px 0 5px; 
+}
+
+$comrade_yellow: #ffcc00;
+$comrade_red:  #a50000;
+.comrade {
+    &__title {
+        font-size: 18px;
+        margin-left: 5px;
+        color: $comrade_yellow;
+        font-weight: bold;
+    }
+
+    &__text {
+        color: $comrade_yellow;
+    }
+
+    &__button {
+        background: $comrade_yellow;
+        border-color: $comrade_yellow;
+        color: $comrade_red;
+    }
+
+    &__video {
+        width: 300px;  
+        padding-top: 20px;
+        margin: auto;
+    }
+
+    &__input {
+        color: $comrade_red;
+        border-color: $comrade_yellow;
+        background: $comrade_yellow;
+    }
+
+    &__background {
+        transition: all 3s;
+        background-image: url("assets/img/juche-background.jpg");        
+        background-color: $comrade_red;
+        background-position: 0 0;
+    }
+}

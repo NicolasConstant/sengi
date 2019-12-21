@@ -1,0 +1,72 @@
+@import "variables";
+@import "commons";
+
+$selector-height: 30px;
+
+.notifications {
+    height: calc(100%);
+    width: calc(100%);
+    position: relative;
+
+    &__selector {
+        height: $selector-height;
+        background-color: $notification-column-selector-background;
+        width: calc(100%);
+
+        &__button {
+            text-decoration: none;
+            display: inline-block;
+            width: 50%;
+            height: 100%;
+            text-align: center;
+            padding-top: 3px;
+            color: $notification-column-selector-color;
+
+            &--selected {
+                color: $notification-column-selector-color-hover;
+            }
+
+
+        }
+    }
+
+    &__elements {
+        height: calc(100% - #{$selector-height});
+        width: calc(100%);
+        position: relative;
+
+        &__wrapper {
+            transition: all .15s;
+            position: absolute;
+            height: calc(100%);
+            width: calc(100%);
+
+            // right: 0;
+            // left: 0;
+            // bottom: 0;
+
+            z-index: 1;
+            opacity: 0;
+
+            overflow: auto;
+            outline: none;
+
+            &--selected {
+                z-index: 10;
+                opacity: 1;
+            }
+        }
+
+
+        :focus {
+            outline: none;
+        }
+
+
+
+    }
+}
+
+.notification {
+    position: relative;
+}

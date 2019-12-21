@@ -1,74 +1,119 @@
-<div class="reblog" *ngIf="reblog">
-    <a class="reblog__profile-link" href (click)="openAccount(status.account)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
-</div>
-<div *ngIf="notificationType === 'favourite'">
-    <div class="notification--icon">
-        <fa-icon class="favorite" [icon]="faStar"></fa-icon>
+<div class="status-wrapper" [class.direct-message]="isDirectMessage" [class.status-selected]="isSelected">
+    <div class="reblog" *ngIf="reblog">
+        <a class="reblog__profile-link" href title="{{ status.account.acct }}" 
+            (click)="openAccount(status.account)"
+            (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img
+                *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
     </div>
-    <div class="notification--label">
-        <a href class="notification--link" (click)="openAccount(notificationAccount)" innerHTML="{{ notificationAccount  | accountEmoji }}"></a> favorited your status
+    <div *ngIf="statusWrapper.status.pinned" class="pinned">
+        <div class="notification--icon">
+            <fa-icon class="pinned__icon" [icon]="faThumbtack"></fa-icon>
+        </div>
+        <div class="notification--label pinned__label">
+            Pinned
+        </div>
     </div>
-</div>
-<div *ngIf="notificationType === 'reblog'">
-    <div class="notification--icon">
-        <fa-icon class="boost" [icon]="faRetweet"></fa-icon>
+    <div *ngIf="notificationType === 'favourite'">
+        <div class="notification--icon">
+            <fa-icon class="favorite" [icon]="faStar"></fa-icon>
+        </div>
+        <div class="notification--label">
+            <a href class="notification--link" title="{{ notificationAccount.acct }}" 
+                (click)="openAccount(notificationAccount)"
+                (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount  | accountEmoji }}"></a>
+            favorited your status
+        </div>
     </div>
-    <div class="notification--label">
-        <a href class="notification--link" (click)="openAccount(notificationAccount)" innerHTML="{{ notificationAccount | accountEmoji }}"></a> boosted your status
+    <div *ngIf="notificationType === 'reblog'">
+        <div class="notification--icon">
+            <fa-icon class="boost" [icon]="faRetweet"></fa-icon>
+        </div>
+        <div class="notification--label">
+            <a href class="notification--link" title="{{ notificationAccount.acct }}" 
+                (click)="openAccount(notificationAccount)"
+                (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount | accountEmoji }}"></a>
+            boosted your status
+        </div>
     </div>
-</div>
-<div class="status">
-    <div [ngClass]="{'notification--status': notificationAccount }">
-        <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
-            (click)="openAccount(displayedStatus.account)">
-            <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar"
-                src="{{ displayedStatus.account.avatar }}" />
-            <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
-            <img *ngIf="notificationAccount" class="notification--avatar" src="{{ notificationAccount.avatar }}" />
-            <span class="status__name">
-                <span class="status__name--displayname"
-                    innerHTML="{{displayedStatus.account | accountEmoji}}"></span><span
-                    class="status__name--username">{{displayedStatus.account.acct}}</span>
-            </span>
+    <div *ngIf="notificationType === 'poll'">
+        <div class="notification--icon">
+            <fa-icon class="boost" [icon]="faList"></fa-icon>
+        </div>
+        <div class="notification--label">
+            A poll you have voted in has ended
+        </div>
+    </div>
+    <div class="status">
+        <a href class="status__navigation" title="open status" (click)="textSelected()">
+
         </a>
-        <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">
-            <a class="status__created-at--link" href="{{ displayedStatus.url }}" target="_blank">
-                {{ status.created_at | timeAgo | async }}
+        <div [ngClass]="{'notification--status': notificationAccount }">
+            <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
+                (click)="openAccount(displayedStatus.account)" (auxclick)="openUrl(displayedStatus.account.url)">
+                <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar"
+                    src="{{ displayedStatus.account.avatar }}" />
+                <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
+                <img *ngIf="notificationAccount" class="notification--avatar" src="{{ notificationAccount.avatar }}" />
+                <span class="status__name">
+                    <span class="status__name--displayname"
+                        innerHTML="{{displayedStatus.account | accountEmoji}}"></span><span
+                        class="status__name--username">{{displayedStatus.account.acct}}</span>
+                </span>
             </a>
-        </div>
-        <div class="status__labels">
-            <div class="status__labels--label status__labels--bot" title="bot" *ngIf="status.account.bot">
-                bot
+            <div class="status__created-at" title="{{ displayedStatus.created_at | date: 'full' }}">
+                <a href class="status__created-at--link" (click)="textSelected()"
+                    (auxclick)="openUrl(displayedStatus.url)">
+                    {{ displayedStatus.created_at | timeAgo | async }}
+                </a>
             </div>
-            <div class="status__labels--label status__labels--xpost" title="this status was cross-posted"
-                *ngIf="isCrossPoster">
-                x-post
+            <div class="status__labels">
+                <div class="status__labels--label status__labels--bot" title="bot" *ngIf="displayedStatus.account.bot">
+                    bot
+                </div>
+                <div class="status__labels--label status__labels--xpost" title="this status was cross-posted"
+                    *ngIf="isCrossPoster">
+                    x-post
+                </div>
+                <div class="status__labels--label status__labels--thread" title="thread" *ngIf="isThread">
+                    thread
+                </div>
+                <div class="status__labels--label status__labels--discuss" title="this status has a discussion"
+                    *ngIf="hasReply">
+                    replies
+                </div>
+                <div class="status__labels--label status__labels--old" title="this status is old" *ngIf="isOld && !statusWrapper.status.pinned">
+                    old
+                </div>
             </div>
-            <div class="status__labels--label status__labels--thread" title="thread" *ngIf="isThread">
-                thread
-            </div>
-            <div class="status__labels--label status__labels--discuss" title="this status has a discution"
-                *ngIf="hasReply">
-                replies
-            </div>
-        </div>
-        <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
 
-        <a href class="status__content-warning" *ngIf="isContentWarned" title="show content"
-            (click)="removeContentWarning()">
-            <span class="status__content-warning--title">sensitive content</span>
-            {{ contentWarningText }}
-        </a>
-        <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="statusContent"
-            (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
-            (textSelected)="textSelected()"></app-databinded-text>
-        <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments"
-            [attachments]="displayedStatus.media_attachments">
-        </app-attachements>
 
-        <app-action-bar #appActionBar [statusWrapper]="statusWrapper" (cwIsActiveEvent)="changeCw($event)"
-            (replyEvent)="openReply()"></app-action-bar>
+            <!-- <div #content class="status__content" innerHTML="{{displayedStatus.content}}"></div> -->
+
+            <a href class="status__content-warning" *ngIf="isContentWarned" title="show content"
+                (click)="removeContentWarning()">
+                <span class="status__content-warning--title">sensitive content</span>
+                {{ contentWarningText }}
+            </a>
+            <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="statusContent"
+                (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
+                (textSelected)="textSelected()"></app-databinded-text>
+
+            <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll"
+                [poll]="displayedStatus.poll" [statusWrapper]="displayedStatusWrapper"></app-poll>
+
+            <app-card class="status__card" *ngIf="!isContentWarned && displayedStatus.card && !hasAttachments"
+                [card]="displayedStatus.card"></app-card>
+
+            <app-attachements *ngIf="!isContentWarned && hasAttachments" class="attachments"
+                [attachments]="displayedStatus.media_attachments">
+            </app-attachements>
+
+            <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper"
+                (browseThreadEvent)="browseThread($event)" (cwIsActiveEvent)="changeCw($event)"
+                (replyEvent)="openReply()"></app-action-bar>
+        </div>
+        <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper"
+            (onClose)="closeReply()">
+        </app-create-status>
     </div>
-    <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="statusWrapper"
-        (onClose)="closeReply()"></app-create-status>
 </div>

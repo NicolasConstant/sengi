@@ -1,16 +1,14 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { faStar, faUserPlus, faRetweet } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStar2 } from "@fortawesome/free-regular-svg-icons";
 
 import { AccountWrapper } from '../../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../../services/user-notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { Notification, Account } from '../../../../services/models/mastodon.interfaces';
-import { MastodonService } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
 
 @Component({
     selector: 'app-notifications',
@@ -18,10 +16,6 @@ import { OpenThreadEvent } from '../../../../services/tools.service';
     styleUrls: ['./notifications.component.scss']
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
-    faUserPlus = faUserPlus;
-    // faStar = faStar;
-    // faRetweet = faRetweet;
-
     notifications: NotificationWrapper[] = [];
     isLoading = false;
 
@@ -45,10 +39,10 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private userNotificationServiceSub: Subscription;
     private lastId: string;
 
-    constructor(
+    constructor(        
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
     }
@@ -68,17 +62,24 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this.userNotificationService.markNotificationAsRead(this.account.info);    
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
-            this.notifications.length = 0; //TODO: don't reset, only add the new ones
-            const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
-            if(userNotification && userNotification.notifications){
-                userNotification.notifications.forEach((notification: Notification) => {
-                    const notificationWrapper = new NotificationWrapper(notification, this.account.info);
-                    this.notifications.push(notificationWrapper);
-                }); 
-            }
-            this.lastId = userNotification.lastId;
-            this.userNotificationService.markNotificationAsRead(this.account.info);
+            this.processNewNotifications(userNotifications);
+            if(this.notifications.length < 20) this.scrolledToBottom();         
         });
+    }
+
+    private processNewNotifications(userNotifications: UserNotification[]) {
+        const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
+        if (userNotification && userNotification.notifications) {
+            let orderedNotifications = [...userNotification.notifications].reverse();
+            for (let n of orderedNotifications) {
+                const notificationWrapper = new NotificationWrapper(n, this.account.info);
+                if (!this.notifications.find(x => x.wrapperId === notificationWrapper.wrapperId)) {                   
+                    this.notifications.unshift(notificationWrapper);
+                }
+            }
+        }
+        this.lastId = userNotification.lastNotificationsId;
+        this.userNotificationService.markNotificationAsRead(this.account.info);
     }
 
     
@@ -111,22 +112,13 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.lastId = notifications[notifications.length - 1].id;
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;
             });
     }
-    
-    openAccount(account: Account): boolean {
-        let accountName = account.acct;
-        if (!accountName.includes('@'))
-            accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
 
-        this.browseAccountEvent.next(accountName);
-        return false;
-    }
-    
     browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
     }
@@ -140,20 +132,25 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
 }
 
-class NotificationWrapper {
+export class NotificationWrapper {
     constructor(notification: Notification,  provider: AccountInfo) {
         this.type = notification.type;
         switch(this.type){            
             case 'mention': 
             case 'reblog': 
             case 'favourite':
+            case 'poll':
                 this.status= new StatusWrapper(notification.status, provider);
                 break;          
         }    
-        this.account = notification.account;  
+        this.account = notification.account;
+        this.wrapperId = `${this.type}-${notification.id}`;
+        this.notification = notification;
     }
 
+    notification: Notification;
+    wrapperId: string;
     account: Account;
     status: StatusWrapper;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
 }

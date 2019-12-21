@@ -1,0 +1,49 @@
+@import "variables";
+
+::ng-deep .ngx-contextmenu {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+    & .dropdown-menu {
+        //border: solid 1px $context-menu-border-color;
+        border: none;
+        background-color: $context-menu-background;
+        padding: 0;
+        border-radius: 0px;
+        // padding: 2px 0;
+        // border-radius: 2px;
+        //border: solid 2px $context-menu-border-color;
+    }
+
+    & li {
+        display: block;
+        // border-top: solid 1px $context-menu-border-color;
+        // text-transform: uppercase;
+        // text-align: center;
+
+        // &:first-child {
+        //     border-top: none;
+        // }
+    }
+
+    & a {
+        color: $context-menu-font-color;
+        display: block;
+        padding: 0.5em 1em;
+        padding: 3px 10px;
+        text-decoration: none;
+        //transition: all .2s;
+
+        &:hover {
+            color: $context-menu-font-color;
+            background-color: $context-menu-background-hover;
+            text-decoration: none;
+        }
+    }
+
+    & .divider {
+        border-top: solid 2px $context-menu-border-color;
+    }
+}

@@ -26,6 +26,15 @@ export class DatabindedTextComponent implements OnInit {
         // console.warn(value);
 
         this.processedText = '';
+
+        do {
+            value = value.replace('@<span class="">', '<span class="">'); //Friendica sanitarization
+        } while (value.includes('@<span class="">'));
+
+        do {
+            value = value.replace('class="mention" rel="nofollow noopener" target="_blank">@', 'class="mention" rel="nofollow noopener" target="_blank">'); //Misskey sanitarization
+        } while (value.includes('class="mention" rel="nofollow noopener" target="_blank">@'));
+
         let linksSections = value.split('<a ');
 
         for (let section of linksSections) {
@@ -34,13 +43,13 @@ export class DatabindedTextComponent implements OnInit {
                 continue;
             }
 
-            if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#')) {
+            if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#') || section.includes('rel="tag">')) {
                 try {
                     this.processHashtag(section);
                 }
                 catch (err) {
-                    console.warn('process hashtag');
-                    console.warn(value);
+                    console.error('error processing hashtag');
+                    console.error(value);
                 }
 
             } else if (section.includes('class="u-url mention"') || section.includes('class="mention"') || section.includes('class="mention status-link"') || section.includes('class="h-card mention')) {
@@ -48,16 +57,17 @@ export class DatabindedTextComponent implements OnInit {
                     this.processUser(section);
                 }
                 catch (err) {
-                    console.warn('process mention');
-                    console.warn(value);
+                    console.error('error processing mention');
+                    console.error(value);
                 }
             } else {
                 try {
                     this.processLink(section);
+                    //this.processedText += `<a ${section}`;
                 }
                 catch (err) {
-                    console.warn('process link');
-                    console.warn(value);
+                    console.error('error processing link');
+                    console.error(value);
                 }
             }
         }
@@ -68,7 +78,7 @@ export class DatabindedTextComponent implements OnInit {
         let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
 
         let classname = this.getClassNameForHastag(extractedHashtag);
-        this.processedText += ` <a href class="${classname}">#${extractedHashtag}</a>`;
+        this.processedText += ` <a href class="${classname}" title="#${extractedHashtag}">#${extractedHashtag}</a>`;
         if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
         this.hashtags.push(extractedHashtag);
     }
@@ -77,7 +87,10 @@ export class DatabindedTextComponent implements OnInit {
         let extractedAccountAndNext: string[];
         let extractedAccountName: string;
 
-        if (!section.includes('@<span>')) { //GNU social
+        if (section.includes('<span class="mention">')) { //Friendica
+            extractedAccountAndNext = section.split('</a>');
+            extractedAccountName = extractedAccountAndNext[0].split('<span class="mention">')[1].split('</span>')[0];
+        } else if (!section.includes('@<span>')) { //GNU social
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('>')[1];
         } else {
@@ -95,11 +108,11 @@ export class DatabindedTextComponent implements OnInit {
         let classname = this.getClassNameForAccount(extractedAccount);
         this.processedText += `<a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
 
-        if (extractedAccountAndNext[1]) 
+        if (extractedAccountAndNext[1])
             this.processedText += extractedAccountAndNext[1];
 
         //GNU Social clean up
-        if(this.processedText.includes('@<a')) 
+        if (this.processedText.includes('@<a'))
             this.processedText = this.processedText.replace('@<a', '<a');
 
         this.accounts.push(extractedAccount);
@@ -117,7 +130,15 @@ export class DatabindedTextComponent implements OnInit {
                 extractedName = extractedLinkAndNext[0].split(`<span class="">`)[1].split('</span>')[0];
             }
             catch (err) {
-                extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
+                try {
+                    extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
+                } catch (err) { // Pleroma
+                    try {
+                        extractedName = extractedLinkAndNext[0].split('</span><span>')[1].split('</span>')[0];
+                    } catch (err) {
+                        extractedName = extractedLinkAndNext[0].split('">')[1];
+                    }
+                }
             }
         }
 
@@ -138,50 +159,57 @@ export class DatabindedTextComponent implements OnInit {
     ngAfterViewInit() {
         for (const hashtag of this.hashtags) {
             let classname = this.getClassNameForHastag(hashtag);
-            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
+            let els = <Element[]>this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-            this.renderer.listen(el, 'click', (event) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
+            for (const el of els) {
+                this.renderer.listen(el, 'click', (event) => {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
 
-                this.selectHashtag(hashtag);
-                return false;
-            });
+                    this.selectHashtag(hashtag);
+                    return false;
+                });
+            }
         }
 
         for (const account of this.accounts) {
             let classname = this.getClassNameForAccount(account);
-            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
+            let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-            this.renderer.listen(el, 'click', (event) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
+            for (const el of els) {
+                this.renderer.listen(el, 'click', (event) => {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
 
-                this.selectAccount(account);
-                return false;
-            });
+                    this.selectAccount(account);
+                    return false;
+                });
+            }
         }
 
         for (const link of this.links) {
             let classname = this.getClassNameForLink(link);
-            let el = this.contentElement.nativeElement.querySelector(`.${classname}`);
-            this.renderer.listen(el, 'click', (event) => {
-                event.preventDefault();
-                event.stopImmediatePropagation();
+            let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-                window.open(link, '_blank');
-                return false;
-            });
-
-            this.renderer.listen(el, 'mouseup', (event) => {
-                if(event.which === 2){
+            for (const el of els) {
+                this.renderer.listen(el, 'click', (event) => {
                     event.preventDefault();
                     event.stopImmediatePropagation();
-    
+
                     window.open(link, '_blank');
                     return false;
-                }
-            });
+                });
+
+                this.renderer.listen(el, 'mouseup', (event) => {
+                    if (event.which === 2) {
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+
+                        window.open(link, '_blank');
+                        return false;
+                    }
+                });
+            }
         }
     }
 
@@ -210,8 +238,10 @@ export class DatabindedTextComponent implements OnInit {
         this.hashtagSelected.next(hashtag);
     }
 
-    selectText() {
-        this.textSelected.next();
+    selectText(event) {
+        if (event.view.getSelection().toString().length === 0) {
+            this.textSelected.next();
+        }
     }
 
 }

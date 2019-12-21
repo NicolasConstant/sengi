@@ -1,17 +1,53 @@
 @import "variables";
+@import "commons";
 @import "mixins";
 
 .stream-edition {
-    width: 100%;
+    width: calc(100%);
+    width: $stream-column-width;
     // min-height: 50px;
     background-color: #222736;
+    border-bottom: 1px solid $color-secondary;
+
+    &__settings{
+        padding: 5px 5px 0 5px;
+        border-bottom: 1px solid $color-secondary;
+    }
+
+    &__setting{
+        // outline: 1px solid greenyellow;
+        padding: 0 10px 0 10px;
+
+        &--checkbox {
+            position: relative;
+            top: 2px;
+            margin-right: 5px;
+        }
+    }
+
     &__button {
-        @include clearButton;
+        display: inline-block;
         padding: 5px 10px 5px 10px;
         margin: 3px 0;
-        &--delete{
+        color: $font-color-primary;
+
+        &--delete {
+            // float: right;
+            margin-left: 5px;
+
+            &--label {
+                position: relative;
+                top: -1px;
+                left: 7px;
+            }
+        }
+
+        &--move {
             float: right;
-            margin-right: 5px;
+
+            &--right {
+                margin-right: 5px;
+            }
         }
 
         &:hover {

@@ -1,0 +1,54 @@
+@import "variables";
+
+
+.autosuggest {
+    background-color: $autosuggest-background;
+    // border: solid $autosuggest-background;
+    // border-width: 0 1px 1px 1px;
+    
+    &__entry {        
+        display: block;
+        padding: 1px 5px;
+        color: $autosuggest-entry-color;
+        background-color: $autosuggest-entry-background;
+        white-space: nowrap;
+        text-overflow: ellipsis; 
+        overflow: hidden;
+        width: calc(100%);
+
+        &:hover, &--selected {
+            color: $autosuggest-entry-color-hover;
+            text-decoration: none;
+            background-color: $autosuggest-entry-background-hover;
+        }       
+    }
+
+    &__account {
+        padding: 5px 5px 5px 5px;
+
+        &:last-child{
+            padding: 5px 5px 5px 5px;
+        }
+
+        &--avatar {
+            width: 25px;
+            margin-right: 7px;
+        }
+
+        &--text {
+            position: relative;
+            top: 1px;
+        }
+
+        &--handle {
+            color: $autosuggest-entry-handle-color;
+        }
+        // &--acct {
+        //     color: $autosuggest-entry-color;
+        // }
+    }
+
+    &__entry:hover &__account--handle,  &__entry--selected &__account--handle {
+        color: $autosuggest-entry-handle-color-hover;
+    }
+}

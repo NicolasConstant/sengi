@@ -17,14 +17,24 @@ export class SaveSettings {
 
 export class AccountSettings {
     accountId: string;
-    displayMention: boolean = true;
+    displayMention: boolean = true;    
     displayNotifications: boolean = true;
+
+    disableAvatarNotifications = false;
+
     lastMentionCreationDate: string;    
     lastNotificationCreationDate: string;
+
+    customStatusCharLengthEnabled: boolean = false;
+    customStatusCharLength: number = 500;
 }
 
 export class GlobalSettings {
-    disableAllNotifications = false;
+    disableAutofocus = false;
+    disableAvatarNotifications = false;
+    disableSounds = false;
+    
+    notificationSoundFileId: string = '0';
     accountSettings: AccountSettings[] = [];
 }
 
@@ -46,13 +56,12 @@ export class SettingsState {
         });
     }
 
-
     @Action(RemoveAccountSettings)
     RemoveAccountSettings(ctx: StateContext<SettingsStateModel>, action: RemoveAccountSettings){
         const state = ctx.getState();
-        const newSettings = new GlobalSettings();
+        let newSettings = new GlobalSettings();
 
-        newSettings.disableAllNotifications = state.settings.disableAllNotifications;
+        newSettings = this.setGlobalSettingsValues(newSettings, state.settings);
         newSettings.accountSettings = [...state.settings.accountSettings.filter(x => x.accountId !== action.accountId)];
                   
         ctx.patchState({
@@ -63,9 +72,9 @@ export class SettingsState {
     @Action(SaveAccountSettings)
     SaveAccountSettings(ctx: StateContext<SettingsStateModel>, action: SaveAccountSettings){
         const state = ctx.getState();
-        const newSettings = new GlobalSettings();
 
-        newSettings.disableAllNotifications = state.settings.disableAllNotifications;
+        let newSettings = new GlobalSettings();
+        newSettings = this.setGlobalSettingsValues(newSettings, state.settings);
         newSettings.accountSettings = [...state.settings.accountSettings.filter(x => x.accountId !== action.accountSettings.accountId), action.accountSettings];
 
         ctx.patchState({
@@ -76,13 +85,23 @@ export class SettingsState {
     @Action(SaveSettings)
     SaveSettings(ctx: StateContext<SettingsStateModel>, action: SaveSettings){
         const state = ctx.getState();
-        const newSettings = new GlobalSettings();
 
-        newSettings.disableAllNotifications = action.settings.disableAllNotifications;
-        newSettings.accountSettings = [...state.settings.accountSettings];
+        let newSettings = new GlobalSettings();
+        newSettings = this.setGlobalSettingsValues(newSettings, action.settings);
+        newSettings.accountSettings = [...state.settings.accountSettings];        
         
         ctx.patchState({
             settings: newSettings
         });
+    }
+
+    private setGlobalSettingsValues(newSettings: GlobalSettings, oldSettings: GlobalSettings): GlobalSettings {
+
+        newSettings.disableAutofocus = oldSettings.disableAutofocus;
+        newSettings.disableAvatarNotifications = oldSettings.disableAvatarNotifications;
+        newSettings.disableSounds = oldSettings.disableSounds;
+        newSettings.notificationSoundFileId = oldSettings.notificationSoundFileId;
+
+        return newSettings;
     }
 }

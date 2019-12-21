@@ -5,6 +5,11 @@ export class AddStream {
     constructor(public stream: StreamElement) {}
 }
 
+export class UpdateStream {
+    static readonly type = '[Streams] Update stream';
+    constructor(public stream: StreamElement) {}
+}
+
 export class RemoveAllStreams {
     static readonly type = '[Streams] Remove all streams';
     constructor(public accountId :string) {}
@@ -41,6 +46,20 @@ export class StreamsState {
         const state = ctx.getState();
         ctx.patchState({
             streams: [...state.streams, action.stream]
+        });
+    }
+    @Action(UpdateStream)
+    UpdateStream(ctx: StateContext<StreamsStateModel>, action: UpdateStream){
+        const state = ctx.getState();
+
+        const updatedStream = state.streams.find(x => x.id === action.stream.id);
+
+        updatedStream.hideBoosts = action.stream.hideBoosts;
+        updatedStream.hideReplies = action.stream.hideReplies;
+        updatedStream.hideBots = action.stream.hideBots;
+
+        ctx.patchState({
+            streams: [...state.streams]
         });
     }
     @Action(RemoveAllStreams)
@@ -92,12 +111,17 @@ export class StreamsState {
 export class StreamElement {
     public id: string;
 
+    public hideBoosts: boolean = false;
+    public hideReplies: boolean = false;
+    public hideBots: boolean = false;
+
     constructor(
         public type: StreamTypeEnum, 
         public name: string, 
         public accountId: string,
         public tag: string,
         public list: string,
+        public listId: string,
         public instance: string) {
             this.id = `${type}-${name}-${accountId}`;
     }
@@ -105,7 +129,7 @@ export class StreamElement {
   
   export enum StreamTypeEnum {
     unknown = 0,
-    global = 1,
+    global = 1, //public    
     local = 2,
     personnal = 3,
     favorites = 4,
@@ -113,5 +137,6 @@ export class StreamElement {
     list = 6,
     directmessages = 7,
     tag = 8,
+    health = 9
 }
   

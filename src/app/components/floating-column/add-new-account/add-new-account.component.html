@@ -1,11 +1,18 @@
-<div class="panel">
-    <h3 class="panel__title">Add new account</h3>
+<div class="panel" [class.comrade__background]="isComrade">
+    <h3 class="panel__title" [class.comrade__text]="isComrade">Add new account</h3>
 
+    <h2 class="comrade__title" *ngIf="isComrade">Welcome Comrade!</h2>
     <form (ngSubmit)="onSubmit()">
-        <label>Please provide your account:</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle"
+        <label [class.comrade__text]="isComrade">Please provide your <span *ngIf="isComrade">comrade</span> account:</label>
+        <input type="text" class="form-control form-control-sm form-color" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle" [class.comrade__input]="isComrade"
             placeholder="@nickname@mastodon.social" />
         <br />
-        <button type="submit" class="btn btn-success btn-sm">Submit</button>
+        <button type="submit" class="btn btn-success btn-sm"  [class.comrade__button]="isComrade">Submit</button>
     </form>
+
+    <div *ngIf="isComrade" class="comrade__video">
+        <iframe width="300" height="170" src="https://www.youtube.com/embed/NzBjnoRG7Mo?feature=oembed&autoplay=1&auto_play=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+    </div>
 </div>

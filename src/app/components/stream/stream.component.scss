@@ -1,6 +1,7 @@
 @import "variables";
 @import "commons";
-$stream-header-height: 40px;
+@import "panel";
+
 .stream-edition {
     width: $stream-column-width;
     position: absolute;
@@ -11,9 +12,13 @@ $stream-header-height: 40px;
     position: relative;
     width: $stream-column-width;
     height: calc(100%);
+    overflow: hidden;
     background-color: $column-color;
     margin: 0 0 0 $stream-column-separator;
+
     &__stream-header {
+        position: relative;
+        width: $stream-column-width;
         border-bottom: 1px solid #222736;
     }
     &__open-menu {
@@ -37,8 +42,8 @@ $stream-header-height: 40px;
     }
     &__stream-selector {
         display: block;
-        width: calc(100%);
-        height: $stream-header-height;
+        width: $stream-column-width;
+        height: calc(#{$stream-header-height} - 1px);
         background-color: $column-header-background-color;
         text-decoration: none; 
         color: whitesmoke;
@@ -74,6 +79,14 @@ $stream-header-height: 40px;
     width: 320px;
 }
 
+
+// .stream-overlay {
+//     float: right;
+//     width: $stream-column-width;
+//     height: calc(100%);
+// }
+
+
 // .stream-toots {
 //     height: calc(100% - 30px);
 //     width: 320px;
@@ -83,9 +96,10 @@ $stream-header-height: 40px;
 //         border-width: 0 0 1px 0;
 //     }
 // }
-.stream-overlay {
-    position: absolute;
-    z-index: 100;
-    width: $stream-column-width;
-    height: calc(100%);
-}
+// .stream-overlay {
+//     // position: absolute;
+//     float: right;
+//     //z-index: 100;
+//     width: $stream-column-width;
+//     height: calc(100%);
+// }

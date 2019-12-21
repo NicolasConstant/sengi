@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { MastodonService, VisibilityEnum } from './mastodon.service';
+import { VisibilityEnum } from './mastodon.service';
+import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Instance, Account } from './models/mastodon.interfaces';
 import { AccountInfo } from '../states/accounts.state';
 
@@ -12,7 +13,7 @@ export class InstancesInfoService {
     private cachedMaxInstanceChar: { [id: string]: Promise<number>; } = {};
     private cachedDefaultPrivacy: { [id: string]: Promise<VisibilityEnum>; } = {};
 
-    constructor(private mastodonService: MastodonService) { }
+    constructor(private mastodonService: MastodonWrapperService) { }
 
     getMaxStatusChars(instance: string): Promise<number> {
         if (!this.cachedMaxInstanceChar[instance]) {

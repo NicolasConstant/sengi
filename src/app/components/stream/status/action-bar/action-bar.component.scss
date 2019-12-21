@@ -2,11 +2,12 @@
 
 .action-bar {
     // outline: 1px solid greenyellow; // height: 20px;
-    margin: 5px 10px 5px $avatar-column-space;
+    margin: 5px 0px 5px $avatar-column-space;
     padding: 0;
-    font-size: 24px;
+    font-size: 18px;
     height: 30px;
     position: relative;
+    // transform: rotate(0.03deg);
 
     &__link {
         color: $status-secondary-color;
@@ -19,36 +20,54 @@
             margin-right: 15px;
         }
 
+
+        &--reply {
+            font-size: 20px;
+        }
+
+        &--boost {
+            position: relative;
+            bottom: -1px;
+            // font-size: 22px;
+        }
+
+        &--fav {
+            font-size: 17px;
+        }
+
         &--cw {
-            position: absolute;
+            position: relative;
             bottom: -2px;
             font-size: 22px;
         }
 
         &--more {
             position: absolute;
-            left: 155px;
-            bottom: -6px;
+            right: 11px;
+            // left: 155px;
+            bottom: -2px;
         }
     }
 
-    &__lock {
+    &__lock {       
         color: $status-secondary-color;
-        width: 24px;
+        width: 22px;
 
         &:not(:last-child) {
             margin-right: 15px;
         }
     }
 
-    // &_cw {
-    //     // width: 18px;
-    //     font-size: 10px;
+    &__envelope {
+        position: relative;
+        top: 1px;
+        color: $status-secondary-color;
+        width: 22px;
 
-    //     &:not(:last-child) {
-    //         margin-right: 15px;
-    //     }
-    // }
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+    }
 }
 
 .boosted {
@@ -130,5 +149,4 @@
     -moz-animation: loadingAnimation 1s infinite;
     -o-animation: loadingAnimation 1s infinite;
     animation: loadingAnimation 1s infinite;
-
 }

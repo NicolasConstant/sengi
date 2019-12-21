@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener, ElementRef, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown } from '../../../states/streams.state';
+import { StreamElement, RemoveStream, MoveStreamUp, MoveStreamDown, UpdateStream } from '../../../states/streams.state';
 
 @Component({
     selector: 'app-stream-edition',
@@ -14,11 +14,47 @@ export class StreamEditionComponent implements OnInit {
     faChevronRight = faChevronRight;
     faTimes = faTimes;
 
-    @Input() streamElement: StreamElement;
+    hideBoosts: boolean;
+    hideReplies: boolean;
+    hideBots: boolean;
 
-    constructor(private readonly store: Store) { }
+    private init: boolean;
+
+    @Input() streamElement: StreamElement;
+    @Input() displayingNotifications: boolean;
+
+    @Output('closed') public closedEvent = new EventEmitter();
+
+    @HostListener('document:click', ['$event'])
+    clickout(event) {
+        if (!this.init) return;
+
+        if (!this.eRef.nativeElement.contains(event.target)) {
+            this.closedEvent.emit(null);
+        }
+    }
+
+    constructor(
+        private readonly store: Store,
+        private eRef: ElementRef) { }
 
     ngOnInit() {
+        this.hideBoosts = this.streamElement.hideBoosts;
+        this.hideReplies = this.streamElement.hideReplies;
+        this.hideBots = this.streamElement.hideBots;
+
+        setTimeout(() => {
+            this.init = true;
+        }, 0);
+    }
+
+    settingsChanged(): boolean {
+        this.streamElement.hideBoosts = this.hideBoosts;
+        this.streamElement.hideReplies = this.hideReplies;
+        this.streamElement.hideBots = this.hideBots;
+
+        this.store.dispatch([new UpdateStream(this.streamElement)]);
+        return false;
     }
 
     moveLeft(): boolean {

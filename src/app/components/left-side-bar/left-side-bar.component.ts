@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
-import { faCommentAlt } from "@fortawesome/free-regular-svg-icons";
+import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
-import { Account } from "../../services/models/mastodon.interfaces";
 import { AccountWrapper } from "../../models/account.models";
 import { AccountInfo, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
-import { MastodonService } from "../../services/mastodon.service";
-import { NotificationService } from "../../services/notification.service";
 import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
+import { ToolsService } from '../../services/tools.service';
+import { ScheduledStatusService, ScheduledStatusNotification } from '../../services/scheduled-status.service';
 
 @Component({
     selector: "app-left-side-bar",
@@ -19,25 +19,88 @@ import { UserNotificationService, UserNotification } from '../../services/user-n
 })
 export class LeftSideBarComponent implements OnInit, OnDestroy {
     faCommentAlt = faCommentAlt;
+    faSearch = faSearch;
+    faPlus = faPlus;
+    faCog = faCog;
+    faCalendarAlt = faCalendarAlt;
 
     accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;
+    hasScheduledStatuses: boolean;
     private accounts$: Observable<AccountInfo[]>;
 
     private accountSub: Subscription;
+    private scheduledSub: Subscription;
     private notificationSub: Subscription;
 
     constructor(
+        private readonly hotkeysService: HotkeysService,
+        private readonly scheduledStatusService: ScheduledStatusService,
+        private readonly toolsService: ToolsService,
         private readonly userNotificationServiceService: UserNotificationService,
-        private readonly notificationService: NotificationService,
         private readonly navigationService: NavigationService,
-        private readonly mastodonService: MastodonService,
         private readonly store: Store) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+
+        this.hotkeysService.add(new Hotkey('n', (event: KeyboardEvent): boolean => {
+            this.createNewStatus();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('s', (event: KeyboardEvent): boolean => {
+            this.openSearch();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('a', (event: KeyboardEvent): boolean => {
+            this.addNewAccount();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('c', (event: KeyboardEvent): boolean => {
+            this.navigationService.openPanel(LeftPanelType.Closed);
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('escape', (event: KeyboardEvent): boolean => {
+            this.navigationService.openPanel(LeftPanelType.Closed);
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('ctrl+up', (event: KeyboardEvent): boolean => {
+            this.selectPreviousAccount();
+            return false;
+        }));
+
+        this.hotkeysService.add(new Hotkey('ctrl+down', (event: KeyboardEvent): boolean => {
+            this.selectNextAccount();
+            return false;
+        }));
     }
 
-    private currentLoading: number;
+    private selectPreviousAccount() {
+        let accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        let selectedAccount = accounts.find(x => x.isSelected);
+        let selectedIndex = accounts.indexOf(selectedAccount);
+
+        if (selectedIndex > 0) {
+            let previousAccount = accounts[selectedIndex - 1];
+            this.store.dispatch([new SelectAccount(previousAccount)]);
+        }
+    }
+
+    private selectNextAccount() {
+        let accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        let selectedAccount = accounts.find(x => x.isSelected);
+        let selectedIndex = accounts.indexOf(selectedAccount);
+
+        if (selectedIndex < accounts.length - 1) {
+            let nextAccount = accounts[selectedIndex + 1];
+            this.store.dispatch([new SelectAccount(nextAccount)]);
+        }
+    }
+
     ngOnInit() {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
@@ -52,12 +115,9 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
                         this.accounts.push(accWrapper);
 
-                        this.mastodonService.retrieveAccountDetails(acc)
-                            .then((result: Account) => {
-                                accWrapper.avatar = result.avatar;
-                            })
-                            .catch((err: HttpErrorResponse) => {
-                                this.notificationService.notifyHttpError(err);
+                        this.toolsService.getAvatar(acc)
+                            .then((avatar: string) => {
+                                accWrapper.avatar = avatar;
                             });
                     }
                 }
@@ -73,18 +133,35 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         });
 
         this.notificationSub = this.userNotificationServiceService.userNotifications.subscribe((notifications: UserNotification[]) => {
+            const settings = this.toolsService.getSettings();
             notifications.forEach((notification: UserNotification) => {
                 const acc = this.accounts.find(x => x.info.id === notification.account.id);
-                if(acc){
-                    acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
+
+                if (acc) {
+                    const accSettings = settings.accountSettings.find(x => x.accountId === acc.info.id);
+                    if (!settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
+                        acc.hasActivityNotifications = notification.hasNewMentions || notification.hasNewNotifications;
+                    }
                 }
             });
+        });
+
+        this.scheduledSub = this.scheduledStatusService.scheduledStatuses.subscribe((notifications: ScheduledStatusNotification[]) => {
+            let statuses = [];
+            notifications.forEach(n => {
+                n.statuses.forEach(x => {
+                    statuses.push(x);
+                })
+            })
+
+            this.hasScheduledStatuses = statuses.length > 0;
         });
     }
 
     ngOnDestroy(): void {
         this.accountSub.unsubscribe();
         this.notificationSub.unsubscribe();
+        this.scheduledSub.unsubscribe();
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
@@ -114,15 +191,13 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.navigationService.openPanel(LeftPanelType.Settings);
         return false;
     }
+
+    openScheduledStatuses(): boolean {
+        this.navigationService.openPanel(LeftPanelType.ScheduledStatuses);
+        return false;
+    }
 }
 
 export class AccountWithNotificationWrapper extends AccountWrapper {
-    // constructor(accountWrapper: AccountWrapper) {
-    //     super();
-
-    //     this.avatar = accountWrapper.avatar;
-    //     this.info = accountWrapper.info;
-    // }
-
     hasActivityNotifications: boolean;
 }

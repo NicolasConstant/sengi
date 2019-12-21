@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { MastodonService } from '../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { Results, Account } from '../../../services/models/mastodon.interfaces';
 import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
@@ -29,7 +29,7 @@ export class SearchComponent implements OnInit {
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
     }
@@ -54,10 +54,9 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    browseAccount(accountName: string): boolean {
-        if (accountName) {
-            this.browseAccountEvent.next(accountName);
-        }
+    browseAccount(account: Account): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(account);
+        this.browseAccountEvent.next(accountName);
         return false;
     }
 
@@ -70,7 +69,12 @@ export class SearchComponent implements OnInit {
 
         this.lastAccountUsed = this.toolsService.getSelectedAccounts()[0];
 
-        this.mastodonService.search(this.lastAccountUsed, data, true)
+        this.toolsService.getInstanceInfo(this.lastAccountUsed)
+            .then(instance => {
+                let version: 'v1' | 'v2' = 'v1';
+                if (instance.major >= 3) version = 'v2';
+                return this.mastodonService.search(this.lastAccountUsed, data, version, true)
+            })
             .then((results: Results) => {
                 if (results) {
                     this.accounts = results.accounts.slice(0, 5);
@@ -83,10 +87,10 @@ export class SearchComponent implements OnInit {
                 }
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.lastAccountUsed);
             })
             .then(() => { this.isLoading = false; });
     }
 
-    private 
+    private
 }

@@ -1,0 +1,22 @@
+@import "variables";
+@import "panel";
+@import "commons";
+
+.panel {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.scheduled-statuses-display {
+    overflow: auto;
+    height: calc(100% - #{$stream-header-height});
+}
+
+.scheduled-status {
+    display: block;
+    // outline: 1px dotted salmon;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid #141824;
+    }
+}

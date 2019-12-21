@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
 
 import { AuthService, CurrentAuthProcess } from "../../services/auth.service";
-import { TokenData } from "../../services/models/mastodon.interfaces";
+import { TokenData, Account } from "../../services/models/mastodon.interfaces";
 import { RegisteredAppsStateModel, AppInfo } from "../../states/registered-apps.state";
-import { AccountInfo, AddAccount } from "../../states/accounts.state";
+import { AccountInfo, AddAccount, AccountsStateModel } from "../../states/accounts.state";
 import { NotificationService } from "../../services/notification.service";
+import { MastodonWrapperService } from '../../services/mastodon-wrapper.service';
 
 @Component({
     selector: "app-register-new-account",
@@ -23,6 +24,7 @@ export class RegisterNewAccountComponent implements OnInit {
     private authStorageKey: string = 'tempAuth';
 
     constructor(
+        private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly store: Store,
@@ -45,13 +47,33 @@ export class RegisterNewAccountComponent implements OnInit {
             }
 
             const appInfo = this.getAllSavedApps().filter(x => x.instance === appDataWrapper.instance)[0];
-
+            let usedTokenData: TokenData;
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
+                    
+                    if(tokenData.refresh_token && !tokenData.created_at){
+                        const nowEpoch = Date.now() / 1000 | 0;
+                        tokenData.created_at = nowEpoch;                        
+                    }
+
+                    usedTokenData = tokenData;
+
+                    return this.mastodonService.retrieveAccountDetails({ 'instance': appDataWrapper.instance, 'id': '', 'username': '', 'order': 0, 'isSelected': true, 'token': tokenData });
+                })
+                .then((account: Account) => {
+                    var username = account.username.toLowerCase(); 
+                    var instance = appDataWrapper.instance.toLowerCase();
+
+                    if(this.isAccountAlreadyPresent(username, instance)){
+                        this.notificationService.notify(null, null, `Account @${username}@${instance} is already registered`, true);
+                        this.router.navigate(['/home']);
+                        return;
+                    }
+
                     const accountInfo = new AccountInfo();
-                    accountInfo.username = appDataWrapper.username.toLowerCase();
-                    accountInfo.instance = appDataWrapper.instance.toLowerCase();
-                    accountInfo.token = tokenData;
+                    accountInfo.username = username; 
+                    accountInfo.instance = instance;
+                    accountInfo.token = usedTokenData;
 
                     this.store.dispatch([new AddAccount(accountInfo)])
                         .subscribe(() => {
@@ -60,12 +82,22 @@ export class RegisterNewAccountComponent implements OnInit {
                         });
                 })
                 .catch((err: HttpErrorResponse) => {
-                    this.notificationService.notifyHttpError(err);
+                    this.notificationService.notifyHttpError(err, null);
                 });
         });
     }
 
     ngOnInit() {
+    }
+
+    private isAccountAlreadyPresent(username: string, instance: string): boolean{
+        const accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        for (let acc of accounts) {
+            if(acc.instance === instance && acc.username == username){
+                return true;
+            }
+        }
+        return false;
     }
 
     private displayError(type: RegistrationErrorTypes) {
@@ -78,7 +110,7 @@ export class RegisterNewAccountComponent implements OnInit {
                 this.errorMessage = 'No authentication code returned. Please retry.'
                 break;
         }
-    }
+    }   
 
     private getAllSavedApps(): AppInfo[] {
         const snapshot = <RegisteredAppsStateModel>this.store.snapshot().registeredapps;

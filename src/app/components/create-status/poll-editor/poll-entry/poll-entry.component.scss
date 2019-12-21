@@ -1,0 +1,66 @@
+@import "variables";
+
+$selector-size: 20px;
+$selector-padding: 5px;
+
+.poll-entry {
+    position: relative;    
+
+    &__multi {
+        &--link {
+            display: block;
+            padding: $selector-padding;
+            width: calc(#{$selector-size} + 2 * #{$selector-padding});
+            float: left;
+        }
+    }
+
+    &__label {
+        height: calc(#{$selector-size} + 2 * #{$selector-padding});
+        padding-top: 3px;
+
+        &--input {
+            width: calc(100% - #{$selector-size} - 2 * #{$selector-padding} - 30px); 
+            border:1px solid  $poll-editor-input-border;
+
+            &:focus {
+                outline: none !important;
+                border:1px solid $poll-editor-input-border-focus;
+                box-shadow: 0 0 0 #fff;
+            }
+        }
+    }
+
+    &__remove {               
+        float: right;
+        width: 25px;
+        height: 30px;
+
+        &--link {
+            position: absolute;
+            top: -2px;
+            right: 5px;
+            color: rgb(139, 139, 139);
+            padding: 5px;
+
+            &:hover {
+                color: rgb(0, 0, 0);
+            }
+        }
+    }
+}
+
+.check-mark {
+    display: block;
+    border: 1px solid rgb(100, 100, 100);
+    width: $selector-size;
+    height: $selector-size;
+
+    &__round {
+        border-radius: 50px;        
+    }
+
+    &__box {
+        border-radius: 3px;
+    }
+}

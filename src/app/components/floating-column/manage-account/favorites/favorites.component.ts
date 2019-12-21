@@ -3,7 +3,8 @@ import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef }
 import { StatusWrapper } from '../../../../models/common.model';
 import { OpenThreadEvent } from '../../../../services/tools.service';
 import { AccountWrapper } from '../../../../models/account.models';
-import { MastodonService, FavoriteResult } from '../../../../services/mastodon.service';
+import { FavoriteResult } from '../../../../services/mastodon.service';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../../services/notification.service';
 import { resetCompiledComponents } from '@angular/core/src/render3/jit/module';
@@ -41,7 +42,7 @@ export class FavoritesComponent implements OnInit {
 
     constructor(
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
     }
@@ -65,7 +66,7 @@ export class FavoritesComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;
@@ -102,7 +103,7 @@ export class FavoritesComponent implements OnInit {
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err);
+                this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;

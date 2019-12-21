@@ -1,0 +1,34 @@
+<div class="card-data" *ngIf="card.type === 'link' || card.type === 'video'">
+    <a *ngIf="card.type === 'link'" class="card-data__link" href="{{ card.url }}" target="_blank" title="{{ card.title }}">
+        <img *ngIf="card.image" class="card-data__link--image" src="{{ card.image }}" alt="" />
+        <div *ngIf="!card.image" class="card-data__link--image">
+            <fa-icon class="card-data__link--image--logo" [icon]="faFileAlt"></fa-icon>
+        </div>
+
+        <h3 class="card-data__link--title">{{ card.title }}</h3>
+        <span class="card-data__link--host">{{ host }}</span>
+    </a>
+    <div *ngIf="card.type === 'photo'" class="card-data__photo">
+
+    </div>
+    <div *ngIf="card.type === 'video'" class="card-data__video">
+        <div *ngIf="!showHtml" class="card-data__video--preview">
+            <div class="card-data__video--preview--controls">
+                <a href class="card-data__video--preview--link" (click)="play()" title="play">
+                    <fa-icon [icon]="faPlay"></fa-icon>
+                </a>
+                <a href class="card-data__video--preview--link" (click)="expand()" title="open">
+                    <fa-icon [icon]="faExpand"></fa-icon>
+                </a>
+                <a href="{{ card.url }}" class="card-data__video--preview--link" target="_blank" title="browse">
+                    <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+                </a>
+            </div>
+            <img src="{{ card.image }}" class="card-data__video--preview--image" />
+        </div>
+        <div #video *ngIf="showHtml" class="card-data__video--content" [innerHTML]="html">
+
+        </div>
+    </div>
+    <div *ngIf="card.type === 'rich'" class="card-data__rich" [innerHTML]="html"></div>
+</div>

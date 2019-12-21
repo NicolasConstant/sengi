@@ -4,21 +4,25 @@
 
 Sengi is a **Mastodon** and **Pleroma** desktop focused client. It takes inspiration from the old Tweetdeck [client](https://static.makeuseof.com/wp-content/uploads/2012/02/muo-tweetdeck2b.png), the new Tweetdeck webapp and Mastodon UI. 
 
-Focus will be made on the following points:
+It is strongly focused on the following points:
 
   * Heavily oriented on multi-accounts usage 
   * Desktop based interactions (right clic, left clic, etc)
   * One column at a time display (leaves it on the side of your screen, and keep an eye on it while doing your other stuff)
 
-It will be released as a **browser webapp** and also packaged as an **cross-platform desktop application** (Mac, Windows, and Linux).
+It is released as a **browser webapp** and also packaged as an **cross-platform desktop application** (Mac, Windows, and Linux).
+
+## Official project page
+
+[Discover Sengi](https://nicolasconstant.github.io/sengi/)
 
 ## State of development
 
-Sengi is at a very early development stage, a lot has to be done before a first pre-release. 
+Sengi already supporting  all the basics functionalities, but many minors enhancements are still needed before a 1.0.0 release.
 
 ## Screens
 
-soon™
+![/docs/images/presentation_small.gif](/docs/images/presentation_small.gif)
 
 ## Contact
 
@@ -32,11 +36,15 @@ It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) fro
 
 ## Contribute
 
-Please see the [contributing guidelines](CONTRIBUTING.md).
+Please see the [contributing guidelines](CONTRIBUTING.md)
 
 ## License
 
 This project is licensed under the AGPLv3 License - see [LICENSE](LICENSE) for details
+
+## Credits
+
+See [credits](CREDITS.md)
 
 ## Dependencies 
 

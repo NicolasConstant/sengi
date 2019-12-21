@@ -1,26 +1,38 @@
 @import "variables";
 @import "mixins";
 @import "commons";
-$header-content: 40px;
-.stream-overlay {
-    // width: $stream-column-width;
+$header-content-height: 40px;
+.overlay {
     height: calc(100%);
     background-color: $column-color;
+    position: relative;
+
     &__header {
         width: calc(100%);
-        height: $header-content;
-        background-color: $column-header-background-color; // padding: 6px 10px 0 10px;
-        border-bottom: 1px solid #222736;
-        & a {
-            color: whitesmoke;
-            font-size: 0.8em;
-            font-weight: normal;
-        }
+        height: $header-content-height;
+        background-color: $column-header-background-color; 
+        border-bottom: 1px solid #222736;        
     }
+    &__content-wrapper  {
+        transition: all .2s;
+        position: absolute;
+        top: $header-content-height;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        
+        z-index: 1;
+        opacity: 0;
+
+        &--selected {
+            z-index: 10;
+            opacity: 1;
+        }
+    }    
     &__content {
         display: block;
         width: calc(100%);
-        height: calc(100% - #{$header-content});
+        height: calc(100%);
     }
     &__title {
         width: calc(100%);
@@ -30,50 +42,79 @@ $header-content: 40px;
         border-bottom: 1px solid whitesmoke;
         padding: 3px 10px 0 10px;
     }
-}
 
-.overlay {
-    margin: 0;
     &__button {
-        @include clearButton;
         width: 25px;
         height: 25px;
         color: #354060;
         transition: all .2s;
         margin: 8px 0 0 8px;
         &:hover {
-            color: whitesmoke;
+            color: #536599;
+            color: #7a8dc7;
         }
         &--focus {
             color: whitesmoke;
+
+            &:hover {
+                color: whitesmoke;
+            }
         }
     }
     &-previous {
         display: block;
         float: left;
         font-size: 18px;
-        & fa-icon {
+
+        &__icon {
             position: relative;
-            left: -1px;
+            left: 7px;
+            top: -1px
+        }
+    }
+    &-next {
+        display: block;
+        float: left;
+        font-size: 18px;
+
+        &__icon {
+            position: relative;
+            left: 8px;
+            top: -1px
         }
     }
     &-refresh {
         display: block;
         float: left;
         font-size: 14px;
-    }
-    &-next {
+
+        &__icon {
+            position: relative;
+            left: 5px;
+            top: 1px
+        }
+    }   
+    &-gototop {
+        position: absolute;
+        top: 0;
+        left: 110px;
+        right: 40px;
         display: block;
-        float: left;
-        font-size: 18px;
+        height: $header-content-height;
     }
     &-close {
         display: block;
         float: right;
-        font-size: 14px;
+        font-size: 13px;
         color: white;
         margin-right: 8px;
-    }
+
+        &__icon {
+            position: relative;
+            left: 7px;
+            top: 1px
+        }
+    }    
 }
 
 .not-active {

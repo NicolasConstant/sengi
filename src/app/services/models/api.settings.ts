@@ -3,6 +3,7 @@ export class ApiRoutes {
     createApp = '/api/v1/apps';
     getToken = '/oauth/token';
     getAccount = '/api/v1/accounts/{0}';
+    getCustomEmojis = '/api/v1/custom_emojis';
     getCurrentAccount = '/api/v1/accounts/verify_credentials';
     getAccountFollowers = '/api/v1/accounts/{0}/followers';
     getAccountFollowing = '/api/v1/accounts/{0}/following';
@@ -13,6 +14,8 @@ export class ApiRoutes {
     unblock = '/api/v1/accounts/{0}/unblock';
     mute = '/api/v1/accounts/{0}/mute';
     unmute = '/api/v1/accounts/{0}/unmute';
+    muteStatus = '/api/v1/statuses/{0}/mute';
+    unmuteStatus = '/api/v1/statuses/{0}/unmute';
     getAccountRelationships = '/api/v1/accounts/relationships';
     searchForAccounts = '/api/v1/accounts/search';
     getBlocks = '/api/v1/blocks';
@@ -43,6 +46,8 @@ export class ApiRoutes {
     unreblogStatus = '/api/v1/statuses/{0}/unreblog';
     favouritingStatus = '/api/v1/statuses/{0}/favourite';
     unfavouritingStatus = '/api/v1/statuses/{0}/unfavourite';
+    pinStatus = '/api/v1/statuses/{0}/pin';
+    unpinStatus = '/api/v1/statuses/{0}/unpin';
     getHomeTimeline = '/api/v1/timelines/home';
     getPublicTimeline = '/api/v1/timelines/public';
     getHastagTimeline = '/api/v1/timelines/tag/{0}';
@@ -50,4 +55,19 @@ export class ApiRoutes {
     getTagTimeline = '/api/v1/timelines/tag/{0}';
     getListTimeline = '/api/v1/timelines/list/{0}';
     getStreaming = '/api/v1/streaming?access_token={0}&stream={1}';
+    getLists = '/api/v1/lists';
+    getList = '/api/v1/lists/{0}';
+    getListsWithAccount = '/api/v1/accounts/{0}/lists';
+    getAccountsInList = '/api/v1/lists/{0}/accounts';
+    postList = '/api/v1/lists';
+    putList = '/api/v1/lists/{0}';
+    deleteList = '/api/v1/lists/{0}';
+    addAccountToList = '/api/v1/lists/{0}/accounts';
+    removeAccountFromList = '/api/v1/lists/{0}/accounts';
+    voteOnPoll = '/api/v1/polls/{0}/votes';
+    getPoll = '/api/v1/polls/{0}';
+    getConversations = '/api/v1/conversations';
+    getScheduledStatuses = '/api/v1/scheduled_statuses';
+    putScheduleStatus = '/api/v1/scheduled_statuses/{0}';
+    deleteScheduleStatus = '/api/v1/scheduled_statuses/{0}';
 }

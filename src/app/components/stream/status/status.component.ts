@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { faStar, faRetweet } from "@fortawesome/free-solid-svg-icons";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
+import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
@@ -17,8 +17,11 @@ export class StatusComponent implements OnInit {
 
     faStar = faStar;
     faRetweet = faRetweet;
+    faList = faList;
+    faThumbtack = faThumbtack;
 
     displayedStatus: Status;
+    displayedStatusWrapper: StatusWrapper;
 
     // statusAccountName: string;
     statusContent: string;
@@ -28,9 +31,12 @@ export class StatusComponent implements OnInit {
     replyingToStatus: boolean;
     isCrossPoster: boolean;
     isThread: boolean;
+    isOld: boolean;
     isContentWarned: boolean;
     hasReply: boolean;
     contentWarningText: string;
+    isDirectMessage: boolean;
+    isSelected: boolean;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -39,14 +45,16 @@ export class StatusComponent implements OnInit {
 
     @Input() isThreadDisplay: boolean;
 
-    @Input() notificationType: 'mention' | 'reblog' | 'favourite';
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll';
     @Input() notificationAccount: Account;
 
     private _statusWrapper: StatusWrapper;
     status: Status;
+    
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
+        // console.warn(value.status);
         this.status = value.status;
 
         if (this.status.reblog) {
@@ -55,6 +63,9 @@ export class StatusComponent implements OnInit {
         } else {
             this.displayedStatus = this.status;
         }
+
+        this.isDirectMessage = this.displayedStatus.visibility === 'direct';
+        this.displayedStatusWrapper = new StatusWrapper(this.displayedStatus, value.provider);
 
         this.checkLabels(this.displayedStatus);
         this.checkContentWarning(this.displayedStatus);
@@ -75,7 +86,9 @@ export class StatusComponent implements OnInit {
         return this._statusWrapper;
     }
 
-    constructor() { }
+    constructor(
+        public elem: ElementRef,
+        private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
     }
@@ -118,13 +131,17 @@ export class StatusComponent implements OnInit {
         }
 
         this.hasReply = status.replies_count > 0;
+
+        let createdAt = new Date(status.created_at);
+        let now = new Date();
+        now.setMonth(now.getMonth() - 3);
+        if (now > createdAt) {
+            this.isOld = true;
+        }
     }
 
     openAccount(account: Account): boolean {
-        let accountName = account.acct;
-        if (!accountName.includes('@'))
-            accountName += `@${account.url.replace('https://', '').split('/')[0]}`;
-
+        let accountName = this.toolsService.getAccountFullHandle(account);
         this.browseAccountEvent.next(accountName);
         return false;
     }
@@ -148,7 +165,9 @@ export class StatusComponent implements OnInit {
         this.browseHashtagEvent.next(hashtag);
     }
 
-    textSelected(): void {
+    textSelected(): boolean {
+        if(this.isSelected) return false;
+
         const status = this._statusWrapper.status;
         const accountInfo = this._statusWrapper.provider;
 
@@ -160,5 +179,16 @@ export class StatusComponent implements OnInit {
         }
 
         this.browseThreadEvent.next(openThread);
+        return false;
+    }
+
+    browseThread(event: OpenThreadEvent): void {
+        this.browseThreadEvent.next(event);
+    }
+
+    openUrl(url: string): boolean {
+        event.preventDefault();
+        window.open(url, "_blank");
+        return false;
     }
 }

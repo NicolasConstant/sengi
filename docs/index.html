@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-1-of-2">
-                <img class="header__image" src="images/sengi_image.png" />
+                <img id="main-illustration" class="header__image" src="images/sengi_image.png" />
             </div>
             <div class="col-1-of-2">
                 <div class="header__download-box">
@@ -28,14 +28,15 @@
 
                     <div class="header__download-box--description">
                         A FLOSS multi-account Mastodon and Pleroma desktop client<br />
-                        Now available in Beta (v0.7.0)<br />
+                        Now available in Beta <span id="sengi-version"></span> <br />
                         <br />
                     </div>
 
                     <div class="header__download-box--buttons">
                         <p>
                             <h4 class="header__download-box--subtitle">Try it in your browser!</h4>
-                            <a href="#" class="download-button download-button__web" title="what are you waiting for? click!"
+                            <a href="#" class="download-button download-button__web"
+                                title="what are you waiting for? click!"
                                 onClick="window.open('http://sengi.nicolas-constant.com'+'?qt='+ (new Date()).getTime(),'Sengi','toolbar=no,location=no,status=no,menubar=no,scrollbars=no, resizable=yes,width=377,height=800'); return false;"
                                 class="button"><i class="fas fa-globe"></i><span
                                     class="download-button__web--label">launch!</span></a><br />
@@ -43,41 +44,225 @@
                             <br />
 
                             <h4 class="header__download-box--subtitle">Or download the desktop client:</h4>
-                            <a href="https://github.com/NicolasConstant/sengi/releases/download/0.7.0/Sengi-0.7.0-win.exe" class="download-button" title="download client for windows"><i class="fab fa-windows"></i></a>
-                            <a href="https://github.com/NicolasConstant/sengi/releases/download/0.7.0/Sengi-0.7.0-mac.dmg" class="download-button" title="download client for mac"><i class="fab fa-apple"></i></a>
-                            <a href="https://github.com/NicolasConstant/sengi/releases/download/0.7.0/Sengi-0.7.0-linux.deb" class="download-button" title="download client for debian-based distrib"><i class="fab fa-ubuntu"></i></a>
-                            <a href="https://snapcraft.io/sengi" title="use Snap Store for linux"><img src="images/snap-store-white.png" /></a>
+                            <div id="download-buttons" style="display: none;">
+                                <a id="windows" href class="download-button" title="download client for windows">
+                                    <i class="fab fa-windows"></i>
+                                </a>
+                                <a id="mac" href class="download-button" title="download client for mac">
+                                    <i class="fab fa-apple"></i>
+                                </a>
+                                <a id="deb" href class="download-button"
+                                    title="download client for debian-based distrib">
+                                    <i class="fab fa-ubuntu"></i>
+                                </a>
+                                <a id="appimage" href class="download-button"
+                                    title="download client for linux (AppImage)">
+                                    <i class="fab fa-linux"></i>
+                                </a>
+                                <a href="https://snapcraft.io/sengi" title="use Snap Store for linux">
+                                    <img src="images/snap-store-white.png" />
+                                </a>
+                            </div>
+                            <div id="download-buttons-nojs">
+                                <a href="https://github.com/NicolasConstant/sengi/releases/" class="download-button"
+                                    title="latest releases">
+                                    <i class="fab fa-github"></i></a>
+                                <a href="https://snapcraft.io/sengi" title="use Snap Store for linux">
+                                    <img src="images/snap-store-white.png" />
+                                </a>
+                            </div>
                         </p>
+
                     </div>
-
-
+                    <div>
+                        <a class="header__old-releases" href="https://github.com/NicolasConstant/sengi/releases/"
+                            title="browse previous releases">browse previous releases</a>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="header__app-image-box">
-
-        </div>
-
-
+        <div class="header__app-image-box"></div>
     </header>
     <main>
         <section class="section-about">
 
+            <div class="section-about__about">
+                <p>
+                    Sengi will let you use all your accounts<br /> easily and seamlessly<br />
+                </p>
+            </div>
+
         </section>
 
-        <section class="section-about">
+        <section class="section-separator"></section>
+
+        <section class="section-clear">
+            <h2 class="section-clear__big-title">Quick Overview</h2>
+
+            <video class="quick-overview__video" controls>
+                <source src="videos/Quick_overview.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
+
+        <section class="section-separator"></section>
+
+        <section class="section-clear">
+            <h2 class="section-clear__big-title">Main Functionalities</h2>
+
+            <h4 class="section-clear__title">Seamless account switch</h4>
+            <div class="row functionalities__row">
+                <div class="col-1-of-2">
+                    <p class="functionalities__text">
+                        Just click on the account's avatar, <br />
+                        and all your next actions will be performed by it.
+                    </p>
+                </div>
+                <div class="col-1-of-2">
+                    <video width="326" height="260" controls class="functionalities__video">
+                        <source src="videos/Clip_account_switch.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <h4 class="section-clear__title">All instances timelines in one place</h4>
+            <div class="row functionalities__row">
+                <div class="col-1-of-2">
+                    <p class="functionalities__text">
+                        Add timelines and lists from all your accounts in the same
+                        interface.
+                    </p>
+                </div>
+                <div class="col-1-of-2">
+                    <img src="images/timelines.png" class="functionalities__video" />
+                </div>
+            </div>
+
+            <h4 class="section-clear__title">Don't lose your focus</h4>
+            <div class="row functionalities__row">
+                <div class="col-1-of-2">
+                    <p class="functionalities__text">
+                        Opening a profile, thread, hashtag or even just replying to someone will always take place in the
+                        current Timeline.
+                    </p>
+                </div>
+                <div class="col-1-of-2">
+                    <video width="326" height="260" controls class="functionalities__video">
+                        <source src="videos/Clip_timelines.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <h4 class="section-clear__title">Labels</h4>
+            <div class="row functionalities__row">
+                <div class="col-1-of-2">
+                    <p class="functionalities__text">
+                        Get a quick insight if a status is part of a thread, has replies, is from a bot, is old or was
+                        cross-posted (limited to local TL).
+                    </p>
+                </div>
+                <div class="col-1-of-2">
+                    <img src="images/labels.png" class="functionalities__video" />
+                </div>
+            </div>
+
+            <h4 class="section-clear__title">Auto-remove Thread's Content-Warnings</h4>
+            <div class="row functionalities__row">
+                <div class="col-1-of-2">
+                    <p class="functionalities__text">
+                        Easily remove all CW from a thread<br />
+                        with one single click!
+                    </p>
+                </div>
+                <div class="col-1-of-2">
+                    <video width="326" height="260" controls class="functionalities__video">
+                        <source src="videos/Clip_cw_button.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <h4 class="section-clear__title">And many more!</h4>
+
+            <div class="row functionalities__row">
+                <p class="functionalities__text functionalities__conclusion">
+                    There is a lot more things to discover<br/> and more to come too!
+                </p>
+            </div>
 
         </section>
+        <section class="section-separator"></section>
     </main>
     <footer class="footer">
-        <h3 class="footer__title">Let's keep in touch!</h3> 
+        <h3 class="footer__title">Let's keep in touch!</h3>
 
         <div class="footer__buttons">
-            <a href="https://mastodon.social/@sengi_app" rel="me" class="footer__buttons--button" title="open pleroma-compatible account"><i class="fab fa-mastodon"></i></a>
-            <a href="https://github.com/NicolasConstant/sengi" class="footer__buttons--button"  title="open microsoft github repository"><i class="fab fa-github"></i></a>
+            <a href="https://mastodon.social/@sengi_app" rel="me" class="footer__buttons--button"
+                title="open pleroma-compatible account"><i class="fab fa-mastodon"></i></a>
+            <a href="https://github.com/NicolasConstant/sengi" class="footer__buttons--button"
+                title="open microsoft github repository"><i class="fab fa-github"></i></a>
         </div>
     </footer>
+
+
+    <script type="text/javascript" language="javascript">
+        const getLastRelease = async () => {
+            const response = await fetch('https://api.github.com/repos/NicolasConstant/sengi/releases/latest');
+            const myJson = await response.json();
+            return myJson;
+        }
+
+        function getOS() {
+            var userAgent = window.navigator.userAgent,
+                platform = window.navigator.platform,
+                macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+                windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+                iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+                os = null;
+
+            if (macosPlatforms.indexOf(platform) !== -1) {
+                os = 'Mac OS';
+            } else if (iosPlatforms.indexOf(platform) !== -1) {
+                os = 'iOS';
+            } else if (windowsPlatforms.indexOf(platform) !== -1) {
+                os = 'Windows';
+            } else if (/Android/.test(userAgent)) {
+                os = 'Android';
+            } else if (!os && /Linux/.test(platform)) {
+                os = 'Linux';
+            }
+
+            return os;
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            let lastRelease = await getLastRelease();
+            let version = lastRelease.tag_name;
+
+            var downloadButtons = document.getElementById('download-buttons');
+            downloadButtons.style.display = 'block';
+
+            var downloadButtonsNojs = document.getElementById('download-buttons-nojs');
+            downloadButtonsNojs.style.display = 'none';
+
+            var sengiVersion = document.getElementById('sengi-version');
+            sengiVersion.textContent = `(${version})`;
+
+            document.getElementById('windows').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-win.exe`;
+            document.getElementById('mac').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-mac.dmg`;
+            document.getElementById('deb').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.deb`;
+            document.getElementById('appimage').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.AppImage`;
+
+
+            let userOs = getOS();            
+            if(userOs === 'Linux'){
+                var illustration = document.getElementById('main-illustration');
+                illustration.src = 'images/sengi_image_ubuntu.png';
+            }
+        }, false);
+    </script>
 </body>
 
 </html>

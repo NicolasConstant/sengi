@@ -1,9 +1,60 @@
 <div class="my-account__body flexcroll">
-    <h4 class="my-account__label">add column:</h4>
-    <a class="my-account__link my-account__blue" href *ngFor="let stream of availableStreams" 
-        (click)="addStream(stream)" title="{{ stream.isAdded ? '' : 'add timeline'}}" [class.my-account__link--disabled]="stream.isAdded">
-        {{ stream.name }} <fa-icon class="my-account__link--icon" *ngIf="stream.isAdded" [icon]="faCheckSquare"></fa-icon>
+    <h4 class="my-account__label">add timeline:</h4>
+    <a class="my-account__link my-account__link--margin-bottom my-account__blue" href
+        *ngFor="let stream of availableStreams" (click)="addStream(stream)"
+        title="{{ stream.isAdded ? '' : 'add timeline'}}" [class.my-account__link--disabled]="stream.isAdded">
+        {{ stream.name }} <fa-icon class="my-account__link--icon" *ngIf="stream.isAdded" [icon]="faCheckSquare">
+        </fa-icon>
     </a>
+
+    <h4 class="my-account__label my-account__margin-top">manage list:</h4>
+    <div class="my-account__link--margin-bottom" *ngFor="let list of availableLists">
+        <a href class="my-account__list--button" title="delete list" (click)="openCloseDeleteConfirmation(list, true)"
+            *ngIf="!list.confirmDeletion">
+            <fa-icon class="my-account__link--icon" [icon]="faTrash"></fa-icon>
+        </a>
+        <a href class="my-account__list--button" title="edit list" (click)="editList(list)"
+            *ngIf="!list.confirmDeletion">
+            <fa-icon class="my-account__link--icon" [icon]="faPenAlt"></fa-icon>
+        </a>
+
+        <a href class="my-account__list--button" title="cancel" (click)="openCloseDeleteConfirmation(list, false)"
+            *ngIf="list.confirmDeletion">
+            <fa-icon class="my-account__link--icon" [icon]="faTimes"></fa-icon>
+        </a>
+        <a href class="my-account__list--button my-account__red" title="delete list" (click)="deleteList(list)"
+            *ngIf="list.confirmDeletion">
+            <fa-icon class="my-account__link--icon" [icon]="faCheck"></fa-icon>
+        </a>
+
+        <a class="my-account__link my-account__list my-account__blue" href (click)="addStream(list)"
+            title="{{ list.isAdded ? '' : 'add list'}}" [class.my-account__link--disabled]="list.isAdded">
+            {{ list.name }} <fa-icon class="my-account__link--icon" *ngIf="list.isAdded" [icon]="faCheckSquare">
+            </fa-icon>
+        </a>
+
+        <app-list-editor *ngIf="list.editList" [list]="list" [account]="account"></app-list-editor>
+    </div>
+    <a href class="my-account__list--button" title="create list" (click)="createList()">
+        <fa-icon class="my-account__link--icon" [icon]="faPlus"></fa-icon>
+    </a>
+    <input class="my-account__list--new-list-title" placeholder="new list title" [(ngModel)]="listTitle"
+        (keyup.enter)="createList()" [disabled]="creationLoading" />
+
+    <h4 class="my-account__label my-account__margin-top">advanced settings:</h4>
+    <div class="advanced-settings">
+        <input class="advanced-settings__checkbox" [(ngModel)]="avatarNotificationDisabled"
+            (change)="onDisableAvatarNotificationChanged()" type="checkbox" name="avatarNotification" value="avatarNotification" id="avatarNotification"> <label class="noselect advanced-settings__label" for="avatarNotification">disable avatar notifications</label><br>
+        <input class="advanced-settings__checkbox" [(ngModel)]="customStatusLengthEnabled"
+            (change)="onCustomLengthEnabledChanged()" type="checkbox" name="customCharLength" value="customCharLength"
+            id="customCharLength"> <label class="noselect advanced-settings__label" for="customCharLength">custom char
+            limit</label><br>
+        <p *ngIf="customStatusLengthEnabled" class="advanced-settings__text">use this only if your instance doesn't
+            support status custom length detection (i.e. not a Pleroma or glitch-soc instance)</p>
+        <input *ngIf="customStatusLengthEnabled" [(ngModel)]="customStatusLength"
+            class="themed-form advanced-settings__input" type="number" (keyup)="customStatusLengthChanged($event)" />
+    </div>
+
     <h4 class="my-account__label my-account__margin-top">remove account from sengi:</h4>
     <a class="my-account__link my-account__red" href (click)="removeAccount()">
         Delete

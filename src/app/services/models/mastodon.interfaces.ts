@@ -1,3 +1,5 @@
+import { PlatformLocation } from '@angular/common';
+
 export interface AppData {
     client_id: string;
     client_secret: string;
@@ -36,7 +38,7 @@ export interface Account {
     header: string;
     header_static: string;
     emojis: Emoji[];
-    moved: boolean;
+    moved: Account;
     fields: Field[];
     bot: boolean;
     source: AccountInfo;
@@ -69,13 +71,19 @@ export interface Application {
 
 export interface Attachment {
     id: string;
-    type: 'image' | 'video' | 'gifv';
+    type: 'image' | 'video' | 'gifv' | 'audio';
     url: string;
     remote_url: string;
     preview_url: string;
     text_url: string;
     meta: any;
     description: string;
+
+    pleroma: PleromaAttachment;
+}
+
+export interface PleromaAttachment {
+    mime_type: string;
 }
 
 export interface Card {
@@ -83,6 +91,14 @@ export interface Card {
     title: string;
     description: string;
     image: string;
+    type: 'link' | 'photo' | 'video' | 'rich';
+    author_name: string;
+    author_url: string;
+    provider_name: string;
+    provider_url: string;
+    html: any;
+    width: number;
+    height: number;
 }
 
 export interface Context {
@@ -114,7 +130,7 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
     created_at: string;
     account: Account;
     status?: Status;
@@ -124,9 +140,14 @@ export interface Relationship {
     id: number;
     following: boolean;
     followed_by: boolean;
+    blocked_by: boolean;    
     blocking: boolean;
+    domain_blocking: boolean;
     muting: boolean;
+    muting_notifications: boolean;
     requested: boolean;
+    showing_reblogs: boolean;
+    endorsed: boolean;
 }
 
 export interface Report {
@@ -165,8 +186,18 @@ export interface Status {
     emojis: Emoji[];
     language: string;
     pinned: boolean;
+    muted: boolean;
+    card: Card;
+    poll: Poll;    
 
     pleroma: PleromaStatusInfo;
+}
+
+export interface Conversation {
+    id: string;
+    accounts: Account[];
+    last_status: Status;
+    unread: boolean;
 }
 
 export interface PleromaStatusInfo {
@@ -179,3 +210,40 @@ export interface Tag {
     url: string;
 }
 
+export interface List {
+    id: string;
+    title: string;
+}
+
+export interface Poll {
+    id: string;
+    expires_at: string;
+    expired: boolean;
+    multiple: boolean;
+    votes_count: number;
+    options: PollOption[];
+    voted: boolean;
+}
+
+export interface PollOption {
+    title: string;
+    votes_count: number;
+}
+
+export interface ScheduledStatus {
+    id: string;
+    scheduled_at: string;
+    params: StatusParams;
+    media_attachments: Attachment[];
+}
+
+export interface StatusParams {
+    text: string;
+    in_reply_to_id: string;
+    media_ids: string[];
+    sensitive: boolean;
+    spoiler_text: string;
+    visibility: 'public' | 'unlisted' | 'private' | 'direct';
+    scheduled_at: string;
+    application_id: string;
+}

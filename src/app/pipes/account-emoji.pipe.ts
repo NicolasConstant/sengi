@@ -13,7 +13,8 @@ export class AccountEmojiPipe implements PipeTransform {
 
     let textToTransform = text;
     if(!text){
-      textToTransform = value.display_name;
+        if(value.display_name) textToTransform = value.display_name;
+        else textToTransform = value.acct.split('@')[0];
     } 
 
     return this.emojiConverter.applyEmojis(value.emojis, textToTransform, EmojiTypeEnum.small)

@@ -1,25 +1,31 @@
 <div class="floating-column">
-    <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" (closeOverlay)="closeOverlay()" 
-        [browseAccountData]="overlayAccountToBrowse" 
-        [browseHashtagData]="overlayHashtagToBrowse"
-        [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
+    <div class="floating-column__inner">
+        <div class="sliding-column" [class.sliding-column__right-display]="overlayActive">
+            <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" 
+                (closeOverlay)="closeOverlay()"
+                [browseAccountData]="overlayAccountToBrowse" 
+                [browseHashtagData]="overlayHashtagToBrowse"
+                [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
-    <div class="floating-column__header">
-        <a class="close-button" href (click)="closePanel()" title="close">
-            <fa-icon [icon]="faTimes"></fa-icon>
-        </a>
+            <div class="floating-column__inner--left">
+                <div class="floating-column__header">
+                    <a class="close-button" href (click)="closePanel()" title="close">
+                        <fa-icon [icon]="faTimes"></fa-icon>
+                    </a>
+                </div>
+
+                <app-manage-account *ngIf="openPanel === 'manageAccount'" [account]="userAccountUsed"
+                    (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+                    (browseThreadEvent)="browseThread($event)"></app-manage-account>
+                <app-add-new-status *ngIf="openPanel === 'createNewStatus'" [isDirectMention]="isDirectMention"
+                    [userHandle]="userHandle" [redraftedStatus]="redraftedStatus"></app-add-new-status>
+                <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
+                <app-search *ngIf="openPanel === 'search'" (browseAccountEvent)="browseAccount($event)"
+                    (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+                </app-search>
+                <app-settings *ngIf="openPanel === 'settings'"></app-settings>
+                <app-scheduled-statuses *ngIf="openPanel === 'scheduledStatuses'"></app-scheduled-statuses>
+            </div>
+        </div>
     </div>
-
-    <app-manage-account *ngIf="openPanel === 'manageAccount'" 
-        [account]="userAccountUsed"
-        (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-manage-account>
-    <app-add-new-status *ngIf="openPanel === 'createNewStatus'"></app-add-new-status>
-    <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
-    <app-search *ngIf="openPanel === 'search'" 
-        (browseAccountEvent)="browseAccount($event)" 
-        (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-search>
-    <app-settings *ngIf="openPanel === 'settings'"></app-settings>
 </div>

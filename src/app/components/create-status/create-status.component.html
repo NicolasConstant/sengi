@@ -1,28 +1,83 @@
-<form class="status-form" (ngSubmit)="onSubmit()">
-    <div class="status-form__sending" *ngIf="isSending">
-        <app-waiting-animation class="waiting-icon"></app-waiting-animation>
-    </div>
+<form class="status-editor" (ngSubmit)="onSubmit()">
+    <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title"
+        autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" dir="auto" />
 
-    <input [(ngModel)]="title" type="text" class="form-control form-control-sm" name="title" autocomplete="off"
-        placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" />
+        <a class="status-editor__emoji" title="Insert Emoji"
+            #emojiButton href (click)="openEmojiPicker($event)">
+            <img class="status-editor__emoji--image" src="/assets/emoji/72x72/1f636.png">
+        </a>
 
-    <textarea #reply [(ngModel)]="status" name="status"
-        class="form-control form-control-sm status-form__status flexcroll" rows="5" required title="content"
-        placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"></textarea>
+    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content"
+        rows="5" required title="content" placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"
+        (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()" dir="auto">
+    </textarea>
 
-    <div class="status-form__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to the
+    <div class="status-editor__mention-error" *ngIf="mentionTooFarAwayError">Error: mentions must be placed closer to
+        the
         start in order to use multiposting.</div>
 
-    <select class="form-control form-control-sm form-control--privacy" id="privacy" name="privacy"
-        [(ngModel)]="selectedPrivacy">
-        <option *ngFor="let p of privacyList" [ngValue]="p">{{p}}</option>
-    </select>
-    <div class="status-form__counter">
-        <span class="status-form__counter--count">{{charCountLeft}}</span> <span
-            class="status-form__counter--posts">{{postCounts - 1}}/{{postCounts}}</span>
-    </div>
-    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="statusReplyingToWrapper">REPLY!</button>
-    <button type="submit" class="btn btn-sm btn-custom-primary" *ngIf="!statusReplyingToWrapper">POST!</button>
+    <app-autosuggest class="status-editor__autosuggest" *ngIf="autosuggestData" [pattern]="autosuggestData"
+        [autoSuggestUserActionsStream]="autoSuggestUserActionsStream"
+        (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
+    </app-autosuggest>
 
+    <app-poll-editor *ngIf="instanceSupportsPoll && pollIsActive"></app-poll-editor>
+
+    <app-status-scheduler class="scheduler" *ngIf="instanceSupportsScheduling && scheduleIsActive"></app-status-scheduler>
+
+    <div class="status-editor__footer" #footer>
+        <button type="submit" title="reply" class="status-editor__footer--send-button" *ngIf="statusReplyingToWrapper">
+            <span *ngIf="!isSending && !scheduleIsActive">REPLY!</span>
+            <span *ngIf="!isSending && scheduleIsActive">PLAN!</span>
+            <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
+        </button>
+        <button type="submit" title="post" class="status-editor__footer--send-button" *ngIf="!statusReplyingToWrapper">
+            <span *ngIf="!isSending && !scheduleIsActive">POST!</span>
+            <span *ngIf="!isSending && scheduleIsActive">PLAN!</span>
+            <app-waiting-animation class="waiting-icon" *ngIf="isSending"></app-waiting-animation>
+        </button>
+        <div class="status-editor__footer__counter">
+            <div class="status-editor__footer__counter--posts" title="number of statuses">
+                {{postCounts - 1}}/{{postCounts}}</div>
+            <div class="status-editor__footer__counter--count" title="chars left">{{charCountLeft}}</div>
+        </div>
+
+        <a href class="status-editor__footer--link" title="add media" (click)="addMedia()">
+            <fa-icon [icon]="faPaperclip"></fa-icon>
+        </a>
+        <input #fileInput type="file" id="file" style="display: none;" (change)="handleFileInput($event.target.files)">
+
+        <a href class="status-editor__footer--link" title="{{ selectedPrivacy }}" (click)="onContextMenu($event)">
+            <fa-icon [icon]="faGlobeAmericas" *ngIf="selectedPrivacy === 'Public'"></fa-icon>
+            <fa-icon [icon]="faLockOpen" *ngIf="selectedPrivacy === 'Unlisted'"></fa-icon>
+            <fa-icon [icon]="faLock" *ngIf="selectedPrivacy === 'Follows-only'"></fa-icon>
+            <fa-icon [icon]="faEnvelope" *ngIf="selectedPrivacy === 'DM'"></fa-icon>
+        </a>
+
+        <a href *ngIf="instanceSupportsPoll"
+            class="status-editor__footer--link status-editor__footer--add-poll" title="add poll" (click)="addPoll()">
+            <fa-icon [icon]="faPollH"></fa-icon>
+        </a>
+
+        <a href *ngIf="instanceSupportsScheduling"
+            class="status-editor__footer--link" title="schedule" (click)="schedule()">
+            <fa-icon [icon]="faClock"></fa-icon>
+        </a>
+    </div>
+
+    <context-menu #contextMenu>
+        <ng-template contextMenuItem (execute)="changePrivacy('Public')">
+            <fa-icon [icon]="faGlobeAmericas" class="context-menu-icon"></fa-icon> Public
+        </ng-template>
+        <ng-template contextMenuItem (execute)="changePrivacy('Unlisted')">
+            <fa-icon [icon]="faLockOpen" class="context-menu-icon"></fa-icon> Unlisted
+        </ng-template>
+        <ng-template contextMenuItem (execute)="changePrivacy('Follows-only')">
+            <fa-icon [icon]="faLock" class="context-menu-icon"></fa-icon> Followers-only
+        </ng-template>
+        <ng-template contextMenuItem (execute)="changePrivacy('DM')">
+            <fa-icon [icon]="faEnvelope" class="context-menu-icon"></fa-icon> Direct
+        </ng-template>
+    </context-menu>
     <app-media></app-media>
 </form>

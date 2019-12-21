@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-import { Status } from "./models/mastodon.interfaces";
+import { Status, Notification } from "./models/mastodon.interfaces";
 import { ApiRoutes } from "./models/api.settings";
 import { StreamTypeEnum, StreamElement } from "../states/streams.state";
-import { MastodonService } from "./mastodon.service";
+import { MastodonWrapperService } from "./mastodon-wrapper.service";
 import { AccountInfo } from "../states/accounts.state";
 
 @Injectable()
@@ -13,9 +13,13 @@ export class StreamingService {
     public readonly nbStatusPerIteration: number = 20;
 
     constructor(
-        private readonly mastodonService: MastodonService) { }
+        private readonly mastodonService: MastodonWrapperService) { }
 
-    getStreaming(accountInfo: AccountInfo, stream: StreamElement): StreamingWrapper {
+    getStreaming(accountInfo: AccountInfo, stream: StreamElement, since_id: string = null): StreamingWrapper {
+
+        //console.warn('EventSourceStreaminWrapper');
+        //new EventSourceStreaminWrapper(accountInfo, stream);
+
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);
     }
 }
@@ -29,13 +33,14 @@ export class StreamingWrapper {
     private disposed: boolean;
 
     constructor(
-        private readonly mastodonService: MastodonService,
+        private readonly mastodonService: MastodonWrapperService,
         private readonly account: AccountInfo,
         private readonly stream: StreamElement,
-        private readonly nbStatusPerIteration: number) {
+        private readonly nbStatusPerIteration: number,
+        since_id: string = null) {
 
-        const route = this.getRoute(account, stream);
-        this.start(route);
+        this.since_id = since_id;
+        this.start(account, stream);
     }
 
     dispose(): any {
@@ -43,29 +48,74 @@ export class StreamingWrapper {
         this.eventSource.close();
     }
 
-    private start(route: string) {
-        this.eventSource = new WebSocket(route);
-        this.eventSource.onmessage = x => this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
-        this.eventSource.onerror = x => this.webSocketGotError(x);
-        this.eventSource.onopen = x => console.log(x);
-        this.eventSource.onclose = x => this.webSocketClosed(route, x);
+    private start(account: AccountInfo, stream: StreamElement) {
+        this.mastodonService.refreshAccountIfNeeded(account)
+            .catch(err => {
+                return account;
+            })
+            .then((refreshedAccount: AccountInfo) => {
+                const route = this.getRoute(refreshedAccount, stream);
+                this.eventSource = new WebSocket(route);
+                this.eventSource.onmessage = x => {
+                    if (x.data !== '') {
+                        this.statusParsing(<WebSocketEvent>JSON.parse(x.data));
+                    }
+                }
+                this.eventSource.onerror = x => this.webSocketGotError(x);
+                this.eventSource.onopen = x => { };
+                this.eventSource.onclose = x => this.webSocketClosed(refreshedAccount, stream, x);
+            });
     }
 
     private webSocketGotError(x: Event) {
         this.errorClosing = true;
     }
 
-    private webSocketClosed(domain, x: Event) {
+    private webSocketClosed(account: AccountInfo, stream: StreamElement, x: Event) {
         if (this.errorClosing) {
-            this.pullNewStatuses(domain);
-            this.errorClosing = false;
+            setTimeout(() => {
+                if (stream.type === StreamTypeEnum.personnal) {
+                    this.pullNewNotifications();
+                } else {
+                    this.pullNewStatuses();
+                }
+                this.errorClosing = false;
+            }, 60 * 1000);
         } else if (!this.disposed) {
-            setTimeout(() => { this.start(domain) }, 5000);
+            setTimeout(() => { this.start(account, stream) }, 60 * 1000);
         }
     }
 
-    private pullNewStatuses(domain) {
-        this.mastodonService.getTimeline(this.account, this.stream.type, null, this.since_id, this.nbStatusPerIteration, this.stream.tag, this.stream.list)
+    private pullNewNotifications() {
+        this.mastodonService.getNotifications(this.account, null, null, this.since_id, 10)
+            .then((notifications: Notification[]) => {
+                //notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
+                let soundMuted = !this.since_id;
+
+                notifications = notifications.reverse();
+                for (const n of notifications) {
+
+                    const update = new StatusUpdate();
+                    update.notification = n;
+                    update.type = EventEnum.notification;
+                    update.muteSound = soundMuted;
+
+                    this.since_id = n.id;
+                    this.statusUpdateSubjet.next(update);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .then(() => {
+                if (!this.disposed) {
+                    setTimeout(() => { this.pullNewNotifications() }, 60 * 1000);
+                }
+            });
+    }
+
+    private pullNewStatuses() {
+        this.mastodonService.getTimeline(this.account, this.stream.type, null, this.since_id, this.nbStatusPerIteration, this.stream.tag, this.stream.listId)
             .then((status: Status[]) => {
                 // status = status.sort((n1, n2) => {  return (<number>n1.id) < (<number>n2.id); });
                 status = status.sort((a, b) => a.id.localeCompare(b.id));
@@ -83,7 +133,7 @@ export class StreamingWrapper {
             .then(() => {
                 // setTimeout(() => { this.start(domain) }, 20 * 1000);
                 if (!this.disposed) {
-                    setTimeout(() => { this.pullNewStatuses(domain) }, 15 * 1000);
+                    setTimeout(() => { this.pullNewStatuses() }, 60 * 1000);
                 }
             });
     }
@@ -99,6 +149,11 @@ export class StreamingWrapper {
             case 'delete':
                 newUpdate.type = EventEnum.delete;
                 newUpdate.messageId = event.payload;
+                newUpdate.account = this.account;
+                break;
+            case 'notification':
+                newUpdate.type = EventEnum.notification;
+                newUpdate.notification = <Notification>JSON.parse(event.payload);
                 break;
             default:
                 newUpdate.type = EventEnum.unknow;
@@ -112,7 +167,7 @@ export class StreamingWrapper {
         let route = `wss://${account.instance}${this.apiRoutes.getStreaming}`.replace('{0}', account.token.access_token).replace('{1}', streamingRouteType);
 
         if (stream.tag) route = `${route}&tag=${stream.tag}`;
-        if (stream.list) route = `${route}&tag=${stream.list}`;
+        if (stream.list) route = `${route}&list=${stream.listId}`;
 
         return route;
     }
@@ -137,6 +192,83 @@ export class StreamingWrapper {
     }
 }
 
+export class EventSourceStreaminWrapper {
+    eventSource: EventSource;
+    private apiRoutes = new ApiRoutes();
+
+    constructor(
+        private readonly account: AccountInfo,
+        private readonly stream: StreamElement
+    ) {
+        this.start();
+    }
+
+    private start() {
+        const route = this.getRoute();
+        this.eventSource = new EventSource(route);
+        this.eventSource.addEventListener('update', u => {
+            console.warn('update');
+            console.warn(u);
+        });
+        this.eventSource.addEventListener('delete', d => {
+            console.warn('delete');
+            console.warn(d);
+        });
+        this.eventSource.onmessage = x => {
+            console.log(x);
+            if (x.data !== '') {
+                this.onMessage(JSON.parse(x.data));
+            }
+        };
+        this.eventSource.onerror = x => {
+            this.onError(x);
+        };
+
+        console.warn('this.eventSource.CONNECTING');
+        console.warn(this.eventSource.CONNECTING);
+        console.warn('this.eventSource.OPEN');
+        console.warn(this.eventSource.OPEN);
+
+    }
+
+    private onMessage(data) {
+        console.warn('onMessage');
+        console.warn(data);
+    }
+
+    private onError(data) {
+        console.warn('onError');
+        console.warn(data);
+    }
+
+    private getRoute(): string {
+        const streamingRouteType = this.getStreamingRouteType(this.stream.type);
+        let route = `https://${this.account.instance}/api/v1/streaming/${streamingRouteType}?access_token=${this.account.token.access_token}`;
+        return route;
+    }
+
+    private getStreamingRouteType(type: StreamTypeEnum): string {
+        switch (type) {
+            case StreamTypeEnum.global:
+                return 'public';
+            case StreamTypeEnum.local:
+                return 'public/local';
+            case StreamTypeEnum.personnal:
+                return 'user';
+            case StreamTypeEnum.directmessages:
+                return 'direct';
+            case StreamTypeEnum.tag:
+                return 'hashtag?tag={0}';
+            case StreamTypeEnum.list:
+                return 'list?list={0}';
+            case StreamTypeEnum.directmessages:
+                return 'direct';
+            default:
+                throw Error('Not supported');
+        }
+    }
+}
+
 class WebSocketEvent {
     event: string;
     payload: any;
@@ -145,11 +277,15 @@ class WebSocketEvent {
 export class StatusUpdate {
     type: EventEnum;
     status: Status;
-    messageId: number;
+    messageId: string;
+    account: AccountInfo;
+    notification: Notification;
+    muteSound: boolean;
 }
 
 export enum EventEnum {
     unknow = 0,
     update = 1,
-    delete = 2
+    delete = 2,
+    notification = 3
 }

@@ -1,30 +1,36 @@
 @import "variables";
 @import "mixins";
+
 .galery {
     width: 100%;
     height: 150px;
     overflow: hidden;
     border-radius: 2px;
-    position : relative;
+    position: relative;
 
     &__image {
         width: 100%;
         height: 100%;
+
         &--link {
             cursor: zoom-in;
         }
+
         &--1 {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: 50% 50%;
         }
+
         &--link-2 {
             width: 49%;
             height: 100%;
+
             &:last-child {
                 margin-left: 2%; // border: 1px greenyellow solid;
             }
+
             & img {
                 width: 49%;
                 height: 100%;
@@ -32,10 +38,12 @@
                 object-position: 50% 50%;
             }
         }
+
         &--link-3-1 {
             width: 49%;
             height: 100%;
             float: left;
+
             & img {
                 width: 100%;
                 height: 100%;
@@ -43,14 +51,17 @@
                 object-position: 50% 50%;
             }
         }
+
         &--link-3-2 {
             width: 49%;
             height: 49%;
             margin-left: 2%;
             float: left;
+
             &:nth-child(even) {
                 margin-bottom: 2%;
             }
+
             & img {
                 width: 100%;
                 height: 100%;
@@ -58,12 +69,15 @@
                 object-position: 50% 50%;
             }
         }
+
         &--link-4 {
             width: 49%;
             height: 49%;
+
             &:nth-child(even) {
                 margin-left: 2%;
             }
+
             & img {
                 width: 49%;
                 height: 49%;
@@ -73,6 +87,7 @@
             }
         }
     }
+
     &__gifv {
         width: 100%;
         height: 100%;
@@ -80,6 +95,7 @@
         cursor: zoom-in;
         border-radius: 2px;
     }
+
     &__video {
         width: 100%;
         height: 100%;
@@ -87,13 +103,15 @@
         background-color: black;
         border-radius: 2px;
     }
-    &__play-control{
+
+    &__play-control {
         z-index: 2;
         position: absolute;
         bottom: 5px;
-        left: 0;  
+        left: 0;
         // outline: 1px greenyellow solid;    
     }
+
     &__control {
         z-index: 1;
         position: absolute;
@@ -106,8 +124,8 @@
         padding-top: 55px;
 
         &--button {
-            @include clearButton; 
-            color: rgb(211, 211, 211);         
+            display: inline-block;
+            color: rgb(211, 211, 211);            
             font-size: 16px;
             padding: 10px 15px;
 
@@ -115,11 +133,11 @@
             height: 40px;
 
             &:hover {
-                color: #fff;         
+                color: #fff;
             }
         }
 
-        &--play{
+        &--play {
             position: absolute;
             left: 0;
         }
@@ -135,12 +153,23 @@
             // margin-left: 40px;
         }
 
-        background-image: linear-gradient(rgba(0, 0, 0, 0),  rgba(0, 0, 0, .1), rgba(0, 0, 0, .6), rgba(0, 0, 0, 1));
+        background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .1), rgba(0, 0, 0, .6), rgba(0, 0, 0, 1));
     }
+
     &__hover {
         &:hover .galery__control {
             opacity: 100;
-           
+
         }
+    }
+}
+
+
+.audio {
+    width: calc(100%);
+    height: 30px;
+
+    &:focus {
+        outline: none;
     }
 }

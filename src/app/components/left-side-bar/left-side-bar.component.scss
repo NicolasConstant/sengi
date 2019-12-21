@@ -11,6 +11,7 @@ $height-button: 40px;
 
 .left-bar-link {
     color: $font-link-primary;
+    color: darken(whitesmoke, 17);
     text-decoration: none;
     &:hover {
         color: $font-link-primary-hover;
@@ -28,26 +29,37 @@ $height-button: 40px;
     &--status {
         //margin-top: 3px;
         font-size: 26px;
-        padding: 8px 0 2px 12px;
+        font-size: 22px;
+        padding: 8px 0 2px 13px;
     }
     &--search {
-        font-size: 28px;
-        padding: 0 0 0 11px;
+        // font-size: 28px;
+        // font-size: 22px;
+        font-size: 16px;
+        padding: 5px 0 0 16px;
     }
     &--add {
-        padding: 0 0 0 12px;
-        font-size: 26px;
+        padding: 2px 0 5px 18px;
+        font-size: 14px;
+    }
+    &--scheduled {
+        font-size: 24px;
+        position: absolute;
+        left: 14px;
+        bottom: 37px;
     }
     &--cog {
-        padding: 2px 0 0 9px;
+        font-size: 24px;
+        padding: 5px 0 0 12px;
         position: absolute;
         bottom: 7px;
-        opacity: .2;        
-        transition: all .3s;
-        filter: alpha(opacity=20);
-        
-        // color:  darken($font-link-primary, 30);
+       
+    }
 
+    &--bottom {
+        opacity: .3;        
+        transition: all .3s;
+        filter: alpha(opacity=30);
         &:hover{
             filter: alpha(opacity=100);
             opacity: 1;
