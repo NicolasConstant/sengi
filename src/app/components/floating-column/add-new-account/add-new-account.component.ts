@@ -20,6 +20,8 @@ export class AddNewAccountComponent implements OnInit {
     private instance: string;
     isComrade: boolean;
 
+    isLoading: boolean;
+
     private _mastodonFullHandle: string;
     @Input()
     set mastodonFullHandle(value: string) {
@@ -57,17 +59,20 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        // let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
-        // const username = fullHandle[0];
-        // const instance = fullHandle[1];
-
         this.checkBlockList(this.instance);
 
+        this.isLoading = true;
         this.checkAndCreateApplication(this.instance)
             .then((appData: AppData) => {
                 this.redirectToInstanceAuthPage(this.username, this.instance, appData);
             })
+            .then(x => {
+                setTimeout(() => {
+                    this.isLoading = false;    
+                }, 1000);                
+            })
             .catch((err: HttpErrorResponse) => {
+                this.isLoading = false;
                 if (err instanceof HttpErrorResponse) {
                     this.notificationService.notifyHttpError(err, null);
                 } else if ((<Error>err).message === 'CORS') {
