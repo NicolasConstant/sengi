@@ -102,14 +102,20 @@ export class AddNewAccountComponent implements OnInit {
             return Promise.resolve(instanceApps[0].app);
         } else {
             let redirect_uri = this.getLocalHostname();
-            if (process && process.versions && typeof((<any>process.versions).electron) === 'string') {
+
+            let userAgent = navigator.userAgent.toLowerCase();
+            console.log(`userAgent ${userAgent}`);
+
+            if (userAgent.includes(' electron/')) {
                 redirect_uri += '/register';
             }
 
             return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://nicolasconstant.github.io/sengi/')
                 .then((appData: AppData) => {
                     return this.saveNewApp(instance, appData)
-                        .then(() => { return appData; });
+                        .then(() => { 
+                            return new Promise<AppData>(resolve => setTimeout(resolve, 1000, appData));
+                        });
                 })
                 .catch((err: HttpErrorResponse) => {
                     if (err.status === 0) {
