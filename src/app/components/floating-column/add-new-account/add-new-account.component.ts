@@ -20,6 +20,8 @@ export class AddNewAccountComponent implements OnInit {
     private instance: string;
     isComrade: boolean;
 
+    isLoading: boolean;
+
     private _mastodonFullHandle: string;
     @Input()
     set mastodonFullHandle(value: string) {
@@ -57,17 +59,20 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        // let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
-        // const username = fullHandle[0];
-        // const instance = fullHandle[1];
-
         this.checkBlockList(this.instance);
 
+        this.isLoading = true;
         this.checkAndCreateApplication(this.instance)
             .then((appData: AppData) => {
                 this.redirectToInstanceAuthPage(this.username, this.instance, appData);
             })
+            .then(x => {
+                setTimeout(() => {
+                    this.isLoading = false;    
+                }, 1000);                
+            })
             .catch((err: HttpErrorResponse) => {
+                this.isLoading = false;
                 if (err instanceof HttpErrorResponse) {
                     this.notificationService.notifyHttpError(err, null);
                 } else if ((<Error>err).message === 'CORS') {
@@ -102,14 +107,20 @@ export class AddNewAccountComponent implements OnInit {
             return Promise.resolve(instanceApps[0].app);
         } else {
             let redirect_uri = this.getLocalHostname();
-            if (process && process.versions && typeof((<any>process.versions).electron) === 'string') {
+
+            let userAgent = navigator.userAgent.toLowerCase();
+            console.log(`userAgent ${userAgent}`);
+
+            if (userAgent.includes(' electron/')) {
                 redirect_uri += '/register';
             }
 
             return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://nicolasconstant.github.io/sengi/')
                 .then((appData: AppData) => {
                     return this.saveNewApp(instance, appData)
-                        .then(() => { return appData; });
+                        .then(() => { 
+                            return new Promise<AppData>(resolve => setTimeout(resolve, 1000, appData));
+                        });
                 })
                 .catch((err: HttpErrorResponse) => {
                     if (err.status === 0) {

@@ -7,7 +7,8 @@
         <input type="text" class="form-control form-control-sm form-color" [(ngModel)]="mastodonFullHandle" name="mastodonFullHandle" [class.comrade__input]="isComrade"
             placeholder="@nickname@mastodon.social" />
         <br />
-        <button type="submit" class="btn btn-success btn-sm"  [class.comrade__button]="isComrade">Submit</button>
+        <button *ngIf="!isLoading" type="submit" class="btn btn-success btn-sm"  [class.comrade__button]="isComrade">Submit</button>
+        <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
     </form>
 
     <div *ngIf="isComrade" class="comrade__video">
