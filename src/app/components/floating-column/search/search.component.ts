@@ -62,6 +62,8 @@ export class SearchComponent implements OnInit {
 
     private lastAccountUsed: AccountInfo;
     private search(data: string) {
+        if(!data) return;
+
         this.accounts.length = 0;
         this.statuses.length = 0;
         this.hashtags.length = 0;
