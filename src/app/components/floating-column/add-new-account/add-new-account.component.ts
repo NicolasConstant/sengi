@@ -59,9 +59,12 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        this.checkBlockList(this.instance);
+        if(this.isLoading) return false;
 
-        this.isLoading = true;
+        this.isLoading = true;       
+
+        this.checkBlockList(this.instance);
+        
         this.checkAndCreateApplication(this.instance)
             .then((appData: AppData) => {
                 this.redirectToInstanceAuthPage(this.username, this.instance, appData);
