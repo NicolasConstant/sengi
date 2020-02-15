@@ -52,7 +52,7 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        if(this.isLoading) return false;
+        if(this.isLoading || !this.instance) return false;
 
         this.isLoading = true;       
 
