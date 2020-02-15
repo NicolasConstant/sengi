@@ -23,6 +23,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
     isThread = true;
     hasContentWarnings = false;
 
+    bufferStream: Status[] = []; //html compatibility only
+
     private lastThreadEvent: OpenThreadEvent;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
