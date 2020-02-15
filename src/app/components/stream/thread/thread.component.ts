@@ -159,12 +159,16 @@ export class ThreadComponent implements OnInit, OnDestroy {
         pipeline
             .then((status: Status) => {
                 return this.mastodonService.getStatusContext(currentAccount, status.id)
-                    .then((context: Context) => {
+                    .then((context: Context) => {                        
                         let contextStatuses = [...context.ancestors, status, ...context.descendants]
                         const position = context.ancestors.length;
 
-                        for (const s of contextStatuses) {
-                            const wrapper = new StatusWrapper(s, currentAccount);
+                        for (let i = 0; i < contextStatuses.length; i++) {                            
+                            let s = contextStatuses[i];
+                            const wrapper = new StatusWrapper(s, currentAccount);                            
+                            
+                            if(i == position) wrapper.isSelected = true;
+
                             this.statuses.push(wrapper);
                         }
 
@@ -177,10 +181,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
             .then((position: number) => {
                 setTimeout(() => {
                     const el = this.statusChildren.toArray()[position];
-                    el.isSelected = true;
-                    
-                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
 
+                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
+                    
                     scrollIntoView(el.elem.nativeElement, { behavior: 'smooth', block: 'nearest'});
                 }, 250);
             })

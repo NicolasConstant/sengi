@@ -56,6 +56,7 @@ export class StatusComponent implements OnInit {
         this._statusWrapper = value;
         // console.warn(value.status);
         this.status = value.status;
+        this.isSelected = value.isSelected;
 
         if (this.status.reblog) {
             this.reblog = true;
