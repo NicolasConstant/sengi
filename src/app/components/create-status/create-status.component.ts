@@ -206,6 +206,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
     }
 
+    onPaste(ev: ClipboardEvent){
+        console.warn(ev);
+    }
+
     changePrivacy(value: string): boolean {
         this.selectedPrivacy = value;
         return false;

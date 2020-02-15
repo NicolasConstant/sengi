@@ -1,4 +1,4 @@
-<form class="status-editor" (ngSubmit)="onSubmit()">
+<form class="status-editor" (ngSubmit)="onSubmit()" (paste)="onPaste($event)" >
     <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title"
         autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" dir="auto" />
 
