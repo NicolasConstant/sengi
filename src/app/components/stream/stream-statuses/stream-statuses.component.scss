@@ -5,7 +5,7 @@
     height: calc(100%);
     width: calc(100%);
     
-    // overflow: auto;
+    overflow: auto;
     position: relative;
 
     &__error {
@@ -21,6 +21,23 @@
             outline: none; 
         }
     }
+
+    &__new-notification {
+        z-index: 100;
+        width: $stream-column-width;
+        height: 25px;
+        position: absolute;
+        top: -16px;
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+        transition: all .5s;
+        opacity: 0;
+
+        &--display {
+            opacity: 1;
+        }
+    }
+
+   
 
     &__status:not(:last-child) {
         border: solid #06070b;
