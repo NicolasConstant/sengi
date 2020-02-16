@@ -3,6 +3,7 @@
 @import "panel";
 @import "commons";
 @import "buttons";
+
 .panel {
     padding-left: 0px;
     padding-right: 0px;
@@ -11,66 +12,79 @@
 .form-section {
     overflow: auto;
     width: 100%;
+    padding-left: 5px;
 }
 
 .form-with-button {
     width: calc(100% - #{$button-size});
     float: left;
 
-    background-color: $column-color;
-    border-color: $button-border-color;
-    color: #fff;
-    font-size: $default-font-size;
+    // background-color: $column-color;
+    // border-color: $button-border-color;
+    // color: #fff;
+    // color: rgb(255, 0, 0);    
+
     &:focus {
         box-shadow: none;
     }
+
+    font-size: $default-font-size;
     height: 29px;
-    padding: 0 5px 0 5px; 
+    padding: 0 5px 0 5px;    
+
+    background-color: $status-editor-title-background;
+    color: $status-editor-color;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-width: 0;
+    margin-bottom: 0;
 }
 
-
-// .form-control {
-//     margin: 0 0 5px 5px;
-//     width: calc(100% - 10px);
-//     background-color: $column-color;
-//     border-color: $status-secondary-color;
-//     color: #fff;
-//     font-size: $default-font-size;
-//     &:focus {
-//         box-shadow: none;
-//     }
-//     // &--privacy {
-//     //     display: inline-block;
-//     //     width: calc(100% - 15px - #{$btn-send-status-width} - #{$counter-width});
-//     // }
-// }
-
 .form-button {
-    width: $button-size;
-    height: 29px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    background-color: $button-background-color;
-    color: $button-color;
-    color: whitesmoke;
+    @include clearButton;
     transition: all .2s;
+    background-color: $status-editor-footer-background;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+
     &:hover {
-        background-color: $button-background-color-hover;
-        color: $button-color-hover;
+        background-color: lighten($status-editor-footer-background, 20%);
+        background-color: darken($status-editor-footer-background, 20%);
     }
 
-    
-    border: 1px solid $button-border-color;
-    border-width: 1px 1px 1px 0;
+    outline: inherit;
+    &:focus {
+        background-color: darken($status-editor-footer-background, 20%);
+    }
+
+    width: $button-size;
+    height: 29px;
+
+    // border: none;
+    // outline: none;
+    // cursor: pointer;
+    // background-color: $button-background-color;
+    // color: $button-color;
+    // color: whitesmoke;
+    // transition: all .2s;
+
+    // &:hover {
+    //     background-color: $button-background-color-hover;
+    //     color: $button-color-hover;
+    // }
+
+
+    // border: 1px solid $button-border-color;
+    // border-width: 1px 1px 1px 0;
 }
 
 $search-form-height: 70px;
+
 .search-result-form {
     height: $search-form-height;
-    padding-left: 10px;
+    //padding-left: 10px;
     padding-right: 10px;
-    border-bottom: 1px solid #222736;
+    //border-bottom: 1px solid #222736;
 }
 
 .search-result-display {
@@ -83,11 +97,13 @@ $search-form-height: 70px;
     margin-top: 10px; // &:first-of-type{
     padding-left: 10px; //     margin-top: 10px;
     padding-right: 10px; //     margin-top: 10px;
+
     // }
     &__title {
         text-transform: uppercase;
         font-size: 13px;
     }
+
     &__hashtag {
         border-radius: 2px;
         display: block;
@@ -95,17 +111,22 @@ $search-form-height: 70px;
         color: white;
         text-decoration: none;
         transition: all .3s;
+
         &:hover {
             background-color: $button-background-color-hover;
         }
+
         border-top: 1px solid $separator-color;
+
         &:last-of-type {
             border-bottom: 1px solid $separator-color;
         }
     }
+
     &__status {
         font-size: 15px;
         border-top: 1px solid $separator-color;
+
         &:last-of-type {
             border-bottom: 1px solid $separator-color;
         }
@@ -120,18 +141,22 @@ $search-form-height: 70px;
     //     text-decoration: underline;
     // }
     border-top: 1px solid $separator-color;
+
     &:last-of-type {
         border-bottom: 1px solid $separator-color;
     }
+
     &__avatar {
         width: 40px;
         margin: 5px 10px 5px 5px;
         float: left;
         border-radius: 2px;
     }
+
     &__name {
         margin: 7px 0 0 0;
     }
+
     &__fullhandle {
         margin: 0 0 5px 0;
         color: $status-secondary-color;
@@ -139,11 +164,13 @@ $search-form-height: 70px;
         //     color: white;
         // }
     }
+
     &:hover,
     &:hover &__fullhandle {
         color: white;
         text-decoration: none;
         background-color: $button-background-color-hover;
     }
+
     @include clearfix;
 }

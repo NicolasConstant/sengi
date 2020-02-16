@@ -16,20 +16,17 @@ export class AddNewAccountComponent implements OnInit {
     private blockList = ['gab.com', 'gab.ai', 'cyzed.com'];
     private comradeList = ['juche.town'];
 
-    private username: string;
-    private instance: string;
     isComrade: boolean;
-
     isLoading: boolean;
 
-    private _mastodonFullHandle: string;
+    private instance: string;
     @Input()
-    set mastodonFullHandle(value: string) {
-        this._mastodonFullHandle = value;
+    set setInstance(value: string) {
+        this.instance = value;
         this.checkComrad();
     }
-    get mastodonFullHandle(): string {
-        return this._mastodonFullHandle;
+    get setInstance(): string {
+        return this.instance;
     }
 
     constructor(
@@ -41,11 +38,7 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     checkComrad(): any {
-        let fullHandle = this.mastodonFullHandle.split('@').filter(x => x != null && x !== '');
-        this.username = fullHandle[0];
-        this.instance = fullHandle[1];
-
-        if (this.username && this.instance) {
+        if (this.instance) {
             let cleanInstance = this.instance.replace('http://', '').replace('https://', '').toLowerCase();
             for (let b of this.comradeList) {
                 if (cleanInstance == b || cleanInstance.includes(`.${b}`)) {
@@ -59,12 +52,15 @@ export class AddNewAccountComponent implements OnInit {
     }
 
     onSubmit(): boolean {
-        this.checkBlockList(this.instance);
+        if(this.isLoading || !this.instance) return false;
 
-        this.isLoading = true;
+        this.isLoading = true;       
+
+        this.checkBlockList(this.instance);
+        
         this.checkAndCreateApplication(this.instance)
             .then((appData: AppData) => {
-                this.redirectToInstanceAuthPage(this.username, this.instance, appData);
+                this.redirectToInstanceAuthPage(this.instance, appData);
             })
             .then(x => {
                 setTimeout(() => {
@@ -137,8 +133,8 @@ export class AddNewAccountComponent implements OnInit {
         return snapshot.apps;
     }
 
-    private redirectToInstanceAuthPage(username: string, instance: string, app: AppData) {
-        const appDataTemp = new CurrentAuthProcess(username, instance);
+    private redirectToInstanceAuthPage(instance: string, app: AppData) {
+        const appDataTemp = new CurrentAuthProcess(instance);
         localStorage.setItem('tempAuth', JSON.stringify(appDataTemp));
 
         let instanceUrl = this.authService.getInstanceLoginUrl(instance, app.client_id, app.redirect_uri);

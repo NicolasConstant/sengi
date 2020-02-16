@@ -206,6 +206,27 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
     }
 
+    onPaste(e: ClipboardEvent ) {
+        console.log(e);
+
+        // e.stopPropagation();
+        // e.preventDefault();
+
+        // console.warn(e);
+        
+        // console.warn(ev.clipboardData.getData('image'));
+        // console.warn(ev.clipboardData.getData());
+
+
+        // navigator['clipboard'].readText().then(clipText => {
+        //     console.log(clipText);
+        // });
+
+
+        // var items = (ev.clipboardData || ev.originalEvent.clipboardData).items;
+        // console.error(items);
+    }
+
     changePrivacy(value: string): boolean {
         this.selectedPrivacy = value;
         return false;
@@ -224,8 +245,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private detectAutosuggestion(status: string) {
         if (!this.statusLoaded) return;
-        
-        if(!status.includes('@') && !status.includes('#')){
+
+        if (!status.includes('@') && !status.includes('#')) {
             this.autosuggestData = null;
             this.hasSuggestions = false;
             return;

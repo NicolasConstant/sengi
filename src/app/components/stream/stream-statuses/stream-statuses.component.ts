@@ -28,7 +28,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private websocketStreaming: StreamingWrapper;
 
     statuses: StatusWrapper[] = [];
-    private bufferStream: Status[] = [];
+    bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
 
     private hideBoosts: boolean;
