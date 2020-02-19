@@ -23,7 +23,7 @@
     }
 
     &__new-notification {
-        z-index: 100;
+        z-index: 1;
         width: $stream-column-width;
         height: 25px;
         position: absolute;
