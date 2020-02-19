@@ -17,7 +17,7 @@ describe('StatusesStateService', () => {
         
         const service: StatusesStateService = TestBed.get(StatusesStateService);
         service.statusFavoriteStatusChanged(statusId, accountId, true);
-        let result = service.getStateForStatus(statusId, accountId);
+        let result = service.getStateForStatus(statusId).find(x => x.accountId === accountId);
 
         expect(result.isFavorited).toBeTruthy();
     });
@@ -28,7 +28,7 @@ describe('StatusesStateService', () => {
         
         const service: StatusesStateService = TestBed.get(StatusesStateService);
         service.statusReblogStatusChanged(statusId, accountId, true);
-        let result = service.getStateForStatus(statusId, accountId);
+        let result = service.getStateForStatus(statusId).find(x => x.accountId === accountId);
 
         expect(result.isRebloged).toBeTruthy();
     });
@@ -40,7 +40,7 @@ describe('StatusesStateService', () => {
         const service: StatusesStateService = TestBed.get(StatusesStateService);
         service.statusFavoriteStatusChanged(statusId, accountId, true);
         service.statusFavoriteStatusChanged(statusId, accountId, false);
-        let result = service.getStateForStatus(statusId, accountId);
+        let result = service.getStateForStatus(statusId).find(x => x.accountId === accountId);
 
         expect(result.isFavorited).toBeFalsy();
     });
@@ -52,7 +52,7 @@ describe('StatusesStateService', () => {
         const service: StatusesStateService = TestBed.get(StatusesStateService);
         service.statusReblogStatusChanged(statusId, accountId, true);
         service.statusReblogStatusChanged(statusId, accountId, false);
-        let result = service.getStateForStatus(statusId, accountId);
+        let result = service.getStateForStatus(statusId).find(x => x.accountId === accountId);
 
         expect(result.isRebloged).toBeFalsy();
     });

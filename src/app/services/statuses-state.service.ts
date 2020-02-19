@@ -11,11 +11,17 @@ export class StatusesStateService {
 
     constructor() { }
 
-    getStateForStatus(statusId: string, accountId: string): StatusState {
-        if(!this.cachedStatusStates[statusId] || !this.cachedStatusStates[statusId][accountId]) 
+    getStateForStatus(statusId: string): StatusState[] {
+        if(!this.cachedStatusStates[statusId]) 
             return null;
 
-        return this.cachedStatusStates[statusId][accountId];
+        let results: StatusState[] = [];
+        Object.entries(this.cachedStatusStates[statusId]).forEach(
+            ([key, value]) => {
+                results.push(value);
+            }
+        );
+        return results;
     }
 
     statusFavoriteStatusChanged(statusId: string, accountId: string, isFavorited: boolean) {
@@ -45,8 +51,11 @@ export class StatusesStateService {
     }
 }
 
-
-class StatusState {
-    constructor(public statusId: string, public accountId: string, public isFavorited: boolean, public isRebloged: boolean) {
+export class StatusState {
+    constructor(
+        public statusId: string, 
+        public accountId: string, 
+        public isFavorited: boolean, 
+        public isRebloged: boolean) {
     }
 }
