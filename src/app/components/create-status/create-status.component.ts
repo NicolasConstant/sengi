@@ -206,25 +206,16 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
     }
 
-    onPaste(e: ClipboardEvent ) {
-        console.log(e);
-
-        // e.stopPropagation();
-        // e.preventDefault();
-
-        // console.warn(e);
-        
-        // console.warn(ev.clipboardData.getData('image'));
-        // console.warn(ev.clipboardData.getData());
-
-
-        // navigator['clipboard'].readText().then(clipText => {
-        //     console.log(clipText);
-        // });
-
-
-        // var items = (ev.clipboardData || ev.originalEvent.clipboardData).items;
-        // console.error(items);
+    onPaste(e: any) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        let blobs: File[] = [];
+        for (const item of items) {
+            if (item.type.indexOf('image') === 0) {
+                let blob = item.getAsFile();
+                blobs.push(blob);
+            }
+        }
+        this.handleFileInput(blobs);
     }
 
     changePrivacy(value: string): boolean {
