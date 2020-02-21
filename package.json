@@ -5,7 +5,7 @@
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
     "author": {
-        "name": "Nicolas Constant",
+        "name": "Nicolas Constant", 
         "email": "github@nicolas-constant.com"
     },
     "repository": {
