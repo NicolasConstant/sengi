@@ -23,12 +23,12 @@
     padding: 0 5px 15px 5px;
     position: relative;
 
-    &__checkbox{
+    &__checkbox {
         position: relative;
-        top:3px;
+        top: 3px;
         left: 5px;
         margin-right: 7px;
-    }  
+    }
 
     &__text {
         display: block;
@@ -39,14 +39,20 @@
     &__input {
         margin-left: 5px;
     }
-}
 
-.sound {
     &__title {
         display: inline-block;
         margin: 0 0 5px 5px;
-    }
 
+        & a {
+            color: white;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    }
+}
+
+.sound {
     &__select {
         float: left;
         width: calc(100% - 75px);
@@ -54,7 +60,7 @@
         margin-left: 5px;
 
         background-color: #32384d;
-        color: white;        
+        color: white;
         border: 1px solid #32384d;
     }
 
@@ -75,4 +81,3 @@
         }
     }
 }
-

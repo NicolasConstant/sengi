@@ -27,13 +27,31 @@
             <label class="noselect sub-section__label" for="disableSounds">disable sounds</label>
             <br>
 
-            <span class="sound__title">notification sound:</span><br />
+            <span class="sub-section__title">notification sound:</span><br />
             <form [formGroup]="notificationForm">
                 <select formControlName="countryControl" (change)="onChange($event.target.value)" class="sound__select">
                     <option [value]="s.id" *ngFor="let s of notificationSounds"> {{s.name}}</option>
                 </select>
             </form>
             <a href class="form-button sound__play" type="submit" (click)="playNotificationSound()">play</a>
+        </div>
+        <h4 class="panel__subtitle">Shortcuts</h4>
+        <div class="sub-section">
+            <span class="sub-section__title">switch column:</span><br />
+
+            <input class="sub-section__checkbox" [checked]="columnShortcutEnabled === 1"
+                (change)="onShortcutChange(1)" type="radio" name="column-ctrl" value="column-ctrl"
+                id="column-ctrl">
+            <label class="noselect sub-section__label" for="column-ctrl">Ctrl + Left | Ctrl + Right</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="columnShortcutEnabled === 2"
+                (change)="onShortcutChange(2)" type="radio" name="colmun-win"
+                value="colmun-win" id="colmun-win">
+            <label class="noselect sub-section__label" for="colmun-win">Win + Alt + Left | Win + Alt + Right</label>
+            <br>
+
+            <span class="sub-section__title" *ngIf="columnShortcutChanged">this settings needs a <a href (click)="reload()">reload</a> to be effective.</span>
         </div>
 
         <h4 class="panel__subtitle">About</h4>
@@ -48,10 +66,12 @@
                 Clear all local data
             </a>
 
-            <a *ngIf="isCleanningAll" class="sengi-btn sengi-btn__red sengi-btn__medium" href (click)="confirmClearAll()">
+            <a *ngIf="isCleanningAll" class="sengi-btn sengi-btn__red sengi-btn__medium" href
+                (click)="confirmClearAll()">
                 Confirm Clear All
             </a>
-            <a *ngIf="isCleanningAll" class="sengi-btn sengi-btn__blue sengi-btn__medium" href (click)="cancelClearAll()">
+            <a *ngIf="isCleanningAll" class="sengi-btn sengi-btn__blue sengi-btn__medium" href
+                (click)="cancelClearAll()">
                 Cancel
             </a>
         </div>

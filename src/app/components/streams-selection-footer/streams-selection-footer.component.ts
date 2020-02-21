@@ -5,6 +5,7 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { StreamElement, StreamTypeEnum } from '../../states/streams.state';
 import { NavigationService } from '../../services/navigation.service';
+import { ToolsService } from '../../services/tools.service';
 
 @Component({
     selector: 'app-streams-selection-footer',
@@ -16,20 +17,35 @@ export class StreamsSelectionFooterComponent implements OnInit {
     private streams$: Observable<StreamElement[]>;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly hotkeysService: HotkeysService,
         private readonly navigationService: NavigationService,
         private readonly store: Store) {
+
         this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
 
-        this.hotkeysService.add(new Hotkey('ctrl+right', (event: KeyboardEvent): boolean => {
-            this.nextColumnSelected();
-            return false;
-        }));
-
-        this.hotkeysService.add(new Hotkey('ctrl+left', (event: KeyboardEvent): boolean => {
-            this.previousColumnSelected();
-            return false;
-        }));
+        const settings = this.toolsService.getSettings();
+        if(!settings.columnSwitchingWinAlt) {
+            this.hotkeysService.add(new Hotkey('ctrl+right', (event: KeyboardEvent): boolean => {
+                this.nextColumnSelected();
+                return false;
+            }));
+    
+            this.hotkeysService.add(new Hotkey('ctrl+left', (event: KeyboardEvent): boolean => {
+                this.previousColumnSelected();
+                return false;
+            }));
+        } else {
+            this.hotkeysService.add(new Hotkey('meta+alt+right', (event: KeyboardEvent): boolean => {
+                this.nextColumnSelected();
+                return false;
+            }));
+    
+            this.hotkeysService.add(new Hotkey('meta+alt+left', (event: KeyboardEvent): boolean => {
+                this.previousColumnSelected();
+                return false;
+            }));
+        }       
     }
 
     ngOnInit() {

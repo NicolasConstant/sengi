@@ -11,6 +11,7 @@ import { Status, Account, Results } from '../../../../services/models/mastodon.i
 import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
+import { StatusesStateService, StatusState } from '../../../../services/statuses-state.service';
 
 @Component({
     selector: 'app-action-bar',
@@ -43,7 +44,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     favoriteIsLoading: boolean;
     boostIsLoading: boolean;
 
-    isContentWarningActive: boolean = false; 
+    isContentWarningActive: boolean = false;
 
     displayedStatus: Status;
 
@@ -55,10 +56,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+    private statusStateSub: Subscription;
 
-    constructor(        
+    constructor(
         private readonly store: Store,
         private readonly toolsService: ToolsService,
+        private readonly statusStateService: StatusesStateService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService) {
 
@@ -79,6 +82,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.displayedStatus = status;
         }
 
+        this.analyseMemoryStatus();
+
         if (this.displayedStatus.visibility === 'direct') {
             this.isDM = true;
         }
@@ -86,10 +91,31 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.checkStatus(accounts);
         });
+
+        this.statusStateSub = this.statusStateService.stateNotification.subscribe((state: StatusState) => {
+            if (state && state.statusId === this.displayedStatus.url) {
+                this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
+                this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+
+                this.checkIfFavorited();
+                this.checkIfBoosted();
+            }
+        });
     }
 
     ngOnDestroy(): void {
         this.accountSub.unsubscribe();
+        this.statusStateSub.unsubscribe();
+    }
+
+    private analyseMemoryStatus() {
+        let memoryStatusState = this.statusStateService.getStateForStatus(this.displayedStatus.url);
+        if (!memoryStatusState) return;
+
+        memoryStatusState.forEach((state: StatusState) => {
+            this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
+            this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+        });
     }
 
     private checkStatus(accounts: AccountInfo[]): void {
@@ -156,7 +182,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                     this.bootedStatePerAccountId[account.id] = boostedStatus.reblog !== null; //FIXME: when Pleroma will return the good status
                 } else {
                     let reblogged = boostedStatus.reblogged; //FIXME: when pixelfed will return the good status
-                    if(reblogged === null){  
+                    if (reblogged === null) {
                         reblogged = !this.bootedStatePerAccountId[account.id];
                     }
                     this.bootedStatePerAccountId[account.id] = reblogged;
@@ -168,6 +194,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 this.notificationService.notifyHttpError(err, account);
             })
             .then(() => {
+                this.statusStateService.statusReblogStatusChanged(this.displayedStatus.url, account.id, this.bootedStatePerAccountId[account.id]);
                 this.boostIsLoading = false;
             });
 
@@ -192,7 +219,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             })
             .then((favoritedStatus: Status) => {
                 let favourited = favoritedStatus.favourited; //FIXME: when pixelfed will return the good status
-                if(favourited === null){                   
+                if (favourited === null) {
                     favourited = !this.favoriteStatePerAccountId[account.id];
                 }
                 this.favoriteStatePerAccountId[account.id] = favourited;
@@ -202,6 +229,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 this.notificationService.notifyHttpError(err, account);
             })
             .then(() => {
+                this.statusStateService.statusFavoriteStatusChanged(this.displayedStatus.url, account.id, this.favoriteStatePerAccountId[account.id]);
                 this.favoriteIsLoading = false;
             });
 
@@ -225,9 +253,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         } else {
             this.isFavorited = false;
         }
-    }  
+    }
 
-    browseThread(event: OpenThreadEvent){
+    browseThread(event: OpenThreadEvent) {
         this.browseThreadEvent.next(event);
     }
 }

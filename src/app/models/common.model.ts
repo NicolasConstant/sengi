@@ -17,4 +17,6 @@ export class StatusWrapper {
         public status: Status,
         public provider: AccountInfo
     ) { }
+
+    public isSelected: boolean;
 }

@@ -35,6 +35,9 @@ export class GlobalSettings {
     disableSounds = false;
     
     notificationSoundFileId: string = '0';
+
+    columnSwitchingWinAlt = false;
+
     accountSettings: AccountSettings[] = [];
 }
 
@@ -101,6 +104,7 @@ export class SettingsState {
         newSettings.disableAvatarNotifications = oldSettings.disableAvatarNotifications;
         newSettings.disableSounds = oldSettings.disableSounds;
         newSettings.notificationSoundFileId = oldSettings.notificationSoundFileId;
+        newSettings.columnSwitchingWinAlt = oldSettings.columnSwitchingWinAlt;
 
         return newSettings;
     }

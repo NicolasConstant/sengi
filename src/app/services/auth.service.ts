@@ -59,5 +59,5 @@ export class AuthService {
 }
 
 export class CurrentAuthProcess {
-    constructor(public username: string, public instance: string) { }
+    constructor(public instance: string) { }
 }
