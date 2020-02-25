@@ -1,6 +1,6 @@
 {
     "name": "sengi",
-    "version": "0.19.3",
+    "version": "0.20.0",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
@@ -12,7 +12,7 @@
         "type": "git",
         "url": "https://github.com/NicolasConstant/sengi.git"
     },
-    "scripts": {
+    "scripts": { 
         "ng": "ng",
         "start": "ng serve",
         "start-mem": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",

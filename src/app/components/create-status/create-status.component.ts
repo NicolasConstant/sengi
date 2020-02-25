@@ -206,6 +206,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
     }
 
+    onPaste(e: any) {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        let blobs: File[] = [];
+        for (const item of items) {
+            if (item.type.indexOf('image') === 0) {
+                let blob = item.getAsFile();
+                blobs.push(blob);
+            }
+        }
+        this.handleFileInput(blobs);
+    }
+
     changePrivacy(value: string): boolean {
         this.selectedPrivacy = value;
         return false;
@@ -224,8 +236,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private detectAutosuggestion(status: string) {
         if (!this.statusLoaded) return;
-        
-        if(!status.includes('@') && !status.includes('#')){
+
+        if (!status.includes('@') && !status.includes('#')) {
             this.autosuggestData = null;
             this.hasSuggestions = false;
             return;

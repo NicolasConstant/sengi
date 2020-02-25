@@ -157,7 +157,7 @@ export class UserProfileComponent implements OnInit {
                 this.isLoading = false;
                 this.statusLoading = true;
 
-                this.displayedAccount = account;
+                this.displayedAccount = this.fixPleromaFieldsUrl(account);
                 this.hasNote = account && account.note && account.note !== '<p></p>';
                 if (this.hasNote) {
                     this.note = this.emojiConverter.applyEmojis(account.emojis, account.note, EmojiTypeEnum.medium);
@@ -176,6 +176,18 @@ export class UserProfileComponent implements OnInit {
                 this.isLoading = false;
                 this.statusLoading = false;
             });
+    }
+
+    private fixPleromaFieldsUrl(acc: Account): Account {
+        if(acc.fields){
+            acc.fields.forEach(f => {
+                if(f.value.includes('<a href="') && !f.value.includes('target="_blank"')){
+                    f.value = f.value.replace('<a href="', '<a target="_blank" href="');
+                }
+            });
+        }
+
+        return acc;
     }
 
     private getPinnedStatuses(userAccount: AccountInfo, account: Account): Promise<void> {

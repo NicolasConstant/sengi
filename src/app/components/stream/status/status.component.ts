@@ -56,6 +56,7 @@ export class StatusComponent implements OnInit {
         this._statusWrapper = value;
         // console.warn(value.status);
         this.status = value.status;
+        this.isSelected = value.isSelected;
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -96,7 +97,7 @@ export class StatusComponent implements OnInit {
     private checkContentWarning(status: Status) {
         if (status.sensitive || status.spoiler_text) {
             this.isContentWarned = true;
-            this.contentWarningText = status.spoiler_text;
+            this.contentWarningText =  this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.spoiler_text, EmojiTypeEnum.medium);
         }
     }
 

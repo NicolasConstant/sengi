@@ -11,6 +11,7 @@ import { UserNotificationService, NotificationSoundDefinition } from '../../../s
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
 })
+
 export class SettingsComponent implements OnInit {
     
     notificationSounds: NotificationSoundDefinition[];
@@ -22,6 +23,8 @@ export class SettingsComponent implements OnInit {
     disableSoundsEnabled: boolean;
     version: string;
 
+    columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
+    columnShortcutChanged = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -42,6 +45,26 @@ export class SettingsComponent implements OnInit {
         this.disableAutofocusEnabled = settings.disableAutofocus;
         this.disableAvatarNotificationsEnabled = settings.disableAvatarNotifications;
         this.disableSoundsEnabled = settings.disableSounds;
+
+        if(!settings.columnSwitchingWinAlt){
+            this.columnShortcutEnabled = ColumnShortcut.Ctrl;
+        } else {
+            this.columnShortcutEnabled = ColumnShortcut.Win;
+        }
+    }
+
+    onShortcutChange(id: ColumnShortcut){
+        this.columnShortcutEnabled = id;
+        this.columnShortcutChanged = true;
+
+        let settings = this.toolsService.getSettings()        
+        settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
+        this.toolsService.saveSettings(settings);
+    }
+
+    reload(): boolean {
+        window.location.reload();
+        return false;
     }
 
     onChange(soundId: string) {
@@ -96,5 +119,10 @@ export class SettingsComponent implements OnInit {
         this.isCleanningAll = false;
         return false;
     }
+}
 
+
+enum ColumnShortcut {
+    Ctrl = 1, 
+    Win = 2
 }
