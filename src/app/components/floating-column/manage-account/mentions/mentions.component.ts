@@ -22,6 +22,8 @@ export class MentionsComponent implements OnInit, OnDestroy {
     isThread = false;
     hasContentWarnings = false;
 
+    bufferStream: Status[] = []; //html compatibility only
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();

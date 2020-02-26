@@ -92,7 +92,7 @@
             <a href class="status__content-warning" *ngIf="isContentWarned" title="show content"
                 (click)="removeContentWarning()">
                 <span class="status__content-warning--title">sensitive content</span>
-                {{ contentWarningText }}
+                <span innerHTML="{{ contentWarningText }}"></span>
             </a>
             <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="statusContent"
                 (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
