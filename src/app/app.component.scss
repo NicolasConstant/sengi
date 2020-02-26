@@ -107,7 +107,7 @@ app-streams-selection-footer {
     height: 70px;
     left: 0;
     right: 0;
-    bottom: -70px;
+    bottom: -80px;
     z-index: 999999999;
    
     &__activated {
@@ -125,7 +125,9 @@ app-streams-selection-footer {
         margin: auto;
         border-radius: 2px;
         color: rgba(rgb(0, 4, 24), 1);
-        background: rgba(rgb(0, 140, 255), 1);
+        background: #ffffff;
+
+        box-shadow: 0px 0px 10px rgb(0, 0, 0);
 
         &--text {
             display: inline-block;
@@ -135,15 +137,15 @@ app-streams-selection-footer {
         &--reload {
             transition: all .2s;
             position: absolute;
-            right: 31px;
+            right: 30px;
 
             padding: 5px 10px;
             text-decoration: none;
-            color: rgba(rgb(0, 4, 24), 1);
-            background-color: red;
+            color: #ffffff;
+            background-color: #3e455f;
 
             &:hover {
-                background-color: rgb(97, 0, 0);
+                background-color: #1d202c;
             }
         }
 
@@ -158,11 +160,11 @@ app-streams-selection-footer {
             border-top-right-radius: 2px;
             border-bottom-right-radius: 2px;
 
-            color: rgba(rgb(0, 4, 24), 1);
+            color: #ffffff;
+            background-color: #3e455f;
 
-            background-color: red;
             &:hover {
-                background-color: rgb(97, 0, 0);
+                background-color: #1d202c;
             }
         }
     }
