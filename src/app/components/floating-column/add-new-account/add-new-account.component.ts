@@ -22,7 +22,7 @@ export class AddNewAccountComponent implements OnInit {
     private instance: string;
     @Input()
     set setInstance(value: string) {
-        this.instance = value;
+        this.instance = value.trim();
         this.checkComrad();
     }
     get setInstance(): string {
