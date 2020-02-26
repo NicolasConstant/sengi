@@ -10,6 +10,7 @@ import { StreamElement } from './states/streams.state';
 import { OpenMediaEvent } from './models/common.model';
 import { ToolsService } from './services/tools.service';
 import { MediaService } from './services/media.service';
+import { ServiceWorkerService } from './services/service-worker.service';
 
 @Component({
     selector: 'app-root',
@@ -21,30 +22,28 @@ export class AppComponent implements OnInit, OnDestroy {
     title = 'Sengi';
     floatingColumnActive: boolean;
     tutorialActive: boolean;
-    // mediaViewerActive: boolean = false;
     openedMediaEvent: OpenMediaEvent
+    updateAvailable: boolean;
 
     private columnEditorSub: Subscription;
     private openMediaSub: Subscription;
     private streamSub: Subscription;
     private dragoverSub: Subscription;
-
-
-    updateAvailable: boolean;
+    private updateAvailableSub: Subscription;
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
     constructor(
+        private readonly serviceWorkerService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
         private readonly mediaService: MediaService,
         private readonly navigationService: NavigationService) {
     }
 
     ngOnInit(): void {
-        setTimeout(() => {
-            this.updateAvailable = true;
-        }, 2000);
-
+        this.updateAvailableSub = this.serviceWorkerService.newAppVersionIsAvailable.subscribe((updateAvailable) => {
+            this.updateAvailable = updateAvailable;
+        });
 
         this.streamSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
             if (streams && streams.length === 0) {
@@ -75,7 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
             .pipe(
                 debounceTime(1500)
             )
-            .subscribe(() => {                
+            .subscribe(() => {
                 this.drag = false;
             })
     }
@@ -85,6 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.columnEditorSub.unsubscribe();
         this.openMediaSub.unsubscribe();
         this.dragoverSub.unsubscribe();
+        this.updateAvailableSub.unsubscribe();
     }
 
     closeMedia() {
@@ -106,7 +106,6 @@ export class AppComponent implements OnInit, OnDestroy {
         return false;
     }
     dragover(event): boolean {
-        // console.warn('dragover');
         event.stopPropagation();
         event.preventDefault();
         this.dragoverSubject.next(true);
@@ -120,6 +119,11 @@ export class AppComponent implements OnInit, OnDestroy {
         let files = <File[]>event.dataTransfer.files;
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
         this.mediaService.uploadMedia(selectedAccount, files);
+        return false;
+    }
+
+    loadNewVersion(): boolean {
+        this.serviceWorkerService.loadNewAppVersion();
         return false;
     }
 
