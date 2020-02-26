@@ -29,6 +29,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private streamSub: Subscription;
     private dragoverSub: Subscription;
 
+
+    updateAvailable: boolean;
+
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
     constructor(
@@ -38,6 +41,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        setTimeout(() => {
+            this.updateAvailable = true;
+        }, 2000);
+
+
         this.streamSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
             if (streams && streams.length === 0) {
                 this.tutorialActive = true;
@@ -112,6 +120,14 @@ export class AppComponent implements OnInit, OnDestroy {
         let files = <File[]>event.dataTransfer.files;
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
         this.mediaService.uploadMedia(selectedAccount, files);
+        return false;
+    }
+
+    closeAutoUpdate(): boolean {
+        this.updateAvailable = false;
+        setTimeout(() => {
+            this.updateAvailable = true;
+        }, 2000);
         return false;
     }
 }

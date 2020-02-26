@@ -101,13 +101,21 @@ app-streams-selection-footer {
 
 .auto-update {
     transition: all .2s;
+    transition-timing-function: ease-in;
+
     position: absolute;
     height: 70px;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: -70px;
     z-index: 999999999;
    
+    &__activated {
+        // opacity: 1;
+        transition: all .25s;
+        transition-timing-function: ease-out;
+        bottom: 0px;
+    }
 
     &__display {
         position: relative;
