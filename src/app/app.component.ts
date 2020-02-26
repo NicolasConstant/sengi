@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Observable, Subject } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 // import { ElectronService } from 'ngx-electron';
 
 import { NavigationService, LeftPanelType, OpenLeftPanelEvent } from './services/navigation.service';
@@ -16,6 +17,7 @@ import { MediaService } from './services/media.service';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+    faTimes = faTimes;
     title = 'Sengi';
     floatingColumnActive: boolean;
     tutorialActive: boolean;

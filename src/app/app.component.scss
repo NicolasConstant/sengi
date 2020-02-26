@@ -98,3 +98,64 @@ app-streams-selection-footer {
     bottom: 0;
     left: 50px;
 }
+
+.auto-update {
+    transition: all .2s;
+    position: absolute;
+    height: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999999;
+   
+
+    &__display {
+        position: relative;
+        // height: 30px;
+        width: 300px;        
+        // margin: 0 auto 30px auto;
+        margin: auto;
+        border-radius: 2px;
+        color: rgba(rgb(0, 4, 24), 1);
+        background: rgba(rgb(0, 140, 255), 1);
+
+        &--text {
+            display: inline-block;
+            padding: 5px 10px;
+        }
+
+        &--reload {
+            transition: all .2s;
+            position: absolute;
+            right: 31px;
+
+            padding: 5px 10px;
+            text-decoration: none;
+            color: rgba(rgb(0, 4, 24), 1);
+            background-color: red;
+
+            &:hover {
+                background-color: rgb(97, 0, 0);
+            }
+        }
+
+        &--close {
+            transition: all .2s;
+            position: absolute;
+            right: 0;
+
+            display: inline-block;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+
+            color: rgba(rgb(0, 4, 24), 1);
+
+            background-color: red;
+            &:hover {
+                background-color: rgb(97, 0, 0);
+            }
+        }
+    }
+}
