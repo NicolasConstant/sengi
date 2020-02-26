@@ -91,6 +91,7 @@
         "productName": "Sengi",
         "appId": "org.sengi.desktop",
         "artifactName": "${productName}-${version}-${os}.${ext}",
+        "npmRebuild": false,
         "directories": {
             "output": "release"
         },
