@@ -128,10 +128,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     closeAutoUpdate(): boolean {
-        this.updateAvailable = false;
-        setTimeout(() => {
-            this.updateAvailable = true;
-        }, 2000);
+        this.updateAvailable = false;       
         return false;
     }
 }

@@ -13,7 +13,7 @@ export class ServiceWorkerService {
     constructor(appRef: ApplicationRef, updates: SwUpdate) {
 
         //https://angular.io/guide/service-worker-communications
-        
+
         updates.available.subscribe(event => {
             console.log('current version is', event.current);
             console.log('available version is', event.available);
@@ -22,11 +22,17 @@ export class ServiceWorkerService {
         });
 
         // Allow the app to stabilize first, before starting polling for updates with `interval()`.
-        const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
-        const everySixHours$ = interval(2 * 60 * 60 * 1000);
-        const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
+        //const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
+        // const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
+        // everySixHoursOnceAppIsStable$.subscribe(() => { 
+        //     console.warn('wat?');
+        //     updates.checkForUpdate();
+        // });
 
-        everySixHoursOnceAppIsStable$.subscribe(() => updates.checkForUpdate());
+        const updateCheckTimer$ = interval(2 * 60 * 60 * 1000);
+        updateCheckTimer$.subscribe(() => {
+            updates.checkForUpdate();
+        });
     }
 
     loadNewAppVersion() {
