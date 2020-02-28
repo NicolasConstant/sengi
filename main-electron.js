@@ -1,8 +1,8 @@
-const { app, Menu, server, BrowserWindow, shell } = require("electron");
-const path = require("path");
-const url = require("url");
-const http = require("http");
-const fs = require("fs");
+const { app, Menu, BrowserWindow, shell } = require("electron"); //server, 
+// const path = require("path");
+// const url = require("url");
+// const http = require("http");
+// const fs = require("fs");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -14,15 +14,23 @@ function createWindow() {
         width: 377,
         height: 800,
         title: "Sengi",
-        backgroundColor: "#FFF",
-        useContentSize: true
+        backgroundColor: "#131925",
+        useContentSize: true,
+        webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: false,
+            nodeIntegrationInWorker: false
+          }
     });
 
     win.setAutoHideMenuBar(true);
     win.setMenuBarVisibility(false);
 
-    var server = http.createServer(requestHandler).listen(9527);
-    const sengiUrl = "http://localhost:9527";
+    //var server = http.createServer(requestHandler).listen(9527);
+    //const sengiUrl = "http://localhost:9527";
+    
+    const sengiUrl = "https://sengi.nicolas-constant.com";
+
     win.loadURL(sengiUrl);
 
     const template = [
@@ -157,39 +165,39 @@ function createWindow() {
     });
 }
 
-function requestHandler(req, res) {
-    var file = req.url == "/" ? "/index.html" : req.url,
-        root = __dirname + "/dist",
-        page404 = root + "/404.html";
+// function requestHandler(req, res) {
+//     var file = req.url == "/" ? "/index.html" : req.url,
+//         root = __dirname + "/dist",
+//         page404 = root + "/404.html";
 
-    if (file.includes("register") || file.includes("home")) file = "/index.html";
+//     if (file.includes("register") || file.includes("home")) file = "/index.html";
 
-    getFile(root + file, res, page404);
-}
+//     getFile(root + file, res, page404);
+// }
 
-function getFile(filePath, res, page404) {
-    console.warn(`filePath: ${filePath}`);
-    fs.exists(filePath, function (exists) {
-        if (exists) {
-            fs.readFile(filePath, function (err, contents) {
-                if (!err) {
-                    res.end(contents);
-                } else {
-                    console.dir(err);
-                }
-            });
-        } else {
-            fs.readFile(page404, function (err, contents) {
-                if (!err) {
-                    res.writeHead(404, { "Content-Type": "text/html" });
-                    res.end(contents);
-                } else {
-                    console.dir(err);
-                }
-            });
-        }
-    });
-}
+// function getFile(filePath, res, page404) {
+//     console.warn(`filePath: ${filePath}`);
+//     fs.exists(filePath, function (exists) {
+//         if (exists) {
+//             fs.readFile(filePath, function (err, contents) {
+//                 if (!err) {
+//                     res.end(contents);
+//                 } else {
+//                     console.dir(err);
+//                 }
+//             });
+//         } else {
+//             fs.readFile(page404, function (err, contents) {
+//                 if (!err) {
+//                     res.writeHead(404, { "Content-Type": "text/html" });
+//                     res.end(contents);
+//                 } else {
+//                     console.dir(err);
+//                 }
+//             });
+//         }
+//     });
+// }
 
 app.commandLine.appendSwitch("force-color-profile", "srgb");
 

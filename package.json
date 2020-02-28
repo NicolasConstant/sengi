@@ -12,7 +12,7 @@
         "type": "git",
         "url": "https://github.com/NicolasConstant/sengi.git"
     },
-    "scripts": { 
+    "scripts": {
         "ng": "ng",
         "start": "ng serve",
         "start-mem": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",
@@ -23,7 +23,9 @@
         "e2e": "ng e2e",
         "electron": "ng build --prod && electron .",
         "electron-debug": "ng build && electron .",
-        "dist": "npm run build && electron-builder --publish onTagOrDraft"
+        "electron-test": "electron .",
+        "dist": "npm run build && electron-builder --publish onTagOrDraft",
+        "travis": "electron-builder --publish onTagOrDraft"
     },
     "private": true,
     "dependencies": {
@@ -68,7 +70,7 @@
         "@types/jasminewd2": "~2.0.3",
         "@types/node": "~8.9.4",
         "codelyzer": "~4.2.1",
-        "electron": "^4.0.6",
+        "electron": "^8.0.2",
         "electron-builder": "^20.39.0",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
