@@ -98,3 +98,74 @@ app-streams-selection-footer {
     bottom: 0;
     left: 50px;
 }
+
+.auto-update {
+    transition: all .2s;
+    transition-timing-function: ease-in;
+
+    position: absolute;
+    height: 70px;
+    left: 0;
+    right: 0;
+    bottom: -80px;
+    z-index: 999999999;
+   
+    &__activated {
+        // opacity: 1;
+        transition: all .25s;
+        transition-timing-function: ease-out;
+        bottom: 0px;
+    }
+
+    &__display {
+        position: relative;
+        // height: 30px;
+        width: 300px;        
+        // margin: 0 auto 30px auto;
+        margin: auto;
+        border-radius: 2px;
+        color: rgba(rgb(0, 4, 24), 1);
+        background: #ffffff;
+
+        box-shadow: 0px 0px 10px rgb(0, 0, 0);
+
+        &--text {
+            display: inline-block;
+            padding: 5px 10px;
+        }
+
+        &--reload {
+            transition: all .2s;
+            position: absolute;
+            right: 30px;
+
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #3e455f;
+
+            &:hover {
+                background-color: #1d202c;
+            }
+        }
+
+        &--close {
+            transition: all .2s;
+            position: absolute;
+            right: 0;
+
+            display: inline-block;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+
+            color: #ffffff;
+            background-color: #3e455f;
+
+            &:hover {
+                background-color: #1d202c;
+            }
+        }
+    }
+}

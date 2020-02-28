@@ -1,4 +1,4 @@
-<div class="drag-and-drop" *ngIf="drag" (dragover)="dragover($event)"  (drop)="drop($event)"
+<div class="drag-and-drop" *ngIf="drag" (dragover)="dragover($event)" (drop)="drop($event)"
     [ngClass]="{'drag-and-drop__on-drag': drag2 === true }">
     <!-- (dragleave)="dragleave($event)"  -->
     <div class="drag-and-drop__card">
@@ -7,6 +7,12 @@
                 Drag & drop to upload
             </div>
         </div>
+    </div>
+</div>
+
+<div class="auto-update" [class.auto-update__activated]="updateAvailable">
+    <div class="auto-update__display">
+        <div class="auto-update__display--text">A new version is available!</div> <a href class="auto-update__display--reload" (click)="loadNewVersion()">reload</a> <a href class="auto-update__display--close" (click)="closeAutoUpdate()"><fa-icon [icon]="faTimes"></fa-icon></a>
     </div>
 </div>
 

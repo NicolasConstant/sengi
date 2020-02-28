@@ -79,6 +79,8 @@ import { ScheduledStatusesComponent } from './components/floating-column/schedul
 import { ScheduledStatusComponent } from './components/floating-column/scheduled-statuses/scheduled-status/scheduled-status.component';
 import { StreamNotificationsComponent } from './components/stream/stream-notifications/stream-notifications.component';
 import { NotificationComponent } from './components/floating-column/manage-account/notifications/notification/notification.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 const routes: Routes = [
@@ -167,7 +169,8 @@ const routes: Routes = [
         ]),
         NgxsStoragePluginModule.forRoot(),
         ContextMenuModule.forRoot(),
-        HotkeyModule.forRoot()
+        HotkeyModule.forRoot(),
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
     providers: [AuthService, NavigationService, NotificationService, MastodonWrapperService, MastodonService, StreamingService],
     bootstrap: [AppComponent],
