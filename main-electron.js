@@ -16,11 +16,11 @@ function createWindow() {
         title: "Sengi",
         backgroundColor: "#131925",
         useContentSize: true,
-        webPreferences: {
-            contextIsolation: true,
-            nodeIntegration: false,
-            nodeIntegrationInWorker: false
-          }
+        // webPreferences: {
+        //     contextIsolation: true,
+        //     nodeIntegration: false,
+        //     nodeIntegrationInWorker: false
+        //   }
     });
 
     win.setAutoHideMenuBar(true);

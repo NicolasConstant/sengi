@@ -104,12 +104,12 @@ export class AddNewAccountComponent implements OnInit {
         } else {
             let redirect_uri = this.getLocalHostname();
 
-            let userAgent = navigator.userAgent.toLowerCase();
-            console.log(`userAgent ${userAgent}`);
+            // let userAgent = navigator.userAgent.toLowerCase();
+            // console.log(`userAgent ${userAgent}`);
 
-            if (userAgent.includes(' electron/')) {
-                redirect_uri += '/register';
-            }
+            // if (userAgent.includes(' electron/')) {
+            //     redirect_uri += '/register';
+            // }
 
             return this.authService.createNewApplication(instance, 'Sengi', redirect_uri, 'read write follow', 'https://nicolasconstant.github.io/sengi/')
                 .then((appData: AppData) => {
