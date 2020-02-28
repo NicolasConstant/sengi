@@ -10,6 +10,8 @@ export class ServiceWorkerService {
 
     newAppVersionIsAvailable = new BehaviorSubject<boolean>(false);
 
+    private isListening = false;
+
     constructor(appRef: ApplicationRef, updates: SwUpdate) {
 
         //https://angular.io/guide/service-worker-communications
@@ -30,8 +32,14 @@ export class ServiceWorkerService {
         // });
 
         const updateCheckTimer$ = interval(6 * 60 * 60 * 1000);
-        updateCheckTimer$.subscribe(() => {
-            updates.checkForUpdate();
+
+        appRef.isStable.subscribe(() => {
+            if (this.isListening) return;
+            this.isListening = true;
+
+            updateCheckTimer$.subscribe(() => {
+                updates.checkForUpdate();
+            });
         });
     }
 
