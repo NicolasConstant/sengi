@@ -22,14 +22,14 @@ export class ServiceWorkerService {
         });
 
         // Allow the app to stabilize first, before starting polling for updates with `interval()`.
-        //const appIsStable$ = appRef.isStable.pipe(first(isStable => isStable === true));
-        // const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
+        // const updateCheckTimer$ = interval(10 * 1000);
+        // const appIsStable$ = appRef.isStable; //.pipe(first(isStable => isStable === true));
+        // const everySixHoursOnceAppIsStable$ = concat(appIsStable$, updateCheckTimer$);
         // everySixHoursOnceAppIsStable$.subscribe(() => { 
-        //     console.warn('wat?');
         //     updates.checkForUpdate();
         // });
 
-        const updateCheckTimer$ = interval(2 * 60 * 60 * 1000);
+        const updateCheckTimer$ = interval(6 * 60 * 60 * 1000);
         updateCheckTimer$.subscribe(() => {
             updates.checkForUpdate();
         });
