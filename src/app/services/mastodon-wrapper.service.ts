@@ -31,14 +31,12 @@ export class MastodonWrapperService {
 
                     //Pleroma workaround 
                     let expire_in = storedAccountInfo.token.expires_in;
-                    if(expire_in < 3600) {
+                    if (expire_in < 3600) {
                         expire_in = 3600;
                     }
 
                     let expire_on = expire_in + storedAccountInfo.token.created_at;
                     isExpired = expire_on - nowEpoch <= 60 * 2;
-
-                    //console.warn(`expiring in ${Math.round((expire_on - nowEpoch)/24/60/60)}days ${Math.round((expire_on - nowEpoch)/60/60)}h ${Math.round((expire_on - nowEpoch)/60)} mins`);
                 }
             }
         } catch (err) {
@@ -46,10 +44,8 @@ export class MastodonWrapperService {
         }
 
         if (storedAccountInfo.token.refresh_token && isExpired) {
-            console.warn('--------------------------');
-            console.warn('-------->> MARTY!! -------');
-            console.warn('-------->> RENEW TOKEN FFS');
-            console.warn('--------------------------');
+            console.log('>>> MARTY!! ------------');
+            console.log('>>> RENEW TOKEN FFS ----');
 
             const app = this.getAllSavedApps().find(x => x.instance === storedAccountInfo.instance);
             return this.authService.refreshToken(storedAccountInfo.instance, app.app.client_id, app.app.client_secret, storedAccountInfo.token.refresh_token)
@@ -87,7 +83,10 @@ export class MastodonWrapperService {
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
-        return this.mastodonService.retrieveAccountDetails(account);
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.retrieveAccountDetails(refreshedAccount);
+            });
     }
 
     getTimeline(account: AccountInfo, type: StreamTypeEnum, max_id: string = null, since_id: string = null, limit: number = 20, tag: string = null, listId: string = null): Promise<Status[]> {
