@@ -17,6 +17,14 @@
 .version {
     display: block;
     padding: 0 5px;
+
+    &__link {
+        color: rgb(161, 161, 161);
+
+        &:hover {
+            color: #fff;
+        }
+    }
 }
 
 .sub-section {

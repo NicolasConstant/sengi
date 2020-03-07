@@ -55,7 +55,11 @@
         </div>
 
         <h4 class="panel__subtitle">About</h4>
-        <p class="version">Sengi version: {{version}}</p>
+        <p class="version">
+            Sengi version: {{version}}<br/>
+            <a href class="version__link" (click)="checkForUpdates()">check for updates</a>
+        </p>
+        
 
         <h4 class="panel__subtitle">RESET</h4>
         <div class="sub-section">

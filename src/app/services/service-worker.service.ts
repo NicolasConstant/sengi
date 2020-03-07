@@ -7,12 +7,11 @@ import { interval, concat, BehaviorSubject } from 'rxjs';
     providedIn: 'root'
 })
 export class ServiceWorkerService {
-
     newAppVersionIsAvailable = new BehaviorSubject<boolean>(false);
 
     private isListening = false;
 
-    constructor(appRef: ApplicationRef, updates: SwUpdate) {
+    constructor(appRef: ApplicationRef, private updates: SwUpdate) {
 
         //https://angular.io/guide/service-worker-communications
 
@@ -45,5 +44,13 @@ export class ServiceWorkerService {
 
     loadNewAppVersion() {
         document.location.reload();
+    }
+
+    checkForUpdates(): any {
+        console.log("Check for update");
+        this.updates.checkForUpdate()
+            .catch(err => {
+                console.error(err);
+            });
     }
 }

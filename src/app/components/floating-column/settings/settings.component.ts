@@ -5,6 +5,7 @@ import { Howl } from 'howler';
 import { environment } from '../../../../environments/environment';
 import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
+import { ServiceWorkerService } from '../../../services/service-worker.service';
 
 @Component({
     selector: 'app-settings',
@@ -28,6 +29,7 @@ export class SettingsComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
+        private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
         private readonly userNotificationsService: UserNotificationService) { }
 
@@ -117,6 +119,11 @@ export class SettingsComponent implements OnInit {
 
     cancelClearAll(): boolean {
         this.isCleanningAll = false;
+        return false;
+    }
+
+    checkForUpdates(): boolean {
+        this.serviceWorkersService.checkForUpdates();
         return false;
     }
 }
