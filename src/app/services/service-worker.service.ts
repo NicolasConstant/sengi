@@ -46,11 +46,7 @@ export class ServiceWorkerService {
         document.location.reload();
     }
 
-    checkForUpdates(): any {
-        console.log("Check for update");
-        this.updates.checkForUpdate()
-            .catch(err => {
-                console.error(err);
-            });
+    checkForUpdates(): Promise<void> {
+        return this.updates.checkForUpdate();          
     }
 }
