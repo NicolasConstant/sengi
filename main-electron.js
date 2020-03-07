@@ -1,8 +1,4 @@
-const { app, Menu, BrowserWindow, shell } = require("electron"); //server, 
-// const path = require("path");
-// const url = require("url");
-// const http = require("http");
-// const fs = require("fs");
+const { app, Menu, BrowserWindow, shell } = require("electron"); 
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -25,12 +21,8 @@ function createWindow() {
 
     win.setAutoHideMenuBar(true);
     win.setMenuBarVisibility(false);
-
-    //var server = http.createServer(requestHandler).listen(9527);
-    //const sengiUrl = "http://localhost:9527";
-    
+   
     const sengiUrl = "https://sengi.nicolas-constant.com";
-
     win.loadURL(sengiUrl);
 
     const template = [
@@ -147,9 +139,6 @@ function createWindow() {
         );
     }
 
-    // Open the DevTools.
-    // win.webContents.openDevTools()
-
     //open external links to browser
     win.webContents.on("new-window", function (event, url) {
         event.preventDefault();
@@ -164,40 +153,6 @@ function createWindow() {
         win = null;
     });
 }
-
-// function requestHandler(req, res) {
-//     var file = req.url == "/" ? "/index.html" : req.url,
-//         root = __dirname + "/dist",
-//         page404 = root + "/404.html";
-
-//     if (file.includes("register") || file.includes("home")) file = "/index.html";
-
-//     getFile(root + file, res, page404);
-// }
-
-// function getFile(filePath, res, page404) {
-//     console.warn(`filePath: ${filePath}`);
-//     fs.exists(filePath, function (exists) {
-//         if (exists) {
-//             fs.readFile(filePath, function (err, contents) {
-//                 if (!err) {
-//                     res.end(contents);
-//                 } else {
-//                     console.dir(err);
-//                 }
-//             });
-//         } else {
-//             fs.readFile(page404, function (err, contents) {
-//                 if (!err) {
-//                     res.writeHead(404, { "Content-Type": "text/html" });
-//                     res.end(contents);
-//                 } else {
-//                     console.dir(err);
-//                 }
-//             });
-//         }
-//     });
-// }
 
 app.commandLine.appendSwitch("force-color-profile", "srgb");
 
@@ -237,6 +192,3 @@ app.on("activate", () => {
         createWindow();
     }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
