@@ -22,6 +22,9 @@ export class MastodonWrapperService {
         let isExpired = false;
         let storedAccountInfo = this.getStoreAccountInfo(accountInfo.id);
 
+        if(!storedAccountInfo || !(storedAccountInfo.token)) 
+            return Promise.resolve(accountInfo);
+
         try {
             if (storedAccountInfo.token.refresh_token) {
                 if (!storedAccountInfo.token.created_at || !storedAccountInfo.token.expires_in) {
