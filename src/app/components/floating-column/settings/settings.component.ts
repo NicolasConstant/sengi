@@ -5,6 +5,7 @@ import { Howl } from 'howler';
 import { environment } from '../../../../environments/environment';
 import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
+import { ServiceWorkerService } from '../../../services/service-worker.service';
 
 @Component({
     selector: 'app-settings',
@@ -13,7 +14,7 @@ import { UserNotificationService, NotificationSoundDefinition } from '../../../s
 })
 
 export class SettingsComponent implements OnInit {
-    
+
     notificationSounds: NotificationSoundDefinition[];
     notificationSoundId: string;
     notificationForm: FormGroup;
@@ -28,13 +29,14 @@ export class SettingsComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
+        private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
         private readonly userNotificationsService: UserNotificationService) { }
 
     ngOnInit() {
         this.version = environment.VERSION;
 
-        const settings =  this.toolsService.getSettings();
+        const settings = this.toolsService.getSettings();
 
         this.notificationSounds = this.userNotificationsService.getAllNotificationSounds();
         this.notificationSoundId = settings.notificationSoundFileId;
@@ -46,18 +48,18 @@ export class SettingsComponent implements OnInit {
         this.disableAvatarNotificationsEnabled = settings.disableAvatarNotifications;
         this.disableSoundsEnabled = settings.disableSounds;
 
-        if(!settings.columnSwitchingWinAlt){
+        if (!settings.columnSwitchingWinAlt) {
             this.columnShortcutEnabled = ColumnShortcut.Ctrl;
         } else {
             this.columnShortcutEnabled = ColumnShortcut.Win;
         }
     }
 
-    onShortcutChange(id: ColumnShortcut){
+    onShortcutChange(id: ColumnShortcut) {
         this.columnShortcutEnabled = id;
         this.columnShortcutChanged = true;
 
-        let settings = this.toolsService.getSettings()        
+        let settings = this.toolsService.getSettings()
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
         this.toolsService.saveSettings(settings);
     }
@@ -85,19 +87,19 @@ export class SettingsComponent implements OnInit {
         return false;
     }
 
-    onDisableAutofocusChanged(){
+    onDisableAutofocusChanged() {
         let settings = this.toolsService.getSettings();
         settings.disableAutofocus = this.disableAutofocusEnabled;
-        this.toolsService.saveSettings(settings);        
+        this.toolsService.saveSettings(settings);
     }
 
-    onDisableAvatarNotificationsChanged(){
+    onDisableAvatarNotificationsChanged() {
         let settings = this.toolsService.getSettings();
         settings.disableAvatarNotifications = this.disableAvatarNotificationsEnabled;
         this.toolsService.saveSettings(settings);
     }
 
-    onDisableSoundsEnabledChanged(){
+    onDisableSoundsEnabledChanged() {
         let settings = this.toolsService.getSettings();
         settings.disableSounds = this.disableSoundsEnabled;
         this.toolsService.saveSettings(settings);
@@ -109,7 +111,7 @@ export class SettingsComponent implements OnInit {
         return false;
     }
 
-    confirmClearAll(): boolean{
+    confirmClearAll(): boolean {
         localStorage.clear();
         location.reload();
         return false;
@@ -119,10 +121,23 @@ export class SettingsComponent implements OnInit {
         this.isCleanningAll = false;
         return false;
     }
+
+    isCheckingUpdates = false;
+    checkForUpdates(): boolean {
+        this.isCheckingUpdates = true;
+        this.serviceWorkersService.checkForUpdates()
+            .catch(err => {
+                console.error(err);
+            })
+            .then(() => {
+                this.isCheckingUpdates = false;
+            });
+        return false;
+    }
 }
 
 
 enum ColumnShortcut {
-    Ctrl = 1, 
+    Ctrl = 1,
     Win = 2
 }
