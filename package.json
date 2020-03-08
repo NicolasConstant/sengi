@@ -21,9 +21,9 @@
         "test-nowatch": "ng test --watch=false",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "electron": "ng build --prod && electron .",
+        "electron": "electron .",
+        "electron-prod": "ng build --prod && electron .",
         "electron-debug": "ng build && electron .",
-        "electron-test": "electron .",
         "dist": "npm run build && electron-builder --publish onTagOrDraft",
         "travis": "electron-builder --publish onTagOrDraft"
     },

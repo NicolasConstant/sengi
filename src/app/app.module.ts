@@ -23,7 +23,7 @@ import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.c
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
 import { StreamComponent } from "./components/stream/stream.component";
 import { StreamsSelectionFooterComponent } from "./components/streams-selection-footer/streams-selection-footer.component";
-import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
+// import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
@@ -84,10 +84,10 @@ import { environment } from '../environments/environment';
 
 
 const routes: Routes = [
-    { path: "", redirectTo: "home", pathMatch: "full" },
-    { path: "home", component: StreamsMainDisplayComponent },
-    { path: "register", component: RegisterNewAccountComponent },
-    { path: "**", redirectTo: "home" }
+    { path: "", component: StreamsMainDisplayComponent },
+    // { path: "home", component: StreamsMainDisplayComponent },
+    // { path: "register", component: RegisterNewAccountComponent },
+    { path: "**", redirectTo: "" }
 ];
 
 @NgModule({
@@ -98,7 +98,7 @@ const routes: Routes = [
         StreamComponent,
         StreamsSelectionFooterComponent,
         StatusComponent,
-        RegisterNewAccountComponent,
+        // RegisterNewAccountComponent,
         AccountIconComponent,
         FloatingColumnComponent,
         ManageAccountComponent,
