@@ -1,6 +1,6 @@
 {
     "name": "sengi",
-    "version": "0.20.1",
+    "version": "0.21.0",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
@@ -12,7 +12,7 @@
         "type": "git",
         "url": "https://github.com/NicolasConstant/sengi.git"
     },
-    "scripts": { 
+    "scripts": {
         "ng": "ng",
         "start": "ng serve",
         "start-mem": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",
@@ -21,9 +21,11 @@
         "test-nowatch": "ng test --watch=false",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "electron": "ng build --prod && electron .",
+        "electron": "electron .",
+        "electron-prod": "ng build --prod && electron .",
         "electron-debug": "ng build && electron .",
-        "dist": "npm run build && electron-builder --publish onTagOrDraft"
+        "dist": "npm run build && electron-builder --publish onTagOrDraft",
+        "travis": "electron-builder --publish onTagOrDraft"
     },
     "private": true,
     "dependencies": {
@@ -36,7 +38,9 @@
         "@angular/http": "^7.2.7",
         "@angular/platform-browser": "^7.2.7",
         "@angular/platform-browser-dynamic": "^7.2.7",
+        "@angular/pwa": "^0.12.4",
         "@angular/router": "^7.2.7",
+        "@angular/service-worker": "^7.2.7",
         "@ctrl/ngx-emoji-mart": "^0.17.0",
         "@fortawesome/angular-fontawesome": "^0.3.0",
         "@fortawesome/fontawesome-svg-core": "^1.2.13",
@@ -66,7 +70,7 @@
         "@types/jasminewd2": "~2.0.3",
         "@types/node": "~8.9.4",
         "codelyzer": "~4.2.1",
-        "electron": "^4.0.6",
+        "electron": "^8.0.2",
         "electron-builder": "^20.39.0",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
@@ -89,6 +93,7 @@
         "productName": "Sengi",
         "appId": "org.sengi.desktop",
         "artifactName": "${productName}-${version}-${os}.${ext}",
+        "npmRebuild": false,
         "directories": {
             "output": "release"
         },

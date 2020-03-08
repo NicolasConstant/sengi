@@ -23,7 +23,7 @@ import { LeftSideBarComponent } from "./components/left-side-bar/left-side-bar.c
 import { StreamsMainDisplayComponent } from "./pages/streams-main-display/streams-main-display.component";
 import { StreamComponent } from "./components/stream/stream.component";
 import { StreamsSelectionFooterComponent } from "./components/streams-selection-footer/streams-selection-footer.component";
-import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
+// import { RegisterNewAccountComponent } from "./pages/register-new-account/register-new-account.component";
 import { AuthService } from "./services/auth.service";
 import { StreamingService } from "./services/streaming.service";
 import { RegisteredAppsState } from "./states/registered-apps.state";
@@ -79,13 +79,15 @@ import { ScheduledStatusesComponent } from './components/floating-column/schedul
 import { ScheduledStatusComponent } from './components/floating-column/scheduled-statuses/scheduled-status/scheduled-status.component';
 import { StreamNotificationsComponent } from './components/stream/stream-notifications/stream-notifications.component';
 import { NotificationComponent } from './components/floating-column/manage-account/notifications/notification/notification.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 const routes: Routes = [
-    { path: "", redirectTo: "home", pathMatch: "full" },
-    { path: "home", component: StreamsMainDisplayComponent },
-    { path: "register", component: RegisterNewAccountComponent },
-    { path: "**", redirectTo: "home" }
+    { path: "", component: StreamsMainDisplayComponent },
+    // { path: "home", component: StreamsMainDisplayComponent },
+    // { path: "register", component: RegisterNewAccountComponent },
+    { path: "**", redirectTo: "" }
 ];
 
 @NgModule({
@@ -96,7 +98,7 @@ const routes: Routes = [
         StreamComponent,
         StreamsSelectionFooterComponent,
         StatusComponent,
-        RegisterNewAccountComponent,
+        // RegisterNewAccountComponent,
         AccountIconComponent,
         FloatingColumnComponent,
         ManageAccountComponent,
@@ -167,7 +169,8 @@ const routes: Routes = [
         ]),
         NgxsStoragePluginModule.forRoot(),
         ContextMenuModule.forRoot(),
-        HotkeyModule.forRoot()
+        HotkeyModule.forRoot(),
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
     ],
     providers: [AuthService, NavigationService, NotificationService, MastodonWrapperService, MastodonService, StreamingService],
     bootstrap: [AppComponent],
