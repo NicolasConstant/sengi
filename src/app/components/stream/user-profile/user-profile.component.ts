@@ -106,9 +106,11 @@ export class UserProfileComponent implements OnInit {
                 this.relationShipError = false;
                 this.toolsService.findAccount(userAccount, this.lastAccountName)
                     .then((account: Account) => {
+                        if(!account) throw Error(`Could not find ${this.lastAccountName}`);
+
                         return this.getFollowStatus(userAccount, account);
                     })
-                    .catch((err: HttpErrorResponse) => {
+                    .catch((err) => {
                         console.error(err);
                         this.relationShipError =  true;
                     })
@@ -160,6 +162,8 @@ export class UserProfileComponent implements OnInit {
             .then((account: Account) => {
                 this.isLoading = false;
                 this.statusLoading = true;
+
+                if(!account) throw Error(`Could not find ${this.lastAccountName}`);
 
                 this.displayedAccount = this.fixPleromaFieldsUrl(account);
                 this.hasNote = account && account.note && account.note !== '<p></p>';
