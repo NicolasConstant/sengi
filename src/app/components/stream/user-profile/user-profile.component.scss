@@ -21,6 +21,11 @@ $floating-header-height: 60px;
     // width: $stream-column-width;
     overflow: auto;
 
+    &__not-found {
+        padding-top: 15px;
+        text-align: center;
+    }
+
     &__floating-header {
         transition: all .2s;
         transition-timing-function: ease-in;

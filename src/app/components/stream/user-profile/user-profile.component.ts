@@ -153,6 +153,12 @@ export class UserProfileComponent implements OnInit {
         this.currentlyUsedAccount = this.toolsService.getSelectedAccounts()[0];
 
         return this.toolsService.findAccount(this.currentlyUsedAccount, this.lastAccountName)
+            // .then((account: Account) => {
+            //     if(account != null) return account;
+
+            //     let fullName = `https://${this.lastAccountName.split('@')[2]}/@${this.lastAccountName.split('@')[1]}`;
+            //     return this.toolsService.findAccount(this.currentlyUsedAccount, fullName);
+            // })
             .then((account: Account) => {
                 this.isLoading = false;
                 this.statusLoading = true;
@@ -170,7 +176,7 @@ export class UserProfileComponent implements OnInit {
                 return Promise.all([getFollowStatusPromise, getStatusesPromise, getPinnedStatusesPromise]);
             })
             .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err, this.currentlyUsedAccount);
+                //this.notificationService.notifyHttpError(err, this.currentlyUsedAccount);
             })
             .then(() => {
                 this.isLoading = false;

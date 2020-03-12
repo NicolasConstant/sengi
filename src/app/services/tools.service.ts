@@ -11,7 +11,7 @@ import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.sta
 @Injectable({
     providedIn: 'root'
 })
-export class ToolsService {    
+export class ToolsService {
     private accountAvatar: { [id: string]: string; } = {};
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
@@ -99,31 +99,48 @@ export class ToolsService {
         return settings;
     }
 
-    saveSettings(settings: GlobalSettings){
+    saveSettings(settings: GlobalSettings) {
         this.store.dispatch([
             new SaveSettings(settings)
         ]);
     }
 
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {
+        let findAccountFunc = (result: Results) => {
+            if (accountName[0] === '@') accountName = accountName.substr(1);
+
+            const foundAccount = result.accounts.find(
+                x => (x.acct.toLowerCase() === accountName.toLowerCase()
+                    ||
+                    (x.acct.toLowerCase().split('@')[0] === accountName.toLowerCase().split('@')[0])
+                    && x.url.replace('https://', '').split('/')[0] === accountName.toLowerCase().split('@')[1])
+            );
+            return foundAccount;
+        };
+
+        let searchVersion: 'v1' | 'v2' = 'v1';
         return this.getInstanceInfo(account)
             .then(instance => {
-                let version: 'v1' | 'v2' = 'v1';
-                if (instance.major >= 3) version = 'v2';
-                return this.mastodonService.search(account, accountName, version, true);
+                //let version: 'v1' | 'v2' = 'v1';
+                if (instance.major >= 3) searchVersion = 'v2';
+                return this.mastodonService.search(account, accountName, searchVersion, true);
             })
-            .then((result: Results) => {
-                if (accountName[0] === '@') accountName = accountName.substr(1);
+            .then((results: Results) => {
+                return findAccountFunc(results);
+            })
+            .then((foundAccount: Account) => {
+                console.warn(accountName);
 
-                const foundAccount = result.accounts.find(
-                    x => (x.acct.toLowerCase() === accountName.toLowerCase()
-                        ||
-                        (x.acct.toLowerCase().split('@')[0] === accountName.toLowerCase().split('@')[0])
-                        && x.url.replace('https://', '').split('/')[0] === accountName.toLowerCase().split('@')[1])
-                );
-                return foundAccount;
+                if (foundAccount != null) return Promise.resolve(foundAccount);
+
+                console.error('tada');
+                let fullName = `https://${accountName.split('@')[1]}/@${accountName.split('@')[0]}`;
+                return this.mastodonService.search(account, fullName, searchVersion, true)
+                    .then((results: Results) => {
+                        return findAccountFunc(results);
+                    });
             });
-    }    
+    }
 
     getStatusUsableByAccount(account: AccountInfo, originalStatus: StatusWrapper): Promise<Status> {
         const isProvider = originalStatus.provider.id === account.id;
