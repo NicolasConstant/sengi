@@ -218,6 +218,18 @@ export class MastodonService {
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
     }
 
+    bookmark(account: AccountInfo, status: Status): Promise<Status> {
+        const route = `https://${account.instance}${this.apiRoutes.bookmarkingStatus}`.replace('{0}', status.id);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
+    }
+
+    unbookmark(account: AccountInfo, status: Status): Promise<Status> {
+        const route = `https://${account.instance}${this.apiRoutes.unbookmarkingStatus}`.replace('{0}', status.id);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise()
+    }
+
     getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
         let params = `?${this.formatArray(accountsToRetrieve.map(x => x.id.toString()), 'id')}`;
 

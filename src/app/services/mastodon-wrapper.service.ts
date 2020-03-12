@@ -183,6 +183,20 @@ export class MastodonWrapperService {
             });
     }
 
+    bookmark(account: AccountInfo, status: Status): Promise<Status> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.bookmark(refreshedAccount, status);
+            });
+    }
+
+    unbookmark(account: AccountInfo, status: Status): Promise<Status> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unbookmark(refreshedAccount, status);
+            });
+    }
+
     getRelationships(account: AccountInfo, accountsToRetrieve: Account[]): Promise<Relationship[]> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
