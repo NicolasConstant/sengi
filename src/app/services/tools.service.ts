@@ -129,11 +129,8 @@ export class ToolsService {
                 return findAccountFunc(results);
             })
             .then((foundAccount: Account) => {
-                console.warn(accountName);
-
                 if (foundAccount != null) return Promise.resolve(foundAccount);
 
-                console.error('tada');
                 let fullName = `https://${accountName.split('@')[1]}/@${accountName.split('@')[0]}`;
                 return this.mastodonService.search(account, fullName, searchVersion, true)
                     .then((results: Results) => {

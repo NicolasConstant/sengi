@@ -21,7 +21,7 @@
                         class="waiting-icon profile-header__follow--waiting">
                     </app-waiting-animation>
 
-                    <div *ngIf="!loadingRelationShip">
+                    <div *ngIf="!loadingRelationShip && !relationShipError">
                         <a href class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                             (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                             <fa-icon [icon]="faUserRegular"></fa-icon>
@@ -33,6 +33,11 @@
                         <a href class="profile-header__follow--button profile-header__follow--followed" title="pending"
                             (click)="unfollow()" *ngIf="relationship.requested">
                             <fa-icon [icon]="faHourglassHalf"></fa-icon>
+                        </a>
+                    </div>
+                    <div *ngIf="!loadingRelationShip && relationShipError">
+                        <a class="profile-header__follow--button profile-header__follow--followed" title="error when retrieving relationship">
+                            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                         </a>
                     </div>
                 </div>
@@ -68,7 +73,7 @@
                         class="waiting-icon profile-header__follow--waiting">
                     </app-waiting-animation>
 
-                    <div *ngIf="!loadingRelationShip">
+                    <div *ngIf="!loadingRelationShip && !relationShipError">
                         <a href class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                             (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                             <fa-icon [icon]="faUserRegular"></fa-icon>
@@ -80,6 +85,11 @@
                         <a href class="profile-header__follow--button profile-header__follow--followed" title="pending"
                             (click)="unfollow()" *ngIf="relationship.requested">
                             <fa-icon [icon]="faHourglassHalf"></fa-icon>
+                        </a>
+                    </div>
+                    <div *ngIf="!loadingRelationShip && relationShipError">
+                        <a class="profile-header__follow--button profile-header__follow--followed" title="error when retrieving relationship">
+                            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                         </a>
                     </div>
                 </div>
