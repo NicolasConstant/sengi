@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
@@ -27,6 +27,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faEllipsisH = faEllipsisH;
     faLock = faLock;
     faEnvelope = faEnvelope;
+    faBookmark = faBookmark;
 
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
@@ -34,6 +35,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
+    isBookmarked: boolean;
     isFavorited: boolean;
     isBoosted: boolean;
     isDM: boolean;
@@ -41,6 +43,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     isBoostLocked: boolean;
     isLocked: boolean;
 
+    bookmarkingIsLoading: boolean;
     favoriteIsLoading: boolean;
     boostIsLoading: boolean;
 
@@ -232,6 +235,18 @@ export class ActionBarComponent implements OnInit, OnDestroy {
                 this.statusStateService.statusFavoriteStatusChanged(this.displayedStatus.url, account.id, this.favoriteStatePerAccountId[account.id]);
                 this.favoriteIsLoading = false;
             });
+
+        return false;
+    }
+
+    bookmark(): boolean {
+        if (this.bookmarkingIsLoading) return;
+
+        this.bookmarkingIsLoading = true;
+        setTimeout(() => {
+            this.isBookmarked = !this.isBookmarked;
+            this.bookmarkingIsLoading = false;
+        }, 2000);
 
         return false;
     }
