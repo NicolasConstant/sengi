@@ -61,6 +61,14 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
+    processAndBrowseAccount(account: Account): boolean {
+        if(account){
+            const fullHandle = this.toolsService.getAccountFullHandle(account);
+            this.browseAccountEvent.next(fullHandle);
+        }
+        return false;
+    }
+
     private lastAccountUsed: AccountInfo;
     private search(data: string) {
         if (!data) return;
