@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { faAt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { faBell, faEnvelope, faUser, faStar } from "@fortawesome/free-regular-svg-icons";
+import { faBell, faEnvelope, faUser, faStar, faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../models/account.models';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
-import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
+import { OpenThreadEvent, ToolsService, InstanceInfo } from '../../../services/tools.service';
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { Account } from "../../../services/models/mastodon.interfaces";
 import { NotificationService } from '../../../services/notification.service';
@@ -24,10 +24,12 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     faUser = faUser;
     faStar = faStar;
     faUserPlus = faUserPlus;
+    faBookmark = faBookmark;
 
-    subPanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' = 'account';
+    subPanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' | 'bookmarks' = 'account';
     hasNotifications = false;
     hasMentions = false;
+    isBookmarksAvailable = false;
 
     userAccount: Account;
 
@@ -38,6 +40,7 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     @Input('account')
     set account(acc: AccountWrapper) {
         this._account = acc;
+        this.checkIfBookmarksAreAvailable();
         this.checkNotifications();
         this.getUserUrl(acc.info);
     }
@@ -54,11 +57,25 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService) { }
 
-    ngOnInit() {
+    ngOnInit() {        
     }
 
     ngOnDestroy(): void {
         this.userNotificationServiceSub.unsubscribe();
+    }
+
+    private checkIfBookmarksAreAvailable() {
+        this.toolsService.getInstanceInfo(this.account.info)
+            .then((instance: InstanceInfo) => {
+                if (instance.major >= 3 && instance.minor >= 1) {
+                    this.isBookmarksAvailable = true;
+                } else {
+                    this.isBookmarksAvailable = false;
+                }
+            })
+            .catch(err => {
+                this.isBookmarksAvailable = false;
+            });
     }
 
     private getUserUrl(account: AccountInfo) {
