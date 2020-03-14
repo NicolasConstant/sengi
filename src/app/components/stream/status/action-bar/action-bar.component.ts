@@ -77,7 +77,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.displayedStatus = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
 
-        if(this.displayedStatus.reblog){
+        if (this.displayedStatus.reblog) {
             this.displayedStatus = this.displayedStatus.reblog;
         }
 
@@ -97,9 +97,16 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
         this.statusStateSub = this.statusStateService.stateNotification.subscribe((state: StatusState) => {
             if (state && state.statusId === this.displayedStatus.url) {
-                this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
-                this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
-                this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
+
+                if (state.isFavorited) {
+                    this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
+                }
+                if (state.isRebloged) {
+                    this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+                }
+                if (state.isBookmarked) {
+                    this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
+                }
 
                 this.checkIfFavorited();
                 this.checkIfBoosted();
@@ -145,13 +152,13 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         if (status.sensitive || status.spoiler_text) {
             this.isContentWarningActive = true;
         }
-        
+
         this.checkIfBookmarksAreAvailable(this.selectedAccounts[0]);
         this.checkIfFavorited();
         this.checkIfBoosted();
         this.checkIfBookmarked();
     }
-   
+
 
     showContent(): boolean {
         this.isContentWarningActive = false;
@@ -320,7 +327,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private checkIfBookmarksAreAvailable(account: AccountInfo) {
         this.toolsService.getInstanceInfo(account)
             .then((instance: InstanceInfo) => {
-                if(instance.major >= 3 && instance.minor >= 1){
+                if (instance.major >= 3 && instance.minor >= 1) {
                     this.isBookmarksAvailable = true;
                 } else {
                     this.isBookmarksAvailable = false;

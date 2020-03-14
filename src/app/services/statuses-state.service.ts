@@ -29,7 +29,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, false, false);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isFavorited = isFavorited;
         }
@@ -42,7 +42,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, false, isRebloged, false);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, isRebloged, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isRebloged = isRebloged;
         }
@@ -55,7 +55,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, false, false, isBookmarked);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, isBookmarked);
         } else {
             this.cachedStatusStates[statusId][accountId].isBookmarked = isBookmarked;
         }
