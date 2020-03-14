@@ -73,20 +73,16 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        const status = this.statusWrapper.status;
+        this.displayedStatus = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
 
-        if (status.reblog) {
-            this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
-            this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
-            this.bookmarkStatePerAccountId[account.id] = status.reblog.bookmarked;
-            this.displayedStatus = status.reblog;
-        } else {
-            this.favoriteStatePerAccountId[account.id] = status.favourited;
-            this.bootedStatePerAccountId[account.id] = status.reblogged;
-            this.bookmarkStatePerAccountId[account.id] = status.bookmarked;
-            this.displayedStatus = status;
+        if(this.displayedStatus.reblog){
+            this.displayedStatus = this.displayedStatus.reblog;
         }
+
+        this.favoriteStatePerAccountId[account.id] = this.displayedStatus.favourited;
+        this.bootedStatePerAccountId[account.id] = this.displayedStatus.reblogged;
+        this.bookmarkStatePerAccountId[account.id] = this.displayedStatus.bookmarked;
 
         this.analyseMemoryStatus();
 
