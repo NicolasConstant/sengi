@@ -1,6 +1,6 @@
 <div class="outer-profile">
     <div class="profile flexcroll" #statusstream (scroll)="onScroll()">
-        <div *ngIf="!isLoading" class="profile__floating-header"
+        <div *ngIf="!isLoading && displayedAccount" class="profile__floating-header"
             [ngStyle]="{'background-image':'url('+displayedAccount.header+')'}"
             [class.profile__floating-header__activated]="showFloatingHeader">
             <div class="profile__floating-header__inner">
@@ -21,7 +21,7 @@
                         class="waiting-icon profile-header__follow--waiting">
                     </app-waiting-animation>
 
-                    <div *ngIf="!loadingRelationShip">
+                    <div *ngIf="!loadingRelationShip && !relationShipError">
                         <a href class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                             (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                             <fa-icon [icon]="faUserRegular"></fa-icon>
@@ -35,11 +35,20 @@
                             <fa-icon [icon]="faHourglassHalf"></fa-icon>
                         </a>
                     </div>
+                    <div *ngIf="!loadingRelationShip && relationShipError">
+                        <a class="profile-header__follow--button profile-header__follow--followed" title="error when retrieving relationship">
+                            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+
+        <div *ngIf="!isLoading && !displayedAccount" class="profile__not-found">
+            account couldn't be found.
+        </div>
 
         <div class="profile__moved" *ngIf="displayedAccount && displayedAccount.moved">
             <span innerHTML="{{displayedAccount | accountEmoji }}"></span> has moved to <br /><a href
@@ -64,7 +73,7 @@
                         class="waiting-icon profile-header__follow--waiting">
                     </app-waiting-animation>
 
-                    <div *ngIf="!loadingRelationShip">
+                    <div *ngIf="!loadingRelationShip && !relationShipError">
                         <a href class="profile-header__follow--button profile-header__follow--unfollowed" title="follow"
                             (click)="follow()" *ngIf="!relationship.following && !relationship.requested">
                             <fa-icon [icon]="faUserRegular"></fa-icon>
@@ -76,6 +85,11 @@
                         <a href class="profile-header__follow--button profile-header__follow--followed" title="pending"
                             (click)="unfollow()" *ngIf="relationship.requested">
                             <fa-icon [icon]="faHourglassHalf"></fa-icon>
+                        </a>
+                    </div>
+                    <div *ngIf="!loadingRelationShip && relationShipError">
+                        <a class="profile-header__follow--button profile-header__follow--followed" title="error when retrieving relationship">
+                            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                         </a>
                     </div>
                 </div>
@@ -97,7 +111,7 @@
             </app-status-user-context-menu>
         </div>
 
-        <div class="profile-sub-header">
+        <div *ngIf="displayedAccount" class="profile-sub-header">
 
             <div *ngIf="displayedAccount">
                 <div class="profile-name">

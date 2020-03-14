@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData } from "./models/mastodon.interfaces";
 import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
-import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService } from './mastodon.service';
+import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult } from './mastodon.service';
 import { AuthService } from './auth.service';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
@@ -148,6 +148,13 @@ export class MastodonWrapperService {
             });
     }
 
+    getBookmarks(account: AccountInfo, maxId: string = null): Promise<BookmarkResult> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.getBookmarks(refreshedAccount, maxId);
+            });
+    }
+
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false, resolve = true): Promise<Account[]> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
@@ -180,6 +187,20 @@ export class MastodonWrapperService {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.unfavorite(refreshedAccount, status);
+            });
+    }
+
+    bookmark(account: AccountInfo, status: Status): Promise<Status> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.bookmark(refreshedAccount, status);
+            });
+    }
+
+    unbookmark(account: AccountInfo, status: Status): Promise<Status> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unbookmark(refreshedAccount, status);
             });
     }
 

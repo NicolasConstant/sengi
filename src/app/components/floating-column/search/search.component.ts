@@ -54,15 +54,24 @@ export class SearchComponent implements OnInit {
         return false;
     }
 
-    browseAccount(account: Account): boolean {
-        let accountName = this.toolsService.getAccountFullHandle(account);
-        this.browseAccountEvent.next(accountName);
+    browseAccount(account: string): boolean {
+        if (account) {
+            this.browseAccountEvent.next(account);
+        }
+        return false;
+    }
+
+    processAndBrowseAccount(account: Account): boolean {
+        if(account){
+            const fullHandle = this.toolsService.getAccountFullHandle(account);
+            this.browseAccountEvent.next(fullHandle);
+        }
         return false;
     }
 
     private lastAccountUsed: AccountInfo;
     private search(data: string) {
-        if(!data) return;
+        if (!data) return;
 
         this.accounts.length = 0;
         this.statuses.length = 0;

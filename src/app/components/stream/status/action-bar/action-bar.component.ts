@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose, faReply, faRetweet, faStar, faEllipsisH, faLock, faEnvelope, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular-svg-icons";
 
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Status, Account, Results } from '../../../../services/models/mastodon.interfaces';
-import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
+import { ToolsService, OpenThreadEvent, InstanceInfo } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { StatusesStateService, StatusState } from '../../../../services/statuses-state.service';
@@ -27,6 +27,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     faEllipsisH = faEllipsisH;
     faLock = faLock;
     faEnvelope = faEnvelope;
+    faBookmark = faBookmark;
 
     @Input() statusWrapper: StatusWrapper;
     @Output() replyEvent = new EventEmitter();
@@ -34,13 +35,16 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
+    isBookmarked: boolean;
     isFavorited: boolean;
     isBoosted: boolean;
     isDM: boolean;
 
     isBoostLocked: boolean;
     isLocked: boolean;
+    isBookmarksAvailable: boolean;
 
+    bookmarkingIsLoading: boolean;
     favoriteIsLoading: boolean;
     boostIsLoading: boolean;
 
@@ -53,6 +57,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     private favoriteStatePerAccountId: { [id: string]: boolean; } = {};
     private bootedStatePerAccountId: { [id: string]: boolean; } = {};
+    private bookmarkStatePerAccountId: { [id: string]: boolean; } = {};
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
@@ -69,18 +74,16 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        const status = this.statusWrapper.status;
+        this.displayedStatus = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
 
-        if (status.reblog) {
-            this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
-            this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
-            this.displayedStatus = status.reblog;
-        } else {
-            this.favoriteStatePerAccountId[account.id] = status.favourited;
-            this.bootedStatePerAccountId[account.id] = status.reblogged;
-            this.displayedStatus = status;
+        if (this.displayedStatus.reblog) {
+            this.displayedStatus = this.displayedStatus.reblog;
         }
+
+        this.favoriteStatePerAccountId[account.id] = this.displayedStatus.favourited;
+        this.bootedStatePerAccountId[account.id] = this.displayedStatus.reblogged;
+        this.bookmarkStatePerAccountId[account.id] = this.displayedStatus.bookmarked;
 
         this.analyseMemoryStatus();
 
@@ -94,11 +97,20 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
         this.statusStateSub = this.statusStateService.stateNotification.subscribe((state: StatusState) => {
             if (state && state.statusId === this.displayedStatus.url) {
-                this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
-                this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+
+                if (state.isFavorited) {
+                    this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
+                }
+                if (state.isRebloged) {
+                    this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+                }
+                if (state.isBookmarked) {
+                    this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
+                }
 
                 this.checkIfFavorited();
                 this.checkIfBoosted();
+                this.checkIfBookmarked();
             }
         });
     }
@@ -115,6 +127,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         memoryStatusState.forEach((state: StatusState) => {
             this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
             this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+            this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
         });
     }
 
@@ -140,9 +153,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.isContentWarningActive = true;
         }
 
+        this.checkIfBookmarksAreAvailable(this.selectedAccounts[0]);
         this.checkIfFavorited();
         this.checkIfBoosted();
+        this.checkIfBookmarked();
     }
+
 
     showContent(): boolean {
         this.isContentWarningActive = false;
@@ -236,6 +252,49 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    bookmark(): boolean {
+        if (this.bookmarkingIsLoading) return;
+
+        this.bookmarkingIsLoading = true;
+
+        const account = this.toolsService.getSelectedAccounts()[0];
+        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+        usableStatus
+            .then((status: Status) => {
+                if (this.isBookmarked && status.bookmarked) {
+                    return this.mastodonService.unbookmark(account, status);
+                } else if (!this.isBookmarked && !status.bookmarked) {
+                    return this.mastodonService.bookmark(account, status);
+                } else {
+                    return Promise.resolve(status);
+                }
+            })
+            .then((bookmarkedStatus: Status) => {
+                let bookmarked = bookmarkedStatus.bookmarked; //FIXME: when pixelfed will return the good status
+                if (bookmarked === null) {
+                    bookmarked = !this.bookmarkStatePerAccountId[account.id];
+                }
+                this.bookmarkStatePerAccountId[account.id] = bookmarked;
+                this.checkIfBookmarked();
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err, account);
+            })
+            .then(() => {
+                this.statusStateService.statusBookmarkStatusChanged(this.displayedStatus.url, account.id, this.bookmarkStatePerAccountId[account.id]);
+                this.bookmarkingIsLoading = false;
+            });
+
+
+
+        // setTimeout(() => {
+        //     this.isBookmarked = !this.isBookmarked;
+        //     this.bookmarkingIsLoading = false;
+        // }, 2000);
+
+        return false;
+    }
+
     private checkIfBoosted() {
         const selectedAccount = <AccountInfo>this.selectedAccounts[0];
         if (selectedAccount) {
@@ -253,6 +312,30 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         } else {
             this.isFavorited = false;
         }
+    }
+
+    private checkIfBookmarked() {
+        const selectedAccount = <AccountInfo>this.selectedAccounts[0];
+
+        if (selectedAccount) {
+            this.isBookmarked = this.bookmarkStatePerAccountId[selectedAccount.id];
+        } else {
+            this.isBookmarked = false;
+        }
+    }
+
+    private checkIfBookmarksAreAvailable(account: AccountInfo) {
+        this.toolsService.getInstanceInfo(account)
+            .then((instance: InstanceInfo) => {
+                if (instance.major >= 3 && instance.minor >= 1) {
+                    this.isBookmarksAvailable = true;
+                } else {
+                    this.isBookmarksAvailable = false;
+                }
+            })
+            .catch(err => {
+                this.isBookmarksAvailable = false;
+            });
     }
 
     browseThread(event: OpenThreadEvent) {

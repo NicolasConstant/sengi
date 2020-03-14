@@ -187,6 +187,7 @@ export interface Status {
     language: string;
     pinned: boolean;
     muted: boolean;
+    bookmarked: boolean;
     card: Card;
     poll: Poll;    
 

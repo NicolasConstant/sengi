@@ -3,10 +3,16 @@
 
     <div class="account__header">
         <a href (click)="browseLocalAccount()" (auxclick)="openLocalAccount()" title="open {{ account.info.id }}">
-            <img class="account__avatar" src="{{account.avatar}}"/>
+            <img class="account__avatar" src="{{account.avatar}}" />
         </a>
 
         <!-- <a href class="account__header--button"><fa-icon [icon]="faUserPlus"></fa-icon></a> -->
+        <a *ngIf="isBookmarksAvailable" href class="account__header--button" title="bookmark"
+            (click)="loadSubPanel('bookmarks')"
+            [ngClass]="{ 'account__header--button--selected': subPanel === 'bookmarks' }">
+            <fa-icon [icon]="faBookmark"></fa-icon>
+        </a>
+
         <a href class="account__header--button" title="favorites" (click)="loadSubPanel('favorites')"
             [ngClass]="{ 'account__header--button--selected': subPanel === 'favorites' }">
             <fa-icon [icon]="faStar"></fa-icon>
@@ -29,6 +35,9 @@
         </a>
     </div>
 
+    <app-bookmarks class="account__body" *ngIf="subPanel === 'bookmarks'" [account]="account"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-bookmarks>
     <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-direct-messages>
