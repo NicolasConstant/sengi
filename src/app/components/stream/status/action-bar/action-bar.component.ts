@@ -56,6 +56,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     private favoriteStatePerAccountId: { [id: string]: boolean; } = {};
     private bootedStatePerAccountId: { [id: string]: boolean; } = {};
+    private bookmarkStatePerAccountId: { [id: string]: boolean; } = {};
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
@@ -78,10 +79,12 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         if (status.reblog) {
             this.favoriteStatePerAccountId[account.id] = status.reblog.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblog.reblogged;
+            this.bookmarkStatePerAccountId[account.id] = status.reblog.bookmarked;
             this.displayedStatus = status.reblog;
         } else {
             this.favoriteStatePerAccountId[account.id] = status.favourited;
             this.bootedStatePerAccountId[account.id] = status.reblogged;
+            this.bookmarkStatePerAccountId[account.id] = status.bookmarked;
             this.displayedStatus = status;
         }
 
@@ -99,9 +102,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             if (state && state.statusId === this.displayedStatus.url) {
                 this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
                 this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+                this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
 
                 this.checkIfFavorited();
                 this.checkIfBoosted();
+                this.checkIfBookmarked();
             }
         });
     }
@@ -118,6 +123,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         memoryStatusState.forEach((state: StatusState) => {
             this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
             this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
+            this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
         });
     }
 
@@ -145,6 +151,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
         this.checkIfFavorited();
         this.checkIfBoosted();
+        this.checkIfBookmarked();
     }
 
     showContent(): boolean {
@@ -243,10 +250,41 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         if (this.bookmarkingIsLoading) return;
 
         this.bookmarkingIsLoading = true;
-        setTimeout(() => {
-            this.isBookmarked = !this.isBookmarked;
-            this.bookmarkingIsLoading = false;
-        }, 2000);
+
+        const account = this.toolsService.getSelectedAccounts()[0];
+        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+        usableStatus
+            .then((status: Status) => {
+                if (this.isBookmarked && status.bookmarked) {
+                    return this.mastodonService.unbookmark(account, status);
+                } else if (!this.isBookmarked && !status.bookmarked) {
+                    return this.mastodonService.bookmark(account, status);
+                } else {
+                    return Promise.resolve(status);
+                }
+            })
+            .then((bookmarkedStatus: Status) => {
+                let bookmarked = bookmarkedStatus.bookmarked; //FIXME: when pixelfed will return the good status
+                if (bookmarked === null) {
+                    bookmarked = !this.bookmarkStatePerAccountId[account.id];
+                }
+                this.bookmarkStatePerAccountId[account.id] = bookmarked;
+                this.checkIfBookmarked();
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.notificationService.notifyHttpError(err, account);
+            })
+            .then(() => {
+                this.statusStateService.statusBookmarkStatusChanged(this.displayedStatus.url, account.id, this.bookmarkStatePerAccountId[account.id]);
+                this.bookmarkingIsLoading = false;
+            });
+
+
+
+        // setTimeout(() => {
+        //     this.isBookmarked = !this.isBookmarked;
+        //     this.bookmarkingIsLoading = false;
+        // }, 2000);
 
         return false;
     }
@@ -267,6 +305,16 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.isFavorited = this.favoriteStatePerAccountId[selectedAccount.id];
         } else {
             this.isFavorited = false;
+        }
+    }
+
+    private checkIfBookmarked() {
+        const selectedAccount = <AccountInfo>this.selectedAccounts[0];
+
+        if (selectedAccount) {
+            this.isBookmarked = this.bookmarkStatePerAccountId[selectedAccount.id];
+        } else {
+            this.isBookmarked = false;
         }
     }
 
