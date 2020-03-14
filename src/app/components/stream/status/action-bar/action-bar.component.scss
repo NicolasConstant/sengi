@@ -36,8 +36,10 @@
             font-size: 17px;
         }
         
-        &--bookmark {            
+        &--bookmark {
+            display: inline-block;  
             position: relative;
+            padding: 0 8px;
             // bottom: -1px;
             font-size: 16px;
         }
