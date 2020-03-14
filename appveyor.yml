@@ -31,7 +31,7 @@ test_script:
     }
 - npm run dist
 - ps: >- 
-    Remove-Item '\dist\assets\emoji' -Recurse
+    Remove-Item 'C:\projects\sengi\dist\assets\emoji' -Recurse
 artifacts:
 - path: dist
 deploy:
