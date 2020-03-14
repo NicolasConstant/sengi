@@ -7,7 +7,8 @@
         </a>
 
         <!-- <a href class="account__header--button"><fa-icon [icon]="faUserPlus"></fa-icon></a> -->
-        <a *ngIf="isBookmarksAvailable" href class="account__header--button" title="bookmark" (click)="loadSubPanel('bookmarks')"
+        <a *ngIf="isBookmarksAvailable" href class="account__header--button" title="bookmark"
+            (click)="loadSubPanel('bookmarks')"
             [ngClass]="{ 'account__header--button--selected': subPanel === 'bookmarks' }">
             <fa-icon [icon]="faBookmark"></fa-icon>
         </a>
@@ -34,6 +35,9 @@
         </a>
     </div>
 
+    <app-bookmarks class="account__body" *ngIf="subPanel === 'bookmarks'" [account]="account"
+        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+        (browseThreadEvent)="browseThread($event)"></app-bookmarks>
     <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-direct-messages>

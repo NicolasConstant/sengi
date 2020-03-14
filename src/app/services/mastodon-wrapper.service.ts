@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData } from "./models/mastodon.interfaces";
 import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
-import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService } from './mastodon.service';
+import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult } from './mastodon.service';
 import { AuthService } from './auth.service';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
@@ -145,6 +145,13 @@ export class MastodonWrapperService {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getFavorites(refreshedAccount, maxId);
+            });
+    }
+
+    getBookmarks(account: AccountInfo, maxId: string = null): Promise<BookmarkResult> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.getBookmarks(refreshedAccount, maxId);
             });
     }
 

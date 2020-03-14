@@ -188,6 +188,26 @@ export class MastodonService {
             });
     }
 
+    getBookmarks(account: AccountInfo, maxId: string = null): Promise<BookmarkResult> {
+        let route = `https://${account.instance}${this.apiRoutes.getBookmarks}`;
+
+        if (maxId) route += `?max_id=${maxId}`;
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get(route, { headers: headers, observe: "response" }).toPromise()
+            .then((res: HttpResponse<Status[]>) => {                
+                const link = res.headers.get('Link');
+                let lastId = null;
+                if(link){
+                    const maxId = link.split('max_id=')[1];
+                    if(maxId){
+                        lastId = maxId.split('>;')[0];
+                    }
+                }
+                return new BookmarkResult(lastId, res.body);
+            });
+    }
+
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false, resolve = true): Promise<Account[]> {
         const route = `https://${account.instance}${this.apiRoutes.searchForAccounts}?q=${query}&limit=${limit}&following=${following}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
@@ -463,4 +483,10 @@ export class FavoriteResult {
     constructor(
         public max_id: string,
         public favorites: Status[]) {}   
+}
+
+export class BookmarkResult {
+    constructor(
+        public max_id: string,
+        public bookmarked: Status[]) {}   
 }

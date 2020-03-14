@@ -3,17 +3,17 @@ import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef }
 import { StatusWrapper } from '../../../../models/common.model';
 import { OpenThreadEvent } from '../../../../services/tools.service';
 import { AccountWrapper } from '../../../../models/account.models';
-import { FavoriteResult } from '../../../../services/mastodon.service';
+import { FavoriteResult, BookmarkResult } from '../../../../services/mastodon.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../../services/notification.service';
 
 @Component({
-    selector: 'app-favorites',
+    selector: 'app-bookmarks',
     templateUrl: '../../../stream/stream-statuses/stream-statuses.component.html',
-    styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss', './favorites.component.scss']
+    styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss', './bookmarks.component.scss']
 })
-export class FavoritesComponent implements OnInit {
+export class BookmarksComponent implements OnInit {
     statuses: StatusWrapper[] = [];
     displayError: string;
     isLoading = true;
@@ -33,13 +33,14 @@ export class FavoritesComponent implements OnInit {
     @Input('account')
     set account(acc: AccountWrapper) {
         this._account = acc;
-        this.getFavorites();
+        this.getBookmarks();
     }
     get account(): AccountWrapper {
         return this._account;
     }
 
     @ViewChild('statusstream') public statustream: ElementRef;
+
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -48,20 +49,20 @@ export class FavoritesComponent implements OnInit {
     ngOnInit() {
     }
 
-    private reset(){
+    private reset() {
         this.isLoading = true;
         this.statuses.length = 0;
         this.maxReached = false;
         this.maxId = null;
     }
 
-    private getFavorites() {
+    private getBookmarks() {
         this.reset();
 
-        this.mastodonService.getFavorites(this.account.info)
-            .then((result: FavoriteResult) => {
+        this.mastodonService.getBookmarks(this.account.info)
+            .then((result: BookmarkResult) => {
                 this.maxId = result.max_id;
-                for (const s of result.favorites) {
+                for (const s of result.bookmarked) {
                     const wrapper = new StatusWrapper(s, this.account.info);
                     this.statuses.push(wrapper);
                 }
@@ -72,7 +73,6 @@ export class FavoritesComponent implements OnInit {
             .then(() => {
                 this.isLoading = false;
             });
-
     }
 
     onScroll() {
@@ -89,9 +89,9 @@ export class FavoritesComponent implements OnInit {
         if (this.isLoading || this.maxReached) return;
 
         this.isLoading = true;
-        this.mastodonService.getFavorites(this.account.info, this.maxId)
-            .then((result: FavoriteResult) => {
-                const statuses = result.favorites;
+        this.mastodonService.getBookmarks(this.account.info, this.maxId)
+            .then((result: BookmarkResult) => {
+                const statuses = result.bookmarked;
                 if (statuses.length === 0 || !this.maxId) {
                     this.maxReached = true;
                     return;

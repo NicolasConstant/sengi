@@ -72,4 +72,5 @@ export class ApiRoutes {
     deleteScheduleStatus = '/api/v1/scheduled_statuses/{0}';
     bookmarkingStatus = '/api/v1/statuses/{0}/bookmark';
     unbookmarkingStatus = '/api/v1/statuses/{0}/unbookmark';
+    getBookmarks = '/api/v1/bookmarks';
 }
