@@ -8,7 +8,7 @@ import { faWindowClose as faWindowCloseRegular } from "@fortawesome/free-regular
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { Status, Account, Results } from '../../../../services/models/mastodon.interfaces';
-import { ToolsService, OpenThreadEvent } from '../../../../services/tools.service';
+import { ToolsService, OpenThreadEvent, InstanceInfo } from '../../../../services/tools.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { StatusesStateService, StatusState } from '../../../../services/statuses-state.service';
@@ -42,6 +42,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
     isBoostLocked: boolean;
     isLocked: boolean;
+    isBookmarksAvailable: boolean;
 
     bookmarkingIsLoading: boolean;
     favoriteIsLoading: boolean;
@@ -144,11 +145,13 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         if (status.sensitive || status.spoiler_text) {
             this.isContentWarningActive = true;
         }
-
+        
+        this.checkIfBookmarksAreAvailable(this.selectedAccounts[0]);
         this.checkIfFavorited();
         this.checkIfBoosted();
         this.checkIfBookmarked();
     }
+   
 
     showContent(): boolean {
         this.isContentWarningActive = false;
@@ -312,6 +315,20 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         } else {
             this.isBookmarked = false;
         }
+    }
+
+    private checkIfBookmarksAreAvailable(account: AccountInfo) {
+        this.toolsService.getInstanceInfo(account)
+            .then((instance: InstanceInfo) => {
+                if(instance.major >= 3 && instance.minor >= 1){
+                    this.isBookmarksAvailable = true;
+                } else {
+                    this.isBookmarksAvailable = false;
+                }
+            })
+            .catch(err => {
+                this.isBookmarksAvailable = false;
+            });
     }
 
     browseThread(event: OpenThreadEvent) {

@@ -20,11 +20,11 @@
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
-    <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--bookmark" title="Bookmark"
+    <a *ngIf="isBookmarksAvailable && !isLocked" href class="action-bar__link action-bar__link--bookmark" title="Bookmark"
         [class.bookmarked]="isBookmarked" [class.favoriting]="bookmarkingIsLoading" (click)="bookmark()">
         <fa-icon [icon]="faBookmark"></fa-icon>
     </a>
-    <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
+    <fa-icon *ngIf="isBookmarksAvailable && isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
     <a href class="action-bar__link action-bar__link--cw" title="show content" (click)="showContent()"
         *ngIf="isContentWarningActive">
