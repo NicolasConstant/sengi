@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class StatusesStateService {
+export class StatusesStateService {    
     private cachedStatusStates: { [statusId: string]: { [accountId: string]: StatusState } } = {};    
     public stateNotification = new Subject<StatusState>();
 
@@ -29,7 +29,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, false);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isFavorited = isFavorited;
         }
@@ -42,9 +42,22 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, false, isRebloged);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, isRebloged, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isRebloged = isRebloged;
+        }
+
+        this.stateNotification.next(this.cachedStatusStates[statusId][accountId]);
+    }
+
+    statusBookmarkStatusChanged(statusId: string, accountId: string, isBookmarked: boolean) {
+        if (!this.cachedStatusStates[statusId])
+            this.cachedStatusStates[statusId] = {};
+
+        if (!this.cachedStatusStates[statusId][accountId]) {
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, isBookmarked);
+        } else {
+            this.cachedStatusStates[statusId][accountId].isBookmarked = isBookmarked;
         }
 
         this.stateNotification.next(this.cachedStatusStates[statusId][accountId]);
@@ -52,10 +65,12 @@ export class StatusesStateService {
 }
 
 export class StatusState {
+    
     constructor(
         public statusId: string, 
         public accountId: string, 
         public isFavorited: boolean, 
-        public isRebloged: boolean) {
+        public isRebloged: boolean,
+        public isBookmarked: boolean) {
     }
 }

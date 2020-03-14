@@ -1,7 +1,7 @@
 @import "variables";
 
 .action-bar {
-    // outline: 1px solid greenyellow; // height: 20px;
+    //outline: 1px solid greenyellow; // height: 20px;
     margin: 5px 0px 5px $avatar-column-space;
     padding: 0;
     font-size: 18px;
@@ -10,16 +10,17 @@
     // transform: rotate(0.03deg);
 
     &__link {
+        //outline: 1px solid greenyellow;
         color: $status-secondary-color;
+        padding: 0 4px;
 
         &:hover {
             color: $status-links-color;
         }
 
         &:not(:last-child) {
-            margin-right: 15px;
+            margin-right: 8px;
         }
-
 
         &--reply {
             font-size: 20px;
@@ -33,6 +34,14 @@
 
         &--fav {
             font-size: 17px;
+        }
+        
+        &--bookmark {
+            display: inline-block;  
+            position: relative;
+            padding: 0 8px;
+            // bottom: -1px;
+            font-size: 16px;
         }
 
         &--cw {
@@ -86,6 +95,13 @@
     }
 }
 
+.bookmarked {
+    color: $bookmarked-color;
+
+    &:hover {
+        color: darken($bookmarked-color, 10);
+    }
+}
 
 @keyframes loadingAnimation {
     0% {

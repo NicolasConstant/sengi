@@ -81,6 +81,7 @@ import { StreamNotificationsComponent } from './components/stream/stream-notific
 import { NotificationComponent } from './components/floating-column/manage-account/notifications/notification/notification.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { BookmarksComponent } from './components/floating-column/manage-account/bookmarks/bookmarks.component';
 
 
 const routes: Routes = [
@@ -142,7 +143,8 @@ const routes: Routes = [
         ScheduledStatusesComponent,
         ScheduledStatusComponent,
         StreamNotificationsComponent,
-        NotificationComponent
+        NotificationComponent,
+        BookmarksComponent
     ],
     entryComponents: [
         EmojiPickerComponent
