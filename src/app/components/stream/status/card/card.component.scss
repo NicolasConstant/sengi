@@ -16,7 +16,8 @@
         display: block;
         text-decoration: none;
         color: whitesmoke;
-        overflow: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         border: 1px solid $card-border-color;
 
@@ -50,9 +51,9 @@
             margin: 11px 0 0 0px;
             font-size: 0.8em;
             opacity: .7;
+
+            text-overflow: ellipsis;
         }
-
-
     }
 
     &__photo {}
