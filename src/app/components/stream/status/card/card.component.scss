@@ -56,10 +56,9 @@
         }
     }
 
-    &__photo {}
+    //&__photo {}
 
     &__video {
-        // border-radius: 3px;
 
         $height-content: 150px;
 
@@ -70,7 +69,6 @@
                 position: absolute;
                 top: 55px;
                 left: 65px;
-                // outline: 2px solid greenyellow;
                 width: 100px;
                 height: 40px;
                 z-index: 10;
@@ -95,18 +93,16 @@
             &--image {
                 width: 100%;
                 height: $height-content;
-                // border: 1px solid salmon;
                 object-fit: cover;
             }
         }
 
         &--content {
-            //width: 300px;
             width: 100%;
             height: $height-content;
             background-color: #000;
         }
     }
 
-    &__rich {}
+    // &__rich {}
 }
