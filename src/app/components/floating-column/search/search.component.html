@@ -35,8 +35,10 @@
             <h3 class="search-results__title">Statuses</h3>
 
             <div class="search-results__status" *ngFor="let statusWrapper of statuses">
-                <app-status [statusWrapper]="statusWrapper" (browseAccountEvent)="browseAccount($event)"
-                    (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+                <app-status [statusWrapper]="statusWrapper" 
+                    (browseAccountEvent)="browseAccount($event)"
+                    (browseHashtagEvent)="browseHashtag($event)" 
+                    (browseThreadEvent)="browseThread($event)">
                 </app-status>
             </div>
         </div>
