@@ -39,28 +39,66 @@
         <div class="sub-section">
             <span class="sub-section__title">switch column:</span><br />
 
-            <input class="sub-section__checkbox" [checked]="columnShortcutEnabled === 1"
-                (change)="onShortcutChange(1)" type="radio" name="column-ctrl" value="column-ctrl"
-                id="column-ctrl">
+            <input class="sub-section__checkbox" [checked]="columnShortcutEnabled === 1" (change)="onShortcutChange(1)"
+                type="radio" name="column-ctrl" value="column-ctrl" id="column-ctrl">
             <label class="noselect sub-section__label" for="column-ctrl">Ctrl + Left | Ctrl + Right</label>
             <br>
 
-            <input class="sub-section__checkbox" [checked]="columnShortcutEnabled === 2"
-                (change)="onShortcutChange(2)" type="radio" name="colmun-win"
-                value="colmun-win" id="colmun-win">
+            <input class="sub-section__checkbox" [checked]="columnShortcutEnabled === 2" (change)="onShortcutChange(2)"
+                type="radio" name="colmun-win" value="colmun-win" id="colmun-win">
             <label class="noselect sub-section__label" for="colmun-win">Win + Alt + Left | Win + Alt + Right</label>
             <br>
 
-            <span class="sub-section__title" *ngIf="columnShortcutChanged">this settings needs a <a href (click)="reload()">reload</a> to be effective.</span>
+            <span class="sub-section__title" *ngIf="columnShortcutChanged">this settings needs a <a href
+                    (click)="reload()">reload</a> to be effective.</span>
+        </div>
+
+        <h4 class="panel__subtitle">Content-Warning Policies</h4>
+        <div class="sub-section">
+            <span class="sub-section__title">global behavior:</span><br />
+            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 0" (change)="onCwPolicyChange(0)"
+                type="radio" name="cw-none" value="cw-none" id="cw-none">
+            <label class="noselect sub-section__label" for="cw-none">None</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 1" (change)="onCwPolicyChange(1)"
+                type="radio" name="cw-hide-all" value="cw-hide-all" id="cw-hide-all">
+            <label class="noselect sub-section__label" for="cw-hide-all">Hide all CWs</label>
+            <br>
+            <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 1">
+                <span class="sub-section__title">but add CW on content containing:</span><br />
+                <div class="sub-text-input">
+                    <input type="text" class="form-control form-control-sm sub_section__text-input"
+                        [(ngModel)]="setAddCwOnContent" placeholder="example;other example" />
+                </div>
+            </div>
+
+            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 2" (change)="onCwPolicyChange(2)"
+                type="radio" name="cw-add-on-all" value="cw-add-on-all" id="cw-add-on-all">
+            <label class="noselect sub-section__label" for="cw-add-on-all">Add CW on all content</label>
+            <br>
+            <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 2">
+                <span class="sub-section__title">unless content is containing:</span><br />
+                <div class="sub-text-input">
+                    <input type="text" class="form-control form-control-sm sub_section__text-input"
+                        [(ngModel)]="setRemoveCwOnContent" placeholder="example;other example" />
+                </div>
+            </div>
+
+            <span class="sub-section__title">hide completely content containing:</span><br />
+            <div class="sub-text-input">
+                <input type="text" class="form-control form-control-sm sub_section__text-input"
+                    [(ngModel)]="setContentHidedCompletely" placeholder="example;other example" />
+            </div>
         </div>
 
         <h4 class="panel__subtitle">About</h4>
         <p class="version">
-            Sengi version: {{version}}<br/>
+            Sengi version: {{version}}<br />
             <a href class="version__link" (click)="checkForUpdates()">check for updates</a>
             <app-waiting-animation *ngIf="isCheckingUpdates" class="waiting-icon"></app-waiting-animation>
         </p>
-        
+
 
         <h4 class="panel__subtitle">RESET</h4>
         <div class="sub-section">
@@ -79,6 +117,7 @@
                 (click)="cancelClearAll()">
                 Cancel
             </a>
+            <br/>
         </div>
 
     </div>

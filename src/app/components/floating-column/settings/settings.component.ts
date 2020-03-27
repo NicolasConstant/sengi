@@ -27,6 +27,32 @@ export class SettingsComponent implements OnInit {
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     columnShortcutChanged = false;
 
+    contentWarningPolicy: ContentWarningPolicy = ContentWarningPolicy.None;
+
+    private addCwOnContent: string;
+    set setAddCwOnContent(value: string) {
+        this.addCwOnContent = value.trim();
+    }
+    get setAddCwOnContent(): string {
+        return this.addCwOnContent;
+    }
+
+    private removeCwOnContent: string;
+    set setRemoveCwOnContent(value: string) {
+        this.removeCwOnContent = value.trim();
+    }
+    get setRemoveCwOnContent(): string {
+        return this.removeCwOnContent;
+    }
+
+    private contentHidedCompletely: string;
+    set setContentHidedCompletely(value: string) {
+        this.contentHidedCompletely = value.trim();
+    }
+    get setContentHidedCompletely(): string {
+        return this.contentHidedCompletely;
+    }
+
     constructor(
         private formBuilder: FormBuilder,
         private serviceWorkersService: ServiceWorkerService,
@@ -62,6 +88,11 @@ export class SettingsComponent implements OnInit {
         let settings = this.toolsService.getSettings()
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
         this.toolsService.saveSettings(settings);
+    }
+
+
+    onCwPolicyChange(id: ContentWarningPolicy) {
+        this.contentWarningPolicy = id;
     }
 
     reload(): boolean {
@@ -140,4 +171,10 @@ export class SettingsComponent implements OnInit {
 enum ColumnShortcut {
     Ctrl = 1,
     Win = 2
+}
+
+enum ContentWarningPolicy {
+    None = 0, 
+    HideAll = 1,
+    AddOnAllContent = 2
 }

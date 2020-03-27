@@ -57,7 +57,30 @@
             font-weight: bold;
             text-decoration: underline;
         }
+    }   
+
+    &__text-input {
+
     }
+
+    &__cw-settings {
+        padding: 0 0 10px 15px;
+    }
+}
+
+.form-control {
+    border: 1px solid $settings-text-input-border;
+    color: $settings-text-input-foreground;
+    background-color: $settings-text-input-background;
+    height: 24px;
+
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+.sub-text-input {
+    padding: 0 5px;
 }
 
 .sound {
