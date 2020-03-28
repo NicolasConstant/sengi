@@ -100,7 +100,8 @@ export class StatusComponent implements OnInit {
         let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
 
         let splittedContent = [];
-        if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll || cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
+        if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0) 
+            || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)) {
             let parser = new DOMParser();
             let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
             let contentToParse = dom.body.textContent;
@@ -115,7 +116,10 @@ export class StatusComponent implements OnInit {
             console.warn(splittedContent);
             console.warn(cwPolicy.addCwOnContent);
             console.warn(detected);
-            if (!detected || detected.length === 0) return;
+            if (!detected || detected.length === 0) {
+                this.status.sensitive = false;
+                return;
+            }
 
             if (!status.spoiler_text) {
                 status.spoiler_text = detected.join(' ');
@@ -126,11 +130,14 @@ export class StatusComponent implements OnInit {
 
             if (!detected) {
                 this.setContentWarning(status);
+            } else {
+                this.status.sensitive = false;
             }
         }
     }
 
     private setContentWarning(status: Status) {
+        this.status.sensitive = true;
         this.isContentWarned = true;
         this.contentWarningText = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.spoiler_text, EmojiTypeEnum.medium);
     }

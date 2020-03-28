@@ -112,25 +112,25 @@ export class SettingsComponent implements OnInit {
         let settings = this.toolsService.getSettings();        
         let cwPolicySettings = new ContentWarningPolicy();
 
-        if(id){
+        if(id !== null){
             cwPolicySettings.policy = id;
         } else {
             cwPolicySettings.policy = settings.contentWarningPolicy.policy;
         }
 
-        if(addCw){
+        if(addCw !== null){
             cwPolicySettings.addCwOnContent = this.splitCwValues(addCw);
         } else {
             cwPolicySettings.addCwOnContent = settings.contentWarningPolicy.addCwOnContent;
         }
 
-        if(removeCw){
+        if(removeCw !== null){
             cwPolicySettings.removeCwOnContent = this.splitCwValues(removeCw);
         } else {
             cwPolicySettings.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent;
         }
 
-        if(hide){
+        if(hide !== null){
             cwPolicySettings.hideCompletlyContent = this.splitCwValues(hide);
         } else {
             cwPolicySettings.hideCompletlyContent = settings.contentWarningPolicy.hideCompletlyContent;
