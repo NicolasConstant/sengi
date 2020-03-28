@@ -5,6 +5,11 @@ export class RemoveAccountSettings {
     constructor(public accountId: string) {}
 }
 
+export class SaveContentWarningPolicy {
+    static readonly type = '[Settings] Save ContentWarningPolicy';
+    constructor(public contentWarningPolicy: ContentWarningPolicy) {}
+}
+
 export class SaveAccountSettings {
     static readonly type = '[Settings] Save AccountSettings';
     constructor(public accountSettings: AccountSettings) {}
@@ -29,12 +34,21 @@ export class AccountSettings {
     customStatusCharLength: number = 500;
 }
 
+export class ContentWarningPolicy {
+    policy: number = 1;
+    addCwOnContent: string[] = [];
+    removeCwOnContent: string[] = [];
+    hideCompletlyContent: string[] = [];
+}
+
 export class GlobalSettings {
     disableAutofocus = false;
     disableAvatarNotifications = false;
     disableSounds = false;
     
     notificationSoundFileId: string = '0';
+
+    contentWarningPolicy: ContentWarningPolicy = new ContentWarningPolicy();
 
     columnSwitchingWinAlt = false;
 
@@ -93,6 +107,21 @@ export class SettingsState {
         newSettings = this.setGlobalSettingsValues(newSettings, action.settings);
         newSettings.accountSettings = [...state.settings.accountSettings];        
         
+        ctx.patchState({
+            settings: newSettings
+        });
+    }
+
+    @Action(SaveContentWarningPolicy)
+    SaveContentWarningPolicy(ctx: StateContext<SettingsStateModel>, action: SaveContentWarningPolicy){
+        const state = ctx.getState();
+
+        let newSettings = new GlobalSettings();
+
+        newSettings = this.setGlobalSettingsValues(newSettings, state.settings);
+        newSettings.accountSettings = [...state.settings.accountSettings];
+        newSettings.contentWarningPolicy = action.contentWarningPolicy;
+
         ctx.patchState({
             settings: newSettings
         });

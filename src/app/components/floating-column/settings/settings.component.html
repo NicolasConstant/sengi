@@ -56,16 +56,16 @@
         <h4 class="panel__subtitle">Content-Warning Policies</h4>
         <div class="sub-section">
             <span class="sub-section__title">global behavior:</span><br />
-            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 0" (change)="onCwPolicyChange(0)"
+            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 1" (change)="onCwPolicyChange(1)"
                 type="radio" name="cw-none" value="cw-none" id="cw-none">
             <label class="noselect sub-section__label" for="cw-none">None</label>
             <br>
 
-            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 1" (change)="onCwPolicyChange(1)"
+            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 2" (change)="onCwPolicyChange(2)"
                 type="radio" name="cw-hide-all" value="cw-hide-all" id="cw-hide-all">
             <label class="noselect sub-section__label" for="cw-hide-all">Hide all CWs</label>
             <br>
-            <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 1">
+            <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 2">
                 <span class="sub-section__title">but add CW on content containing:</span><br />
                 <div class="sub-text-input">
                     <input type="text" class="form-control form-control-sm sub_section__text-input"
@@ -73,11 +73,11 @@
                 </div>
             </div>
 
-            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 2" (change)="onCwPolicyChange(2)"
+            <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 3" (change)="onCwPolicyChange(3)"
                 type="radio" name="cw-add-on-all" value="cw-add-on-all" id="cw-add-on-all">
             <label class="noselect sub-section__label" for="cw-add-on-all">Add CW on all content</label>
             <br>
-            <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 2">
+            <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 3">
                 <span class="sub-section__title">unless content is containing:</span><br />
                 <div class="sub-text-input">
                     <input type="text" class="form-control form-control-sm sub_section__text-input"

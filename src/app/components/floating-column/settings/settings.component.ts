@@ -6,6 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
+import { ContentWarningPolicy } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-settings',
@@ -27,10 +28,12 @@ export class SettingsComponent implements OnInit {
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     columnShortcutChanged = false;
 
-    contentWarningPolicy: ContentWarningPolicy = ContentWarningPolicy.None;
+    contentWarningPolicy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
+    contentWarningPolicyChanged = false;
 
     private addCwOnContent: string;
     set setAddCwOnContent(value: string) {
+        this.setCwPolicy(null, value, null, null);
         this.addCwOnContent = value.trim();
     }
     get setAddCwOnContent(): string {
@@ -39,6 +42,7 @@ export class SettingsComponent implements OnInit {
 
     private removeCwOnContent: string;
     set setRemoveCwOnContent(value: string) {
+        this.setCwPolicy(null, null, value, null);
         this.removeCwOnContent = value.trim();
     }
     get setRemoveCwOnContent(): string {
@@ -47,6 +51,7 @@ export class SettingsComponent implements OnInit {
 
     private contentHidedCompletely: string;
     set setContentHidedCompletely(value: string) {
+        this.setCwPolicy(null, null, null, value);
         this.contentHidedCompletely = value.trim();
     }
     get setContentHidedCompletely(): string {
@@ -79,20 +84,58 @@ export class SettingsComponent implements OnInit {
         } else {
             this.columnShortcutEnabled = ColumnShortcut.Win;
         }
+
+        this.contentWarningPolicy = settings.contentWarningPolicy.policy;
+        this.addCwOnContent = settings.contentWarningPolicy.addCwOnContent.join(';');
+        this.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent.join(';');
+        this.contentHidedCompletely = settings.contentWarningPolicy.hideCompletlyContent.join(';');
     }
 
     onShortcutChange(id: ColumnShortcut) {
         this.columnShortcutEnabled = id;
         this.columnShortcutChanged = true;
 
-        let settings = this.toolsService.getSettings()
+        let settings = this.toolsService.getSettings();
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
         this.toolsService.saveSettings(settings);
     }
 
-
-    onCwPolicyChange(id: ContentWarningPolicy) {
+    onCwPolicyChange(id: ContentWarningPolicyEnum) {
         this.contentWarningPolicy = id;
+        this.contentWarningPolicyChanged = true;
+
+        this.setCwPolicy(id);
+    }
+
+    private setCwPolicy(id: ContentWarningPolicyEnum = null, addCw: string = null, removeCw: string = null, hide: string = null){
+        let settings = this.toolsService.getSettings();        
+        let cwPolicySettings = new ContentWarningPolicy();
+
+        if(id){
+            cwPolicySettings.policy = id;
+        } else {
+            cwPolicySettings.policy = settings.contentWarningPolicy.policy;
+        }
+
+        if(addCw){
+            cwPolicySettings.addCwOnContent = addCw.split(';').map(x => x.trim());
+        } else {
+            cwPolicySettings.addCwOnContent = settings.contentWarningPolicy.addCwOnContent;
+        }
+
+        if(removeCw){
+            cwPolicySettings.removeCwOnContent = removeCw.split(';').map(x => x.trim());
+        } else {
+            cwPolicySettings.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent;
+        }
+
+        if(hide){
+            cwPolicySettings.hideCompletlyContent = hide.split(';').map(x => x.trim());
+        } else {
+            cwPolicySettings.hideCompletlyContent = settings.contentWarningPolicy.hideCompletlyContent;
+        }
+
+        this.toolsService.saveContentWarningPolicy(cwPolicySettings);
     }
 
     reload(): boolean {
@@ -173,8 +216,8 @@ enum ColumnShortcut {
     Win = 2
 }
 
-enum ContentWarningPolicy {
-    None = 0, 
-    HideAll = 1,
-    AddOnAllContent = 2
+enum ContentWarningPolicyEnum {
+    None = 1, 
+    HideAll = 2,
+    AddOnAllContent = 3
 }
