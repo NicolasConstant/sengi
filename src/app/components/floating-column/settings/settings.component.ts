@@ -108,6 +108,7 @@ export class SettingsComponent implements OnInit {
     }
 
     private setCwPolicy(id: ContentWarningPolicyEnum = null, addCw: string = null, removeCw: string = null, hide: string = null){
+        this.contentWarningPolicyChanged = true;
         let settings = this.toolsService.getSettings();        
         let cwPolicySettings = new ContentWarningPolicy();
 
@@ -118,24 +119,28 @@ export class SettingsComponent implements OnInit {
         }
 
         if(addCw){
-            cwPolicySettings.addCwOnContent = addCw.split(';').map(x => x.trim().toLowerCase());
+            cwPolicySettings.addCwOnContent = this.splitCwValues(addCw);
         } else {
             cwPolicySettings.addCwOnContent = settings.contentWarningPolicy.addCwOnContent;
         }
 
         if(removeCw){
-            cwPolicySettings.removeCwOnContent = removeCw.split(';').map(x => x.trim().toLowerCase());
+            cwPolicySettings.removeCwOnContent = this.splitCwValues(removeCw);
         } else {
             cwPolicySettings.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent;
         }
 
         if(hide){
-            cwPolicySettings.hideCompletlyContent = hide.split(';').map(x => x.trim().toLowerCase());
+            cwPolicySettings.hideCompletlyContent = this.splitCwValues(hide);
         } else {
             cwPolicySettings.hideCompletlyContent = settings.contentWarningPolicy.hideCompletlyContent;
         }
 
         this.toolsService.saveContentWarningPolicy(cwPolicySettings);
+    }
+
+    private splitCwValues(data: string): string[]{
+        return data.split(';').map(x => x.trim().toLowerCase()).filter((value, index, self) => self.indexOf(value) === index);
     }
 
     reload(): boolean {

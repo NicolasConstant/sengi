@@ -98,22 +98,33 @@ export class StatusComponent implements OnInit {
 
     private checkContentWarning(status: Status) {
         let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
-        let splittedContent = (status.content + ' ' + status.spoiler_text).toLowerCase().split(' ');
+
+        let splittedContent = [];
+        if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll || cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
+            let parser = new DOMParser();
+            let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
+            let contentToParse = dom.body.textContent;
+            console.warn(contentToParse);
+            splittedContent = contentToParse.toLowerCase().split(' ');
+        }
 
         if (cwPolicy.policy === ContentWarningPolicyEnum.None && (status.sensitive || status.spoiler_text)) {
             this.setContentWarning(status);
         } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
-            let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x));
-            if(!detected || detected.length === 0) return;
+            let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+            console.warn(splittedContent);
+            console.warn(cwPolicy.addCwOnContent);
+            console.warn(detected);
+            if (!detected || detected.length === 0) return;
 
-            if(!status.spoiler_text){
+            if (!status.spoiler_text) {
                 status.spoiler_text = detected.join(' ');
             }
             this.setContentWarning(status);
         } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
             let detected = cwPolicy.removeCwOnContent.find(x => splittedContent.find(y => y == x) != null) != null;
 
-            if(!detected) {
+            if (!detected) {
                 this.setContentWarning(status);
             }
         }
