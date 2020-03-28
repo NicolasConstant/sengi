@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
-import { ContentWarningPolicy } from '../../../states/settings.state';
+import { ContentWarningPolicy, ContentWarningPolicyEnum } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-settings',
@@ -118,19 +118,19 @@ export class SettingsComponent implements OnInit {
         }
 
         if(addCw){
-            cwPolicySettings.addCwOnContent = addCw.split(';').map(x => x.trim());
+            cwPolicySettings.addCwOnContent = addCw.split(';').map(x => x.trim().toLowerCase());
         } else {
             cwPolicySettings.addCwOnContent = settings.contentWarningPolicy.addCwOnContent;
         }
 
         if(removeCw){
-            cwPolicySettings.removeCwOnContent = removeCw.split(';').map(x => x.trim());
+            cwPolicySettings.removeCwOnContent = removeCw.split(';').map(x => x.trim().toLowerCase());
         } else {
             cwPolicySettings.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent;
         }
 
         if(hide){
-            cwPolicySettings.hideCompletlyContent = hide.split(';').map(x => x.trim());
+            cwPolicySettings.hideCompletlyContent = hide.split(';').map(x => x.trim().toLowerCase());
         } else {
             cwPolicySettings.hideCompletlyContent = settings.contentWarningPolicy.hideCompletlyContent;
         }
@@ -210,14 +210,7 @@ export class SettingsComponent implements OnInit {
     }
 }
 
-
 enum ColumnShortcut {
     Ctrl = 1,
     Win = 2
-}
-
-enum ContentWarningPolicyEnum {
-    None = 1, 
-    HideAll = 2,
-    AddOnAllContent = 3
 }

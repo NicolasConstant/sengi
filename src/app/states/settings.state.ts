@@ -34,8 +34,14 @@ export class AccountSettings {
     customStatusCharLength: number = 500;
 }
 
+export enum ContentWarningPolicyEnum {
+    None = 1, 
+    HideAll = 2,
+    AddOnAllContent = 3
+}
+
 export class ContentWarningPolicy {
-    policy: number = 1;
+    policy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
     addCwOnContent: string[] = [];
     removeCwOnContent: string[] = [];
     hideCompletlyContent: string[] = [];
