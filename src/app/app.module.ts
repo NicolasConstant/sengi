@@ -168,7 +168,8 @@ const routes: Routes = [
             AccountsState,
             StreamsState,
             SettingsState
-        ], { developmentMode: !environment.production }),
+        ]),
+        //], { developmentMode: !environment.production }),
         NgxsStoragePluginModule.forRoot(),
         ContextMenuModule.forRoot(),
         HotkeyModule.forRoot(),
