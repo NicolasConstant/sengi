@@ -105,7 +105,6 @@ export class StatusComponent implements OnInit {
             let parser = new DOMParser();
             let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
             let contentToParse = dom.body.textContent;
-            console.warn(contentToParse);
             splittedContent = contentToParse.toLowerCase().split(' ');
         }
 
@@ -113,9 +112,6 @@ export class StatusComponent implements OnInit {
             this.setContentWarning(status);
         } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
             let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
-            console.warn(splittedContent);
-            console.warn(cwPolicy.addCwOnContent);
-            console.warn(detected);
             if (!detected || detected.length === 0) {
                 this.status.sensitive = false;
                 return;
