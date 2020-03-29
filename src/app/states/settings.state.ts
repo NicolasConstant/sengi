@@ -85,6 +85,7 @@ export class SettingsState {
         let newSettings = new GlobalSettings();
 
         newSettings = this.setGlobalSettingsValues(newSettings, state.settings);
+        newSettings.contentWarningPolicy = state.settings.contentWarningPolicy;
         newSettings.accountSettings = [...state.settings.accountSettings.filter(x => x.accountId !== action.accountId)];
                   
         ctx.patchState({
@@ -98,6 +99,7 @@ export class SettingsState {
 
         let newSettings = new GlobalSettings();
         newSettings = this.setGlobalSettingsValues(newSettings, state.settings);
+        newSettings.contentWarningPolicy = state.settings.contentWarningPolicy;
         newSettings.accountSettings = [...state.settings.accountSettings.filter(x => x.accountId !== action.accountSettings.accountId), action.accountSettings];
 
         ctx.patchState({
@@ -111,6 +113,7 @@ export class SettingsState {
 
         let newSettings = new GlobalSettings();
         newSettings = this.setGlobalSettingsValues(newSettings, action.settings);
+        newSettings.contentWarningPolicy = state.settings.contentWarningPolicy;
         newSettings.accountSettings = [...state.settings.accountSettings];        
         
         ctx.patchState({
