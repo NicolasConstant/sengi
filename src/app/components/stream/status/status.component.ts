@@ -6,6 +6,8 @@ import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
+import { ContentWarningPolicyEnum } from '../../../states/settings.state';
+import { stat } from 'fs';
 
 @Component({
     selector: "app-status",
@@ -38,6 +40,8 @@ export class StatusComponent implements OnInit {
     isDirectMessage: boolean;
     isSelected: boolean;
 
+    hideStatus: boolean = false;
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
@@ -50,7 +54,7 @@ export class StatusComponent implements OnInit {
 
     private _statusWrapper: StatusWrapper;
     status: Status;
-    
+
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
@@ -95,10 +99,52 @@ export class StatusComponent implements OnInit {
     }
 
     private checkContentWarning(status: Status) {
-        if (status.sensitive || status.spoiler_text) {
-            this.isContentWarned = true;
-            this.contentWarningText =  this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.spoiler_text, EmojiTypeEnum.medium);
+        let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
+
+        let splittedContent = [];
+        if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
+            || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
+            || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
+            let parser = new DOMParser();
+            let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
+            let contentToParse = dom.body.textContent;
+            splittedContent = contentToParse.toLowerCase().split(' ');
         }
+
+        if (cwPolicy.policy === ContentWarningPolicyEnum.None && (status.sensitive || status.spoiler_text)) {
+            this.setContentWarning(status);
+        } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
+            let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+            if (!detected || detected.length === 0) {
+                this.status.sensitive = false;
+            } else {
+                if (!status.spoiler_text) {
+                    status.spoiler_text = detected.join(' ');
+                }
+                this.setContentWarning(status);
+            }
+        } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
+            let detected = cwPolicy.removeCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+
+            if (detected && detected.length > 0) {
+                this.status.sensitive = false;
+            } else {               
+                this.setContentWarning(status);
+            }
+        }
+
+        if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
+            let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+            if (detected && detected.length > 0) {
+                this.hideStatus = true;
+            }
+        }
+    }
+
+    private setContentWarning(status: Status) {
+        this.status.sensitive = true;
+        this.isContentWarned = true;
+        this.contentWarningText = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.spoiler_text, EmojiTypeEnum.medium);
     }
 
     removeContentWarning(): boolean {
@@ -167,7 +213,7 @@ export class StatusComponent implements OnInit {
     }
 
     textSelected(): boolean {
-        if(this.isSelected) return false;
+        if (this.isSelected) return false;
 
         const status = this._statusWrapper.status;
         const accountInfo = this._statusWrapper.provider;
