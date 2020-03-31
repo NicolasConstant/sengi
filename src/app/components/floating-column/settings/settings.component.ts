@@ -140,7 +140,7 @@ export class SettingsComponent implements OnInit {
     }
 
     private splitCwValues(data: string): string[]{
-        return data.split(';').map(x => x.trim().toLowerCase()).filter((value, index, self) => self.indexOf(value) === index);
+        return data.split(';').map(x => x.trim().toLowerCase()).filter((value, index, self) => self.indexOf(value) === index).filter(y => y !== '');
     }
 
     reload(): boolean {
