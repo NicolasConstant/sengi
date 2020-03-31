@@ -40,6 +40,8 @@ export class StatusComponent implements OnInit {
     isDirectMessage: boolean;
     isSelected: boolean;
 
+    hideStatus: boolean = false;
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
@@ -100,8 +102,9 @@ export class StatusComponent implements OnInit {
         let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
 
         let splittedContent = [];
-        if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0) 
-            || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)) {
+        if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
+            || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
+            || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
             let parser = new DOMParser();
             let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
             let contentToParse = dom.body.textContent;
@@ -114,20 +117,28 @@ export class StatusComponent implements OnInit {
             let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
             if (!detected || detected.length === 0) {
                 this.status.sensitive = false;
-                return;
-            }
-
-            if (!status.spoiler_text) {
-                status.spoiler_text = detected.join(' ');
-            }
-            this.setContentWarning(status);
-        } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
-            let detected = cwPolicy.removeCwOnContent.find(x => splittedContent.find(y => y == x) != null) != null;
-
-            if (!detected) {
-                this.setContentWarning(status);
             } else {
+                if (!status.spoiler_text) {
+                    status.spoiler_text = detected.join(' ');
+                }
+                this.setContentWarning(status);
+            }
+        } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
+            let detected = cwPolicy.removeCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+
+            if (detected && detected.length > 0) {
                 this.status.sensitive = false;
+            } else {               
+                this.setContentWarning(status);
+            }
+        }
+
+        if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
+            console.warn('tata');
+            console.warn(cwPolicy.hideCompletlyContent);
+            let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+            if (detected && detected.length > 0) {
+                this.hideStatus = true;
             }
         }
     }
