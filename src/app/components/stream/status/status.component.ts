@@ -134,8 +134,6 @@ export class StatusComponent implements OnInit {
         }
 
         if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
-            console.warn('tata');
-            console.warn(cwPolicy.hideCompletlyContent);
             let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
             if (detected && detected.length > 0) {
                 this.hideStatus = true;
