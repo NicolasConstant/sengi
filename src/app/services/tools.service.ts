@@ -5,13 +5,13 @@ import { AccountInfo } from '../states/accounts.state';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
-import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings } from '../states/settings.state';
+import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy } from '../states/settings.state';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ToolsService {
+export class ToolsService {   
     private accountAvatar: { [id: string]: string; } = {};
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
@@ -96,12 +96,25 @@ export class ToolsService {
 
     getSettings(): GlobalSettings {
         let settings = <GlobalSettings>this.store.snapshot().globalsettings.settings;
+
+        if(!settings.contentWarningPolicy){
+            var newCwPolicy = new ContentWarningPolicy();
+            this.saveContentWarningPolicy(newCwPolicy);
+            return <GlobalSettings>this.store.snapshot().globalsettings.settings;
+        }
+
         return settings;
     }
 
     saveSettings(settings: GlobalSettings) {
         this.store.dispatch([
             new SaveSettings(settings)
+        ]);
+    }
+
+    saveContentWarningPolicy(cwSettings: ContentWarningPolicy){
+        this.store.dispatch([
+            new SaveContentWarningPolicy(cwSettings)
         ]);
     }
 
