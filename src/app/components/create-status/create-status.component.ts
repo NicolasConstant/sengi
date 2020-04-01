@@ -81,7 +81,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.isSending = true;
                 this.mastodonService.getStatus(value.provider, value.status.in_reply_to_id)
                     .then((status: Status) => {
-                        this.statusReplyingToWrapper = new StatusWrapper(status, value.provider);
+                        let cwResult = this.toolsService.checkContentWarning(status);
+                        this.statusReplyingToWrapper = new StatusWrapper(cwResult.status, value.provider, cwResult.applyCw, cwResult.hide);
 
                         const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
                         for (const mention of mentions) {
@@ -564,7 +565,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 })
                 .then((status: Status) => {
                     if (this.statusReplyingToWrapper) {
-                        this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(status, account));
+                        let cwPolicy = this.toolsService.checkContentWarning(status);
+                        this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(cwPolicy.status, account, cwPolicy.applyCw, cwPolicy.hide));
                     }
 
                     return status;

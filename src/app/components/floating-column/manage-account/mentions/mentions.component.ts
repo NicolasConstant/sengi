@@ -7,7 +7,7 @@ import { StatusWrapper } from '../../../../models/common.model';
 import { Status, Notification } from '../../../../services/models/mastodon.interfaces';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
-import { OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
 
 
 @Component({
@@ -45,6 +45,7 @@ export class MentionsComponent implements OnInit, OnDestroy {
     private lastId: string;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonWrapperService) {
@@ -80,7 +81,8 @@ export class MentionsComponent implements OnInit, OnDestroy {
             let orderedMentions = [...userNotification.mentions.map(x => x.status)].reverse();
             for (let m of orderedMentions) {
                 if (!this.statuses.find(x => x.status.id === m.id)) {
-                    const statusWrapper = new StatusWrapper(m, this.account.info);
+                    let cwPolicy = this.toolsService.checkContentWarning(m);
+                    const statusWrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.unshift(statusWrapper);
                 }
             }
@@ -113,7 +115,8 @@ export class MentionsComponent implements OnInit, OnDestroy {
                 }
 
                 for (const s of statuses) {
-                    const wrapper = new StatusWrapper(s, this.account.info);
+                    let cwPolicy = this.toolsService.checkContentWarning(s);
+                    const wrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
                 }
 

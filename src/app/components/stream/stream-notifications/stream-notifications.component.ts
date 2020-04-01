@@ -103,7 +103,12 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
 
         if (!userNotification) return;
 
-        let mentions = userNotification.mentions.map(x => new NotificationWrapper(x, this.account)).reverse();
+        let mentions = userNotification.mentions
+            .map(x => { 
+                let cwPolicy = this.toolsService.checkContentWarning(x.status);
+                return new NotificationWrapper(x, this.account, cwPolicy.applyCw, cwPolicy.hide);
+            })
+            .reverse();
         this.lastMentionId = userNotification.lastMentionsId;
 
         if (!mentions) return;
@@ -126,7 +131,10 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
             .then((notifications: Notification[]) => {
                 this.isNotificationsLoading = false;
 
-                this.notifications = notifications.map(x => new NotificationWrapper(x, this.account));
+                this.notifications = notifications.map(x => { 
+                    let cwPolicy = this.toolsService.checkContentWarning(x.status);
+                    return new NotificationWrapper(x, this.account, cwPolicy.applyCw, cwPolicy.hide);
+                });
                 this.lastNotificationId = this.notifications[this.notifications.length - 1].notification.id;
             })
             .catch(err => {
@@ -138,7 +146,8 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
                 let streaming = this.streamingService.getStreaming(this.account, streamElement);
                 this.notificationSubscription = streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
                     if (notification && notification.type === EventEnum.notification) {
-                        const n = new NotificationWrapper(notification.notification, this.account);
+                        let cwPolicy = this.toolsService.checkContentWarning(notification.status);
+                        const n = new NotificationWrapper(notification.notification, this.account, cwPolicy.applyCw, cwPolicy.hide);
                         this.notifications.unshift(n);
                     }
                 });
@@ -200,7 +209,8 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
                 }
 
                 for (const s of result) {
-                    const wrapper = new NotificationWrapper(s, this.account);
+                    let cwPolicy = this.toolsService.checkContentWarning(s.status);
+                    const wrapper = new NotificationWrapper(s, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.notifications.push(wrapper);
                 }
 
@@ -228,7 +238,8 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
                 }
 
                 for (const s of result) {
-                    const wrapper = new NotificationWrapper(s, this.account);
+                    let cwPolicy = this.toolsService.checkContentWarning(s.status);
+                    const wrapper = new NotificationWrapper(s, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.mentions.push(wrapper);
                 }
 

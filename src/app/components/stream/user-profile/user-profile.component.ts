@@ -203,7 +203,8 @@ export class UserProfileComponent implements OnInit {
             .then((statuses: Status[]) => {
                 for (const status of statuses) {
                     status.pinned = true;
-                    const wrapper = new StatusWrapper(status, userAccount);
+                    let cwPolicy = this.toolsService.checkContentWarning(status);
+                    const wrapper = new StatusWrapper(cwPolicy.status, userAccount, cwPolicy.applyCw, cwPolicy.hide);
                     this.pinnedStatuses.push(wrapper);
                 }
             })
@@ -355,7 +356,8 @@ export class UserProfileComponent implements OnInit {
         }
 
         for (const status of statuses) {
-            const wrapper = new StatusWrapper(status, userAccount);
+            let cwPolicy = this.toolsService.checkContentWarning(status);
+            const wrapper = new StatusWrapper(cwPolicy.status, userAccount, cwPolicy.applyCw, cwPolicy.hide);
             this.statuses.push(wrapper);
         }
 

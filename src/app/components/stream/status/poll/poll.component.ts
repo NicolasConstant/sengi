@@ -89,7 +89,8 @@ export class PollComponent implements OnInit {
         if (accountChanged && !this.pollPerAccountId[newSelectedAccount.id] && (this.statusWrapper.status.visibility === 'public' || this.statusWrapper.status.visibility === 'unlisted')) {
             this.setStatsAtZero();
 
-            this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, new StatusWrapper(this.statusWrapper.status, this.statusWrapper.provider))
+            let statusWrapper = new StatusWrapper(this.statusWrapper.status, this.statusWrapper.provider, this.statusWrapper.applyCw, this.statusWrapper.hide);
+            this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, statusWrapper)
                 .then((status: Status) => {
                     if(!status || !(status.poll)) return null;
                     return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
