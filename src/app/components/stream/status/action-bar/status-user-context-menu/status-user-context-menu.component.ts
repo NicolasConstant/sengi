@@ -244,7 +244,8 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                     this.navigationService.redraft(this.statusWrapper)
                 }
 
-                const deletedStatus = new StatusWrapper(this.displayedStatus, selectedAccount);
+                let cwPolicy = this.toolsService.checkContentWarning(this.displayedStatus);
+                const deletedStatus = new StatusWrapper(cwPolicy.status, selectedAccount, cwPolicy.applyCw, cwPolicy.hide);
                 this.notificationService.deleteStatus(deletedStatus);
             })
             .catch(err => {

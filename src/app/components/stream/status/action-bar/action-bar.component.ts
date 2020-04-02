@@ -149,9 +149,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.isLocked = false;
         }
 
-        if (status.sensitive || status.spoiler_text) {
-            this.isContentWarningActive = true;
-        }
+        this.isContentWarningActive = this.statusWrapper.applyCw;
 
         this.checkIfBookmarksAreAvailable(this.selectedAccounts[0]);
         this.checkIfFavorited();

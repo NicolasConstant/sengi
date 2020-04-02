@@ -167,14 +167,15 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
                         for (let i = 0; i < contextStatuses.length; i++) {                            
                             let s = contextStatuses[i];
-                            const wrapper = new StatusWrapper(s, currentAccount);                            
+                            let cwPolicy = this.toolsService.checkContentWarning(s);
+                            const wrapper = new StatusWrapper(cwPolicy.status, currentAccount, cwPolicy.applyCw, cwPolicy.hide);                            
                             
                             if(i == position) wrapper.isSelected = true;
 
                             this.statuses.push(wrapper);
                         }
 
-                        this.hasContentWarnings = this.statuses.filter(x => x.status.sensitive || x.status.spoiler_text).length > 1;
+                        this.hasContentWarnings = this.statuses.filter(x => x.applyCw).length > 1;
 
                         return position;
                     });

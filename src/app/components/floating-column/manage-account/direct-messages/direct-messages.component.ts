@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 
 import { AccountWrapper } from '../../../../models/account.models';
-import { OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
 import { StatusWrapper } from '../../../../models/common.model';
 import { NotificationService } from '../../../../services/notification.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
@@ -42,6 +42,7 @@ export class DirectMessagesComponent implements OnInit {
     @ViewChild('statusstream') public statustream: ElementRef;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService) { }
 
@@ -60,7 +61,8 @@ export class DirectMessagesComponent implements OnInit {
         this.mastodonService.getConversations(this.account.info)
             .then((conversations: Conversation[]) => {
                 for (const c of conversations) {
-                    const wrapper = new ConversationWrapper(c, this.account.info, this.account.avatar);
+                    let cwPolicy = this.toolsService.checkContentWarning(c.last_status);
+                    const wrapper = new ConversationWrapper(c, this.account.info, this.account.avatar, cwPolicy.applyCw, cwPolicy.hide);
                     this.conversations.push(wrapper);
                 }
             })
@@ -95,7 +97,8 @@ export class DirectMessagesComponent implements OnInit {
                 }
 
                 for (const c of conversations) {
-                    const wrapper = new ConversationWrapper(c, this.account.info, this.account.avatar);
+                    let cwPolicy = this.toolsService.checkContentWarning(c.last_status);
+                    const wrapper = new ConversationWrapper(c, this.account.info, this.account.avatar, cwPolicy.applyCw, cwPolicy.hide);
                     this.conversations.push(wrapper);
                 }
             })
@@ -121,13 +124,14 @@ export class DirectMessagesComponent implements OnInit {
 }
 
 class ConversationWrapper {
-
     constructor(
         public conversation: Conversation,
         public provider: AccountInfo,
-        public userAvatar: string
+        public userAvatar: string,
+        applyCw: boolean,
+        hideStatus: boolean
     ) {
-        this.lastStatus = new StatusWrapper(conversation.last_status, provider);
+        this.lastStatus = new StatusWrapper(conversation.last_status, provider, applyCw, hideStatus);
     }
 
     lastStatus: StatusWrapper;

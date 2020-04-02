@@ -70,10 +70,11 @@ export class StatusComponent implements OnInit {
         }
 
         this.isDirectMessage = this.displayedStatus.visibility === 'direct';
-        this.displayedStatusWrapper = new StatusWrapper(this.displayedStatus, value.provider);
+        let cwPolicy = this.toolsService.checkContentWarning(this.displayedStatus);
+        this.displayedStatusWrapper = new StatusWrapper(cwPolicy.status, value.provider, cwPolicy.applyCw, cwPolicy.hide);
 
         this.checkLabels(this.displayedStatus);
-        this.checkContentWarning(this.displayedStatus);
+        this.setContentWarning(this.displayedStatusWrapper);
 
         if (!this.displayedStatus.account.display_name) {
             this.displayedStatus.account.display_name = this.displayedStatus.account.username;
@@ -98,53 +99,53 @@ export class StatusComponent implements OnInit {
     ngOnInit() {
     }
 
-    private checkContentWarning(status: Status) {
-        let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
+    // private checkContentWarning(status: Status) {
+    //             let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
 
-        let splittedContent = [];
-        if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
-            || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
-            || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
-            let parser = new DOMParser();
-            let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
-            let contentToParse = dom.body.textContent;
-            splittedContent = contentToParse.toLowerCase().split(' ');
-        }
+    //     let splittedContent = [];
+    //     if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
+    //         || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
+    //         || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
+    //         let parser = new DOMParser();
+    //         let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
+    //         let contentToParse = dom.body.textContent;
+    //         splittedContent = contentToParse.toLowerCase().split(' ');
+    //     }
 
-        if (cwPolicy.policy === ContentWarningPolicyEnum.None && (status.sensitive || status.spoiler_text)) {
-            this.setContentWarning(status);
-        } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
-            let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
-            if (!detected || detected.length === 0) {
-                this.status.sensitive = false;
-            } else {
-                if (!status.spoiler_text) {
-                    status.spoiler_text = detected.join(' ');
-                }
-                this.setContentWarning(status);
-            }
-        } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
-            let detected = cwPolicy.removeCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+    //     if (cwPolicy.policy === ContentWarningPolicyEnum.None && (status.sensitive || status.spoiler_text)) {
+    //         this.setContentWarning(status);
+    //     } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
+    //         let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+    //         if (!detected || detected.length === 0) {
+    //             this.status.sensitive = false;
+    //         } else {
+    //             if (!status.spoiler_text) {
+    //                 status.spoiler_text = detected.join(' ');
+    //             }
+    //             this.setContentWarning(status);
+    //         }
+    //     } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
+    //         let detected = cwPolicy.removeCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
 
-            if (detected && detected.length > 0) {
-                this.status.sensitive = false;
-            } else {               
-                this.setContentWarning(status);
-            }
-        }
+    //         if (detected && detected.length > 0) {
+    //             this.status.sensitive = false;
+    //         } else {               
+    //             this.setContentWarning(status);
+    //         }
+    //     }
 
-        if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
-            let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
-            if (detected && detected.length > 0) {
-                this.hideStatus = true;
-            }
-        }
-    }
+    //     if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
+    //         let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+    //         if (detected && detected.length > 0) {
+    //             this.hideStatus = true;
+    //         }
+    //     }
+    // }
 
-    private setContentWarning(status: Status) {
-        this.status.sensitive = true;
-        this.isContentWarned = true;
-        this.contentWarningText = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.spoiler_text, EmojiTypeEnum.medium);
+    private setContentWarning(status: StatusWrapper) {
+        this.hideStatus = status.hide;
+        this.isContentWarned = status.applyCw;
+        this.contentWarningText = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.status.spoiler_text, EmojiTypeEnum.medium);
     }
 
     removeContentWarning(): boolean {

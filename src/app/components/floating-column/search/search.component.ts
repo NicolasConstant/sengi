@@ -92,7 +92,8 @@ export class SearchComponent implements OnInit {
                     this.hashtags = results.hashtags;
 
                     for (let status of results.statuses) {
-                        const statusWrapper = new StatusWrapper(status, this.lastAccountUsed);
+                        let cwPolicy = this.toolsService.checkContentWarning(status);
+                        const statusWrapper = new StatusWrapper(cwPolicy.status, this.lastAccountUsed, cwPolicy.applyCw, cwPolicy.hide);
                         this.statuses.push(statusWrapper);
                     }
                 }

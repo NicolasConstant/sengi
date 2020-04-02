@@ -5,19 +5,71 @@ import { AccountInfo } from '../states/accounts.state';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
-import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy } from '../states/settings.state';
+import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy, ContentWarningPolicyEnum } from '../states/settings.state';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ToolsService {   
+export class ToolsService {
     private accountAvatar: { [id: string]: string; } = {};
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
     constructor(
         private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) { }
+
+    checkContentWarning(status: Status): StatusWithCwPolicyResult {
+        if(!status) {
+            return new StatusWithCwPolicyResult(status, false, false);
+        }
+
+        let applyCw = false;
+        let hideStatus = false;
+        
+        let cwPolicy = this.getSettings().contentWarningPolicy;
+
+        let splittedContent = [];
+        if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
+            || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
+            || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
+            let parser = new DOMParser();
+            let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
+            let contentToParse = dom.body.textContent;
+            splittedContent = contentToParse.toLowerCase().split(' ');
+        }
+
+        if (cwPolicy.policy === ContentWarningPolicyEnum.None && (status.sensitive || status.spoiler_text)) {
+            applyCw = true;            
+        } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
+            let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+            if (!detected || detected.length === 0) {
+                applyCw = false;                
+            } else {
+                if (!status.spoiler_text) {
+                    status.spoiler_text = detected.join(' ');
+                }
+                applyCw = true;                
+            }
+        } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
+            let detected = cwPolicy.removeCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+
+            if (detected && detected.length > 0) {
+                applyCw = false;                
+            } else {               
+                applyCw = true;                
+            }
+        }
+
+        if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
+            let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+            if (detected && detected.length > 0) {
+                hideStatus = true;
+            }
+        }
+
+        return new StatusWithCwPolicyResult(status, applyCw, hideStatus);
+    }
 
     getInstanceInfo(acc: AccountInfo): Promise<InstanceInfo> {
         if (this.instanceInfos[acc.instance]) {
@@ -97,7 +149,7 @@ export class ToolsService {
     getSettings(): GlobalSettings {
         let settings = <GlobalSettings>this.store.snapshot().globalsettings.settings;
 
-        if(!settings.contentWarningPolicy){
+        if (!settings.contentWarningPolicy) {
             var newCwPolicy = new ContentWarningPolicy();
             this.saveContentWarningPolicy(newCwPolicy);
             return <GlobalSettings>this.store.snapshot().globalsettings.settings;
@@ -112,7 +164,7 @@ export class ToolsService {
         ]);
     }
 
-    saveContentWarningPolicy(cwSettings: ContentWarningPolicy){
+    saveContentWarningPolicy(cwSettings: ContentWarningPolicy) {
         this.store.dispatch([
             new SaveContentWarningPolicy(cwSettings)
         ]);
@@ -220,4 +272,9 @@ export enum InstanceType {
     GlitchSoc = 3,
     Florence = 4,
     Pixelfed = 5
+}
+
+export class StatusWithCwPolicyResult {
+    constructor(public status: Status, public applyCw: boolean, public hide: boolean) {
+    }
 }

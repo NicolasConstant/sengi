@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
 
 import { StatusWrapper } from '../../../../models/common.model';
-import { OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
 import { AccountWrapper } from '../../../../models/account.models';
 import { FavoriteResult } from '../../../../services/mastodon.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
@@ -42,6 +42,7 @@ export class FavoritesComponent implements OnInit {
     @ViewChild('statusstream') public statustream: ElementRef;
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService) { }
 
@@ -62,7 +63,8 @@ export class FavoritesComponent implements OnInit {
             .then((result: FavoriteResult) => {
                 this.maxId = result.max_id;
                 for (const s of result.favorites) {
-                    const wrapper = new StatusWrapper(s, this.account.info);
+                    let cwPolicy = this.toolsService.checkContentWarning(s);
+                    const wrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
                 }
             })
@@ -99,7 +101,8 @@ export class FavoritesComponent implements OnInit {
 
                 this.maxId = result.max_id;
                 for (const s of statuses) {
-                    const wrapper = new StatusWrapper(s, this.account.info);
+                    let cwPolicy = this.toolsService.checkContentWarning(s);
+                    const wrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
                 }
             })

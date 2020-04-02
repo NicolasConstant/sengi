@@ -152,7 +152,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                                 return;
                             }
 
-                            const wrapper = new StatusWrapper(update.status, this.account);
+                            let cwPolicy = this.toolsService.checkContentWarning(update.status);
+                            const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
                             this.statuses.unshift(wrapper);
                         } else {
                             this.bufferStream.push(update.status);
@@ -235,7 +236,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 continue;
             }
 
-            const wrapper = new StatusWrapper(status, this.account);
+            let cwPolicy = this.toolsService.checkContentWarning(status);
+            const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
             this.statuses.unshift(wrapper);
         }
 
@@ -256,7 +258,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                         continue;
                     }
 
-                    const wrapper = new StatusWrapper(s, this.account);
+                    let cwPolicy = this.toolsService.checkContentWarning(s);
+                    const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
                 }
             })
@@ -292,7 +295,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                         continue;
                     }
 
-                    const wrapper = new StatusWrapper(s, this.account);
+                    let cwPolicy = this.toolsService.checkContentWarning(s);
+                    const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
                 }
             })

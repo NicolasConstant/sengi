@@ -15,7 +15,9 @@ export class OpenMediaEvent {
 export class StatusWrapper {
     constructor(
         public status: Status,
-        public provider: AccountInfo
+        public provider: AccountInfo, 
+        public applyCw: boolean, 
+        public hide: boolean
     ) { }
 
     public isSelected: boolean;
