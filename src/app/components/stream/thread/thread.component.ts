@@ -161,16 +161,16 @@ export class ThreadComponent implements OnInit, OnDestroy {
         pipeline
             .then((status: Status) => {
                 return this.mastodonService.getStatusContext(currentAccount, status.id)
-                    .then((context: Context) => {                        
+                    .then((context: Context) => {
                         let contextStatuses = [...context.ancestors, status, ...context.descendants]
                         const position = context.ancestors.length;
 
-                        for (let i = 0; i < contextStatuses.length; i++) {                            
+                        for (let i = 0; i < contextStatuses.length; i++) {
                             let s = contextStatuses[i];
                             let cwPolicy = this.toolsService.checkContentWarning(s);
-                            const wrapper = new StatusWrapper(cwPolicy.status, currentAccount, cwPolicy.applyCw, cwPolicy.hide);                            
-                            
-                            if(i == position) wrapper.isSelected = true;
+                            const wrapper = new StatusWrapper(cwPolicy.status, currentAccount, cwPolicy.applyCw, cwPolicy.hide);
+
+                            if (i == position) wrapper.isSelected = true;
 
                             this.statuses.push(wrapper);
                         }
@@ -178,16 +178,17 @@ export class ThreadComponent implements OnInit, OnDestroy {
                         this.hasContentWarnings = this.statuses.filter(x => x.applyCw).length > 1;
 
                         return position;
+                    })
+                    .then((position: number) => {
+                        this.retrieveRemoteThread(status);
+                        return position;
                     });
-
             })
             .then((position: number) => {
                 setTimeout(() => {
                     const el = this.statusChildren.toArray()[position];
-
-                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
-                    
-                    scrollIntoView(el.elem.nativeElement, { behavior: 'smooth', block: 'nearest'});
+                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });                    
+                    scrollIntoView(el.elem.nativeElement, { behavior: 'smooth', block: 'nearest' });
                 }, 250);
             })
             .catch((err: HttpErrorResponse) => {
@@ -196,6 +197,22 @@ export class ThreadComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.isLoading = false;
             });
+    }
+
+    private retrieveRemoteThread(status: Status) {
+        try {
+            console.warn(status);
+            let splitUrl = status.url.replace('https://', '').split('/');
+            let id = splitUrl[splitUrl.length - 1];
+            let instance = splitUrl[0];
+            console.warn(id);
+            console.warn(instance);
+            this.mastodonService.getRemoteStatusContext(instance, id)
+                .then((context: Context) => {
+                    console.warn(context);
+                })
+                .catch(() => { });
+        } catch (err) { };
     }
 
     refresh(): any {
@@ -225,9 +242,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
         const statuses = this.statusChildren.toArray();
         statuses.forEach(x => {
             x.removeContentWarning();
-            if(x.isSelected){
+            if (x.isSelected) {
                 setTimeout(() => {
-                    scrollIntoView(x.elem.nativeElement, { behavior: 'auto', block: 'nearest'});
+                    scrollIntoView(x.elem.nativeElement, { behavior: 'auto', block: 'nearest' });
                 }, 0);
             }
         });
