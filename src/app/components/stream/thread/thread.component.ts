@@ -131,7 +131,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (status.visibility === 'public' || status.visibility === 'unlisted') {
             var statusPromise: Promise<Status> = Promise.resolve(status);
 
-            if (sourceAccount.id !== currentAccount.id) {
+            if (!sourceAccount || sourceAccount.id !== currentAccount.id) {
                 statusPromise = this.toolsService.getInstanceInfo(currentAccount)
                     .then(instance => {
                         let version: 'v1' | 'v2' = 'v1';
@@ -149,7 +149,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
             this.retrieveThread(currentAccount, statusPromise);
 
-        } else if (sourceAccount.id === currentAccount.id) {
+        } else if (sourceAccount && sourceAccount.id === currentAccount.id) {
             var statusPromise = Promise.resolve(status);
             this.retrieveThread(currentAccount, statusPromise);
         } else {
