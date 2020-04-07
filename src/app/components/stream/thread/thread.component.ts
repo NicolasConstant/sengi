@@ -216,9 +216,13 @@ export class ThreadComponent implements OnInit, OnDestroy {
             let context = await this.mastodonService.getRemoteStatusContext(instance, id);
             let remoteStatuses = [...context.ancestors, ...context.descendants];
 
-            let unknownStatuses = remoteStatuses.filter(x => !this.statuses.find(y => y.status.url == x.url));
+            let unknownStatuses = remoteStatuses.filter(x => !this.statuses.find(y => y.status.uri == x.uri));
 
-            for(let s of unknownStatuses){                
+            for(let s of unknownStatuses){
+                if(!s.account.acct.includes('@')){
+                    s.account.acct += `@${instance}`;
+                }
+
                 let cwPolicy = this.toolsService.checkContentWarning(s);
                 let wrapper = new StatusWrapper(s, null, cwPolicy.applyCw, cwPolicy.hide);
                 wrapper.isRemote = true;
