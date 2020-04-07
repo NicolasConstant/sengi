@@ -21,4 +21,5 @@ export class StatusWrapper {
     ) { }
 
     public isSelected: boolean;
+    public isRemote: boolean;
 }

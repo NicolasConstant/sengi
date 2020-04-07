@@ -84,6 +84,9 @@
                 <div class="status__labels--label status__labels--old" title="this status is old" *ngIf="isOld && !statusWrapper.status.pinned">
                     old
                 </div>
+                <div class="status__labels--label status__labels--remote" title="this status isn't federated with this instance" *ngIf="isRemote">
+                    remote
+                </div>
             </div>
 
 

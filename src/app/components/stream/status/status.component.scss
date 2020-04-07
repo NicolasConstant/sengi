@@ -99,6 +99,11 @@
         &--old {
             background-color: rgb(150, 0, 0);
         }
+        &--remote {
+            background-color: rgb(161, 64, 140);
+            background-color: rgb(33, 69, 136);
+            background-color: rgb(38, 77, 148);
+        }
     }
     &__name {
         display: inline-block;

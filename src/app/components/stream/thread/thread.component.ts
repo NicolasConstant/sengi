@@ -213,8 +213,22 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 id = webpage.split(`<meta content="https://${instance}/notice/`)[1].split('" property="og:url"')[0];
             }           
             
-            let statuses = await this.mastodonService.getRemoteStatusContext(instance, id);
-            console.warn(statuses);            
+            let context = await this.mastodonService.getRemoteStatusContext(instance, id);
+            let remoteStatuses = [...context.ancestors, ...context.descendants];
+
+            let unknownStatuses = remoteStatuses.filter(x => !this.statuses.find(y => y.status.url == x.url));
+            console.warn(unknownStatuses);
+            for(let s of unknownStatuses){
+                //TODO fetch settings
+                let wrapper = new StatusWrapper(s, null, false, false);
+                wrapper.isRemote = true;
+                this.statuses.push(wrapper);
+                this.statuses.sort((a,b) => { 
+                    if(a.status.created_at > b.status.created_at) return 1;
+                    if(a.status.created_at < b.status.created_at) return -1;
+                    return 0;
+                });
+            }            
         } catch (err) { };
     }
 

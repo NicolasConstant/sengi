@@ -39,6 +39,7 @@ export class StatusComponent implements OnInit {
     contentWarningText: string;
     isDirectMessage: boolean;
     isSelected: boolean;
+    isRemote: boolean;
 
     hideStatus: boolean = false;
 
@@ -58,9 +59,9 @@ export class StatusComponent implements OnInit {
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
-        // console.warn(value.status);
         this.status = value.status;
         this.isSelected = value.isSelected;
+        this.isRemote = value.isRemote;
 
         if (this.status.reblog) {
             this.reblog = true;
@@ -72,6 +73,7 @@ export class StatusComponent implements OnInit {
         this.isDirectMessage = this.displayedStatus.visibility === 'direct';
         let cwPolicy = this.toolsService.checkContentWarning(this.displayedStatus);
         this.displayedStatusWrapper = new StatusWrapper(cwPolicy.status, value.provider, cwPolicy.applyCw, cwPolicy.hide);
+        this.displayedStatusWrapper.isRemote = value.isRemote;
 
         this.checkLabels(this.displayedStatus);
         this.setContentWarning(this.displayedStatusWrapper);
