@@ -217,10 +217,10 @@ export class ThreadComponent implements OnInit, OnDestroy {
             let remoteStatuses = [...context.ancestors, ...context.descendants];
 
             let unknownStatuses = remoteStatuses.filter(x => !this.statuses.find(y => y.status.url == x.url));
-                        
-            for(let s of unknownStatuses){
-                //TODO fetch settings
-                let wrapper = new StatusWrapper(s, null, false, false);
+
+            for(let s of unknownStatuses){                
+                let cwPolicy = this.toolsService.checkContentWarning(s);
+                let wrapper = new StatusWrapper(s, null, cwPolicy.applyCw, cwPolicy.hide);
                 wrapper.isRemote = true;
                 this.statuses.push(wrapper);
                 this.statuses.sort((a,b) => { 
