@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
@@ -51,6 +51,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private goToTopSubscription: Subscription;
 
     constructor(
+        private readonly httpClient: HttpClient,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService) { }
@@ -199,19 +200,21 @@ export class ThreadComponent implements OnInit, OnDestroy {
             });
     }
 
-    private retrieveRemoteThread(status: Status) {
+    private async retrieveRemoteThread(status: Status) {
         try {
-            console.warn(status);
-            let splitUrl = status.url.replace('https://', '').split('/');
+            let url = status.url;
+            let splitUrl = url.replace('https://', '').split('/');            
             let id = splitUrl[splitUrl.length - 1];
             let instance = splitUrl[0];
-            console.warn(id);
-            console.warn(instance);
-            this.mastodonService.getRemoteStatusContext(instance, id)
-                .then((context: Context) => {
-                    console.warn(context);
-                })
-                .catch(() => { });
+
+            //Pleroma
+            if(url.includes('/objects/')){ 
+                var webpage = await this.httpClient.get(url, { responseType: 'text' }).toPromise();
+                id = webpage.split(`<meta content="https://${instance}/notice/`)[1].split('" property="og:url"')[0];
+            }           
+            
+            let statuses = await this.mastodonService.getRemoteStatusContext(instance, id);
+            console.warn(statuses);            
         } catch (err) { };
     }
 
