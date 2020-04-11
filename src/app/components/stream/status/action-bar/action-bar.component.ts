@@ -76,14 +76,18 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.displayedStatus = this.statusWrapper.status;
         const account = this.statusWrapper.provider;
+        let accountId = 'remote';
+        if (account) {
+            accountId = account.id;
+        }
 
         if (this.displayedStatus.reblog) {
             this.displayedStatus = this.displayedStatus.reblog;
         }
 
-        this.favoriteStatePerAccountId[account.id] = this.displayedStatus.favourited;
-        this.bootedStatePerAccountId[account.id] = this.displayedStatus.reblogged;
-        this.bookmarkStatePerAccountId[account.id] = this.displayedStatus.bookmarked;
+        this.favoriteStatePerAccountId[accountId] = this.displayedStatus.favourited;
+        this.bootedStatePerAccountId[accountId] = this.displayedStatus.reblogged;
+        this.bookmarkStatePerAccountId[accountId] = this.displayedStatus.bookmarked;
 
         this.analyseMemoryStatus();
 
@@ -134,8 +138,13 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private checkStatus(accounts: AccountInfo[]): void {
         const status = this.statusWrapper.status;
         const provider = this.statusWrapper.provider;
-        this.selectedAccounts = accounts.filter(x => x.isSelected);
-        this.isProviderSelected = this.selectedAccounts.filter(x => x.id === provider.id).length > 0;
+        this.selectedAccounts = accounts.filter(x => x.isSelected);       
+
+        if (!this.statusWrapper.isRemote) {
+            this.isProviderSelected = this.selectedAccounts.filter(x => x.id === provider.id).length > 0;
+        } else {
+            this.isProviderSelected = false;
+        }
 
         if (status.visibility === 'direct' || status.visibility === 'private') {
             this.isBoostLocked = true;

@@ -456,7 +456,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let globalUniqueMentions = [];
         for (let mention of uniqueMentions) {
             if (!mention.includes('@')) {
-                mention += `@${providerInfo.instance}`;
+                if (providerInfo) {
+                    mention += `@${providerInfo.instance}`;
+                } else {
+                    mention += `@${status.url.replace('https://', '').split('/')[0]}`;
+                }
             }
             globalUniqueMentions.push(mention);
         }

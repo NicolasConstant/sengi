@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChildren, QueryList, ViewChild, ElementRef } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
@@ -22,6 +22,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     isLoading = true;
     isThread = true;
     hasContentWarnings = false;
+    private remoteStatusFetchingDisabled = false;
 
     bufferStream: Status[] = []; //html compatibility only
 
@@ -51,11 +52,15 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private goToTopSubscription: Subscription;
 
     constructor(
+        private readonly httpClient: HttpClient,
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
+        let settings = this.toolsService.getSettings();
+        this.remoteStatusFetchingDisabled = settings.disableRemoteStatusFetching;
+
         if (this.refreshEventEmitter) {
             this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
                 this.refresh();
@@ -130,7 +135,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (status.visibility === 'public' || status.visibility === 'unlisted') {
             var statusPromise: Promise<Status> = Promise.resolve(status);
 
-            if (sourceAccount.id !== currentAccount.id) {
+            if (!sourceAccount || sourceAccount.id !== currentAccount.id) {
                 statusPromise = this.toolsService.getInstanceInfo(currentAccount)
                     .then(instance => {
                         let version: 'v1' | 'v2' = 'v1';
@@ -148,7 +153,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
             this.retrieveThread(currentAccount, statusPromise);
 
-        } else if (sourceAccount.id === currentAccount.id) {
+        } else if (sourceAccount && sourceAccount.id === currentAccount.id) {
             var statusPromise = Promise.resolve(status);
             this.retrieveThread(currentAccount, statusPromise);
         } else {
@@ -161,33 +166,52 @@ export class ThreadComponent implements OnInit, OnDestroy {
         pipeline
             .then((status: Status) => {
                 return this.mastodonService.getStatusContext(currentAccount, status.id)
-                    .then((context: Context) => {                        
+                    .then((context: Context) => {
                         let contextStatuses = [...context.ancestors, status, ...context.descendants]
                         const position = context.ancestors.length;
 
-                        for (let i = 0; i < contextStatuses.length; i++) {                            
+                        let localStatuses = [];
+                        for (let i = 0; i < contextStatuses.length; i++) {
                             let s = contextStatuses[i];
                             let cwPolicy = this.toolsService.checkContentWarning(s);
-                            const wrapper = new StatusWrapper(cwPolicy.status, currentAccount, cwPolicy.applyCw, cwPolicy.hide);                            
-                            
-                            if(i == position) wrapper.isSelected = true;
+                            const wrapper = new StatusWrapper(cwPolicy.status, currentAccount, cwPolicy.applyCw, cwPolicy.hide);
 
-                            this.statuses.push(wrapper);
+                            if (i == position) wrapper.isSelected = true;
+
+                            // this.statuses.push(wrapper);
+                            localStatuses.push(wrapper);
                         }
+                        return localStatuses;
+                    })
+                    .then(async (localStatuses: StatusWrapper[]) => {
 
+                        let remoteStatuses = await this.retrieveRemoteThread(status);                      
+                        let unknownStatuses = remoteStatuses.filter(x => !localStatuses.find(y => y.status.uri == x.uri));
+
+                        for(let s of unknownStatuses){            
+                            let cwPolicy = this.toolsService.checkContentWarning(s);
+                            let wrapper = new StatusWrapper(s, null, cwPolicy.applyCw, cwPolicy.hide);
+                            wrapper.isRemote = true;
+                            localStatuses.push(wrapper);
+                        }    
+
+                        localStatuses.sort((a,b) => { 
+                            if(a.status.created_at > b.status.created_at) return 1;
+                            if(a.status.created_at < b.status.created_at) return -1;
+                            return 0;
+                        });
+
+                        this.statuses = localStatuses;
                         this.hasContentWarnings = this.statuses.filter(x => x.applyCw).length > 1;
-
-                        return position;
+                        let newPosition = this.statuses.findIndex(x => x.isSelected);
+                        return newPosition;
                     });
-
             })
             .then((position: number) => {
                 setTimeout(() => {
                     const el = this.statusChildren.toArray()[position];
-
-                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });
-                    
-                    scrollIntoView(el.elem.nativeElement, { behavior: 'smooth', block: 'nearest'});
+                    //el.elem.nativeElement.scrollIntoViewIfNeeded({ behavior: 'auto', block: 'start', inline: 'nearest' });                    
+                    scrollIntoView(el.elem.nativeElement, { behavior: 'smooth', block: 'nearest' });
                 }, 250);
             })
             .catch((err: HttpErrorResponse) => {
@@ -196,6 +220,35 @@ export class ThreadComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.isLoading = false;
             });
+    }
+
+    private async retrieveRemoteThread(status: Status): Promise<Status[]> {
+        if(this.remoteStatusFetchingDisabled) return [];
+
+        try {
+            let url = status.url;
+            let splitUrl = url.replace('https://', '').split('/');            
+            let id = splitUrl[splitUrl.length - 1];
+            let instance = splitUrl[0];
+
+            //Pleroma
+            if(url.includes('/objects/')){ 
+                var webpage = await this.httpClient.get(url, { responseType: 'text' }).toPromise();
+                id = webpage.split(`<meta content="https://${instance}/notice/`)[1].split('" property="og:url"')[0];
+            }           
+            
+            let context = await this.mastodonService.getRemoteStatusContext(instance, id);
+            let remoteStatuses = [...context.ancestors, ...context.descendants];
+            remoteStatuses.forEach(s => {
+                if(!s.account.acct.includes('@')){
+                    s.account.acct += `@${instance}`;
+                }
+            });            
+            return remoteStatuses;
+                   
+        } catch (err) {
+            return [];
+         };
     }
 
     refresh(): any {
@@ -225,9 +278,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
         const statuses = this.statusChildren.toArray();
         statuses.forEach(x => {
             x.removeContentWarning();
-            if(x.isSelected){
+            if (x.isSelected) {
                 setTimeout(() => {
-                    scrollIntoView(x.elem.nativeElement, { behavior: 'auto', block: 'nearest'});
+                    scrollIntoView(x.elem.nativeElement, { behavior: 'auto', block: 'nearest' });
                 }, 0);
             }
         });

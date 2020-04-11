@@ -205,7 +205,10 @@ export class ToolsService {
     }
 
     getStatusUsableByAccount(account: AccountInfo, originalStatus: StatusWrapper): Promise<Status> {
-        const isProvider = originalStatus.provider.id === account.id;
+        let isProvider = false;
+        if(!originalStatus.isRemote){
+            isProvider = originalStatus.provider.id === account.id;
+        }        
 
         let statusPromise: Promise<Status> = Promise.resolve(originalStatus.status);
 
