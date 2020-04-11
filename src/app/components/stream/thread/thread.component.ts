@@ -22,6 +22,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     isLoading = true;
     isThread = true;
     hasContentWarnings = false;
+    private remoteStatusFetchingDisabled = false;
 
     bufferStream: Status[] = []; //html compatibility only
 
@@ -57,6 +58,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
         private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
+        let settings = this.toolsService.getSettings();
+        this.remoteStatusFetchingDisabled = settings.disableRemoteStatusFetching;
+
         if (this.refreshEventEmitter) {
             this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
                 this.refresh();
@@ -219,6 +223,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
     }
 
     private async retrieveRemoteThread(status: Status): Promise<Status[]> {
+        if(this.remoteStatusFetchingDisabled) return [];
+
         try {
             let url = status.url;
             let splitUrl = url.replace('https://', '').split('/');            

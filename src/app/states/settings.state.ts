@@ -51,14 +51,15 @@ export class GlobalSettings {
     disableAutofocus = false;
     disableAvatarNotifications = false;
     disableSounds = false;
-    
+    disableRemoteStatusFetching = false;
+
     notificationSoundFileId: string = '0';
 
     contentWarningPolicy: ContentWarningPolicy = new ContentWarningPolicy();
 
     columnSwitchingWinAlt = false;
 
-    accountSettings: AccountSettings[] = [];
+    accountSettings: AccountSettings[] = [];    
 }
 
 export interface SettingsStateModel {
@@ -143,6 +144,7 @@ export class SettingsState {
         newSettings.disableSounds = oldSettings.disableSounds;
         newSettings.notificationSoundFileId = oldSettings.notificationSoundFileId;
         newSettings.columnSwitchingWinAlt = oldSettings.columnSwitchingWinAlt;
+        newSettings.disableRemoteStatusFetching = oldSettings.disableRemoteStatusFetching;
 
         return newSettings;
     }

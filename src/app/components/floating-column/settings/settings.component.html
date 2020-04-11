@@ -94,6 +94,15 @@
             <span class="sub-section__title" *ngIf="contentWarningPolicyChanged"><br/>this settings needs a <a href (click)="reload()">reload</a> to be effective.</span>
         </div>
 
+        <h4 class="panel__subtitle">Other</h4>
+        <div class="sub-section">
+            <input class="sub-section__checkbox" [(ngModel)]="disableRemoteStatusFetchingEnabled"
+                (change)="onDisableRemoteStatusFetchingChanged()" type="checkbox" name="disableRemoteFetching" value="disableRemoteFetching"
+                id="disableRemoteFetching">
+            <label class="noselect sub-section__label" for="disableRemoteFetching">disable remote status fetching</label>
+            <br>
+        </div>
+
         <h4 class="panel__subtitle">About</h4>
         <p class="version">
             Sengi version: {{version}}<br />
