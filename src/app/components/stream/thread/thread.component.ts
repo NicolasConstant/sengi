@@ -166,6 +166,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
                         let contextStatuses = [...context.ancestors, status, ...context.descendants]
                         const position = context.ancestors.length;
 
+                        let localStatuses = [];
                         for (let i = 0; i < contextStatuses.length; i++) {
                             let s = contextStatuses[i];
                             let cwPolicy = this.toolsService.checkContentWarning(s);
@@ -173,16 +174,33 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
                             if (i == position) wrapper.isSelected = true;
 
-                            this.statuses.push(wrapper);
+                            // this.statuses.push(wrapper);
+                            localStatuses.push(wrapper);
                         }
-
-                        this.hasContentWarnings = this.statuses.filter(x => x.applyCw).length > 1;
-
-                        return position;
+                        return localStatuses;
                     })
-                    .then((position: number) => {
-                        this.retrieveRemoteThread(status);
-                        return position;
+                    .then(async (localStatuses: StatusWrapper[]) => {
+
+                        let remoteStatuses = await this.retrieveRemoteThread(status);                      
+                        let unknownStatuses = remoteStatuses.filter(x => !localStatuses.find(y => y.status.uri == x.uri));
+
+                        for(let s of unknownStatuses){            
+                            let cwPolicy = this.toolsService.checkContentWarning(s);
+                            let wrapper = new StatusWrapper(s, null, cwPolicy.applyCw, cwPolicy.hide);
+                            wrapper.isRemote = true;
+                            localStatuses.push(wrapper);
+                        }    
+
+                        localStatuses.sort((a,b) => { 
+                            if(a.status.created_at > b.status.created_at) return 1;
+                            if(a.status.created_at < b.status.created_at) return -1;
+                            return 0;
+                        });
+
+                        this.statuses = localStatuses;
+                        this.hasContentWarnings = this.statuses.filter(x => x.applyCw).length > 1;
+                        let newPosition = this.statuses.findIndex(x => x.isSelected);
+                        return newPosition;
                     });
             })
             .then((position: number) => {
@@ -200,7 +218,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
             });
     }
 
-    private async retrieveRemoteThread(status: Status) {
+    private async retrieveRemoteThread(status: Status): Promise<Status[]> {
         try {
             let url = status.url;
             let splitUrl = url.replace('https://', '').split('/');            
@@ -215,25 +233,16 @@ export class ThreadComponent implements OnInit, OnDestroy {
             
             let context = await this.mastodonService.getRemoteStatusContext(instance, id);
             let remoteStatuses = [...context.ancestors, ...context.descendants];
-
-            let unknownStatuses = remoteStatuses.filter(x => !this.statuses.find(y => y.status.uri == x.uri));
-
-            for(let s of unknownStatuses){
+            remoteStatuses.forEach(s => {
                 if(!s.account.acct.includes('@')){
                     s.account.acct += `@${instance}`;
                 }
-
-                let cwPolicy = this.toolsService.checkContentWarning(s);
-                let wrapper = new StatusWrapper(s, null, cwPolicy.applyCw, cwPolicy.hide);
-                wrapper.isRemote = true;
-                this.statuses.push(wrapper);
-                this.statuses.sort((a,b) => { 
-                    if(a.status.created_at > b.status.created_at) return 1;
-                    if(a.status.created_at < b.status.created_at) return -1;
-                    return 0;
-                });
-            }            
-        } catch (err) { };
+            });            
+            return remoteStatuses;
+                   
+        } catch (err) {
+            return [];
+         };
     }
 
     refresh(): any {
