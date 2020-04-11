@@ -141,6 +141,10 @@ export class MastodonWrapperService {
             });
     }
 
+    getRemoteStatusContext(instance: string, targetStatusId: string): Promise<Context> {
+        return this.mastodonService.getRemoteStatusContext(instance, targetStatusId);
+    }
+
     getFavorites(account: AccountInfo, maxId: string = null): Promise<FavoriteResult> { //, minId: string = null
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {

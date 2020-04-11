@@ -167,6 +167,13 @@ export class MastodonService {
         return this.httpClient.get<Context>(route, { headers: headers }).toPromise();
     }
 
+    getRemoteStatusContext(instance: string, targetStatusId: string): Promise<Context> {
+        const params = this.apiRoutes.getStatusContext.replace('{0}', targetStatusId);
+        const route = `https://${instance}${params}`;
+
+        return this.httpClient.get<Context>(route).toPromise();
+    }
+
     getFavorites(account: AccountInfo, maxId: string = null): Promise<FavoriteResult> { //, minId: string = null
         let route = `https://${account.instance}${this.apiRoutes.getFavourites}`; //?limit=${limit}
 

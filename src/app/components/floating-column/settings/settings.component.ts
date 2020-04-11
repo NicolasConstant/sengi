@@ -21,6 +21,7 @@ export class SettingsComponent implements OnInit {
     notificationForm: FormGroup;
 
     disableAutofocusEnabled: boolean;
+    disableRemoteStatusFetchingEnabled: boolean;
     disableAvatarNotificationsEnabled: boolean;
     disableSoundsEnabled: boolean;
     version: string;
@@ -78,6 +79,7 @@ export class SettingsComponent implements OnInit {
         this.disableAutofocusEnabled = settings.disableAutofocus;
         this.disableAvatarNotificationsEnabled = settings.disableAvatarNotifications;
         this.disableSoundsEnabled = settings.disableSounds;
+        this.disableRemoteStatusFetchingEnabled = settings.disableRemoteStatusFetching;
 
         if (!settings.columnSwitchingWinAlt) {
             this.columnShortcutEnabled = ColumnShortcut.Ctrl;
@@ -169,6 +171,12 @@ export class SettingsComponent implements OnInit {
     onDisableAutofocusChanged() {
         let settings = this.toolsService.getSettings();
         settings.disableAutofocus = this.disableAutofocusEnabled;
+        this.toolsService.saveSettings(settings);
+    }
+
+    onDisableRemoteStatusFetchingChanged() {
+        let settings = this.toolsService.getSettings();
+        settings.disableRemoteStatusFetching = this.disableRemoteStatusFetchingEnabled;
         this.toolsService.saveSettings(settings);
     }
 
