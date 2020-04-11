@@ -1,7 +1,7 @@
 {
   "name": "sengi",
   "short_name": "sengi",
-  "theme_color": "#1976d2",
+  "theme_color": "#000000",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",
