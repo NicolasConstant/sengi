@@ -16,10 +16,6 @@ export class AttachementsComponent implements OnInit {
     audioAttachments: Attachment[] = [];
 
     private _attachments: Attachment[];
-    // isImage: boolean;
-    // isGifv: boolean;
-    // isVideo: boolean;
-    // isAudio: boolean;
 
     faPlay = faPlay;
     faPause = faPause;
@@ -35,19 +31,7 @@ export class AttachementsComponent implements OnInit {
     @Input('attachments')
     set attachments(value: Attachment[]) {
         this._attachments = value;
-
         this.setAttachments(value);
-
-        // if (this._attachments[0].type === 'image') {
-        //     this.isImage = true;
-        // } else if (this._attachments[0].type === 'gifv') {
-        //     this.isGifv = true;
-        // } else if (this._attachments[0].type === 'video') {
-        //     this.isVideo = true;
-        // } else if (this._attachments[0].type === 'audio') {
-        //     this.isAudio = true;
-        //     this.setAudioData(this._attachments[0]);
-        // }
     }
     get attachments(): Attachment[] {
         return this._attachments;
