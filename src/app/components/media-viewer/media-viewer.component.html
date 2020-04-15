@@ -21,7 +21,7 @@
             <img *ngIf="att.type === 'image'" src="{{att.url}}" class="media-viewer-canvas__image"   [class.collapsed]="currentIndex !== att.index" />
         </a>
 
-        <video *ngIf="att.type === 'gifv'" class="media-viewer-canvas__image" role="application" loop autoplay>
+        <video *ngIf="att.type === 'gifv'" class="media-viewer-canvas__image" role="application" loop autoplay [class.collapsed]="currentIndex !== att.index">
             <source src="{{att.url}}" type="video/mp4">
         </video>
         <video *ngIf="att.type === 'video'" class="media-viewer-canvas__image" role="application" loop autoplay
