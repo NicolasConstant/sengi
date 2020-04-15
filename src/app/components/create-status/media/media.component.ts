@@ -50,6 +50,8 @@ export class MediaComponent implements OnInit, OnDestroy {
     }
 
     updateMedia(media: MediaWrapper): boolean {
+        if(media.description === null || media.description === undefined) return false;
+
         const account = this.toolsService.getSelectedAccounts()[0];
         this.mediaService.update(account, media);
         return false;
