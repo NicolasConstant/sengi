@@ -1,0 +1,41 @@
+.image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: 50% 50%;
+
+    &__link {
+        z-index: 10;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 5px 5px 8px 8px;
+        transition: all .2s;
+        opacity: 0;
+        color: white;
+
+        &--icon {  
+            filter: drop-shadow(0 0 3px rgb(78, 78, 78));        
+        }
+
+        // &:hover {
+        //     color: rgb(174, 202, 255);
+        // }
+    }
+
+    &:hover &__link {
+        opacity: 1;
+        cursor: pointer;
+    }
+}
+
+img,
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: zoom-in;
+    border-radius: 2px;
+}
