@@ -1,4 +1,8 @@
 <div class="image">
+    <a href class="image__link" (click)="openExternal()" title="open image">
+        <fa-icon class="image__link--icon" [icon]="faLink"></fa-icon>
+    </a>
+
     <a *ngIf="attachment.type === 'image'" class="galery__image--link" title="{{ attachment.description }}"
         (click)="attachmentSelected()">
         <img class="galery__image--1" src="{{ attachment.preview_url }}" />
