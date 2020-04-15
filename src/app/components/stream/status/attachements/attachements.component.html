@@ -1,33 +1,43 @@
 <div class="galery" *ngIf="imageAttachments.length > 0">
     <div class="galery__image" *ngIf="imageAttachments.length === 1">
-        <app-attachement-image class="galery__img--1" [attachment]="imageAttachments[0]">
+        <app-attachement-image class="galery__img--1" 
+            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected(0)">
         </app-attachement-image>
     </div>
 
     <div class="galery__image" *ngIf="imageAttachments.length === 2">
-        <app-attachement-image class="galery__img--2" [attachment]="imageAttachments[0]">
+        <app-attachement-image class="galery__img--2" 
+            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected(0)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--2" [attachment]="imageAttachments[1]">
+        <app-attachement-image class="galery__img--2" 
+            [attachment]="imageAttachments[1]" (openEvent)="attachmentSelected(1)">
         </app-attachement-image>
     </div>
 
     <div class="galery__image" *ngIf="imageAttachments.length === 3">
-        <app-attachement-image class="galery__img--3-1" [attachment]="imageAttachments[0]">
+        <app-attachement-image class="galery__img--3-1" 
+            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected(0)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--3-2" [attachment]="imageAttachments[1]">
+        <app-attachement-image class="galery__img--3-2" 
+            [attachment]="imageAttachments[1]" (openEvent)="attachmentSelected(1)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--3-2" [attachment]="imageAttachments[2]">
+        <app-attachement-image class="galery__img--3-2" 
+            [attachment]="imageAttachments[2]" (openEvent)="attachmentSelected(2)">
         </app-attachement-image>
     </div>
 
     <div class="galery__image" *ngIf="imageAttachments.length === 4">
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[0]">
+        <app-attachement-image class="galery__img--4" 
+            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected(0)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[1]">
+        <app-attachement-image class="galery__img--4" 
+            [attachment]="imageAttachments[1]" (openEvent)="attachmentSelected(1)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[2]">
+        <app-attachement-image class="galery__img--4" 
+            [attachment]="imageAttachments[2]" (openEvent)="attachmentSelected(2)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[3]">
+        <app-attachement-image class="galery__img--4" 
+            [attachment]="imageAttachments[3]" (openEvent)="attachmentSelected(3)">
         </app-attachement-image>
     </div>    
 </div>

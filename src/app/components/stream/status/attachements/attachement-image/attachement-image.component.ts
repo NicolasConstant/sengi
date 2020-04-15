@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Attachment } from '../../../../../services/models/mastodon.interfaces';
 
@@ -8,12 +8,16 @@ import { Attachment } from '../../../../../services/models/mastodon.interfaces';
     styleUrls: ['./attachement-image.component.scss']
 })
 export class AttachementImageComponent implements OnInit {
-
     @Input() attachment: Attachment;
+    @Output() openEvent = new EventEmitter();
 
     constructor() { }
 
     ngOnInit() {
     }
 
+    attachmentSelected(): boolean {
+        this.openEvent.next();
+        return false;
+    }
 }
