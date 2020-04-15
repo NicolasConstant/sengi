@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
-import { Attachment } from '../../../../services/models/mastodon.interfaces';
+import { Attachment, PleromaAttachment } from '../../../../services/models/mastodon.interfaces';
 import { NavigationService } from '../../../../services/navigation.service';
 import { OpenMediaEvent } from '../../../../models/common.model';
 
@@ -13,7 +13,7 @@ import { OpenMediaEvent } from '../../../../models/common.model';
 export class AttachementsComponent implements OnInit {    
     imageAttachments: Attachment[] = [];
     videoAttachments: Attachment[] = [];
-    audioAttachments: Attachment[] = [];
+    audioAttachments: AudioAttachment[] = [];
 
     private _attachments: Attachment[];
 
@@ -51,8 +51,7 @@ export class AttachementsComponent implements OnInit {
             } else if(a.type === 'video') {
                 this.videoAttachments.push(a);                
             } else if(a.type === 'audio') {
-                this.audioAttachments.push(a);
-                this.setAudioData(a);
+                this.audioAttachments.push(new AudioAttachment(a));
             }
         });
     }
@@ -103,6 +102,24 @@ export class AttachementsComponent implements OnInit {
         return false;
     }
 
+    
+}
+
+class AudioAttachment implements Attachment {
+    constructor(att: Attachment){
+        this.id = att.id;
+        this.type = att.type;
+        this.url = att.url;
+        this.remote_url = att.remote_url;
+        this.preview_url = att.preview_url;
+        this.text_url = att.text_url;
+        this.meta = att.meta;
+        this.description = att.description;
+        this.pleroma = att.pleroma;
+
+        this.setAudioData(att);
+    }
+
     setAudioData(att: Attachment): any {
         if(att.meta && att.meta.audio_encode){
             this.audioType = `audio/${att.meta.audio_encode}`;
@@ -110,4 +127,16 @@ export class AttachementsComponent implements OnInit {
             this.audioType = att.pleroma.mime_type;
         }
     }
+
+    id: string;
+    type: "image" | "video" | "gifv" | "audio";
+    url: string;
+    remote_url: string;
+    preview_url: string;
+    text_url: string;
+    meta: any;
+    description: string;
+    pleroma: PleromaAttachment;
+
+    audioType: string;
 }

@@ -1,45 +1,45 @@
 <div class="galery" *ngIf="imageAttachments.length > 0">
     <div class="galery__image" *ngIf="imageAttachments.length === 1">
-        <app-attachement-image class="galery__img--1" 
-            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected('image', 0)">
+        <app-attachement-image class="galery__img--1" [attachment]="imageAttachments[0]"
+            (openEvent)="attachmentSelected('image', 0)">
         </app-attachement-image>
     </div>
 
     <div class="galery__image" *ngIf="imageAttachments.length === 2">
-        <app-attachement-image class="galery__img--2" 
-            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected('image', 0)">
+        <app-attachement-image class="galery__img--2" [attachment]="imageAttachments[0]"
+            (openEvent)="attachmentSelected('image', 0)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--2" 
-            [attachment]="imageAttachments[1]" (openEvent)="attachmentSelected('image', 1)">
+        <app-attachement-image class="galery__img--2" [attachment]="imageAttachments[1]"
+            (openEvent)="attachmentSelected('image', 1)">
         </app-attachement-image>
     </div>
 
     <div class="galery__image" *ngIf="imageAttachments.length === 3">
-        <app-attachement-image class="galery__img--3-1" 
-            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected('image', 0)">
+        <app-attachement-image class="galery__img--3-1" [attachment]="imageAttachments[0]"
+            (openEvent)="attachmentSelected('image', 0)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--3-2" 
-            [attachment]="imageAttachments[1]" (openEvent)="attachmentSelected('image', 1)">
+        <app-attachement-image class="galery__img--3-2" [attachment]="imageAttachments[1]"
+            (openEvent)="attachmentSelected('image', 1)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--3-2" 
-            [attachment]="imageAttachments[2]" (openEvent)="attachmentSelected('image', 2)">
+        <app-attachement-image class="galery__img--3-2" [attachment]="imageAttachments[2]"
+            (openEvent)="attachmentSelected('image', 2)">
         </app-attachement-image>
     </div>
 
     <div class="galery__image" *ngIf="imageAttachments.length === 4">
-        <app-attachement-image class="galery__img--4" 
-            [attachment]="imageAttachments[0]" (openEvent)="attachmentSelected('image', 0)">
+        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[0]"
+            (openEvent)="attachmentSelected('image', 0)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--4" 
-            [attachment]="imageAttachments[1]" (openEvent)="attachmentSelected('image', 1)">
+        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[1]"
+            (openEvent)="attachmentSelected('image', 1)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--4" 
-            [attachment]="imageAttachments[2]" (openEvent)="attachmentSelected('image', 2)">
+        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[2]"
+            (openEvent)="attachmentSelected('image', 2)">
         </app-attachement-image>
-        <app-attachement-image class="galery__img--4" 
-            [attachment]="imageAttachments[3]" (openEvent)="attachmentSelected('image', 3)">
+        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[3]"
+            (openEvent)="attachmentSelected('image', 3)">
         </app-attachement-image>
-    </div>    
+    </div>
 </div>
 
 <div class="galery galery__hover" *ngIf="videoAttachments.length > 0">
@@ -65,8 +65,10 @@
     </div>
 </div>
 <div *ngIf="audioAttachments.length > 0">
-    <audio controls class="audio">
-        <source src="{{ audioAttachments[0].url }}" type="{{ audioType }}">
-        Your browser does not support the audio element.
-    </audio>
+    <div *ngFor="let a of audioAttachments">
+        <audio controls class="audio">
+            <source src="{{ a.url }}" type="{{ a.audioType }}">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
 </div>
