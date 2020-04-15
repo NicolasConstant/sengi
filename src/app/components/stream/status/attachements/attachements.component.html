@@ -1,55 +1,103 @@
-<div class="galery" *ngIf="isImage">
+<div class="galery" *ngIf="imageAttachments.length > 0">
     <div class="galery__image">
-        <a *ngIf="attachments.length === 1" class="galery__image--link" title="{{ attachments[0].description }}"
-            (click)="attachmentSelected(0)">
-            <img class="galery__image--1" src="{{ attachments[0].preview_url }}" />
+        <div class="galery__image" *ngIf="imageAttachments.length === 1">
+            <a *ngIf="imageAttachments[0].type === 'image'" class="galery__image--link"
+                title="{{ imageAttachments[0].description }}" (click)="attachmentSelected(0)">
+                <img class="galery__image--1" src="{{ imageAttachments[0].preview_url }}" />
+            </a>
+            <video *ngIf="imageAttachments[0].type === 'gifv'" class="galery__image--link galery__image--1"
+                role="application" loop autoplay (click)="attachmentSelected(0)">
+                <source src="{{ imageAttachments[0].url }}" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="galery__image" *ngIf="imageAttachments.length === 2">
+            <a *ngIf="imageAttachments[0].type === 'image'" class="galery__image--link galery__image--link-2"
+                title="{{ imageAttachments[0].description }}" (click)="attachmentSelected(0)">
+                <img src="{{ imageAttachments[0].preview_url }}" />
+            </a>
+            <div class="galery__image--link galery__image--link-2">
+                <video *ngIf="imageAttachments[0].type === 'gifv'" role="application" loop autoplay
+                    (click)="attachmentSelected(0)">
+                    <source src="{{ imageAttachments[0].url }}" type="video/mp4">
+                </video>
+            </div>
+            <a *ngIf="imageAttachments[0].type === 'image'" class="galery__image--link galery__image--link-2"
+                title="{{ imageAttachments[1].description }}" (click)="attachmentSelected(1)">
+                <img src="{{ imageAttachments[1].preview_url }}" />
+            </a>
+            <div class="galery__image--link galery__image--link-2">
+                <video *ngIf="imageAttachments[1].type === 'gifv'" role="application" loop autoplay
+                    (click)="attachmentSelected(1)">
+                    <source src="{{ imageAttachments[1].url }}" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <a *ngIf="imageAttachments.length === 3" class="galery__image--link galery__image--link-3-1"
+            title="{{ imageAttachments[0].description }}" (click)="attachmentSelected(0)">
+            <img *ngIf="imageAttachments[0].type === 'image'" src="{{ imageAttachments[0].preview_url }}" />
+            <video *ngIf="imageAttachments[0].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(0)">
+                <source src="{{ imageAttachments[0].url }}" type="video/mp4">
+            </video>
+        </a>
+        <a *ngIf="imageAttachments.length === 3" class="galery__image--link galery__image--link-3-2"
+            title="{{ imageAttachments[1].description }}" (click)="attachmentSelected(1)">
+            <img *ngIf="imageAttachments[1].type === 'image'" src="{{ imageAttachments[1].preview_url }}" />
+            <video *ngIf="imageAttachments[1].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(1)">
+                <source src="{{ imageAttachments[1].url }}" type="video/mp4">
+            </video>
+        </a>
+        <a *ngIf="imageAttachments.length === 3" class="galery__image--link galery__image--link-3-2"
+            title="{{ imageAttachments[2].description }}" (click)="attachmentSelected(2)">
+            <img *ngIf="imageAttachments[2].type === 'image'" src="{{ imageAttachments[2].preview_url }}" />
+            <video *ngIf="imageAttachments[2].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(2)">
+                <source src="{{ imageAttachments[2].url }}" type="video/mp4">
+            </video>
         </a>
 
-        <a *ngIf="attachments.length === 2" class="galery__image--link galery__image--link-2"
-            title="{{ attachments[0].description }}" (click)="attachmentSelected(0)">
-            <img src="{{ attachments[0].preview_url }}" />
+        <a *ngIf="imageAttachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ imageAttachments[0].description }}" (click)="attachmentSelected(0)">
+            <img *ngIf="imageAttachments[0].type === 'image'" src="{{ imageAttachments[0].preview_url }}" />
+            <video *ngIf="imageAttachments[0].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(0)">
+                <source src="{{ imageAttachments[0].url }}" type="video/mp4">
+            </video>
         </a>
-        <a *ngIf="attachments.length === 2" class="galery__image--link galery__image--link-2"
-            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
-            <img src="{{ attachments[1].preview_url }}" />
+        <a *ngIf="imageAttachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ imageAttachments[1].description }}" (click)="attachmentSelected(1)">
+            <img *ngIf="imageAttachments[1].type === 'image'" src="{{ imageAttachments[1].preview_url }}" />
+            <video *ngIf="imageAttachments[1].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(1)">
+                <source src="{{ imageAttachments[1].url }}" type="video/mp4">
+            </video>
         </a>
-
-        <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-1"
-            title="{{ attachments[0].description }}" (click)="attachmentSelected(0)">
-            <img src="{{ attachments[0].preview_url }}" />
+        <a *ngIf="imageAttachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ imageAttachments[2].description }}" (click)="attachmentSelected(2)">
+            <img *ngIf="imageAttachments[2].type === 'image'" src="{{ imageAttachments[2].preview_url }}" />
+            <video *ngIf="imageAttachments[2].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(2)">
+                <source src="{{ imageAttachments[2].url }}" type="video/mp4">
+            </video>
         </a>
-        <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
-            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
-            <img src="{{ attachments[1].preview_url }}" />
-        </a>
-        <a *ngIf="attachments.length === 3" class="galery__image--link galery__image--link-3-2"
-            title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
-            <img src="{{ attachments[2].preview_url }}" />
-        </a>
-
-        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[0].description }}" (click)="attachmentSelected(0)">
-            <img src="{{ attachments[0].preview_url }}" />
-        </a>
-        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[1].description }}" (click)="attachmentSelected(1)">
-            <img src="{{ attachments[1].preview_url }}" />
-        </a>
-        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[2].description }}" (click)="attachmentSelected(2)">
-            <img src="{{ attachments[2].preview_url }}" />
-        </a>
-        <a *ngIf="attachments.length === 4" class="galery__image--link galery__image--link-4"
-            title="{{ attachments[3].description }}" (click)="attachmentSelected(3)">
-            <img src="{{ attachments[3].preview_url }}" />
+        <a *ngIf="imageAttachments.length === 4" class="galery__image--link galery__image--link-4"
+            title="{{ imageAttachments[3].description }}" (click)="attachmentSelected(3)">
+            <img *ngIf="imageAttachments[3].type === 'image'" src="{{ imageAttachments[3].preview_url }}" />
+            <video *ngIf="imageAttachments[3].type === 'gifv'" class="galery__gifv" role="application" loop autoplay
+                (click)="attachmentSelected(3)">
+                <source src="{{ imageAttachments[3].url }}" type="video/mp4">
+            </video>
         </a>
     </div>
 </div>
-<div class="galery" *ngIf="isGifv">
+<!-- <div class="galery" *ngIf="isGifv">
     <video class="galery__gifv" role="application" loop autoplay (click)="attachmentSelected(0)">
         <source src="{{ attachments[0].url }}" type="video/mp4">
     </video>
-</div>
+</div> -->
 <div class="galery galery__hover" *ngIf="isVideo">
     <video #videoPlayer class="galery__video" role="application" loop>
         <source src="{{ attachments[0].url }}" type="video/mp4">
@@ -62,14 +110,14 @@
     <div class="galery__control">
         <a href class="galery__control--button" (click)="onPlay()">
             <fa-icon [icon]="faPause" *ngIf="isPlaying"></fa-icon>
-        </a>        
+        </a>
         <a href class="galery__control--button galery__control--expand" (click)="onExpand()">
             <fa-icon [icon]="faExpand"></fa-icon>
         </a>
         <a href class="galery__control--button galery__control--mute" (click)="onMute()">
             <fa-icon [icon]="faVolumeUp" *ngIf="!isMuted"></fa-icon>
             <fa-icon [icon]="faVolumeMute" *ngIf="isMuted"></fa-icon>
-        </a> 
+        </a>
     </div>
 </div>
 <div *ngIf="isAudio">

@@ -11,11 +11,15 @@ import { OpenMediaEvent } from '../../../../models/common.model';
     styleUrls: ['./attachements.component.scss']
 })
 export class AttachementsComponent implements OnInit {    
+    imageAttachments: Attachment[] = [];
+    videoAttachments: Attachment[] = [];
+    audioAttachments: Attachment[] = [];
+
     private _attachments: Attachment[];
-    isImage: boolean;
-    isGifv: boolean;
-    isVideo: boolean;
-    isAudio: boolean;
+    // isImage: boolean;
+    // isGifv: boolean;
+    // isVideo: boolean;
+    // isAudio: boolean;
 
     faPlay = faPlay;
     faPause = faPause;
@@ -32,16 +36,18 @@ export class AttachementsComponent implements OnInit {
     set attachments(value: Attachment[]) {
         this._attachments = value;
 
-        if (this._attachments[0].type === 'image') {
-            this.isImage = true;
-        } else if (this._attachments[0].type === 'gifv') {
-            this.isGifv = true;
-        } else if (this._attachments[0].type === 'video') {
-            this.isVideo = true;
-        } else if (this._attachments[0].type === 'audio') {
-            this.isAudio = true;
-            this.setAudioData(this._attachments[0]);
-        }
+        this.setAttachments(value);
+
+        // if (this._attachments[0].type === 'image') {
+        //     this.isImage = true;
+        // } else if (this._attachments[0].type === 'gifv') {
+        //     this.isGifv = true;
+        // } else if (this._attachments[0].type === 'video') {
+        //     this.isVideo = true;
+        // } else if (this._attachments[0].type === 'audio') {
+        //     this.isAudio = true;
+        //     this.setAudioData(this._attachments[0]);
+        // }
     }
     get attachments(): Attachment[] {
         return this._attachments;
@@ -52,6 +58,19 @@ export class AttachementsComponent implements OnInit {
     constructor(private readonly navigationService: NavigationService) { }
 
     ngOnInit() {
+    }
+
+    private setAttachments(att: Attachment[]){
+        att.forEach(a => {
+            if(a.type === 'image' || a.type === 'gifv'){
+                this.imageAttachments.push(a);
+            } else if(a.type === 'video') {
+                this.videoAttachments.push(a);                
+            } else if(a.type === 'audio') {
+                this.audioAttachments.push(a);
+                this.setAudioData(a);
+            }
+        });
     }
 
     attachmentSelected(index: number): boolean {
