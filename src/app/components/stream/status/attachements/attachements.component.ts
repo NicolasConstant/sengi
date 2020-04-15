@@ -57,8 +57,14 @@ export class AttachementsComponent implements OnInit {
         });
     }
 
-    attachmentSelected(index: number): boolean {
-        let openMediaEvent = new OpenMediaEvent(index, this.attachments, null);
+    attachmentSelected(type: 'image' | 'video', index: number): boolean {
+        let openMediaEvent: OpenMediaEvent;
+        if(type === 'image'){
+            openMediaEvent = new OpenMediaEvent(index, this.imageAttachments, null);
+        } else if(type === 'video') {
+            openMediaEvent = new OpenMediaEvent(index, this.videoAttachments, null);
+        }
+
         this.navigationService.openMedia(openMediaEvent);
         return false;
     }
@@ -87,7 +93,7 @@ export class AttachementsComponent implements OnInit {
             this.onPlay();
         }
 
-        this.attachmentSelected(0);
+        this.attachmentSelected('video', 0);
         return false;
     }
 
