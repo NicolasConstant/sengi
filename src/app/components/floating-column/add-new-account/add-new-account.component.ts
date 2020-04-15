@@ -22,7 +22,7 @@ export class AddNewAccountComponent implements OnInit {
     private instance: string;
     @Input()
     set setInstance(value: string) {
-        this.instance = value.trim();
+        this.instance = value.replace('http://', '').replace('https://', '').replace('/', '').toLowerCase().trim();
         this.checkComrad();
     }
     get setInstance(): string {
