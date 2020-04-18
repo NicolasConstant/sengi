@@ -19,6 +19,7 @@ import { StatusWrapper } from '../../../models/common.model';
 })
 export class StreamStatusesComponent implements OnInit, OnDestroy {
     isLoading = true;
+    private lastInfinityFetchReturnedNothing = false;
     isThread = false;
     displayError: string;
     hasContentWarnings = false;
@@ -255,7 +256,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     }
 
     private scrolledToBottom() {
-        if (this.isLoading) return;
+        if (this.isLoading || this.lastInfinityFetchReturnedNothing) return;
 
         this.isLoading = true;
         this.isProcessingInfiniteScroll = true;
@@ -271,6 +272,10 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                     let cwPolicy = this.toolsService.checkContentWarning(s);
                     const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
+                }
+
+                if(!status || status.length === 0){
+                    this.lastInfinityFetchReturnedNothing = true;
                 }
             })
             .catch((err: HttpErrorResponse) => {
@@ -318,6 +323,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
+            this.lastInfinityFetchReturnedNothing = false;
         }
 
         if (this.bufferStream.length > 3 * this.streamingService.nbStatusPerIteration) {
