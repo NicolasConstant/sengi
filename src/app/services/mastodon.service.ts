@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {             
+export class MastodonService {
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -28,7 +28,7 @@ export class MastodonService {
         return this.httpClient.get<Status[]>(route, { headers: headers }).toPromise();
     }
 
-    getConversations(account: AccountInfo, max_id: string = null, since_id: string = null, min_id = null, limit: number = 20): Promise<Conversation[]> {        
+    getConversations(account: AccountInfo, max_id: string = null, since_id: string = null, min_id = null, limit: number = 20): Promise<Conversation[]> {
         let params = `?limit=${limit}`;
         if (max_id) params += `&max_id=${max_id}`;
         if (since_id) params += `&since_id=${since_id}`;
@@ -90,8 +90,14 @@ export class MastodonService {
         const statusData = new StatusData();
         statusData.status = status;
         statusData.media_ids = mediaIds;
-        statusData.poll = poll;
-        statusData.scheduled_at = scheduled_at;
+
+        if (poll) {
+            statusData['poll'] = poll;
+        }
+
+        if (scheduled_at) {
+            statusData['scheduled_at'] = scheduled_at;
+        }
 
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
@@ -131,14 +137,14 @@ export class MastodonService {
     search(account: AccountInfo, query: string, version: 'v1' | 'v2', resolve: boolean = false): Promise<Results> {
         if (query[0] === '#') query = query.substr(1);
         let searchRoute = this.apiRoutes.search;
-        if(version === 'v2') searchRoute = this.apiRoutes.searchV2;
+        if (version === 'v2') searchRoute = this.apiRoutes.searchV2;
 
         const route = `https://${account.instance}${searchRoute}?q=${query}&resolve=${resolve}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Results>(route, { headers: headers }).toPromise()
             .then((result: Results) => {
-                if(version === 'v2'){
-                    result = { 
+                if (version === 'v2') {
+                    result = {
                         accounts: result.accounts,
                         statuses: result.statuses,
                         hashtags: result.hashtags.map(x => (<any>x).name)
@@ -182,12 +188,12 @@ export class MastodonService {
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get(route, { headers: headers, observe: "response" }).toPromise()
-            .then((res: HttpResponse<Status[]>) => {                
+            .then((res: HttpResponse<Status[]>) => {
                 const link = res.headers.get('Link');
                 let lastId = null;
-                if(link){
+                if (link) {
                     const maxId = link.split('max_id=')[1];
-                    if(maxId){
+                    if (maxId) {
                         lastId = maxId.split('>;')[0];
                     }
                 }
@@ -202,12 +208,12 @@ export class MastodonService {
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get(route, { headers: headers, observe: "response" }).toPromise()
-            .then((res: HttpResponse<Status[]>) => {                
+            .then((res: HttpResponse<Status[]>) => {
                 const link = res.headers.get('Link');
                 let lastId = null;
-                if(link){
+                if (link) {
                     const maxId = link.split('max_id=')[1];
-                    if(maxId){
+                    if (maxId) {
                         lastId = maxId.split('>;')[0];
                     }
                 }
@@ -286,7 +292,11 @@ export class MastodonService {
     uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
         let input = new FormData();
         input.append('file', file);
-        input.append('description', description);
+        if (description !== null && description !== undefined) {
+            input.append('description', description);
+        } else {
+            input.append('description', '');
+        }
         const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Attachment>(route, input, { headers: headers }).toPromise();
@@ -304,15 +314,15 @@ export class MastodonService {
     getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         let route = `https://${account.instance}${this.apiRoutes.getNotifications}?limit=${limit}`;
 
-        if(maxId){
+        if (maxId) {
             route += `&max_id=${maxId}`;
         }
 
-        if(sinceId){
+        if (sinceId) {
             route += `&since_id=${sinceId}`;
         }
 
-        if(excludeTypes && excludeTypes.length > 0) {
+        if (excludeTypes && excludeTypes.length > 0) {
             const excludeTypeArray = this.formatArray(excludeTypes, 'exclude_types');
             route += `&${excludeTypeArray}`;
         }
@@ -328,7 +338,7 @@ export class MastodonService {
             result += `${paramName}[]=${x}`;
         });
         return result;
-    } 
+    }
 
     getLists(account: AccountInfo): Promise<StreamElement[]> {
         let route = `https://${account.instance}${this.apiRoutes.getLists}`;
@@ -351,19 +361,19 @@ export class MastodonService {
             .then((list: List) => {
                 return new StreamElement(StreamTypeEnum.list, list.title, account.id, null, list.title, list.id, account.instance);
             });
-    }  
+    }
 
     deleteList(account: AccountInfo, listId: string): Promise<any> {
-        let route = `https://${account.instance}${this.apiRoutes.deleteList}`.replace('{0}', listId);       
+        let route = `https://${account.instance}${this.apiRoutes.deleteList}`.replace('{0}', listId);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.delete(route, { headers: headers }).toPromise();
-    } 
+    }
 
     getListAccounts(account: AccountInfo, listId: string): Promise<Account[]> {
         let route = `https://${account.instance}${this.apiRoutes.getAccountsInList}`.replace('{0}', listId);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.get<Account[]>(route, { headers: headers }).toPromise();
-    }   
+    }
 
     addAccountToList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
         let route = `https://${account.instance}${this.apiRoutes.addAccountToList}`.replace('{0}', listId);
@@ -385,7 +395,7 @@ export class MastodonService {
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Poll>(route, null, { headers: headers }).toPromise();
-    } 
+    }
 
     getPoll(account: AccountInfo, pollId: string): Promise<Poll> {
         let route = `https://${account.instance}${this.apiRoutes.getPoll}`.replace('{0}', pollId);
@@ -422,7 +432,7 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(route, null, { headers: headers }).toPromise();
     }
-  
+
     unmuteConversation(account: AccountInfo, statusId: string): Promise<Status> {
         let route = `https://${account.instance}${this.apiRoutes.unmuteStatus}`.replace('{0}', statusId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
@@ -433,12 +443,12 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.deleteStatus}`.replace('{0}', statusId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.delete<any>(route, { headers: headers }).toPromise();
-    } 
-    
+    }
+
     getCustomEmojis(account: AccountInfo): Promise<Emoji[]> {
         let route = `https://${account.instance}${this.apiRoutes.getCustomEmojis}`;
         return this.httpClient.get<Emoji[]>(route).toPromise();
-    }   
+    }
 
     getScheduledStatuses(account: AccountInfo): Promise<ScheduledStatus[]> {
         let route = `https://${account.instance}${this.apiRoutes.getScheduledStatuses}`;
@@ -446,7 +456,7 @@ export class MastodonService {
         return this.httpClient.get<ScheduledStatus[]>(route, { headers: headers }).toPromise();
     }
 
-    changeScheduledStatus(account: AccountInfo, statusId: string, scheduled_at: string): Promise<ScheduledStatus>{
+    changeScheduledStatus(account: AccountInfo, statusId: string, scheduled_at: string): Promise<ScheduledStatus> {
         let route = `https://${account.instance}${this.apiRoutes.putScheduleStatus}`.replace('{0}', statusId);
         route = `${route}?scheduled_at=${scheduled_at}`
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
@@ -472,15 +482,15 @@ class StatusData {
     status: string;
     in_reply_to_id: string;
     media_ids: string[];
-    poll: PollParameters;
+    // poll: PollParameters;
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
-    scheduled_at: string;
+    // scheduled_at: string;
 }
 
 export class PollParameters {
-    options: string [] = [];
+    options: string[] = [];
     expires_in: number;
     multiple: boolean;
     hide_totals: boolean;
@@ -489,11 +499,11 @@ export class PollParameters {
 export class FavoriteResult {
     constructor(
         public max_id: string,
-        public favorites: Status[]) {}   
+        public favorites: Status[]) { }
 }
 
 export class BookmarkResult {
     constructor(
         public max_id: string,
-        public bookmarked: Status[]) {}   
+        public bookmarked: Status[]) { }
 }

@@ -60,6 +60,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private goToTopSubscription: Subscription;
     private streamsSubscription: Subscription;
     private hideAccountSubscription: Subscription;
+    private deleteStatusSubscription: Subscription;
     private streams$: Observable<StreamElement[]>;
 
     constructor(
@@ -107,12 +108,21 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.deleteStatusSubscription = this.notificationService.deletedStatusStream.subscribe((status: StatusWrapper) => {
+            if (status) {
+                this.statuses = this.statuses.filter(x => {       
+                    return !(x.status.url.replace('https://', '').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
+                });
+            }
+        });
     }
 
     ngOnDestroy() {
         if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
         if (this.streamsSubscription) this.streamsSubscription.unsubscribe();
         if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
+        if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
     }
 
     refresh(): any {

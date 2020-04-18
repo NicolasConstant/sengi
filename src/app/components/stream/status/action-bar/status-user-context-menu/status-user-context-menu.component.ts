@@ -75,9 +75,9 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
     private checkStatus(accounts: AccountInfo[]): void {
         const selectedAccount = accounts.find(x => x.isSelected);
-
-        this.isOwnerSelected = selectedAccount.username === this.displayedStatus.account.username
-            && selectedAccount.instance === this.displayedStatus.account.url.replace('https://', '').split('/')[0];
+        
+        this.isOwnerSelected = selectedAccount.username.toLowerCase() === this.displayedStatus.account.username.toLowerCase()
+            && selectedAccount.instance.toLowerCase() === this.displayedStatus.account.url.replace('https://', '').split('/')[0].toLowerCase();
     }
 
 

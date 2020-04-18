@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { faPlay, faPause, faExpand, faVolumeUp, faVolumeMute } from "@fortawesome/free-solid-svg-icons";
 
-import { Attachment } from '../../../../services/models/mastodon.interfaces';
+import { Attachment, PleromaAttachment } from '../../../../services/models/mastodon.interfaces';
 import { NavigationService } from '../../../../services/navigation.service';
 import { OpenMediaEvent } from '../../../../models/common.model';
 
@@ -11,11 +11,11 @@ import { OpenMediaEvent } from '../../../../models/common.model';
     styleUrls: ['./attachements.component.scss']
 })
 export class AttachementsComponent implements OnInit {    
+    imageAttachments: Attachment[] = [];
+    videoAttachments: Attachment[] = [];
+    audioAttachments: AudioAttachment[] = [];
+
     private _attachments: Attachment[];
-    isImage: boolean;
-    isGifv: boolean;
-    isVideo: boolean;
-    isAudio: boolean;
 
     faPlay = faPlay;
     faPause = faPause;
@@ -31,17 +31,7 @@ export class AttachementsComponent implements OnInit {
     @Input('attachments')
     set attachments(value: Attachment[]) {
         this._attachments = value;
-
-        if (this._attachments[0].type === 'image') {
-            this.isImage = true;
-        } else if (this._attachments[0].type === 'gifv') {
-            this.isGifv = true;
-        } else if (this._attachments[0].type === 'video') {
-            this.isVideo = true;
-        } else if (this._attachments[0].type === 'audio') {
-            this.isAudio = true;
-            this.setAudioData(this._attachments[0]);
-        }
+        this.setAttachments(value);
     }
     get attachments(): Attachment[] {
         return this._attachments;
@@ -54,8 +44,26 @@ export class AttachementsComponent implements OnInit {
     ngOnInit() {
     }
 
-    attachmentSelected(index: number): boolean {
-        let openMediaEvent = new OpenMediaEvent(index, this.attachments, null);
+    private setAttachments(att: Attachment[]){
+        att.forEach(a => {
+            if(a.type === 'image' || a.type === 'gifv'){
+                this.imageAttachments.push(a);
+            } else if(a.type === 'video') {
+                this.videoAttachments.push(a);                
+            } else if(a.type === 'audio') {
+                this.audioAttachments.push(new AudioAttachment(a));
+            }
+        });
+    }
+
+    attachmentSelected(type: 'image' | 'video', index: number): boolean {
+        let openMediaEvent: OpenMediaEvent;
+        if(type === 'image'){
+            openMediaEvent = new OpenMediaEvent(index, this.imageAttachments, null);
+        } else if(type === 'video') {
+            openMediaEvent = new OpenMediaEvent(index, this.videoAttachments, null);
+        }
+
         this.navigationService.openMedia(openMediaEvent);
         return false;
     }
@@ -84,7 +92,7 @@ export class AttachementsComponent implements OnInit {
             this.onPlay();
         }
 
-        this.attachmentSelected(0);
+        this.attachmentSelected('video', 0);
         return false;
     }
 
@@ -94,6 +102,24 @@ export class AttachementsComponent implements OnInit {
         return false;
     }
 
+    
+}
+
+class AudioAttachment implements Attachment {
+    constructor(att: Attachment){
+        this.id = att.id;
+        this.type = att.type;
+        this.url = att.url;
+        this.remote_url = att.remote_url;
+        this.preview_url = att.preview_url;
+        this.text_url = att.text_url;
+        this.meta = att.meta;
+        this.description = att.description;
+        this.pleroma = att.pleroma;
+
+        this.setAudioData(att);
+    }
+
     setAudioData(att: Attachment): any {
         if(att.meta && att.meta.audio_encode){
             this.audioType = `audio/${att.meta.audio_encode}`;
@@ -101,4 +127,16 @@ export class AttachementsComponent implements OnInit {
             this.audioType = att.pleroma.mime_type;
         }
     }
+
+    id: string;
+    type: "image" | "video" | "gifv" | "audio";
+    url: string;
+    remote_url: string;
+    preview_url: string;
+    text_url: string;
+    meta: any;
+    description: string;
+    pleroma: PleromaAttachment;
+
+    audioType: string;
 }

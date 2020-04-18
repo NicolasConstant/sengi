@@ -8,12 +8,62 @@
     border-radius: 2px;
     position: relative;
 
+    &__img {
+        &--1 {
+            width: 100%;
+            height: 100%;
+            display: inline-block;
+        }
+
+        &--2 {
+            width: 49%;
+            height: 100%;
+            display: inline-block;
+
+            &:last-child {
+                margin-left: 2%; // border: 1px greenyellow solid;
+            }            
+        }
+
+        &--3-1 {
+            width: 49%;
+            height: 100%;
+            float: left;
+        }
+
+        &--3-2 {
+            width: 49%;
+            height: 49%;
+            margin-left: 2%;
+            float: left;
+
+            &:nth-child(even) {
+                margin-bottom: 2%;
+            }
+        }
+
+        &--4 {
+            width: 49%;
+            height: 49%;            
+            margin-bottom: 2%;
+            float: left;
+
+            &:nth-child(even) {
+                margin-left: 2%;
+            }
+        }
+
+    }
+
+
     &__image {
         width: 100%;
         height: 100%;
 
-        &--link {
+        &--link {            
+            //display: inline;
             cursor: zoom-in;
+            outline: 1px solid orange;
         }
 
         &--1 {
@@ -31,12 +81,17 @@
                 margin-left: 2%; // border: 1px greenyellow solid;
             }
 
-            & img {
+            & img, & video {
                 width: 49%;
                 height: 100%;
                 object-fit: cover;
                 object-position: 50% 50%;
             }
+
+            // & video {              
+            //     object-fit: cover;
+            //     object-position: 50% 50%;                
+            // }
         }
 
         &--link-3-1 {
@@ -44,7 +99,7 @@
             height: 100%;
             float: left;
 
-            & img {
+            & img, & video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
@@ -62,7 +117,7 @@
                 margin-bottom: 2%;
             }
 
-            & img {
+            & img, & video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
@@ -78,7 +133,7 @@
                 margin-left: 2%;
             }
 
-            & img {
+            & img, & video {
                 width: 49%;
                 height: 49%;
                 object-fit: cover;
@@ -88,13 +143,13 @@
         }
     }
 
-    &__gifv {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        cursor: zoom-in;
-        border-radius: 2px;
-    }
+    // &__gifv {
+    //     width: 100%;
+    //     height: 100%;
+    //     object-fit: cover;
+    //     cursor: zoom-in;
+    //     border-radius: 2px;
+    // }
 
     &__video {
         width: 100%;
