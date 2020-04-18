@@ -91,6 +91,10 @@ export class SearchComponent implements OnInit {
                     this.accounts = results.accounts.slice(0, 5);
                     this.hashtags = results.hashtags;
 
+                    if(!this.hashtags.map(x => x.toLowerCase()).includes(data.toLowerCase())){
+                        this.hashtags.unshift(data);
+                    }
+
                     for (let status of results.statuses) {
                         let cwPolicy = this.toolsService.checkContentWarning(status);
                         const statusWrapper = new StatusWrapper(cwPolicy.status, this.lastAccountUsed, cwPolicy.applyCw, cwPolicy.hide);
