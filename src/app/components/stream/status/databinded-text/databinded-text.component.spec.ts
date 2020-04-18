@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatabindedTextComponent } from './databinded-text.component';
-import { By } from '@angular/platform-browser';
-import { isGeneratedFile } from '@angular/compiler/src/aot/util';
-import { tick } from '@angular/core/src/render3';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DatabindedTextComponent', () => {
     let component: DatabindedTextComponent;
@@ -11,7 +9,8 @@ describe('DatabindedTextComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [DatabindedTextComponent]
+            declarations: [DatabindedTextComponent],
+            schemas:  [CUSTOM_ELEMENTS_SCHEMA]
         }).compileComponents();
     }));
 
