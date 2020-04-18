@@ -41,6 +41,14 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
     });
 
+    it('should parse hashtag - Pleroma 2.0.2', () => {
+        const sample = `Blabla <a class="hashtag" data-tag="covid19" href="https://url.com/tag/covid19">#covid19</a> Blibli`;
+        component.text = sample;
+        expect(component.processedText).toContain('<a href class="hashtag-covid19" title="#covid19">#covid19</a>');
+        expect(component.processedText).toContain('Blabla');
+        expect(component.processedText).toContain('Blibli');
+    });
+
     it('should parse mention', () => {
         const mention = 'sengi_app';
         const url = 'https://mastodon.social/@sengi_app';

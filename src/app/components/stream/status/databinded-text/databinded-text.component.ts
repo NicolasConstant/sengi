@@ -28,11 +28,11 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
+        //console.warn(value);
 
         let parser = new DOMParser();
         var dom = parser.parseFromString(value, 'text/html')
         this.isCollapsed = [...dom.body.textContent].length > 500;
-        //console.warn(this.isCollapsed);
 
         this.processedText = '';
 
@@ -52,7 +52,7 @@ export class DatabindedTextComponent implements OnInit {
                 continue;
             }
 
-            if (section.includes('class="mention hashtag"') || section.includes('target="_blank">#') || section.includes('rel="tag">')) {
+            if (section.includes('class="mention hashtag"') || section.includes('class="hashtag"') || section.includes('target="_blank">#') || section.includes('rel="tag">')) {
                 try {
                     this.processHashtag(section);
                 }
