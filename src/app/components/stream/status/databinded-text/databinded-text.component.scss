@@ -1,8 +1,51 @@
 @import "variables";
 
+$expand-color: $column-color;
+
 .selectable {
     cursor: pointer;
 }
+
+.collapsed {
+    max-height: 290px;
+    overflow: hidden;
+}
+
+.content-wrapper {
+    position: relative;
+    cursor: pointer;
+
+    &__expand {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding-top: 60px;
+        padding-left: 15px;
+        background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba($expand-color ,0.25), rgba($expand-color,0.5), $expand-color, $expand-color);
+        
+        &--link{
+            transition: all .2s;
+            color: #a9b5d8;
+            color: #c0c8e0;
+            // text-decoration: underline;
+
+            &:hover {
+                color: white;
+            }
+
+            &--icon {
+                position: relative;
+                top: 1px;
+            }
+        }
+
+        &--selected {
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba($selected-status ,0.25), rgba($selected-status,0.5), $selected-status, $selected-status); 
+        }
+    }    
+}
+
 
 //Mastodon styling
 :host ::ng-deep .content {

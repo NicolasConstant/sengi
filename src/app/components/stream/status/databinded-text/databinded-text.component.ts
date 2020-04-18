@@ -1,16 +1,21 @@
 import { Component, OnInit, Input, EventEmitter, Output, Renderer2, ViewChild, ElementRef } from '@angular/core';
 
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+
 @Component({
     selector: 'app-databinded-text',
     templateUrl: './databinded-text.component.html',
     styleUrls: ['./databinded-text.component.scss']
 })
 export class DatabindedTextComponent implements OnInit {
+    faAngleDown = faAngleDown;
+
     private accounts: string[] = [];
     private hashtags: string[] = [];
     private links: string[] = [];
 
     processedText: string;
+    isCollapsed: boolean = false;
 
     @ViewChild('content') contentElement: ElementRef;
 
@@ -19,11 +24,15 @@ export class DatabindedTextComponent implements OnInit {
     @Output() textSelected = new EventEmitter();
 
     @Input() textIsSelectable: boolean = true;
+    @Input() selected: boolean;
 
     @Input('text')
     set text(value: string) {
-        // console.warn('text');
-        // console.warn(value);
+
+        let parser = new DOMParser();
+        var dom = parser.parseFromString(value, 'text/html')
+        this.isCollapsed = [...dom.body.textContent].length > 500;
+        //console.warn(this.isCollapsed);
 
         this.processedText = '';
 
@@ -71,6 +80,11 @@ export class DatabindedTextComponent implements OnInit {
                 }
             }
         }
+    }
+
+    expand(): boolean {
+        this.isCollapsed = false;
+        return false;
     }
 
     private processHashtag(section: string) {
