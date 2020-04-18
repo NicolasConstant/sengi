@@ -90,8 +90,14 @@ export class MastodonService {
         const statusData = new StatusData();
         statusData.status = status;
         statusData.media_ids = mediaIds;
-        statusData.poll = poll;
-        statusData.scheduled_at = scheduled_at;
+
+        if (poll) {
+            statusData['poll'] = poll;
+        }
+
+        if (scheduled_at) {
+            statusData['scheduled_at'] = scheduled_at;
+        }
 
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
@@ -476,11 +482,11 @@ class StatusData {
     status: string;
     in_reply_to_id: string;
     media_ids: string[];
-    poll: PollParameters;
+    // poll: PollParameters;
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
-    scheduled_at: string;
+    // scheduled_at: string;
 }
 
 export class PollParameters {
