@@ -215,7 +215,7 @@
                         </div>
                         <div *ngIf="statusSection === 'media'" class="status-media">
                             <div *ngFor="let media of statusWrapper.status.media_attachments">
-                                <a href title="open" (click)="openAttachment(media)">
+                                <a *ngIf="media.type === 'image' || media.type === 'gifv'" href title="open" (click)="openAttachment(media)">
                                     <img class="status-media__image" src="{{media.preview_url}}" />
                                 </a>
                             </div>
