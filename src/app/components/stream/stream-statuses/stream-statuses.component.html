@@ -6,12 +6,15 @@
     </div>
 
     <div class="stream-toots__new-notification" 
-        [class.stream-toots__new-notification--display]="bufferStream && bufferStream.length > 0"></div>
+        [class.stream-toots__new-notification--display]="bufferStream && bufferStream.length > 0 && !streamPositionnedAtTop"></div>
 
     <div class="stream-toots__content flexcroll" #statusstream (scroll)="onScroll()" tabindex="0">       
         <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>
 
-        <!-- data-simplebar  -->
+        <div *ngIf="timelineLoadingMode === 3 && bufferStream && bufferStream.length > 0">
+            <a href (click)="loadBuffer()" class="stream-toots__load-buffer" title="load new items">{{ bufferStream.length }} new item<span *ngIf="bufferStream.length > 1">s</span></a>
+        </div>
+
         <div class="stream-toots__status" *ngFor="let statusWrapper of statuses" #status>
             <app-status 
                 [statusWrapper]="statusWrapper" [isThreadDisplay]="isThread"
