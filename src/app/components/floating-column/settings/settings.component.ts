@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
-import { ContentWarningPolicy, ContentWarningPolicyEnum } from '../../../states/settings.state';
+import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-settings',
@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     columnShortcutChanged = false;
 
-    timeLineMode: TimeLineMode = TimeLineMode.OnTop;
+    timeLineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
     timeLineModeChanged = false;
 
     contentWarningPolicy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
@@ -94,6 +94,8 @@ export class SettingsComponent implements OnInit {
         this.addCwOnContent = settings.contentWarningPolicy.addCwOnContent.join(';');
         this.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent.join(';');
         this.contentHidedCompletely = settings.contentWarningPolicy.hideCompletlyContent.join(';');
+
+        this.timeLineMode = settings.timelineMode;
     }
 
     onShortcutChange(id: ColumnShortcut) {
@@ -105,11 +107,13 @@ export class SettingsComponent implements OnInit {
         this.toolsService.saveSettings(settings);
     }
 
-    onTimeLineModeChange(id: TimeLineMode){
+    onTimeLineModeChange(id: TimeLineModeEnum){
         this.timeLineMode = id;
         this.timeLineModeChanged = true;
 
-        
+        let settings = this.toolsService.getSettings();
+        settings.timelineMode = id;
+        this.toolsService.saveSettings(settings);
     }
 
     onCwPolicyChange(id: ContentWarningPolicyEnum) {
@@ -236,10 +240,4 @@ export class SettingsComponent implements OnInit {
 enum ColumnShortcut {
     Ctrl = 1,
     Win = 2
-}
-
-enum TimeLineMode {
-    OnTop = 1,
-    Continuous = 2,
-    SlowMode = 3
 }

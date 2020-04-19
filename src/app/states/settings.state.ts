@@ -40,6 +40,12 @@ export enum ContentWarningPolicyEnum {
     AddOnAllContent = 3
 }
 
+export enum TimeLineModeEnum {
+    OnTop = 1,
+    Continuous = 2,
+    SlowMode = 3
+}
+
 export class ContentWarningPolicy {
     policy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
     addCwOnContent: string[] = [];
@@ -54,6 +60,8 @@ export class GlobalSettings {
     disableRemoteStatusFetching = false;
 
     notificationSoundFileId: string = '0';
+
+    timelineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
 
     contentWarningPolicy: ContentWarningPolicy = new ContentWarningPolicy();
 
@@ -145,6 +153,7 @@ export class SettingsState {
         newSettings.notificationSoundFileId = oldSettings.notificationSoundFileId;
         newSettings.columnSwitchingWinAlt = oldSettings.columnSwitchingWinAlt;
         newSettings.disableRemoteStatusFetching = oldSettings.disableRemoteStatusFetching;
+        newSettings.timelineMode = oldSettings.timelineMode;
 
         return newSettings;
     }
