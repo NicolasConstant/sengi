@@ -25,7 +25,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     displayError: string;
     hasContentWarnings = false;
 
-    private timelineLoadingMode: TimeLineModeEnum;
+    timelineLoadingMode: TimeLineModeEnum;
 
     private _streamElement: StreamElement;
     private account: AccountInfo;

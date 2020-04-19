@@ -11,6 +11,7 @@ import { StatusWrapper } from '../../../models/common.model';
 import { StatusComponent } from '../status/status.component';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
+import { TimeLineModeEnum } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-thread',
@@ -26,6 +27,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private remoteStatusFetchingDisabled = false;
 
     bufferStream: Status[] = []; //html compatibility only
+    streamPositionnedAtTop: boolean = true; //html compatibility only
+    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     private lastThreadEvent: OpenThreadEvent;
 
