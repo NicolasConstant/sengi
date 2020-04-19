@@ -91,16 +91,41 @@
                     [(ngModel)]="setContentHidedCompletely" placeholder="example;other example" />
             </div>
 
-            <span class="sub-section__title" *ngIf="contentWarningPolicyChanged"><br/>this settings needs a <a href (click)="reload()">reload</a> to be effective.</span>
+            <span class="sub-section__title" *ngIf="contentWarningPolicyChanged"><br />this settings needs a <a href
+                    (click)="reload()">reload</a> to be effective.</span>
+        </div>
+
+        <h4 class="panel__subtitle">Timelines</h4>
+        <div class="sub-section">
+            <span class="sub-section__title">loading behavior:</span><br />
+
+            <input class="sub-section__checkbox" [checked]="timeLineMode === 1" (change)="onTimeLineModeChange(1)"
+                type="radio" name="timelinemode-1" value="timelinemode-1" id="timelinemode-1">
+            <label class="noselect sub-section__label" for="timelinemode-1">Load new statuses only on top</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="timeLineMode === 2" (change)="onTimeLineModeChange(2)"
+                type="radio" name="timelinemode-2" value="timelinemode-2" id="timelinemode-2">
+            <label class="noselect sub-section__label" for="timelinemode-2">Continuously loading new statuses</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="timeLineMode === 3" (change)="onTimeLineModeChange(3)"
+                type="radio" name="timelinemode-3" value="timelinemode-3" id="timelinemode-3">
+            <label class="noselect sub-section__label" for="timelinemode-3">Slow mode (manual loading)</label>
+            <br>
+
+            <span class="sub-section__title" *ngIf="timeLineModeChanged">this settings needs a <a href
+                    (click)="reload()">reload</a> to be effective.</span>
         </div>
 
         <h4 class="panel__subtitle">Other</h4>
         <div class="sub-section">
             <input class="sub-section__checkbox" [(ngModel)]="disableRemoteStatusFetchingEnabled"
-                (change)="onDisableRemoteStatusFetchingChanged()" type="checkbox" name="disableRemoteFetching" value="disableRemoteFetching"
-                id="disableRemoteFetching">
-            <label class="noselect sub-section__label" for="disableRemoteFetching">disable remote status fetching</label>
-            <br>
+                (change)="onDisableRemoteStatusFetchingChanged()" type="checkbox" name="disableRemoteFetching"
+                value="disableRemoteFetching" id="disableRemoteFetching">
+            <label class="noselect sub-section__label" for="disableRemoteFetching">disable remote status
+                fetching</label>
+            <br>            
         </div>
 
         <h4 class="panel__subtitle">About</h4>
@@ -128,7 +153,7 @@
                 (click)="cancelClearAll()">
                 Cancel
             </a>
-            <br/>
+            <br />
         </div>
 
     </div>

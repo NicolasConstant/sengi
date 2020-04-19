@@ -29,6 +29,9 @@ export class SettingsComponent implements OnInit {
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     columnShortcutChanged = false;
 
+    timeLineMode: TimeLineMode = TimeLineMode.OnTop;
+    timeLineModeChanged = false;
+
     contentWarningPolicy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
     contentWarningPolicyChanged = false;
 
@@ -100,6 +103,13 @@ export class SettingsComponent implements OnInit {
         let settings = this.toolsService.getSettings();
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
         this.toolsService.saveSettings(settings);
+    }
+
+    onTimeLineModeChange(id: TimeLineMode){
+        this.timeLineMode = id;
+        this.timeLineModeChanged = true;
+
+        
     }
 
     onCwPolicyChange(id: ContentWarningPolicyEnum) {
@@ -226,4 +236,10 @@ export class SettingsComponent implements OnInit {
 enum ColumnShortcut {
     Ctrl = 1,
     Win = 2
+}
+
+enum TimeLineMode {
+    OnTop = 1,
+    Continuous = 2,
+    SlowMode = 3
 }
