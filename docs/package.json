@@ -9,10 +9,10 @@
   "author": "Nicolas Constant",
   "license": "WTFPL",
   "devDependencies": {
-    "node-sass": "^4.13.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-run": "^1.7.1",
-    "gulp-sass": "^4.0.1"
+    "gulp-sass": "^4.0.1",
+    "node-sass": "^4.13.1"
   },
   "dependencies": {}
 }

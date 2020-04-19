@@ -28,7 +28,7 @@
 
                     <div class="header__download-box--description">
                         A FLOSS multi-account Mastodon and Pleroma desktop client<br />
-                        Now available in Beta <span id="sengi-version"></span> <br />
+                        <span id="sengi-version"></span> <br />
                         <br />
                     </div>
 
@@ -160,7 +160,7 @@
                 <div class="col-1-of-2">
                     <p class="functionalities__text">
                         Get a quick insight if a status is part of a thread, has replies, is from a bot, is old or was
-                        cross-posted (limited to local TL).
+                        cross-posted (limited to local TL), is remotely fetched.
                     </p>
                 </div>
                 <div class="col-1-of-2">
@@ -248,7 +248,7 @@
             downloadButtonsNojs.style.display = 'none';
 
             var sengiVersion = document.getElementById('sengi-version');
-            sengiVersion.textContent = `(${version})`;
+            sengiVersion.textContent = `Current version: ${version}`;
 
             document.getElementById('windows').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-win.exe`;
             document.getElementById('mac').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-mac.dmg`;
