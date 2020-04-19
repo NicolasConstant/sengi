@@ -30,6 +30,7 @@ export class StreamingWrapper {
     private apiRoutes = new ApiRoutes();
     private errorClosing: boolean;
     private since_id: string;
+    private since_id_notifications: string;
     private disposed: boolean;
 
     constructor(
@@ -88,10 +89,10 @@ export class StreamingWrapper {
     }
 
     private pullNewNotifications() {
-        this.mastodonService.getNotifications(this.account, null, null, this.since_id, 10)
+        this.mastodonService.getNotifications(this.account, null, null, this.since_id_notifications, 10)
             .then((notifications: Notification[]) => {
                 //notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
-                let soundMuted = !this.since_id;
+                let soundMuted = !this.since_id_notifications;
 
                 notifications = notifications.reverse();
                 for (const n of notifications) {
@@ -101,7 +102,7 @@ export class StreamingWrapper {
                     update.type = EventEnum.notification;
                     update.muteSound = soundMuted;
 
-                    this.since_id = n.id;
+                    this.since_id_notifications = n.id;
                     this.statusUpdateSubjet.next(update);
                 }
             })
