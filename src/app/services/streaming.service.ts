@@ -67,7 +67,7 @@ export class StreamingWrapper {
             });
     }
 
-    private webSocketGotError(x: Event) {
+    private webSocketGotError(x: Event) {        
         this.errorClosing = true;
     }
 
@@ -76,6 +76,7 @@ export class StreamingWrapper {
             setTimeout(() => {
                 if (stream.type === StreamTypeEnum.personnal) {
                     this.pullNewNotifications();
+                    this.pullNewStatuses();
                 } else {
                     this.pullNewStatuses();
                 }
