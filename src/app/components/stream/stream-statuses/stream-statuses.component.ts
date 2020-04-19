@@ -34,6 +34,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     statuses: StatusWrapper[] = [];
     bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
+    streamPositionnedAtTop: boolean = true;
+    private isProcessingInfiniteScroll: boolean;
 
     private hideBoosts: boolean;
     private hideReplies: boolean;
@@ -205,9 +207,6 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
         return false;
     }
-
-    private streamPositionnedAtTop: boolean = true;
-    private isProcessingInfiniteScroll: boolean;
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
