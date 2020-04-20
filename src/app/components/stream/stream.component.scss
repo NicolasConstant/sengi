@@ -48,27 +48,58 @@
         text-decoration: none; 
         color: whitesmoke;
         position: relative;
+        &--avatar {
+            width: 20px;
+            float: left;
+            margin-left: 11px;
+            position: relative;
+            // left: 11px;
+            top: 9px;
+        }
         &--icon {
             float: left;
+            margin-left: 11px;
             position: relative;
-            left: 11px;
+            // left: 11px;
             top: 9px;
+        }
+        &--text {
+            float: left;
+            margin-left: 9px;
         }
         &--title {
             font-size: 0.8em;
             font-weight: normal;
-            position: absolute;
+            // float: left;
+            // margin-left: 10px;
+            // position: absolute;
+            position: relative;
             top: 9px;
-            left: 35px;
-        }
+            // left: 35px;
+
+            &--only {
+                top: 13px;
+            }
+        }        
+
         &--subtitle {
             color: $font-link-primary-hover;
             font-size: 0.7em;
             font-weight: normal;
             font-style: italic;
-            position: absolute;
-            top: 21px;
-            left: 35px;;
+            // position: absolute;
+            position: relative;
+            top: -2px;
+            // top: 21px;
+            // top: 10px;
+            // left: 35px;;
+            // outline: 1px solid greenyellow;
+            display: inline-block;
+            white-space: nowrap;
+            max-width: 240px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-right: 5px;
         }
     }
 }

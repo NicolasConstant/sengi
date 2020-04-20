@@ -7,19 +7,20 @@
         <!-- <div> -->
         <div class="stream-column__stream-header">
             <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
+                <img *ngIf="timelineHeader === 3 || timelineHeader === 4" class="stream-column__stream-selector--avatar" src="{{avatar}}" />
                 <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
-                <h1 class="stream-column__stream-selector--title">{{ streamElement.name.toUpperCase() }}</h1>
-                <span class="stream-column__stream-selector--subtitle"
-                    *ngIf="streamElement.instance">{{ streamElement.instance.toLowerCase() }}</span>
+                <span class="stream-column__stream-selector--text">
+                    <h1 class="stream-column__stream-selector--title" [class.stream-column__stream-selector--title--only]="timelineHeader === 4 || timelineHeader === 5">{{ streamElement.name.toUpperCase() }}</h1>
+                    <span class="stream-column__stream-selector--subtitle" *ngIf="streamElement.instance && timelineHeader !== 4 && timelineHeader !== 5"><span *ngIf="timelineHeader === 2">{{account.username}}@</span>{{ streamElement.instance.toLowerCase() }}</span>
+                </span>
             </a>
             <a class="stream-column__open-menu" href title="edit column" (click)="openEditionMenu()">
                 <fa-icon class="stream-column__open-menu--icon" [icon]="menuFaIcon"></fa-icon>
             </a>
         </div>
 
-        <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" 
-            [streamElement]="streamElement" [displayingNotifications]="displayingNotifications"
-            (closed)="streamEditionClosed()">
+        <app-stream-edition class="stream-edition" *ngIf="editionPanelIsOpen" [streamElement]="streamElement"
+            [displayingNotifications]="displayingNotifications" (closed)="streamEditionClosed()">
         </app-stream-edition>
 
         <app-stream-statuses *ngIf="!displayingNotifications" class="stream-statuses" [streamElement]="streamElement"
@@ -27,9 +28,10 @@
             (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
         </app-stream-statuses>
 
-        <app-stream-notifications *ngIf="displayingNotifications" class="stream-statuses" [streamElement]="streamElement"
-            [goToTop]="goToTopSubject.asObservable()" (browseAccountEvent)="browseAccount($event)"
-            (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)">
+        <app-stream-notifications *ngIf="displayingNotifications" class="stream-statuses"
+            [streamElement]="streamElement" [goToTop]="goToTopSubject.asObservable()"
+            (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
+            (browseThreadEvent)="browseThread($event)">
 
         </app-stream-notifications>
         <!-- </div> -->
