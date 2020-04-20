@@ -46,6 +46,14 @@ export enum TimeLineModeEnum {
     SlowMode = 3
 }
 
+export enum TimeLineHeaderEnum {
+    Title_DomainName = 1,
+    Title_Username_DomainName = 2,
+    Title_AccountIcon_DomainName = 3,
+    Title_AccountIcon = 4,
+    Title = 5
+}
+
 export class ContentWarningPolicy {
     policy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
     addCwOnContent: string[] = [];
@@ -61,6 +69,7 @@ export class GlobalSettings {
 
     notificationSoundFileId: string = '0';
 
+    timelineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
     timelineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
 
     contentWarningPolicy: ContentWarningPolicy = new ContentWarningPolicy();
@@ -153,6 +162,7 @@ export class SettingsState {
         newSettings.notificationSoundFileId = oldSettings.notificationSoundFileId;
         newSettings.columnSwitchingWinAlt = oldSettings.columnSwitchingWinAlt;
         newSettings.disableRemoteStatusFetching = oldSettings.disableRemoteStatusFetching;
+        newSettings.timelineHeader = oldSettings.timelineHeader;
         newSettings.timelineMode = oldSettings.timelineMode;
 
         return newSettings;

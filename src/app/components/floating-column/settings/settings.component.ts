@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
-import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum } from '../../../states/settings.state';
+import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-settings',
@@ -28,6 +28,9 @@ export class SettingsComponent implements OnInit {
 
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     columnShortcutChanged = false;
+
+    timeLineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
+    timeLineHeaderChanged = false;
 
     timeLineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
     timeLineModeChanged = false;
@@ -95,6 +98,7 @@ export class SettingsComponent implements OnInit {
         this.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent.join(';');
         this.contentHidedCompletely = settings.contentWarningPolicy.hideCompletlyContent.join(';');
 
+        this.timeLineHeader = settings.timelineHeader;
         this.timeLineMode = settings.timelineMode;
     }
 
@@ -104,6 +108,15 @@ export class SettingsComponent implements OnInit {
 
         let settings = this.toolsService.getSettings();
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
+        this.toolsService.saveSettings(settings);
+    }
+
+    onTimeLineHeaderChange(id: TimeLineHeaderEnum){
+        this.timeLineHeader = id;
+        this.timeLineHeaderChanged = true;
+
+        let settings = this.toolsService.getSettings();
+        settings.timelineHeader = id;
         this.toolsService.saveSettings(settings);
     }
 

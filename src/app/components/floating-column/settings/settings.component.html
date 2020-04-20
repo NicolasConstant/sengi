@@ -97,6 +97,35 @@
 
         <h4 class="panel__subtitle">Timelines</h4>
         <div class="sub-section">
+            <span class="sub-section__title">header display:</span><br />
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 1" (change)="onTimeLineHeaderChange(1)"
+                type="radio" name="timelineheader-1" value="timelineheader-1" id="timelineheader-1">
+            <label class="noselect sub-section__label" for="timelineheader-1">Title - Domain Name</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 2" (change)="onTimeLineHeaderChange(2)"
+                type="radio" name="timelineheader-2" value="timelineheader-2" id="timelineheader-2">
+            <label class="noselect sub-section__label" for="timelineheader-2">Title - Username - Domain Name</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 3" (change)="onTimeLineHeaderChange(3)"
+                type="radio" name="timelineheader-3" value="timelineheader-3" id="timelineheader-3">
+            <label class="noselect sub-section__label" for="timelineheader-3">Title - Account Icon - Domain Name</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 4" (change)="onTimeLineHeaderChange(4)"
+                type="radio" name="timelineheader-4" value="timelineheader-4" id="timelineheader-4">
+            <label class="noselect sub-section__label" for="timelineheader-4">Title - Account Icon</label>
+            <br>
+
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 5" (change)="onTimeLineHeaderChange(5)"
+                type="radio" name="timelineheader-5" value="timelineheader-5" id="timelineheader-5">
+            <label class="noselect sub-section__label" for="timelineheader-5">Title</label>
+            <br>
+
+            <span class="sub-section__title" *ngIf="timeLineHeaderChanged">this settings needs a <a href
+                    (click)="reload()">reload</a> to be effective.</span>
+
             <span class="sub-section__title">loading behavior:</span><br />
 
             <input class="sub-section__checkbox" [checked]="timeLineMode === 1" (change)="onTimeLineModeChange(1)"
@@ -125,7 +154,7 @@
                 value="disableRemoteFetching" id="disableRemoteFetching">
             <label class="noselect sub-section__label" for="disableRemoteFetching">disable remote status
                 fetching</label>
-            <br>            
+            <br>
         </div>
 
         <h4 class="panel__subtitle">About</h4>

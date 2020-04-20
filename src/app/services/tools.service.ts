@@ -5,7 +5,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
-import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum } from '../states/settings.state';
+import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../states/settings.state';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
 @Injectable({
@@ -157,6 +157,11 @@ export class ToolsService {
 
         if(!settings.timelineMode){
             settings.timelineMode = TimeLineModeEnum.OnTop;
+            this.saveSettings(settings);
+        }
+
+        if(!settings.timelineHeader){
+            settings.timelineHeader = TimeLineHeaderEnum.Title_DomainName;
             this.saveSettings(settings);
         }
 
