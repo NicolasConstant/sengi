@@ -3,6 +3,7 @@
 @import "panel";
 
 .stream-edition {
+    display: block;
     width: $stream-column-width;
     position: absolute;
     z-index: 50;
