@@ -71,6 +71,24 @@
             width: 100%;
             height: 492;
         }
+
+        &:focus {
+            background: none;
+            border: 0px;
+            outline: none;
+        }
+    }
+}
+
+.link {
+    color: black;   
+
+    &:visited, &:focus {
+        color: black;   
+    }
+
+    &:hover {
+        color: grey;
     }
 }
 
@@ -84,7 +102,7 @@
         display: block;
         margin: auto;
         font-weight: 400;
-        font-size: 2rem;     
+        font-size: 2rem;
 
         text-align: center;
         padding: 7rem 5rem 0 5rem;
