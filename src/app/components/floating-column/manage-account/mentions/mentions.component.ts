@@ -8,6 +8,7 @@ import { Status, Notification } from '../../../../services/models/mastodon.inter
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
+import { TimeLineModeEnum } from '../../../../states/settings.state';
 
 
 @Component({
@@ -23,6 +24,8 @@ export class MentionsComponent implements OnInit, OnDestroy {
     hasContentWarnings = false;
 
     bufferStream: Status[] = []; //html compatibility only
+    streamPositionnedAtTop: boolean = true; //html compatibility only
+    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();

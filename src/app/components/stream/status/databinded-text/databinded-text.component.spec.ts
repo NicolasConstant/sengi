@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatabindedTextComponent } from './databinded-text.component';
-import { By } from '@angular/platform-browser';
-import { isGeneratedFile } from '@angular/compiler/src/aot/util';
-import { tick } from '@angular/core/src/render3';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DatabindedTextComponent', () => {
     let component: DatabindedTextComponent;
@@ -11,7 +9,8 @@ describe('DatabindedTextComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [DatabindedTextComponent]
+            declarations: [DatabindedTextComponent],
+            schemas:  [CUSTOM_ELEMENTS_SCHEMA]
         }).compileComponents();
     }));
 
@@ -40,6 +39,14 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('<a href class="hashtag-programmers" title="#programmers">#programmers</a>');
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
+    });
+
+    it('should parse hashtag - Pleroma 2.0.2', () => {
+        const sample = `Blabla <a class="hashtag" data-tag="covid19" href="https://url.com/tag/covid19">#covid19</a> Blibli`;
+        component.text = sample;
+        expect(component.processedText).toContain('<a href class="hashtag-covid19" title="#covid19">#covid19</a>');
+        expect(component.processedText).toContain('Blabla');
+        expect(component.processedText).toContain('Blibli');
     });
 
     it('should parse mention', () => {

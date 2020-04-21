@@ -7,6 +7,7 @@ import { FavoriteResult } from '../../../../services/mastodon.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../../services/notification.service';
+import { TimeLineModeEnum } from '../../../../states/settings.state';
 
 @Component({
     selector: 'app-favorites',
@@ -21,6 +22,8 @@ export class FavoritesComponent implements OnInit {
     hasContentWarnings = false;
 
     bufferStream: Status[] = []; //html compatibility only
+    streamPositionnedAtTop: boolean = true; //html compatibility only
+    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();

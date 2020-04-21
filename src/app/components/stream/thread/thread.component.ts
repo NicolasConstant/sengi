@@ -10,6 +10,8 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper } from '../../../models/common.model';
 import { StatusComponent } from '../status/status.component';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
+import { TimeLineModeEnum } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-thread',
@@ -25,6 +27,8 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private remoteStatusFetchingDisabled = false;
 
     bufferStream: Status[] = []; //html compatibility only
+    streamPositionnedAtTop: boolean = true; //html compatibility only
+    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     private lastThreadEvent: OpenThreadEvent;
 
@@ -50,10 +54,12 @@ export class ThreadComponent implements OnInit, OnDestroy {
     private deleteStatusSubscription: Subscription;
     private refreshSubscription: Subscription;
     private goToTopSubscription: Subscription;
+    private responseSubscription: Subscription;
 
     constructor(
         private readonly httpClient: HttpClient,
         private readonly notificationService: NotificationService,
+        private readonly userNotificationService: UserNotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService) { }
 
@@ -102,6 +108,20 @@ export class ThreadComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.responseSubscription = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
+            userNotifications.forEach(x => {
+                x.mentions.forEach(y => {
+                    if(y.status){
+                        if(this.statuses.map(z => z.status.id).includes(y.status.in_reply_to_id) && !this.statuses.map(z => z.status.uri).includes(y.status.uri)) {
+                            let cwResult = this.toolsService.checkContentWarning(y.status);
+                            this.statuses.push(new StatusWrapper(y.status, x.account, cwResult.applyCw, cwResult.hide));
+                            return;
+                        }
+                    }
+                });
+            });
+        });        
     }
 
     ngOnDestroy(): void {
@@ -110,6 +130,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
         if (this.refreshSubscription) this.refreshSubscription.unsubscribe();
         if (this.goToTopSubscription) this.goToTopSubscription.unsubscribe();
+        if (this.responseSubscription) this.responseSubscription.unsubscribe();
     }
 
     @ViewChild('statusstream') public statustream: ElementRef;
@@ -133,10 +154,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
         const sourceAccount = openThreadEvent.sourceAccount;
 
         if (status.visibility === 'public' || status.visibility === 'unlisted') {
-            var statusPromise: Promise<Status> = Promise.resolve(status);
-
-            if (!sourceAccount || sourceAccount.id !== currentAccount.id) {
-                statusPromise = this.toolsService.getInstanceInfo(currentAccount)
+            // var statusPromise: Promise<Status> = Promise.resolve(status);
+            // if (!sourceAccount || sourceAccount.id !== currentAccount.id) {
+            var statusPromise = this.toolsService.getInstanceInfo(currentAccount)
                     .then(instance => {
                         let version: 'v1' | 'v2' = 'v1';
                         if (instance.major >= 3) version = 'v2';
@@ -149,7 +169,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
                         }
                         throw new Error('could not find status');
                     });
-            }
+            // }
 
             this.retrieveThread(currentAccount, statusPromise);
 

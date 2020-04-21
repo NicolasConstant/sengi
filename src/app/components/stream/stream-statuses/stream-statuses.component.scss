@@ -8,6 +8,25 @@
     overflow: auto;
     position: relative;
 
+    &__load-buffer {
+        position: relative;
+        z-index: 1;
+        display:  inline-block;
+        border-bottom: 1px solid black;
+        padding: 10px;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        // border: 1px dotted greenyellow ;
+        transition: all .2s;
+        color: $status-secondary-color;
+
+        &:hover {
+            color: white;
+            text-decoration: none;
+        }
+    }
+
     &__error {
         padding: 20px 20px 0 20px;
         color: rgb(255, 113, 113);

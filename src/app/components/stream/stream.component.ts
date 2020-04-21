@@ -3,9 +3,11 @@ import { Subject } from "rxjs";
 import { faHome, faGlobe, faUser, faHashtag, faListUl, faBars, IconDefinition, faBell } from "@fortawesome/free-solid-svg-icons";
 
 import { StreamElement, StreamTypeEnum } from "../../states/streams.state";
-import { OpenThreadEvent } from "../../services/tools.service";
+import { OpenThreadEvent, ToolsService } from "../../services/tools.service";
 import { StreamStatusesComponent } from './stream-statuses/stream-statuses.component';
 import { StreamNotificationsComponent } from './stream-notifications/stream-notifications.component';
+import { TimeLineHeaderEnum } from '../../states/settings.state';
+import { AccountInfo } from '../../states/accounts.state';
 
 @Component({
     selector: "app-stream",
@@ -20,6 +22,10 @@ export class StreamComponent implements OnInit {
     overlayAccountToBrowse: string;
     overlayHashtagToBrowse: string;
     overlayThreadToBrowse: OpenThreadEvent;
+
+    timelineHeader: TimeLineHeaderEnum;
+    account: AccountInfo;
+    avatar: string;
 
     displayingNotifications: boolean;
 
@@ -48,26 +54,33 @@ export class StreamComponent implements OnInit {
             case StreamTypeEnum.list:
                 this.columnFaIcon = faListUl;
                 break;
-            case StreamTypeEnum.activity: 
+            case StreamTypeEnum.activity:
                 this.columnFaIcon = faBell;
                 this.displayingNotifications = true;
                 break;
         }
 
         this._streamElement = stream;
+        this.account = this.toolsService.getAccountById(stream.accountId);
+        this.toolsService.getAvatar(this.account)
+            .then(a => {
+                this.avatar = a;
+            })
+            .catch(err => { });
     }
     get streamElement(): StreamElement {
         return this._streamElement;
     }
 
-
-    constructor() { }
+    constructor(private toolsService: ToolsService) { }
 
     ngOnInit() {
+        let settings = this.toolsService.getSettings();
+        this.timelineHeader = settings.timelineHeader;
     }
 
     focus(): boolean {
-        if(this.overlayActive) return false;
+        if (this.overlayActive) return false;
 
         if (!this.displayingNotifications) {
             this.streamStatusesComponent.focus();
