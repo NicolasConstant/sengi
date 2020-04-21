@@ -11,6 +11,7 @@ import { MastodonWrapperService } from '../../../services/mastodon-wrapper.servi
 import { NotificationService } from '../../../services/notification.service';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../../models/common.model';
+import { TimeLineModeEnum } from '../../../states/settings.state';
 
 @Component({
     selector: 'app-stream-statuses',
@@ -24,6 +25,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     displayError: string;
     hasContentWarnings = false;
 
+    timelineLoadingMode: TimeLineModeEnum;
+
     private _streamElement: StreamElement;
     private account: AccountInfo;
     private websocketStreaming: StreamingWrapper;
@@ -31,6 +34,8 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     statuses: StatusWrapper[] = [];
     bufferStream: Status[] = [];
     private bufferWasCleared: boolean;
+    streamPositionnedAtTop: boolean = true;
+    private isProcessingInfiniteScroll: boolean;
 
     private hideBoosts: boolean;
     private hideReplies: boolean;
@@ -75,6 +80,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        let settings = this.toolsService.getSettings();
+        this.timelineLoadingMode = settings.timelineMode;
+
         this.goToTopSubscription = this.goToTop.subscribe(() => {
             this.applyGoToTop();
         });
@@ -112,7 +120,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
 
         this.deleteStatusSubscription = this.notificationService.deletedStatusStream.subscribe((status: StatusWrapper) => {
             if (status) {
-                this.statuses = this.statuses.filter(x => {       
+                this.statuses = this.statuses.filter(x => {
                     return !(x.status.url.replace('https://', '').split('/')[0] === status.provider.instance && x.status.id === status.status.id);
                 });
             }
@@ -158,7 +166,9 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
             if (update) {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.status.id == update.status.id)) {
-                        if (this.streamPositionnedAtTop) {
+                        if ((this.streamPositionnedAtTop || this.timelineLoadingMode === TimeLineModeEnum.Continuous)
+                            && this.timelineLoadingMode !== TimeLineModeEnum.SlowMode) {
+
                             if (this.isFiltered(update.status)) {
                                 return;
                             }
@@ -198,9 +208,6 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private streamPositionnedAtTop: boolean = true;
-    private isProcessingInfiniteScroll: boolean;
-
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
@@ -233,10 +240,12 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private scrolledToTop() {
         this.streamPositionnedAtTop = true;
 
-        this.loadBuffer();
+        if (this.timelineLoadingMode !== TimeLineModeEnum.SlowMode) {
+            this.loadBuffer();
+        }
     }
 
-    private loadBuffer() {
+    loadBuffer(): boolean {
         if (this.bufferWasCleared) {
             this.statuses.length = 0;
             this.bufferWasCleared = false;
@@ -253,6 +262,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         }
 
         this.bufferStream.length = 0;
+        return false;
     }
 
     private scrolledToBottom() {
@@ -274,7 +284,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
                     this.statuses.push(wrapper);
                 }
 
-                if(!status || status.length === 0){
+                if (!status || status.length === 0) {
                     this.lastInfinityFetchReturnedNothing = true;
                 }
             })
