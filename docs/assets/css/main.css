@@ -201,6 +201,17 @@ body {
     .quick-overview__video {
       width: 100%;
       height: 492; } }
+  .quick-overview__video:focus {
+    background: none;
+    border: 0px;
+    outline: none; }
+
+.link {
+  color: black; }
+  .link:visited, .link:focus {
+    color: black; }
+  .link:hover {
+    color: grey; }
 
 .functionalities__row {
   max-width: 100rem; }

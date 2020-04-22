@@ -134,11 +134,11 @@ export class UserNotificationService {
         if (currentAccountNotifications) {
             currentAccountNotifications = this.analyseNotifications(account, currentAccountNotifications, notifications, type);
 
-            if (currentAccountNotifications.hasNewMentions || currentAccountNotifications.hasNewNotifications) {
+            //if (currentAccountNotifications.hasNewMentions || currentAccountNotifications.hasNewNotifications) {
                 currentNotifications = currentNotifications.filter(x => x.account.id !== account.id);
                 currentNotifications.push(currentAccountNotifications);
                 this.userNotifications.next(currentNotifications);
-            }
+            //}
         } else {
             let newNotifications = new UserNotification();
             newNotifications.account = account;

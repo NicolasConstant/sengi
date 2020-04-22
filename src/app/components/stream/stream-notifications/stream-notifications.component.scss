@@ -9,15 +9,32 @@ $selector-height: 30px;
     position: relative;
 
     &__selector {
+        position: relative;
         height: $selector-height;
-        background-color: $notification-column-selector-background;
         width: calc(100%);
+        background-color: $notification-column-selector-background;
+
+        &--wrapper {
+            position: absolute;
+            width: calc(50%);           
+            display: inline-block;
+
+            &:nth-child(odd) {
+                top: 0;
+                left: 0;
+            }
+
+            &:nth-child(even) {
+                top: 0;
+                right: 0;
+            }
+        }
 
         &__button {
             text-decoration: none;
-            display: inline-block;
-            width: 50%;
+            display: block;
             height: 100%;
+            height: $selector-height;
             text-align: center;
             padding-top: 3px;
             color: $notification-column-selector-color;
@@ -25,8 +42,6 @@ $selector-height: 30px;
             &--selected {
                 color: $notification-column-selector-color-hover;
             }
-
-
         }
     }
 
