@@ -5,7 +5,7 @@
             (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img
                 *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
     </div>
-    <div *ngIf="statusWrapper.status.pinned" class="pinned">
+    <div *ngIf="statusWrapper.status.pinned && !notificationType" class="pinned">
         <div class="notification--icon">
             <fa-icon class="pinned__icon" [icon]="faThumbtack"></fa-icon>
         </div>
