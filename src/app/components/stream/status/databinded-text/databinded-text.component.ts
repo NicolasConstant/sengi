@@ -32,7 +32,7 @@ export class DatabindedTextComponent implements OnInit {
 
         let parser = new DOMParser();
         var dom = parser.parseFromString(value, 'text/html')
-        this.isCollapsed = [...dom.body.textContent].length > 500;
+        this.isCollapsed = [...dom.body.textContent].length > 600;
 
         this.processedText = '';
 
