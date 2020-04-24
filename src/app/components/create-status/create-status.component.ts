@@ -67,14 +67,45 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return this._status;
     }
 
+    private trim(s, mask) {
+        while (~mask.indexOf(s[0])) {
+            s = s.slice(1);
+        }
+        while (~mask.indexOf(s[s.length - 1])) {
+            s = s.slice(0, -1);
+        }
+        return s;
+    }
+
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
-
+            console.warn(value.status.content);
             this.statusLoaded = false;
             let parser = new DOMParser();
-            var dom = parser.parseFromString(value.status.content, 'text/html')
+            const newLine = String.fromCharCode(13, 10);
+            let content = value.status.content;
+
+            while (content.includes('<p>') || content.includes('</p>') || content.includes('<br>') || content.includes('<br/>') || content.includes('<br />')) {
+                content = content.replace('<p>', '').replace('</p>', newLine + newLine).replace('<br />', newLine).replace('<br/>', newLine).replace('<br>', newLine);
+            }
+
+            content = this.trim(content, newLine);
+
+            // let splitedContent = content.replace('<p>', '').split('</p>').forEach(x => x.split('<br>'));
+            // let splitedContentRendered = [];
+            // splitedContent.forEach(c => {
+            //     var dom = parser.parseFromString(c, 'text/html')
+            //     splitedContentRendered.push(dom.body.textContent);
+            // });
+
+            var dom = parser.parseFromString(content, 'text/html')
             this.status = dom.body.textContent;
+            // this.status = '';
+            // splitedContentRendered.forEach(element => {
+            //     this.status += element + String.fromCharCode(13, 10);
+            // });
+            console.warn(this.status);
 
             this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
 
