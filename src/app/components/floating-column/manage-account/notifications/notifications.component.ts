@@ -31,7 +31,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     get account(): AccountWrapper {
         return this._account;
     }
-        
+
     @ViewChild('statusstream') public statustream: ElementRef;
 
     private maxReached = false;
@@ -39,7 +39,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     private userNotificationServiceSub: Subscription;
     private lastId: string;
 
-    constructor(        
+    constructor(
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
@@ -49,22 +49,22 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        if(this.userNotificationServiceSub){
+        if (this.userNotificationServiceSub) {
             this.userNotificationServiceSub.unsubscribe();
         }
     }
 
-    private loadNotifications(){
-        if(this.userNotificationServiceSub){
+    private loadNotifications() {
+        if (this.userNotificationServiceSub) {
             this.userNotificationServiceSub.unsubscribe();
         }
 
         this.notifications.length = 0;
-        this.userNotificationService.markNotificationAsRead(this.account.info);    
+        this.userNotificationService.markNotificationAsRead(this.account.info);
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             this.processNewNotifications(userNotifications);
-            if(this.notifications.length < 20) this.scrolledToBottom();         
+            if (this.notifications.length < 20) this.scrolledToBottom();
         });
     }
 
@@ -75,7 +75,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
             for (let n of orderedNotifications) {
                 let cwPolicy = this.toolsService.checkContentWarning(n.status);
                 const notificationWrapper = new NotificationWrapper(n, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
-                if (!this.notifications.find(x => x.wrapperId === notificationWrapper.wrapperId)) {                   
+                if (!this.notifications.find(x => x.wrapperId === notificationWrapper.wrapperId)) {
                     this.notifications.unshift(notificationWrapper);
                 }
             }
@@ -84,7 +84,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this.userNotificationService.markNotificationAsRead(this.account.info);
     }
 
-    
+
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
@@ -105,11 +105,13 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                     this.maxReached = true;
                     return;
                 }
-                
+
                 for (const s of notifications) {
                     let cwPolicy = this.toolsService.checkContentWarning(s.status);
                     const wrapper = new NotificationWrapper(s, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
-                    this.notifications.push(wrapper);
+                    if (!this.notifications.find(x => x.wrapperId === wrapper.wrapperId)) {
+                        this.notifications.push(wrapper);
+                    }
                 }
 
                 this.lastId = notifications[notifications.length - 1].id;
@@ -136,16 +138,16 @@ export class NotificationsComponent implements OnInit, OnDestroy {
 }
 
 export class NotificationWrapper {
-    constructor(notification: Notification,  provider: AccountInfo, applyCw: boolean, hideStatus: boolean) {
+    constructor(notification: Notification, provider: AccountInfo, applyCw: boolean, hideStatus: boolean) {
         this.type = notification.type;
-        switch(this.type){            
-            case 'mention': 
-            case 'reblog': 
+        switch (this.type) {
+            case 'mention':
+            case 'reblog':
             case 'favourite':
-            case 'poll':                
-                this.status= new StatusWrapper(notification.status, provider, applyCw, hideStatus);
-                break;          
-        }    
+            case 'poll':
+                this.status = new StatusWrapper(notification.status, provider, applyCw, hideStatus);
+                break;
+        }
         this.account = notification.account;
         this.wrapperId = `${this.type}-${notification.id}`;
         this.notification = notification;
