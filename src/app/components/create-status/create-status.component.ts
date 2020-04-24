@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild, ViewContainerRef, ComponentRef, HostListener } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { Store } from '@ngxs/store';
 import { Subscription, Observable } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, ENTER, ESCAPE } from '@angular/cdk/keycodes';
@@ -17,12 +19,11 @@ import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
 import { MediaService } from '../../services/media.service';
 import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
-import { Overlay, OverlayConfig, FullscreenOverlayContainer, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
 import { PollEditorComponent } from './poll-editor/poll-editor.component';
 import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.component';
 import { ScheduledStatusService } from '../../services/scheduled-status.service';
+import { StatusesStateService } from '../../services/statuses-state.service';
 
 @Component({
     selector: 'app-create-status',
@@ -53,6 +54,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _status: string = '';
     @Input('status')
     set status(value: string) {
+        this.statusStateService.setStatusContent(value, this.statusReplyingToWrapper);
         this.countStatusChar(value);
         this.detectAutosuggestion(value);
         this._status = value;
@@ -68,10 +70,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
+
             this.statusLoaded = false;
             let parser = new DOMParser();
             var dom = parser.parseFromString(value.status.content, 'text/html')
             this.status = dom.body.textContent;
+
+            this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
 
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
@@ -159,6 +164,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private selectedAccount: AccountInfo;
 
     constructor(
+        private statusStateService: StatusesStateService,
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
@@ -169,7 +175,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly mediaService: MediaService,
         private readonly overlay: Overlay,
         public viewContainerRef: ViewContainerRef) {
+
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+        this.status = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
     }
 
     ngOnInit() {
@@ -185,9 +193,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status;
             }
 
-            const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
-            for (const mention of uniqueMentions) {
-                this.status += `@${mention} `;
+            let state = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
+            if (state && state !== '') {
+                this.status = state;
+            } else {
+                const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
+                for (const mention of uniqueMentions) {
+                    this.status += `@${mention} `;
+                }
             }
 
             this.setVisibilityFromStatus(this.statusReplyingTo);
@@ -533,6 +546,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 if (this.scheduleIsActive) {
                     this.scheduledStatusService.statusAdded(acc);
                 }
+
+                this.statusStateService.resetStatusContent(this.statusReplyingToWrapper);
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err, acc);
