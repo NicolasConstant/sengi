@@ -85,7 +85,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             const newLine = String.fromCharCode(13, 10);
             let content = value.status.content;
 
+            console.warn(content);
             content = this.tranformHtmlRepliesToReplies(content);
+            console.warn(content);
             
             while (content.includes('<p>') || content.includes('</p>') || content.includes('<br>') || content.includes('<br/>') || content.includes('<br />')) {
                 content = content.replace('<p>', '').replace('</p>', newLine + newLine).replace('<br />', newLine).replace('<br/>', newLine).replace('<br>', newLine);
@@ -96,6 +98,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             let parser = new DOMParser();
             var dom = parser.parseFromString(content, 'text/html')
             this.status = dom.body.textContent;
+
+            console.warn(this.status);
 
             this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
 
@@ -110,15 +114,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         let cwResult = this.toolsService.checkContentWarning(status);
                         this.statusReplyingToWrapper = new StatusWrapper(cwResult.status, value.provider, cwResult.applyCw, cwResult.hide);
 
-                        const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
-                        for (const mention of mentions) {
-                            const name = `@${mention.split('@')[0]}`;
-                            if (this.status.includes(name)) {
-                                this.status = this.status.replace(name, `@${mention}`);
-                            } else {
-                                this.status = `@${mention} ` + this.status;
-                            }
-                        }
+                        // const mentions = this.getMentions(this.statusReplyingToWrapper.status, this.statusReplyingToWrapper.provider);
+                        // for (const mention of mentions) {
+                        //     const name = `@${mention.split('@')[0]}`;
+                        //     if (this.status.includes(name)) {
+                        //         this.status = this.status.replace(name, `@${mention}`);
+                        //     } else {
+                        //         this.status = `@${mention} ` + this.status;
+                        //     }
+                        // }
 
                     })
                     .catch(err => {
