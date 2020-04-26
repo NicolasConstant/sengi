@@ -79,33 +79,23 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
-        if (value) {
-            console.warn(value.status.content);
+        if (value) {            
             this.statusLoaded = false;
-            let parser = new DOMParser();
+            
             const newLine = String.fromCharCode(13, 10);
             let content = value.status.content;
 
+            content = this.tranformHtmlRepliesToReplies(content);
+            
             while (content.includes('<p>') || content.includes('</p>') || content.includes('<br>') || content.includes('<br/>') || content.includes('<br />')) {
                 content = content.replace('<p>', '').replace('</p>', newLine + newLine).replace('<br />', newLine).replace('<br/>', newLine).replace('<br>', newLine);
             }
 
             content = this.trim(content, newLine);
-
-            // let splitedContent = content.replace('<p>', '').split('</p>').forEach(x => x.split('<br>'));
-            // let splitedContentRendered = [];
-            // splitedContent.forEach(c => {
-            //     var dom = parser.parseFromString(c, 'text/html')
-            //     splitedContentRendered.push(dom.body.textContent);
-            // });
-
+            
+            let parser = new DOMParser();
             var dom = parser.parseFromString(content, 'text/html')
             this.status = dom.body.textContent;
-            // this.status = '';
-            // splitedContentRendered.forEach(element => {
-            //     this.status += element + String.fromCharCode(13, 10);
-            // });
-            console.warn(this.status);
 
             this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
 
@@ -855,5 +845,20 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     schedule(): boolean {
         this.scheduleIsActive = !this.scheduleIsActive;
         return false;
+    }
+
+    private tranformHtmlRepliesToReplies(data: string): string {
+        const mastodonMentionRegex = /<span class="h-card"><a href="https:\/\/([a-zA-Z0-9\/.]{0,255})\/@([a-zA-Z0-9_-]{0,255})" class="u-url mention">@<span>[a-zA-Z0-9_-]{0,255}<\/span><\/a><\/span>/gmi;
+        const pleromaMentionRegex = /<span class="h-card"><a data-user="[a-zA-Z0-9]{0,255}" class="u-url mention" href="https:\/\/([a-zA-Z0-9\/.]{0,255})\/@([a-zA-Z0-9_-]{0,255})" rel="ugc">@<span>[a-zA-Z0-9_-]{0,255}<\/span><\/a><\/span>/gmi;
+
+        while(data.match(mastodonMentionRegex)){
+            data = data.replace(mastodonMentionRegex, '@$2@$1');
+        }
+
+        while(data.match(pleromaMentionRegex)){
+            data = data.replace(pleromaMentionRegex, '@$2@$1');
+        }
+
+        return data;
     }
 }
