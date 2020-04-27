@@ -74,11 +74,11 @@ export class MentionsComponent implements OnInit, OnDestroy {
 
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             this.processNewMentions(userNotifications);
-            if(this.statuses.length < 20) this.scrolledToBottom();
+            if (this.statuses.length < 20) this.scrolledToBottom();
         });
     }
 
-    private processNewMentions(userNotifications: UserNotification[]) {        
+    private processNewMentions(userNotifications: UserNotification[]) {
         const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
         if (userNotification && userNotification.mentions) {
             let orderedMentions = [...userNotification.mentions.map(x => x.status)].reverse();
@@ -120,7 +120,9 @@ export class MentionsComponent implements OnInit, OnDestroy {
                 for (const s of statuses) {
                     let cwPolicy = this.toolsService.checkContentWarning(s);
                     const wrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
-                    this.statuses.push(wrapper);
+                    if (!this.statuses.find(x => x.status.id === s.id)) {
+                        this.statuses.push(wrapper);
+                    }
                 }
 
                 this.lastId = result[result.length - 1].id;

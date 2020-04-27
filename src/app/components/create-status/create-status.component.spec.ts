@@ -195,4 +195,32 @@ describe('CreateStatusComponent', () => {
         expect(result[1].length).toBeLessThanOrEqual(527);      
         expect(result[1]).toBe('http://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/');      
     });
+
+    it('should tranform external mentions properly - mastodon', () => {
+        let mastodonMention = '<p>test <span class="h-card"><a href="https://mastodon.social/@sengi_app" class="u-url mention">@<span>sengi_app</span></a></span> qsdqds qsd qsd qsd q <span class="h-card"><a href="https://mastodon.social/@test" class="u-url mention">@<span>test</span></a></span> <span class="h-card"><a href="https://mastodon.social/@no" class="u-url">@<span>no</span></a></span></p>';
+     
+        const result = <string>(<any>component).tranformHtmlRepliesToReplies(mastodonMention);
+        expect(result).toBe('<p>test @sengi_app@mastodon.social qsdqds qsd qsd qsd q @test@mastodon.social <span class="h-card"><a href="https://mastodon.social/@no" class="u-url">@<span>no</span></a></span></p>');       
+    });
+
+    it('should tranform external mentions properly - mastodon 2', () => {
+        let mastodonMention = '<p>test <span class="h-card"><a href="https://pleroma.site/users/sengi_app" class="u-url mention">@<span>sengi_app</span></a></span> qsdqds qsd qsd qsd q <span class="h-card"><a href="https://pleroma.site/users/test" class="u-url mention">@<span>test</span></a></span> <span class="h-card"><a href="https://pleroma.site/users/no" class="u-url">@<span>no</span></a></span></p>';
+     
+        const result = <string>(<any>component).tranformHtmlRepliesToReplies(mastodonMention);
+        expect(result).toBe('<p>test @sengi_app@pleroma.site qsdqds qsd qsd qsd q @test@pleroma.site <span class="h-card"><a href="https://pleroma.site/users/no" class="u-url">@<span>no</span></a></span></p>');       
+    });
+
+    it('should tranform external mentions properly - pleroma', () => {
+        let pleromaMention = '<p>test <span class="h-card"><a data-user="50504" class="u-url mention" href="https://mastodon.social/@sengi_app" rel="ugc">@<span>sengi_app</span></a></span> qsdqds qsd qsd qsd q <span class="h-card"><a data-user="50504" class="u-url mention" href="https://mastodon.social/@test" rel="ugc">@<span>test</span></a></span> <span class="h-card"><a href="https://mastodon.social/@no" class="u-url">@<span>no</span></a></span></p>';
+     
+        const result = <string>(<any>component).tranformHtmlRepliesToReplies(pleromaMention);
+        expect(result).toBe('<p>test @sengi_app@mastodon.social qsdqds qsd qsd qsd q @test@mastodon.social <span class="h-card"><a href="https://mastodon.social/@no" class="u-url">@<span>no</span></a></span></p>');       
+    });
+
+    it('should tranform external mentions properly - pleroma 2', () => {
+        let pleromaMention = '<p>test <span class="h-card"><a data-user="50504" class="u-url mention" href="https://pleroma.site/users/sengi_app" rel="ugc">@<span>sengi_app</span></a></span> qsdqds qsd qsd qsd q <span class="h-card"><a data-user="50504" class="u-url mention" href="https://pleroma.site/users/test" rel="ugc">@<span>test</span></a></span> <span class="h-card"><a href="https://pleroma.site/users/no" class="u-url">@<span>no</span></a></span></p>';
+     
+        const result = <string>(<any>component).tranformHtmlRepliesToReplies(pleromaMention);
+        expect(result).toBe('<p>test @sengi_app@pleroma.site qsdqds qsd qsd qsd q @test@pleroma.site <span class="h-card"><a href="https://pleroma.site/users/no" class="u-url">@<span>no</span></a></span></p>');       
+    });
 });
