@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
+import { StatusWrapper } from '../models/common.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StatusesStateService {    
+    private cachedStatusText: { [statusId: string]: string } = {};    
     private cachedStatusStates: { [statusId: string]: { [accountId: string]: StatusState } } = {};    
     public stateNotification = new Subject<StatusState>();
 
@@ -61,6 +63,34 @@ export class StatusesStateService {
         }
 
         this.stateNotification.next(this.cachedStatusStates[statusId][accountId]);
+    }
+
+    setStatusContent(data: string, replyingToStatus: StatusWrapper){
+        if(replyingToStatus){
+            this.cachedStatusText[replyingToStatus.status.uri] = data;
+        } else {
+            this.cachedStatusText['none'] = data;
+        }       
+    }
+
+    getStatusContent(replyingToStatus: StatusWrapper): string{
+        let data: string;
+        if(replyingToStatus){
+            data = this.cachedStatusText[replyingToStatus.status.uri];
+        } else {
+            data = this.cachedStatusText['none'];
+        }
+
+        if(!data) return '';
+        return data;
+    }
+
+    resetStatusContent(replyingToStatus: StatusWrapper){
+        if(replyingToStatus){
+            this.cachedStatusText[replyingToStatus.status.uri] = '';
+        } else {
+            this.cachedStatusText['none'] = '';
+        } 
     }
 }
 
