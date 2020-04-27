@@ -852,8 +852,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private tranformHtmlRepliesToReplies(data: string): string {
-        const mastodonMentionRegex = /<span class="h-card"><a href="https:\/\/([a-zA-Z0-9\/.]{0,255})\/@([a-zA-Z0-9_-]{0,255})" class="u-url mention">@<span>[a-zA-Z0-9_-]{0,255}<\/span><\/a><\/span>/gmi;
-        const pleromaMentionRegex = /<span class="h-card"><a data-user="[a-zA-Z0-9]{0,255}" class="u-url mention" href="https:\/\/([a-zA-Z0-9\/.]{0,255})\/@([a-zA-Z0-9_-]{0,255})" rel="ugc">@<span>[a-zA-Z0-9_-]{0,255}<\/span><\/a><\/span>/gmi;
+        const mastodonMentionRegex = /<span class="h-card"><a href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" class="u-url mention">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
+        const pleromaMentionRegex = /<span class="h-card"><a data-user="[a-zA-Z0-9]{0,255}" class="u-url mention" href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" rel="ugc">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
 
         while(data.match(mastodonMentionRegex)){
             data = data.replace(mastodonMentionRegex, '@$2@$1');
