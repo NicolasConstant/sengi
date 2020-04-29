@@ -8,7 +8,7 @@
         </a>
 
     <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"
-        rows="5" required title="content" placeholder="What's in your mind?" (keydown.control.enter)="onCtrlEnter()"
+        rows="5" required title="content" placeholder="What's on your mind?" (keydown.control.enter)="onCtrlEnter()"
         (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()" dir="auto">
     </textarea>
 
