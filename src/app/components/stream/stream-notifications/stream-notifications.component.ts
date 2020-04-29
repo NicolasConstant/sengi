@@ -261,7 +261,7 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
             } else {
                 element = this.notificationstream.nativeElement as HTMLElement;
             }
-            element.focus();
+            element.focus({preventScroll:true});
         }, 0);
         return false;
     }

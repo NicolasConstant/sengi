@@ -37,9 +37,9 @@ export class StreamsMainDisplayComponent implements OnInit, OnDestroy {
         if (columnIndex > -1) {
             setTimeout(() => {
                 let element = this.streamsElementRef.toArray()[columnIndex].nativeElement;
-                element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                //element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
 
-                const scrolling = <Promise<any>><any>scrollIntoView(element, { behavior: 'smooth', block: 'nearest'});
+                const scrolling = <Promise<any>><any>scrollIntoView(element, { behavior: 'smooth', block: 'nearest', inline: 'start'});
                 scrolling
                     .then(() => {
                         this.streamComponents.toArray()[columnIndex].focus();
