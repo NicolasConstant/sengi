@@ -306,7 +306,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     focus(): boolean {
         setTimeout(() => {
             var element = this.statustream.nativeElement as HTMLElement;
-            element.focus();
+            element.focus({preventScroll:true});
         }, 0);
         return false;
     }
