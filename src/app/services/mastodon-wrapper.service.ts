@@ -12,6 +12,7 @@ import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.sta
     providedIn: 'root'
 })
 export class MastodonWrapperService {
+    private refreshingToken: { [id: string]: Promise<AccountInfo> } = {};
 
     constructor(
         private readonly store: Store,
@@ -19,6 +20,10 @@ export class MastodonWrapperService {
         private readonly mastodonService: MastodonService) { }
 
     refreshAccountIfNeeded(accountInfo: AccountInfo): Promise<AccountInfo> {
+        if(this.refreshingToken[accountInfo.id]){
+            return this.refreshingToken[accountInfo.id];
+        }
+
         let isExpired = false;
         let storedAccountInfo = this.getStoreAccountInfo(accountInfo.id);
 
@@ -47,11 +52,8 @@ export class MastodonWrapperService {
         }
 
         if (storedAccountInfo.token.refresh_token && isExpired) {
-            console.log('>>> MARTY!! ------------');
-            console.log('>>> RENEW TOKEN FFS ----');
-
             const app = this.getAllSavedApps().find(x => x.instance === storedAccountInfo.instance);
-            return this.authService.refreshToken(storedAccountInfo.instance, app.app.client_id, app.app.client_secret, storedAccountInfo.token.refresh_token)
+            let p = this.authService.refreshToken(storedAccountInfo.instance, app.app.client_id, app.app.client_secret, storedAccountInfo.token.refresh_token)
                 .then((tokenData: TokenData) => {
                     if (tokenData.refresh_token && !tokenData.created_at) {
                         const nowEpoch = Date.now() / 1000 | 0;
@@ -66,6 +68,13 @@ export class MastodonWrapperService {
                 .catch(err => {
                     return Promise.resolve(storedAccountInfo);
                 });
+
+            p.then(() => {
+                this.refreshingToken[accountInfo.id] = null;
+            });
+            
+            this.refreshingToken[accountInfo.id] = p;
+            return p;
         } else {
             return Promise.resolve(storedAccountInfo);
         }
