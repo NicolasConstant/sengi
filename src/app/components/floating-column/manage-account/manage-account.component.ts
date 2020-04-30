@@ -152,7 +152,6 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
                     this.favoritesComp.applyGoToTop();
                     break;                
             }
-            console.log('gototop');
         }
 
         this.subPanel = subpanel;
