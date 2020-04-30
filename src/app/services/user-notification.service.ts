@@ -25,82 +25,94 @@ export class UserNotificationService {
     private soundJustPlayed = false;
     private soundFileId: string;
 
+    private accountSub: Subscription;
+    private loadedAccounts: AccountInfo[] = [];
+
     constructor(
         private readonly streamingService: StreamingService,
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) {
-        
+
         this.fetchNotifications();
-    }   
+    }
 
     private fetchNotifications() {
         let accounts = this.store.snapshot().registeredaccounts.accounts;
-        // let promises: Promise<any>[] = [];
 
         accounts.forEach((account: AccountInfo) => {
-            // let sinceId = null;
-            // if (this.sinceIds[account.id]) {
-            //     sinceId = this.sinceIds[account.id];
-            // }
-
-            let getMentionsPromise = this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll'], null, null, 10)
-                .then((notifications: Notification[]) => {
-                    this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
-                })
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err, account);
-                });
-
-            let getNotificationPromise = this.mastodonService.getNotifications(account, ['mention'], null, null, 10)
-                .then((notifications: Notification[]) => {
-                    this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserNotification);
-                })
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err, account);
-                });
-
-            Promise.all([getMentionsPromise, getNotificationPromise])
-                .then(() => {
-                    let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
-
-                    let streaming = this.streamingService.getStreaming(account, streamElement); 
-                    streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
-                        if (notification && notification.type === EventEnum.notification) {
-                            this.processNewUpdate(account, notification);
-                        }
-                    });
-                })
-                .catch(err => { });
+            this.loadedAccounts.push(account);
+            this.startFetchingNotifications(account);
         });
+
+        this.accountSub = this.store.select(state => state.registeredaccounts.accounts)
+            .subscribe((accounts: AccountInfo[]) => {
+                accounts.forEach(a => {
+                    if(!this.loadedAccounts.find(x => x.id === a.id)){                        
+                        this.loadedAccounts.push(a);
+                        this.startFetchingNotifications(a);
+                    }
+                });
+            });
+    }
+
+    private startFetchingNotifications(account: AccountInfo) {
+        let getMentionsPromise = this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll'], null, null, 10)
+            .then((notifications: Notification[]) => {
+                this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, account);
+            });
+
+        let getNotificationPromise = this.mastodonService.getNotifications(account, ['mention'], null, null, 10)
+            .then((notifications: Notification[]) => {
+                this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserNotification);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, account);
+            });
+
+        Promise.all([getMentionsPromise, getNotificationPromise])
+            .then(() => {
+                let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
+
+                let streaming = this.streamingService.getStreaming(account, streamElement);
+                streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
+                    if (notification && notification.type === EventEnum.notification) {
+                        this.processNewUpdate(account, notification);
+                    }
+                });
+            })
+            .catch(err => { });
     }
 
     private playSoundNotification() {
         const settings = this.toolsService.getSettings();
-        if(settings.disableSounds) return;
-        if(this.soundJustPlayed) return;
+        if (settings.disableSounds) return;
+        if (this.soundJustPlayed) return;
         this.soundJustPlayed = true;
-        
+
         this.setNotificationSound();
         this.sound.play();
 
-        setTimeout(() => { 
+        setTimeout(() => {
             this.soundJustPlayed = false;
         }, 2000);
     }
 
     private setNotificationSound() {
         let settings = this.toolsService.getSettings();
-        let soundId = settings.notificationSoundFileId;       
-        
-        if(!soundId){
+        let soundId = settings.notificationSoundFileId;
+
+        if (!soundId) {
             soundId = '0';
             settings.notificationSoundFileId = '0';
             this.toolsService.saveSettings(settings);
         }
 
-        if(this.soundFileId === soundId) return;
+        if (this.soundFileId === soundId) return;
 
         var sound = this.getAllNotificationSounds().find(x => x.id === soundId);
         this.sound = new Howl({
@@ -110,9 +122,9 @@ export class UserNotificationService {
     }
 
     private processNewUpdate(account: AccountInfo, notification: StatusUpdate) {
-        if(!notification && !notification.notification) return;
+        if (!notification && !notification.notification) return;
 
-        if(!notification.muteSound){
+        if (!notification.muteSound) {
             this.playSoundNotification();
         }
 
@@ -129,15 +141,15 @@ export class UserNotificationService {
         }
 
         let currentNotifications = this.userNotifications.value;
-        let currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);       
+        let currentAccountNotifications = currentNotifications.find(x => x.account.id === account.id);
 
         if (currentAccountNotifications) {
             currentAccountNotifications = this.analyseNotifications(account, currentAccountNotifications, notifications, type);
 
             //if (currentAccountNotifications.hasNewMentions || currentAccountNotifications.hasNewNotifications) {
-                currentNotifications = currentNotifications.filter(x => x.account.id !== account.id);
-                currentNotifications.push(currentAccountNotifications);
-                this.userNotifications.next(currentNotifications);
+            currentNotifications = currentNotifications.filter(x => x.account.id !== account.id);
+            currentNotifications.push(currentAccountNotifications);
+            this.userNotifications.next(currentNotifications);
             //}
         } else {
             let newNotifications = new UserNotification();
@@ -230,7 +242,7 @@ export class UserNotificationService {
             new NotificationSoundDefinition('0', 'assets/audio/all-eyes-on-me.mp3', 'All eyes on me'),
             new NotificationSoundDefinition('1', 'assets/audio/exquisite.mp3', 'Exquisite'),
             new NotificationSoundDefinition('2', 'assets/audio/appointed.mp3', 'Appointed'),
-            new NotificationSoundDefinition('3', 'assets/audio/boop.mp3', 'Mastodon boop'),            
+            new NotificationSoundDefinition('3', 'assets/audio/boop.mp3', 'Mastodon boop'),
         ];
         return defs;
     }
@@ -261,5 +273,5 @@ export class NotificationSoundDefinition {
     constructor(
         public readonly id: string,
         public readonly path: string,
-        public readonly name: string) {}
+        public readonly name: string) { }
 }
