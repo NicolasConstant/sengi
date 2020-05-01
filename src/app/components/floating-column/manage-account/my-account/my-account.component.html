@@ -1,11 +1,16 @@
 <div class="my-account__body flexcroll">
     <h4 class="my-account__label">add timeline:</h4>
-    <a class="my-account__link my-account__link--margin-bottom my-account__blue" href
-        *ngFor="let stream of availableStreams" (click)="addStream(stream)"
-        title="{{ stream.isAdded ? '' : 'add timeline'}}" [class.my-account__link--disabled]="stream.isAdded">
-        {{ stream.name }} <fa-icon class="my-account__link--icon" *ngIf="stream.isAdded" [icon]="faCheckSquare">
-        </fa-icon>
-    </a>
+    <div class="my-account__link--margin-bottom" *ngFor="let stream of availableStreams">
+        <a href *ngIf="stream.isAdded" class="my-account__list--button" title="remove timeline">
+            <fa-icon class="my-account__link--icon my-account__link--remove" [icon]="faTimes"></fa-icon>
+        </a>
+        <a href class="my-account__link my-account__link--margin-bottom my-account__blue" (click)="addStream(stream)"
+            title="{{ stream.isAdded ? '' : 'add timeline'}}" 
+            [class.my-account__link--disabled]="stream.isAdded">
+            {{ stream.name }} <!-- <fa-icon class="my-account__link--icon" *ngIf="stream.isAdded" [icon]="faCheckSquare"> </fa-icon> -->
+        </a>       
+    </div>
+
 
     <h4 class="my-account__label my-account__margin-top">manage list:</h4>
     <div class="my-account__link--margin-bottom" *ngFor="let list of availableLists">
@@ -26,11 +31,12 @@
             *ngIf="list.confirmDeletion">
             <fa-icon class="my-account__link--icon" [icon]="faCheck"></fa-icon>
         </a>
-
+        <a href *ngIf="list.isAdded" class="my-account__list--button" title="remove list">
+            <fa-icon class="my-account__link--icon my-account__list--remove" [icon]="faTimes"></fa-icon>
+        </a>
         <a class="my-account__link my-account__list my-account__blue" href (click)="addStream(list)"
-            title="{{ list.isAdded ? '' : 'add list'}}" [class.my-account__link--disabled]="list.isAdded">
-            {{ list.name }} <fa-icon class="my-account__link--icon" *ngIf="list.isAdded" [icon]="faCheckSquare">
-            </fa-icon>
+            title="{{ list.isAdded ? '' : 'add list'}}" [class.my-account__list--disabled]="list.isAdded">
+            {{ list.name }} <!--<fa-icon class="my-account__link--icon" *ngIf="list.isAdded" [icon]="faCheckSquare"> </fa-icon>-->
         </a>
 
         <app-list-editor *ngIf="list.editList" [list]="list" [account]="account"></app-list-editor>
@@ -44,7 +50,9 @@
     <h4 class="my-account__label my-account__margin-top">advanced settings:</h4>
     <div class="advanced-settings">
         <input class="advanced-settings__checkbox" [(ngModel)]="avatarNotificationDisabled"
-            (change)="onDisableAvatarNotificationChanged()" type="checkbox" name="avatarNotification" value="avatarNotification" id="avatarNotification"> <label class="noselect advanced-settings__label" for="avatarNotification">disable avatar notifications</label><br>
+            (change)="onDisableAvatarNotificationChanged()" type="checkbox" name="avatarNotification"
+            value="avatarNotification" id="avatarNotification"> <label class="noselect advanced-settings__label"
+            for="avatarNotification">disable avatar notifications</label><br>
         <input class="advanced-settings__checkbox" [(ngModel)]="customStatusLengthEnabled"
             (change)="onCustomLengthEnabledChanged()" type="checkbox" name="customCharLength" value="customCharLength"
             id="customCharLength"> <label class="noselect advanced-settings__label" for="customCharLength">custom char
