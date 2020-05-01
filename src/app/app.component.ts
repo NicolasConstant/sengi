@@ -33,8 +33,9 @@ export class AppComponent implements OnInit, OnDestroy {
     tutorialActive: boolean;
     openedMediaEvent: OpenMediaEvent
 
-    updateAvailable: boolean;
-    showUpdate: boolean;
+    restartNotificationLabel: string;
+    restartNotificationAvailable: boolean;
+    showRestartNotification: boolean;
 
     private authStorageKey: string = 'tempAuth';
 
@@ -42,8 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private openMediaSub: Subscription;
     private streamSub: Subscription;
     private dragoverSub: Subscription;
-    private updateAvailableSub: Subscription;
     private paramsSub: Subscription;
+    private restartNotificationSub: Subscription;
 
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
@@ -54,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private readonly mastodonService: MastodonWrapperService,
         private readonly authService: AuthService,
         private readonly activatedRoute: ActivatedRoute,
-        private readonly serviceWorkerService: ServiceWorkerService,
+        private readonly serviceWorkerService: ServiceWorkerService, // Ensure update checks
         private readonly toolsService: ToolsService,
         private readonly mediaService: MediaService,
         private readonly navigationService: NavigationService) {
@@ -115,12 +116,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 });
         });
 
-        this.updateAvailableSub = this.serviceWorkerService.newAppVersionIsAvailable.subscribe((updateAvailable) => {
-            if(updateAvailable){
-                this.showAutoUpdate();
-            }
-        });
-
         this.streamSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
             if (streams && streams.length === 0) {
                 this.tutorialActive = true;
@@ -151,7 +146,13 @@ export class AppComponent implements OnInit, OnDestroy {
             )
             .subscribe(() => {
                 this.drag = false;
-            })
+            });
+
+        this.restartNotificationSub = this.notificationService.restartNotificationStream.subscribe((label: string) => {
+            if (label) {
+                this.displayRestartNotification(label);
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -159,8 +160,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.columnEditorSub.unsubscribe();
         this.openMediaSub.unsubscribe();
         this.dragoverSub.unsubscribe();
-        this.updateAvailableSub.unsubscribe();
         this.paramsSub.unsubscribe();
+        this.restartNotificationSub.unsubscribe();
     }
 
     closeMedia() {
@@ -199,25 +200,27 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     loadNewVersion(): boolean {
-        this.serviceWorkerService.loadNewAppVersion();
+        document.location.reload();
+        // this.serviceWorkerService.loadNewAppVersion();
         return false;
     }
 
-    showAutoUpdate(): boolean {
-        this.showUpdate = true;
+    displayRestartNotification(label: string): boolean {
+        this.restartNotificationLabel = label;
+        this.showRestartNotification = true;
         setTimeout(() => {
-            this.updateAvailable = true;
+            this.restartNotificationAvailable = true;
         }, 200);
 
         return false;
     }
 
-    closeAutoUpdate(): boolean {
-        this.updateAvailable = false;
+    closeRestartNotification(): boolean {
+        this.restartNotificationAvailable = false;
         setTimeout(() => {
-            this.showUpdate = false;
-        }, 250);      
-        
+            this.showRestartNotification = false;
+        }, 250);
+
         return false;
     }
 
