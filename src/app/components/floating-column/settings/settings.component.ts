@@ -198,6 +198,7 @@ export class SettingsComponent implements OnInit {
     }
 
     onDisableRemoteStatusFetchingChanged() {
+        this.notifyRestartNeeded();
         let settings = this.toolsService.getSettings();
         settings.disableRemoteStatusFetching = this.disableRemoteStatusFetchingEnabled;
         this.toolsService.saveSettings(settings);
