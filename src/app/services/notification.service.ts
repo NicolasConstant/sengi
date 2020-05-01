@@ -9,6 +9,7 @@ import { ToolsService } from './tools.service';
 
 @Injectable()
 export class NotificationService {
+    public restartNotificationStream = new Subject<string>();
     public notifactionStream = new Subject<NotificatioData>();
     public newRespondPostedStream = new Subject<NewReplyData>();
     public hideAccountUrlStream = new Subject<string>();
@@ -59,6 +60,10 @@ export class NotificationService {
 
     public deleteStatus(status: StatusWrapper) {
         this.deletedStatusStream.next(status);
+    }
+
+    public notifyRestartNotification(label: string){
+        this.restartNotificationStream.next(label);
     }
 }
 

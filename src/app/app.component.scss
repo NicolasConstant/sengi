@@ -104,17 +104,20 @@ app-streams-selection-footer {
     transition-timing-function: ease-in;
 
     position: absolute;
-    height: 70px;
+    height: 50px;
     left: 0;
     right: 0;
-    bottom: -80px;
+    bottom: 0;
+    //bottom: -80px;
+    opacity: 0;
     z-index: 999999999;
    
     &__activated {
         // opacity: 1;
         transition: all .25s;
         transition-timing-function: ease-out;
-        bottom: 0px;
+        opacity: 1;
+        height: 70px;
     }
 
     &__display {

@@ -48,9 +48,6 @@
                 type="radio" name="colmun-win" value="colmun-win" id="colmun-win">
             <label class="noselect sub-section__label" for="colmun-win">Win + Alt + Left | Win + Alt + Right</label>
             <br>
-
-            <span class="sub-section__title" *ngIf="columnShortcutChanged">this settings needs a <a href
-                    (click)="reload()">reload</a> to be effective.</span>
         </div>
 
         <h4 class="panel__subtitle">Content-Warning Policies</h4>
@@ -90,9 +87,6 @@
                 <input type="text" class="form-control form-control-sm sub_section__text-input"
                     [(ngModel)]="setContentHidedCompletely" placeholder="example;other example" />
             </div>
-
-            <span class="sub-section__title" *ngIf="contentWarningPolicyChanged"><br />this settings needs a <a href
-                    (click)="reload()">reload</a> to be effective.</span>
         </div>
 
         <h4 class="panel__subtitle">Timelines</h4>
@@ -123,9 +117,6 @@
             <label class="noselect sub-section__label" for="timelineheader-5">Title</label>
             <br>
 
-            <span class="sub-section__title" *ngIf="timeLineHeaderChanged">this settings needs a <a href
-                    (click)="reload()">reload</a> to be effective.</span>
-
             <span class="sub-section__title">loading behavior:</span><br />
 
             <input class="sub-section__checkbox" [checked]="timeLineMode === 1" (change)="onTimeLineModeChange(1)"
@@ -142,9 +133,6 @@
                 type="radio" name="timelinemode-3" value="timelinemode-3" id="timelinemode-3">
             <label class="noselect sub-section__label" for="timelinemode-3">Slow mode (manual loading)</label>
             <br>
-
-            <span class="sub-section__title" *ngIf="timeLineModeChanged">this settings needs a <a href
-                    (click)="reload()">reload</a> to be effective.</span>
         </div>
 
         <h4 class="panel__subtitle">Other</h4>

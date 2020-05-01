@@ -10,9 +10,9 @@
     </div>
 </div>
 
-<div class="auto-update" [class.auto-update__activated]="updateAvailable">
+<div *ngIf="showRestartNotification" class="auto-update" [class.auto-update__activated]="restartNotificationAvailable">
     <div class="auto-update__display">
-        <div class="auto-update__display--text">A new version is available!</div> <a href class="auto-update__display--reload" (click)="loadNewVersion()">reload</a> <a href class="auto-update__display--close" (click)="closeAutoUpdate()"><fa-icon [icon]="faTimes"></fa-icon></a>
+        <div class="auto-update__display--text">{{restartNotificationLabel}}</div> <a href class="auto-update__display--reload" (click)="loadNewVersion()" title="reload">reload</a> <a href class="auto-update__display--close" (click)="closeRestartNotification()" title="close"><fa-icon [icon]="faTimes"></fa-icon></a>
     </div>
 </div>
 

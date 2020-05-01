@@ -7,6 +7,7 @@ import { ToolsService } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
 import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
     selector: 'app-settings',
@@ -27,16 +28,9 @@ export class SettingsComponent implements OnInit {
     version: string;
 
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
-    columnShortcutChanged = false;
-
     timeLineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
-    timeLineHeaderChanged = false;
-
     timeLineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
-    timeLineModeChanged = false;
-
     contentWarningPolicy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
-    contentWarningPolicyChanged = false;
 
     private addCwOnContent: string;
     set setAddCwOnContent(value: string) {
@@ -69,6 +63,7 @@ export class SettingsComponent implements OnInit {
         private formBuilder: FormBuilder,
         private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
+        private readonly notificationService: NotificationService,
         private readonly userNotificationsService: UserNotificationService) { }
 
     ngOnInit() {
@@ -104,7 +99,7 @@ export class SettingsComponent implements OnInit {
 
     onShortcutChange(id: ColumnShortcut) {
         this.columnShortcutEnabled = id;
-        this.columnShortcutChanged = true;
+        this.notifyRestartNeeded();
 
         let settings = this.toolsService.getSettings();
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
@@ -113,7 +108,7 @@ export class SettingsComponent implements OnInit {
 
     onTimeLineHeaderChange(id: TimeLineHeaderEnum){
         this.timeLineHeader = id;
-        this.timeLineHeaderChanged = true;
+        this.notifyRestartNeeded();
 
         let settings = this.toolsService.getSettings();
         settings.timelineHeader = id;
@@ -122,7 +117,7 @@ export class SettingsComponent implements OnInit {
 
     onTimeLineModeChange(id: TimeLineModeEnum){
         this.timeLineMode = id;
-        this.timeLineModeChanged = true;
+        this.notifyRestartNeeded();
 
         let settings = this.toolsService.getSettings();
         settings.timelineMode = id;
@@ -131,13 +126,13 @@ export class SettingsComponent implements OnInit {
 
     onCwPolicyChange(id: ContentWarningPolicyEnum) {
         this.contentWarningPolicy = id;
-        this.contentWarningPolicyChanged = true;
+        this.notifyRestartNeeded();
 
         this.setCwPolicy(id);
     }
 
     private setCwPolicy(id: ContentWarningPolicyEnum = null, addCw: string = null, removeCw: string = null, hide: string = null){
-        this.contentWarningPolicyChanged = true;
+        this.notifyRestartNeeded();
         let settings = this.toolsService.getSettings();        
         let cwPolicySettings = new ContentWarningPolicy();
 
@@ -172,10 +167,10 @@ export class SettingsComponent implements OnInit {
         return data.split(';').map(x => x.trim().toLowerCase()).filter((value, index, self) => self.indexOf(value) === index).filter(y => y !== '');
     }
 
-    reload(): boolean {
-        window.location.reload();
-        return false;
-    }
+    // reload(): boolean {
+    //     window.location.reload();
+    //     return false;
+    // }
 
     onChange(soundId: string) {
         this.notificationSoundId = soundId;
@@ -196,18 +191,21 @@ export class SettingsComponent implements OnInit {
     }
 
     onDisableAutofocusChanged() {
+        this.notifyRestartNeeded();
         let settings = this.toolsService.getSettings();
         settings.disableAutofocus = this.disableAutofocusEnabled;
         this.toolsService.saveSettings(settings);
     }
 
     onDisableRemoteStatusFetchingChanged() {
+        this.notifyRestartNeeded();
         let settings = this.toolsService.getSettings();
         settings.disableRemoteStatusFetching = this.disableRemoteStatusFetchingEnabled;
         this.toolsService.saveSettings(settings);
     }
 
     onDisableAvatarNotificationsChanged() {
+        this.notifyRestartNeeded();
         let settings = this.toolsService.getSettings();
         settings.disableAvatarNotifications = this.disableAvatarNotificationsEnabled;
         this.toolsService.saveSettings(settings);
@@ -247,6 +245,10 @@ export class SettingsComponent implements OnInit {
                 this.isCheckingUpdates = false;
             });
         return false;
+    }
+
+    notifyRestartNeeded(){
+        this.notificationService.notifyRestartNotification('Reload to apply changes');
     }
 }
 
