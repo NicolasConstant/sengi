@@ -104,18 +104,22 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.availableLists.length = 0;
+        // this.availableLists.length = 0;
         this.mastodonService.getLists(account.info)
             .then((streams: StreamElement[]) => {
-                this.availableLists.length = 0;
+                // this.availableLists.length = 0;
                 for (let stream of streams) {
-                    let wrappedStream = new StreamWrapper(stream);
+                    let wrappedStream =  this.availableLists.find(x => x.id === stream.id);
+                    if(!wrappedStream){
+                        wrappedStream = new StreamWrapper(stream);
+                        this.availableLists.push(wrappedStream);
+                    }
+                    
                     if(loadedStreams.find(x => x.id == stream.id)){
                         wrappedStream.isAdded = true;
                     } else {
                         wrappedStream.isAdded = false;
-                    }
-                    this.availableLists.push(wrappedStream);
+                    }                    
                 }                
             })
             .catch(err => {
@@ -128,6 +132,16 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             this.store.dispatch([new AddStream(stream)]).toPromise()
                 .then(() => {
                     stream.isAdded = true;
+                });            
+        }
+        return false;
+    }
+
+    removeStream(stream: StreamWrapper): boolean {
+        if (stream && stream.isAdded) {
+            this.store.dispatch([new RemoveStream(stream.id)]).toPromise()
+                .then(() => {
+                    stream.isAdded = false;
                 });            
         }
         return false;
