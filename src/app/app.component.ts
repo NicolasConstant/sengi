@@ -32,7 +32,9 @@ export class AppComponent implements OnInit, OnDestroy {
     floatingColumnActive: boolean;
     tutorialActive: boolean;
     openedMediaEvent: OpenMediaEvent
+
     updateAvailable: boolean;
+    showUpdate: boolean;
 
     private authStorageKey: string = 'tempAuth';
 
@@ -42,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private dragoverSub: Subscription;
     private updateAvailableSub: Subscription;
     private paramsSub: Subscription;
-    
+
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
     constructor(
@@ -59,7 +61,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.paramsSub =  this.activatedRoute.queryParams.subscribe(params => {
+        this.paramsSub = this.activatedRoute.queryParams.subscribe(params => {
             const code = params['code'];
             if (!code) {
                 return;
@@ -76,10 +78,10 @@ export class AppComponent implements OnInit, OnDestroy {
             let usedTokenData: TokenData;
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
-                    
-                    if(tokenData.refresh_token && !tokenData.created_at){
+
+                    if (tokenData.refresh_token && !tokenData.created_at) {
                         const nowEpoch = Date.now() / 1000 | 0;
-                        tokenData.created_at = nowEpoch;                        
+                        tokenData.created_at = nowEpoch;
                     }
 
                     usedTokenData = tokenData;
@@ -87,17 +89,17 @@ export class AppComponent implements OnInit, OnDestroy {
                     return this.mastodonService.retrieveAccountDetails({ 'instance': appDataWrapper.instance, 'id': '', 'username': '', 'order': 0, 'isSelected': true, 'token': tokenData });
                 })
                 .then((account: Account) => {
-                    var username = account.username.toLowerCase(); 
+                    var username = account.username.toLowerCase();
                     var instance = appDataWrapper.instance.toLowerCase();
 
-                    if(this.isAccountAlreadyPresent(username, instance)){
+                    if (this.isAccountAlreadyPresent(username, instance)) {
                         this.notificationService.notify(null, null, `Account @${username}@${instance} is already registered`, true);
                         this.router.navigate(['/']);
                         return;
                     }
 
                     const accountInfo = new AccountInfo();
-                    accountInfo.username = username; 
+                    accountInfo.username = username;
                     accountInfo.instance = instance;
                     accountInfo.token = usedTokenData;
 
@@ -114,7 +116,9 @@ export class AppComponent implements OnInit, OnDestroy {
         });
 
         this.updateAvailableSub = this.serviceWorkerService.newAppVersionIsAvailable.subscribe((updateAvailable) => {
-            this.updateAvailable = updateAvailable;
+            if(updateAvailable){
+                this.showAutoUpdate();
+            }
         });
 
         this.streamSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
@@ -199,15 +203,28 @@ export class AppComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    closeAutoUpdate(): boolean {
-        this.updateAvailable = false;       
+    showAutoUpdate(): boolean {
+        this.showUpdate = true;
+        setTimeout(() => {
+            this.updateAvailable = true;
+        }, 200);
+
         return false;
     }
 
-    private isAccountAlreadyPresent(username: string, instance: string): boolean{
+    closeAutoUpdate(): boolean {
+        this.updateAvailable = false;
+        setTimeout(() => {
+            this.showUpdate = false;
+        }, 250);      
+        
+        return false;
+    }
+
+    private isAccountAlreadyPresent(username: string, instance: string): boolean {
         const accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         for (let acc of accounts) {
-            if(acc.instance === instance && acc.username == username){
+            if (acc.instance === instance && acc.username == username) {
                 return true;
             }
         }
