@@ -137,6 +137,16 @@ export class MyAccountComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    removeStream(stream: StreamWrapper): boolean {
+        if (stream && stream.isAdded) {
+            this.store.dispatch([new RemoveStream(stream.id)]).toPromise()
+                .then(() => {
+                    stream.isAdded = false;
+                });            
+        }
+        return false;
+    }
+
     removeAccount(): boolean {
         const accountId = this.account.info.id;
         this.store.dispatch([new RemoveAllStreams(accountId), new RemoveAccount(accountId)]);

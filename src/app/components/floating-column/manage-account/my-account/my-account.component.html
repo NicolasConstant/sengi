@@ -1,7 +1,7 @@
 <div class="my-account__body flexcroll">
     <h4 class="my-account__label">add timeline:</h4>
     <div class="my-account__link--margin-bottom" *ngFor="let stream of availableStreams">
-        <a href *ngIf="stream.isAdded" class="my-account__list--button" title="remove timeline">
+        <a href *ngIf="stream.isAdded" class="my-account__list--button" title="remove timeline" (click)="removeStream(stream)">
             <fa-icon class="my-account__link--icon my-account__link--remove" [icon]="faTimes"></fa-icon>
         </a>
         <a href class="my-account__link my-account__link--margin-bottom my-account__blue" (click)="addStream(stream)"
@@ -31,7 +31,7 @@
             *ngIf="list.confirmDeletion">
             <fa-icon class="my-account__link--icon" [icon]="faCheck"></fa-icon>
         </a>
-        <a href *ngIf="list.isAdded" class="my-account__list--button" title="remove list">
+        <a href *ngIf="list.isAdded" class="my-account__list--button" title="remove list" (click)="removeStream(list)">
             <fa-icon class="my-account__link--icon my-account__list--remove" [icon]="faTimes"></fa-icon>
         </a>
         <a class="my-account__link my-account__list my-account__blue" href (click)="addStream(list)"
