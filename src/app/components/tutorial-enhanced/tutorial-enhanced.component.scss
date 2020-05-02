@@ -65,4 +65,14 @@ $footer-height: 30px;
 
 .tutorial-content {
     font-size: 14px;
+
+    &__title {
+        font-size: 20px;
+
+    }
+
+    &__subtitle {
+        font-size: 16px;
+
+    }
 }
