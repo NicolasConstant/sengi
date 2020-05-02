@@ -1,10 +1,18 @@
 <div class="tutorial">
-    <div class="tutorial__content"></div>
-    <div class="tutorial__footer">        
-        <a href (click)="close()">close</a>
-        <a href (click)="close()">prev.</a>
-        <a href (click)="close()">next</a>
-    </div>
+    <div class="tutorial__content">
 
-    
+    </div>
+    <div class="tutorial__footer">        
+        <a href (click)="close()" 
+            title="close tutorial"
+            class="tutorial__footer--button tutorial__footer--button--close">close</a>
+        <a href (click)="previous()" 
+            title="previous"
+            class="tutorial__footer--button tutorial__footer--button--navigate"
+            [class.tutorial__footer--button--disabled]="!previousAvailable">prev.</a>
+        <a href (click)="next()" 
+            title="next"
+            class="tutorial__footer--button tutorial__footer--button--navigate"
+            [class.tutorial__footer--button--disabled]="!nextAvailable">next</a>
+    </div>    
 </div>

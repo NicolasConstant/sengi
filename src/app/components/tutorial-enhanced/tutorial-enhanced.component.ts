@@ -6,8 +6,12 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
     styleUrls: ['./tutorial-enhanced.component.scss']
 })
 export class TutorialEnhancedComponent implements OnInit {
-
     @Output() closeEvent = new EventEmitter();
+
+    previousAvailable = false;
+    nextAvailable = true;
+    index = 0;
+    private maxIndex = 5;
 
     constructor() { }
 
@@ -19,4 +23,29 @@ export class TutorialEnhancedComponent implements OnInit {
         return false;
     }
 
+    previous(): boolean {
+        if (this.index > 0) {
+            this.index--;
+            this.checkState();
+        }
+        return false;
+    }
+
+    next(): boolean {
+        this.index++;
+        this.checkState();
+        return false;
+    }
+
+    private checkState() {
+        if (this.index === 0) {
+            this.previousAvailable = false;
+        } else {
+            this.previousAvailable = true;
+        }
+
+        if (this.index === this.maxIndex){
+            this.close();
+        }
+    }
 }

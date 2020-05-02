@@ -1,8 +1,62 @@
 @import"variables";
 
+$border-color: #1d2335;
+$footer-height: 30px;
+
 .tutorial {
-    border: 1px solid #1d2335;
+    border: 1px solid $border-color;
     background-color: $color-primary;
     height: calc(100%);
     border-radius: 2px;
+
+    &__content {
+        // outline: 1px dotted greenyellow;
+        overflow-y: auto;
+
+        height: calc(100% - #{$footer-height});
+    }
+
+    &__footer {
+        border-top: 1px solid $border-color;
+        height: $footer-height;
+
+        &--button {
+            text-transform: uppercase;
+            font-size: 1em;
+            text-align: center;
+            display: inline-block;
+            height: $footer-height;
+            width: calc(33.33333% - 1px);
+            color: white;
+            padding-top: 3px;
+            transition: all .2s;
+        
+            &:not(:last-child){
+                border-right: 1px solid $border-color;
+            }
+
+            &--close {
+                &:hover {
+                    text-decoration: none;
+                    background-color: rgb(95, 0, 0);
+                }
+            }
+
+            &--navigate {
+                &:hover {
+                    text-decoration: none;
+                    background-color: rgb(0, 74, 109);
+                }
+            }
+
+            &--disabled {
+                color: #4e5672;
+                &:hover {
+                    cursor: default;
+                    text-decoration: none;     
+                    background-color: rgba(0, 0, 0, 0); 
+                }
+            }
+        }
+    }
 }
