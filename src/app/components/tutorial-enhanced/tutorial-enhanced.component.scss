@@ -1,4 +1,6 @@
 @import"variables";
+@import "commons";
+@import "panel";
 
 $border-color: #1d2335;
 $footer-height: 30px;
@@ -12,7 +14,7 @@ $footer-height: 30px;
     &__content {
         // outline: 1px dotted greenyellow;
         overflow-y: auto;
-
+        padding: 5px 10px;
         height: calc(100% - #{$footer-height});
     }
 
@@ -22,7 +24,7 @@ $footer-height: 30px;
 
         &--button {
             text-transform: uppercase;
-            font-size: 1em;
+            font-size: 15px;
             text-align: center;
             display: inline-block;
             height: $footer-height;
@@ -59,4 +61,8 @@ $footer-height: 30px;
             }
         }
     }
+}
+
+.tutorial-content {
+    font-size: 14px;
 }

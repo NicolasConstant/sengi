@@ -84,6 +84,7 @@ import { environment } from '../environments/environment';
 import { BookmarksComponent } from './components/floating-column/manage-account/bookmarks/bookmarks.component';
 import { AttachementImageComponent } from './components/stream/status/attachements/attachement-image/attachement-image.component';
 import { TutorialEnhancedComponent } from './components/tutorial-enhanced/tutorial-enhanced.component';
+import { NotificationsTutorialComponent } from './components/tutorial-enhanced/notifications-tutorial/notifications-tutorial.component';
 
 
 const routes: Routes = [
@@ -148,7 +149,8 @@ const routes: Routes = [
         NotificationComponent,
         BookmarksComponent,
         AttachementImageComponent,
-        TutorialEnhancedComponent
+        TutorialEnhancedComponent,
+        NotificationsTutorialComponent
     ],
     entryComponents: [
         EmojiPickerComponent
