@@ -127,6 +127,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.columnEditorSub = this.navigationService.activatedPanelSubject.subscribe((event: OpenLeftPanelEvent) => {
             if (event.type === LeftPanelType.Closed) {
                 this.floatingColumnActive = false;
+
+                this.checkEnhancedTutorial();
             } else {
                 this.floatingColumnActive = true;
             }
@@ -153,6 +155,33 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.displayRestartNotification(label);
             }
         });
+    }
+
+    enhancedTutorialActive: boolean;
+    enhancedTutorialVisible: boolean;
+    private checkEnhancedTutorial() {
+        let enhancedTutorialDesactivated = JSON.parse(localStorage.getItem('tutorial'));
+        console.warn(enhancedTutorialDesactivated);
+
+        if (!this.floatingColumnActive && !this.tutorialActive && !enhancedTutorialDesactivated) {
+            console.warn('load enhanced tutorial');
+
+            setTimeout(() => {
+                this.enhancedTutorialActive = true;
+                setTimeout(() => {
+                    this.enhancedTutorialVisible = true;
+                }, 100);
+            }, 500);
+        }
+    }
+
+    closeTutorial(){
+        console.warn('close tutorial');
+        this.enhancedTutorialVisible = false;
+        setTimeout(() => {
+            this.enhancedTutorialActive = false;
+        }, 400);
+        //localStorage.setItem('tutorial', JSON.stringify(true));        
     }
 
     ngOnDestroy(): void {

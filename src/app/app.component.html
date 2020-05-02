@@ -16,6 +16,11 @@
     </div>
 </div>
 
+<div *ngIf="enhancedTutorialActive" class="enhanced-tutorial"
+    [class.enhanced-tutorial__visible]="enhancedTutorialVisible">
+    <app-tutorial-enhanced class="enhanced-tutorial__content" (closeEvent)="closeTutorial()"></app-tutorial-enhanced>
+</div>
+
 <app-media-viewer id="media-viewer" *ngIf="openedMediaEvent" [openedMediaEvent]="openedMediaEvent"
     (closeSubject)="closeMedia()" (dragenter)="dragenter($event)"></app-media-viewer>
 

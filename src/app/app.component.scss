@@ -172,3 +172,26 @@ app-streams-selection-footer {
         }
     }
 }
+
+.enhanced-tutorial {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 9999999;
+    opacity: 0;
+    transition: all .4s;
+
+    &__visible {
+        opacity: 1;
+    }
+
+    &__content {
+        display: block;
+        padding: 25px;
+        width: calc(100%);
+        height: calc(100%);
+    }
+}
