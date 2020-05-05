@@ -85,6 +85,7 @@ import { BookmarksComponent } from './components/floating-column/manage-account/
 import { AttachementImageComponent } from './components/stream/status/attachements/attachement-image/attachement-image.component';
 import { TutorialEnhancedComponent } from './components/tutorial-enhanced/tutorial-enhanced.component';
 import { NotificationsTutorialComponent } from './components/tutorial-enhanced/notifications-tutorial/notifications-tutorial.component';
+import { LabelsTutorialComponent } from './components/tutorial-enhanced/labels-tutorial/labels-tutorial.component';
 
 
 const routes: Routes = [
@@ -150,7 +151,8 @@ const routes: Routes = [
         BookmarksComponent,
         AttachementImageComponent,
         TutorialEnhancedComponent,
-        NotificationsTutorialComponent
+        NotificationsTutorialComponent,
+        LabelsTutorialComponent
     ],
     entryComponents: [
         EmojiPickerComponent
