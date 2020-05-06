@@ -146,4 +146,15 @@ export class MentionsComponent implements OnInit, OnDestroy {
     browseThread(openThreadEvent: OpenThreadEvent): void {
         this.browseThreadEvent.next(openThreadEvent);
     }
+
+    applyGoToTop(): boolean {
+        const stream = this.statustream.nativeElement as HTMLElement;
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }, 0);
+        return false;
+    }
 }

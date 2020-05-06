@@ -266,6 +266,7 @@ export class UserProfileComponent implements OnInit {
 
     refresh(): any {
         this.showFloatingHeader = false;
+        this.showFloatingStatusMenu = false;
         this.load(this.lastAccountName);
     }
 

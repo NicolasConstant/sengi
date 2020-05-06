@@ -32,7 +32,10 @@ export class AppComponent implements OnInit, OnDestroy {
     floatingColumnActive: boolean;
     tutorialActive: boolean;
     openedMediaEvent: OpenMediaEvent
-    updateAvailable: boolean;
+
+    restartNotificationLabel: string;
+    restartNotificationAvailable: boolean;
+    showRestartNotification: boolean;
 
     private authStorageKey: string = 'tempAuth';
 
@@ -40,9 +43,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private openMediaSub: Subscription;
     private streamSub: Subscription;
     private dragoverSub: Subscription;
-    private updateAvailableSub: Subscription;
     private paramsSub: Subscription;
-    
+    private restartNotificationSub: Subscription;
+
     @Select(state => state.streamsstatemodel.streams) streamElements$: Observable<StreamElement[]>;
 
     constructor(
@@ -52,14 +55,17 @@ export class AppComponent implements OnInit, OnDestroy {
         private readonly mastodonService: MastodonWrapperService,
         private readonly authService: AuthService,
         private readonly activatedRoute: ActivatedRoute,
-        private readonly serviceWorkerService: ServiceWorkerService,
+        private readonly serviceWorkerService: ServiceWorkerService, // Ensure update checks
         private readonly toolsService: ToolsService,
         private readonly mediaService: MediaService,
         private readonly navigationService: NavigationService) {
     }
 
     ngOnInit(): void {
-        this.paramsSub =  this.activatedRoute.queryParams.subscribe(params => {
+        // disable tutorial for future update
+        localStorage.setItem('tutorial', JSON.stringify(true));
+
+        this.paramsSub = this.activatedRoute.queryParams.subscribe(params => {
             const code = params['code'];
             if (!code) {
                 return;
@@ -76,10 +82,10 @@ export class AppComponent implements OnInit, OnDestroy {
             let usedTokenData: TokenData;
             this.authService.getToken(appDataWrapper.instance, appInfo.app.client_id, appInfo.app.client_secret, code, appInfo.app.redirect_uri)
                 .then((tokenData: TokenData) => {
-                    
-                    if(tokenData.refresh_token && !tokenData.created_at){
+
+                    if (tokenData.refresh_token && !tokenData.created_at) {
                         const nowEpoch = Date.now() / 1000 | 0;
-                        tokenData.created_at = nowEpoch;                        
+                        tokenData.created_at = nowEpoch;
                     }
 
                     usedTokenData = tokenData;
@@ -87,17 +93,17 @@ export class AppComponent implements OnInit, OnDestroy {
                     return this.mastodonService.retrieveAccountDetails({ 'instance': appDataWrapper.instance, 'id': '', 'username': '', 'order': 0, 'isSelected': true, 'token': tokenData });
                 })
                 .then((account: Account) => {
-                    var username = account.username.toLowerCase(); 
+                    var username = account.username.toLowerCase();
                     var instance = appDataWrapper.instance.toLowerCase();
 
-                    if(this.isAccountAlreadyPresent(username, instance)){
+                    if (this.isAccountAlreadyPresent(username, instance)) {
                         this.notificationService.notify(null, null, `Account @${username}@${instance} is already registered`, true);
                         this.router.navigate(['/']);
                         return;
                     }
 
                     const accountInfo = new AccountInfo();
-                    accountInfo.username = username; 
+                    accountInfo.username = username;
                     accountInfo.instance = instance;
                     accountInfo.token = usedTokenData;
 
@@ -111,10 +117,6 @@ export class AppComponent implements OnInit, OnDestroy {
                     this.notificationService.notifyHttpError(err, null);
                     this.router.navigate(['/']);
                 });
-        });
-
-        this.updateAvailableSub = this.serviceWorkerService.newAppVersionIsAvailable.subscribe((updateAvailable) => {
-            this.updateAvailable = updateAvailable;
         });
 
         this.streamSub = this.streamElements$.subscribe((streams: StreamElement[]) => {
@@ -147,7 +149,13 @@ export class AppComponent implements OnInit, OnDestroy {
             )
             .subscribe(() => {
                 this.drag = false;
-            })
+            });
+
+        this.restartNotificationSub = this.notificationService.restartNotificationStream.subscribe((label: string) => {
+            if (label) {
+                this.displayRestartNotification(label);
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -155,8 +163,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.columnEditorSub.unsubscribe();
         this.openMediaSub.unsubscribe();
         this.dragoverSub.unsubscribe();
-        this.updateAvailableSub.unsubscribe();
         this.paramsSub.unsubscribe();
+        this.restartNotificationSub.unsubscribe();
     }
 
     closeMedia() {
@@ -195,19 +203,34 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     loadNewVersion(): boolean {
-        this.serviceWorkerService.loadNewAppVersion();
+        document.location.reload();
+        // this.serviceWorkerService.loadNewAppVersion();
         return false;
     }
 
-    closeAutoUpdate(): boolean {
-        this.updateAvailable = false;       
+    displayRestartNotification(label: string): boolean {
+        this.restartNotificationLabel = label;
+        this.showRestartNotification = true;
+        setTimeout(() => {
+            this.restartNotificationAvailable = true;
+        }, 200);
+
         return false;
     }
 
-    private isAccountAlreadyPresent(username: string, instance: string): boolean{
+    closeRestartNotification(): boolean {
+        this.restartNotificationAvailable = false;
+        setTimeout(() => {
+            this.showRestartNotification = false;
+        }, 250);
+
+        return false;
+    }
+
+    private isAccountAlreadyPresent(username: string, instance: string): boolean {
         const accounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         for (let acc of accounts) {
-            if(acc.instance === instance && acc.username == username){
+            if (acc.instance === instance && acc.username == username) {
                 return true;
             }
         }

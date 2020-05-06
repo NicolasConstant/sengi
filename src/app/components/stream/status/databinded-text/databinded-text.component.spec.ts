@@ -31,6 +31,12 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain(sample);
     });
 
+    it('should parse href text', () => {
+        const sample = '<p>href<p>';
+        component.text = sample;
+        expect(component.processedText).toBe(sample);
+    });
+
     it('should parse hashtag', () => {
         const hashtag = 'programmers';
         const url = 'https://test.social/tags/programmers';

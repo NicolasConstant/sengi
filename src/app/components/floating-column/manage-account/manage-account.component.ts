@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { faAt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBell, faEnvelope, faUser, faStar, faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { Subscription } from 'rxjs';
@@ -10,6 +10,11 @@ import { MastodonWrapperService } from '../../../services/mastodon-wrapper.servi
 import { Account } from "../../../services/models/mastodon.interfaces";
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
+import { BookmarksComponent } from './bookmarks/bookmarks.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { MentionsComponent } from './mentions/mentions.component';
+import { DirectMessagesComponent } from './direct-messages/direct-messages.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 
 @Component({
@@ -122,8 +127,35 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadSubPanel(subpanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites'): boolean {
+    @ViewChild('bookmarks') bookmarksComp:BookmarksComponent;
+    @ViewChild('notifications') notificationsComp:NotificationsComponent;
+    @ViewChild('mentions') mentionsComp:MentionsComponent;
+    @ViewChild('dm') dmComp:DirectMessagesComponent;
+    @ViewChild('favorites') favoritesComp:FavoritesComponent;
+
+    loadSubPanel(subpanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' | 'bookmarks'): boolean {
+        if(this.subPanel === subpanel){
+            switch(subpanel){
+                case 'bookmarks': 
+                    this.bookmarksComp.applyGoToTop();
+                    break;
+                case 'notifications':
+                    this.notificationsComp.applyGoToTop();
+                    break;
+                case 'mentions':
+                    this.mentionsComp.applyGoToTop();
+                    break;
+                case 'dm':
+                    this.dmComp.applyGoToTop();
+                    break;
+                case 'favorites':
+                    this.favoritesComp.applyGoToTop();
+                    break;                
+            }
+        }
+
         this.subPanel = subpanel;
+        
         return false;
     }
 

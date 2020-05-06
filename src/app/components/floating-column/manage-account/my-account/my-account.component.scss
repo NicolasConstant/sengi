@@ -1,6 +1,10 @@
 @import "variables";
 @import "commons";
 
+
+$list-width: 60px;
+$button-width: $list-width/2;
+
 .my-account {
     transition: all .2s;
 
@@ -50,9 +54,18 @@
             float: right;
         }
 
+        &--remove {
+            position: relative;
+            top: 1px;
+            right: 1px;
+        }
+
         &--disabled {
             cursor: default;
             background-color: darken($color-primary, 4);
+
+            width: calc(100% - #{$button-width} - 1px);
+            //outline: 1px solid greenyellow;
 
             &:hover {
                 background-color: darken($color-primary, 4);
@@ -67,8 +80,26 @@
     }
 
     &__list {
-        $list-width: 60px;
+       
         width: calc(100% - #{$list-width} - 2px);
+
+        &--remove {
+            position: relative;
+            top: 0px;
+            right: 1px;
+        }
+
+        &--disabled {
+            cursor: default;
+            background-color: darken($color-primary, 4);
+
+            width: calc(100% - #{$button-width} * 3 - 3px);
+            //outline: 1px solid greenyellow;
+
+            &:hover {
+                background-color: darken($color-primary, 4);
+            }
+        }
 
         &--button {
             margin-left: 1px;

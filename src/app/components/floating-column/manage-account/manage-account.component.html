@@ -35,20 +35,20 @@
         </a>
     </div>
 
-    <app-bookmarks class="account__body" *ngIf="subPanel === 'bookmarks'" [account]="account"
+    <app-bookmarks #bookmarks class="account__body" *ngIf="subPanel === 'bookmarks'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-bookmarks>
-    <app-direct-messages class="account__body" *ngIf="subPanel === 'dm'" [account]="account"
+    <app-direct-messages #dm class="account__body" *ngIf="subPanel === 'dm'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-direct-messages>
-    <app-favorites class="account__body" *ngIf="subPanel === 'favorites'" [account]="account"
+    <app-favorites #favorites class="account__body" *ngIf="subPanel === 'favorites'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-favorites>
-    <app-mentions class="account__body" *ngIf="subPanel === 'mentions'" [account]="account"
+    <app-mentions #mentions class="account__body" *ngIf="subPanel === 'mentions'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-mentions>
     <app-my-account class="account__body" *ngIf="subPanel === 'account'" [account]="account"></app-my-account>
-    <app-notifications class="account__body" *ngIf="subPanel === 'notifications'" [account]="account"
+    <app-notifications #notifications class="account__body" *ngIf="subPanel === 'notifications'" [account]="account"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
         (browseThreadEvent)="browseThread($event)"></app-notifications>
 </div>

@@ -28,7 +28,7 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
-        //console.warn(value);
+        // console.warn(value);
 
         let parser = new DOMParser();
         var dom = parser.parseFromString(value, 'text/html')
@@ -133,6 +133,11 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private processLink(section: string) {
+        if(!section.includes('</a>')){
+            this.processedText += section;
+            return;
+        }
+
         let extractedLinkAndNext = section.split('</a>')
         let extractedUrl = extractedLinkAndNext[0].split('"')[1];
 

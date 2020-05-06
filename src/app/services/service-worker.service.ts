@@ -1,17 +1,19 @@
 import { Injectable, ApplicationRef } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { first } from 'rxjs/operators';
 import { interval, concat, BehaviorSubject } from 'rxjs';
+
+import { NotificationService } from './notification.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ServiceWorkerService {
-    newAppVersionIsAvailable = new BehaviorSubject<boolean>(false);
-
     private isListening = false;
 
-    constructor(appRef: ApplicationRef, private updates: SwUpdate) {
+    constructor(
+        appRef: ApplicationRef,
+        private updates: SwUpdate,
+        private notificationService: NotificationService) {
 
         //https://angular.io/guide/service-worker-communications
 
@@ -19,7 +21,7 @@ export class ServiceWorkerService {
             console.log('current version is', event.current);
             console.log('available version is', event.available);
 
-            this.newAppVersionIsAvailable.next(true);
+            this.notificationService.notifyRestartNotification('A new version is available!');
         });
 
         // Allow the app to stabilize first, before starting polling for updates with `interval()`.
@@ -47,6 +49,6 @@ export class ServiceWorkerService {
     }
 
     checkForUpdates(): Promise<void> {
-        return this.updates.checkForUpdate();          
+        return this.updates.checkForUpdate();
     }
 }
