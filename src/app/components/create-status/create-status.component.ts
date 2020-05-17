@@ -17,7 +17,7 @@ import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
 import { AccountInfo } from '../../states/accounts.state';
 import { InstancesInfoService } from '../../services/instances-info.service';
-import { MediaService } from '../../services/media.service';
+import { MediaService, MediaWrapper } from '../../services/media.service';
 import { AutosuggestSelection, AutosuggestUserActionEnum } from './autosuggest/autosuggest.component';
 import { EmojiPickerComponent } from './emoji-picker/emoji-picker.component';
 import { PollEditorComponent } from './poll-editor/poll-editor.component';
@@ -79,8 +79,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
-        if (value) {            
+        if (value) {           
             this.statusLoaded = false;
+
+            if(value.status && value.status.media_attachments){
+                for (const m of value.status.media_attachments) {
+                    this.mediaService.addExistingMedia(new MediaWrapper(m.id, null, m));
+                }
+            }
             
             const newLine = String.fromCharCode(13, 10);
             let content = value.status.content;
