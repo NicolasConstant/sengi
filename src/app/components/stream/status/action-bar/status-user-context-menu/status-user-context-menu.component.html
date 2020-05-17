@@ -11,6 +11,9 @@
     <ng-template contextMenuItem (execute)="copyStatusLink()" *ngIf="statusWrapper">
         Copy link to status
     </ng-template>
+    <ng-template contextMenuItem (execute)="copyAllData()" *ngIf="statusWrapper">
+        Copy all data
+    </ng-template>
     <ng-template contextMenuItem divider="true" *ngIf="statusWrapper"></ng-template>
     <ng-template contextMenuItem (execute)="mentionAccount()" *ngIf="!isOwnerSelected">
         Mention @{{ this.username }}

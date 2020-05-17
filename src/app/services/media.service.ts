@@ -12,6 +12,7 @@ import { NotificationService } from './notification.service';
 })
 export class MediaService {
     mediaSubject: BehaviorSubject<MediaWrapper[]> = new BehaviorSubject<MediaWrapper[]>([]);
+    fileCache: { [url: string]: File } = {};
 
     constructor(
         private readonly notificationService: NotificationService,
@@ -36,6 +37,7 @@ export class MediaService {
 
         this.mastodonService.uploadMediaAttachment(account, file, null)
             .then((attachment: Attachment) => {
+                this.fileCache[attachment.url] = file;
                 let currentMedias = this.mediaSubject.value;
                 let currentMedia = currentMedias.filter(x => x.id === uniqueId)[0];
                 if (currentMedia) {
@@ -64,6 +66,15 @@ export class MediaService {
             });
     }
 
+    addExistingMedia(media: MediaWrapper){
+        if(!this.fileCache[media.attachment.url]) return;
+        
+        media.file = this.fileCache[media.attachment.url];
+        let medias = this.mediaSubject.value;
+        medias.push(media);
+        this.mediaSubject.next(medias);
+    }
+
     remove(media: MediaWrapper) {
         let medias = this.mediaSubject.value;
         let filteredMedias = medias.filter(x => x.id !== media.id);
@@ -84,6 +95,7 @@ export class MediaService {
         for (let media of medias) {
             this.mastodonService.uploadMediaAttachment(account, media.file, media.description)
                 .then((attachment: Attachment) => {
+                    this.fileCache[attachment.url] = media.file;
                     let currentMedias = this.mediaSubject.value;
                     let currentMedia = currentMedias.filter(x => x.id === media.id)[0];
                     if (currentMedia) {

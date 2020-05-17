@@ -7,17 +7,26 @@ import { NotificationService, NotificatioData } from '../../services/notificatio
     styleUrls: ['./notification-hub.component.scss']
 })
 export class NotificationHubComponent implements OnInit {
-    notifications: NotificatioData[] = [];
+    notifications: NotificationWrapper[] = [];
 
     constructor(private notificationService: NotificationService) { }
 
     ngOnInit() {
         this.notificationService.notifactionStream.subscribe((notification: NotificatioData) => {
-            this.notifications.push(notification);
+            let alreadyExistingNotification = this.notifications.find(x => x.avatar === notification.avatar && x.message === notification.message);
 
-            setTimeout(() => {
-                this.notifications = this.notifications.filter(x => x.id !== notification.id);
-            }, 5000);
+            if(alreadyExistingNotification){
+                alreadyExistingNotification.count++;
+            } else{
+                this.notifications.push(new NotificationWrapper(notification));
+                if(this.notifications.length > 3){
+                    this.notifications.length = 3;
+                }
+    
+                setTimeout(() => {
+                    this.notifications = this.notifications.filter(x => x.id !== notification.id);
+                }, 5000);
+            }
         });
 
         //this.autoSubmit();       
@@ -34,4 +43,12 @@ export class NotificationHubComponent implements OnInit {
     onClick(notification: NotificatioData): void{
         this.notifications = this.notifications.filter(x => x.id !== notification.id);
     }
+}
+
+class NotificationWrapper extends NotificatioData {
+    constructor(data: NotificatioData) {
+        super(data.avatar, data.errorCode, data.message, data.isError);        
+    }
+
+    count = 1;
 }

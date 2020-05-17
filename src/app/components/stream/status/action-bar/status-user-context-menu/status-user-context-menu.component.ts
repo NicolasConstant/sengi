@@ -75,7 +75,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
     private checkStatus(accounts: AccountInfo[]): void {
         const selectedAccount = accounts.find(x => x.isSelected);
-        
+
         this.isOwnerSelected = selectedAccount.username.toLowerCase() === this.displayedStatus.account.username.toLowerCase()
             && selectedAccount.instance.toLowerCase() === this.displayedStatus.account.url.replace('https://', '').split('/')[0].toLowerCase();
     }
@@ -109,6 +109,33 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         selBox.style.top = '0';
         selBox.style.opacity = '0';
         selBox.value = this.displayedStatus.url;
+        document.body.appendChild(selBox);
+        selBox.focus();
+        selBox.select();
+        document.execCommand('copy');
+        document.body.removeChild(selBox);
+
+        return false;
+    }
+
+    copyAllData(): boolean {
+        const newLine = String.fromCharCode(13, 10);
+
+        let selBox = document.createElement('textarea');
+        selBox.style.position = 'fixed';
+        selBox.style.left = '0';
+        selBox.style.top = '0';
+        selBox.style.opacity = '0';
+        selBox.value = `${this.displayedStatus.url}${newLine}${newLine}${this.displayedStatus.content}${newLine}${newLine}`;
+
+        let parser = new DOMParser();
+        var dom = parser.parseFromString(this.displayedStatus.content, 'text/html')
+        selBox.value += `${dom.body.textContent}${newLine}${newLine}`;
+
+        for (const att of this.displayedStatus.media_attachments) {
+            selBox.value += `${att.url}${newLine}${newLine}`;
+        }
+
         document.body.appendChild(selBox);
         selBox.focus();
         selBox.select();
