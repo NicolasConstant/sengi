@@ -62,6 +62,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        // //Test 
+        // setInterval(() => {
+        //     this.notificationService.notify('https://files.mastodon.social/accounts/avatars/000/520/226/original/fb37ef31376e5dfc.png', 500, null, true);
+        // }, 50);
+
         // disable tutorial for future update
         localStorage.setItem('tutorial', JSON.stringify(true));
 

@@ -5,9 +5,10 @@
         <img class="notification-hub__notification--avatar" *ngIf="notification.avatar"
             src="{{ notification.avatar }}" />
 
-        <div class="notification-hub__notification--message">
+        <div class="notification-hub__notification--message" [class.notification-hub__notification--message--no-avatar]="!notification.avatar">
             <span *ngIf="!notification.message">Error {{ notification.errorCode }}</span>
             <span *ngIf="notification.message">{{ notification.message }}</span>
+            <span class="notification-hub__notification--count" *ngIf="notification.count > 1"> ({{ notification.count}})</span>
         </div>
     </div>
 </div>
