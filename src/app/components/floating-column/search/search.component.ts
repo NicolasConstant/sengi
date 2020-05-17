@@ -88,11 +88,11 @@ export class SearchComponent implements OnInit {
             })
             .then((results: Results) => {
                 if (results) {
-                    this.accounts = results.accounts.slice(0, 5);
+                    this.accounts = results.accounts.slice(0, 7);
                     this.hashtags = results.hashtags;
 
-                    if(!this.hashtags.map(x => x.toLowerCase()).includes(data.toLowerCase())){
-                        this.hashtags.unshift(data);
+                    if(data && data[0] === '#' && !this.hashtags.map(x => x.toLowerCase()).includes(data.replace('#', '').toLowerCase())){
+                        this.hashtags.unshift(data.replace('#', ''));
                     }
 
                     for (let status of results.statuses) {
