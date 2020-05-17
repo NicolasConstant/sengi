@@ -107,6 +107,4 @@ export class SearchComponent implements OnInit {
             })
             .then(() => { this.isLoading = false; });
     }
-
-    private
 }
