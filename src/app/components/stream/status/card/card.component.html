@@ -1,6 +1,6 @@
 <div class="card-data" *ngIf="card.type === 'link' || card.type === 'video'">
     <a *ngIf="card.type === 'link'" class="card-data__link" href="{{ card.url }}" target="_blank" title="{{ card.title }} &#10;{{ host }}">
-        <img *ngIf="card.image" class="card-data__link--image" src="{{ card.image }}" alt="" />
+        <img *ngIf="card.image" class="card-data__link--image" src="{{ card.image | ensureHttps }}" alt="" />
         <div *ngIf="!card.image" class="card-data__link--image">
             <fa-icon class="card-data__link--image--logo" [icon]="faFileAlt"></fa-icon>
         </div>
@@ -24,7 +24,7 @@
                     <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
                 </a>
             </div>
-            <img src="{{ card.image }}" class="card-data__video--preview--image" />
+            <img src="{{ card.image | ensureHttps }}" class="card-data__video--preview--image" />
         </div>
         <div #video *ngIf="showHtml" class="card-data__video--content" [innerHTML]="html">
 
