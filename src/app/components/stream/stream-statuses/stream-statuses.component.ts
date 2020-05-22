@@ -12,38 +12,60 @@ import { NotificationService } from '../../../services/notification.service';
 import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../../models/common.model';
 import { TimeLineModeEnum } from '../../../states/settings.state';
+import { TimelineBase } from '../../common/timeline-base';
 
 @Component({
     selector: 'app-stream-statuses',
     templateUrl: './stream-statuses.component.html',
     styleUrls: ['./stream-statuses.component.scss']
 })
-export class StreamStatusesComponent implements OnInit, OnDestroy {
-    isLoading = true;
-    private lastInfinityFetchReturnedNothing = false;
-    isThread = false;
-    displayError: string;
-    hasContentWarnings = false;
+// export class StreamStatusesComponent implements OnInit, OnDestroy {
+export class StreamStatusesComponent extends TimelineBase {
+    // isLoading = true;
+    // private lastInfinityFetchReturnedNothing = false;
+    // isThread = false;
+    // displayError: string;
+    // hasContentWarnings = false;
 
-    timelineLoadingMode: TimeLineModeEnum;
+    // timelineLoadingMode: TimeLineModeEnum;
 
-    private _streamElement: StreamElement;
-    private account: AccountInfo;
-    private websocketStreaming: StreamingWrapper;
+    // private _streamElement: StreamElement;
+    // private account: AccountInfo;
+    // private websocketStreaming: StreamingWrapper;
 
-    statuses: StatusWrapper[] = [];
-    bufferStream: Status[] = [];
-    private bufferWasCleared: boolean;
-    streamPositionnedAtTop: boolean = true;
-    private isProcessingInfiniteScroll: boolean;
+    // statuses: StatusWrapper[] = [];
+    // bufferStream: Status[] = [];
+    // private bufferWasCleared: boolean;
+    // streamPositionnedAtTop: boolean = true;
+    // private isProcessingInfiniteScroll: boolean;
 
-    private hideBoosts: boolean;
-    private hideReplies: boolean;
-    private hideBots: boolean;
+    // private hideBoosts: boolean;
+    // private hideReplies: boolean;
+    // private hideBots: boolean;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+    // @Output() browseAccountEvent = new EventEmitter<string>();
+    // @Output() browseHashtagEvent = new EventEmitter<string>();
+    // @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+
+    // @Input()
+    // set streamElement(streamElement: StreamElement) {
+    //     this._streamElement = streamElement;
+
+    //     this.hideBoosts = streamElement.hideBoosts;
+    //     this.hideBots = streamElement.hideBots;
+    //     this.hideReplies = streamElement.hideReplies;
+
+    //     this.load(this._streamElement);
+    // }
+    // get streamElement(): StreamElement {
+    //     return this._streamElement;
+    // }
+
+    // @Input() goToTop: Observable<void>;
+
+    // @Input() userLocked = true;
+
+    protected _streamElement: StreamElement;
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -59,10 +81,6 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return this._streamElement;
     }
 
-    @Input() goToTop: Observable<void>;
-
-    @Input() userLocked = true;
-
     private goToTopSubscription: Subscription;
     private streamsSubscription: Subscription;
     private hideAccountSubscription: Subscription;
@@ -70,12 +88,13 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private streams$: Observable<StreamElement[]>;
 
     constructor(
-        private readonly store: Store,
-        private readonly toolsService: ToolsService,
-        private readonly notificationService: NotificationService,
-        private readonly streamingService: StreamingService,
-        private readonly mastodonService: MastodonWrapperService) {
+        protected readonly store: Store,
+        protected readonly toolsService: ToolsService,
+        protected readonly notificationService: NotificationService,
+        protected readonly streamingService: StreamingService,
+        protected readonly mastodonService: MastodonWrapperService) {
 
+        super(toolsService, notificationService, mastodonService);
         this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
     }
 
@@ -138,7 +157,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         this.load(this._streamElement);
     }
 
-    private load(streamElement: StreamElement) {
+    protected load(streamElement: StreamElement) {
         this.resetStream();
 
         if (this.userLocked) {
@@ -221,17 +240,17 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         }
     }
 
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
+    // browseAccount(accountName: string): void {
+    //     this.browseAccountEvent.next(accountName);
+    // }
 
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
+    // browseHashtag(hashtag: string): void {
+    //     this.browseHashtagEvent.next(hashtag);
+    // }
 
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
-    }
+    // browseThread(openThreadEvent: OpenThreadEvent): void {
+    //     this.browseThreadEvent.next(openThreadEvent);
+    // }
 
     textSelected(): void {
         console.warn(`status comp: textSelected`); //TODO
@@ -265,36 +284,64 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private scrolledToBottom() {
-        if (this.isLoading || this.lastInfinityFetchReturnedNothing) return;
+    // private scrolledToBottom() {
+    //     if (this.isLoading || this.lastInfinityFetchReturnedNothing) return;
 
-        this.isLoading = true;
-        this.isProcessingInfiniteScroll = true;
+    //     this.isLoading = true;
+    //     this.isProcessingInfiniteScroll = true;
 
+    //     const lastStatus = this.statuses[this.statuses.length - 1];
+    //     this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
+    //         .then((status: Status[]) => {
+    //             for (const s of status) {
+    //                 if (this.isFiltered(s)) {
+    //                     continue;
+    //                 }
+
+    //                 let cwPolicy = this.toolsService.checkContentWarning(s);
+    //                 const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
+    //                 this.statuses.push(wrapper);
+    //             }
+
+    //             if (!status || status.length === 0) {
+    //                 this.lastInfinityFetchReturnedNothing = true;
+    //             }
+    //         })
+    //         .catch((err: HttpErrorResponse) => {
+    //             this.notificationService.notifyHttpError(err, this.account);
+    //         })
+    //         .then(() => {
+    //             this.isLoading = false;
+    //             this.isProcessingInfiniteScroll = false;
+    //         });
+    // }
+
+    protected getNextStatuses(): Promise<Status[]> {
         const lastStatus = this.statuses[this.statuses.length - 1];
-        this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
-            .then((status: Status[]) => {
-                for (const s of status) {
-                    if (this.isFiltered(s)) {
-                        continue;
-                    }
 
-                    let cwPolicy = this.toolsService.checkContentWarning(s);
-                    const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
-                    this.statuses.push(wrapper);
-                }
-
-                if (!status || status.length === 0) {
-                    this.lastInfinityFetchReturnedNothing = true;
-                }
-            })
-            .catch((err: HttpErrorResponse) => {
-                this.notificationService.notifyHttpError(err, this.account);
-            })
-            .then(() => {
-                this.isLoading = false;
-                this.isProcessingInfiniteScroll = false;
+        return this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
+            .then((status: Status[]) =>{
+                return status.filter(x => this.isFiltered(x));
             });
+    }
+    
+    private isFiltered(status: Status): boolean {
+        if (this.streamElement.hideBoosts) {
+            if (status.reblog) {
+                return true;
+            }
+        }
+        if (this.streamElement.hideBots) {
+            if (status.account.bot) {
+                return true;
+            }
+        }
+        if (this.streamElement.hideReplies) {
+            if (status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private getRegisteredAccounts(): AccountInfo[] {
@@ -306,7 +353,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     focus(): boolean {
         setTimeout(() => {
             var element = this.statustream.nativeElement as HTMLElement;
-            element.focus({preventScroll:true});
+            element.focus({ preventScroll: true });
         }, 0);
         return false;
     }
@@ -333,7 +380,7 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
     private checkAndCleanUpStream(): void {
         if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
-            this.lastInfinityFetchReturnedNothing = false;
+            this.maxReached = false;
         }
 
         if (this.bufferStream.length > 3 * this.streamingService.nbStatusPerIteration) {
@@ -342,23 +389,23 @@ export class StreamStatusesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private isFiltered(status: Status): boolean {
-        if (this.streamElement.hideBoosts) {
-            if (status.reblog) {
-                return true;
-            }
-        }
-        if (this.streamElement.hideBots) {
-            if (status.account.bot) {
-                return true;
-            }
-        }
-        if (this.streamElement.hideReplies) {
-            if (status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // private isFiltered(status: Status): boolean {
+    //     if (this.streamElement.hideBoosts) {
+    //         if (status.reblog) {
+    //             return true;
+    //         }
+    //     }
+    //     if (this.streamElement.hideBots) {
+    //         if (status.account.bot) {
+    //             return true;
+    //         }
+    //     }
+    //     if (this.streamElement.hideReplies) {
+    //         if (status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }
 
