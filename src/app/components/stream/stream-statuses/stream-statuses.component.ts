@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, EventEmitter, Output, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { StreamElement } from '../../../states/streams.state';
 import { AccountInfo } from '../../../states/accounts.state';
-import { StreamingService, EventEnum, StreamingWrapper, StatusUpdate } from '../../../services/streaming.service';
+import { StreamingService, EventEnum, StatusUpdate } from '../../../services/streaming.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../services/notification.service';
-import { OpenThreadEvent, ToolsService } from '../../../services/tools.service';
+import { ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../../models/common.model';
 import { TimeLineModeEnum } from '../../../states/settings.state';
 import { TimelineBase } from '../../common/timeline-base';
@@ -19,52 +19,7 @@ import { TimelineBase } from '../../common/timeline-base';
     templateUrl: './stream-statuses.component.html',
     styleUrls: ['./stream-statuses.component.scss']
 })
-// export class StreamStatusesComponent implements OnInit, OnDestroy {
 export class StreamStatusesComponent extends TimelineBase {
-    // isLoading = true;
-    // private lastInfinityFetchReturnedNothing = false;
-    // isThread = false;
-    // displayError: string;
-    // hasContentWarnings = false;
-
-    // timelineLoadingMode: TimeLineModeEnum;
-
-    // private _streamElement: StreamElement;
-    // private account: AccountInfo;
-    // private websocketStreaming: StreamingWrapper;
-
-    // statuses: StatusWrapper[] = [];
-    // bufferStream: Status[] = [];
-    // private bufferWasCleared: boolean;
-    // streamPositionnedAtTop: boolean = true;
-    // private isProcessingInfiniteScroll: boolean;
-
-    // private hideBoosts: boolean;
-    // private hideReplies: boolean;
-    // private hideBots: boolean;
-
-    // @Output() browseAccountEvent = new EventEmitter<string>();
-    // @Output() browseHashtagEvent = new EventEmitter<string>();
-    // @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
-    // @Input()
-    // set streamElement(streamElement: StreamElement) {
-    //     this._streamElement = streamElement;
-
-    //     this.hideBoosts = streamElement.hideBoosts;
-    //     this.hideBots = streamElement.hideBots;
-    //     this.hideReplies = streamElement.hideReplies;
-
-    //     this.load(this._streamElement);
-    // }
-    // get streamElement(): StreamElement {
-    //     return this._streamElement;
-    // }
-
-    // @Input() goToTop: Observable<void>;
-
-    // @Input() userLocked = true;
-
     protected _streamElement: StreamElement;
 
     @Input()
@@ -215,50 +170,6 @@ export class StreamStatusesComponent extends TimelineBase {
         }
     }
 
-    // @ViewChild('statusstream') public statustream: ElementRef;
-
-    // private applyGoToTop(): boolean {
-    //     // this.loadBuffer();
-    //     if (this.statuses.length > 2 * this.streamingService.nbStatusPerIteration) {
-    //         this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
-    //     }
-
-    //     const stream = this.statustream.nativeElement as HTMLElement;
-    //     setTimeout(() => {
-    //         stream.scrollTo({
-    //             top: 0,
-    //             behavior: 'smooth'
-    //         });
-    //     }, 0);
-
-    //     return false;
-    // }
-
-    // onScroll() {
-    //     var element = this.statustream.nativeElement as HTMLElement;
-    //     const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
-    //     const atTop = element.scrollTop === 0;
-
-    //     this.streamPositionnedAtTop = false;
-    //     if (atBottom && !this.isProcessingInfiniteScroll) {
-    //         this.scrolledToBottom();
-    //     } else if (atTop) {
-    //         this.scrolledToTop();
-    //     }
-    // }
-
-    // browseAccount(accountName: string): void {
-    //     this.browseAccountEvent.next(accountName);
-    // }
-
-    // browseHashtag(hashtag: string): void {
-    //     this.browseHashtagEvent.next(hashtag);
-    // }
-
-    // browseThread(openThreadEvent: OpenThreadEvent): void {
-    //     this.browseThreadEvent.next(openThreadEvent);
-    // }
-
     textSelected(): void {
         console.warn(`status comp: textSelected`); //TODO
     }
@@ -290,38 +201,6 @@ export class StreamStatusesComponent extends TimelineBase {
         this.bufferStream.length = 0;
         return false;
     }
-
-    // private scrolledToBottom() {
-    //     if (this.isLoading || this.lastInfinityFetchReturnedNothing) return;
-
-    //     this.isLoading = true;
-    //     this.isProcessingInfiniteScroll = true;
-
-    //     const lastStatus = this.statuses[this.statuses.length - 1];
-    //     this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
-    //         .then((status: Status[]) => {
-    //             for (const s of status) {
-    //                 if (this.isFiltered(s)) {
-    //                     continue;
-    //                 }
-
-    //                 let cwPolicy = this.toolsService.checkContentWarning(s);
-    //                 const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
-    //                 this.statuses.push(wrapper);
-    //             }
-
-    //             if (!status || status.length === 0) {
-    //                 this.lastInfinityFetchReturnedNothing = true;
-    //             }
-    //         })
-    //         .catch((err: HttpErrorResponse) => {
-    //             this.notificationService.notifyHttpError(err, this.account);
-    //         })
-    //         .then(() => {
-    //             this.isLoading = false;
-    //             this.isProcessingInfiniteScroll = false;
-    //         });
-    // }
 
     protected getNextStatuses(): Promise<Status[]> {
         const lastStatus = this.statuses[this.statuses.length - 1];
@@ -395,24 +274,5 @@ export class StreamStatusesComponent extends TimelineBase {
             this.bufferStream.length = 2 * this.streamingService.nbStatusPerIteration;
         }
     }
-
-    // private isFiltered(status: Status): boolean {
-    //     if (this.streamElement.hideBoosts) {
-    //         if (status.reblog) {
-    //             return true;
-    //         }
-    //     }
-    //     if (this.streamElement.hideBots) {
-    //         if (status.account.bot) {
-    //             return true;
-    //         }
-    //     }
-    //     if (this.streamElement.hideReplies) {
-    //         if (status.in_reply_to_account_id && status.account.id !== status.in_reply_to_account_id) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
 }
 
