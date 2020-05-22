@@ -87,15 +87,14 @@ export class BookmarksComponent extends TimelineBase {
             });
     }
 
-    onScroll() {
-        var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+    // onScroll() {
+    //     var element = this.statustream.nativeElement as HTMLElement;
+    //     const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
 
-        if (atBottom) {
-            this.scrolledToBottom();
-        }
-    }
-
+    //     if (atBottom) {
+    //         this.scrolledToBottom();
+    //     }
+    // }
 
     // private scrolledToBottom() {
     //     if (this.isLoading || this.maxReached) return;
@@ -138,6 +137,10 @@ export class BookmarksComponent extends TimelineBase {
             });
     }
 
+    protected scrolledToTop() {}
+
+    protected  statusProcessOnGoToTop(){}
+
     // browseAccount(accountName: string): void {
     //     this.browseAccountEvent.next(accountName);
     // }
@@ -148,16 +151,16 @@ export class BookmarksComponent extends TimelineBase {
 
     // browseThread(openThreadEvent: OpenThreadEvent): void {
     //     this.browseThreadEvent.next(openThreadEvent);
-    // }
+    // }    
 
-    applyGoToTop(): boolean {
-        const stream = this.statustream.nativeElement as HTMLElement;
-        setTimeout(() => {
-            stream.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }, 0);
-        return false;
-    }
+    // applyGoToTop(): boolean {
+    //     const stream = this.statustream.nativeElement as HTMLElement;
+    //     setTimeout(() => {
+    //         stream.scrollTo({
+    //             top: 0,
+    //             behavior: 'smooth'
+    //         });
+    //     }, 0);
+    //     return false;
+    // }
 }

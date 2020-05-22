@@ -1,4 +1,4 @@
-import { OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -44,6 +44,8 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
 
     @Input() userLocked = true;
 
+    @ViewChild('statusstream') public statustream: ElementRef;
+
     constructor(
         // protected readonly store: Store,
         protected readonly toolsService: ToolsService,
@@ -56,7 +58,23 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
 
     abstract ngOnInit();
     abstract ngOnDestroy();
+    protected abstract scrolledToTop();
+    protected abstract statusProcessOnGoToTop();
+    protected abstract getNextStatuses(): Promise<Status[]>;
     // protected abstract load(streamElement: StreamElement);
+
+    onScroll() {
+        var element = this.statustream.nativeElement as HTMLElement;
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+        const atTop = element.scrollTop === 0;
+
+        this.streamPositionnedAtTop = false;
+        if (atBottom && !this.isProcessingInfiniteScroll) {
+            this.scrolledToBottom();
+        } else if (atTop) {
+            this.scrolledToTop();
+        }
+    }
 
     protected scrolledToBottom() {
         if (this.isLoading || this.maxReached) return;
@@ -85,11 +103,7 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
                 this.isProcessingInfiniteScroll = false;
             });
     }
-
-    protected abstract getNextStatuses(): Promise<Status[]>;
-
-
-
+    
     browseAccount(accountName: string): void {
         this.browseAccountEvent.next(accountName);
     }
@@ -100,5 +114,18 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
 
     browseThread(openThreadEvent: OpenThreadEvent): void {
         this.browseThreadEvent.next(openThreadEvent);
+    }
+
+    applyGoToTop(): boolean {
+        this.statusProcessOnGoToTop();      
+
+        const stream = this.statustream.nativeElement as HTMLElement;
+        setTimeout(() => {
+            stream.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }, 0);
+        return false;
     }
 }

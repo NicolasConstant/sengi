@@ -209,36 +209,43 @@ export class StreamStatusesComponent extends TimelineBase {
         });
     }
 
-    @ViewChild('statusstream') public statustream: ElementRef;
-    private applyGoToTop(): boolean {
-        // this.loadBuffer();
+    protected statusProcessOnGoToTop(){
         if (this.statuses.length > 2 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
         }
-
-        const stream = this.statustream.nativeElement as HTMLElement;
-        setTimeout(() => {
-            stream.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }, 0);
-
-        return false;
     }
 
-    onScroll() {
-        var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
-        const atTop = element.scrollTop === 0;
+    // @ViewChild('statusstream') public statustream: ElementRef;
 
-        this.streamPositionnedAtTop = false;
-        if (atBottom && !this.isProcessingInfiniteScroll) {
-            this.scrolledToBottom();
-        } else if (atTop) {
-            this.scrolledToTop();
-        }
-    }
+    // private applyGoToTop(): boolean {
+    //     // this.loadBuffer();
+    //     if (this.statuses.length > 2 * this.streamingService.nbStatusPerIteration) {
+    //         this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
+    //     }
+
+    //     const stream = this.statustream.nativeElement as HTMLElement;
+    //     setTimeout(() => {
+    //         stream.scrollTo({
+    //             top: 0,
+    //             behavior: 'smooth'
+    //         });
+    //     }, 0);
+
+    //     return false;
+    // }
+
+    // onScroll() {
+    //     var element = this.statustream.nativeElement as HTMLElement;
+    //     const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+    //     const atTop = element.scrollTop === 0;
+
+    //     this.streamPositionnedAtTop = false;
+    //     if (atBottom && !this.isProcessingInfiniteScroll) {
+    //         this.scrolledToBottom();
+    //     } else if (atTop) {
+    //         this.scrolledToTop();
+    //     }
+    // }
 
     // browseAccount(accountName: string): void {
     //     this.browseAccountEvent.next(accountName);
@@ -256,7 +263,7 @@ export class StreamStatusesComponent extends TimelineBase {
         console.warn(`status comp: textSelected`); //TODO
     }
 
-    private scrolledToTop() {
+    protected scrolledToTop() {
         this.streamPositionnedAtTop = true;
 
         if (this.timelineLoadingMode !== TimeLineModeEnum.SlowMode) {
@@ -321,7 +328,7 @@ export class StreamStatusesComponent extends TimelineBase {
 
         return this.mastodonService.getTimeline(this.account, this._streamElement.type, lastStatus.status.id, null, this.streamingService.nbStatusPerIteration, this._streamElement.tag, this._streamElement.listId)
             .then((status: Status[]) =>{
-                return status.filter(x => this.isFiltered(x));
+                return status.filter(x => !this.isFiltered(x));
             });
     }
     
