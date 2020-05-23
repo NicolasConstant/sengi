@@ -38,11 +38,15 @@ function createWindow() {
                 { type: "separator" },
                 { role: "reload" },
                 { role: "forcereload" },
-                { type: 'separator' },
-                { role: 'togglefullscreen' },
+                { type: "separator" },
+                { role: "resetzoom" },
+                { role: "zoomin", accelerator: "CommandOrControl+=" },
+                { role: "zoomout" },
+                { type: "separator" },
+                { role: "togglefullscreen" },
                 { type: "separator" },
                 { role: "close" },
-                { role: 'quit' }
+                { role: "quit" }
             ]
         },
         {
