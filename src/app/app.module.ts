@@ -83,6 +83,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BookmarksComponent } from './components/floating-column/manage-account/bookmarks/bookmarks.component';
 import { AttachementImageComponent } from './components/stream/status/attachements/attachement-image/attachement-image.component';
+import { EnsureHttpsPipe } from './pipes/ensure-https.pipe';
 
 
 const routes: Routes = [
@@ -146,7 +147,8 @@ const routes: Routes = [
         StreamNotificationsComponent,
         NotificationComponent,
         BookmarksComponent,
-        AttachementImageComponent
+        AttachementImageComponent,
+        EnsureHttpsPipe
     ],
     entryComponents: [
         EmojiPickerComponent

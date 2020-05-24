@@ -2,8 +2,7 @@
     <div class="reblog" *ngIf="reblog">
         <a class="reblog__profile-link" href title="{{ status.account.acct }}" 
             (click)="openAccount(status.account)"
-            (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img
-                *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar }}" /></a> boosted
+            (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar | ensureHttps }}" /></a> boosted
     </div>
     <div *ngIf="statusWrapper.status.pinned && !notificationType" class="pinned">
         <div class="notification--icon">
@@ -50,10 +49,9 @@
         <div [ngClass]="{'notification--status': notificationAccount }">
             <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
                 (click)="openAccount(displayedStatus.account)" (auxclick)="openUrl(displayedStatus.account.url)">
-                <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar"
-                    src="{{ displayedStatus.account.avatar }}" />
+                <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar" src="{{ displayedStatus.account.avatar | ensureHttps }}" />
                 <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
-                <img *ngIf="notificationAccount" class="notification--avatar" src="{{ notificationAccount.avatar }}" />
+                <img *ngIf="notificationAccount" class="notification--avatar" src="{{ notificationAccount.avatar | ensureHttps }}" />
                 <span class="status__name">
                     <span class="status__name--displayname"
                         innerHTML="{{displayedStatus.account | accountEmoji}}"></span><span
