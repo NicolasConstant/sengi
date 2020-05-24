@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, ElementRef, ViewChild, HostListener, OnDestroy } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { faTimes, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Subject } from 'rxjs';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { OpenMediaEvent } from '../../models/common.model';
 import { Attachment, PleromaAttachment } from '../../services/models/mastodon.interfaces';
@@ -12,7 +13,7 @@ import { Attachment, PleromaAttachment } from '../../services/models/mastodon.in
     templateUrl: './media-viewer.component.html',
     styleUrls: ['./media-viewer.component.scss']
 })
-export class MediaViewerComponent implements OnInit {
+export class MediaViewerComponent implements OnInit, OnDestroy {
     private _mediaEvent: OpenMediaEvent;
     faTimes = faTimes;
     faAngleLeft = faAngleLeft;
@@ -64,9 +65,20 @@ export class MediaViewerComponent implements OnInit {
         }
     }
 
-    constructor() { }
+    private escapeHotkey = new Hotkey('escape', (event: KeyboardEvent): boolean => {
+        console.warn('CLOSE');
+        this.close();
+        return false;
+    });
 
+    constructor(private readonly hotkeysService: HotkeysService) { }
+  
     ngOnInit() {
+        this.hotkeysService.add(this.escapeHotkey);
+    }
+
+    ngOnDestroy(): void {
+        this.hotkeysService.remove(this.escapeHotkey);
     }
 
     private setBrowsing() {
