@@ -210,12 +210,14 @@ export class DatabindedTextComponent implements OnInit {
             let classname = this.getClassNameForLink(link);
             let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
+            let sanitizedLink = this.sanitizeLink(link);
+
             for (const el of els) {
                 this.renderer.listen(el, 'click', (event) => {
                     event.preventDefault();
                     event.stopImmediatePropagation();
 
-                    window.open(link, '_blank');
+                    window.open(sanitizedLink, '_blank');
                     return false;
                 });
 
@@ -224,12 +226,17 @@ export class DatabindedTextComponent implements OnInit {
                         event.preventDefault();
                         event.stopImmediatePropagation();
 
-                        window.open(link, '_blank');
+                        window.open(sanitizedLink, '_blank');
                         return false;
                     }
                 });
             }
         }
+    }
+
+    private sanitizeLink(link: string): string {
+        let res = link.replace(/&amp;/g, '&');
+        return res;
     }
 
     private getClassNameForHastag(value: string): string {
