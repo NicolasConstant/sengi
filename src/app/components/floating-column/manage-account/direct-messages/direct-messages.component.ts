@@ -23,6 +23,8 @@ export class DirectMessagesComponent implements OnInit {
     isThread = false;
     hasContentWarnings = false;
 
+    private isProcessingInfiniteScroll: boolean;
+
     @Output() browseAccountEvent = new EventEmitter<string>();
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
@@ -78,7 +80,7 @@ export class DirectMessagesComponent implements OnInit {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
 
-        if (atBottom) {
+        if (atBottom && !this.isProcessingInfiniteScroll) {
             this.scrolledToBottom();
         }
     }
@@ -89,6 +91,7 @@ export class DirectMessagesComponent implements OnInit {
         const maxId = this.conversations[this.conversations.length - 1].conversation.last_status.id;
         
         this.isLoading = true;
+        this.isProcessingInfiniteScroll = true;
         this.mastodonService.getConversations(this.account.info, maxId)
             .then((conversations: Conversation[]) => {
                 if (conversations.length === 0) {
@@ -107,6 +110,7 @@ export class DirectMessagesComponent implements OnInit {
             })
             .then(() => {
                 this.isLoading = false;
+                this.isProcessingInfiniteScroll = false;
             });
     }
 

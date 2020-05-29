@@ -17,6 +17,7 @@ import { OpenThreadEvent, ToolsService } from '../../../../services/tools.servic
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
     notifications: NotificationWrapper[] = [];
+    private isProcessingInfiniteScroll: boolean;
     isLoading = false;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
@@ -89,7 +90,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
 
-        if (atBottom) {
+        if (atBottom && !this.isProcessingInfiniteScroll) {
             this.scrolledToBottom();
         }
     }
@@ -98,6 +99,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         if (this.isLoading || this.maxReached || this.notifications.length === 0) return;
 
         this.isLoading = true;
+        this.isProcessingInfiniteScroll = true;
 
         this.mastodonService.getNotifications(this.account.info, ['mention'], this.lastId)
             .then((notifications: Notification[]) => {
@@ -121,6 +123,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
             })
             .then(() => {
                 this.isLoading = false;
+                this.isProcessingInfiniteScroll = false;
             });
     }
 

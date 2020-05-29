@@ -1,16 +1,14 @@
 import { OnInit, Input, OnDestroy, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 import { MastodonWrapperService } from '../../services/mastodon-wrapper.service';
 import { AccountInfo } from '../../states/accounts.state';
-import { StreamingService, StreamingWrapper } from '../../services/streaming.service';
+import { StreamingWrapper } from '../../services/streaming.service';
 import { NotificationService } from '../../services/notification.service';
 import { ToolsService, OpenThreadEvent } from '../../services/tools.service';
 import { StatusWrapper } from '../../models/common.model';
 import { Status } from '../../services/models/mastodon.interfaces';
-import { StreamElement } from '../../states/streams.state';
 import { TimeLineModeEnum } from '../../states/settings.state';
 
 export abstract class TimelineBase implements OnInit, OnDestroy {
@@ -21,7 +19,6 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
     hasContentWarnings = false;
 
     timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; 
-
     
     protected account: AccountInfo;
     protected websocketStreaming: StreamingWrapper;
@@ -47,13 +44,9 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
     @ViewChild('statusstream') public statustream: ElementRef;
 
     constructor(
-        // protected readonly store: Store,
         protected readonly toolsService: ToolsService,
         protected readonly notificationService: NotificationService,
-        // protected readonly streamingService: StreamingService,
         protected readonly mastodonService: MastodonWrapperService) {
-
-        // this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
     } 
 
     abstract ngOnInit();
@@ -61,7 +54,6 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
     protected abstract scrolledToTop();
     protected abstract statusProcessOnGoToTop();
     protected abstract getNextStatuses(): Promise<Status[]>;
-    // protected abstract load(streamElement: StreamElement);
 
     onScroll() {
         var element = this.statustream.nativeElement as HTMLElement;
