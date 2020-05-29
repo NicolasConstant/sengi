@@ -1,58 +1,48 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { StatusWrapper } from '../../../../models/common.model';
-import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
+import { ToolsService } from '../../../../services/tools.service';
 import { AccountWrapper } from '../../../../models/account.models';
 import { FavoriteResult } from '../../../../services/mastodon.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Status } from '../../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../../services/notification.service';
-import { TimeLineModeEnum } from '../../../../states/settings.state';
+import { TimelineBase } from '../../../../components/common/timeline-base';
 
 @Component({
     selector: 'app-favorites',
     templateUrl: '../../../stream/stream-statuses/stream-statuses.component.html',
     styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss', './favorites.component.scss']
 })
-export class FavoritesComponent implements OnInit {
-    statuses: StatusWrapper[] = [];
-    displayError: string;
-    isLoading = true;
-    isThread = false;
-    hasContentWarnings = false;
-
-    bufferStream: Status[] = []; //html compatibility only
-    streamPositionnedAtTop: boolean = true; //html compatibility only
-    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
-
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
-    private maxReached = false;
+export class FavoritesComponent extends TimelineBase {
     private maxId: string;
     private _account: AccountWrapper;
 
     @Input('account')
-    set account(acc: AccountWrapper) {
+    set accountWrapper(acc: AccountWrapper) {
         this._account = acc;
+        this.account = acc.info;
         this.getFavorites();
     }
-    get account(): AccountWrapper {
+    get accountWrapper(): AccountWrapper {
         return this._account;
     }
 
-    @ViewChild('statusstream') public statustream: ElementRef;
-
     constructor(
-        private readonly toolsService: ToolsService,
-        private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonWrapperService) { }
+        protected readonly toolsService: ToolsService,
+        protected readonly notificationService: NotificationService,
+        protected readonly mastodonService: MastodonWrapperService) {
+
+        super(toolsService, notificationService, mastodonService);
+    }
 
     ngOnInit() {
     }
 
-    private reset(){
+    ngOnDestroy() {
+    }
+
+    private reset() {
         this.isLoading = true;
         this.statuses.length = 0;
         this.maxReached = false;
@@ -62,17 +52,17 @@ export class FavoritesComponent implements OnInit {
     private getFavorites() {
         this.reset();
 
-        this.mastodonService.getFavorites(this.account.info)
+        this.mastodonService.getFavorites(this.account)
             .then((result: FavoriteResult) => {
                 this.maxId = result.max_id;
                 for (const s of result.favorites) {
                     let cwPolicy = this.toolsService.checkContentWarning(s);
-                    const wrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
+                    const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.push(wrapper);
                 }
             })
             .catch(err => {
-                this.notificationService.notifyHttpError(err, this.account.info);
+                this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {
                 this.isLoading = false;
@@ -80,63 +70,21 @@ export class FavoritesComponent implements OnInit {
 
     }
 
-    onScroll() {
-        var element = this.statustream.nativeElement as HTMLElement;
-        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
-
-        if (atBottom) {
-            this.scrolledToBottom();
-        }
-    }
-
-
-    private scrolledToBottom() {
-        if (this.isLoading || this.maxReached) return;
-
-        this.isLoading = true;
-        this.mastodonService.getFavorites(this.account.info, this.maxId)
+    protected getNextStatuses(): Promise<Status[]> {
+       return this.mastodonService.getFavorites(this.account, this.maxId)
             .then((result: FavoriteResult) => {
                 const statuses = result.favorites;
-                if (statuses.length === 0 || !this.maxId) {
-                    this.maxReached = true;
-                    return;
-                }
-
                 this.maxId = result.max_id;
-                for (const s of statuses) {
-                    let cwPolicy = this.toolsService.checkContentWarning(s);
-                    const wrapper = new StatusWrapper(cwPolicy.status, this.account.info, cwPolicy.applyCw, cwPolicy.hide);
-                    this.statuses.push(wrapper);
+
+                if(!this.maxId){
+                    this.maxReached = true;
                 }
-            })
-            .catch(err => {
-                this.notificationService.notifyHttpError(err, this.account.info);
-            })
-            .then(() => {
-                this.isLoading = false;
+
+                return statuses;
             });
     }
 
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
+    protected scrolledToTop() {}
 
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
-    }
-
-    applyGoToTop(): boolean {
-        const stream = this.statustream.nativeElement as HTMLElement;
-        setTimeout(() => {
-            stream.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }, 0);
-        return false;
-    }
+    protected statusProcessOnGoToTop(){}
 }
