@@ -107,13 +107,13 @@ export class UserProfileComponent implements OnInit {
                 this.relationShipError = false;
                 this.toolsService.findAccount(userAccount, this.lastAccountName)
                     .then((account: Account) => {
-                        if(!account) throw Error(`Could not find ${this.lastAccountName}`);
+                        if (!account) throw Error(`Could not find ${this.lastAccountName}`);
 
                         return this.getFollowStatus(userAccount, account);
                     })
                     .catch((err) => {
                         console.error(err);
-                        this.relationShipError =  true;
+                        this.relationShipError = true;
                     })
                     .then(() => {
                         this.loadingRelationShip = false;
@@ -128,7 +128,7 @@ export class UserProfileComponent implements OnInit {
                 });
             }
         });
-    }   
+    }
 
     ngOnDestroy() {
         if (this.accountSub) this.accountSub.unsubscribe();
@@ -164,7 +164,7 @@ export class UserProfileComponent implements OnInit {
                 this.isLoading = false;
                 this.statusLoading = true;
 
-                if(!account) throw Error(`Could not find ${this.lastAccountName}`);
+                if (!account) throw Error(`Could not find ${this.lastAccountName}`);
 
                 this.displayedAccount = this.fixPleromaFieldsUrl(account);
                 this.hasNote = account && account.note && account.note !== '<p></p>';
@@ -188,9 +188,9 @@ export class UserProfileComponent implements OnInit {
     }
 
     private fixPleromaFieldsUrl(acc: Account): Account {
-        if(acc.fields){
+        if (acc.fields) {
             acc.fields.forEach(f => {
-                if(f.value.includes('<a href="') && !f.value.includes('target="_blank"')){
+                if (f.value.includes('<a href="') && !f.value.includes('target="_blank"')) {
                     f.value = f.value.replace('<a href="', '<a target="_blank" href="');
                 }
             });
@@ -271,7 +271,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     browseAccount(accountName: string): void {
-        if(accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;
+        if (accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;
 
         this.browseAccountEvent.next(accountName);
     }
@@ -330,11 +330,13 @@ export class UserProfileComponent implements OnInit {
             this.showFloatingHeader = false;
         }
 
-        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30 - 31;
-        if (element.scrollTop > menuPosition) {
-            this.showFloatingStatusMenu = true;
-        } else {
-            this.showFloatingStatusMenu = false;
+        if (this.profilestatuses) {
+            const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30 - 31;
+            if (element.scrollTop > menuPosition) {
+                this.showFloatingStatusMenu = true;
+            } else {
+                this.showFloatingStatusMenu = false;
+            }
         }
 
         if (atBottom) {
@@ -343,7 +345,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     private scrolledToBottom() {
-        if (this.statusLoading || this.maxReached) return;
+        if (this.statusLoading || this.maxReached || !this.displayedAccount) return;
 
         const onlyMedia = this.statusSection === 'media';
         const excludeReplies = this.statusSection === 'status';

@@ -169,4 +169,11 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('Bla<br /><br /><a href class="link-httpslink" title="open link">https://link/</a>'); 
     });
+
+    it('should sanitize link', () => {
+        const sample = `https://domain.fr/public.php?op=rss&amp;id=-2&amp;key=60c63a21c2928546b4485017876fe850c6ebcebd#tag:domain.fr,2020-05-26:/49902061`;
+
+        let result = (<any>component).sanitizeLink(sample);
+        expect(result).toBe('https://domain.fr/public.php?op=rss&id=-2&key=60c63a21c2928546b4485017876fe850c6ebcebd#tag:domain.fr,2020-05-26:/49902061'); 
+    });
 });
