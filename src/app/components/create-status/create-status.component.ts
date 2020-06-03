@@ -222,7 +222,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             // if (state && state !== '') {
             //     this.status = state;
             // } else {
-            if(!this.status || this.status === '') {
+            if (!this.status || this.status === '') {
                 const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
                 for (const mention of uniqueMentions) {
                     this.status += `@${mention} `;
@@ -242,8 +242,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.innerHeight = window.innerHeight;
     }
 
-    ngOnDestroy() {        
-        if(this.isRedrafting){
+    ngOnDestroy() {
+        if (this.isRedrafting) {
             this.statusStateService.resetStatusContent(null);
         }
 
@@ -577,7 +577,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     this.scheduledStatusService.statusAdded(acc);
                 }
 
-                if(this.isRedrafting){
+                if (this.isRedrafting) {
                     this.statusStateService.resetStatusContent(null);
                 } else {
                     this.statusStateService.resetStatusContent(this.statusReplyingToWrapper);
@@ -685,12 +685,17 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     suggestionSelected(selection: AutosuggestSelection) {
         if (this.status.includes(selection.pattern)) {
+            // let transformedStatus = this.status;
+            // transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
+            // transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
+            // transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
 
-            let transformedStatus = this.status;
-            transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
-            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
-            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
-            this.status = transformedStatus;
+            // const newLine = String.fromCharCode(13, 10);
+            // transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}${newLine}`), `${selection.autosuggest}${newLine}`).replace('  ', ' ');
+
+            // this.status = transformedStatus;
+
+            this.status = this.replacePatternWithAutosuggest(this.status, selection.pattern, selection.autosuggest);
 
             let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
             if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
@@ -706,6 +711,22 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.focus(newCaretPosition);
             }
         }
+    }
+
+    private replacePatternWithAutosuggest(status: string, pattern: string, autosuggest: string): string {
+        status = status.replace(new RegExp(` ${pattern} `), ` ${autosuggest} `).replace('  ', ' ');
+        status = status.replace(new RegExp(`${pattern} `), `${autosuggest} `).replace('  ', ' ');
+        status = status.replace(new RegExp(`${pattern}$`), `${autosuggest} `).replace('  ', ' ');
+        //status = status.replace(/$pattern$/, `${autosuggest} `).replace('  ', ' ');
+
+        // const newLine = String.fromCharCode(13, 10);
+        // status = status.replace(new RegExp(`${pattern}${newLine}`), `${autosuggest}${newLine}`).replace('  ', ' ');
+
+        //status = status.replace(new RegExp(`${pattern}$`, 'i'), `${autosuggest} `).replace('  ', ' ');
+        //status = status.replace(new RegExp(`/^${pattern}$/`, 'i'), `${autosuggest} `).replace('  ', ' ');
+        //status = status.replace(new RegExp(pattern, 'i'), `${autosuggest} `).replace('  ', ' ');
+
+        return status;
     }
 
     suggestionsChanged(hasSuggestions: boolean) {

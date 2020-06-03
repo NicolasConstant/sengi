@@ -223,4 +223,60 @@ describe('CreateStatusComponent', () => {
         const result = <string>(<any>component).tranformHtmlRepliesToReplies(pleromaMention);
         expect(result).toBe('<p>test @sengi_app@pleroma.site qsdqds qsd qsd qsd q @test@pleroma.site <span class="h-card"><a href="https://pleroma.site/users/no" class="u-url">@<span>no</span></a></span></p>');       
     });
+
+    it('should autocomplete - at the end', () => {
+        let text = 'data @sengi';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi@mastodon.social ');
+    });
+
+    it('should autocomplete - at the start', () => {
+        let text = '@sengi data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('@sengi@mastodon.social data');
+    });
+
+    it('should autocomplete - at the middle', () => {
+        let text = 'data @sengi data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi@mastodon.social data');
+    });
+
+    it('should autocomplete - duplicate', () => {
+        let text = 'data @sengi @sengi2 data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi@mastodon.social @sengi2 data');
+    });
+
+    it('should autocomplete - duplicate 2', () => {
+        let text = 'data @sengi2 @sengi data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi2 @sengi@mastodon.social data');
+    });
+
+    it('should autocomplete - new lines', () => {
+        const newLine = String.fromCharCode(13, 10);
+        let text = `@sengi${newLine}${newLine}data`;
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe(`@sengi@mastodon.social${newLine}${newLine}data`);
+    });
+
 });
