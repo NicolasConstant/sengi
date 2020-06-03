@@ -279,4 +279,14 @@ describe('CreateStatusComponent', () => {
         expect(result).toBe(`@sengi@mastodon.social${newLine}${newLine}data`);
     });
 
+    it('should autocomplete - new lines 2', () => {
+        const newLine = String.fromCharCode(13, 10);
+        let text = `@nicolasconstant\n\ndata`;
+        let pattern = '@nicolasconstant';
+        let autosuggest = '@nicolasconstant@social.nicolas-constant.com';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe(`@nicolasconstant@social.nicolas-constant.com${newLine}${newLine}data`);
+    });
+
 });

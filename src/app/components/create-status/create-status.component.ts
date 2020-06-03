@@ -696,6 +696,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             // this.status = transformedStatus;
 
             this.status = this.replacePatternWithAutosuggest(this.status, selection.pattern, selection.autosuggest);
+            
 
             let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
             if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
@@ -714,19 +715,57 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private replacePatternWithAutosuggest(status: string, pattern: string, autosuggest: string): string {
-        status = status.replace(new RegExp(` ${pattern} `), ` ${autosuggest} `).replace('  ', ' ');
-        status = status.replace(new RegExp(`${pattern} `), `${autosuggest} `).replace('  ', ' ');
-        status = status.replace(new RegExp(`${pattern}$`), `${autosuggest} `).replace('  ', ' ');
-        //status = status.replace(/$pattern$/, `${autosuggest} `).replace('  ', ' ');
+        status = status.replace(/  /g, ' ');
 
-        // const newLine = String.fromCharCode(13, 10);
-        // status = status.replace(new RegExp(`${pattern}${newLine}`), `${autosuggest}${newLine}`).replace('  ', ' ');
+        const newLine = String.fromCharCode(13, 10);
+        // let statusPerLines = status.split(newLine);
+        let statusPerLines = status.split(/\r?\n/);
+        let statusPerLinesPerWords: string[][] = [];
+        let regex = new RegExp(`^${pattern}$`, 'i');
 
-        //status = status.replace(new RegExp(`${pattern}$`, 'i'), `${autosuggest} `).replace('  ', ' ');
-        //status = status.replace(new RegExp(`/^${pattern}$/`, 'i'), `${autosuggest} `).replace('  ', ' ');
-        //status = status.replace(new RegExp(pattern, 'i'), `${autosuggest} `).replace('  ', ' ');
+        statusPerLines.forEach(line => {
+            let words = line.split(' ');
 
-        return status;
+            words = words.map(word => {
+                console.warn(`+${word}+`);
+                return word.replace(regex, `${autosuggest}`);
+            });
+
+            console.log(words);
+
+            statusPerLinesPerWords.push(words);
+        });
+
+        let result = '';
+        let nberLines = statusPerLinesPerWords.length;
+        let i = 0;
+
+        statusPerLinesPerWords.forEach(line => {
+            i++;
+
+            let wordCount = line.length;
+            let w = 0;
+            line.forEach(word => {
+                w++;
+                result += `${word}`;
+
+                if(w < wordCount || i === nberLines){
+                    result += ' ';
+                }
+            });
+            if (i < nberLines) {
+                result += newLine;
+            }
+        })
+
+        result = result.replace('  ', ' ');
+
+        let endRegex = new RegExp(`${autosuggest} $`, 'i');
+        if(!result.match(endRegex)){
+            result = result.substring(0, result.length - 1);
+        }
+
+        return result;
     }
 
     suggestionsChanged(hasSuggestions: boolean) {
