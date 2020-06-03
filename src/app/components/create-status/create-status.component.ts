@@ -685,21 +685,12 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     suggestionSelected(selection: AutosuggestSelection) {
         if (this.status.includes(selection.pattern)) {
-            // let transformedStatus = this.status;
-            // transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
-            // transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
-            // transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
-
-            // const newLine = String.fromCharCode(13, 10);
-            // transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}${newLine}`), `${selection.autosuggest}${newLine}`).replace('  ', ' ');
-
-            // this.status = transformedStatus;
-
             this.status = this.replacePatternWithAutosuggest(this.status, selection.pattern, selection.autosuggest);
             
-
-            let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
-            if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
+            let cleanStatus = this.status.replace(/\r?\n/g, ' ');
+            console.warn([cleanStatus]);
+            let newCaretPosition = cleanStatus.indexOf(`${selection.autosuggest}`) + selection.autosuggest.length;
+            if (newCaretPosition > cleanStatus.length) newCaretPosition = cleanStatus.length;
 
             this.autosuggestData = null;
             this.hasSuggestions = false;
@@ -727,11 +718,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             let words = line.split(' ');
 
             words = words.map(word => {
-                console.warn(`+${word}+`);
                 return word.replace(regex, `${autosuggest}`);
             });
-
-            console.log(words);
 
             statusPerLinesPerWords.push(words);
         });
