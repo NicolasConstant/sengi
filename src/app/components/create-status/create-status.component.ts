@@ -41,6 +41,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     faClock = faClock;
 
     autoSuggestUserActionsStream = new EventEmitter<AutosuggestUserActionEnum>();
+    private isRedrafting: boolean;
 
     private _title: string;
     set title(value: string) {
@@ -54,7 +55,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private _status: string = '';
     @Input('status')
     set status(value: string) {
-        this.statusStateService.setStatusContent(value, this.statusReplyingToWrapper);
+        if (this.isRedrafting) {
+            this.statusStateService.setStatusContent(value, null);
+        } else {
+            this.statusStateService.setStatusContent(value, this.statusReplyingToWrapper);
+        }
         this.countStatusChar(value);
         this.detectAutosuggestion(value);
         this._status = value;
@@ -79,31 +84,32 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
-        if (value) {           
+        if (value) {
+            this.isRedrafting = true;
             this.statusLoaded = false;
 
-            if(value.status && value.status.media_attachments){
+            if (value.status && value.status.media_attachments) {
                 for (const m of value.status.media_attachments) {
                     this.mediaService.addExistingMedia(new MediaWrapper(m.id, null, m));
                 }
             }
-            
+
             const newLine = String.fromCharCode(13, 10);
             let content = value.status.content;
 
             content = this.tranformHtmlRepliesToReplies(content);
-            
+
             while (content.includes('<p>') || content.includes('</p>') || content.includes('<br>') || content.includes('<br/>') || content.includes('<br />')) {
                 content = content.replace('<p>', '').replace('</p>', newLine + newLine).replace('<br />', newLine).replace('<br/>', newLine).replace('<br>', newLine);
             }
 
             content = this.trim(content, newLine);
-            
+
             let parser = new DOMParser();
             var dom = parser.parseFromString(content, 'text/html')
             this.status = dom.body.textContent;
 
-            this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
+            // this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
 
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
@@ -193,10 +199,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         public viewContainerRef: ViewContainerRef) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
-        this.status = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
     }
 
     ngOnInit() {
+        if (!this.isRedrafting) {
+            this.status = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
+        }
+
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             this.accountChanged(accounts);
         });
@@ -209,10 +218,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.statusReplyingTo = this.statusReplyingToWrapper.status;
             }
 
-            let state = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
-            if (state && state !== '') {
-                this.status = state;
-            } else {
+            // let state = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
+            // if (state && state !== '') {
+            //     this.status = state;
+            // } else {
+            if (!this.status || this.status === '') {
                 const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
                 for (const mention of uniqueMentions) {
                     this.status += `@${mention} `;
@@ -233,6 +243,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        if (this.isRedrafting) {
+            this.statusStateService.resetStatusContent(null);
+        }
+
         this.accountSub.unsubscribe();
     }
 
@@ -563,7 +577,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     this.scheduledStatusService.statusAdded(acc);
                 }
 
-                this.statusStateService.resetStatusContent(this.statusReplyingToWrapper);
+                if (this.isRedrafting) {
+                    this.statusStateService.resetStatusContent(null);
+                } else {
+                    this.statusStateService.resetStatusContent(this.statusReplyingToWrapper);
+                }
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err, acc);
@@ -667,15 +685,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     suggestionSelected(selection: AutosuggestSelection) {
         if (this.status.includes(selection.pattern)) {
-
-            let transformedStatus = this.status;
-            transformedStatus = transformedStatus.replace(new RegExp(` ${selection.pattern} `), ` ${selection.autosuggest} `).replace('  ', ' ');
-            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern} `), `${selection.autosuggest} `).replace('  ', ' ');
-            transformedStatus = transformedStatus.replace(new RegExp(`${selection.pattern}$`), `${selection.autosuggest} `).replace('  ', ' ');
-            this.status = transformedStatus;
-
-            let newCaretPosition = this.status.indexOf(`${selection.autosuggest} `) + selection.autosuggest.length + 1;
-            if (newCaretPosition > this.status.length) newCaretPosition = this.status.length;
+            this.status = this.replacePatternWithAutosuggest(this.status, selection.pattern, selection.autosuggest);
+            
+            let cleanStatus = this.status.replace(/\r?\n/g, ' ');            
+            let newCaretPosition = cleanStatus.indexOf(`${selection.autosuggest}`) + selection.autosuggest.length;
+            if (newCaretPosition > cleanStatus.length) newCaretPosition = cleanStatus.length;
 
             this.autosuggestData = null;
             this.hasSuggestions = false;
@@ -688,6 +702,57 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.focus(newCaretPosition);
             }
         }
+    }
+
+    private replacePatternWithAutosuggest(status: string, pattern: string, autosuggest: string): string {
+        status = status.replace(/  /g, ' ');
+
+        const newLine = String.fromCharCode(13, 10);
+        // let statusPerLines = status.split(newLine);
+        let statusPerLines = status.split(/\r?\n/);
+        let statusPerLinesPerWords: string[][] = [];
+        let regex = new RegExp(`^${pattern}$`, 'i');
+
+        statusPerLines.forEach(line => {
+            let words = line.split(' ');
+
+            words = words.map(word => {
+                return word.replace(regex, `${autosuggest}`);
+            });
+
+            statusPerLinesPerWords.push(words);
+        });
+
+        let result = '';
+        let nberLines = statusPerLinesPerWords.length;
+        let i = 0;
+
+        statusPerLinesPerWords.forEach(line => {
+            i++;
+
+            let wordCount = line.length;
+            let w = 0;
+            line.forEach(word => {
+                w++;
+                result += `${word}`;
+
+                if(w < wordCount || i === nberLines){
+                    result += ' ';
+                }
+            });
+            if (i < nberLines) {
+                result += newLine;
+            }
+        })
+
+        result = result.replace('  ', ' ');
+
+        let endRegex = new RegExp(`${autosuggest} $`, 'i');
+        if(!result.match(endRegex)){
+            result = result.substring(0, result.length - 1);
+        }
+
+        return result;
     }
 
     suggestionsChanged(hasSuggestions: boolean) {
@@ -741,9 +806,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
             if (isVisible) {
                 setTimeout(() => {
-                    try{
+                    try {
                         this.footerElement.nativeElement.scrollIntoViewIfNeeded({ behavior: 'instant', block: 'end', inline: 'start' });
-                    }catch(err) {
+                    } catch (err) {
                         this.footerElement.nativeElement.scrollIntoView({ behavior: 'instant', block: 'end', inline: 'start' });
                     }
                 }, 0);
@@ -850,11 +915,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const mastodonMentionRegex = /<span class="h-card"><a href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" class="u-url mention">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
         const pleromaMentionRegex = /<span class="h-card"><a data-user="[a-zA-Z0-9]{0,255}" class="u-url mention" href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" rel="ugc">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
 
-        while(data.match(mastodonMentionRegex)){
+        while (data.match(mastodonMentionRegex)) {
             data = data.replace(mastodonMentionRegex, '@$2@$1');
         }
 
-        while(data.match(pleromaMentionRegex)){
+        while (data.match(pleromaMentionRegex)) {
             data = data.replace(pleromaMentionRegex, '@$2@$1');
         }
 
