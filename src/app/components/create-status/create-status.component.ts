@@ -687,8 +687,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if (this.status.includes(selection.pattern)) {
             this.status = this.replacePatternWithAutosuggest(this.status, selection.pattern, selection.autosuggest);
             
-            let cleanStatus = this.status.replace(/\r?\n/g, ' ');
-            console.warn([cleanStatus]);
+            let cleanStatus = this.status.replace(/\r?\n/g, ' ');            
             let newCaretPosition = cleanStatus.indexOf(`${selection.autosuggest}`) + selection.autosuggest.length;
             if (newCaretPosition > cleanStatus.length) newCaretPosition = cleanStatus.length;
 
