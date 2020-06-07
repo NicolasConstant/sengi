@@ -28,7 +28,7 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
-        // console.warn(value);
+        //console.warn(value);
 
         let parser = new DOMParser();
         var dom = parser.parseFromString(value, 'text/html')
@@ -104,6 +104,9 @@ export class DatabindedTextComponent implements OnInit {
         if (section.includes('<span class="mention">')) { //Friendica
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('<span class="mention">')[1].split('</span>')[0];
+        } else if(section.includes('>@<span class="article-type">')){ //Remote status
+            extractedAccountAndNext = section.split('</a></span>');
+            extractedAccountName = extractedAccountAndNext[0].split('@<span class="article-type">')[1].replace('<span>', '').replace('</span>', '');
         } else if (!section.includes('@<span>')) { //GNU social
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('>')[1];
