@@ -194,8 +194,9 @@ export class StreamNotificationsComponent extends BrowseBase {
         }
     }
 
+    private scrolledErrorOccured = false;
     notificationsScrolledToBottom(): any {
-        if (this.isNotificationsLoading || this.notificationsMaxReached || this.notifications.length === 0)
+        if (this.isNotificationsLoading || this.notificationsMaxReached || this.notifications.length === 0 || this.scrolledErrorOccured)
             return;
 
         this.isNotificationsLoading = true;
@@ -216,6 +217,11 @@ export class StreamNotificationsComponent extends BrowseBase {
                 this.lastNotificationId = result[result.length - 1].id;
             })
             .catch(err => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+
                 this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {
@@ -224,7 +230,7 @@ export class StreamNotificationsComponent extends BrowseBase {
     }
 
     mentionsScrolledToBottom(): any {
-        if (this.isMentionsLoading || this.mentionsMaxReached || this.mentions.length === 0)
+        if (this.isMentionsLoading || this.mentionsMaxReached || this.mentions.length === 0 || this.scrolledErrorOccured)
             return;
 
         this.isMentionsLoading = true;
@@ -245,6 +251,11 @@ export class StreamNotificationsComponent extends BrowseBase {
                 this.lastMentionId = result[result.length - 1].id;
             })
             .catch(err => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+
                 this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {

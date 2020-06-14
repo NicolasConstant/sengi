@@ -94,8 +94,9 @@ export class NotificationsComponent extends BrowseBase {
         }
     }
 
+    private scrolledErrorOccured = false;
     private scrolledToBottom() {
-        if (this.isLoading || this.maxReached || this.notifications.length === 0) return;
+        if (this.isLoading || this.maxReached || this.notifications.length === 0 || this.scrolledErrorOccured) return;
 
         this.isLoading = true;
         this.isProcessingInfiniteScroll = true;
@@ -118,6 +119,11 @@ export class NotificationsComponent extends BrowseBase {
                 this.lastId = notifications[notifications.length - 1].id;
             })
             .catch(err => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+                
                 this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {

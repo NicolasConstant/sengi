@@ -66,8 +66,9 @@ export abstract class TimelineBase extends BrowseBase {
         }
     }
 
+    private scrolledErrorOccured = false;
     protected scrolledToBottom() {
-        if (this.isLoading || this.maxReached) return;
+        if (this.isLoading || this.maxReached || this.scrolledErrorOccured) return;
 
         this.isLoading = true;
         this.isProcessingInfiniteScroll = true;
@@ -86,6 +87,11 @@ export abstract class TimelineBase extends BrowseBase {
                 }             
             })
             .catch((err: HttpErrorResponse) => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+
                 this.notificationService.notifyHttpError(err, this.account);
             })
             .then(() => {

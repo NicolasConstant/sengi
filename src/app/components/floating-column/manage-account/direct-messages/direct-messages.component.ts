@@ -87,8 +87,9 @@ export class DirectMessagesComponent extends BrowseBase {
         }
     }
 
+    private scrolledErrorOccured = false;
     private scrolledToBottom() {
-        if (this.isLoading || this.maxReached) return;
+        if (this.isLoading || this.maxReached || this.scrolledErrorOccured) return;
 
         const maxId = this.conversations[this.conversations.length - 1].conversation.last_status.id;
         
@@ -108,6 +109,11 @@ export class DirectMessagesComponent extends BrowseBase {
                 }
             })
             .catch(err => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+
                 this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
