@@ -10,8 +10,9 @@ import { ToolsService, OpenThreadEvent } from '../../services/tools.service';
 import { StatusWrapper } from '../../models/common.model';
 import { Status } from '../../services/models/mastodon.interfaces';
 import { TimeLineModeEnum } from '../../states/settings.state';
+import { BrowseBase } from './browse-base';
 
-export abstract class TimelineBase implements OnInit, OnDestroy {
+export abstract class TimelineBase extends BrowseBase {
     isLoading = true;
     protected maxReached = false;
     isThread = false;
@@ -33,10 +34,6 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
     protected hideReplies: boolean;
     protected hideBots: boolean;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
     @Input() goToTop: Observable<void>;
 
     @Input() userLocked = true;
@@ -47,6 +44,7 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
         protected readonly toolsService: ToolsService,
         protected readonly notificationService: NotificationService,
         protected readonly mastodonService: MastodonWrapperService) {
+            super();
     } 
 
     abstract ngOnInit();
@@ -94,18 +92,6 @@ export abstract class TimelineBase implements OnInit, OnDestroy {
                 this.isLoading = false;
                 this.isProcessingInfiniteScroll = false;
             });
-    }
-    
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     applyGoToTop(): boolean {

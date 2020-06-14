@@ -13,13 +13,14 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper, OpenMediaEvent } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { NavigationService } from '../../../services/navigation.service';
+import { BrowseBase } from '../../common/browse-base';
 
 @Component({
     selector: 'app-user-profile',
     templateUrl: './user-profile.component.html',
     styleUrls: ['./user-profile.component.scss']
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent extends BrowseBase {
     private emojiConverter = new EmojiConverter();
 
     faUser = faUser;
@@ -64,10 +65,6 @@ export class UserProfileComponent implements OnInit {
     @ViewChild('statusstream') public statustream: ElementRef;
     @ViewChild('profilestatuses') public profilestatuses: ElementRef;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
     @Input() refreshEventEmitter: EventEmitter<any>;
     @Input() goToTopEventEmitter: EventEmitter<any>;
 
@@ -83,6 +80,7 @@ export class UserProfileComponent implements OnInit {
         private readonly mastodonService: MastodonWrapperService,
         private readonly toolsService: ToolsService) {
 
+        super();
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
@@ -280,14 +278,6 @@ export class UserProfileComponent implements OnInit {
         const handle = this.toolsService.getAccountFullHandle(account);
         this.browseAccount(handle);
         return false;
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     follow(): boolean {

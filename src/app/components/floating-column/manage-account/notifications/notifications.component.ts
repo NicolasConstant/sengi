@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { AccountWrapper } from '../../../../models/account.models';
@@ -8,21 +8,18 @@ import { Notification, Account } from '../../../../services/models/mastodon.inte
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { AccountInfo } from '../../../../states/accounts.state';
-import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
+import { ToolsService } from '../../../../services/tools.service';
+import { BrowseBase } from '../../../../components/common/browse-base';
 
 @Component({
     selector: 'app-notifications',
     templateUrl: './notifications.component.html',
     styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit, OnDestroy {
+export class NotificationsComponent extends BrowseBase {
     notifications: NotificationWrapper[] = [];
     private isProcessingInfiniteScroll: boolean;
     isLoading = false;
-
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('account')
     set account(acc: AccountWrapper) {
@@ -44,7 +41,9 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
-        private readonly mastodonService: MastodonWrapperService) { }
+        private readonly mastodonService: MastodonWrapperService) { 
+            super();
+        }
 
     ngOnInit() {
     }
@@ -125,18 +124,6 @@ export class NotificationsComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 this.isProcessingInfiniteScroll = false;
             });
-    }
-
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     applyGoToTop(): boolean {

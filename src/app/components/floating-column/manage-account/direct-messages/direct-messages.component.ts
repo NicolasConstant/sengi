@@ -8,13 +8,14 @@ import { NotificationService } from '../../../../services/notification.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Conversation } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
+import { BrowseBase } from '../../../common/browse-base';
 
 @Component({
     selector: 'app-direct-messages',
     templateUrl: './direct-messages.component.html',
     styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss', './direct-messages.component.scss']
 })
-export class DirectMessagesComponent implements OnInit {
+export class DirectMessagesComponent extends BrowseBase {   
     faUserFriends = faUserFriends;
 
     conversations: ConversationWrapper[] = [];
@@ -24,10 +25,6 @@ export class DirectMessagesComponent implements OnInit {
     hasContentWarnings = false;
 
     private isProcessingInfiniteScroll: boolean;
-
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     private maxReached = false;
     private _account: AccountWrapper;
@@ -46,9 +43,14 @@ export class DirectMessagesComponent implements OnInit {
     constructor(
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonWrapperService) { }
+        private readonly mastodonService: MastodonWrapperService) { 
+            super();
+        }
 
     ngOnInit() {
+    }
+
+    ngOnDestroy() {
     }
 
     private reset() {
@@ -112,18 +114,6 @@ export class DirectMessagesComponent implements OnInit {
                 this.isLoading = false;
                 this.isProcessingInfiniteScroll = false;
             });
-    }
-
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     applyGoToTop(): boolean {

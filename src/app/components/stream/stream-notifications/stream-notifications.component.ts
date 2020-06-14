@@ -10,13 +10,14 @@ import { NotificationWrapper } from '../../floating-column/manage-account/notifi
 import { AccountInfo } from '../../../states/accounts.state';
 import { NotificationService } from '../../../services/notification.service';
 import { StreamingService, StatusUpdate, EventEnum } from '../../../services/streaming.service';
+import { BrowseBase } from '../../common/browse-base';
 
 @Component({
     selector: 'app-stream-notifications',
     templateUrl: './stream-notifications.component.html',
     styleUrls: ['./stream-notifications.component.scss']
 })
-export class StreamNotificationsComponent implements OnInit, OnDestroy {
+export class StreamNotificationsComponent extends BrowseBase {
     displayingNotifications = true;
     displayingMentions = false;
 
@@ -25,10 +26,6 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
 
     @Input() streamElement: StreamElement;
     @Input() goToTop: Observable<void>;
-
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @ViewChild('notificationstream') public notificationstream: ElementRef;
     @ViewChild('mentionstream') public mentionstream: ElementRef;
@@ -53,7 +50,9 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly mastodonService: MastodonService,
-        private readonly toolsService: ToolsService) { }
+        private readonly toolsService: ToolsService) { 
+            super();
+        }
 
     ngOnInit() {
         this.goToTopSubscription = this.goToTop.subscribe(() => {
@@ -264,17 +263,5 @@ export class StreamNotificationsComponent implements OnInit, OnDestroy {
             element.focus({preventScroll:true});
         }, 0);
         return false;
-    }
-
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 }
