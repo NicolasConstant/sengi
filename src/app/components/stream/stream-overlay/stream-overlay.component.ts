@@ -123,7 +123,7 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
     browseAccount(accountName: string): void {
         if (!accountName) return;
 
-        const newElement = new OverlayBrowsing(null, accountName, null);
+        const newElement = new OverlayBrowsing('account', null, accountName, null);
         this.loadElement(newElement);
     }
 
@@ -132,14 +132,28 @@ export class StreamOverlayComponent implements OnInit, OnDestroy {
 
         const selectedAccount = this.toolsService.getSelectedAccounts()[0];
         const hashTagElement = new StreamElement(StreamTypeEnum.tag, hashtag, selectedAccount.id, hashtag, null, null, selectedAccount.instance);
-        const newElement = new OverlayBrowsing(hashTagElement, null, null);
+        const newElement = new OverlayBrowsing('hashtag', hashTagElement, null, null);
         this.loadElement(newElement);
     }
 
     browseThread(openThread: OpenThreadEvent): any {
         if (!openThread) return;
 
-        const newElement = new OverlayBrowsing(null, null, openThread);
+        const newElement = new OverlayBrowsing('thread', null, null, openThread);
+        this.loadElement(newElement);
+    }
+
+    browseFollows(accountName: string): void {
+        if (!accountName) return;
+
+        const newElement = new OverlayBrowsing('follows', null, accountName, null);
+        this.loadElement(newElement);
+    }
+
+    browseFollowers(accountName: string): void {
+        if (!accountName) return;
+
+        const newElement = new OverlayBrowsing('followers', null, accountName, null);
         this.loadElement(newElement);
     }
 
@@ -167,19 +181,10 @@ class OverlayBrowsing {
     goToTopEventEmitter = new EventEmitter();
 
     constructor(
+        public readonly type: 'hashtag' | 'account' | 'thread' | 'follows' | 'followers',
         public readonly hashtag: StreamElement,
         public readonly account: string,
         public readonly thread: OpenThreadEvent) {
-
-        if (hashtag) {
-            this.type = 'hashtag';
-        } else if (account) {
-            this.type = 'account';
-        } else if (thread) {
-            this.type = 'thread';
-        } else {
-            throw Error('NotImplemented');
-        }
     }
 
     show(): any {
@@ -198,5 +203,4 @@ class OverlayBrowsing {
     }
 
     isVisible: boolean;
-    type: 'hashtag' | 'account' | 'thread';
 }

@@ -31,7 +31,16 @@
             class="overlay__content" 
             (browseAccountEvent)="browseAccount($event)"
             (browseHashtagEvent)="browseHashtag($event)" 
-            (browseThreadEvent)="browseThread($event)"></app-user-profile>
+            (browseThreadEvent)="browseThread($event)"
+            (browseFollowsEvent)="browseFollows($event)"
+            (browseFollowersEvent)="browseFollowers($event)"></app-user-profile>
+        <app-user-follows *ngIf="e.type === 'follows' || e.type === 'followers'"
+            [currentAccount]="e.account"
+            [type]="e.type"
+            [refreshEventEmitter]="e.refreshEventEmitter"
+            [goToTopEventEmitter]="e.goToTopEventEmitter"
+            class="overlay__content"
+            (browseAccountEvent)="browseAccount($event)"></app-user-follows>
         <app-hashtag #appHashtag *ngIf="e.type === 'hashtag'" 
             [hashtagElement]="e.hashtag"
             [refreshEventEmitter]="e.refreshEventEmitter"

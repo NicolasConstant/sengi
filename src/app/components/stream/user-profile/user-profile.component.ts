@@ -418,4 +418,19 @@ export class UserProfileComponent extends BrowseBase {
         this.navigationService.openMedia(openMediaEvent);
         return false;
     }
+
+    @Output() browseFollowsEvent = new EventEmitter<string>();
+    @Output() browseFollowersEvent = new EventEmitter<string>();
+
+    browseFollows(): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(this.displayedAccount);
+        this.browseFollowsEvent.next(accountName);
+        return false;
+    }
+
+    browseFollowers(): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(this.displayedAccount);
+        this.browseFollowersEvent.next(accountName);
+        return false;
+    }
 }
