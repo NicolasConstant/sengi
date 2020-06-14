@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { faAt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBell, faEnvelope, faUser, faStar, faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { Subscription } from 'rxjs';
@@ -15,6 +15,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { MentionsComponent } from './mentions/mentions.component';
 import { DirectMessagesComponent } from './direct-messages/direct-messages.component';
 import { FavoritesComponent } from './favorites/favorites.component';
+import { BrowseBase } from '../../common/browse-base';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { FavoritesComponent } from './favorites/favorites.component';
     templateUrl: './manage-account.component.html',
     styleUrls: ['./manage-account.component.scss']
 })
-export class ManageAccountComponent implements OnInit, OnDestroy {
+export class ManageAccountComponent extends BrowseBase {
     faAt = faAt;
     faBell = faBell;
     faEnvelope = faEnvelope;
@@ -37,10 +38,6 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     isBookmarksAvailable = false;
 
     userAccount: Account;
-
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input('account')
     set account(acc: AccountWrapper) {
@@ -60,7 +57,9 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
-        private readonly userNotificationService: UserNotificationService) { }
+        private readonly userNotificationService: UserNotificationService) { 
+            super();
+        }
 
     ngOnInit() {        
     }
@@ -159,10 +158,6 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
     browseLocalAccount(): boolean {
         var accountName = `@${this.account.info.username}@${this.account.info.instance}`;
         this.browseAccountEvent.next(accountName);
@@ -172,13 +167,5 @@ export class ManageAccountComponent implements OnInit, OnDestroy {
     openLocalAccount(): boolean {
         window.open(this.userAccount.url, '_blank');
         return false;
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 }
