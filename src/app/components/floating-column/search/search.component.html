@@ -15,12 +15,17 @@
 
         <div *ngIf="accounts.length > 0" class="search-results">
             <h3 class="search-results__title">Accounts</h3>
-            <a href *ngFor="let account of accounts" class="account" title="open account"
+
+            <app-account *ngFor="let account of accounts"
+                [account]="account"
+                (accountSelected)="processAndBrowseAccount($event)"></app-account>
+
+            <!-- <a href *ngFor="let account of accounts" class="account" title="open account"
                 (click)="processAndBrowseAccount(account)">
                 <img src="{{account.avatar}}" class="account__avatar" />
                 <div class="account__name">{{ account.username }}</div>
                 <div class="account__fullhandle">@{{ account.acct }}</div>
-            </a>
+            </a> -->
         </div>
 
         <div *ngIf="hashtags.length > 0" class="search-results">

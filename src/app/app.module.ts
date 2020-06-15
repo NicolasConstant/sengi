@@ -85,6 +85,7 @@ import { BookmarksComponent } from './components/floating-column/manage-account/
 import { AttachementImageComponent } from './components/stream/status/attachements/attachement-image/attachement-image.component';
 import { EnsureHttpsPipe } from './pipes/ensure-https.pipe';
 import { UserFollowsComponent } from './components/stream/user-follows/user-follows.component';
+import { AccountComponent } from './components/common/account/account.component';
 
 
 const routes: Routes = [
@@ -150,7 +151,8 @@ const routes: Routes = [
         BookmarksComponent,
         AttachementImageComponent,
         EnsureHttpsPipe,
-        UserFollowsComponent
+        UserFollowsComponent,
+        AccountComponent
     ],
     entryComponents: [
         EmojiPickerComponent

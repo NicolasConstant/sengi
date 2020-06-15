@@ -135,42 +135,4 @@ $search-form-height: 70px;
 
 .account {
     display: block;
-    color: white;
-    border-radius: 2px;
-    transition: all .3s; // &:hover &__name {
-    //     text-decoration: underline;
-    // }
-    border-top: 1px solid $separator-color;
-
-    &:last-of-type {
-        border-bottom: 1px solid $separator-color;
-    }
-
-    &__avatar {
-        width: 40px;
-        margin: 5px 10px 5px 5px;
-        float: left;
-        border-radius: 2px;
-    }
-
-    &__name {
-        margin: 7px 0 0 0;
-    }
-
-    &__fullhandle {
-        margin: 0 0 5px 0;
-        color: $status-secondary-color;
-        transition: all .3s; // &:hover {
-        //     color: white;
-        // }
-    }
-
-    &:hover,
-    &:hover &__fullhandle {
-        color: white;
-        text-decoration: none;
-        background-color: $button-background-color-hover;
-    }
-
-    @include clearfix;
 }
