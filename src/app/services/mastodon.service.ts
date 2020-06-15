@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {
+export class MastodonService {    
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -467,6 +467,27 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.deleteScheduleStatus}`.replace('{0}', statusId);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.delete<ScheduledStatus>(route, { headers: headers }).toPromise();
+    }
+
+    getFollowers(account: AccountInfo, targetAccountId: number, maxId: string = null, sinceId: string = null, limit: number = 40): Promise<Account[]> {
+        const route = `https://${account.instance}${this.apiRoutes.getFollowers}`.replace('{0}', targetAccountId.toString());
+
+        let params = `?limit=${limit}`;
+        if(maxId) params += `$max_id=${maxId}`;
+        if(sinceId) params += `$since_id=${sinceId}`;
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Account[]>(route + params, { headers: headers }).toPromise();
+    }
+    getFollowing(account: AccountInfo, targetAccountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<Account[]> {
+        const route = `https://${account.instance}${this.apiRoutes.getFollowing}`.replace('{0}', targetAccountId.toString());
+        
+        let params = `?limit=${limit}`;
+        if(maxId) params += `$max_id=${maxId}`;
+        if(sinceId) params += `$since_id=${sinceId}`;
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Account[]>(route + params, { headers: headers }).toPromise();
     }
 }
 

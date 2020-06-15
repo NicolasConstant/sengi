@@ -1,3 +1,8 @@
-<p>
-  user-follows works!
-</p>
+<div class="follow flexcroll" #accountslist>
+    <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
+    <div class="accounts" *ngIf="!isLoading">
+        <div class="account" *ngFor="let a of accounts">
+            ACC
+        </div>
+    </div>
+</div>
