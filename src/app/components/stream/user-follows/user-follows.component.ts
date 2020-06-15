@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { Store } from '@ngxs/store';
+import { HttpErrorResponse } from '@angular/common/http';
 
-import { AccountInfo } from '../../../states/accounts.state';
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
 import { ToolsService } from '../../../services/tools.service';
 import { Account } from "../../../services/models/mastodon.interfaces";
-
-
+import { NotificationService } from '../../../services/notification.service';
+import { FollowingResult } from '../../../services/mastodon.service';
 
 @Component({
     selector: 'app-user-follows',
@@ -19,8 +18,9 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
     private _type: 'follows' | 'followers';
     private _currentAccount: string;
 
+    private sinceId: string;
     isLoading: boolean = true;
-    accounts: Account[] = [];
+    accounts: Account[] = [];    
 
     @Input('type')
     set setType(type: 'follows' | 'followers') {
@@ -48,17 +48,17 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
     @ViewChild('accountslist') public accountslist: ElementRef;
 
     private refreshSubscription: Subscription;
-    private goToTopSubscription: Subscription;    
+    private goToTopSubscription: Subscription;
     // private accountSub: Subscription;    
     // private accounts$: Observable<AccountInfo[]>;
 
     constructor(
-        private readonly store: Store,
+        private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonWrapperService) { 
-            // this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
-        }
- 
+        private readonly mastodonService: MastodonWrapperService) {
+        // this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
+    }
+
     ngOnInit() {
         if (this.refreshEventEmitter) {
             this.refreshSubscription = this.refreshEventEmitter.subscribe(() => {
@@ -87,24 +87,72 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
             let currentAccount = this.toolsService.getSelectedAccounts()[0];
             this.toolsService.findAccount(currentAccount, accountName)
                 .then((acc: Account) => {
-                    if(type === 'followers'){
+                    if (type === 'followers') {
                         return this.mastodonService.getFollowers(currentAccount, acc.id, null, null);
-                    } else if(type === 'follows') {
+                    } else if (type === 'follows') {
                         return this.mastodonService.getFollowing(currentAccount, acc.id, null, null);
                     } else {
                         throw Error('not implemented');
-                    }                    
+                    }
                 })
-                .then((accounts: Account[]) => {
-                    this.accounts = accounts;
+                .then((result: FollowingResult) => {
+                    console.warn(result);
+                    this.sinceId = result.sinceId;
+                    this.accounts = result.follows;
                 })
                 .catch(err => {
-
+                    this.notificationService.notifyHttpError(err, currentAccount);
                 })
                 .then(() => {
                     this.isLoading = false;
                 });
         }
+    }
+
+    private scrolledToBottom() {
+        if (this.isLoading || this.maxReached || this.scrolledErrorOccured || this.accounts.length === 0) return;
+
+        this.isLoading = true;
+        this.isProcessingInfiniteScroll = true;
+
+        let currentAccount = this.toolsService.getSelectedAccounts()[0];
+        this.toolsService.findAccount(currentAccount, this._currentAccount)
+            .then((acc: Account) => {
+                if (this._type === 'followers') {
+                    return this.mastodonService.getFollowers(currentAccount, acc.id, this.sinceId, null);
+                } else if (this._type === 'follows') {
+                    return this.mastodonService.getFollowing(currentAccount, acc.id, this.sinceId, null);
+                } else {
+                    throw Error('not implemented');
+                }
+            })
+            .then((result: FollowingResult) => {
+                if(!result) return;
+
+                let accounts = result.follows;
+
+                if (!accounts || accounts.length === 0 || this.maxReached) {
+                    this.maxReached = true;
+                    return;
+                }
+
+                this.sinceId = result.sinceId;
+                for (let a of accounts) {
+                    this.accounts.push(a);
+                }
+            })
+            .catch((err: HttpErrorResponse) => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+
+                this.notificationService.notifyHttpError(err, currentAccount);
+            })
+            .then(() => {
+                this.isLoading = false;
+                this.isProcessingInfiniteScroll = false;
+            });
     }
 
     refresh(): any {
@@ -125,4 +173,19 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
         let acc = this.toolsService.getAccountFullHandle(account);
         this.browseAccountEvent.next(acc);
     }
+
+    onScroll() {
+        var element = this.accountslist.nativeElement as HTMLElement;
+        const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
+        const atTop = element.scrollTop === 0;
+
+        if (atBottom) {
+            this.scrolledToBottom();
+        }
+    }
+
+    private scrolledErrorOccured = false;
+    private maxReached = false;
+    private isProcessingInfiniteScroll = false;
+
 }

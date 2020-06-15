@@ -4,7 +4,7 @@ import { Store } from '@ngxs/store';
 import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData } from "./models/mastodon.interfaces";
 import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
-import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult } from './mastodon.service';
+import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult, FollowingResult } from './mastodon.service';
 import { AuthService } from './auth.service';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
 
@@ -392,14 +392,14 @@ export class MastodonWrapperService {
             });
     }
 
-    getFollowing(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40):  Promise<Account[]> {
+    getFollowing(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40):  Promise<FollowingResult> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getFollowing(refreshedAccount, accountId, maxId, sinceId, limit);
             });
     }
 
-    getFollowers(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40):  Promise<Account[]> {
+    getFollowers(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40):  Promise<FollowingResult> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getFollowers(refreshedAccount, accountId, maxId, sinceId, limit);

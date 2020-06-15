@@ -7,7 +7,7 @@ import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
 @Injectable()
-export class MastodonService {    
+export class MastodonService {
     private apiRoutes = new ApiRoutes();
 
     constructor(private readonly httpClient: HttpClient) { }
@@ -469,25 +469,47 @@ export class MastodonService {
         return this.httpClient.delete<ScheduledStatus>(route, { headers: headers }).toPromise();
     }
 
-    getFollowers(account: AccountInfo, targetAccountId: number, maxId: string = null, sinceId: string = null, limit: number = 40): Promise<Account[]> {
+    getFollowers(account: AccountInfo, targetAccountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<FollowingResult> {
         const route = `https://${account.instance}${this.apiRoutes.getFollowers}`.replace('{0}', targetAccountId.toString());
 
         let params = `?limit=${limit}`;
-        if(maxId) params += `$max_id=${maxId}`;
-        if(sinceId) params += `$since_id=${sinceId}`;
+        if (maxId) params += `&max_id=${maxId}`;
+        if (sinceId) params += `&since_id=${sinceId}`;
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.get<Account[]>(route + params, { headers: headers }).toPromise();
+        return this.httpClient.get<Account[]>(route + params, { headers: headers, observe: "response" }).toPromise()
+            .then((res: HttpResponse<Account[]>) => {
+                const link = res.headers.get('Link');
+                let lastId = null;
+                if (link) {
+                    const sinceId = link.split('since_id=')[1];
+                    if (maxId) {
+                        lastId = sinceId.split('>;')[0];
+                    }
+                }
+                return new FollowingResult(lastId, res.body)
+            });
     }
-    getFollowing(account: AccountInfo, targetAccountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<Account[]> {
+    getFollowing(account: AccountInfo, targetAccountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<FollowingResult> {
         const route = `https://${account.instance}${this.apiRoutes.getFollowing}`.replace('{0}', targetAccountId.toString());
-        
+
         let params = `?limit=${limit}`;
-        if(maxId) params += `$max_id=${maxId}`;
-        if(sinceId) params += `$since_id=${sinceId}`;
+        if (maxId) params += `&max_id=${maxId}`;
+        if (sinceId) params += `&since_id=${sinceId}`;
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.get<Account[]>(route + params, { headers: headers }).toPromise();
+        return this.httpClient.get<Account[]>(route + params, { headers: headers, observe: "response" }).toPromise()
+            .then((res: HttpResponse<Account[]>) => {
+                const link = res.headers.get('Link');
+                let lastId = null;
+                if (link) {
+                    const sinceId = link.split('since_id=')[1];
+                    if (sinceId) {
+                        lastId = sinceId.split('>;')[0];
+                    }
+                }
+                return new FollowingResult(lastId, res.body)
+            });
     }
 }
 
@@ -527,4 +549,10 @@ export class BookmarkResult {
     constructor(
         public max_id: string,
         public bookmarked: Status[]) { }
+}
+
+export class FollowingResult {
+    constructor(
+        public sinceId: string,
+        public follows: Account[]) { }
 }
