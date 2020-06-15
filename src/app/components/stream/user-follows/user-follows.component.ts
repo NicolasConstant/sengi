@@ -18,7 +18,7 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
     private _type: 'follows' | 'followers';
     private _currentAccount: string;
 
-    private sinceId: string;
+    private maxId: string;
     isLoading: boolean = true;
     accounts: Account[] = [];    
 
@@ -97,7 +97,7 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
                 })
                 .then((result: FollowingResult) => {
                     console.warn(result);
-                    this.sinceId = result.sinceId;
+                    this.maxId = result.maxId;
                     this.accounts = result.follows;
                 })
                 .catch(err => {
@@ -119,9 +119,9 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
         this.toolsService.findAccount(currentAccount, this._currentAccount)
             .then((acc: Account) => {
                 if (this._type === 'followers') {
-                    return this.mastodonService.getFollowers(currentAccount, acc.id, this.sinceId, null);
+                    return this.mastodonService.getFollowers(currentAccount, acc.id, this.maxId, null);
                 } else if (this._type === 'follows') {
-                    return this.mastodonService.getFollowing(currentAccount, acc.id, this.sinceId, null);
+                    return this.mastodonService.getFollowing(currentAccount, acc.id, this.maxId, null);
                 } else {
                     throw Error('not implemented');
                 }
@@ -135,10 +135,14 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
                     this.maxReached = true;
                     return;
                 }
-
-                this.sinceId = result.sinceId;
+                
                 for (let a of accounts) {
                     this.accounts.push(a);
+                }
+
+                this.maxId = result.maxId;
+                if(!this.maxId) {
+                    this.maxReached = true;
                 }
             })
             .catch((err: HttpErrorResponse) => {

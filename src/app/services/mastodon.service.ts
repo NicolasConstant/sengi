@@ -482,9 +482,9 @@ export class MastodonService {
                 const link = res.headers.get('Link');
                 let lastId = null;
                 if (link) {
-                    const sinceId = link.split('since_id=')[1];
+                    const maxId = link.split('max_id=')[1];
                     if (maxId) {
-                        lastId = sinceId.split('>;')[0];
+                        lastId = maxId.split('>;')[0];
                     }
                 }
                 return new FollowingResult(lastId, res.body)
@@ -503,9 +503,9 @@ export class MastodonService {
                 const link = res.headers.get('Link');
                 let lastId = null;
                 if (link) {
-                    const sinceId = link.split('since_id=')[1];
-                    if (sinceId) {
-                        lastId = sinceId.split('>;')[0];
+                    const maxId = link.split('max_id=')[1];
+                    if (maxId) {
+                        lastId = maxId.split('>;')[0];
                     }
                 }
                 return new FollowingResult(lastId, res.body)
@@ -553,6 +553,6 @@ export class BookmarkResult {
 
 export class FollowingResult {
     constructor(
-        public sinceId: string,
+        public maxId: string,
         public follows: Account[]) { }
 }
