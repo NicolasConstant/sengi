@@ -120,4 +120,9 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
             });
         }, 0);
     }
+
+    browseAccount(account: Account) {
+        let acc = this.toolsService.getAccountFullHandle(account);
+        this.browseAccountEvent.next(acc);
+    }
 }

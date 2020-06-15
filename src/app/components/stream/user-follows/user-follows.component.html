@@ -1,8 +1,8 @@
 <div class="follow flexcroll" #accountslist>
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
     <div class="accounts" *ngIf="!isLoading">
-        <div class="account" *ngFor="let a of accounts">
-            ACC
-        </div>
+        <app-account class="account" *ngFor="let account of accounts"
+            [account]="account"
+            (accountSelected)="browseAccount($event)"></app-account>
     </div>
 </div>

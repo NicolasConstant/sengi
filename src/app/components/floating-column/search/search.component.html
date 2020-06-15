@@ -16,7 +16,7 @@
         <div *ngIf="accounts.length > 0" class="search-results">
             <h3 class="search-results__title">Accounts</h3>
 
-            <app-account *ngFor="let account of accounts"
+            <app-account class="account" *ngFor="let account of accounts"
                 [account]="account"
                 (accountSelected)="processAndBrowseAccount($event)"></app-account>
 

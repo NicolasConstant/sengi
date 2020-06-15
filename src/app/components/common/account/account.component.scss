@@ -2,6 +2,8 @@
 @import "mixins";
 
 .account {
+    font-size: $small-font-size; 
+    
     display: block;
     color: white;
     border-radius: 2px;
