@@ -81,7 +81,7 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
 
     private load(type: 'follows' | 'followers', accountName: string) {
         if (type && accountName) {
-            console.warn(`type: ${type} account ${accountName}`);
+            this.accounts = [];
             this.isLoading = true;
 
             let currentAccount = this.toolsService.getSelectedAccounts()[0];
@@ -159,7 +159,7 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
             });
     }
 
-    refresh(): any {
+    refresh(): any {        
         this.load(this._type, this._currentAccount);
     }
 
