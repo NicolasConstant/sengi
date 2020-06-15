@@ -10,6 +10,8 @@
     transition: all .3s; 
     border-top: 1px solid $separator-color;
 
+    overflow: hidden;
+
     &:last-of-type {
         border-bottom: 1px solid $separator-color;
     }
@@ -29,12 +31,16 @@
         margin: 0 0 5px 0;
         color: $status-secondary-color;
         transition: all .3s;
+        white-space: nowrap;
     }
 
     &:hover,
     &:hover &__fullhandle {
         color: white;
         text-decoration: none;
+    }
+
+    &:hover {
         background-color: $button-background-color-hover;
     }
 
