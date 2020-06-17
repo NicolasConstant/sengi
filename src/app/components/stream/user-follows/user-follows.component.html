@@ -4,5 +4,6 @@
             [account]="account"
             (accountSelected)="browseAccount($event)"></app-account>
     </div>
+    <div *ngIf="accounts.length === 0 && !isLoading" class="follow__empty"> There is nothing here! </div>
     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
 </div>

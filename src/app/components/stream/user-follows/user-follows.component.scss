@@ -7,6 +7,11 @@
     
     overflow: auto;
     position: relative;
+
+    &__empty {
+        padding: 20px 0 0 0;
+        text-align: center;
+    }
 }
 
 .account {
