@@ -179,7 +179,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private statusReplyingTo: Status;
 
     selectedPrivacy = 'Public';
-    // privacyList: string[] = ['Public', 'Unlisted', 'Follows-only', 'DM'];
+    private selectedPrivacySetByRedraft = false;
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
@@ -429,9 +429,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 this.setVisibility(VisibilityEnum.Direct);
                 break;
         }
+
+        this.selectedPrivacySetByRedraft = true;
     }
 
     private setVisibility(defaultPrivacy: VisibilityEnum) {
+        if(this.selectedPrivacySetByRedraft) return;
+
         switch (defaultPrivacy) {
             case VisibilityEnum.Public:
                 this.selectedPrivacy = 'Public';

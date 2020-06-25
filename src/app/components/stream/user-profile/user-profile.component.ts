@@ -13,13 +13,14 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper, OpenMediaEvent } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { NavigationService } from '../../../services/navigation.service';
+import { BrowseBase } from '../../common/browse-base';
 
 @Component({
     selector: 'app-user-profile',
     templateUrl: './user-profile.component.html',
     styleUrls: ['./user-profile.component.scss']
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent extends BrowseBase {
     private emojiConverter = new EmojiConverter();
 
     faUser = faUser;
@@ -64,10 +65,6 @@ export class UserProfileComponent implements OnInit {
     @ViewChild('statusstream') public statustream: ElementRef;
     @ViewChild('profilestatuses') public profilestatuses: ElementRef;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
     @Input() refreshEventEmitter: EventEmitter<any>;
     @Input() goToTopEventEmitter: EventEmitter<any>;
 
@@ -83,6 +80,7 @@ export class UserProfileComponent implements OnInit {
         private readonly mastodonService: MastodonWrapperService,
         private readonly toolsService: ToolsService) {
 
+        super();
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
@@ -282,14 +280,6 @@ export class UserProfileComponent implements OnInit {
         return false;
     }
 
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
-    }
-
     follow(): boolean {
         const userAccount = this.toolsService.getSelectedAccounts()[0];
         this.toolsService.findAccount(userAccount, this.lastAccountName)
@@ -426,6 +416,21 @@ export class UserProfileComponent implements OnInit {
     openAttachment(attachment: Attachment): boolean {
         let openMediaEvent = new OpenMediaEvent(0, [attachment], null);
         this.navigationService.openMedia(openMediaEvent);
+        return false;
+    }
+
+    @Output() browseFollowsEvent = new EventEmitter<string>();
+    @Output() browseFollowersEvent = new EventEmitter<string>();
+
+    browseFollows(): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(this.displayedAccount);
+        this.browseFollowsEvent.next(accountName);
+        return false;
+    }
+
+    browseFollowers(): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(this.displayedAccount);
+        this.browseFollowersEvent.next(accountName);
         return false;
     }
 }

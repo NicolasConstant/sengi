@@ -29,8 +29,11 @@ export class NotificationService {
 
         try {
             code = err.status;
-            message = err.error.error; //Mastodon
-            if (!message) {
+            if(err.message){
+                message = err.message;
+            } else if(err.error && err.error.error) {
+                message = err.error.error; //Mastodon
+            } else if(err.error && err.error.errors && err.error.errors.detail){
                 message = err.error.errors.detail; //Pleroma
             }
         } catch (err) { }

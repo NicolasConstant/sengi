@@ -15,7 +15,7 @@ $floating-header-height: 60px;
     position: relative;
 }
 
-.profile {    
+.profile {
     // overflow: auto;
     height: calc(100%);
     // width: $stream-column-width;
@@ -175,7 +175,8 @@ $floating-header-height: 60px;
                 display: inline-block;
                 transition: all .2s;
                 color: white;
-                &:hover{
+
+                &:hover {
                     color: rgb(216, 216, 216);
                 }
             }
@@ -188,7 +189,7 @@ $floating-header-height: 60px;
                 color: #5fbcff;
                 color: #85ccff;
 
-                &:hover{
+                &:hover {
                     color: #85ccff;
                     color: #38abff;
                 }
@@ -212,7 +213,7 @@ $floating-header-height: 60px;
             font-size: 12px;
             // max-width: 150px;
             width: 265px;
-            
+
             //outline: 1px solid greenyellow;
 
             &--data {
@@ -221,7 +222,7 @@ $floating-header-height: 60px;
                 padding: 4px 10px;
                 border-radius: 4px;
                 text-align: center;
-                margin: 0 2px 2px 0; 
+                margin: 0 2px 2px 0;
             }
         }
 
@@ -252,7 +253,7 @@ $floating-header-height: 60px;
             overflow: hidden;
             margin: 0;
 
-            &:not(:last-child){
+            &:not(:last-child) {
                 margin-bottom: 3px;
             }
         }
@@ -267,6 +268,27 @@ $floating-header-height: 60px;
 
             &:hover {
                 color: $full-alias-color-hover;
+            }
+        }
+    }
+
+    &-follows {
+        width: calc(100%);  
+        font-size: 13px;
+        border-bottom: 1px solid #0f111a;;
+
+        &__link {
+            color: white;
+            width: calc(50%);
+            padding: 5px;
+            text-align: center;
+            display: inline-block;
+            background-color: #1a1f2e;
+            transition: all .2s;
+
+            &:hover {
+                text-decoration: none;
+                background-color: #131722;
             }
         }
     }
@@ -360,7 +382,7 @@ $floating-header-height: 60px;
     }
 
     &__status-switching-section {
-        height: calc(100vh - 35px - #{$floating-header-height} - #{$stream-header-height} - #{$stream-selector-height});        
+        height: calc(100vh - 35px - #{$floating-header-height} - #{$stream-header-height} - #{$stream-selector-height});
     }
 
     &-no-toots {

@@ -65,6 +65,13 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
     });
 
+    it('should parse remote mention', () => {
+        const sample = `<p><span class="article-type"><a href="https://domain.name/@username" class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@<span class="article-type">username</span></a></span> <br>Yes, indeed.</p>`;
+
+        component.text = sample;
+        expect(component.processedText).toBe('<p><span class="article-type"><a href class="account--username-domain-name" title="@username@domain.name">@username</a> <br>Yes, indeed.</p>');
+    });
+
     it('should parse link', () => {
         const url = 'mydomain.co/test';
         const sample = `<p>bla1 <a href="https://${url}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${url}</span><span class="invisible"></span></a> bla2</p>`;
@@ -126,7 +133,7 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('<a href class="account--user-instance-club" title="@user@instance.club">@user</a>');
         expect(component.processedText).toContain('bla1');     
-    })
+    });
 
     it('should parse mention - Pleroma in Mastodon - 2', () => {
         const sample = `<div><span><a class="mention status-link" href="https://pleroma.site/users/kaniini" rel="noopener" target="_blank" title="kaniini@pleroma.site">@<span>kaniini</span></a></span> <span><a class="mention status-link" href="https://mastodon.social/@Gargron" rel="noopener" target="_blank" title="Gargron@mastodon.social">@<span>Gargron</span></a></span> bla1?</div>`;

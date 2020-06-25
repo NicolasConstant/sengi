@@ -121,6 +121,11 @@
                             target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
                 </div>
 
+                <div class="profile-follows">
+                    <a href class="profile-follows__link" title="show following" (click)="browseFollows()" >Following</a>
+                    <a href class="profile-follows__link" title="show followers" (click)="browseFollowers()">Followers</a>
+                </div>
+
                 <!-- <div class="profile__extra-info">
                     <div class="profile__extra-info__section">
                         <a href class="profile__extra-info__links" 
