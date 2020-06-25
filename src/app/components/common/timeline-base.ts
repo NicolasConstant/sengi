@@ -15,12 +15,13 @@ import { BrowseBase } from './browse-base';
 export abstract class TimelineBase extends BrowseBase {
     isLoading = true;
     protected maxReached = false;
+    protected lastCallReachedMax = false;
     isThread = false;
     displayError: string;
     hasContentWarnings = false;
 
-    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; 
-    
+    timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
+
     protected account: AccountInfo;
     protected websocketStreaming: StreamingWrapper;
 
@@ -44,8 +45,8 @@ export abstract class TimelineBase extends BrowseBase {
         protected readonly toolsService: ToolsService,
         protected readonly notificationService: NotificationService,
         protected readonly mastodonService: MastodonWrapperService) {
-            super();
-    } 
+        super();
+    }
 
     abstract ngOnInit();
     abstract ngOnDestroy();
@@ -80,11 +81,17 @@ export abstract class TimelineBase extends BrowseBase {
                     return;
                 }
 
-                for (const s of status) {
-                    let cwPolicy = this.toolsService.checkContentWarning(s);
-                    const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
-                    this.statuses.push(wrapper);
-                }             
+                if (status) {
+                    for (const s of status) {
+                        let cwPolicy = this.toolsService.checkContentWarning(s);
+                        const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
+                        this.statuses.push(wrapper);
+                    }
+                }
+
+                if(this.lastCallReachedMax){
+                    this.maxReached = true;
+                }
             })
             .catch((err: HttpErrorResponse) => {
                 this.scrolledErrorOccured = true;
@@ -101,7 +108,7 @@ export abstract class TimelineBase extends BrowseBase {
     }
 
     applyGoToTop(): boolean {
-        this.statusProcessOnGoToTop();      
+        this.statusProcessOnGoToTop();
 
         const stream = this.statustream.nativeElement as HTMLElement;
         setTimeout(() => {

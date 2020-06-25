@@ -267,6 +267,7 @@ export class StreamStatusesComponent extends TimelineBase {
         if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
             this.maxReached = false;
+            this.lastCallReachedMax = false;
         }
 
         if (this.bufferStream.length > 3 * this.streamingService.nbStatusPerIteration) {

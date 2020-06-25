@@ -47,7 +47,8 @@ export class BookmarksComponent extends TimelineBase {
     private reset() {
         this.isLoading = true;
         this.statuses.length = 0;
-        this.maxReached = false;
+        this.maxReached = false;        
+        this.lastCallReachedMax = false;
         this.maxId = null;
     }
 
@@ -78,7 +79,7 @@ export class BookmarksComponent extends TimelineBase {
                 this.maxId = result.max_id;
 
                 if(!this.maxId){
-                    this.maxReached = true;
+                    this.lastCallReachedMax = true;
                 }
 
                 return statuses;
