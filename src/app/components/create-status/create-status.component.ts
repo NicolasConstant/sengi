@@ -649,6 +649,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         while (trucatedStatus.length > currentMaxCharLength) {
             const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
+            
+            if(nextIndex === -1){
+                break;
+            }
+
             results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
             trucatedStatus = aggregateMention + trucatedStatus.substr(nextIndex + 1);
         }
