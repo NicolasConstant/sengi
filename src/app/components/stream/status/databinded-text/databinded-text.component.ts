@@ -12,7 +12,7 @@ export class DatabindedTextComponent implements OnInit {
 
     private accounts: string[] = [];
     private hashtags: string[] = [];
-    private links: string[] = [];
+    // private links: string[] = [];
 
     processedText: string;
     isCollapsed: boolean = false;
@@ -164,10 +164,12 @@ export class DatabindedTextComponent implements OnInit {
             }
         }
 
-        this.links.push(extractedUrl);
+        // this.links.push(extractedUrl);
         let classname = this.getClassNameForLink(extractedUrl);
 
-        this.processedText += `<a href class="${classname}" title="open link">${extractedName}</a>`;
+        let sanitizedLink = this.sanitizeLink(extractedUrl);
+
+        this.processedText += `<a href="${sanitizedLink}" class="${classname}" title="open link" target="_blank" rel="noopener noreferrer">${extractedName}</a>`;
         if (extractedLinkAndNext.length > 1) this.processedText += extractedLinkAndNext[1];
     }
 
@@ -209,32 +211,32 @@ export class DatabindedTextComponent implements OnInit {
             }
         }
 
-        for (const link of this.links) {
-            let classname = this.getClassNameForLink(link);
-            let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
+        // for (const link of this.links) {
+        //     let classname = this.getClassNameForLink(link);
+        //     let els = this.contentElement.nativeElement.querySelectorAll(`.${classname}`);
 
-            let sanitizedLink = this.sanitizeLink(link);
+        //     let sanitizedLink = this.sanitizeLink(link);
 
-            for (const el of els) {
-                this.renderer.listen(el, 'click', (event) => {
-                    event.preventDefault();
-                    event.stopImmediatePropagation();
+        //     for (const el of els) {
+        //         this.renderer.listen(el, 'click', (event) => {
+        //             event.preventDefault();
+        //             event.stopImmediatePropagation();
 
-                    window.open(sanitizedLink, '_blank');
-                    return false;
-                });
+        //             window.open(sanitizedLink, '_blank');
+        //             return false;
+        //         });
 
-                this.renderer.listen(el, 'mouseup', (event) => {
-                    if (event.which === 2) {
-                        event.preventDefault();
-                        event.stopImmediatePropagation();
+        //         this.renderer.listen(el, 'mouseup', (event) => {
+        //             if (event.which === 2) {
+        //                 event.preventDefault();
+        //                 event.stopImmediatePropagation();
 
-                        window.open(sanitizedLink, '_blank');
-                        return false;
-                    }
-                });
-            }
-        }
+        //                 window.open(sanitizedLink, '_blank');
+        //                 return false;
+        //             }
+        //         });
+        //     }
+        // }
     }
 
     private sanitizeLink(link: string): string {
