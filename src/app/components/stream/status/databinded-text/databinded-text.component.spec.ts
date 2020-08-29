@@ -60,7 +60,7 @@ describe('DatabindedTextComponent', () => {
         const url = 'https://mastodon.social/@sengi_app';
         const sample = `<p>bla1 <span class="h-card"><a href="${url}" class="u-url mention" rel="nofollow noopener" target="_blank">@<span>${mention}</span></a></span> bla2</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social">@sengi_app</a>');
+        expect(component.processedText).toContain(`<a href="${url}" class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social" target="_blank" rel="noopener noreferrer">@sengi_app</a>`);
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
     });
@@ -69,7 +69,7 @@ describe('DatabindedTextComponent', () => {
         const sample = `<p><span class="article-type"><a href="https://domain.name/@username" class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@<span class="article-type">username</span></a></span> <br>Yes, indeed.</p>`;
 
         component.text = sample;
-        expect(component.processedText).toBe('<p><span class="article-type"><a href class="account--username-domain-name" title="@username@domain.name">@username</a> <br>Yes, indeed.</p>');
+        expect(component.processedText).toBe('<p><span class="article-type"><a href="https://domain.name/@username" class="account--username-domain-name" title="@username@domain.name" target="_blank" rel="noopener noreferrer">@username</a> <br>Yes, indeed.</p>');
     });
 
     it('should parse link', () => {
@@ -111,7 +111,7 @@ describe('DatabindedTextComponent', () => {
         const sample = `<p>bla1 <a href="${hashtagUrl}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2 <span class="h-card"><a href="${mentionUrl}" class="u-url mention" rel="nofollow noopener" target="_blank">@<span>${mention}</span></a></span> bla3 <a href="https://${linkUrl}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${linkUrl}</span><span class="invisible"></span></a> bla4</p>`;
         component.text = sample;
         expect(component.processedText).toContain(`<a href="${hashtagUrl}" class="hashtag-programmers" title="#programmers" target="_blank" rel="noopener noreferrer">#programmers</a>`);
-        expect(component.processedText).toContain('<a href class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social">@sengi_app</a>');
+        expect(component.processedText).toContain(`<a href="${mentionUrl}" class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social" target="_blank" rel="noopener noreferrer">@sengi_app</a>`);
         expect(component.processedText).toContain(`<a href="https://${linkUrl}" class="link-httpsmydomaincotest" title="open link" target="_blank" rel="noopener noreferrer">mydomain.co/test</a>`);
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
@@ -131,7 +131,7 @@ describe('DatabindedTextComponent', () => {
         const sample = `<div>bla1 <br> @<a href="https://instance.club/user/1" class="h-card mention status-link" rel="noopener" target="_blank" title="https://instance.club/user/1">user</a>&nbsp;</div>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="account--user-instance-club" title="@user@instance.club">@user</a>');
+        expect(component.processedText).toContain('<a href="https://instance.club/user/1" class="account--user-instance-club" title="@user@instance.club" target="_blank" rel="noopener noreferrer">@user</a>');
         expect(component.processedText).toContain('bla1');     
     });
 
@@ -139,35 +139,35 @@ describe('DatabindedTextComponent', () => {
         const sample = `<div><span><a class="mention status-link" href="https://pleroma.site/users/kaniini" rel="noopener" target="_blank" title="kaniini@pleroma.site">@<span>kaniini</span></a></span> <span><a class="mention status-link" href="https://mastodon.social/@Gargron" rel="noopener" target="_blank" title="Gargron@mastodon.social">@<span>Gargron</span></a></span> bla1?</div>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<div><span><a href class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site">@kaniini</a> <span><a href class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social">@Gargron</a> bla1?</div>');
+        expect(component.processedText).toContain('<div><span><a href="https://pleroma.site/users/kaniini" class="account--kaniini-pleroma-site" title="@kaniini@pleroma.site" target="_blank" rel="noopener noreferrer">@kaniini</a> <span><a href="https://mastodon.social/@Gargron" class="account--Gargron-mastodon-social" title="@Gargron@mastodon.social" target="_blank" rel="noopener noreferrer">@Gargron</a> bla1?</div>');
     });       
 
     it('should parse mention - Friendica in Mastodon', () => {
         const sample = `@<span class=""><a href="https://m.s/me" class="u-url mention" rel="nofollow noopener" target="_blank"><span class="mention">me</span></a></span> Blablabla.`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<span class=""><a href class="account--me-m-s" title="@me@m.s">@me</a></span> Blablabla.');
+        expect(component.processedText).toContain('<span class=""><a href="https://m.s/me" class="account--me-m-s" title="@me@m.s" target="_blank" rel="noopener noreferrer">@me</a></span> Blablabla.');
     });
 
     it('should parse mention - Misskey in Mastodon', () => {
         const sample = `<p><a href="https://mastodon.social/users/sengi_app" class="mention" rel="nofollow noopener" target="_blank">@sengi_app@mastodon.social</a><span> Blabla</span></p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<p><a href class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
+        expect(component.processedText).toContain('<p><a href="https://mastodon.social/users/sengi_app" class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social" target="_blank" rel="noopener noreferrer">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
     });
 
     it('should parse mention - Misskey in Mastodon - 2', () => {
         const sample = `<p><span>Since </span><a href="https://mastodon.technology/@test" class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@test@mastodon.technology</a><span> mentioned </span></p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="account--test-mastodon-technology" title="@test@mastodon.technology">@test</a>');
+        expect(component.processedText).toContain('<a href="https://mastodon.technology/@test" class="account--test-mastodon-technology" title="@test@mastodon.technology" target="_blank" rel="noopener noreferrer">@test</a>');
     });
 
     it('should parse mention - Zap in Mastodon', () => {
         const sample = `test @<span class="h-card"><a class="u-url mention" href="https://mastodon.social/@test" rel="nofollow noopener noreferrer" target="_blank">test</a></span> bla"`;
 
         component.text = sample;
-        expect(component.processedText).toContain('test <span class="h-card"><a href class="account--test-mastodon-social" title="@test@mastodon.social">@test</a></span>');
+        expect(component.processedText).toContain('test <span class="h-card"><a href="https://mastodon.social/@test" class="account--test-mastodon-social" title="@test@mastodon.social" target="_blank" rel="noopener noreferrer">@test</a></span>');
     });
 
     it('should parse hastag - Pleroma', () => {

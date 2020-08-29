@@ -134,9 +134,10 @@ export class DatabindedTextComponent implements OnInit {
         //let username = extractedAccountLink[extractedAccountLink.length - 1];
 
         let extractedAccount = `@${extractedAccountName}@${domain}`;
+        let extractedUrl = section.split('href="')[1].split('"')[0];
 
         let classname = this.getClassNameForAccount(extractedAccount);
-        this.processedText += `<a href class="${classname}" title="${extractedAccount}">@${extractedAccountName}</a>`;
+        this.processedText += `<a href="${extractedUrl}" class="${classname}" title="${extractedAccount}" target="_blank" rel="noopener noreferrer">@${extractedAccountName}</a>`;
 
         if (extractedAccountAndNext[1])
             this.processedText += extractedAccountAndNext[1];
