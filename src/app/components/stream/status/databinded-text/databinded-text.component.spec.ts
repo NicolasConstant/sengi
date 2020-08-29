@@ -163,6 +163,13 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('<a href class="account--test-mastodon-technology" title="@test@mastodon.technology">@test</a>');
     });
 
+    it('should parse mention - Zap in Mastodon', () => {
+        const sample = `test @<span class="h-card"><a class="u-url mention" href="https://mastodon.social/@test" rel="nofollow noopener noreferrer" target="_blank">test</a></span> bla"`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('test <span class="h-card"><a href class="account--test-mastodon-social" title="@test@mastodon.social">@test</a></span>');
+    });
+
     it('should parse hastag - Pleroma', () => {
         const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
 

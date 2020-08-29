@@ -44,6 +44,10 @@ export class DatabindedTextComponent implements OnInit {
             value = value.replace('class="mention" rel="nofollow noopener" target="_blank">@', 'class="mention" rel="nofollow noopener" target="_blank">'); //Misskey sanitarization
         } while (value.includes('class="mention" rel="nofollow noopener" target="_blank">@'));
 
+        do {
+            value = value.replace('@<span class="h-card">', '<span class="h-card">'); //Zap sanitarization
+        } while (value.includes('@<span class="h-card">'));
+
         let linksSections = value.split('<a ');
 
         for (let section of linksSections) {
