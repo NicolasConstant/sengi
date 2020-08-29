@@ -156,6 +156,13 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('<p><a href class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
     });
 
+    it('should parse mention - Misskey in Mastodon - 2', () => {
+        const sample = `<p><span>Since </span><a href="https://mastodon.technology/@test" class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@test@mastodon.technology</a><span> mentioned </span></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<a href class="account--test-mastodon-technology" title="@test@mastodon.technology">@test</a>');
+    });
+
     it('should parse hastag - Pleroma', () => {
         const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
 

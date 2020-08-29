@@ -28,7 +28,7 @@ export class DatabindedTextComponent implements OnInit {
 
     @Input('text')
     set text(value: string) {
-        //console.warn(value);
+        //console.log(value);
 
         let parser = new DOMParser();
         var dom = parser.parseFromString(value, 'text/html')
@@ -107,6 +107,14 @@ export class DatabindedTextComponent implements OnInit {
         } else if(section.includes('>@<span class="article-type">')){ //Remote status
             extractedAccountAndNext = section.split('</a></span>');
             extractedAccountName = extractedAccountAndNext[0].split('@<span class="article-type">')[1].replace('<span>', '').replace('</span>', '');
+        } else if (section.includes('class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@') && !section.includes('target="_blank">@<')){ //Misskey
+            //console.warn('misskey');
+
+            extractedAccountAndNext = section.split('</a>');
+            extractedAccountName = extractedAccountAndNext[0].split('class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@')[1];
+
+            if(extractedAccountName.includes('@'))
+                extractedAccountName = extractedAccountName.split('@')[0];
         } else if (!section.includes('@<span>')) { //GNU social
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('>')[1];
