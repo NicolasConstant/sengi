@@ -221,18 +221,18 @@ export class DatabindedTextComponent implements OnInit {
                 this.renderer.listen(el, 'click', (event) => {
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                    window.open(sanitizedLink, '_blank');
+                    window.open(sanitizedLink, '_blank', 'noopener');
                     return false;
                 });
 
-                this.renderer.listen(el, 'mouseup', (event) => {
-                    if (event.which === 2) {
-                        event.preventDefault();
-                        event.stopImmediatePropagation();
-                        window.open(sanitizedLink, '_blank');
-                        return false;
-                    }
-                });
+                // this.renderer.listen(el, 'mouseup', (event) => {
+                //     if (event.which === 2) {
+                //         event.preventDefault();
+                //         event.stopImmediatePropagation();
+                //         window.open(sanitizedLink, '_blank', 'noopener');
+                //         return false;
+                //     }
+                // });
             }
         }
     }
