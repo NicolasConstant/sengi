@@ -58,6 +58,11 @@ export class BookmarksComponent extends TimelineBase {
         this.mastodonService.getBookmarks(this.account)
             .then((result: BookmarkResult) => {
                 this.maxId = result.max_id;
+
+                if(!this.maxId){
+                    this.lastCallReachedMax = true;
+                }
+
                 for (const s of result.bookmarked) {
                     let cwPolicy = this.toolsService.checkContentWarning(s);
                     const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
@@ -73,6 +78,8 @@ export class BookmarksComponent extends TimelineBase {
     }
 
     protected getNextStatuses(): Promise<Status[]> {
+        if(this.lastCallReachedMax) return Promise.resolve([]);
+
         return this.mastodonService.getBookmarks(this.account, this.maxId)
             .then((result: BookmarkResult) => {
                 const statuses = result.bookmarked;
