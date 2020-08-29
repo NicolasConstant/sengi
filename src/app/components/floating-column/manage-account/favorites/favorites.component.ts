@@ -56,6 +56,11 @@ export class FavoritesComponent extends TimelineBase {
         this.mastodonService.getFavorites(this.account)
             .then((result: FavoriteResult) => {
                 this.maxId = result.max_id;
+
+                if (!this.maxId) {
+                    this.lastCallReachedMax = true;
+                }
+
                 for (const s of result.favorites) {
                     let cwPolicy = this.toolsService.checkContentWarning(s);
                     const wrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
@@ -72,12 +77,14 @@ export class FavoritesComponent extends TimelineBase {
     }
 
     protected getNextStatuses(): Promise<Status[]> {
-       return this.mastodonService.getFavorites(this.account, this.maxId)
+        if (this.lastCallReachedMax) return Promise.resolve([]);
+
+        return this.mastodonService.getFavorites(this.account, this.maxId)
             .then((result: FavoriteResult) => {
                 const statuses = result.favorites;
                 this.maxId = result.max_id;
 
-                if(!this.maxId){
+                if (!this.maxId) {
                     this.lastCallReachedMax = true;
                 }
 
@@ -85,7 +92,7 @@ export class FavoritesComponent extends TimelineBase {
             });
     }
 
-    protected scrolledToTop() {}
+    protected scrolledToTop() { }
 
-    protected statusProcessOnGoToTop(){}
+    protected statusProcessOnGoToTop() { }
 }

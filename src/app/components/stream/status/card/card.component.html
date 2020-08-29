@@ -1,5 +1,5 @@
 <div class="card-data" *ngIf="card.type === 'link' || card.type === 'video'">
-    <a *ngIf="card.type === 'link'" class="card-data__link" href="{{ card.url }}" target="_blank" title="{{ card.title }} &#10;{{ host }}">
+    <a *ngIf="card.type === 'link'" class="card-data__link" href="{{ card.url }}" target="_blank" rel="noopener noreferrer" title="{{ card.title }} &#10;{{ host }}">
         <img *ngIf="card.image" class="card-data__link--image" src="{{ card.image | ensureHttps }}" alt="" />
         <div *ngIf="!card.image" class="card-data__link--image">
             <fa-icon class="card-data__link--image--logo" [icon]="faFileAlt"></fa-icon>
