@@ -22,7 +22,7 @@ Sengi already supporting  all the basics functionalities, but many minors enhanc
 
 ## Screens
 
-![/docs/images/presentation_small.gif](/docs/images/presentation_small.gif)
+![https://raw.githubusercontent.com/NicolasConstant/sengi/master/docs/images/presentation_small.gif](https://raw.githubusercontent.com/NicolasConstant/sengi/master/docs/images/presentation_small.gif)
 
 ## Contact
 
