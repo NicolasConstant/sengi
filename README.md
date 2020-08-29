@@ -36,21 +36,21 @@ It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) fro
 
 ## Contribute
 
-Please see the [contributing guidelines](CONTRIBUTING.md)
+Please see the [contributing guidelines](https://github.com/NicolasConstant/sengi/blob/master/CONTRIBUTING.md)
 
 ## License
 
-This project is licensed under the AGPLv3 License - see [LICENSE](LICENSE) for details
+This project is licensed under the AGPLv3 License - see [LICENSE](https://github.com/NicolasConstant/sengi/blob/master/LICENSE) for details
 
 ## Credits
 
-See [credits](CREDITS.md)
+See [credits](https://github.com/NicolasConstant/sengi/blob/master/CREDITS.md)
 
 ## Dependencies 
 
   * [Angular 7](https://github.com/angular/angular)
   * [NGXS](https://github.com/ngxs/store)
   * [SASS](https://github.com/sass/dart-sass)
-  * [Electron 4](https://github.com/electron/electron)
+  * [Electron 8](https://github.com/electron/electron)
 
 
