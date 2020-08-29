@@ -76,7 +76,7 @@ describe('DatabindedTextComponent', () => {
         const url = 'mydomain.co/test';
         const sample = `<p>bla1 <a href="https://${url}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${url}</span><span class="invisible"></span></a> bla2</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="link-httpsmydomaincotest" title="open link">mydomain.co/test</a>');
+        expect(component.processedText).toContain(`<a href="https://${url}" class="link-httpsmydomaincotest" title="open link" target="_blank" rel="noopener noreferrer">mydomain.co/test</a>`);
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
     });
@@ -85,21 +85,21 @@ describe('DatabindedTextComponent', () => {
         const url = 'bbc.com/news/magazine-34901704';
         const sample = `<p>The rise of"<br><a href="https:www//${url}" rel="nofollow noopener" target="_blank"><span class="invisible">https://www.</span><span class="">${url}</span><span class="invisible"></span></a></p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="link-httpswwwbbccomnewsmagazine34901704" title="open link">bbc.com/news/magazine-34901704</a></p>');
+        expect(component.processedText).toContain(`<a href="https:www//${url}" class="link-httpswwwbbccomnewsmagazine34901704" title="open link" target="_blank" rel="noopener noreferrer">bbc.com/news/magazine-34901704</a></p>`);
     });
 
     it('should parse link - dual section', () => {
         const sample = `<p>Test.<br><a href="https://peertube.fr/videos/watch/69bb6e90-ec0f-49a3-9e28-41792f4a7c5f" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="ellipsis">peertube.fr/videos/watch/69bb6</span><span class="invisible">e90-ec0f-49a3-9e28-41792f4a7c5f</span></a></p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<p>Test.<br><a href class="link-httpspeertubefrvideoswatch69bb6e90ec0f49a39e2841792f4a7c5f" title="open link">peertube.fr/videos/watch/69bb6</a></p>');
+        expect(component.processedText).toContain('<p>Test.<br><a href="https://peertube.fr/videos/watch/69bb6e90-ec0f-49a3-9e28-41792f4a7c5f" class="link-httpspeertubefrvideoswatch69bb6e90ec0f49a39e2841792f4a7c5f" title="open link" target="_blank" rel="noopener noreferrer">peertube.fr/videos/watch/69bb6</a></p>');
     });  
 
     it('should parse link with special character', () => {
         const sample = `<p>Magnitude: 2.5 Depth: 3.4 km<br>Details: 2018/09/27 06:50:17 34.968N 120.685W<br>Location: 10 km (6 mi) W of Guadalupe, CA<br>Map: <a href="https://www.google.com/maps/place/34°58'4%20N+120°41'6%20W/@34.968,-120.685,10z" rel="noopener" target="_blank" class="status-link" title="https://www.google.com/maps/place/34%C2%B058'4%20N+120%C2%B041'6%20W/@34.968,-120.685,10z"><span class="invisible">https://www.</span><span class="ellipsis">google.com/maps/place/34°58'4%</span><span class="invisible">20N+120°41'6%20W/@34.968,-120.685,10z</span></a><br><a href="https://mastodon.cloud/tags/earthquake" class="mention hashtag status-link" rel="noopener" target="_blank">#<span>EarthQuake</span></a> <a href="https://mastodon.cloud/tags/quake" class="mention hashtag status-link" rel="noopener" target="_blank">#<span>Quake</span></a> <a href="https://mastodon.cloud/tags/california" class="mention hashtag status-link" rel="noopener" target="_blank">#<span>California</span></a></p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="link-httpswwwgooglecommapsplace3458420N12041620W3496812068510z" title="open link">google.com/maps/place/34°58\'4%</a>');
+        expect(component.processedText).toContain(`<a href="https://www.google.com/maps/place/34°58'4%20N+120°41'6%20W/@34.968,-120.685,10z" class="link-httpswwwgooglecommapsplace3458420N12041620W3496812068510z" title="open link" target="_blank" rel="noopener noreferrer">google.com/maps/place/34°58\'4%</a>`);
     });
 
     it('should parse combined hashtag, mention and link', () => {
@@ -112,7 +112,7 @@ describe('DatabindedTextComponent', () => {
         component.text = sample;
         expect(component.processedText).toContain('<a href class="hashtag-programmers" title="#programmers">#programmers</a>');
         expect(component.processedText).toContain('<a href class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social">@sengi_app</a>');
-        expect(component.processedText).toContain('<a href class="link-httpsmydomaincotest" title="open link">mydomain.co/test</a>');
+        expect(component.processedText).toContain(`<a href="https://${linkUrl}" class="link-httpsmydomaincotest" title="open link" target="_blank" rel="noopener noreferrer">mydomain.co/test</a>`);
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
         expect(component.processedText).toContain('bla3');
@@ -123,7 +123,7 @@ describe('DatabindedTextComponent', () => {
         const sample = `bla1 <a href="https://www.lemonde.fr/planete.html?xtor=RSS-3208" rel="nofollow noopener" class="" target="_blank">https://social.bitcast.info/url/819438</a>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="link-httpswwwlemondefrplanetehtmlxtorRSS3208" title="open link">https://social.bitcast.info/url/819438</a>');
+        expect(component.processedText).toContain('<a href="https://www.lemonde.fr/planete.html?xtor=RSS-3208" class="link-httpswwwlemondefrplanetehtmlxtorRSS3208" title="open link" target="_blank" rel="noopener noreferrer">https://social.bitcast.info/url/819438</a>');
         expect(component.processedText).toContain('bla1');
     });
 
@@ -167,14 +167,14 @@ describe('DatabindedTextComponent', () => {
         const sample = `<p>Bla <a href="https://cloudblogs.microsoft.com/opensource/2019/05/21/service-mesh-interface-smi-release/"><span>https://</span><span>cloudblogs.microsoft.com/opens</span><span>ource/2019/05/21/service-mesh-interface-smi-release/</span></a></p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<p>Bla <a href class="link-httpscloudblogsmicrosoftcomopensource20190521servicemeshinterfacesmirelease" title="open link">cloudblogs.microsoft.com/opens</a></p>'); 
+        expect(component.processedText).toContain('<p>Bla <a href="https://cloudblogs.microsoft.com/opensource/2019/05/21/service-mesh-interface-smi-release/" class="link-httpscloudblogsmicrosoftcomopensource20190521servicemeshinterfacesmirelease" title="open link" target="_blank" rel="noopener noreferrer">cloudblogs.microsoft.com/opens</a></p>'); 
     });
 
     it('should parse link 2 - Pleroma', () => {
         const sample = `Bla<br /><br /><a href="https://link/">https://link/</a>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('Bla<br /><br /><a href class="link-httpslink" title="open link">https://link/</a>'); 
+        expect(component.processedText).toContain('Bla<br /><br /><a href="https://link/" class="link-httpslink" title="open link" target="_blank" rel="noopener noreferrer">https://link/</a>'); 
     });
 
     it('should sanitize link', () => {
