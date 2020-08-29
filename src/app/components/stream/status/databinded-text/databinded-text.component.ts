@@ -94,9 +94,10 @@ export class DatabindedTextComponent implements OnInit {
     private processHashtag(section: string) {
         let extractedLinkAndNext = section.split('</a>');
         let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
+        let extractedUrl = extractedLinkAndNext[0].split('href="')[1].split('"')[0];
 
         let classname = this.getClassNameForHastag(extractedHashtag);
-        this.processedText += ` <a href class="${classname}" title="#${extractedHashtag}">#${extractedHashtag}</a>`;
+        this.processedText += ` <a href="${extractedUrl}" class="${classname}" title="#${extractedHashtag}" target="_blank" rel="noopener noreferrer">#${extractedHashtag}</a>`;
         if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
         this.hashtags.push(extractedHashtag);
     }
@@ -108,16 +109,16 @@ export class DatabindedTextComponent implements OnInit {
         if (section.includes('<span class="mention">')) { //Friendica
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('<span class="mention">')[1].split('</span>')[0];
-        } else if(section.includes('>@<span class="article-type">')){ //Remote status
+        } else if (section.includes('>@<span class="article-type">')) { //Remote status
             extractedAccountAndNext = section.split('</a></span>');
             extractedAccountName = extractedAccountAndNext[0].split('@<span class="article-type">')[1].replace('<span>', '').replace('</span>', '');
-        } else if (section.includes('class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@') && !section.includes('target="_blank">@<')){ //Misskey
+        } else if (section.includes('class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@') && !section.includes('target="_blank">@<')) { //Misskey
             //console.warn('misskey');
 
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split('class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@')[1];
 
-            if(extractedAccountName.includes('@'))
+            if (extractedAccountName.includes('@'))
                 extractedAccountName = extractedAccountName.split('@')[0];
         } else if (!section.includes('@<span>')) { //GNU social
             extractedAccountAndNext = section.split('</a>');
@@ -148,7 +149,7 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     private processLink(section: string) {
-        if(!section.includes('</a>')){
+        if (!section.includes('</a>')) {
             this.processedText += section;
             return;
         }

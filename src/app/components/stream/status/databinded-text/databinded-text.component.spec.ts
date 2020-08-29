@@ -42,7 +42,7 @@ describe('DatabindedTextComponent', () => {
         const url = 'https://test.social/tags/programmers';
         const sample = `<p>bla1 <a href="${url}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="hashtag-programmers" title="#programmers">#programmers</a>');
+        expect(component.processedText).toContain(`<a href="${url}" class="hashtag-programmers" title="#programmers" target="_blank" rel="noopener noreferrer">#programmers</a>`);
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
     });
@@ -50,7 +50,7 @@ describe('DatabindedTextComponent', () => {
     it('should parse hashtag - Pleroma 2.0.2', () => {
         const sample = `Blabla <a class="hashtag" data-tag="covid19" href="https://url.com/tag/covid19">#covid19</a> Blibli`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="hashtag-covid19" title="#covid19">#covid19</a>');
+        expect(component.processedText).toContain(`<a href="https://url.com/tag/covid19" class="hashtag-covid19" title="#covid19" target="_blank" rel="noopener noreferrer">#covid19</a>`);
         expect(component.processedText).toContain('Blabla');
         expect(component.processedText).toContain('Blibli');
     });
@@ -110,7 +110,7 @@ describe('DatabindedTextComponent', () => {
         const linkUrl = 'mydomain.co/test';
         const sample = `<p>bla1 <a href="${hashtagUrl}" class="mention hashtag" rel="nofollow noopener" target="_blank">#<span>${hashtag}</span></a> bla2 <span class="h-card"><a href="${mentionUrl}" class="u-url mention" rel="nofollow noopener" target="_blank">@<span>${mention}</span></a></span> bla3 <a href="https://${linkUrl}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${linkUrl}</span><span class="invisible"></span></a> bla4</p>`;
         component.text = sample;
-        expect(component.processedText).toContain('<a href class="hashtag-programmers" title="#programmers">#programmers</a>');
+        expect(component.processedText).toContain(`<a href="${hashtagUrl}" class="hashtag-programmers" title="#programmers" target="_blank" rel="noopener noreferrer">#programmers</a>`);
         expect(component.processedText).toContain('<a href class="account--sengi_app-mastodon-social" title="@sengi_app@mastodon.social">@sengi_app</a>');
         expect(component.processedText).toContain(`<a href="https://${linkUrl}" class="link-httpsmydomaincotest" title="open link" target="_blank" rel="noopener noreferrer">mydomain.co/test</a>`);
         expect(component.processedText).toContain('bla1');
@@ -174,7 +174,7 @@ describe('DatabindedTextComponent', () => {
         const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<p>Bla  <a href class="hashtag-KubeCon" title="#KubeCon">#KubeCon</a> Bla</p>'); 
+        expect(component.processedText).toContain('<p>Bla  <a href="https://ubuntu.social/tags/kubecon" class="hashtag-KubeCon" title="#KubeCon" target="_blank" rel="noopener noreferrer">#KubeCon</a> Bla</p>'); 
     });
 
     it('should parse link - Pleroma', () => {
