@@ -663,7 +663,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private getLinksExtraChars(status: string): number {
         let mentionExtraChars = 0;
-        let links = status.split(' ').filter(x => x.startsWith('http://') || x.startsWith('https://'));
+        let links = status.split(/\s+/).filter(x => x.startsWith('http://') || x.startsWith('https://'));
         for (let link of links) {
             if (link.length > 23) {
                 mentionExtraChars += link.length - 23;
