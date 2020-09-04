@@ -164,6 +164,41 @@ describe('CreateStatusComponent', () => {
         expect(result.length).toBe(1);
     });
 
+    it('should cound URL correctly', () => {
+        const newLine = String.fromCharCode(13, 10);
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s`;
+
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+    });
+
+    it('should cound URL correctly - new lines', () => {
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd\nhttps://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs\ndsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s`;
+
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+    });
+
+    it('should cound URL correctly - dual post', () => {
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd  qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s`;
+
+        (<any>component).maxCharLength = 512;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+        expect((<any>component).postCounts).toBe(2);
+    });
+
+    it('should cound URL correctly - triple post', () => {
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd  qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qs qsd qsd qsd qsd sqd qsd qsd sqd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd sd`;
+
+        (<any>component).maxCharLength = 512;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+        expect((<any>component).postCounts).toBe(3);
+    });
+
     it('should add alias in multiposting replies', () => {
         const status = '@Lorem@ipsum.com ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed ante id dolor vulputate pulvinar sit amet a nisl. Duis sagittis nisl sit amet est rhoncus rutrum. Duis aliquet eget erat nec molestie. Fusce bibendum consectetur rhoncus. Aenean vel neque ac diam hendrerit interdum id a nisl. Aenean leo ante, luctus eget erat at, interdum tincidunt turpis. Donec non efficitur magna. Nam placerat convallis tincidunt. Etiam ac scelerisque velit, at vestibulum turpis. In hac habitasse platea dictu0';
         (<any>component).maxCharLength = 500;

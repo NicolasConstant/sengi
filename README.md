@@ -24,15 +24,20 @@ Sengi already supporting  all the basics functionalities, but many minors enhanc
 
 ![https://raw.githubusercontent.com/NicolasConstant/sengi/master/docs/images/presentation_small.gif](https://raw.githubusercontent.com/NicolasConstant/sengi/master/docs/images/presentation_small.gif)
 
+## Docker
+
+A docker image is available for auto-hosting your own Sengi webapp!
+
+```
+docker run -d -p 80:80 nicolasconstant/sengi
+```
+
+The docker image also provide a landing page so that you can open a pop-up really easily. <br />
+It's available in ```https://your-host/start/index.html```
+
 ## Contact
 
   * [Official Sengi Account](https://mastodon.social/@sengi_app)
-
-## What's a sengi?!
-
-It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) from Africa: 
-
-![Rhynchocyon petersi](https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Rhynchocyon_petersi_from_side.jpg/400px-Rhynchocyon_petersi_from_side.jpg)
 
 ## Contribute
 
@@ -52,5 +57,12 @@ See [credits](https://github.com/NicolasConstant/sengi/blob/master/CREDITS.md)
   * [NGXS](https://github.com/ngxs/store)
   * [SASS](https://github.com/sass/dart-sass)
   * [Electron 8](https://github.com/electron/electron)
+
+## What's a sengi?!
+
+It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) from Africa: 
+
+![Rhynchocyon petersi](https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Rhynchocyon_petersi_from_side.jpg/400px-Rhynchocyon_petersi_from_side.jpg)
+
 
 

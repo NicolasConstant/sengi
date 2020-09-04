@@ -474,8 +474,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
 
         const currentStatus = parseStatus[parseStatus.length - 1];
-        const statusExtraChars = this.getMentionExtraChars(status);
-        const linksExtraChars = this.getLinksExtraChars(status);
+        const statusExtraChars = this.getMentionExtraChars(currentStatus);
+        const linksExtraChars = this.getLinksExtraChars(currentStatus);
 
         const statusLength = [...currentStatus].length - statusExtraChars - linksExtraChars;
         this.charCountLeft = this.maxCharLength - statusLength - this.getCwLength();
@@ -634,7 +634,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private parseStatus(status: string): string[] {
+        //console.error(status.toString());
+
         let mentionExtraChars = this.getMentionExtraChars(status);
+        let urlExtraChar = this.getLinksExtraChars(status);
         let trucatedStatus = `${status}`;
         let results = [];
 
@@ -644,8 +647,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             aggregateMention += `${x} `;
         });
 
-        const currentMaxCharLength = this.maxCharLength + mentionExtraChars - this.getCwLength();
-        const maxChars = currentMaxCharLength - 6;
+        let currentMaxCharLength = this.maxCharLength + mentionExtraChars + urlExtraChar - this.getCwLength();
+        let maxChars = currentMaxCharLength - 6;
 
         while (trucatedStatus.length > currentMaxCharLength) {
             const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
@@ -656,6 +659,12 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
             results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
             trucatedStatus = aggregateMention + trucatedStatus.substr(nextIndex + 1);
+
+            // Refresh max
+            let mentionExtraChars = this.getMentionExtraChars(trucatedStatus);
+            let urlExtraChar = this.getLinksExtraChars(trucatedStatus);
+            currentMaxCharLength = this.maxCharLength + mentionExtraChars + urlExtraChar - this.getCwLength();
+            maxChars = currentMaxCharLength - 6;
         }
         results.push(trucatedStatus);
         return results;
