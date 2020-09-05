@@ -1,4 +1,4 @@
-const { app, Menu, BrowserWindow, shell } = require("electron"); 
+const { app, Menu, MenuItem, BrowserWindow, shell } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -12,6 +12,9 @@ function createWindow() {
         title: "Sengi",
         backgroundColor: "#131925",
         useContentSize: true,
+        webPreferences: {
+            spellcheck: false
+        }
         // webPreferences: {
         //     contextIsolation: true,
         //     nodeIntegration: false,
@@ -21,7 +24,7 @@ function createWindow() {
 
     win.setAutoHideMenuBar(true);
     win.setMenuBarVisibility(false);
-   
+
     const sengiUrl = "https://sengi.nicolas-constant.com";
     win.loadURL(sengiUrl);
 
@@ -75,7 +78,7 @@ function createWindow() {
             Menu.buildFromTemplate([
                 {
                     label: "Sengi",
-                    submenu: [                        
+                    submenu: [
                         { role: "close" },
                         { role: 'quit' }
                     ]
@@ -114,7 +117,7 @@ function createWindow() {
                             }
                         },
                         { type: "separator" },
-                        { role: "reload" }, 
+                        { role: "reload" },
                         { role: "forcereload" },
                         { type: 'separator' },
                         { role: 'togglefullscreen' }
@@ -156,6 +159,30 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
+
+
+    // win.webContents.on('context-menu', (event, params) => {
+    //     const menu = new Menu();
+
+    //     // Add each spelling suggestion
+    //     for (const suggestion of params.dictionarySuggestions) {
+    //         menu.append(new MenuItem({
+    //             label: suggestion,
+    //             click: () => mainWindow.webContents.replaceMisspelling(suggestion)
+    //         }));
+    //     }
+
+    //     // Allow users to add the misspelled word to the dictionary
+    //     if (params.misspelledWord) {
+    //         menu.append(
+    //             new MenuItem({
+    //                 label: 'Add to dictionary',
+    //                 click: () => mainWindow.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord)
+    //             }));
+    //     }
+
+    //     menu.popup();
+    // });
 }
 
 app.commandLine.appendSwitch("force-color-profile", "srgb");
