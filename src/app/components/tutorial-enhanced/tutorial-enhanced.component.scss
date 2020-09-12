@@ -94,3 +94,15 @@ $footer-height: 30px;
 
     }
 }
+
+.video {
+    &__center {
+        margin: auto;
+        width: 48px;
+        display: block;
+    }
+    
+    &__expand {
+        
+    }
+}
