@@ -27,7 +27,17 @@
         }
 
         &--message {
+            padding-top: 4px;
             margin-left: 37px;
+
+            &--no-avatar {
+                margin-left: 0px;
+                margin-left: 5px;
+            }
+        }
+
+        &--count {
+            color: rgba(255, 255, 255, .6);
         }
     }
 }

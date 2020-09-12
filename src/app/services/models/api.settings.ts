@@ -73,4 +73,6 @@ export class ApiRoutes {
     bookmarkingStatus = '/api/v1/statuses/{0}/bookmark';
     unbookmarkingStatus = '/api/v1/statuses/{0}/unbookmark';
     getBookmarks = '/api/v1/bookmarks';
+    getFollowers = '/api/v1/accounts/{0}/followers';
+    getFollowing = '/api/v1/accounts/{0}/following';
 }

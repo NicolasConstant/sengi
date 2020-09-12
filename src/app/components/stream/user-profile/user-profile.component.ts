@@ -13,13 +13,14 @@ import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper, OpenMediaEvent } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { NavigationService } from '../../../services/navigation.service';
+import { BrowseBase } from '../../common/browse-base';
 
 @Component({
     selector: 'app-user-profile',
     templateUrl: './user-profile.component.html',
     styleUrls: ['./user-profile.component.scss']
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent extends BrowseBase {
     private emojiConverter = new EmojiConverter();
 
     faUser = faUser;
@@ -64,10 +65,6 @@ export class UserProfileComponent implements OnInit {
     @ViewChild('statusstream') public statustream: ElementRef;
     @ViewChild('profilestatuses') public profilestatuses: ElementRef;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
     @Input() refreshEventEmitter: EventEmitter<any>;
     @Input() goToTopEventEmitter: EventEmitter<any>;
 
@@ -83,6 +80,7 @@ export class UserProfileComponent implements OnInit {
         private readonly mastodonService: MastodonWrapperService,
         private readonly toolsService: ToolsService) {
 
+        super();
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
@@ -107,13 +105,13 @@ export class UserProfileComponent implements OnInit {
                 this.relationShipError = false;
                 this.toolsService.findAccount(userAccount, this.lastAccountName)
                     .then((account: Account) => {
-                        if(!account) throw Error(`Could not find ${this.lastAccountName}`);
+                        if (!account) throw Error(`Could not find ${this.lastAccountName}`);
 
                         return this.getFollowStatus(userAccount, account);
                     })
                     .catch((err) => {
                         console.error(err);
-                        this.relationShipError =  true;
+                        this.relationShipError = true;
                     })
                     .then(() => {
                         this.loadingRelationShip = false;
@@ -128,7 +126,7 @@ export class UserProfileComponent implements OnInit {
                 });
             }
         });
-    }   
+    }
 
     ngOnDestroy() {
         if (this.accountSub) this.accountSub.unsubscribe();
@@ -164,7 +162,7 @@ export class UserProfileComponent implements OnInit {
                 this.isLoading = false;
                 this.statusLoading = true;
 
-                if(!account) throw Error(`Could not find ${this.lastAccountName}`);
+                if (!account) throw Error(`Could not find ${this.lastAccountName}`);
 
                 this.displayedAccount = this.fixPleromaFieldsUrl(account);
                 this.hasNote = account && account.note && account.note !== '<p></p>';
@@ -188,9 +186,9 @@ export class UserProfileComponent implements OnInit {
     }
 
     private fixPleromaFieldsUrl(acc: Account): Account {
-        if(acc.fields){
+        if (acc.fields) {
             acc.fields.forEach(f => {
-                if(f.value.includes('<a href="') && !f.value.includes('target="_blank"')){
+                if (f.value.includes('<a href="') && !f.value.includes('target="_blank"')) {
                     f.value = f.value.replace('<a href="', '<a target="_blank" href="');
                 }
             });
@@ -266,11 +264,12 @@ export class UserProfileComponent implements OnInit {
 
     refresh(): any {
         this.showFloatingHeader = false;
+        this.showFloatingStatusMenu = false;
         this.load(this.lastAccountName);
     }
 
     browseAccount(accountName: string): void {
-        if(accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;
+        if (accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;
 
         this.browseAccountEvent.next(accountName);
     }
@@ -279,14 +278,6 @@ export class UserProfileComponent implements OnInit {
         const handle = this.toolsService.getAccountFullHandle(account);
         this.browseAccount(handle);
         return false;
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     follow(): boolean {
@@ -329,11 +320,13 @@ export class UserProfileComponent implements OnInit {
             this.showFloatingHeader = false;
         }
 
-        const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30 - 31;
-        if (element.scrollTop > menuPosition) {
-            this.showFloatingStatusMenu = true;
-        } else {
-            this.showFloatingStatusMenu = false;
+        if (this.profilestatuses) {
+            const menuPosition = element.scrollHeight - this.profilestatuses.nativeElement.offsetHeight - 30 - 31;
+            if (element.scrollTop > menuPosition) {
+                this.showFloatingStatusMenu = true;
+            } else {
+                this.showFloatingStatusMenu = false;
+            }
         }
 
         if (atBottom) {
@@ -342,7 +335,7 @@ export class UserProfileComponent implements OnInit {
     }
 
     private scrolledToBottom() {
-        if (this.statusLoading || this.maxReached) return;
+        if (this.statusLoading || this.maxReached || !this.displayedAccount) return;
 
         const onlyMedia = this.statusSection === 'media';
         const excludeReplies = this.statusSection === 'status';
@@ -423,6 +416,21 @@ export class UserProfileComponent implements OnInit {
     openAttachment(attachment: Attachment): boolean {
         let openMediaEvent = new OpenMediaEvent(0, [attachment], null);
         this.navigationService.openMedia(openMediaEvent);
+        return false;
+    }
+
+    @Output() browseFollowsEvent = new EventEmitter<string>();
+    @Output() browseFollowersEvent = new EventEmitter<string>();
+
+    browseFollows(): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(this.displayedAccount);
+        this.browseFollowsEvent.next(accountName);
+        return false;
+    }
+
+    browseFollowers(): boolean {
+        let accountName = this.toolsService.getAccountFullHandle(this.displayedAccount);
+        this.browseFollowersEvent.next(accountName);
         return false;
     }
 }

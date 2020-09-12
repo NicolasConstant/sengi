@@ -22,9 +22,9 @@ $expand-color: $column-color;
         right: 0;
         padding-top: 60px;
         padding-left: 15px;
-        background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba($expand-color ,0.25), rgba($expand-color,0.5), $expand-color, $expand-color);
-        
-        &--link{
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba($expand-color, 0.25), rgba($expand-color, 0.5), $expand-color, $expand-color);
+
+        &--link {
             transition: all .2s;
             color: #a9b5d8;
             color: #c0c8e0;
@@ -41,9 +41,9 @@ $expand-color: $column-color;
         }
 
         &--selected {
-            background-image: linear-gradient(to bottom, rgba(0,0,0,0), rgba($selected-status ,0.25), rgba($selected-status,0.5), $selected-status, $selected-status); 
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba($selected-status, 0.25), rgba($selected-status, 0.5), $selected-status, $selected-status);
         }
-    }    
+    }
 }
 
 
@@ -51,20 +51,48 @@ $expand-color: $column-color;
 :host ::ng-deep .content {
     // font-size: 14px;
     color: $status-primary-color;
+
     & a,
     .mention,
     .ellipsis {
         color: $status-links-color;
     }
+
     & .invisible {
         display: none;
     }
+
     & p {
         margin: 0px;
         //font-size: .9em;
         // font-size: 14px;
     }
+
     & p:not(:last-child) {
         margin-bottom: 20px;
+    }
+
+    & code {
+        color: #a0d1ff;
+    }
+
+    & pre {
+        padding: 0 5px 5px 5px;
+        background-color: #000000;
+
+        scrollbar-width: thin;
+        border-radius: 5px 5px 0 0;
+
+        &::-webkit-scrollbar {
+            width: $scroll-bar-width;
+            height: $scroll-bar-width;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 0px;
+            border-radius: 0px;
+            background: $scrollbar-color-thumb;
+            background: #384958;
+        }
     }
 }

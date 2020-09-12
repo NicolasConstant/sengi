@@ -22,6 +22,8 @@ export class PollComponent implements OnInit {
     choiceType: string;
     pollLocked: boolean;
 
+    errorOccuredWhenRetrievingPoll: boolean;
+
     private pollSelection: number[] = [];
     options: PollOptionWrapper[] = [];
 
@@ -30,7 +32,7 @@ export class PollComponent implements OnInit {
     private _poll: Poll;
     @Input('poll')
     set poll(value: Poll) {
-        if(!value) return;
+        if (!value) return;
 
         this._poll = value;
 
@@ -83,6 +85,7 @@ export class PollComponent implements OnInit {
 
     private checkStatus(accounts: AccountInfo[]): void {
         this.pollLocked = false;
+        this.errorOccuredWhenRetrievingPoll = false;
         var newSelectedAccount = accounts.find(x => x.isSelected);
 
         const accountChanged = this.selectedAccount.id !== newSelectedAccount.id;
@@ -92,7 +95,7 @@ export class PollComponent implements OnInit {
             let statusWrapper = new StatusWrapper(this.statusWrapper.status, this.statusWrapper.provider, this.statusWrapper.applyCw, this.statusWrapper.hide);
             this.pollPerAccountId[newSelectedAccount.id] = this.toolsService.getStatusUsableByAccount(newSelectedAccount, statusWrapper)
                 .then((status: Status) => {
-                    if(!status || !(status.poll)) return null;
+                    if (!status || !(status.poll)) return null;
                     return this.mastodonService.getPoll(newSelectedAccount, status.poll.id);
                 })
                 .then((poll: Poll) => {
@@ -100,7 +103,9 @@ export class PollComponent implements OnInit {
                     return poll;
                 })
                 .catch(err => {
-                    this.notificationService.notifyHttpError(err, newSelectedAccount);
+                    //this.notificationService.notifyHttpError(err, newSelectedAccount);
+                    this.errorOccuredWhenRetrievingPoll = true;
+                    this.pollPerAccountId[newSelectedAccount.id] = null;
                     return null;
                 });
         } else if (this.statusWrapper.status.visibility !== 'public' && this.statusWrapper.status.visibility !== 'unlisted' && this.statusWrapper.provider.id !== newSelectedAccount.id) {
@@ -115,8 +120,9 @@ export class PollComponent implements OnInit {
         this.selectedAccount = newSelectedAccount;
     }
 
-
     vote(): boolean {
+        if (this.errorOccuredWhenRetrievingPoll) return false;
+
         const selectedAccount = this.selectedAccount;
         const pollPromise = this.pollPerAccountId[selectedAccount.id];
 
@@ -140,6 +146,8 @@ export class PollComponent implements OnInit {
     }
 
     refresh(): boolean {
+        if (this.errorOccuredWhenRetrievingPoll) return false;
+
         this.setStatsAtZero();
 
         const selectedAccount = this.selectedAccount;

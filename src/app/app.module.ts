@@ -83,10 +83,12 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BookmarksComponent } from './components/floating-column/manage-account/bookmarks/bookmarks.component';
 import { AttachementImageComponent } from './components/stream/status/attachements/attachement-image/attachement-image.component';
+import { EnsureHttpsPipe } from './pipes/ensure-https.pipe';
+import { UserFollowsComponent } from './components/stream/user-follows/user-follows.component';
+import { AccountComponent } from './components/common/account/account.component';
 import { TutorialEnhancedComponent } from './components/tutorial-enhanced/tutorial-enhanced.component';
 import { NotificationsTutorialComponent } from './components/tutorial-enhanced/notifications-tutorial/notifications-tutorial.component';
 import { LabelsTutorialComponent } from './components/tutorial-enhanced/labels-tutorial/labels-tutorial.component';
-
 
 const routes: Routes = [
     { path: "", component: StreamsMainDisplayComponent },
@@ -150,6 +152,9 @@ const routes: Routes = [
         NotificationComponent,
         BookmarksComponent,
         AttachementImageComponent,
+        EnsureHttpsPipe,
+        UserFollowsComponent,
+        AccountComponent
         TutorialEnhancedComponent,
         NotificationsTutorialComponent,
         LabelsTutorialComponent

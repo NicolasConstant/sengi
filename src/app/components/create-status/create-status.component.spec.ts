@@ -164,6 +164,41 @@ describe('CreateStatusComponent', () => {
         expect(result.length).toBe(1);
     });
 
+    it('should cound URL correctly', () => {
+        const newLine = String.fromCharCode(13, 10);
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s`;
+
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+    });
+
+    it('should cound URL correctly - new lines', () => {
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd\nhttps://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs\ndsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s`;
+
+        (<any>component).maxCharLength = 500;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+    });
+
+    it('should cound URL correctly - dual post', () => {
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd  qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s`;
+
+        (<any>component).maxCharLength = 512;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+        expect((<any>component).postCounts).toBe(2);
+    });
+
+    it('should cound URL correctly - triple post', () => {
+        const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd  qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qs qsd qsd qsd qsd sqd qsd qsd sqd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd sd`;
+
+        (<any>component).maxCharLength = 512;
+        (<any>component).countStatusChar(status);
+        expect((<any>component).charCountLeft).toBe(0);
+        expect((<any>component).postCounts).toBe(3);
+    });
+
     it('should add alias in multiposting replies', () => {
         const status = '@Lorem@ipsum.com ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed ante id dolor vulputate pulvinar sit amet a nisl. Duis sagittis nisl sit amet est rhoncus rutrum. Duis aliquet eget erat nec molestie. Fusce bibendum consectetur rhoncus. Aenean vel neque ac diam hendrerit interdum id a nisl. Aenean leo ante, luctus eget erat at, interdum tincidunt turpis. Donec non efficitur magna. Nam placerat convallis tincidunt. Etiam ac scelerisque velit, at vestibulum turpis. In hac habitasse platea dictu0';
         (<any>component).maxCharLength = 500;
@@ -222,5 +257,80 @@ describe('CreateStatusComponent', () => {
      
         const result = <string>(<any>component).tranformHtmlRepliesToReplies(pleromaMention);
         expect(result).toBe('<p>test @sengi_app@pleroma.site qsdqds qsd qsd qsd q @test@pleroma.site <span class="h-card"><a href="https://pleroma.site/users/no" class="u-url">@<span>no</span></a></span></p>');       
+    });
+
+    it('should autocomplete - at the end', () => {
+        let text = 'data @sengi';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi@mastodon.social ');
+    });
+
+    it('should autocomplete - at the start', () => {
+        let text = '@sengi data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('@sengi@mastodon.social data');
+    });
+
+    it('should autocomplete - at the middle', () => {
+        let text = 'data @sengi data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi@mastodon.social data');
+    });
+
+    it('should autocomplete - duplicate', () => {
+        let text = 'data @sengi @sengi2 data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi@mastodon.social @sengi2 data');
+    });
+
+    it('should autocomplete - duplicate 2', () => {
+        let text = 'data @sengi2 @sengi data';
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe('data @sengi2 @sengi@mastodon.social data');
+    });
+
+    it('should autocomplete - new lines', () => {
+        const newLine = String.fromCharCode(13, 10);
+        let text = `@sengi${newLine}${newLine}data`;
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe(`@sengi@mastodon.social${newLine}${newLine}data`);
+    });
+
+    it('should autocomplete - new lines 2', () => {
+        const newLine = String.fromCharCode(13, 10);
+        let text = `@nicolasconstant\n\ndata`;
+        let pattern = '@nicolasconstant';
+        let autosuggest = '@nicolasconstant@social.nicolas-constant.com';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe(`@nicolasconstant@social.nicolas-constant.com${newLine}${newLine}data`);
+    });
+
+    it('should autocomplete - complex', () => {
+        const newLine = String.fromCharCode(13, 10);
+        let text = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper nulla eu metus euismod, non lobortis${newLine}quam congue. @sengi Ut hendrerit, nulla vel feugiat lobortis, diam ligula congue lacus, sed facilisis nisl dui at mauris.${newLine}Cras non hendrerit tellus. Donec eleifend metus quis nibh commodo${newLine}${newLine}data`;
+        let pattern = '@sengi';
+        let autosuggest = '@sengi@mastodon.social';
+
+        const result = <string>(<any>component).replacePatternWithAutosuggest(text, pattern, autosuggest);
+        expect(result).toBe(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ullamcorper nulla eu metus euismod, non lobortis${newLine}quam congue. @sengi@mastodon.social Ut hendrerit, nulla vel feugiat lobortis, diam ligula congue lacus, sed facilisis nisl dui at mauris.${newLine}Cras non hendrerit tellus. Donec eleifend metus quis nibh commodo${newLine}${newLine}data`);
     });
 });

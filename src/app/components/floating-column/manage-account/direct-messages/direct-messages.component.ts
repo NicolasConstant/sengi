@@ -8,13 +8,14 @@ import { NotificationService } from '../../../../services/notification.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Conversation } from '../../../../services/models/mastodon.interfaces';
 import { AccountInfo } from '../../../../states/accounts.state';
+import { BrowseBase } from '../../../common/browse-base';
 
 @Component({
     selector: 'app-direct-messages',
     templateUrl: './direct-messages.component.html',
     styleUrls: ['../../../stream/stream-statuses/stream-statuses.component.scss', './direct-messages.component.scss']
 })
-export class DirectMessagesComponent implements OnInit {
+export class DirectMessagesComponent extends BrowseBase {   
     faUserFriends = faUserFriends;
 
     conversations: ConversationWrapper[] = [];
@@ -23,9 +24,7 @@ export class DirectMessagesComponent implements OnInit {
     isThread = false;
     hasContentWarnings = false;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+    private isProcessingInfiniteScroll: boolean;
 
     private maxReached = false;
     private _account: AccountWrapper;
@@ -44,9 +43,14 @@ export class DirectMessagesComponent implements OnInit {
     constructor(
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
-        private readonly mastodonService: MastodonWrapperService) { }
+        private readonly mastodonService: MastodonWrapperService) { 
+            super();
+        }
 
     ngOnInit() {
+    }
+
+    ngOnDestroy() {
     }
 
     private reset() {
@@ -78,17 +82,19 @@ export class DirectMessagesComponent implements OnInit {
         var element = this.statustream.nativeElement as HTMLElement;
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
 
-        if (atBottom) {
+        if (atBottom && !this.isProcessingInfiniteScroll) {
             this.scrolledToBottom();
         }
     }
 
+    private scrolledErrorOccured = false;
     private scrolledToBottom() {
-        if (this.isLoading || this.maxReached) return;
+        if (this.isLoading || this.maxReached || this.scrolledErrorOccured) return;
 
         const maxId = this.conversations[this.conversations.length - 1].conversation.last_status.id;
         
         this.isLoading = true;
+        this.isProcessingInfiniteScroll = true;
         this.mastodonService.getConversations(this.account.info, maxId)
             .then((conversations: Conversation[]) => {
                 if (conversations.length === 0) {
@@ -103,23 +109,17 @@ export class DirectMessagesComponent implements OnInit {
                 }
             })
             .catch(err => {
+                this.scrolledErrorOccured = true;
+                setTimeout(() => {
+                    this.scrolledErrorOccured = false;
+                }, 5000);
+
                 this.notificationService.notifyHttpError(err, this.account.info);
             })
             .then(() => {
                 this.isLoading = false;
+                this.isProcessingInfiniteScroll = false;
             });
-    }
-
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     applyGoToTop(): boolean {

@@ -22,11 +22,41 @@ Sengi already supporting  all the basics functionalities, but many minors enhanc
 
 ## Screens
 
-![/docs/images/presentation_small.gif](/docs/images/presentation_small.gif)
+![https://raw.githubusercontent.com/NicolasConstant/sengi/master/docs/images/presentation_small.gif](https://raw.githubusercontent.com/NicolasConstant/sengi/master/docs/images/presentation_small.gif)
+
+## Docker
+
+A docker image is available for auto-hosting your own Sengi webapp!
+
+```
+docker run -d -p 80:80 nicolasconstant/sengi
+```
+
+The docker image also provide a landing page so that you can open a pop-up really easily. <br />
+It's available in ```https://your-host/start/index.html```
 
 ## Contact
 
   * [Official Sengi Account](https://mastodon.social/@sengi_app)
+
+## Contribute
+
+Please see the [contributing guidelines](https://github.com/NicolasConstant/sengi/blob/master/CONTRIBUTING.md)
+
+## License
+
+This project is licensed under the AGPLv3 License - see [LICENSE](https://github.com/NicolasConstant/sengi/blob/master/LICENSE) for details
+
+## Credits
+
+See [credits](https://github.com/NicolasConstant/sengi/blob/master/CREDITS.md)
+
+## Dependencies 
+
+  * [Angular 7](https://github.com/angular/angular)
+  * [NGXS](https://github.com/ngxs/store)
+  * [SASS](https://github.com/sass/dart-sass)
+  * [Electron 8](https://github.com/electron/electron)
 
 ## What's a sengi?!
 
@@ -34,23 +64,5 @@ It's a little [elephant shrew](https://en.wikipedia.org/wiki/Elephant_shrew) fro
 
 ![Rhynchocyon petersi](https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Rhynchocyon_petersi_from_side.jpg/400px-Rhynchocyon_petersi_from_side.jpg)
 
-## Contribute
-
-Please see the [contributing guidelines](CONTRIBUTING.md)
-
-## License
-
-This project is licensed under the AGPLv3 License - see [LICENSE](LICENSE) for details
-
-## Credits
-
-See [credits](CREDITS.md)
-
-## Dependencies 
-
-  * [Angular 7](https://github.com/angular/angular)
-  * [NGXS](https://github.com/ngxs/store)
-  * [SASS](https://github.com/sass/dart-sass)
-  * [Electron 4](https://github.com/electron/electron)
 
 

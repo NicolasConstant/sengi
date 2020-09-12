@@ -27,4 +27,7 @@
         <a href class="poll__refresh" *ngIf="(poll.voted || poll.expired) && !pollLocked" title="refresh poll" (click)="refresh()">refresh</a>
         <div class="poll__statistics"><span *ngIf="(poll.voted || poll.expired) && !pollLocked" class="poll__separator">·</span>{{poll.votes_count}} votes<span *ngIf="!poll.expired" class="poll__separator" title="{{ poll.expires_at | timeLeft | async }}">· {{ poll.expires_at | timeLeft | async }}</span></div>
     </div>
+    <div class="poll__error" *ngIf="errorOccuredWhenRetrievingPoll">
+        Error occured when retrieving the poll
+    </div>
 </div>

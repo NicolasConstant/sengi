@@ -5,10 +5,10 @@
 
     <a *ngIf="attachment.type === 'image'" class="galery__image--link" title="{{ attachment.description }}"
         (click)="attachmentSelected()">
-        <img class="galery__image--1" src="{{ attachment.preview_url }}" />
+        <img class="galery__image--1" src="{{ attachment.preview_url | ensureHttps }}" />
     </a>
     <video *ngIf="attachment.type === 'gifv'" class="galery__image--link galery__image--1" role="application" loop
         autoplay (click)="attachmentSelected()">
-        <source src="{{ attachment.url }}" type="video/mp4">
+        <source src="{{ attachment.url | ensureHttps }}" type="video/mp4">
     </video>
 </div>

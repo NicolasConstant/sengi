@@ -12,13 +12,14 @@ import { StatusComponent } from '../status/status.component';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 import { TimeLineModeEnum } from '../../../states/settings.state';
+import { BrowseBase } from '../../common/browse-base';
 
 @Component({
     selector: 'app-thread',
     templateUrl: '../stream-statuses/stream-statuses.component.html',
     styleUrls: ['../stream-statuses/stream-statuses.component.scss']
 })
-export class ThreadComponent implements OnInit, OnDestroy {
+export class ThreadComponent extends BrowseBase {
     statuses: StatusWrapper[] = [];
     displayError: string;
     isLoading = true;
@@ -31,10 +32,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
     timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     private lastThreadEvent: OpenThreadEvent;
-
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
     @Input() refreshEventEmitter: EventEmitter<any>;
     @Input() goToTopEventEmitter: EventEmitter<any>;
@@ -61,7 +58,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
         private readonly toolsService: ToolsService,
-        private readonly mastodonService: MastodonWrapperService) { }
+        private readonly mastodonService: MastodonWrapperService) { 
+            super();
+        }
 
     ngOnInit() {
         let settings = this.toolsService.getSettings();
@@ -280,18 +279,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
     onScroll() {
         //Do nothing
-    }
-
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
     }
 
     removeCw(): boolean {

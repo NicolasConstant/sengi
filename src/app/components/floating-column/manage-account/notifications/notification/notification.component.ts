@@ -1,39 +1,29 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { NotificationWrapper } from '../notifications.component';
-import { OpenThreadEvent, ToolsService } from '../../../../../services/tools.service';
+import { ToolsService } from '../../../../../services/tools.service';
 import { Account } from '../../../../../services/models/mastodon.interfaces';
+import { BrowseBase } from '../../../../../components/common/browse-base';
 
 @Component({
     selector: 'app-notification',
     templateUrl: './notification.component.html',
     styleUrls: ['./notification.component.scss']
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent extends BrowseBase {  
     faUserPlus = faUserPlus;
 
     @Input() notification: NotificationWrapper;
 
-    @Output() browseAccountEvent = new EventEmitter<string>();
-    @Output() browseHashtagEvent = new EventEmitter<string>();
-    @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
-    constructor(private readonly toolsService: ToolsService) { }
+    constructor(private readonly toolsService: ToolsService) { 
+        super();
+    }
 
     ngOnInit() {
     }
 
-    browseAccount(accountName: string): void {
-        this.browseAccountEvent.next(accountName);
-    }
-
-    browseHashtag(hashtag: string): void {
-        this.browseHashtagEvent.next(hashtag);
-    }
-
-    browseThread(openThreadEvent: OpenThreadEvent): void {
-        this.browseThreadEvent.next(openThreadEvent);
+    ngOnDestroy() {
     }
 
     openAccount(account: Account): boolean {

@@ -27,6 +27,11 @@
         margin-top: 10px;
     }
 
+    &__error {
+        font-size: 12px;
+        color: red;
+    }
+
     &__refresh {
         font-size: 0.8em;
         color: rgb(101, 121, 160);
