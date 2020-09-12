@@ -1,6 +1,7 @@
 <div class="tutorial">
     <div class="tutorial__content flexcroll">
         <app-notifications-tutorial *ngIf="index === 0"></app-notifications-tutorial>
+        <app-labels-tutorial *ngIf="index === 1"></app-labels-tutorial>
     </div>
     <div class="tutorial__footer">        
         <a href (click)="close()" 

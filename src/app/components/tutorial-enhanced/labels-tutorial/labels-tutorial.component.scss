@@ -1,0 +1,60 @@
+.doc-label-wrapper {
+    margin-bottom: 15px;
+}
+
+.doc-label {
+    width: 70px;
+    // height: 15px;
+    color: white;
+    text-align: center;
+    padding: 3px 0 2px 0;
+    font-size: 11px;
+    border-radius: 3px;
+    float: left;
+
+    &__bot {
+        background-color: #017282;
+    }
+
+    &__replies {
+        background-color: #59028f;
+    }
+
+    &__thread {
+        background-color: #007233;
+    }
+
+    &__xpost {
+        background-color: #9f5d00;
+    }
+
+    &__old {
+        background-color: #960000;
+    }
+
+    &__remote {
+        background-color: #264d94;
+    }
+}
+
+.doc-label-definition {
+    margin-left: 85px;
+    position: relative;
+    // top: -1px;
+
+    & a {
+        color: white;
+        text-decoration: underline;
+
+        &:hover, &:active, &:focus {
+            color: rgb(218, 218, 218);
+        }
+    }
+
+    &__gray {
+        display: inline-block;
+        margin-top: 5px;
+        color: #0f111a;
+        color: #9497a5;
+    }
+}

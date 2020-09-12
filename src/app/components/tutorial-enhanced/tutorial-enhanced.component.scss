@@ -95,7 +95,7 @@ $footer-height: 30px;
     }
 }
 
-.video {
+.content {
     &__center {
         margin: auto;
         width: 48px;
@@ -103,6 +103,9 @@ $footer-height: 30px;
     }
     
     &__expand {
-        
+        margin: auto;
+        width: calc(100%);
+        max-width: 380px;
+        display: block;
     }
 }
