@@ -12,7 +12,7 @@
             <img class="content__expand content__expand--smaller" src="assets/img/account.png" /><br />
         </a>
 
-        <a class="follow" href (click)="follow()" title="follow @Sengi_app with all your account(s)">
+        <a class="follow" href (click)="follow()" title="follow @Sengi_app with all your account(s)" [class.follow__disabled]="followingDisabled">
             Follow @Sengi_app
         </a>
     </p>

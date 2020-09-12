@@ -10,8 +10,20 @@
     transition: all .2s;
     box-shadow: inset 0 0 5px rgb(0, 84, 122);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         text-decoration: none;
         background-color: rgb(0, 84, 122);
+    }
+
+    &__disabled {
+        opacity: .15;
+        border: 1px solid gray;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            background-color: gray;
+        }
     }
 }
