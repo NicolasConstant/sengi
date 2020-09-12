@@ -30,7 +30,7 @@ $footer-height: 30px;
             height: $footer-height;
             width: calc(33.33333% - 1px);
             color: white;
-            padding-top: 3px;
+            padding-top: 4px;
             transition: all .2s;
         
             &:not(:last-child){
@@ -48,6 +48,19 @@ $footer-height: 30px;
                 &:hover {
                     text-decoration: none;
                     background-color: rgb(0, 74, 109);
+                }
+            }
+            
+            &--next {
+                background-color: rgb(230, 230, 230);
+                background-color: rgb(0, 74, 109);
+                background-color: rgb(0, 84, 122);
+                color: white;
+                // font-weight: bold;
+                &:hover {
+                    text-decoration: none;
+                    background-color: rgb(0, 74, 109);
+                    background-color: rgb(0, 117, 172);
                 }
             }
 
@@ -69,6 +82,11 @@ $footer-height: 30px;
     &__title {
         font-size: 20px;
 
+    }
+
+    &__title-important {
+        font-size: 20px;
+        margin: 5px 0 15px 10px;
     }
 
     &__subtitle {

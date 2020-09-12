@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         // disable tutorial for future update
-        localStorage.setItem('tutorial', JSON.stringify(true));
+        //localStorage.setItem('tutorial', JSON.stringify(true));
 
         this.paramsSub = this.activatedRoute.queryParams.subscribe(params => {
             const code = params['code'];
