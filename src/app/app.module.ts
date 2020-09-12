@@ -154,7 +154,7 @@ const routes: Routes = [
         AttachementImageComponent,
         EnsureHttpsPipe,
         UserFollowsComponent,
-        AccountComponent
+        AccountComponent,
         TutorialEnhancedComponent,
         NotificationsTutorialComponent,
         LabelsTutorialComponent
