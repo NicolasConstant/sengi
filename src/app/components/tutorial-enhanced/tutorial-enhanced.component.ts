@@ -11,7 +11,8 @@ export class TutorialEnhancedComponent implements OnInit {
     previousAvailable = false;
     nextAvailable = true;
     index = 0;
-    private maxIndex = 5;
+    tutorialEnded = false;
+    private maxIndex = 3;
 
     constructor() { }
 
@@ -38,6 +39,12 @@ export class TutorialEnhancedComponent implements OnInit {
     }
 
     private checkState() {
+        if(this.index >= this.maxIndex - 1){
+            this.tutorialEnded = true;
+        } else {
+            this.tutorialEnded = false;
+        }
+
         if (this.index === 0) {
             this.previousAvailable = false;
         } else {

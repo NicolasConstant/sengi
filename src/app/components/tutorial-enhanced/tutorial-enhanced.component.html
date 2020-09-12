@@ -15,6 +15,6 @@
         <a href (click)="next()" 
             title="next"
             class="tutorial__footer--button tutorial__footer--button--next"
-            [class.tutorial__footer--button--disabled]="!nextAvailable">next</a>
+            [class.tutorial__footer--button--disabled]="!nextAvailable"><span *ngIf="!tutorialEnded">next</span><span *ngIf="tutorialEnded">close</span></a>
     </div>    
 </div>
