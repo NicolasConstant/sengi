@@ -62,9 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        // disable tutorial for future update
-        localStorage.setItem('tutorial', JSON.stringify(true));
-
         this.paramsSub = this.activatedRoute.queryParams.subscribe(params => {
             const code = params['code'];
             if (!code) {
@@ -130,6 +127,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.columnEditorSub = this.navigationService.activatedPanelSubject.subscribe((event: OpenLeftPanelEvent) => {
             if (event.type === LeftPanelType.Closed) {
                 this.floatingColumnActive = false;
+
+                this.checkEnhancedTutorial();
             } else {
                 this.floatingColumnActive = true;
             }
@@ -156,6 +155,29 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.displayRestartNotification(label);
             }
         });
+    }
+
+    enhancedTutorialActive: boolean;
+    enhancedTutorialVisible: boolean;
+    private checkEnhancedTutorial() {
+        let enhancedTutorialDesactivated = JSON.parse(localStorage.getItem('tutorial'));
+        if (!this.floatingColumnActive && !this.tutorialActive && !enhancedTutorialDesactivated) {
+            setTimeout(() => {
+                this.enhancedTutorialActive = true;
+                setTimeout(() => {
+                    this.enhancedTutorialVisible = true;
+                }, 100);
+            }, 500);
+        }
+    }
+
+    closeTutorial(){
+        localStorage.setItem('tutorial', JSON.stringify(true));
+
+        this.enhancedTutorialVisible = false;
+        setTimeout(() => {
+            this.enhancedTutorialActive = false;
+        }, 400);        
     }
 
     ngOnDestroy(): void {
