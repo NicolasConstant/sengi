@@ -1,6 +1,6 @@
 {
     "name": "sengi",
-    "version": "0.31.1",
+    "version": "0.32.0",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
