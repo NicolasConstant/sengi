@@ -1,10 +1,69 @@
-<div class="tutorial-content">
-    <h3 class="tutorial-content__subtitle">Labels</h3>
+<div class="tutorial-content flexcroll">
+    <h2 class="tutorial-content__title-important">Labels</h2>
     <p>
-        Toots in Sengi have little labels under the avatar:<br/>
+        Sengi uses labels on statuses to describe them properly: <br />
         <br />
-        [TODO]<br />
-        <br />
-        Here are the signification of them:
+        <img class="content__expand" src="assets/img/labels.png" /><br />
+    </p>
+
+
+    <h3 class="tutorial-content__subtitle">Definitions</h3>
+    <br />
+    <div class="doc-label-wrapper">
+        <div class="doc-label doc-label__bot">
+            BOT
+        </div>
+        <div class="doc-label-definition">
+            The account is tagged as a bot
+        </div>
+    </div>
+    <div class="doc-label-wrapper">
+        <div class="doc-label doc-label__replies">
+            REPLIES
+        </div>
+        <div class="doc-label-definition">
+          The status has replies
+        </div>
+    </div>
+    <div class="doc-label-wrapper">
+        <div class="doc-label doc-label__thread">
+            THREAD
+        </div>
+        <div class="doc-label-definition">
+          The status is part of a thread
+        </div>
+    </div>
+    <div class="doc-label-wrapper">
+        <div class="doc-label doc-label__xpost">
+            X-POST
+        </div>
+        <div class="doc-label-definition">
+           The status was cross-posted using a software like <a href="https://moa.party/" target="_blank">MOA</a>.<br/>
+           <span class="doc-label-definition__gray">This functionality is limited to Local TL/Accounts due to API limitation.</span>
+        </div>
+    </div>   
+    <div class="doc-label-wrapper">
+        <div class="doc-label doc-label__old">
+            OLD
+        </div>
+        <div class="doc-label-definition">
+           The status was posted more than 3 months ago.
+        </div>
+    </div>
+    <div class="doc-label-wrapper">
+        <div class="doc-label doc-label__remote">
+            REMOTE
+        </div>
+        <div class="doc-label-definition">
+            The status wasn't federated with your instance and was fetched remotely.<br/>
+            <span class="doc-label-definition__gray">This functionality bypasses the blocking rules of your account/instance, you can disable it in the settings.</span>
+        </div>
+    </div>
+
+
+
+
+    <p>
+
     </p>
 </div>

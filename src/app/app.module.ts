@@ -89,6 +89,7 @@ import { AccountComponent } from './components/common/account/account.component'
 import { TutorialEnhancedComponent } from './components/tutorial-enhanced/tutorial-enhanced.component';
 import { NotificationsTutorialComponent } from './components/tutorial-enhanced/notifications-tutorial/notifications-tutorial.component';
 import { LabelsTutorialComponent } from './components/tutorial-enhanced/labels-tutorial/labels-tutorial.component';
+import { ThankyouTutorialComponent } from './components/tutorial-enhanced/thankyou-tutorial/thankyou-tutorial.component';
 
 const routes: Routes = [
     { path: "", component: StreamsMainDisplayComponent },
@@ -154,10 +155,11 @@ const routes: Routes = [
         AttachementImageComponent,
         EnsureHttpsPipe,
         UserFollowsComponent,
-        AccountComponent
+        AccountComponent,
         TutorialEnhancedComponent,
         NotificationsTutorialComponent,
-        LabelsTutorialComponent
+        LabelsTutorialComponent,
+        ThankyouTutorialComponent
     ],
     entryComponents: [
         EmojiPickerComponent

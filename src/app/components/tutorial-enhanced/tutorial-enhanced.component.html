@@ -1,6 +1,8 @@
 <div class="tutorial">
-    <div class="tutorial__content flexcroll">
+    <div class="tutorial__content">
         <app-notifications-tutorial *ngIf="index === 0"></app-notifications-tutorial>
+        <app-labels-tutorial *ngIf="index === 1"></app-labels-tutorial>
+        <app-thankyou-tutorial *ngIf="index === 2"></app-thankyou-tutorial>
     </div>
     <div class="tutorial__footer">        
         <a href (click)="close()" 
@@ -12,7 +14,7 @@
             [class.tutorial__footer--button--disabled]="!previousAvailable">prev.</a>
         <a href (click)="next()" 
             title="next"
-            class="tutorial__footer--button tutorial__footer--button--navigate"
-            [class.tutorial__footer--button--disabled]="!nextAvailable">next</a>
+            class="tutorial__footer--button tutorial__footer--button--next"
+            [class.tutorial__footer--button--disabled]="!nextAvailable"><span *ngIf="!tutorialEnded">next</span><span *ngIf="tutorialEnded">close</span></a>
     </div>    
 </div>

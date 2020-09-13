@@ -12,9 +12,6 @@ $footer-height: 30px;
     border-radius: 2px;
 
     &__content {
-        // outline: 1px dotted greenyellow;
-        overflow-y: auto;
-        padding: 5px 10px;
         height: calc(100% - #{$footer-height});
     }
 
@@ -30,10 +27,10 @@ $footer-height: 30px;
             height: $footer-height;
             width: calc(33.33333% - 1px);
             color: white;
-            padding-top: 3px;
+            padding-top: 4px;
             transition: all .2s;
-        
-            &:not(:last-child){
+
+            &:not(:last-child) {
                 border-right: 1px solid $border-color;
             }
 
@@ -47,16 +44,31 @@ $footer-height: 30px;
             &--navigate {
                 &:hover {
                     text-decoration: none;
+                    background-color: rgb(0, 117, 172);
+                }
+            }
+
+            &--next {
+                background-color: rgb(230, 230, 230);
+                background-color: rgb(0, 74, 109);
+                background-color: rgb(0, 84, 122);
+                color: white;
+
+                // font-weight: bold;
+                &:hover {
+                    text-decoration: none;
                     background-color: rgb(0, 74, 109);
+                    background-color: rgb(0, 117, 172);
                 }
             }
 
             &--disabled {
                 color: #4e5672;
+
                 &:hover {
                     cursor: default;
-                    text-decoration: none;     
-                    background-color: rgba(0, 0, 0, 0); 
+                    text-decoration: none;
+                    background-color: rgba(0, 0, 0, 0);
                 }
             }
         }
@@ -66,13 +78,56 @@ $footer-height: 30px;
 .tutorial-content {
     font-size: 14px;
 
+    padding: 5px 10px;
+    overflow-y: auto;
+    height: calc(100%);
+
     &__title {
         font-size: 20px;
 
     }
 
+    &__title-important {
+        font-size: 20px;
+        margin: 5px 0 15px 10px;
+    }
+
     &__subtitle {
         font-size: 16px;
 
+    }
+}
+
+.content {
+    &__center {
+        margin: auto;
+        width: 48px;
+        display: block;
+    }
+
+    &__expand {
+        margin: auto;
+        width: calc(100%);
+        max-width: 380px;
+        display: block;
+
+        &--smaller {
+            max-width: 270px;
+        }
+    }
+}
+
+.link {
+    color: white;
+    text-decoration: underline;
+
+    &:hover,
+    &:active,
+    &:focus {
+        color: rgb(218, 218, 218);
+    }
+
+    &__tab {
+        padding-left: 10px;
     }
 }
