@@ -32,6 +32,8 @@ A docker image is available for auto-hosting your own Sengi webapp!
 docker run -d -p 80:80 nicolasconstant/sengi
 ```
 
+Find more informations [here](https://github.com/NicolasConstant/sengi/blob/master/DOCKER.md).
+
 The docker image also provide a landing page so that you can open a pop-up really easily. <br />
 It's available in ```https://your-host/start/index.html```
 
