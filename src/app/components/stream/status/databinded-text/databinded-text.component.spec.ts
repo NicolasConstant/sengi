@@ -156,6 +156,15 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('<p><a href="https://mastodon.social/users/sengi_app" class="account--sengi_app-mastodon-social-mastodon-social" title="@sengi_app@mastodon.social@mastodon.social" target="_blank" rel="noopener noreferrer">@sengi_app@mastodon.social</a><span> Blabla</span></p>'); //FIXME: dont let domain appear in name
     });
 
+    it('should parse mention - Misskey in Pleroma', () => {
+        const sample = `<p><a href="https://domain.xyz/@sengi" class="u-url mention">@sengi@domain.xyz</a><span> </span><a href="https://domain.eu/@sengi" class="u-url mention">@sengi@domain.eu</a><span> bla bla<br/>bla bla bla</span></p>`;
+
+        component.text = sample;
+        expect(component.processedText).toContain('<a href="https://domain.xyz/@sengi" class="account--sengi-domain-xyz" title="@sengi@domain.xyz" target="_blank" rel="noopener noreferrer">@sengi</a><span>');
+        expect(component.processedText).toContain('<a href="https://domain.eu/@sengi" class="account--sengi-domain-eu" title="@sengi@domain.eu" target="_blank" rel="noopener noreferrer">@sengi</a>');
+        expect(component.processedText).toContain('<span> bla bla<br/>bla bla bla</span>');
+    });
+
     it('should parse mention - Misskey in Mastodon - 2', () => {
         const sample = `<p><span>Since </span><a href="https://mastodon.technology/@test" class="u-url mention" rel="nofollow noopener noreferrer" target="_blank">@test@mastodon.technology</a><span> mentioned </span></p>`;
 
