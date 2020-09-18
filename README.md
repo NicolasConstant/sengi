@@ -58,7 +58,7 @@ See [credits](https://github.com/NicolasConstant/sengi/blob/master/CREDITS.md)
   * [Angular 7](https://github.com/angular/angular)
   * [NGXS](https://github.com/ngxs/store)
   * [SASS](https://github.com/sass/dart-sass)
-  * [Electron 8](https://github.com/electron/electron)
+  * [Electron 10](https://github.com/electron/electron)
 
 ## What's a sengi?!
 
