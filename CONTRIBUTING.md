@@ -21,4 +21,4 @@ For example:
 
 ## Pull Requests
 Pull Requests are maybe a bit early right now, since the project and code can change a lot, so it's not really adviced to open PR today. 
-I will notify explicitely when I'll be more opened to external contributions. 
+I will notify explicitly when I'll be more open to external contributions. 
