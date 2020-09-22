@@ -131,3 +131,12 @@ $footer-height: 30px;
         padding-left: 10px;
     }
 }
+
+.clean-outline{
+    display: block;
+    &:focus {
+        background: none !important;
+        border: 0px !important;
+        outline: none !important;
+    }
+}
