@@ -119,6 +119,11 @@ export class ToolsService {
         return regAccounts.filter(x => x.isSelected);
     }
 
+    getAllAccounts(): AccountInfo[] {
+        let regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
+        return regAccounts;
+    }
+
     getAccountById(accountId: string): AccountInfo {
         let regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         return regAccounts.find(x => x.id === accountId);

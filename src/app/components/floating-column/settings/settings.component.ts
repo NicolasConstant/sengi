@@ -8,6 +8,7 @@ import { UserNotificationService, NotificationSoundDefinition } from '../../../s
 import { ServiceWorkerService } from '../../../services/service-worker.service';
 import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
 import { NotificationService } from '../../../services/notification.service';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
     selector: 'app-settings',
@@ -60,6 +61,7 @@ export class SettingsComponent implements OnInit {
     }
 
     constructor(
+        private readonly navigationService: NavigationService,
         private formBuilder: FormBuilder,
         private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
@@ -249,6 +251,12 @@ export class SettingsComponent implements OnInit {
 
     notifyRestartNeeded(){
         this.notificationService.notifyRestartNotification('Reload to apply changes');
+    }
+
+    openTutorial(): boolean {
+        localStorage.setItem('tutorial', JSON.stringify(false));
+        this.navigationService.closePanel();
+        return false;
     }
 }
 

@@ -7,8 +7,8 @@ Sengi is a **Mastodon** and **Pleroma** desktop focused client. It takes inspira
 It is strongly focused on the following points:
 
   * Heavily oriented on multi-accounts usage 
-  * Desktop based interactions (right clic, left clic, etc)
-  * One column at a time display (leaves it on the side of your screen, and keep an eye on it while doing your other stuff)
+  * Desktop based interactions (right click, left click, etc)
+  * One column at a time display (leave it on the side of your screen, and keep an eye on it while doing your other stuff)
 
 It is released as a **browser webapp** and also packaged as an **cross-platform desktop application** (Mac, Windows, and Linux).
 
@@ -18,7 +18,7 @@ It is released as a **browser webapp** and also packaged as an **cross-platform 
 
 ## State of development
 
-Sengi already supporting  all the basics functionalities, but many minors enhancements are still needed before a 1.0.0 release.
+Sengi already supports all the basics functionalities, but many minors enhancements are still needed before a 1.0.0 release.
 
 ## Screens
 
@@ -31,6 +31,8 @@ A docker image is available for auto-hosting your own Sengi webapp!
 ```
 docker run -d -p 80:80 nicolasconstant/sengi
 ```
+
+Find more informations [here](https://github.com/NicolasConstant/sengi/blob/master/DOCKER.md).
 
 The docker image also provide a landing page so that you can open a pop-up really easily. <br />
 It's available in ```https://your-host/start/index.html```
@@ -56,7 +58,7 @@ See [credits](https://github.com/NicolasConstant/sengi/blob/master/CREDITS.md)
   * [Angular 7](https://github.com/angular/angular)
   * [NGXS](https://github.com/ngxs/store)
   * [SASS](https://github.com/sass/dart-sass)
-  * [Electron 8](https://github.com/electron/electron)
+  * [Electron 10](https://github.com/electron/electron)
 
 ## What's a sengi?!
 

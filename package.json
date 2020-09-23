@@ -1,11 +1,11 @@
 {
     "name": "sengi",
-    "version": "0.31.1",
+    "version": "0.32.0",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
     "author": {
-        "name": "Nicolas Constant", 
+        "name": "Nicolas Constant",
         "email": "github@nicolas-constant.com"
     },
     "repository": {
@@ -70,7 +70,7 @@
         "@types/jasminewd2": "~2.0.3",
         "@types/node": "~8.9.4",
         "codelyzer": "~4.2.1",
-        "electron": "^8.0.2",
+        "electron": "^10.1.1",
         "electron-builder": "^20.39.0",
         "jasmine-core": "~2.99.1",
         "jasmine-spec-reporter": "~4.2.1",
