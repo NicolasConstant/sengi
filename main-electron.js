@@ -7,7 +7,7 @@ let win;
 
 function createWindow() {
     // Create the browser window
-    let icon = join(__dirname, '/assets/icons/png/512x512.png');
+    let icon = join(__dirname, '/src/assets/icons/icon-512x512.png');
     if (process.platform === "win32") {
         icon = join(__dirname, '/assets/icons/win/icon.ico');
     }
