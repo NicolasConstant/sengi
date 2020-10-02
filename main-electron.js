@@ -1,3 +1,4 @@
+const { join } = require("path");
 const { app, Menu, MenuItem, BrowserWindow, shell } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -10,6 +11,8 @@ function createWindow() {
         width: 377,
         height: 800,
         title: "Sengi",
+        //icon: join(__dirname, '/src/assets/icons/icon-512x512.png'),
+        icon: join(__dirname, '/assets/icons/win/icon.ico'),
         backgroundColor: "#131925",
         useContentSize: true,
         webPreferences: {
