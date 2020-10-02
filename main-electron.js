@@ -6,7 +6,7 @@ const { app, Menu, MenuItem, BrowserWindow, shell } = require("electron");
 let win;
 
 function createWindow() {
-    // Create the browser window.
+    // Create the browser window
     let icon = join(__dirname, '/assets/icons/png/512x512.png');
     if (process.platform === "win32") {
         icon = join(__dirname, '/assets/icons/win/icon.ico');
