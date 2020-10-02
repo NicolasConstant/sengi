@@ -7,23 +7,37 @@ let win;
 
 function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({
-        width: 377,
-        height: 800,
-        title: "Sengi",
-        //icon: join(__dirname, '/src/assets/icons/icon-512x512.png'),
-        icon: join(__dirname, '/assets/icons/win/icon.ico'),
-        backgroundColor: "#131925",
-        useContentSize: true,
-        webPreferences: {
-            spellcheck: false
-        }
-        // webPreferences: {
-        //     contextIsolation: true,
-        //     nodeIntegration: false,
-        //     nodeIntegrationInWorker: false
-        //   }
-    });
+    if(process.platform === "win32"){
+        win = new BrowserWindow({
+            width: 377,
+            height: 800,
+            title: "Sengi",
+            icon: join(__dirname, '/assets/icons/win/icon.ico'),
+            backgroundColor: "#131925",
+            useContentSize: true,
+            webPreferences: {
+                spellcheck: false
+            }
+            // webPreferences: {
+            //     contextIsolation: true,
+            //     nodeIntegration: false,
+            //     nodeIntegrationInWorker: false
+            //   }
+        });
+    } else {
+        win = new BrowserWindow({
+            width: 377,
+            height: 800,
+            title: "Sengi",
+            //icon: join(__dirname, '/src/assets/icons/icon-512x512.png'),
+            icon: join(__dirname, '/assets/icons/png/512x512.png'),
+            backgroundColor: "#131925",
+            useContentSize: true,
+            webPreferences: {
+                spellcheck: false
+            }
+        });
+    }   
 
     win.setAutoHideMenuBar(true);
     win.setMenuBarVisibility(false);
