@@ -26,7 +26,7 @@ export interface Account {
     username: string;
     acct: string;
     display_name: string;
-    locked: string;
+    locked: boolean;
     created_at: string;
     followers_count: number;
     following_count: number;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { faUser, faHourglassHalf, faUserCheck, faExclamationTriangle, faLink } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faHourglassHalf, faUserCheck, faExclamationTriangle, faLink, faLock } from "@fortawesome/free-solid-svg-icons";
 import { faUser as faUserRegular } from "@fortawesome/free-regular-svg-icons";
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
@@ -29,6 +29,7 @@ export class UserProfileComponent extends BrowseBase {
     faUserCheck = faUserCheck;
     faExclamationTriangle = faExclamationTriangle;
     faLink = faLink;
+    faLock = faLock;
 
     displayedAccount: Account;
     hasNote: boolean;
