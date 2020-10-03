@@ -1,5 +1,5 @@
 <div class="notification">
-    <div *ngIf="notification.type === 'follow_request'">
+    <div *ngIf="notification.type === 'follow_request' && !followRequestProcessed">
         <div class="stream__notification--icon" title="{{notification.account.acct}}">
             <fa-icon class="followed" [icon]="faUserClock"></fa-icon>
         </div>

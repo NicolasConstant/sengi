@@ -158,8 +158,10 @@ export class NotificationWrapper {
         this.account = notification.account;
         this.wrapperId = `${this.type}-${notification.id}`;
         this.notification = notification;
+        this.provider = provider;
     }
 
+    provider: AccountInfo;
     notification: Notification;
     wrapperId: string;
     account: Account;

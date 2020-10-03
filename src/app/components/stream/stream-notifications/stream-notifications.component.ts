@@ -237,7 +237,7 @@ export class StreamNotificationsComponent extends BrowseBase {
 
         this.isMentionsLoading = true;
 
-        this.mastodonService.getNotifications(this.account, ['follow', 'favourite', 'reblog', 'poll'], this.lastMentionId)
+        this.mastodonService.getNotifications(this.account, ['follow', 'favourite', 'reblog', 'poll', 'follow_request'], this.lastMentionId)
             .then((result: Notification[]) => {
                 if (result.length === 0) {
                     this.mentionsMaxReached = true;
