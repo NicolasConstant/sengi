@@ -130,7 +130,7 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request';
     created_at: string;
     account: Account;
     status?: Status;

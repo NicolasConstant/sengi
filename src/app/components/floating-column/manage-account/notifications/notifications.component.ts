@@ -164,5 +164,5 @@ export class NotificationWrapper {
     wrapperId: string;
     account: Account;
     status: StatusWrapper;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request';
 }
