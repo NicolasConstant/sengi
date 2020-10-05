@@ -1,15 +1,28 @@
+const { join } = require("path");
 const { app, Menu, MenuItem, BrowserWindow, shell } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+const globalAny = global;
+
+if (process.env.NODE_ENV !== 'development') {
+    globalAny.__static = require('path').join(__dirname, '/assets/icons').replace(/\\/g, '\\\\');
+}
 
 function createWindow() {
-    // Create the browser window.
+    // Set icon
+    let icon = join(globalAny.__static, '/png/512x512.png');
+    if (process.platform === "win32") {
+        icon = join(globalAny.__static, '/win/icon.ico');
+    }
+
+    // Create the browser window
     win = new BrowserWindow({
         width: 377,
         height: 800,
         title: "Sengi",
+        icon: icon,
         backgroundColor: "#131925",
         useContentSize: true,
         webPreferences: {
