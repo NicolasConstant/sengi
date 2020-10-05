@@ -46,6 +46,7 @@
     color: $boost-color;
 }
 
+$acccount-info-left: 70px;
 .follow-account {
     padding: 5px;
     height: 60px;
@@ -62,8 +63,7 @@
         height: 45px;
         border-radius: 2px;
     }
-
-    $acccount-info-left: 70px;
+    
     &__display-name {
         position: absolute;
         top: 7px;
@@ -81,5 +81,44 @@
         left: $acccount-info-left;
         font-size: 13px;
         color: $status-links-color;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        width: calc(100% - #{$acccount-info-left});
+    }
+}
+
+.follow_request {
+    width: calc(100% - #{$acccount-info-left});
+    margin-left: $acccount-info-left;
+
+    &__link {
+        display: inline-block;
+        width: calc(50%);
+        padding: 2px;
+
+        text-align: center;
+        color: rgb(182, 182, 182);
+        transition: all .2s;
+
+        // outline: 1px dotted greenyellow;
+
+        &--check {
+            &:hover {
+                color: greenyellow;
+            }
+        }
+
+        &--cross {
+            &:hover {
+                color: orangered;
+            }
+        }
+    }
+
+    &__icon {
+        text-align: center;
     }
 }

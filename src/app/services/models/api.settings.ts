@@ -21,8 +21,8 @@ export class ApiRoutes {
     getBlocks = '/api/v1/blocks';
     getFavourites = '/api/v1/favourites';
     getFollowRequests = '/api/v1/follow_requests';
-    authorizeFollowRequest = '/api/v1/follow_requests/authorize';
-    rejectFollowRequest = '/api/v1/follow_requests/reject';
+    authorizeFollowRequest = '/api/v1/follow_requests/{0}/authorize';
+    rejectFollowRequest = '/api/v1/follow_requests/{0}/reject';
     followRemote = '/api/v1/follows';
     getInstance = '/api/v1/instance';
     uploadMediaAttachment = '/api/v1/media';

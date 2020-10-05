@@ -26,7 +26,7 @@ export interface Account {
     username: string;
     acct: string;
     display_name: string;
-    locked: string;
+    locked: boolean;
     created_at: string;
     followers_count: number;
     following_count: number;
@@ -130,7 +130,7 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request';
     created_at: string;
     account: Account;
     status?: Status;

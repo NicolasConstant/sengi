@@ -13,7 +13,7 @@
                     <h2 class="profile__floating-header__names__display-name"
                         innerHTML="{{displayedAccount | accountEmoji }}" title="{{displayedAccount.display_name}}"></h2>
                     <a class="profile__floating-header__names__fullhandle" href="{{displayedAccount.url}}"
-                        target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a>
+                        target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a> <fa-icon class="fa-lock" *ngIf="displayedAccount.locked" [icon]="faLock" title="account locked"></fa-icon>
                 </div>
 
                 <div class="profile__floating-header__follow" *ngIf="relationship && !displayedAccount.moved">
@@ -118,7 +118,7 @@
                     <h2 class="profile-name__link profile-name__display-name"
                         innerHTML="{{displayedAccount | accountEmoji }}" title="{{displayedAccount.display_name}}"></h2>
                     <h2 class="profile-name__link profile-name__fullhandle"><a href="{{displayedAccount.url}}"
-                            target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a></h2>
+                            target="_blank" title="{{displayedAccount.acct}}">@{{displayedAccount.acct}}</a> <fa-icon class="fa-lock" *ngIf="displayedAccount.locked" [icon]="faLock" title="account locked"></fa-icon></h2> 
                 </div>
 
                 <div class="profile-follows">

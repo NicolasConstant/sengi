@@ -311,7 +311,7 @@ export class MastodonService {
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
     }
 
-    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         let route = `https://${account.instance}${this.apiRoutes.getNotifications}?limit=${limit}`;
 
         if (maxId) {
@@ -490,6 +490,7 @@ export class MastodonService {
                 return new FollowingResult(lastId, res.body)
             });
     }
+
     getFollowing(account: AccountInfo, targetAccountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<FollowingResult> {
         const route = `https://${account.instance}${this.apiRoutes.getFollowing}`.replace('{0}', targetAccountId.toString());
 
@@ -510,6 +511,20 @@ export class MastodonService {
                 }
                 return new FollowingResult(lastId, res.body)
             });
+    }
+
+    authorizeFollowRequest(account: AccountInfo, id: number): Promise<Relationship> {
+        const route = `https://${account.instance}${this.apiRoutes.authorizeFollowRequest}`.replace('{0}', id.toString());
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    rejectFollowRequest(account: AccountInfo, id: number): Promise<Relationship> {
+        const route = `https://${account.instance}${this.apiRoutes.rejectFollowRequest}`.replace('{0}', id.toString());
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
 }
 
