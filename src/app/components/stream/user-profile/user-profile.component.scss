@@ -402,6 +402,12 @@ $floating-header-height: 60px;
     }
 }
 
+.fa-lock {
+    margin-left: 5px;
+    color: gray;
+    font-size: 14px;
+}
+
 //Mastodon styling
 :host ::ng-deep .profile-fields__field--value {
     // font-size: 14px;
