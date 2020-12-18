@@ -3,7 +3,7 @@
         <a href (click)="goToTop()" class="hashtag-header__gototop" title="go to top">
             <h3 class="hashtag-header__title">#{{hashtagElement.tag}}</h3>
 
-            <button class="btn-custom-secondary hashtag-header__add-column" (click)="addColumn($event)" title="add column to board">add column</button>
+            <button class="btn-custom-secondary hashtag-header__add-column" (click)="addColumn($event)" title="add column to board" [hidden]="columnAdded">add column</button>
         </a>
     </div>
     <app-stream-statuses #appStreamStatuses class="hashtag-stream" *ngIf="hashtagElement" 
