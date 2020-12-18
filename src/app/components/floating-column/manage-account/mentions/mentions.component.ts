@@ -70,7 +70,7 @@ export class MentionsComponent extends TimelineBase {
         if (userNotification && userNotification.mentions) {
             let orderedMentions = [...userNotification.mentions.map(x => x.status)].reverse();
             for (let m of orderedMentions) {
-                if (!this.statuses.find(x => x.status.id === m.id)) {
+                if (m && !this.statuses.find(x => x.status.id === m.id)) {
                     let cwPolicy = this.toolsService.checkContentWarning(m);
                     const statusWrapper = new StatusWrapper(cwPolicy.status, this.account, cwPolicy.applyCw, cwPolicy.hide);
                     this.statuses.unshift(statusWrapper);
