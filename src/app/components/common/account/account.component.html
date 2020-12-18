@@ -1,4 +1,4 @@
-<a href class="account" title="open account" (click)="selected()">
+<a href class="account" title="open account" (click)="selected()" (auxclick)="openAccount()">
     <img src="{{account.avatar}}" class="account__avatar" />
     <div class="account__name" innerHTML="{{ account | accountEmoji }}"></div>
     <div class="account__fullhandle">@{{ account.acct }}</div>

@@ -21,4 +21,9 @@ export class AccountComponent implements OnInit {
         this.accountSelected.next(this.account);
         return false;
     }
+
+    openAccount(): boolean {
+        window.open(this.account.url, '_blank');
+        return false;
+    }
 }
