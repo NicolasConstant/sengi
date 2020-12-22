@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NotificationService, NotificatioData } from '../../services/notification.service';
+import { NotificationService, NotificationData } from '../../services/notification.service';
 
 @Component({
     selector: 'app-notification-hub',
@@ -12,7 +12,7 @@ export class NotificationHubComponent implements OnInit {
     constructor(private notificationService: NotificationService) { }
 
     ngOnInit() {
-        this.notificationService.notifactionStream.subscribe((notification: NotificatioData) => {
+        this.notificationService.notifactionStream.subscribe((notification: NotificationData) => {
             let alreadyExistingNotification = this.notifications.find(x => x.avatar === notification.avatar && x.message === notification.message);
 
             if(alreadyExistingNotification){
@@ -40,13 +40,13 @@ export class NotificationHubComponent implements OnInit {
     //     }, 1500);
     // }
 
-    onClick(notification: NotificatioData): void{
+    onClick(notification: NotificationData): void{
         this.notifications = this.notifications.filter(x => x.id !== notification.id);
     }
 }
 
-class NotificationWrapper extends NotificatioData {
-    constructor(data: NotificatioData) {
+class NotificationWrapper extends NotificationData {
+    constructor(data: NotificationData) {
         super(data.avatar, data.errorCode, data.message, data.isError);        
     }
 

@@ -10,7 +10,7 @@ import { ToolsService } from './tools.service';
 @Injectable()
 export class NotificationService {
     public restartNotificationStream = new Subject<string>();
-    public notifactionStream = new Subject<NotificatioData>();
+    public notifactionStream = new Subject<NotificationData>();
     public newRespondPostedStream = new Subject<NewReplyData>();
     public hideAccountUrlStream = new Subject<string>();
     public deletedStatusStream = new Subject<StatusWrapper>();
@@ -19,7 +19,7 @@ export class NotificationService {
     }
 
     public notify(avatar: string, errorCode: number, message: string, isError: boolean) {
-        let newNotification = new NotificatioData(avatar, errorCode, message, isError);
+        let newNotification = new NotificationData(avatar, errorCode, message, isError);
         this.notifactionStream.next(newNotification);
     }
 
@@ -70,7 +70,7 @@ export class NotificationService {
     }
 }
 
-export class NotificatioData {
+export class NotificationData {
     public id: string;
 
     constructor(
