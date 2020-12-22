@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { faUserPlus, faUserClock, faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus, faUserClock, faCheck, faTimes, faTruckMoving } from "@fortawesome/free-solid-svg-icons";
 
 import { NotificationWrapper } from '../notifications.component';
 import { ToolsService } from '../../../../../services/tools.service';
@@ -18,6 +18,7 @@ export class NotificationComponent extends BrowseBase {
     faUserClock = faUserClock;
     faCheck = faCheck;
     faTimes = faTimes;
+    faTruckMoving = faTruckMoving;
 
     @Input() notification: NotificationWrapper;
 

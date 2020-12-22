@@ -50,6 +50,25 @@
         </a>
     </div>
 
+    <div *ngIf="notification.type === 'move'">
+        <div class="stream__notification--icon" title="{{notification.account.acct}}">
+            <fa-icon class="followed" [icon]="faTruckMoving"></fa-icon>
+        </div>
+        <div class="stream__notification--label">
+            <a href class="stream__link" title="{{notification.account.acct}}"
+                (click)="openAccount(notification.account)" (auxclick)="openUrl(notification.account.url)"
+                innerHTML="{{ notification.account | accountEmoji }}"></a>
+            migrated to
+        </div>
+
+        <a href (click)="openAccount(notification.target)" (auxclick)="openUrl(notification.target.url)"
+            class="follow-account" title="{{notification.target.acct}}">
+            <img class="follow-account__avatar" src="{{ notification.target.avatar }}" />
+            <span class="follow-account__display-name" innerHTML="{{ notification.target | accountEmoji }}"></span>
+            <span class="follow-account__acct">@{{ notification.target.acct }}</span>
+        </a>
+    </div>
+
     <app-status *ngIf="notification.status && notification.type !== 'mention'" class="stream__status" [statusWrapper]="notification.status"
         [notificationAccount]="notification.account" [notificationType]="notification.type"
         (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"

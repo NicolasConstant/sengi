@@ -156,6 +156,7 @@ export class NotificationWrapper {
                 break;
         }
         this.account = notification.account;
+        this.target = notification.target;
         this.wrapperId = `${this.type}-${notification.id}`;
         this.notification = notification;
         this.provider = provider;
@@ -165,6 +166,7 @@ export class NotificationWrapper {
     notification: Notification;
     wrapperId: string;
     account: Account;
+    target: Account;
     status: StatusWrapper;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move';
 }
