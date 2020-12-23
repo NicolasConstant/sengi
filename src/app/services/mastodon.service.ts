@@ -393,8 +393,11 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.voteOnPoll}`.replace('{0}', pollId);
         route += `?${this.formatArray(pollSelection.map(x => x.toString()), 'choices')}`;
 
+        let data = new PollData();
+        data.choices = pollSelection;
+
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.post<Poll>(route, null, { headers: headers }).toPromise();
+        return this.httpClient.post<Poll>(route, data, { headers: headers }).toPromise();
     }
 
     getPoll(account: AccountInfo, pollId: string): Promise<Poll> {
@@ -534,6 +537,10 @@ export enum VisibilityEnum {
     Unlisted = 2,
     Private = 3,
     Direct = 4
+}
+
+class PollData {
+    choices: number[];
 }
 
 class StatusData {
