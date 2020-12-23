@@ -96,7 +96,6 @@ export class UserFollowsComponent implements OnInit, OnDestroy {
                     }
                 })
                 .then((result: FollowingResult) => {
-                    console.warn(result);
                     this.maxId = result.maxId;
                     this.accounts = result.follows;
                 })

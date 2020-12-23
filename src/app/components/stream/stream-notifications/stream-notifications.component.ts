@@ -128,8 +128,6 @@ export class StreamNotificationsComponent extends BrowseBase {
 
         this.mastodonService.getNotifications(this.account, null, null, null, 10)
             .then((notifications: Notification[]) => {
-                console.warn(notifications);
-
                 this.isNotificationsLoading = false;
 
                 this.notifications = notifications.map(x => { 

@@ -82,7 +82,6 @@ export class MentionsComponent extends TimelineBase {
     }
 
     protected getNextStatuses(): Promise<Status[]> {
-        console.warn('MENTIONS get next status');
         return this.mastodonService.getNotifications(this.account, ['follow', 'favourite', 'reblog', 'poll', 'move'], this.lastId)
              .then((result: Notification[]) => {
                 const statuses = result.map(x => x.status);
