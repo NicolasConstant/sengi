@@ -58,7 +58,7 @@ export class UserNotificationService {
     }
 
     private startFetchingNotifications(account: AccountInfo) {
-        let getMentionsPromise = this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll', 'follow_request'], null, null, 10)
+        let getMentionsPromise = this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll', 'follow_request', 'move'], null, null, 10)
             .then((notifications: Notification[]) => {
                 this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
             })

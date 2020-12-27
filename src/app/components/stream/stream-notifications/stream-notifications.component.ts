@@ -128,8 +128,6 @@ export class StreamNotificationsComponent extends BrowseBase {
 
         this.mastodonService.getNotifications(this.account, null, null, null, 10)
             .then((notifications: Notification[]) => {
-                console.warn(notifications);
-
                 this.isNotificationsLoading = false;
 
                 this.notifications = notifications.map(x => { 
@@ -237,7 +235,7 @@ export class StreamNotificationsComponent extends BrowseBase {
 
         this.isMentionsLoading = true;
 
-        this.mastodonService.getNotifications(this.account, ['follow', 'favourite', 'reblog', 'poll', 'follow_request'], this.lastMentionId)
+        this.mastodonService.getNotifications(this.account, ['follow', 'favourite', 'reblog', 'poll', 'follow_request', 'move'], this.lastMentionId)
             .then((result: Notification[]) => {
                 if (result.length === 0) {
                     this.mentionsMaxReached = true;

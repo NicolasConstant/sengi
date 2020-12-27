@@ -16,8 +16,6 @@ export class StreamingService {
         private readonly mastodonService: MastodonWrapperService) { }
 
     getStreaming(accountInfo: AccountInfo, stream: StreamElement, since_id: string = null): StreamingWrapper {
-
-        //console.warn('EventSourceStreaminWrapper');
         //new EventSourceStreaminWrapper(accountInfo, stream);
 
         return new StreamingWrapper(this.mastodonService, accountInfo, stream, this.nbStatusPerIteration);

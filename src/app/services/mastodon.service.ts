@@ -311,7 +311,7 @@ export class MastodonService {
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
     }
 
-    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         let route = `https://${account.instance}${this.apiRoutes.getNotifications}?limit=${limit}`;
 
         if (maxId) {
@@ -393,8 +393,11 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.voteOnPoll}`.replace('{0}', pollId);
         route += `?${this.formatArray(pollSelection.map(x => x.toString()), 'choices')}`;
 
+        let data = new PollData();
+        data.choices = pollSelection;
+
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.post<Poll>(route, null, { headers: headers }).toPromise();
+        return this.httpClient.post<Poll>(route, data, { headers: headers }).toPromise();
     }
 
     getPoll(account: AccountInfo, pollId: string): Promise<Poll> {
@@ -534,6 +537,10 @@ export enum VisibilityEnum {
     Unlisted = 2,
     Private = 3,
     Direct = 4
+}
+
+class PollData {
+    choices: number[];
 }
 
 class StatusData {

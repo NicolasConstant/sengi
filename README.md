@@ -18,7 +18,7 @@ It is released as a **browser webapp** and also packaged as an **cross-platform 
 
 ## State of development
 
-Sengi already supports all the basics functionalities, but many minors enhancements are still needed before a 1.0.0 release.
+The first major stable release has been published (1.0.0), the project is open to external contributions.
 
 ## Screens
 

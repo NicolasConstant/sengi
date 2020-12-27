@@ -130,10 +130,11 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move';
     created_at: string;
     account: Account;
     status?: Status;
+    target?: Account; //for move Pleroma's notification
 }
 
 export interface Relationship {

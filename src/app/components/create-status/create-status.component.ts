@@ -883,7 +883,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         this.overlayRef = this.overlay.create(config);
         // this.overlayRef.backdropClick().subscribe(() => {
-        //     console.warn('wut?');
         //     this.overlayRef.dispose();
         // });
 

@@ -66,7 +66,6 @@ export class MediaViewerComponent implements OnInit, OnDestroy {
     }
 
     private escapeHotkey = new Hotkey('escape', (event: KeyboardEvent): boolean => {
-        console.warn('CLOSE');
         this.close();
         return false;
     });

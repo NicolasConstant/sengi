@@ -39,6 +39,8 @@ export class HashtagComponent implements OnInit, OnDestroy {
     private refreshSubscription: Subscription;
     private goToTopSubscription: Subscription;
 
+    columnAdded: boolean;
+
     constructor(
         private readonly store: Store,
         private readonly toolsService: ToolsService) { }
@@ -73,6 +75,8 @@ export class HashtagComponent implements OnInit, OnDestroy {
         const hashtag = this.hashtagElement.tag;
         const newStream = new StreamElement(StreamTypeEnum.tag, `${hashtag}`, this.lastUsedAccount.id, hashtag, null, null, this.lastUsedAccount.instance);
         this.store.dispatch([new AddStream(newStream)]);
+
+        this.columnAdded = true;
 
         return false;
     }
