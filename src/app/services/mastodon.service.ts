@@ -357,7 +357,11 @@ export class MastodonService {
     createList(account: AccountInfo, title: string): Promise<StreamElement> {
         let route = `https://${account.instance}${this.apiRoutes.postList}?title=${title}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.post<List>(route, null, { headers: headers }).toPromise()
+
+        let data = new ListData();
+        data.title = title;
+
+        return this.httpClient.post<List>(route, data, { headers: headers }).toPromise()
             .then((list: List) => {
                 return new StreamElement(StreamTypeEnum.list, list.title, account.id, null, list.title, list.id, account.instance);
             });
@@ -378,8 +382,12 @@ export class MastodonService {
     addAccountToList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
         let route = `https://${account.instance}${this.apiRoutes.addAccountToList}`.replace('{0}', listId);
         route += `?account_ids[]=${accountId}`;
+        
+        let data = new ListAccountData();
+        data.account_ids.push(accountId.toString());
+        
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.post(route, null, { headers: headers }).toPromise();
+        return this.httpClient.post(route, data, { headers: headers }).toPromise();
     }
 
     removeAccountFromList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
@@ -541,6 +549,15 @@ export enum VisibilityEnum {
 
 class PollData {
     choices: number[];
+}
+
+class ListData {
+    title: string;
+    replies_policy: string = 'list'; //TODO
+}
+
+class ListAccountData {
+    account_ids: string[] = [];
 }
 
 class StatusData {
