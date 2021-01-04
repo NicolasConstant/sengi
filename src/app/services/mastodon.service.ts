@@ -382,8 +382,12 @@ export class MastodonService {
     addAccountToList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
         let route = `https://${account.instance}${this.apiRoutes.addAccountToList}`.replace('{0}', listId);
         route += `?account_ids[]=${accountId}`;
+        
+        let data = new ListAccountData();
+        data.account_ids.push(accountId.toString());
+        
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.post(route, null, { headers: headers }).toPromise();
+        return this.httpClient.post(route, data, { headers: headers }).toPromise();
     }
 
     removeAccountFromList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
@@ -550,6 +554,10 @@ class PollData {
 class ListData {
     title: string;
     replies_policy: string = 'list'; //TODO
+}
+
+class ListAccountData {
+    account_ids: string[] = [];
 }
 
 class StatusData {
