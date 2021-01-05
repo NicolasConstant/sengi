@@ -44,4 +44,4 @@ deploy:
   folder: /
   application: dist.zip
   on:
-    branch: master
+    APPVEYOR_REPO_TAG: true   
