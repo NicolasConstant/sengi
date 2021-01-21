@@ -150,7 +150,8 @@
         min-height: 80px;
         display: block;
         margin: 0 10px 0 $avatar-column-space;
-        padding: 3px 5px 12px 5px;
+        padding: 3px 5px 14px 5px;
+        overflow-wrap: break-word;
         
         text-decoration: none;
         text-align: center;
