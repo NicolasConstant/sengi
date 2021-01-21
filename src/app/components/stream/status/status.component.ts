@@ -100,54 +100,20 @@ export class StatusComponent implements OnInit {
 
     ngOnInit() {
     }
-
-    // private checkContentWarning(status: Status) {
-    //             let cwPolicy = this.toolsService.getSettings().contentWarningPolicy;
-
-    //     let splittedContent = [];
-    //     if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
-    //         || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
-    //         || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
-    //         let parser = new DOMParser();
-    //         let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
-    //         let contentToParse = dom.body.textContent;
-    //         splittedContent = contentToParse.toLowerCase().split(' ');
-    //     }
-
-    //     if (cwPolicy.policy === ContentWarningPolicyEnum.None && (status.sensitive || status.spoiler_text)) {
-    //         this.setContentWarning(status);
-    //     } else if (cwPolicy.policy === ContentWarningPolicyEnum.HideAll) {
-    //         let detected = cwPolicy.addCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
-    //         if (!detected || detected.length === 0) {
-    //             this.status.sensitive = false;
-    //         } else {
-    //             if (!status.spoiler_text) {
-    //                 status.spoiler_text = detected.join(' ');
-    //             }
-    //             this.setContentWarning(status);
-    //         }
-    //     } else if (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent) {
-    //         let detected = cwPolicy.removeCwOnContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
-
-    //         if (detected && detected.length > 0) {
-    //             this.status.sensitive = false;
-    //         } else {               
-    //             this.setContentWarning(status);
-    //         }
-    //     }
-
-    //     if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
-    //         let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
-    //         if (detected && detected.length > 0) {
-    //             this.hideStatus = true;
-    //         }
-    //     }
-    // }
-
+    
     private setContentWarning(status: StatusWrapper) {
         this.hideStatus = status.hide;
         this.isContentWarned = status.applyCw;
-        this.contentWarningText = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, status.status.spoiler_text, EmojiTypeEnum.medium);
+
+        let spoiler = this.htmlEncode(status.status.spoiler_text);
+        this.contentWarningText = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, spoiler, EmojiTypeEnum.medium);
+    }
+
+    private htmlEncode(str: string): string {
+        var encodedStr = str.replace(/[\u00A0-\u9999<>\&]/gim, function (i) {
+            return '&#' + i.charCodeAt(0) + ';';
+        });
+        return encodedStr;
     }
 
     removeContentWarning(): boolean {
