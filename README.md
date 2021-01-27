@@ -37,6 +37,16 @@ Find more informations [here](https://github.com/NicolasConstant/sengi/blob/mast
 The docker image also provide a landing page so that you can open a pop-up really easily. <br />
 It's available in ```https://your-host/start/index.html```
 
+## Installation
+
+### macOS
+
+Sengi is available in Homebrew. You can install the latest version of Sengi with the following command:
+
+```
+brew install --cask sengi
+```
+
 ## Contact
 
   * [Official Sengi Account](https://mastodon.social/@sengi_app)
