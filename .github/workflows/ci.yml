@@ -1,0 +1,75 @@
+name: CI
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - '*'
+  pull_request:
+    branches:
+    - master
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 10.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Sengi
+        run: npm run build
+      - run: |
+          cp -r ./dist app
+          cp -r ./assets/docker_init app/start
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: sengi-app
+          path: app/
+          if-no-files-found: error
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: sengi-app
+          path: app/
+      - name: Deploy to sengiapp.github.io
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
+          external_repository: SengiApp/sengiapp.github.io
+          publish_dir: ./app
+          enable_jekyll: false
+          force_orphan: true
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: olegtarasov/get-tag@v2
+        id: tagName
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: sengi-app
+          path: "sengi-${{ steps.tagName.outputs.tag }}"
+      - run: zip -r -9 "sengi-${GIT_TAG_NAME}.zip" "sengi-${GIT_TAG_NAME}"
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tagName.outputs.tag }}
+          name: Sengi ${{ steps.tagName.outputs.tag }}
+          draft: true
+          files: |
+            sengi-${{ steps.tagName.outputs.tag }}.zip
