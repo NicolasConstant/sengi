@@ -6,7 +6,7 @@ import { MastodonWrapperService } from '../../../../../services/mastodon-wrapper
 import { AccountWrapper } from '../../../../../models/account.models';
 import { NotificationService } from '../../../../../services/notification.service';
 import { Account, Relationship, Instance } from "../../../../../services/models/mastodon.interfaces";
-import { ToolsService } from '../../../../../services/tools.service';
+import { SettingsService } from '../../../../../services/settings.service';
 
 @Component({
     selector: 'app-list-editor',
@@ -25,7 +25,7 @@ export class ListEditorComponent implements OnInit {
     searchOpen: boolean;
 
     constructor(
-        private readonly toolsService: ToolsService,
+        private readonly settingsService: SettingsService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService) { }
 
@@ -70,7 +70,7 @@ export class ListEditorComponent implements OnInit {
     }
 
     addEvent(accountWrapper: AccountListWrapper) {
-        const settings = this.toolsService.getSettings();
+        const settings = this.settingsService.getSettings();
 
         accountWrapper.isLoading = true;
         this.mastodonService.getInstance(this.account.info.instance)

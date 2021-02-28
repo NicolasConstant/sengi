@@ -9,6 +9,7 @@ import { ServiceWorkerService } from '../../../services/service-worker.service';
 import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
 import { NotificationService } from '../../../services/notification.service';
 import { NavigationService } from '../../../services/navigation.service';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
     selector: 'app-settings',
@@ -76,6 +77,7 @@ export class SettingsComponent implements OnInit {
     }
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly navigationService: NavigationService,
         private formBuilder: FormBuilder,
         private serviceWorkersService: ServiceWorkerService,
@@ -86,7 +88,7 @@ export class SettingsComponent implements OnInit {
     ngOnInit() {
         this.version = environment.VERSION;
 
-        const settings = this.toolsService.getSettings();
+        const settings = this.settingsService.getSettings();
 
         this.notificationSounds = this.userNotificationsService.getAllNotificationSounds();
         this.notificationSoundId = settings.notificationSoundFileId;
@@ -133,27 +135,27 @@ export class SettingsComponent implements OnInit {
         this.columnShortcutEnabled = id;
         this.notifyRestartNeeded();
 
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.columnSwitchingWinAlt = id === ColumnShortcut.Win;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onTimeLineHeaderChange(id: TimeLineHeaderEnum){
         this.timeLineHeader = id;
         this.notifyRestartNeeded();
 
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.timelineHeader = id;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onTimeLineModeChange(id: TimeLineModeEnum){
         this.timeLineMode = id;
         this.notifyRestartNeeded();
 
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.timelineMode = id;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onCwPolicyChange(id: ContentWarningPolicyEnum) {
@@ -165,7 +167,7 @@ export class SettingsComponent implements OnInit {
 
     private setCwPolicy(id: ContentWarningPolicyEnum = null, addCw: string = null, removeCw: string = null, hide: string = null){
         this.notifyRestartNeeded();
-        let settings = this.toolsService.getSettings();        
+        let settings = this.settingsService.getSettings();        
         let cwPolicySettings = new ContentWarningPolicy();
 
         if(id !== null){
@@ -192,7 +194,7 @@ export class SettingsComponent implements OnInit {
             cwPolicySettings.hideCompletlyContent = settings.contentWarningPolicy.hideCompletlyContent;
         }
 
-        this.toolsService.saveContentWarningPolicy(cwPolicySettings);
+        this.settingsService.saveContentWarningPolicy(cwPolicySettings);
     }   
 
     private splitCwValues(data: string): string[]{
@@ -200,9 +202,9 @@ export class SettingsComponent implements OnInit {
     }
 
     private setBridgeInstance(instance: string){
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.twitterBridgeInstance = instance;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     // reload(): boolean {
@@ -212,9 +214,9 @@ export class SettingsComponent implements OnInit {
 
     onChange(soundId: string) {
         this.notificationSoundId = soundId;
-        let settings = this.toolsService.getSettings()
+        let settings = this.settingsService.getSettings()
         settings.notificationSoundFileId = soundId;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     playNotificationSound(): boolean {
@@ -230,41 +232,41 @@ export class SettingsComponent implements OnInit {
 
     onDisableAutofocusChanged() {
         this.notifyRestartNeeded();
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.disableAutofocus = this.disableAutofocusEnabled;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableRemoteStatusFetchingChanged() {
         this.notifyRestartNeeded();
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.disableRemoteStatusFetching = this.disableRemoteStatusFetchingEnabled;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableAvatarNotificationsChanged() {
         this.notifyRestartNeeded();
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.disableAvatarNotifications = this.disableAvatarNotificationsEnabled;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableSoundsEnabledChanged() {
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.disableSounds = this.disableSoundsEnabled;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onAutoFollowOnListChanged(){
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.autoFollowOnListEnabled = this.autoFollowOnListEnabled;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     onTwitterBridgeEnabledChanged(){
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         settings.twitterBridgeEnabled = this.twitterBridgeEnabled;
-        this.toolsService.saveSettings(settings);
+        this.settingsService.saveSettings(settings);
     }
 
     isCleanningAll: boolean = false;

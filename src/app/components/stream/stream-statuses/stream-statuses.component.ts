@@ -13,6 +13,7 @@ import { ToolsService } from '../../../services/tools.service';
 import { StatusWrapper } from '../../../models/common.model';
 import { TimeLineModeEnum } from '../../../states/settings.state';
 import { TimelineBase } from '../../common/timeline-base';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
     selector: 'app-stream-statuses',
@@ -43,6 +44,7 @@ export class StreamStatusesComponent extends TimelineBase {
     private streams$: Observable<StreamElement[]>;
 
     constructor(
+        protected readonly settingsService: SettingsService,
         protected readonly store: Store,
         protected readonly toolsService: ToolsService,
         protected readonly notificationService: NotificationService,
@@ -54,7 +56,7 @@ export class StreamStatusesComponent extends TimelineBase {
     }
 
     ngOnInit() {
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         this.timelineLoadingMode = settings.timelineMode;
 
         this.goToTopSubscription = this.goToTop.subscribe(() => {
