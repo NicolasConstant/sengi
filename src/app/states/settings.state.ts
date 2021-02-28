@@ -67,8 +67,10 @@ export class GlobalSettings {
     disableSounds = false;
     disableRemoteStatusFetching = false;
     autoFollowOnListEnabled = false;
+    twitterBridgeEnabled = false;
 
     notificationSoundFileId: string = '0';
+    twitterBridgeInstance: string = '';
 
     timelineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
     timelineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
@@ -166,6 +168,8 @@ export class SettingsState {
         newSettings.timelineHeader = oldSettings.timelineHeader;
         newSettings.timelineMode = oldSettings.timelineMode;
         newSettings.autoFollowOnListEnabled = oldSettings.autoFollowOnListEnabled;
+        newSettings.twitterBridgeEnabled = oldSettings.twitterBridgeEnabled;
+        newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
 
         return newSettings;
     }

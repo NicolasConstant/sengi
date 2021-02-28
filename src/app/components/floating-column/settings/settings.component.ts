@@ -31,6 +31,8 @@ export class SettingsComponent implements OnInit {
     hasPleromaAccount: boolean;
     autoFollowOnListEnabled: boolean;
 
+    twitterBridgeEnabled: boolean;
+
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     timeLineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
     timeLineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
@@ -61,6 +63,16 @@ export class SettingsComponent implements OnInit {
     }
     get setContentHidedCompletely(): string {
         return this.contentHidedCompletely;
+    }
+
+    private twitterBridgeInstance: string;
+    set setTwitterBridgeInstance(value: string) {
+        let instance = value.replace('https://', '').replace('http://', '').replace('/', '').trim();
+        this.setBridgeInstance(instance);
+        this.twitterBridgeInstance = instance;
+    }
+    get setTwitterBridgeInstance(): string {
+        return this.twitterBridgeInstance;
     }
 
     constructor(
@@ -111,7 +123,10 @@ export class SettingsComponent implements OnInit {
                 }
             })
             .catch(err => console.error(err));
-        });      
+        });
+
+        this.twitterBridgeEnabled = settings.twitterBridgeEnabled;
+        this.twitterBridgeInstance = settings.twitterBridgeInstance;
     }
 
     onShortcutChange(id: ColumnShortcut) {
@@ -178,10 +193,16 @@ export class SettingsComponent implements OnInit {
         }
 
         this.toolsService.saveContentWarningPolicy(cwPolicySettings);
-    }
+    }   
 
     private splitCwValues(data: string): string[]{
         return data.split(';').map(x => x.trim().toLowerCase()).filter((value, index, self) => self.indexOf(value) === index).filter(y => y !== '');
+    }
+
+    private setBridgeInstance(instance: string){
+        let settings = this.toolsService.getSettings();
+        settings.twitterBridgeInstance = instance;
+        this.toolsService.saveSettings(settings);
     }
 
     // reload(): boolean {
@@ -237,6 +258,12 @@ export class SettingsComponent implements OnInit {
     onAutoFollowOnListChanged(){
         let settings = this.toolsService.getSettings();
         settings.autoFollowOnListEnabled = this.autoFollowOnListEnabled;
+        this.toolsService.saveSettings(settings);
+    }
+
+    onTwitterBridgeEnabledChanged(){
+        let settings = this.toolsService.getSettings();
+        settings.twitterBridgeEnabled = this.twitterBridgeEnabled;
         this.toolsService.saveSettings(settings);
     }
 
