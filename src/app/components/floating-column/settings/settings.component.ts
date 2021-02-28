@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Howl } from 'howler';
 
 import { environment } from '../../../../environments/environment';
-import { ToolsService } from '../../../services/tools.service';
+import { ToolsService, InstanceType } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
 import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
@@ -27,6 +27,9 @@ export class SettingsComponent implements OnInit {
     disableAvatarNotificationsEnabled: boolean;
     disableSoundsEnabled: boolean;
     version: string;
+
+    hasPleromaAccount: boolean;
+    autoFollowOnListEnabled: boolean;
 
     columnShortcutEnabled: ColumnShortcut = ColumnShortcut.Ctrl;
     timeLineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
@@ -97,6 +100,18 @@ export class SettingsComponent implements OnInit {
 
         this.timeLineHeader = settings.timelineHeader;
         this.timeLineMode = settings.timelineMode;
+
+        this.autoFollowOnListEnabled = settings.autoFollowOnListEnabled;
+        const accs =  this.toolsService.getAllAccounts();
+        accs.forEach(a => {
+            this.toolsService.getInstanceInfo(a)
+            .then(ins => {
+                if(ins.type === InstanceType.Pleroma){
+                    this.hasPleromaAccount = true;
+                }
+            })
+            .catch(err => console.error(err));
+        });      
     }
 
     onShortcutChange(id: ColumnShortcut) {
@@ -216,6 +231,12 @@ export class SettingsComponent implements OnInit {
     onDisableSoundsEnabledChanged() {
         let settings = this.toolsService.getSettings();
         settings.disableSounds = this.disableSoundsEnabled;
+        this.toolsService.saveSettings(settings);
+    }
+
+    onAutoFollowOnListChanged(){
+        let settings = this.toolsService.getSettings();
+        settings.autoFollowOnListEnabled = this.autoFollowOnListEnabled;
         this.toolsService.saveSettings(settings);
     }
 

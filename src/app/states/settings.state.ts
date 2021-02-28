@@ -66,6 +66,7 @@ export class GlobalSettings {
     disableAvatarNotifications = false;
     disableSounds = false;
     disableRemoteStatusFetching = false;
+    autoFollowOnListEnabled = false;
 
     notificationSoundFileId: string = '0';
 
@@ -164,6 +165,7 @@ export class SettingsState {
         newSettings.disableRemoteStatusFetching = oldSettings.disableRemoteStatusFetching;
         newSettings.timelineHeader = oldSettings.timelineHeader;
         newSettings.timelineMode = oldSettings.timelineMode;
+        newSettings.autoFollowOnListEnabled = oldSettings.autoFollowOnListEnabled;
 
         return newSettings;
     }
