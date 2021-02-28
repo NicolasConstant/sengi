@@ -93,7 +93,7 @@ export class DatabindedTextComponent implements OnInit {
 
     private processHashtag(section: string) {
         let extractedLinkAndNext = section.split('</a>');
-        let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span>', '').replace('</span>', '');
+        let extractedHashtag = extractedLinkAndNext[0].split('#')[1].replace('<span class="article-type">', '').replace('<span>', '').replace('</span>', '');
         let extractedUrl = extractedLinkAndNext[0].split('href="')[1].split('"')[0];
 
         let classname = this.getClassNameForHastag(extractedHashtag);
@@ -118,7 +118,7 @@ export class DatabindedTextComponent implements OnInit {
 
             if (extractedAccountName.includes('@'))
                 extractedAccountName = extractedAccountName.split('@')[0];
-        } else if(section.includes(' class="u-url mention">@') && !section.includes(' class="u-url mention">@<')) { //Misskey in pleroma
+        } else if (section.includes(' class="u-url mention">@') && !section.includes(' class="u-url mention">@<')) { //Misskey in pleroma
             extractedAccountAndNext = section.split('</a>');
             extractedAccountName = extractedAccountAndNext[0].split(' class="u-url mention">@')[1];
 
