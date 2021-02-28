@@ -163,26 +163,31 @@ export class DatabindedTextComponent implements OnInit {
         let extractedLinkAndNext = section.split('</a>')
         let extractedUrl = extractedLinkAndNext[0].split('"')[1];
 
-        let extractedName = '';
-        try {
-            extractedName = extractedLinkAndNext[0].split('<span class="ellipsis">')[1].split('</span>')[0];
-        } catch (err) {
+        let extractedName = '';      
+
+        if(extractedLinkAndNext[0].includes('<span class="article-type">')){
+            extractedName = extractedLinkAndNext[0].split('<span class="article-type">')[2].split('</span>')[0];
+        } else {
             try {
-                extractedName = extractedLinkAndNext[0].split(`<span class="">`)[1].split('</span>')[0];
-            }
-            catch (err) {
+                extractedName = extractedLinkAndNext[0].split('<span class="ellipsis">')[1].split('</span>')[0];
+            } catch (err) {
                 try {
-                    extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
-                } catch (err) { // Pleroma
+                    extractedName = extractedLinkAndNext[0].split(`<span class="">`)[1].split('</span>')[0];
+                }
+                catch (err) {
                     try {
-                        extractedName = extractedLinkAndNext[0].split('</span><span>')[1].split('</span>')[0];
-                    } catch (err) {
-                        extractedName = extractedLinkAndNext[0].split('">')[1];
+                        extractedName = extractedLinkAndNext[0].split(' target="_blank">')[1].split('</span>')[0];
+                    } catch (err) { // Pleroma
+                        try {
+                            extractedName = extractedLinkAndNext[0].split('</span><span>')[1].split('</span>')[0];
+                        } catch (err) {
+                            extractedName = extractedLinkAndNext[0].split('">')[1];
+                        }
                     }
                 }
             }
         }
-
+        
         this.links.push(extractedUrl);
         let classname = this.getClassNameForLink(extractedUrl);
 

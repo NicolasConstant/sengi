@@ -91,6 +91,15 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
     });
 
+    it('should parse link - Hometown', () => {
+        const url = 'bbs.archlinux.org/test';
+        const sample = `<p>bla1 <a href="https://${url}" rel="nofollow noopener noreferrer" target="_blank"><span class="article-type">https://</span><span class="article-type">${url}</span><span class="article-type">p?id=264086&amp;action=new</span></a> bla2`;
+        component.text = sample;
+        expect(component.processedText).toContain(`<a href="https://${url}" class="link-httpsbbsarchlinuxorgtest" title="open link" target="_blank" rel="noopener noreferrer">${url}</a>`);
+        expect(component.processedText).toContain('bla1');
+        expect(component.processedText).toContain('bla2');
+    });
+
     it('should parse https://www. link', () => {
         const url = 'bbc.com/news/magazine-34901704';
         const sample = `<p>The rise of"<br><a href="https:www//${url}" rel="nofollow noopener" target="_blank"><span class="invisible">https://www.</span><span class="">${url}</span><span class="invisible"></span></a></p>`;
