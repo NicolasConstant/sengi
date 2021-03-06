@@ -6,6 +6,7 @@ import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../states/settings.state';
+import { SettingsService } from './settings.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,7 @@ export class ToolsService {
     private instanceInfos: { [id: string]: InstanceInfo } = {};
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) { }
 
@@ -26,7 +28,7 @@ export class ToolsService {
         let applyCw = false;
         let hideStatus = false;
         
-        let cwPolicy = this.getSettings().contentWarningPolicy;
+        let cwPolicy = this.settingsService.getSettings().contentWarningPolicy;
 
         let splittedContent = [];
         if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
@@ -127,61 +129,6 @@ export class ToolsService {
     getAccountById(accountId: string): AccountInfo {
         let regAccounts = <AccountInfo[]>this.store.snapshot().registeredaccounts.accounts;
         return regAccounts.find(x => x.id === accountId);
-    }
-
-    getAccountSettings(account: AccountInfo): AccountSettings {
-        let accountsSettings = <AccountSettings[]>this.store.snapshot().globalsettings.settings.accountSettings;
-        let accountSettings = accountsSettings.find(x => x.accountId === account.id);
-        if (!accountSettings) {
-            accountSettings = new AccountSettings();
-            accountSettings.accountId = account.id;
-            this.saveAccountSettings(accountSettings);
-        }
-        if (!accountSettings.customStatusCharLength) {
-            accountSettings.customStatusCharLength = 500;
-            this.saveAccountSettings(accountSettings);
-        }
-        return accountSettings;
-    }
-
-    saveAccountSettings(accountSettings: AccountSettings) {
-        this.store.dispatch([
-            new SaveAccountSettings(accountSettings)
-        ]);
-    }
-
-    getSettings(): GlobalSettings {
-        let settings = <GlobalSettings>this.store.snapshot().globalsettings.settings;
-
-        if (!settings.contentWarningPolicy) {
-            var newCwPolicy = new ContentWarningPolicy();
-            this.saveContentWarningPolicy(newCwPolicy);
-            return <GlobalSettings>this.store.snapshot().globalsettings.settings;
-        }
-
-        if(!settings.timelineMode){
-            settings.timelineMode = TimeLineModeEnum.OnTop;
-            this.saveSettings(settings);
-        }
-
-        if(!settings.timelineHeader){
-            settings.timelineHeader = TimeLineHeaderEnum.Title_DomainName;
-            this.saveSettings(settings);
-        }
-
-        return settings;
-    }
-
-    saveSettings(settings: GlobalSettings) {
-        this.store.dispatch([
-            new SaveSettings(settings)
-        ]);
-    }
-
-    saveContentWarningPolicy(cwSettings: ContentWarningPolicy) {
-        this.store.dispatch([
-            new SaveContentWarningPolicy(cwSettings)
-        ]);
     }
 
     findAccount(account: AccountInfo, accountName: string): Promise<Account> {

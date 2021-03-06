@@ -6,7 +6,7 @@ import { MastodonWrapperService } from '../../../../../services/mastodon-wrapper
 import { AccountWrapper } from '../../../../../models/account.models';
 import { NotificationService } from '../../../../../services/notification.service';
 import { Account, Relationship, Instance } from "../../../../../services/models/mastodon.interfaces";
-import { of } from 'rxjs';
+import { SettingsService } from '../../../../../services/settings.service';
 
 @Component({
     selector: 'app-list-editor',
@@ -25,6 +25,7 @@ export class ListEditorComponent implements OnInit {
     searchOpen: boolean;
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService) { }
 
@@ -69,13 +70,12 @@ export class ListEditorComponent implements OnInit {
     }
 
     addEvent(accountWrapper: AccountListWrapper) {
-        console.log(accountWrapper);
+        const settings = this.settingsService.getSettings();
 
         accountWrapper.isLoading = true;
         this.mastodonService.getInstance(this.account.info.instance)
             .then((instance: Instance) => {
-                console.log(instance);
-                if (instance.version.toLowerCase().includes('pleroma')) {
+                if (instance.version.toLowerCase().includes('pleroma') && !settings.autoFollowOnListEnabled) {
                     return Promise.resolve(true);
                 } else {
                     return this.followAccount(accountWrapper);

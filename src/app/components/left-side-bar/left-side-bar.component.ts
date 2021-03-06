@@ -11,6 +11,7 @@ import { NavigationService, LeftPanelType } from "../../services/navigation.serv
 import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
 import { ToolsService } from '../../services/tools.service';
 import { ScheduledStatusService, ScheduledStatusNotification } from '../../services/scheduled-status.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
     selector: "app-left-side-bar",
@@ -34,6 +35,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private notificationSub: Subscription;
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly hotkeysService: HotkeysService,
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly toolsService: ToolsService,
@@ -133,7 +135,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         });
 
         this.notificationSub = this.userNotificationServiceService.userNotifications.subscribe((notifications: UserNotification[]) => {
-            const settings = this.toolsService.getSettings();
+            const settings = this.settingsService.getSettings();
             notifications.forEach((notification: UserNotification) => {
                 const acc = this.accounts.find(x => x.info.id === notification.account.id);
 

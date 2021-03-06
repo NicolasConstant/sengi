@@ -5,7 +5,7 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { StreamElement, StreamTypeEnum } from '../../states/streams.state';
 import { NavigationService } from '../../services/navigation.service';
-import { ToolsService } from '../../services/tools.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
     selector: 'app-streams-selection-footer',
@@ -17,14 +17,14 @@ export class StreamsSelectionFooterComponent implements OnInit {
     private streams$: Observable<StreamElement[]>;
 
     constructor(
-        private readonly toolsService: ToolsService,
+        private readonly settingsService: SettingsService,
         private readonly hotkeysService: HotkeysService,
         private readonly navigationService: NavigationService,
         private readonly store: Store) {
 
         this.streams$ = this.store.select(state => state.streamsstatemodel.streams);
 
-        const settings = this.toolsService.getSettings();
+        const settings = this.settingsService.getSettings();
         if(!settings.columnSwitchingWinAlt) {
             this.hotkeysService.add(new Hotkey('ctrl+right', (event: KeyboardEvent): boolean => {
                 this.nextColumnSelected();

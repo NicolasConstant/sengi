@@ -35,6 +35,7 @@
             </form>
             <a href class="form-button sound__play" type="submit" (click)="playNotificationSound()">play</a>
         </div>
+        
         <h4 class="panel__subtitle">Shortcuts</h4>
         <div class="sub-section">
             <span class="sub-section__title">switch column:</span><br />
@@ -48,6 +49,21 @@
                 type="radio" name="colmun-win" value="colmun-win" id="colmun-win">
             <label class="noselect sub-section__label" for="colmun-win">Win + Alt + Left | Win + Alt + Right</label>
             <br>
+        </div>
+
+        <h4 class="panel__subtitle">Twitter Bridge</h4>
+        <div class="sub-section">
+            <input class="sub-section__checkbox" [(ngModel)]="twitterBridgeEnabled"
+            (change)="onTwitterBridgeEnabledChanged()" type="checkbox" name="onTwitterBridgeEnabled"
+            value="onTwitterBridgeEnabled" id="onTwitterBridgeEnabled">
+            <label class="noselect sub-section__label" for="onTwitterBridgeEnabled">enable bridge</label>
+            <br>
+            <div *ngIf="twitterBridgeEnabled">
+                <p>Please provide your bridge instance:
+                <input type="text" class="form-control form-control-sm sub_section__text-input"
+                [(ngModel)]="setTwitterBridgeInstance" placeholder="bridge.tld" />
+                If you don't know any, consider using <a href="https://github.com/NicolasConstant/BirdsiteLive" target="_blank" class="version__link">BirdsiteLIVE</a></p>
+            </div>
         </div>
 
         <h4 class="panel__subtitle">Content-Warning Policies</h4>
@@ -135,6 +151,17 @@
             <br>
         </div>
 
+        <div *ngIf="hasPleromaAccount">
+            <h4 class="panel__subtitle">Pleroma</h4>
+            <div class="sub-section">
+                <input class="sub-section__checkbox" [(ngModel)]="autoFollowOnListEnabled"
+                    (change)="onAutoFollowOnListChanged()" type="checkbox" name="onAutoFollowOnListChanged"
+                    value="onAutoFollowOnListChanged" id="onAutoFollowOnListChanged">
+                <label class="noselect sub-section__label" for="onAutoFollowOnListChanged">autofollow accounts when adding to list</label>
+                <br>
+            </div>
+        </div>
+
         <h4 class="panel__subtitle">Other</h4>
         <div class="sub-section">
             <input class="sub-section__checkbox" [(ngModel)]="disableRemoteStatusFetchingEnabled"
@@ -148,9 +175,9 @@
         <h4 class="panel__subtitle">About</h4>
         <p class="version">
             Sengi version: {{version}}<br />
-            <a href class="version__link" (click)="openTutorial()">open tutorial</a><br/>
-            <a href="assets/docs/privacy.html" class="version__link" target="_blank">imprint & privacy</a><br/>
-            <a href class="version__link" (click)="checkForUpdates()">check for updates</a>            
+            <a href class="version__link" (click)="openTutorial()">open tutorial</a><br />
+            <a href="assets/docs/privacy.html" class="version__link" target="_blank">imprint & privacy</a><br />
+            <a href class="version__link" (click)="checkForUpdates()">check for updates</a>
             <app-waiting-animation *ngIf="isCheckingUpdates" class="waiting-icon"></app-waiting-animation>
         </p>
 

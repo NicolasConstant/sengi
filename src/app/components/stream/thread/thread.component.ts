@@ -13,6 +13,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import { UserNotificationService, UserNotification } from '../../../services/user-notification.service';
 import { TimeLineModeEnum } from '../../../states/settings.state';
 import { BrowseBase } from '../../common/browse-base';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
     selector: 'app-thread',
@@ -54,6 +55,7 @@ export class ThreadComponent extends BrowseBase {
     private responseSubscription: Subscription;
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly httpClient: HttpClient,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService,
@@ -63,7 +65,7 @@ export class ThreadComponent extends BrowseBase {
         }
 
     ngOnInit() {
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         this.remoteStatusFetchingDisabled = settings.disableRemoteStatusFetching;
 
         if (this.refreshEventEmitter) {

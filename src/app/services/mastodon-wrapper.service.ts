@@ -7,6 +7,7 @@ import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult, FollowingResult } from './mastodon.service';
 import { AuthService } from './auth.service';
 import { AppInfo, RegisteredAppsStateModel } from '../states/registered-apps.state';
+import { SettingsService } from './settings.service';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,7 @@ export class MastodonWrapperService {
     private refreshingToken: { [id: string]: Promise<AccountInfo> } = {};
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly store: Store,
         private readonly authService: AuthService,
         private readonly mastodonService: MastodonService) { }
@@ -130,10 +132,33 @@ export class MastodonWrapperService {
     }
 
     search(account: AccountInfo, query: string, version: 'v1' | 'v2', resolve: boolean = false): Promise<Results> {
+        if(query.includes('twitter.com')){
+            query = this.processTwitterQuery(query);
+        }
+
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.search(refreshedAccount, query, version, resolve);
             });
+    }
+
+    private processTwitterQuery(query: string): string {
+        const settings = this.settingsService.getSettings();
+        if(!settings.twitterBridgeInstance) return query;
+
+        let name;
+        if(query.includes('twitter.com/')){
+            console.log(query.replace('https://', '').replace('http://', '').split('/'));
+            name = query.replace('https://', '').replace('http://', '').split('/')[1];
+        }
+        if(query.includes('@twitter.com')){
+            console.log(query.split('@'));
+            name = query.split('@')[0];
+            if(name === '' || name == null){
+                name = query.split('@')[1];
+            }
+        }
+        return `@${name}@${settings.twitterBridgeInstance}`;
     }
 
     getAccountStatuses(account: AccountInfo, targetAccountId: number, onlyMedia: boolean, onlyPinned: boolean, excludeReplies: boolean, maxId: string, sinceId: string, limit: number = 20): Promise<Status[]> {
@@ -169,6 +194,10 @@ export class MastodonWrapperService {
     }
 
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false, resolve = true): Promise<Account[]> {
+        if(query.includes('twitter.com')){
+            query = this.processTwitterQuery(query);
+        }
+
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.searchAccount(refreshedAccount, query, limit, following, resolve);
