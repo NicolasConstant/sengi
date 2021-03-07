@@ -10,8 +10,8 @@ import { AccountWrapper } from '../../../../models/account.models';
 import { RemoveAccount } from '../../../../states/accounts.state';
 import { NavigationService } from '../../../../services/navigation.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
-import { ToolsService } from '../../../../services/tools.service';
 import { AccountSettings } from '../../../../states/settings.state';
+import { SettingsService } from '../../../../services/settings.service';
 
 @Component({
     selector: 'app-my-account',
@@ -49,8 +49,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     private streamChangedSub: Subscription;
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly store: Store,
-        private readonly toolsService: ToolsService,
         private readonly navigationService: NavigationService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService) { }
@@ -68,7 +68,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
 
     private loadAccountSettings(){
-        this.accountSettings = this.toolsService.getAccountSettings(this.account.info);
+        this.accountSettings = this.settingsService.getAccountSettings(this.account.info);
 
         this.customStatusLengthEnabled = this.accountSettings.customStatusCharLengthEnabled;          
         this.customStatusLength = this.accountSettings.customStatusCharLength;
@@ -77,13 +77,13 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
     onCustomLengthEnabledChanged(): boolean {
         this.accountSettings.customStatusCharLengthEnabled = this.customStatusLengthEnabled;
-        this.toolsService.saveAccountSettings(this.accountSettings);
+        this.settingsService.saveAccountSettings(this.accountSettings);
         return false;
     }
 
     customStatusLengthChanged(event): boolean{
         this.accountSettings.customStatusCharLength = this.customStatusLength;
-        this.toolsService.saveAccountSettings(this.accountSettings);
+        this.settingsService.saveAccountSettings(this.accountSettings);
         return false;
     }
 
@@ -203,9 +203,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     }
 
     onDisableAvatarNotificationChanged() {
-        let settings = this.toolsService.getAccountSettings(this.account.info);
+        let settings = this.settingsService.getAccountSettings(this.account.info);
         settings.disableAvatarNotifications = this.avatarNotificationDisabled;
-        this.toolsService.saveAccountSettings(settings);
+        this.settingsService.saveAccountSettings(settings);
     }
 }
 

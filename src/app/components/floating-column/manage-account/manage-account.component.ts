@@ -16,6 +16,7 @@ import { MentionsComponent } from './mentions/mentions.component';
 import { DirectMessagesComponent } from './direct-messages/direct-messages.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { BrowseBase } from '../../common/browse-base';
+import { SettingsService } from '../../../services/settings.service';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class ManageAccountComponent extends BrowseBase {
     private _account: AccountWrapper;
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
@@ -100,8 +102,8 @@ export class ManageAccountComponent extends BrowseBase {
         this.userNotificationServiceSub = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             const userNotification = userNotifications.find(x => x.account.id === this.account.info.id);
             if (userNotification) {
-                let settings = this.toolsService.getSettings();
-                let accSettings = this.toolsService.getAccountSettings(this.account.info);
+                let settings = this.settingsService.getSettings();
+                let accSettings = this.settingsService.getAccountSettings(this.account.info);
 
                 if (!settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
                     this.hasNotifications = userNotification.hasNewNotifications;
@@ -113,8 +115,8 @@ export class ManageAccountComponent extends BrowseBase {
         let current = this.userNotificationService.userNotifications.value;
         const userNotification = current.find(x => x.account.id === this.account.info.id);
         if (userNotification) {
-            let settings = this.toolsService.getSettings();
-            let accSettings = this.toolsService.getAccountSettings(this.account.info);
+            let settings = this.settingsService.getSettings();
+            let accSettings = this.settingsService.getAccountSettings(this.account.info);
 
             if (!settings.disableAutofocus && !settings.disableAvatarNotifications && !accSettings.disableAvatarNotifications) {
                 if (userNotification.hasNewNotifications) {

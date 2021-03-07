@@ -47,6 +47,16 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('bla2');
     });
 
+    it('should parse hashtag - Hometown', () => {
+        const hashtag = 'MicroFiction';
+        const url = 'https://mastodon.social/tags/MicroFiction';
+        const sample = `<p>"bla1"<br><a href="${url}" class="mention hashtag" rel="nofollow noopener noreferrer" target="_blank">#<span class="article-type">${hashtag}</span></a> bla2</p>`;
+        component.text = sample;
+        expect(component.processedText).toContain(`<a href="${url}" class="hashtag-${hashtag}" title="#${hashtag}" target="_blank" rel="noopener noreferrer">#${hashtag}</a>`);
+        expect(component.processedText).toContain('bla1');
+        expect(component.processedText).toContain('bla2');
+    });
+
     it('should parse hashtag - Pleroma 2.0.2', () => {
         const sample = `Blabla <a class="hashtag" data-tag="covid19" href="https://url.com/tag/covid19">#covid19</a> Blibli`;
         component.text = sample;
@@ -77,6 +87,15 @@ describe('DatabindedTextComponent', () => {
         const sample = `<p>bla1 <a href="https://${url}" rel="nofollow noopener" target="_blank"><span class="invisible">https://</span><span class="">${url}</span><span class="invisible"></span></a> bla2</p>`;
         component.text = sample;
         expect(component.processedText).toContain(`<a href="https://${url}" class="link-httpsmydomaincotest" title="open link" target="_blank" rel="noopener noreferrer">mydomain.co/test</a>`);
+        expect(component.processedText).toContain('bla1');
+        expect(component.processedText).toContain('bla2');
+    });
+
+    it('should parse link - Hometown', () => {
+        const url = 'bbs.archlinux.org/test';
+        const sample = `<p>bla1 <a href="https://${url}" rel="nofollow noopener noreferrer" target="_blank"><span class="article-type">https://</span><span class="article-type">${url}</span><span class="article-type">p?id=264086&amp;action=new</span></a> bla2`;
+        component.text = sample;
+        expect(component.processedText).toContain(`<a href="https://${url}" class="link-httpsbbsarchlinuxorgtest" title="open link" target="_blank" rel="noopener noreferrer">${url}</a>`);
         expect(component.processedText).toContain('bla1');
         expect(component.processedText).toContain('bla2');
     });

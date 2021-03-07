@@ -8,6 +8,7 @@ import { StreamStatusesComponent } from './stream-statuses/stream-statuses.compo
 import { StreamNotificationsComponent } from './stream-notifications/stream-notifications.component';
 import { TimeLineHeaderEnum } from '../../states/settings.state';
 import { AccountInfo } from '../../states/accounts.state';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
     selector: "app-stream",
@@ -72,10 +73,12 @@ export class StreamComponent implements OnInit {
         return this._streamElement;
     }
 
-    constructor(private toolsService: ToolsService) { }
+    constructor(
+        private readonly settingsService: SettingsService,
+        private readonly toolsService: ToolsService) { }
 
     ngOnInit() {
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         this.timelineHeader = settings.timelineHeader;
     }
 

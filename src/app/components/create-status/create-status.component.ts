@@ -24,6 +24,7 @@ import { PollEditorComponent } from './poll-editor/poll-editor.component';
 import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.component';
 import { ScheduledStatusService } from '../../services/scheduled-status.service';
 import { StatusesStateService } from '../../services/statuses-state.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
     selector: 'app-create-status',
@@ -186,6 +187,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly settingsService: SettingsService,
         private statusStateService: StatusesStateService,
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly contextMenuService: ContextMenuService,
@@ -370,7 +372,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if (accounts && accounts.length > 0) {
             this.selectedAccount = accounts.filter(x => x.isSelected)[0];
 
-            const settings = this.toolsService.getAccountSettings(this.selectedAccount);
+            const settings = this.settingsService.getAccountSettings(this.selectedAccount);
             if (settings.customStatusCharLengthEnabled) {
                 this.maxCharLength = settings.customStatusCharLength;
                 this.countStatusChar(this.status);

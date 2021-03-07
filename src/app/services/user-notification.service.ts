@@ -7,9 +7,9 @@ import { Status, Notification } from './models/mastodon.interfaces';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
 import { AccountInfo } from '../states/accounts.state';
 import { NotificationService } from './notification.service';
-import { ToolsService } from './tools.service';
 import { StreamingService, StatusUpdate, EventEnum } from './streaming.service';
 import { StreamElement, StreamTypeEnum } from '../states/streams.state';
+import { SettingsService } from './settings.service';
 
 
 @Injectable({
@@ -29,8 +29,8 @@ export class UserNotificationService {
     private loadedAccounts: AccountInfo[] = [];
 
     constructor(
+        private readonly settingsService: SettingsService,
         private readonly streamingService: StreamingService,
-        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly store: Store) {
@@ -89,7 +89,7 @@ export class UserNotificationService {
     }
 
     private playSoundNotification() {
-        const settings = this.toolsService.getSettings();
+        const settings = this.settingsService.getSettings();
         if (settings.disableSounds) return;
         if (this.soundJustPlayed) return;
         this.soundJustPlayed = true;
@@ -103,13 +103,13 @@ export class UserNotificationService {
     }
 
     private setNotificationSound() {
-        let settings = this.toolsService.getSettings();
+        let settings = this.settingsService.getSettings();
         let soundId = settings.notificationSoundFileId;
 
         if (!soundId) {
             soundId = '0';
             settings.notificationSoundFileId = '0';
-            this.toolsService.saveSettings(settings);
+            this.settingsService.saveSettings(settings);
         }
 
         if (this.soundFileId === soundId) return;
@@ -174,7 +174,7 @@ export class UserNotificationService {
 
         let lastNotificationId = newNotifications[newNotifications.length - 1].id;
 
-        const accountSettings = this.toolsService.getAccountSettings(account);
+        const accountSettings = this.settingsService.getAccountSettings(account);
 
         if (type === NotificationTypeEnum.UserMention) {
             userNotification.lastMentionsId = lastNotificationId;
@@ -190,12 +190,12 @@ export class UserNotificationService {
         // Set settings if needed
         if (type === NotificationTypeEnum.UserMention && !accountSettings.lastMentionCreationDate && newNotifications.length > 0) {
             accountSettings.lastMentionCreationDate = newNotifications[0].created_at;
-            this.toolsService.saveAccountSettings(accountSettings);
+            this.settingsService.saveAccountSettings(accountSettings);
         }
 
         if (type === NotificationTypeEnum.UserNotification && !accountSettings.lastNotificationCreationDate && newNotifications.length > 0) {
             accountSettings.lastNotificationCreationDate = newNotifications[0].created_at;
-            this.toolsService.saveAccountSettings(accountSettings);
+            this.settingsService.saveAccountSettings(accountSettings);
         }
 
         return userNotification;
@@ -208,10 +208,10 @@ export class UserNotificationService {
         const lastMention = currentAccountNotifications.mentions[0];
 
         if (lastMention) {
-            const settings = this.toolsService.getAccountSettings(account);
+            const settings = this.settingsService.getAccountSettings(account);
             // const lastMentionNotification = currentAccountNotifications.mentions[0];
             settings.lastMentionCreationDate = lastMention.created_at;
-            this.toolsService.saveAccountSettings(settings);
+            this.settingsService.saveAccountSettings(settings);
         }
 
         if (currentAccountNotifications.hasNewMentions === true) {
@@ -226,9 +226,9 @@ export class UserNotificationService {
 
         const lastNotification = currentAccountNotifications.notifications[0];
         if (lastNotification) {
-            const settings = this.toolsService.getAccountSettings(account);
+            const settings = this.settingsService.getAccountSettings(account);
             settings.lastNotificationCreationDate = lastNotification.created_at;
-            this.toolsService.saveAccountSettings(settings);
+            this.settingsService.saveAccountSettings(settings);
         }
 
         if (currentAccountNotifications.hasNewNotifications === true) {
