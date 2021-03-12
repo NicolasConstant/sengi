@@ -185,7 +185,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     boost(): boolean {
-        if (this.boostIsLoading) return;
+        if (this.boostIsLoading) return false;
 
         this.boostIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -223,9 +223,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
 
         return false;
     }
-
+    
     favorite(): boolean {
-        if (this.favoriteIsLoading) return;
+        if (this.favoriteIsLoading) return false;
 
         this.favoriteIsLoading = true;
         const account = this.toolsService.getSelectedAccounts()[0];
@@ -260,7 +260,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     bookmark(): boolean {
-        if (this.bookmarkingIsLoading) return;
+        if (this.bookmarkingIsLoading) return false;
 
         this.bookmarkingIsLoading = true;
 
