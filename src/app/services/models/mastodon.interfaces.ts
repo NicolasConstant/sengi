@@ -223,6 +223,7 @@ export interface Poll {
     expired: boolean;
     multiple: boolean;
     votes_count: number;
+    voters_count: number;
     options: PollOption[];
     voted: boolean;
 }
