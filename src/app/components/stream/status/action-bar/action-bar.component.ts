@@ -102,13 +102,13 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.statusStateSub = this.statusStateService.stateNotification.subscribe((state: StatusState) => {
             if (state && state.statusId === this.displayedStatus.url) {
 
-                if (state.isFavorited) {
+                if (state.isFavorited !== null) {
                     this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
                 }
-                if (state.isRebloged) {
+                if (state.isRebloged !== null) {
                     this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
                 }
-                if (state.isBookmarked) {
+                if (state.isBookmarked !== null) {
                     this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
                 }
 
