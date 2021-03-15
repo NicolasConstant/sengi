@@ -102,13 +102,13 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         this.statusStateSub = this.statusStateService.stateNotification.subscribe((state: StatusState) => {
             if (state && state.statusId === this.displayedStatus.url) {
 
-                if (state.isFavorited) {
+                if (state.isFavorited !== null) {
                     this.favoriteStatePerAccountId[state.accountId] = state.isFavorited;
                 }
-                if (state.isRebloged) {
+                if (state.isRebloged !== null) {
                     this.bootedStatePerAccountId[state.accountId] = state.isRebloged;
                 }
-                if (state.isBookmarked) {
+                if (state.isBookmarked !== null) {
                     this.bookmarkStatePerAccountId[state.accountId] = state.isBookmarked;
                 }
 
@@ -138,7 +138,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private checkStatus(accounts: AccountInfo[]): void {
         const status = this.statusWrapper.status;
         const provider = this.statusWrapper.provider;
-        this.selectedAccounts = accounts.filter(x => x.isSelected);       
+        this.selectedAccounts = accounts.filter(x => x.isSelected);
 
         if (!this.statusWrapper.isRemote) {
             this.isProviderSelected = this.selectedAccounts.filter(x => x.id === provider.id).length > 0;
@@ -184,13 +184,18 @@ export class ActionBarComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    private boostPromise: Promise<any>;
     boost(): boolean {
-        if (this.boostIsLoading) return;
+        if (!this.boostPromise) {
+            this.boostPromise = Promise.resolve(true);
+        }
 
-        this.boostIsLoading = true;
-        const account = this.toolsService.getSelectedAccounts()[0];
-        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
-        usableStatus
+        const account = this.toolsService.getSelectedAccounts()[0];        
+        this.boostPromise = this.boostPromise
+            .then(() => {
+                this.boostIsLoading = true;
+                return this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+            })
             .then((status: Status) => {
                 if (this.isBoosted && status.reblogged) {
                     return this.mastodonService.unreblog(account, status);
@@ -219,18 +224,24 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.statusStateService.statusReblogStatusChanged(this.displayedStatus.url, account.id, this.bootedStatePerAccountId[account.id]);
                 this.boostIsLoading = false;
+                this.boostPromise = null;
             });
 
         return false;
     }
 
-    favorite(): boolean {
-        if (this.favoriteIsLoading) return;
-
-        this.favoriteIsLoading = true;
+    private favoritePromise: Promise<any>;
+    favorite(): boolean {              
+        if (!this.favoritePromise) {
+            this.favoritePromise = Promise.resolve(true);
+        }
+        
         const account = this.toolsService.getSelectedAccounts()[0];
-        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
-        usableStatus
+        this.favoritePromise = this.favoritePromise
+            .then(() => {
+                this.favoriteIsLoading = true;
+                return this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+            })
             .then((status: Status) => {
                 if (this.isFavorited && status.favourited) {
                     return this.mastodonService.unfavorite(account, status);
@@ -254,19 +265,24 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.statusStateService.statusFavoriteStatusChanged(this.displayedStatus.url, account.id, this.favoriteStatePerAccountId[account.id]);
                 this.favoriteIsLoading = false;
+                this.favoritePromise = null;
             });
 
         return false;
     }
 
+    private bookmarkPromise: Promise<any>;
     bookmark(): boolean {
-        if (this.bookmarkingIsLoading) return;
-
-        this.bookmarkingIsLoading = true;
+        if (!this.bookmarkPromise) {
+            this.bookmarkPromise = Promise.resolve(true);
+        }
 
         const account = this.toolsService.getSelectedAccounts()[0];
-        const usableStatus = this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
-        usableStatus
+        this.bookmarkPromise = this.bookmarkPromise
+            .then(() => {
+                this.bookmarkingIsLoading = true;
+                return this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
+            })        
             .then((status: Status) => {
                 if (this.isBookmarked && status.bookmarked) {
                     return this.mastodonService.unbookmark(account, status);
@@ -290,14 +306,8 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.statusStateService.statusBookmarkStatusChanged(this.displayedStatus.url, account.id, this.bookmarkStatePerAccountId[account.id]);
                 this.bookmarkingIsLoading = false;
+                this.bookmarkPromise = null;
             });
-
-
-
-        // setTimeout(() => {
-        //     this.isBookmarked = !this.isBookmarked;
-        //     this.bookmarkingIsLoading = false;
-        // }, 2000);
 
         return false;
     }

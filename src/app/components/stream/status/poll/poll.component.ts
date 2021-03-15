@@ -48,7 +48,7 @@ export class PollComponent implements OnInit {
         const maxVotes = Math.max(...this.poll.options.map(x => x.votes_count));
         let i = 0;
         for (let opt of this.poll.options) {
-            let optWrapper = new PollOptionWrapper(i, opt, this.poll.votes_count, opt.votes_count === maxVotes);
+            let optWrapper = new PollOptionWrapper(i, opt, this.poll.votes_count, this.poll.voters_count, opt.votes_count === maxVotes);
             this.options.push(optWrapper);
             i++;
         }
@@ -183,14 +183,19 @@ export class PollComponent implements OnInit {
 }
 
 class PollOptionWrapper implements PollOption {
-    constructor(index: number, option: PollOption, totalVotes: number, isMax: boolean) {
+    constructor(index: number, option: PollOption, totalVotes: number, totalVoters: number, isMax: boolean) {
+        let votesDivider = totalVotes;
+        if(totalVoters && totalVoters > 0){
+            votesDivider = totalVoters;
+        }
+
         this.id = index;
         this.title = option.title;
         this.votes_count = option.votes_count;
         if (totalVotes === 0) {
             this.percentage = '0';
         } else {
-            this.percentage = ((this.votes_count / totalVotes) * 100).toFixed(0);
+            this.percentage = ((this.votes_count / votesDivider) * 100).toFixed(0);
         }
         this.isMax = isMax;
     }
