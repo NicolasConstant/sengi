@@ -176,21 +176,7 @@ export class ToolsService {
         if (!isProvider) {
             statusPromise = statusPromise
                 .then((foreignStatus: Status) => {
-                    const statusUri = foreignStatus.uri;
-                    const statusUrl = foreignStatus.url;                    
-                    return this.getInstanceInfo(account)
-                        .then(instance => {
-                            let version: 'v1' | 'v2' = 'v1';
-                            if (instance.major >= 3) version = 'v2';
-                            return this.mastodonService.search(account, statusUri, version, true)
-                                .then((results: Results) => {
-                                    if(results && results.statuses.length > 0) return results;
-                                    return this.mastodonService.search(account, statusUrl, version, true);
-                                });
-                        })
-                        .then((results: Results) => {
-                            return results.statuses[0];
-                        });
+                    return this.mastodonService.getStatus(foreignStatus.id);
                 });
         }
 

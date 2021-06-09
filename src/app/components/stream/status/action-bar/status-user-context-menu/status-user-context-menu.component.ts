@@ -286,16 +286,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         let statusPromise: Promise<Status> = Promise.resolve(this.statusWrapper.status);
 
         if (account.id !== this.statusWrapper.provider.id) {
-            statusPromise =
-                this.toolsService.getInstanceInfo(account)
-                    .then(instance => {
-                        let version: 'v1' | 'v2' = 'v1';
-                        if (instance.major >= 3) version = 'v2';
-                        return this.mastodonService.search(account, this.statusWrapper.status.url, version, true);
-                    })
-                    .then((result: Results) => {
-                        return result.statuses[0];
-                    });
+            statusPromise = this.mastodonService.getStatus(this.statusWrapper.status.id);
         }
 
         return statusPromise;
