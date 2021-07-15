@@ -225,7 +225,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             //     this.status = state;
             // } else {
             if (!this.status || this.status === '') {
-                const uniqueMentions = this.getMentions(this.statusReplyingTo, this.statusReplyingToWrapper.provider);
+                const uniqueMentions = this.getMentions(this.statusReplyingTo);
                 for (const mention of uniqueMentions) {
                     this.status += `@${mention} `;
                 }
@@ -492,8 +492,20 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return cwLength;
     }
 
-    private getMentions(status: Status, providerInfo: AccountInfo): string[] {
-        const mentions = [status.account.acct, ...status.mentions.map(x => x.acct)];
+    private getMentions(status: Status): string[] {
+        let acct = status.account.acct;
+        if(!acct.includes('@')) {
+            acct += `@${status.account.url.replace('https://', '').split('/')[0]}`
+        }
+
+        const mentions = [acct];
+        status.mentions.forEach(m => {
+            let mentionAcct = m.acct;
+            if(!mentionAcct.includes('@')){
+                mentionAcct += `@${m.url.replace('https://', '').split('/')[0]}`;
+            }
+            mentions.push(mentionAcct);
+        });
 
         let uniqueMentions = [];
         for (let mention of mentions) {
@@ -502,22 +514,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             }
         }
 
-        let globalUniqueMentions = [];
-        for (let mention of uniqueMentions) {
-            if (!mention.includes('@')) {
-                if (providerInfo) {
-                    mention += `@${providerInfo.instance}`;
-                } else {
-                    mention += `@${status.url.replace('https://', '').split('/')[0]}`;
-                }
-            }
-            globalUniqueMentions.push(mention);
-        }
-
         const selectedUser = this.toolsService.getSelectedAccounts()[0];
-        globalUniqueMentions = globalUniqueMentions.filter(x => x.toLowerCase() !== `${selectedUser.username}@${selectedUser.instance}`.toLowerCase());
+        uniqueMentions = uniqueMentions.filter(x => x.toLowerCase() !== `${selectedUser.username}@${selectedUser.instance}`.toLowerCase());
 
-        return globalUniqueMentions;
+        return uniqueMentions;
     }
 
     onCtrlEnter(): boolean {
