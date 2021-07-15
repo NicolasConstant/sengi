@@ -32,7 +32,7 @@ addons:
 
 install:
   - nvm install 10.9.0
-  - npm install electron-builder@latest
+  - npm install electron-builder@22.11.5
   - npm install
   - npm rebuild node-sass
   - export DISPLAY=':99.0'
