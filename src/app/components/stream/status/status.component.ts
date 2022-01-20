@@ -88,7 +88,8 @@ export class StatusComponent implements OnInit {
 
         // const instanceUrl = 'https://' + this.status.uri.split('https://')[1].split('/')[0];
         // this.statusAccountName = this.emojiConverter.applyEmojis(this.displayedStatus.account.emojis, this.displayedStatus.account.display_name, EmojiTypeEnum.small);
-        this.statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, this.displayedStatus.content, EmojiTypeEnum.medium);
+        let statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, this.displayedStatus.content, EmojiTypeEnum.medium);
+        this.statusContent = this.ensureMentionAreDisplayed(statusContent);
     }
     get statusWrapper(): StatusWrapper {
         return this._statusWrapper;
@@ -101,6 +102,22 @@ export class StatusComponent implements OnInit {
     ngOnInit() {
     }
     
+    private ensureMentionAreDisplayed(data: string): string {
+        const mentions = this.displayedStatus.mentions;
+        if(!mentions || mentions.length === 0) return data;
+        
+        let textMentions = '';
+        for (const m of mentions) {
+            if(!data.includes(m.url)){
+                textMentions += `<span class="h-card"><a class="u-url mention" data-user="${m.id}" href="${m.url}" rel="ugc">@<span>${m.username}</span></a></span> `
+            }
+        }
+        if(textMentions !== ''){
+            data = textMentions + data;
+        }
+        return data;
+    }
+
     private setContentWarning(status: StatusWrapper) {
         this.hideStatus = status.hide;
         this.isContentWarned = status.applyCw;
