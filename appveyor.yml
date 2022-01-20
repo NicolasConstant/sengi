@@ -1,6 +1,6 @@
 os: unstable
 cache:
-  - node_modules
+  #- node_modules
 environment:
   GH_TOKEN:
       secure: wRRBU0GXTmTBgZBs2PGSaEJWOflynAyvp3Nc/7e9xmciPfkUCQAXcpOn0jIYmzpb
