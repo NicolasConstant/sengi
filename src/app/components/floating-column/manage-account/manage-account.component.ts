@@ -59,11 +59,11 @@ export class ManageAccountComponent extends BrowseBase {
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
-        private readonly userNotificationService: UserNotificationService) { 
+        private readonly userNotificationService: UserNotificationService) {
             super();
         }
 
-    ngOnInit() {        
+    ngOnInit() {
     }
 
     ngOnDestroy(): void {
@@ -73,7 +73,7 @@ export class ManageAccountComponent extends BrowseBase {
     private checkIfBookmarksAreAvailable() {
         this.toolsService.getInstanceInfo(this.account.info)
             .then((instance: InstanceInfo) => {
-                if (instance.major >= 3 && instance.minor >= 1) {
+                if (instance.major == 3 && instance.minor >= 1 || instance.major > 3) {
                     this.isBookmarksAvailable = true;
                 } else {
                     this.isBookmarksAvailable = false;
@@ -137,7 +137,7 @@ export class ManageAccountComponent extends BrowseBase {
     loadSubPanel(subpanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' | 'bookmarks'): boolean {
         if(this.subPanel === subpanel){
             switch(subpanel){
-                case 'bookmarks': 
+                case 'bookmarks':
                     this.bookmarksComp.applyGoToTop();
                     break;
                 case 'notifications':
@@ -151,12 +151,12 @@ export class ManageAccountComponent extends BrowseBase {
                     break;
                 case 'favorites':
                     this.favoritesComp.applyGoToTop();
-                    break;                
+                    break;
             }
         }
 
         this.subPanel = subpanel;
-        
+
         return false;
     }
 
