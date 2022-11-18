@@ -190,7 +190,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             this.boostPromise = Promise.resolve(true);
         }
 
-        const account = this.toolsService.getSelectedAccounts()[0];        
+        const account = this.toolsService.getSelectedAccounts()[0];
         this.boostPromise = this.boostPromise
             .then(() => {
                 this.boostIsLoading = true;
@@ -231,11 +231,11 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     private favoritePromise: Promise<any>;
-    favorite(): boolean {              
+    favorite(): boolean {
         if (!this.favoritePromise) {
             this.favoritePromise = Promise.resolve(true);
         }
-        
+
         const account = this.toolsService.getSelectedAccounts()[0];
         this.favoritePromise = this.favoritePromise
             .then(() => {
@@ -282,7 +282,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
             .then(() => {
                 this.bookmarkingIsLoading = true;
                 return this.toolsService.getStatusUsableByAccount(account, this.statusWrapper);
-            })        
+            })
             .then((status: Status) => {
                 if (this.isBookmarked && status.bookmarked) {
                     return this.mastodonService.unbookmark(account, status);
@@ -344,7 +344,7 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     private checkIfBookmarksAreAvailable(account: AccountInfo) {
         this.toolsService.getInstanceInfo(account)
             .then((instance: InstanceInfo) => {
-                if (instance.major >= 3 && instance.minor >= 1) {
+                if (instance.major == 3 && instance.minor >= 1 || instance.major > 3) {
                     this.isBookmarksAvailable = true;
                 } else {
                     this.isBookmarksAvailable = false;
