@@ -12,7 +12,7 @@ import { SettingsService } from './settings.service';
 @Injectable({
     providedIn: 'root'
 })
-export class MastodonWrapperService {    
+export class MastodonWrapperService {
     private refreshingToken: { [id: string]: Promise<AccountInfo> } = {};
 
     constructor(
@@ -29,7 +29,7 @@ export class MastodonWrapperService {
         let isExpired = false;
         let storedAccountInfo = this.getStoreAccountInfo(accountInfo.id);
 
-        if(!storedAccountInfo || !(storedAccountInfo.token)) 
+        if(!storedAccountInfo || !(storedAccountInfo.token))
             return Promise.resolve(accountInfo);
 
         try {
@@ -39,7 +39,7 @@ export class MastodonWrapperService {
                 } else {
                     const nowEpoch = Date.now() / 1000 | 0;
 
-                    //Pleroma workaround 
+                    //Pleroma workaround
                     let expire_in = storedAccountInfo.token.expires_in;
                     if (expire_in < 3600) {
                         expire_in = 3600;
@@ -74,7 +74,7 @@ export class MastodonWrapperService {
             p.then(() => {
                 this.refreshingToken[accountInfo.id] = null;
             });
-            
+
             this.refreshingToken[accountInfo.id] = p;
             return p;
         } else {
@@ -121,6 +121,13 @@ export class MastodonWrapperService {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.postNewStatus(refreshedAccount, status, visibility, spoiler, in_reply_to_id, mediaIds, poll, scheduled_at);
+            });
+    }
+
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.editStatus(refreshedAccount, statusId, status, visibility, spoiler, in_reply_to_id, mediaIds, poll, scheduled_at);
             });
     }
 

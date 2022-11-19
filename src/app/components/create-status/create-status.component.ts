@@ -83,6 +83,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return s;
     }
 
+    @Input('statusToEdit')
+    set statusToEdit(value: StatusWrapper) {
+        if (value) {
+            this.isEditing = true;
+            this.editingId = value.status.id;
+            this.redraftedStatus = value;
+        }
+    }
+
     @Input('redraftedStatus')
     set redraftedStatus(value: StatusWrapper) {
         if (value) {
@@ -141,6 +150,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     autosuggestData: string = null;
     instanceSupportsPoll = true;
     instanceSupportsScheduling = true;
+    isEditing: boolean;
+    editingId: string;
     private statusLoaded: boolean;
     private hasSuggestions: boolean;
 
@@ -572,7 +583,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         usableStatus
             .then((status: Status) => {
-                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
+                if (this.isEditing) {
+                    return this.editStatus(acc, this.editingId, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
+                } else {
+                    return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
+                }
             })
             .then((res: Status) => {
                 this.title = '';
@@ -635,6 +650,42 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return resultPromise;
     }
 
+    private editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
+        let parsedStatus = this.parseStatus(status);
+        let resultPromise = Promise.resolve(previousStatus);
+
+        for (let i = 0; i < parsedStatus.length; i++) {
+            let s = parsedStatus[i];
+            resultPromise = resultPromise
+                .then((pStatus: Status) => {
+                    let inReplyToId = null;
+                    if (pStatus) {
+                        inReplyToId = pStatus.id;
+                    }
+
+                    if (i === 0) {
+                        return this.mastodonService.editStatus(account, statusId, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt)
+                            .then((status: Status) => {
+                                this.mediaService.clearMedia();
+                                return status;
+                            });
+                    } else {
+                        return this.mastodonService.editStatus(account, statusId, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                    }
+                })
+                .then((status: Status) => {
+                    if (this.statusReplyingToWrapper) {
+                        let cwPolicy = this.toolsService.checkContentWarning(status);
+                        this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(cwPolicy.status, account, cwPolicy.applyCw, cwPolicy.hide));
+                    }
+
+                    return status;
+                });
+        }
+
+        return resultPromise;
+    }
+
     private parseStatus(status: string): string[] {
         //console.error(status.toString());
 
@@ -654,7 +705,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         while (trucatedStatus.length > currentMaxCharLength) {
             const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
-            
+
             if(nextIndex === -1){
                 break;
             }
@@ -706,8 +757,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     suggestionSelected(selection: AutosuggestSelection) {
         if (this.status.includes(selection.pattern)) {
             this.status = this.replacePatternWithAutosuggest(this.status, selection.pattern, selection.autosuggest);
-            
-            let cleanStatus = this.status.replace(/\r?\n/g, ' ');            
+
+            let cleanStatus = this.status.replace(/\r?\n/g, ' ');
             let newCaretPosition = cleanStatus.indexOf(`${selection.autosuggest}`) + selection.autosuggest.length;
             if (newCaretPosition > cleanStatus.length) newCaretPosition = cleanStatus.length;
 
