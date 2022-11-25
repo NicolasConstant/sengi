@@ -190,15 +190,15 @@
             <p>
                 If you run into bugs or want to clear all stored Sengi data, please procede:
             </p>
-            <a *ngIf="!isCleanningAll" class="sengi-btn sengi-btn__red" href (click)="startClearAllLocalData()">
+            <a *ngIf="!isCleaningAll" class="sengi-btn sengi-btn__red" href (click)="startClearAllLocalData()">
                 Clear all local data
             </a>
 
-            <a *ngIf="isCleanningAll" class="sengi-btn sengi-btn__red sengi-btn__medium" href
+            <a *ngIf="isCleaningAll" class="sengi-btn sengi-btn__red sengi-btn__medium" href
                 (click)="confirmClearAll()">
                 Confirm Clear All
             </a>
-            <a *ngIf="isCleanningAll" class="sengi-btn sengi-btn__blue sengi-btn__medium" href
+            <a *ngIf="isCleaningAll" class="sengi-btn sengi-btn__blue sengi-btn__medium" href
                 (click)="cancelClearAll()">
                 Cancel
             </a>

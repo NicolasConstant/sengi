@@ -269,9 +269,9 @@ export class SettingsComponent implements OnInit {
         this.settingsService.saveSettings(settings);
     }
 
-    isCleanningAll: boolean = false;
+    isCleaningAll: boolean = false;
     startClearAllLocalData(): boolean {
-        this.isCleanningAll = !this.isCleanningAll;
+        this.isCleaningAll = !this.isCleaningAll;
         return false;
     }
 
@@ -282,7 +282,7 @@ export class SettingsComponent implements OnInit {
     }
 
     cancelClearAll(): boolean {
-        this.isCleanningAll = false;
+        this.isCleaningAll = false;
         return false;
     }
 
