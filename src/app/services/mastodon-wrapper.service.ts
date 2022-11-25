@@ -344,17 +344,17 @@ export class MastodonWrapperService {
             });
     }
 
-    mute(account: AccountInfo, accounId: number): Promise<Relationship> {
+    mute(account: AccountInfo, accountId: number): Promise<Relationship> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
-                return this.mastodonService.mute(refreshedAccount, accounId);
+                return this.mastodonService.mute(refreshedAccount, accountId);
             });
     }
 
-    block(account: AccountInfo, accounId: number): Promise<Relationship> {
+    block(account: AccountInfo, accountId: number): Promise<Relationship> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
-                return this.mastodonService.block(refreshedAccount, accounId);
+                return this.mastodonService.block(refreshedAccount, accountId);
             });
     }
 

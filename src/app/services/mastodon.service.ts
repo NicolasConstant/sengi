@@ -414,14 +414,14 @@ export class MastodonService {
         return this.httpClient.get<Poll>(route, { headers: headers }).toPromise();
     }
 
-    mute(account: AccountInfo, accounId: number): Promise<Relationship> {
-        let route = `https://${account.instance}${this.apiRoutes.mute}`.replace('{0}', accounId.toString());
+    mute(account: AccountInfo, accountId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.mute}`.replace('{0}', accountId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
 
-    block(account: AccountInfo, accounId: number): Promise<Relationship> {
-        let route = `https://${account.instance}${this.apiRoutes.block}`.replace('{0}', accounId.toString());
+    block(account: AccountInfo, accountId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.block}`.replace('{0}', accountId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
