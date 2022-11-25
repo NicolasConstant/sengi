@@ -15,7 +15,7 @@
         <fa-icon [icon]="faAngleRight"></fa-icon>
     </a>
 
-    <div *ngFor="let att of attachments" class="media-viewer-canvas__attachement"
+    <div *ngFor="let att of attachments" class="media-viewer-canvas__attachment"
         [class.collapsed]="currentIndex !== att.index">
         <a href="{{att.url}}" target="_blank" title="{{att.description}}">
             <img *ngIf="att.type === 'image'" src="{{att.url}}" class="media-viewer-canvas__image"   [class.collapsed]="currentIndex !== att.index" />
