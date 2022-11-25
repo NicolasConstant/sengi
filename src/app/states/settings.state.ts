@@ -58,7 +58,7 @@ export class ContentWarningPolicy {
     policy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
     addCwOnContent: string[] = [];
     removeCwOnContent: string[] = [];
-    hideCompletlyContent: string[] = [];
+    hideCompletelyContent: string[] = [];
 }
 
 export class GlobalSettings {

@@ -110,7 +110,7 @@ export class SettingsComponent implements OnInit {
         this.contentWarningPolicy = settings.contentWarningPolicy.policy;
         this.addCwOnContent = settings.contentWarningPolicy.addCwOnContent.join(';');
         this.removeCwOnContent = settings.contentWarningPolicy.removeCwOnContent.join(';');
-        this.contentHidedCompletely = settings.contentWarningPolicy.hideCompletlyContent.join(';');
+        this.contentHidedCompletely = settings.contentWarningPolicy.hideCompletelyContent.join(';');
 
         this.timeLineHeader = settings.timelineHeader;
         this.timeLineMode = settings.timelineMode;
@@ -189,9 +189,9 @@ export class SettingsComponent implements OnInit {
         }
 
         if(hide !== null){
-            cwPolicySettings.hideCompletlyContent = this.splitCwValues(hide);
+            cwPolicySettings.hideCompletelyContent = this.splitCwValues(hide);
         } else {
-            cwPolicySettings.hideCompletlyContent = settings.contentWarningPolicy.hideCompletlyContent;
+            cwPolicySettings.hideCompletelyContent = settings.contentWarningPolicy.hideCompletelyContent;
         }
 
         this.settingsService.saveContentWarningPolicy(cwPolicySettings);
