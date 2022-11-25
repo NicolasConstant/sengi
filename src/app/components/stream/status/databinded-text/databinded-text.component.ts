@@ -37,15 +37,15 @@ export class DatabindedTextComponent implements OnInit {
         this.processedText = '';
 
         do {
-            value = value.replace('@<span class="">', '<span class="">'); //Friendica sanitarization
+            value = value.replace('@<span class="">', '<span class="">'); //Friendica sanitization
         } while (value.includes('@<span class="">'));
 
         do {
-            value = value.replace('class="mention" rel="nofollow noopener" target="_blank">@', 'class="mention" rel="nofollow noopener" target="_blank">'); //Misskey sanitarization
+            value = value.replace('class="mention" rel="nofollow noopener" target="_blank">@', 'class="mention" rel="nofollow noopener" target="_blank">'); //Misskey sanitization
         } while (value.includes('class="mention" rel="nofollow noopener" target="_blank">@'));
 
         do {
-            value = value.replace('@<span class="h-card">', '<span class="h-card">'); //Zap sanitarization
+            value = value.replace('@<span class="h-card">', '<span class="h-card">'); //Zap sanitization
         } while (value.includes('@<span class="h-card">'));
 
         let linksSections = value.split('<a ');
