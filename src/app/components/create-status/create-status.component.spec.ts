@@ -164,7 +164,7 @@ describe('CreateStatusComponent', () => {
         expect(result.length).toBe(1);
     });
 
-    it('should cound URL correctly', () => {
+    it('should count URL correctly', () => {
         const newLine = String.fromCharCode(13, 10);
         const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s`;
 
@@ -173,7 +173,7 @@ describe('CreateStatusComponent', () => {
         expect((<any>component).charCountLeft).toBe(0);
     });
 
-    it('should cound URL correctly - new lines', () => {
+    it('should count URL correctly - new lines', () => {
         const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd\nhttps://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs\ndsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s`;
 
         (<any>component).maxCharLength = 500;
@@ -181,7 +181,7 @@ describe('CreateStatusComponent', () => {
         expect((<any>component).charCountLeft).toBe(0);
     });
 
-    it('should cound URL correctly - dual post', () => {
+    it('should count URL correctly - dual post', () => {
         const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd  qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s`;
 
         (<any>component).maxCharLength = 512;
@@ -190,7 +190,7 @@ describe('CreateStatusComponent', () => {
         expect((<any>component).postCounts).toBe(2);
     });
 
-    it('should cound URL correctly - triple post', () => {
+    it('should count URL correctly - triple post', () => {
         const status = `qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd https://google.com/testqsdqsdqsdqsdqsdqsdqsdqdqsdqsdqsdqsdqs dsqd qsd qsd dsqdqs dqs dqsd qsd qsd qsd qsd qsd qs dqsdsq qsd qsd qs dsqds qqs d dqs dqs dqs dqqsd qsd qsd qsd sqd qsd qsd sqd qds dsqd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd qsd qsd qs dqsd  qsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsd qsd qsddq sqd qsd qsdqs dqsd qsd qsd qsd qsd qsd qsd dsqd qsd qsd dsqdqs fqd dsq sq dsq qsd q qsd qsd qs dqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsqs dqs qsd qsd qss sq ss s dqsd qsd sqd qsqsd qsd qsdd dqsd qs s dsqs sd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd qs qsd qsd qsd qsd sqd qsd qsd sqd qsd qsd qsd qsd qsd qsd qsd qsd qsd qsd sd`;
 
         (<any>component).maxCharLength = 512;
