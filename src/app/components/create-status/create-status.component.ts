@@ -98,7 +98,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             const newLine = String.fromCharCode(13, 10);
             let content = value.status.content;
 
-            content = this.tranformHtmlRepliesToReplies(content);
+            content = this.transformHtmlRepliesToReplies(content);
 
             while (content.includes('<p>') || content.includes('</p>') || content.includes('<br>') || content.includes('<br/>') || content.includes('<br />')) {
                 content = content.replace('<p>', '').replace('</p>', newLine + newLine).replace('<br />', newLine).replace('<br/>', newLine).replace('<br>', newLine);
@@ -930,7 +930,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private tranformHtmlRepliesToReplies(data: string): string {
+    private transformHtmlRepliesToReplies(data: string): string {
         const mastodonMentionRegex = /<span class="h-card"><a href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" class="u-url mention">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
         const pleromaMentionRegex = /<span class="h-card"><a data-user="[a-zA-Z0-9]{0,255}" class="u-url mention" href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" rel="ugc">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
 
