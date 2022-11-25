@@ -198,7 +198,7 @@ describe('DatabindedTextComponent', () => {
         expect(component.processedText).toContain('test <span class="h-card"><a href="https://mastodon.social/@test" class="account--test-mastodon-social" title="@test@mastodon.social" target="_blank" rel="noopener noreferrer">@test</a></span>');
     });
 
-    it('should parse hastag - Pleroma', () => {
+    it('should parse hashtag - Pleroma', () => {
         const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
 
         component.text = sample;
