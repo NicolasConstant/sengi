@@ -142,7 +142,7 @@ export class StreamStatusesComponent extends TimelineBase {
             if (update) {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.status.id == update.status.id)) {
-                        if ((this.streamPositionnedAtTop || this.timelineLoadingMode === TimeLineModeEnum.Continuous)
+                        if ((this.streamPositionedAtTop || this.timelineLoadingMode === TimeLineModeEnum.Continuous)
                             && this.timelineLoadingMode !== TimeLineModeEnum.SlowMode) {
 
                             if (this.isFiltered(update.status)) {
@@ -177,7 +177,7 @@ export class StreamStatusesComponent extends TimelineBase {
     }
 
     protected scrolledToTop() {
-        this.streamPositionnedAtTop = true;
+        this.streamPositionedAtTop = true;
 
         if (this.timelineLoadingMode !== TimeLineModeEnum.SlowMode) {
             this.loadBuffer();
@@ -266,7 +266,7 @@ export class StreamStatusesComponent extends TimelineBase {
     }
 
     private checkAndCleanUpStream(): void {
-        if (this.streamPositionnedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
+        if (this.streamPositionedAtTop && this.statuses.length > 3 * this.streamingService.nbStatusPerIteration) {
             this.statuses.length = 2 * this.streamingService.nbStatusPerIteration;
             this.maxReached = false;
             this.lastCallReachedMax = false;

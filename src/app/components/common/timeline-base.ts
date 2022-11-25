@@ -28,7 +28,7 @@ export abstract class TimelineBase extends BrowseBase {
     statuses: StatusWrapper[] = [];
     bufferStream: Status[] = [];
     protected bufferWasCleared: boolean;
-    streamPositionnedAtTop: boolean = true;
+    streamPositionedAtTop: boolean = true;
     protected isProcessingInfiniteScroll: boolean;
 
     protected hideBoosts: boolean;
@@ -59,7 +59,7 @@ export abstract class TimelineBase extends BrowseBase {
         const atBottom = element.scrollHeight <= element.clientHeight + element.scrollTop + 1000;
         const atTop = element.scrollTop === 0;
 
-        this.streamPositionnedAtTop = false;
+        this.streamPositionedAtTop = false;
         if (atBottom && !this.isProcessingInfiniteScroll) {
             this.scrolledToBottom();
         } else if (atTop) {

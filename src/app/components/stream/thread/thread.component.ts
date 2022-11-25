@@ -29,7 +29,7 @@ export class ThreadComponent extends BrowseBase {
     private remoteStatusFetchingDisabled = false;
 
     bufferStream: Status[] = []; //html compatibility only
-    streamPositionnedAtTop: boolean = true; //html compatibility only
+    streamPositionedAtTop: boolean = true; //html compatibility only
     timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     private lastThreadEvent: OpenThreadEvent;
