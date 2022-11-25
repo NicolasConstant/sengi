@@ -138,7 +138,7 @@ export class StreamStatusesComponent extends TimelineBase {
 
     private launchWebsocket(): void {
         this.websocketStreaming = this.streamingService.getStreaming(this.account, this._streamElement);
-        this.websocketStreaming.statusUpdateSubjet.subscribe((update: StatusUpdate) => {
+        this.websocketStreaming.statusUpdateSubject.subscribe((update: StatusUpdate) => {
             if (update) {
                 if (update.type === EventEnum.update) {
                     if (!this.statuses.find(x => x.status.id == update.status.id)) {
