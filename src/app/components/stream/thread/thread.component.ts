@@ -82,9 +82,9 @@ export class ThreadComponent extends BrowseBase {
 
         this.newPostSub = this.notificationService.newRespondPostedStream.subscribe((replyData: NewReplyData) => {
             if (replyData) {
-                const repondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
+                const respondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
                 const responseStatus = replyData.response;
-                if (repondingStatus && this.statuses[0]) {
+                if (respondingStatus && this.statuses[0]) {
                     this.statuses.push(responseStatus);
                 }
             }
