@@ -640,7 +640,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         let mentionExtraChars = this.getMentionExtraChars(status);
         let urlExtraChar = this.getLinksExtraChars(status);
-        let trucatedStatus = `${status}`;
+        let truncatedStatus = `${status}`;
         let results = [];
 
         let aggregateMention = '';
@@ -652,23 +652,23 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let currentMaxCharLength = this.maxCharLength + mentionExtraChars + urlExtraChar - this.getCwLength();
         let maxChars = currentMaxCharLength - 6;
 
-        while (trucatedStatus.length > currentMaxCharLength) {
-            const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
+        while (truncatedStatus.length > currentMaxCharLength) {
+            const nextIndex = truncatedStatus.lastIndexOf(' ', maxChars);
             
             if(nextIndex === -1){
                 break;
             }
 
-            results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
-            trucatedStatus = aggregateMention + trucatedStatus.substr(nextIndex + 1);
+            results.push(truncatedStatus.substr(0, nextIndex) + ' (...)');
+            truncatedStatus = aggregateMention + truncatedStatus.substr(nextIndex + 1);
 
             // Refresh max
-            let mentionExtraChars = this.getMentionExtraChars(trucatedStatus);
-            let urlExtraChar = this.getLinksExtraChars(trucatedStatus);
+            let mentionExtraChars = this.getMentionExtraChars(truncatedStatus);
+            let urlExtraChar = this.getLinksExtraChars(truncatedStatus);
             currentMaxCharLength = this.maxCharLength + mentionExtraChars + urlExtraChar - this.getCwLength();
             maxChars = currentMaxCharLength - 6;
         }
-        results.push(trucatedStatus);
+        results.push(truncatedStatus);
         return results;
     }
 
