@@ -28,6 +28,6 @@
         <div class="poll__statistics"><span *ngIf="(poll.voted || poll.expired) && !pollLocked && !(poll.voters_count && poll.voters_count > 0)" class="poll__separator">·</span><span *ngIf="!(poll.voters_count && poll.voters_count > 0)">{{poll.votes_count}} votes</span><span *ngIf="poll.voters_count > 0 && !pollLocked" class="poll__separator">·</span><span *ngIf="poll.voters_count > 0">{{poll.voters_count}} people</span><span *ngIf="!poll.expired" class="poll__separator" title="{{ poll.expires_at | timeLeft | async }}">· {{ poll.expires_at | timeLeft | async }}</span></div>
     </div>
     <div class="poll__error" *ngIf="errorOccuredWhenRetrievingPoll">
-        Error occured when retrieving the poll
+        Error occurred when retrieving the poll
     </div>
 </div>

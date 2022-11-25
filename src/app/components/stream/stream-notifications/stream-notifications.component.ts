@@ -143,7 +143,7 @@ export class StreamNotificationsComponent extends BrowseBase {
                 let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', this.account.id, null, null, null, this.account.instance);
 
                 let streaming = this.streamingService.getStreaming(this.account, streamElement);
-                this.notificationSubscription = streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
+                this.notificationSubscription = streaming.statusUpdateSubject.subscribe((notification: StatusUpdate) => {
                     if (notification && notification.type === EventEnum.notification) {
                         let cwPolicy = this.toolsService.checkContentWarning(notification.status);
                         const n = new NotificationWrapper(notification.notification, this.account, cwPolicy.applyCw, cwPolicy.hide);

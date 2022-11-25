@@ -29,7 +29,7 @@ export class ThreadComponent extends BrowseBase {
     private remoteStatusFetchingDisabled = false;
 
     bufferStream: Status[] = []; //html compatibility only
-    streamPositionnedAtTop: boolean = true; //html compatibility only
+    streamPositionedAtTop: boolean = true; //html compatibility only
     timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
 
     private lastThreadEvent: OpenThreadEvent;
@@ -82,9 +82,9 @@ export class ThreadComponent extends BrowseBase {
 
         this.newPostSub = this.notificationService.newRespondPostedStream.subscribe((replyData: NewReplyData) => {
             if (replyData) {
-                const repondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
+                const respondingStatus = this.statuses.find(x => x.status.id === replyData.uiStatusId);
                 const responseStatus = replyData.response;
-                if (repondingStatus && this.statuses[0]) {
+                if (respondingStatus && this.statuses[0]) {
                     this.statuses.push(responseStatus);
                 }
             }

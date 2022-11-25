@@ -160,8 +160,8 @@ export class AppComponent implements OnInit, OnDestroy {
     enhancedTutorialActive: boolean;
     enhancedTutorialVisible: boolean;
     private checkEnhancedTutorial() {
-        let enhancedTutorialDesactivated = JSON.parse(localStorage.getItem('tutorial'));
-        if (!this.floatingColumnActive && !this.tutorialActive && !enhancedTutorialDesactivated) {
+        let enhancedTutorialDeactivated = JSON.parse(localStorage.getItem('tutorial'));
+        if (!this.floatingColumnActive && !this.tutorialActive && !enhancedTutorialDeactivated) {
             setTimeout(() => {
                 this.enhancedTutorialActive = true;
                 setTimeout(() => {

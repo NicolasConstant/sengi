@@ -23,7 +23,7 @@ export class StreamingService {
 }
 
 export class StreamingWrapper {
-    statusUpdateSubjet = new BehaviorSubject<StatusUpdate>(null);
+    statusUpdateSubject = new BehaviorSubject<StatusUpdate>(null);
     eventSource: WebSocket;
     private apiRoutes = new ApiRoutes();
     private errorClosing: boolean;
@@ -101,7 +101,7 @@ export class StreamingWrapper {
                     update.muteSound = soundMuted;
 
                     this.since_id_notifications = n.id;
-                    this.statusUpdateSubjet.next(update);
+                    this.statusUpdateSubject.next(update);
                 }
             })
             .catch(err => {
@@ -124,7 +124,7 @@ export class StreamingWrapper {
                     update.status = s;
                     update.type = EventEnum.update;
                     this.since_id = update.status.id;
-                    this.statusUpdateSubjet.next(update);
+                    this.statusUpdateSubject.next(update);
                 }
             })
             .catch(err => {
@@ -159,7 +159,7 @@ export class StreamingWrapper {
                 newUpdate.type = EventEnum.unknow;
         }
 
-        this.statusUpdateSubjet.next(newUpdate);
+        this.statusUpdateSubject.next(newUpdate);
     }
 
     private getRoute(account: AccountInfo, stream: StreamElement): string {

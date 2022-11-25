@@ -79,7 +79,7 @@ export class UserNotificationService {
                 let streamElement = new StreamElement(StreamTypeEnum.personnal, 'activity', account.id, null, null, null, account.instance);
 
                 let streaming = this.streamingService.getStreaming(account, streamElement);
-                streaming.statusUpdateSubjet.subscribe((notification: StatusUpdate) => {
+                streaming.statusUpdateSubject.subscribe((notification: StatusUpdate) => {
                     if (notification && notification.type === EventEnum.notification) {
                         this.processNewUpdate(account, notification);
                     }

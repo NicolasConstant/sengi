@@ -33,7 +33,7 @@ export class ToolsService {
         let splittedContent = [];
         if ((cwPolicy.policy === ContentWarningPolicyEnum.HideAll && cwPolicy.addCwOnContent.length > 0)
             || (cwPolicy.policy === ContentWarningPolicyEnum.AddOnAllContent && cwPolicy.removeCwOnContent.length > 0)
-            || (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0)) {
+            || (cwPolicy.hideCompletelyContent && cwPolicy.hideCompletelyContent.length > 0)) {
             let parser = new DOMParser();
             let dom = parser.parseFromString((status.content + ' ' + status.spoiler_text).replace("<br/>", " ").replace("<br>", " ").replace(/\n/g, ' '), 'text/html')
             let contentToParse = dom.body.textContent;
@@ -62,8 +62,8 @@ export class ToolsService {
             }
         }
 
-        if (cwPolicy.hideCompletlyContent && cwPolicy.hideCompletlyContent.length > 0) {
-            let detected = cwPolicy.hideCompletlyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
+        if (cwPolicy.hideCompletelyContent && cwPolicy.hideCompletelyContent.length > 0) {
+            let detected = cwPolicy.hideCompletelyContent.filter(x => splittedContent.find(y => y == x || y == `#${x}`));
             if (detected && detected.length > 0) {
                 hideStatus = true;
             }

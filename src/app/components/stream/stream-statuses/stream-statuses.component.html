@@ -6,7 +6,7 @@
     </div>
 
     <div class="stream-toots__new-notification" 
-        [class.stream-toots__new-notification--display]="bufferStream && bufferStream.length > 0 && !streamPositionnedAtTop"></div>
+        [class.stream-toots__new-notification--display]="bufferStream && bufferStream.length > 0 && !streamPositionedAtTop"></div>
 
     <div class="stream-toots__content flexcroll" #statusstream (scroll)="onScroll()" tabindex="0">       
         <div *ngIf="displayError" class="stream-toots__error">{{displayError}}</div>

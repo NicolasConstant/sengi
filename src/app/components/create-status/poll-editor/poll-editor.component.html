@@ -2,7 +2,7 @@
     <div class="poll-editor__entries">
         <div *ngFor="let e of entries">
             <app-poll-entry class="poll-editor__entry" [entry]="e" (removeEvent)="removeElement(e)"
-                (toogleMultiEvent)="toogleMulti()"></app-poll-entry>
+                (toggleMultiEvent)="toggleMulti()"></app-poll-entry>
         </div>
     </div>
 

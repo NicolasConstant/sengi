@@ -46,7 +46,7 @@
     color: $boost-color;
 }
 
-$acccount-info-left: 70px;
+$account-info-left: 70px;
 .follow-account {
     padding: 5px;
     height: 60px;
@@ -67,7 +67,7 @@ $acccount-info-left: 70px;
     &__display-name {
         position: absolute;
         top: 7px;
-        left:  $acccount-info-left;
+        left:  $account-info-left;
         color: whitesmoke;      
     }
 
@@ -78,7 +78,7 @@ $acccount-info-left: 70px;
     &__acct {
         position: absolute;
         top: 27px;
-        left: $acccount-info-left;
+        left: $account-info-left;
         font-size: 13px;
         color: $status-links-color;
 
@@ -86,13 +86,13 @@ $acccount-info-left: 70px;
         overflow: hidden;
         text-overflow: ellipsis;
 
-        width: calc(100% - #{$acccount-info-left});
+        width: calc(100% - #{$account-info-left});
     }
 }
 
 .follow_request {
-    width: calc(100% - #{$acccount-info-left});
-    margin-left: $acccount-info-left;
+    width: calc(100% - #{$account-info-left});
+    margin-left: $account-info-left;
 
     &__link {
         display: inline-block;

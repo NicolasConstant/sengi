@@ -98,7 +98,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             const newLine = String.fromCharCode(13, 10);
             let content = value.status.content;
 
-            content = this.tranformHtmlRepliesToReplies(content);
+            content = this.transformHtmlRepliesToReplies(content);
 
             while (content.includes('<p>') || content.includes('</p>') || content.includes('<br>') || content.includes('<br/>') || content.includes('<br />')) {
                 content = content.replace('<p>', '').replace('</p>', newLine + newLine).replace('<br />', newLine).replace('<br/>', newLine).replace('<br>', newLine);
@@ -294,10 +294,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const lastChar = status.substr(caretPosition - 1, 1);
         const lastCharIsSpace = lastChar === ' ';
 
-        const splitedStatus = status.split(/(\r\n|\n|\r)/);
+        const splitStatus = status.split(/(\r\n|\n|\r)/);
         let offset = 0;
         let currentSection = '';
-        for (let x of splitedStatus) {
+        for (let x of splitStatus) {
             const sectionLength = x.length;
             if (offset + sectionLength >= caretPosition) {
                 currentSection = x;
@@ -640,7 +640,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         let mentionExtraChars = this.getMentionExtraChars(status);
         let urlExtraChar = this.getLinksExtraChars(status);
-        let trucatedStatus = `${status}`;
+        let truncatedStatus = `${status}`;
         let results = [];
 
         let aggregateMention = '';
@@ -652,23 +652,23 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         let currentMaxCharLength = this.maxCharLength + mentionExtraChars + urlExtraChar - this.getCwLength();
         let maxChars = currentMaxCharLength - 6;
 
-        while (trucatedStatus.length > currentMaxCharLength) {
-            const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
+        while (truncatedStatus.length > currentMaxCharLength) {
+            const nextIndex = truncatedStatus.lastIndexOf(' ', maxChars);
             
             if(nextIndex === -1){
                 break;
             }
 
-            results.push(trucatedStatus.substr(0, nextIndex) + ' (...)');
-            trucatedStatus = aggregateMention + trucatedStatus.substr(nextIndex + 1);
+            results.push(truncatedStatus.substr(0, nextIndex) + ' (...)');
+            truncatedStatus = aggregateMention + truncatedStatus.substr(nextIndex + 1);
 
             // Refresh max
-            let mentionExtraChars = this.getMentionExtraChars(trucatedStatus);
-            let urlExtraChar = this.getLinksExtraChars(trucatedStatus);
+            let mentionExtraChars = this.getMentionExtraChars(truncatedStatus);
+            let urlExtraChar = this.getLinksExtraChars(truncatedStatus);
             currentMaxCharLength = this.maxCharLength + mentionExtraChars + urlExtraChar - this.getCwLength();
             maxChars = currentMaxCharLength - 6;
         }
-        results.push(trucatedStatus);
+        results.push(truncatedStatus);
         return results;
     }
 
@@ -930,7 +930,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private tranformHtmlRepliesToReplies(data: string): string {
+    private transformHtmlRepliesToReplies(data: string): string {
         const mastodonMentionRegex = /<span class="h-card"><a href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" class="u-url mention">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
         const pleromaMentionRegex = /<span class="h-card"><a data-user="[a-zA-Z0-9]{0,255}" class="u-url mention" href="https:\/\/([a-zA-Z0-9.]{0,255})\/[a-zA-Z0-9_@/-]{0,255}" rel="ugc">@<span>([a-zA-Z0-9_-]{0,255})<\/span><\/a><\/span>/gmi;
 

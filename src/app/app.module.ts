@@ -35,7 +35,7 @@ import { StreamsState } from "./states/streams.state";
 import { StatusComponent } from "./components/stream/status/status.component";
 import { MastodonService } from "./services/mastodon.service";
 import { MastodonWrapperService } from "./services/mastodon-wrapper.service";
-import { AttachementsComponent } from './components/stream/status/attachements/attachements.component';
+import { AttachementsComponent } from './components/stream/status/attachments/attachments.component';
 import { SettingsComponent } from './components/floating-column/settings/settings.component';
 import { AddNewAccountComponent } from './components/floating-column/add-new-account/add-new-account.component';
 import { SearchComponent } from './components/floating-column/search/search.component';
@@ -82,7 +82,7 @@ import { NotificationComponent } from './components/floating-column/manage-accou
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { BookmarksComponent } from './components/floating-column/manage-account/bookmarks/bookmarks.component';
-import { AttachementImageComponent } from './components/stream/status/attachements/attachement-image/attachement-image.component';
+import { AttachementImageComponent } from './components/stream/status/attachments/attachment-image/attachment-image.component';
 import { EnsureHttpsPipe } from './pipes/ensure-https.pipe';
 import { UserFollowsComponent } from './components/stream/user-follows/user-follows.component';
 import { AccountComponent } from './components/common/account/account.component';

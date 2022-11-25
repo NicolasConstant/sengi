@@ -14,7 +14,7 @@
     padding: 4px 5px 0 5px;
     height: $stream-selector-height;
 
-    &__column-reprensentation {
+    &__column-representation {
         transition: all .2s;
         display: inline-block;
         width: 5px;
@@ -27,7 +27,7 @@
         }
     }
 
-    &:hover &__column-reprensentation {
+    &:hover &__column-representation {
         background-color: $font-link-primary-hover;
 
         &--selected {

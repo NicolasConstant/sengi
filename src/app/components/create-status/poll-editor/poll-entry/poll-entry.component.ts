@@ -12,7 +12,7 @@ export class PollEntryComponent implements OnInit {
     @Input() entry: PollEntry;
 
     @Output() removeEvent = new EventEmitter();
-    @Output() toogleMultiEvent = new EventEmitter();
+    @Output() toggleMultiEvent = new EventEmitter();
 
     constructor() { }
 
@@ -24,8 +24,8 @@ export class PollEntryComponent implements OnInit {
         return false;
     }
 
-    toogleMulti(): boolean {
-        this.toogleMultiEvent.next();
+    toggleMulti(): boolean {
+        this.toggleMultiEvent.next();
         return false;
     }
 
