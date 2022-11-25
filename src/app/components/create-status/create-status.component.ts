@@ -294,10 +294,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         const lastChar = status.substr(caretPosition - 1, 1);
         const lastCharIsSpace = lastChar === ' ';
 
-        const splitedStatus = status.split(/(\r\n|\n|\r)/);
+        const splitStatus = status.split(/(\r\n|\n|\r)/);
         let offset = 0;
         let currentSection = '';
-        for (let x of splitedStatus) {
+        for (let x of splitStatus) {
             const sectionLength = x.length;
             if (offset + sectionLength >= caretPosition) {
                 currentSection = x;

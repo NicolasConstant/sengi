@@ -118,9 +118,9 @@ export class StreamStatusesComponent extends TimelineBase {
         this.resetStream();
 
         if (this.userLocked) {
-            const splitedUserName = streamElement.accountId.split('@');
-            const user = splitedUserName[0];
-            const instance = splitedUserName[1];
+            const splitUserName = streamElement.accountId.split('@');
+            const user = splitUserName[0];
+            const instance = splitUserName[1];
             this.account = this.getRegisteredAccounts().find(x => x.username == user && x.instance == instance);
         } else {
             this.account = this.toolsService.getSelectedAccounts()[0];
