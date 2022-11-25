@@ -54,7 +54,7 @@ export class PollEditorComponent implements OnInit {
         this.entries = this.entries.filter(x => x.id != entry.id);
     }
 
-    toogleMulti() {
+    toggleMulti() {
         this.multiSelected = !this.multiSelected;
         this.entries.forEach((e: PollEntry) => {
             e.isMulti = this.multiSelected;

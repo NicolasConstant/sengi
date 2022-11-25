@@ -9,7 +9,7 @@
     </a>
 
     <div *ngFor="let account of accounts">
-        <app-account-icon [account]="account" (toogleAccountNotify)="onToogleAccountNotify($event)"
+        <app-account-icon [account]="account" (toggleAccountNotify)="onToogleAccountNotify($event)"
             (openMenuNotify)="onOpenMenuNotify($event)">
         </app-account-icon>
     </div>

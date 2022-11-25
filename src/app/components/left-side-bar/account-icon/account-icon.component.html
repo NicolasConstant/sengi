@@ -1,5 +1,5 @@
 <a class="account-icon"
-  href title="{{ account.info.id }}" (click)="toogleAccount()" (auxclick)="openLocalAccount($event)"  (contextmenu)="openMenu()">
+  href title="{{ account.info.id }}" (click)="toggleAccount()" (auxclick)="openLocalAccount($event)"  (contextmenu)="openMenu()">
   <span class="hasActivity" *ngIf="account.hasActivityNotifications">new</span>
   <img class="account-icon__avatar" [class.account-icon__avatar--selected]="account.info.isSelected" src="{{ account.avatar }}" />
 </a>

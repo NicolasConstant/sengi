@@ -13,7 +13,7 @@ import { NotificationService } from '../../../services/notification.service';
 })
 export class AccountIconComponent implements OnInit {
     @Input() account: AccountWithNotificationWrapper;
-    @Output() toogleAccountNotify = new EventEmitter<AccountWrapper>();
+    @Output() toggleAccountNotify = new EventEmitter<AccountWrapper>();
     @Output() openMenuNotify = new EventEmitter<AccountWrapper>();
 
     private promiseGetUser: Promise<Account>;
@@ -26,8 +26,8 @@ export class AccountIconComponent implements OnInit {
         this.promiseGetUser = this.mastodonTools.findAccount(this.account.info, `@${this.account.info.username}@${this.account.info.instance}`);
     }
 
-    toogleAccount(): boolean {
-        this.toogleAccountNotify.emit(this.account);
+    toggleAccount(): boolean {
+        this.toggleAccountNotify.emit(this.account);
         return false;
     }
 
