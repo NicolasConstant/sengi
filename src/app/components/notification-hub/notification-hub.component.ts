@@ -12,7 +12,7 @@ export class NotificationHubComponent implements OnInit {
     constructor(private notificationService: NotificationService) { }
 
     ngOnInit() {
-        this.notificationService.notifactionStream.subscribe((notification: NotificationData) => {
+        this.notificationService.notificationStream.subscribe((notification: NotificationData) => {
             let alreadyExistingNotification = this.notifications.find(x => x.avatar === notification.avatar && x.message === notification.message);
 
             if(alreadyExistingNotification){
