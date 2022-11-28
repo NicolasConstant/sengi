@@ -31,12 +31,12 @@ export class EmojiConverter {
     }
 
     private applyEmojiOne(className: string, text: string): string{
-        text = EmojiOne.toImage(text);
+        text = EmojiOne.shortnameToImage(text);
 
         while (text.includes('class="emojione"')) {
           text = text.replace('class="emojione"', `class="emojione ${className}"`);
         }
-    
+
         while (
           text.includes("https://cdn.jsdelivr.net/emojione/assets/4.5/png/32/")
         ) {
