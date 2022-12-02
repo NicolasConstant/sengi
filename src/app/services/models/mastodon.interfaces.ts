@@ -141,7 +141,7 @@ export interface Relationship {
     id: number;
     following: boolean;
     followed_by: boolean;
-    blocked_by: boolean;    
+    blocked_by: boolean;
     blocking: boolean;
     domain_blocking: boolean;
     muting: boolean;
@@ -190,7 +190,7 @@ export interface Status {
     muted: boolean;
     bookmarked: boolean;
     card: Card;
-    poll: Poll;    
+    poll: Poll;
 
     pleroma: PleromaStatusInfo;
 }
@@ -249,4 +249,17 @@ export interface StatusParams {
     visibility: 'public' | 'unlisted' | 'private' | 'direct';
     scheduled_at: string;
     application_id: string;
+}
+
+export interface TagHistory {
+    day: string;
+    uses: number;
+    accounts: number;
+}
+
+export interface Tag {
+    name: string;
+    url: string;
+    history: TagHistory[];
+    following: boolean;
 }
