@@ -207,11 +207,6 @@ export interface PleromaStatusInfo {
     local: boolean;
 }
 
-export interface Tag {
-    name: string;
-    url: string;
-}
-
 export interface List {
     id: string;
     title: string;
