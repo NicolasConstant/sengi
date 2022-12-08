@@ -43,8 +43,6 @@ export class StreamStatusesComponent extends TimelineBase {
     private deleteStatusSubscription: Subscription;
     private streams$: Observable<StreamElement[]>;
 
-    numNewItems: number;
-
     constructor(
         protected readonly settingsService: SettingsService,
         protected readonly store: Store,
