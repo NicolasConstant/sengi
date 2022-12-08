@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData, Tag } from "./models/mastodon.interfaces";
 import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult, FollowingResult } from './mastodon.service';
@@ -271,6 +271,27 @@ export class MastodonWrapperService {
         return this.refreshAccountIfNeeded(currentlyUsedAccount)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.unfollow(refreshedAccount, account);
+            });
+    }
+
+    followHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        return this.refreshAccountIfNeeded(currentlyUsedAccount)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.followHashtag(refreshedAccount, hashtag);
+            });
+    }
+
+    unfollowHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        return this.refreshAccountIfNeeded(currentlyUsedAccount)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unfollowHashtag(refreshedAccount, hashtag);
+            });
+    }
+
+    getHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        return this.refreshAccountIfNeeded(currentlyUsedAccount)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.getHashtag(refreshedAccount, hashtag);
             });
     }
 

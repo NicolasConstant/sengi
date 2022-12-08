@@ -76,4 +76,7 @@ export class ApiRoutes {
     getBookmarks = '/api/v1/bookmarks';
     getFollowers = '/api/v1/accounts/{0}/followers';
     getFollowing = '/api/v1/accounts/{0}/following';
+    followHashtag = '/api/v1/tags/{0}/follow';
+    unfollowHashtag = '/api/v1/tags/{0}/unfollow';
+    getHashtag = '/api/v1/tags/{0}';
 }

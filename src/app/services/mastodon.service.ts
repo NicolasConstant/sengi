@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
@@ -331,6 +331,24 @@ export class MastodonService {
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
 
+    }
+
+    followHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.followHashtag}`.replace('{0}', hashtag);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Tag>(route, null, { headers: headers }).toPromise();
+    }
+
+    unfollowHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.unfollowHashtag}`.replace('{0}', hashtag);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Tag>(route, null, { headers: headers }).toPromise();
+    }
+
+    getHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.getHashtag}`.replace('{0}', hashtag);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.get<Tag>(route, { headers: headers }).toPromise();
     }
 
     uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
