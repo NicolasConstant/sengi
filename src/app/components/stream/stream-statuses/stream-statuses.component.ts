@@ -101,6 +101,8 @@ export class StreamStatusesComponent extends TimelineBase {
                 });
             }
         });
+
+        this.numNewItems = 0;
     }
 
     ngOnDestroy() {
@@ -133,6 +135,7 @@ export class StreamStatusesComponent extends TimelineBase {
     private resetStream() {
         this.statuses.length = 0;
         this.bufferStream.length = 0;
+        this.numNewItems = 0;
         if (this.websocketStreaming) this.websocketStreaming.dispose();
     }
 
@@ -154,6 +157,7 @@ export class StreamStatusesComponent extends TimelineBase {
                             this.statuses.unshift(wrapper);
                         } else {
                             this.bufferStream.push(update.status);
+                            this.numNewItems++;
                         }
                     }
                 } else if (update.type === EventEnum.delete) {
@@ -201,6 +205,7 @@ export class StreamStatusesComponent extends TimelineBase {
         }
 
         this.bufferStream.length = 0;
+        this.numNewItems = 0;
         return false;
     }
 
@@ -212,7 +217,7 @@ export class StreamStatusesComponent extends TimelineBase {
                 return status.filter(x => !this.isFiltered(x));
             });
     }
-    
+
     private isFiltered(status: Status): boolean {
         if (this.streamElement.hideBoosts) {
             if (status.reblog) {

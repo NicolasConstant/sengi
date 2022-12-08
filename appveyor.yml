@@ -3,7 +3,7 @@ cache:
   #- node_modules
 environment:
   GH_TOKEN:
-      secure: wRRBU0GXTmTBgZBs2PGSaEJWOflynAyvp3Nc/7e9xmciPfkUCQAXcpOn0jIYmzpb
+      secure: eXSiJiDFgLi4vixO5GS93lgrqZ+BzQNy7PKPCQCErHjCQD9mWiEtVQQnhvmUq1FPLUc3fNLmOFQu2nIWA9bnkHg5Yw9WiG2m7QSCPRB+xCnvSY6JbLqpzURZp5x5OLj6
   matrix:
     - nodejs_version: 10.9.0
 install:

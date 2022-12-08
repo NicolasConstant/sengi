@@ -28,6 +28,7 @@ export abstract class TimelineBase extends BrowseBase {
     statuses: StatusWrapper[] = [];
     bufferStream: Status[] = [];
     protected bufferWasCleared: boolean;
+    numNewItems: number;
     streamPositionnedAtTop: boolean = true;
     protected isProcessingInfiniteScroll: boolean;
 

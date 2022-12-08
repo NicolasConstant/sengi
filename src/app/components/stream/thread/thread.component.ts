@@ -28,6 +28,7 @@ export class ThreadComponent extends BrowseBase {
     hasContentWarnings = false;
     private remoteStatusFetchingDisabled = false;
 
+    numNewItems: number; //html compatibility only
     bufferStream: Status[] = []; //html compatibility only
     streamPositionnedAtTop: boolean = true; //html compatibility only
     timelineLoadingMode: TimeLineModeEnum = TimeLineModeEnum.OnTop; //html compatibility only
