@@ -686,7 +686,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     let cwPolicy = this.toolsService.checkContentWarning(status);
                     let statusWrapper = new StatusWrapper(status, account, cwPolicy.applyCw, cwPolicy.hide);
                     
-                    //TODO: foreach account
                     this.statusesStateService.statusEditedStatusChanged(status.url, account.id, statusWrapper);
 
                     return status;

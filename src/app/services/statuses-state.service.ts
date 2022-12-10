@@ -31,7 +31,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, null, null, null, null, null);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, null, null, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isFavorited = isFavorited;
         }
@@ -44,7 +44,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, isRebloged, null, null, null, null);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, isRebloged, null, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isRebloged = isRebloged;
         }
@@ -57,7 +57,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, isBookmarked, null, null, null);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, isBookmarked, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isBookmarked = isBookmarked;
         }
@@ -70,10 +70,9 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, null, true, new Date().toISOString(), editedStatus);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, null, true, editedStatus);
         } else {
             this.cachedStatusStates[statusId][accountId].isEdited = true;
-            this.cachedStatusStates[statusId][accountId].editionTime = new Date().toISOString();
             this.cachedStatusStates[statusId][accountId].editedStatus = editedStatus;
         }
 
@@ -117,8 +116,7 @@ export class StatusState {
         public isFavorited: boolean,
         public isRebloged: boolean,
         public isBookmarked: boolean,
-        public isEdited: boolean,        
-        public editionTime: string,
+        public isEdited: boolean,
         public editedStatus: StatusWrapper) {
     }
 }
