@@ -6,15 +6,15 @@ import { StatusWrapper } from '../models/common.model';
 @Injectable({
     providedIn: 'root'
 })
-export class StatusesStateService {    
-    private cachedStatusText: { [statusId: string]: string } = {};    
-    private cachedStatusStates: { [statusId: string]: { [accountId: string]: StatusState } } = {};    
+export class StatusesStateService {
+    private cachedStatusText: { [statusId: string]: string } = {};
+    private cachedStatusStates: { [statusId: string]: { [accountId: string]: StatusState } } = {};
     public stateNotification = new Subject<StatusState>();
 
     constructor() { }
 
     getStateForStatus(statusId: string): StatusState[] {
-        if(!this.cachedStatusStates[statusId]) 
+        if (!this.cachedStatusStates[statusId])
             return null;
 
         let results: StatusState[] = [];
@@ -31,7 +31,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, null, null);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, isFavorited, null, null, null, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isFavorited = isFavorited;
         }
@@ -44,7 +44,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, isRebloged, null);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, isRebloged, null, null, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isRebloged = isRebloged;
         }
@@ -57,7 +57,7 @@ export class StatusesStateService {
             this.cachedStatusStates[statusId] = {};
 
         if (!this.cachedStatusStates[statusId][accountId]) {
-            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, isBookmarked);
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, isBookmarked, null, null, null);
         } else {
             this.cachedStatusStates[statusId][accountId].isBookmarked = isBookmarked;
         }
@@ -65,42 +65,60 @@ export class StatusesStateService {
         this.stateNotification.next(this.cachedStatusStates[statusId][accountId]);
     }
 
-    setStatusContent(data: string, replyingToStatus: StatusWrapper){
-        if(replyingToStatus){
+    statusEditedStatusChanged(statusId: string, accountId: string, editedStatus: StatusWrapper) {
+        if (!this.cachedStatusStates[statusId])
+            this.cachedStatusStates[statusId] = {};
+
+        if (!this.cachedStatusStates[statusId][accountId]) {
+            this.cachedStatusStates[statusId][accountId] = new StatusState(statusId, accountId, null, null, null, true, new Date().toISOString(), editedStatus);
+        } else {
+            this.cachedStatusStates[statusId][accountId].isEdited = true;
+            this.cachedStatusStates[statusId][accountId].editionTime = new Date().toISOString();
+            this.cachedStatusStates[statusId][accountId].editedStatus = editedStatus;
+        }
+
+        this.stateNotification.next(this.cachedStatusStates[statusId][accountId]);
+    }
+
+    setStatusContent(data: string, replyingToStatus: StatusWrapper) {
+        if (replyingToStatus) {
             this.cachedStatusText[replyingToStatus.status.uri] = data;
         } else {
             this.cachedStatusText['none'] = data;
-        }       
+        }
     }
 
-    getStatusContent(replyingToStatus: StatusWrapper): string{
+    getStatusContent(replyingToStatus: StatusWrapper): string {
         let data: string;
-        if(replyingToStatus){
+        if (replyingToStatus) {
             data = this.cachedStatusText[replyingToStatus.status.uri];
         } else {
             data = this.cachedStatusText['none'];
         }
 
-        if(!data) return '';
+        if (!data) return '';
         return data;
     }
 
-    resetStatusContent(replyingToStatus: StatusWrapper){
-        if(replyingToStatus){
+    resetStatusContent(replyingToStatus: StatusWrapper) {
+        if (replyingToStatus) {
             this.cachedStatusText[replyingToStatus.status.uri] = '';
         } else {
             this.cachedStatusText['none'] = '';
-        } 
+        }
     }
 }
 
 export class StatusState {
-    
+
     constructor(
-        public statusId: string, 
-        public accountId: string, 
-        public isFavorited: boolean, 
+        public statusId: string,
+        public accountId: string,
+        public isFavorited: boolean,
         public isRebloged: boolean,
-        public isBookmarked: boolean) {
+        public isBookmarked: boolean,
+        public isEdited: boolean,        
+        public editionTime: string,
+        public editedStatus: StatusWrapper) {
     }
 }

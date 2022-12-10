@@ -209,7 +209,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         private readonly instancesInfoService: InstancesInfoService,
         private readonly mediaService: MediaService,
         private readonly overlay: Overlay,
-        public viewContainerRef: ViewContainerRef) {
+        public viewContainerRef: ViewContainerRef,
+        private readonly statusesStateService: StatusesStateService) {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
@@ -677,7 +678,16 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     if (this.statusReplyingToWrapper) {
                         let cwPolicy = this.toolsService.checkContentWarning(status);
                         this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(cwPolicy.status, account, cwPolicy.applyCw, cwPolicy.hide));
-                    }
+                    }                   
+
+                    return status;
+                })
+                .then((status: Status) => {
+                    let cwPolicy = this.toolsService.checkContentWarning(status);
+                    let statusWrapper = new StatusWrapper(status, account, cwPolicy.applyCw, cwPolicy.hide);
+                    
+                    //TODO: foreach account
+                    this.statusesStateService.statusEditedStatusChanged(status.url, account.id, statusWrapper);
 
                     return status;
                 });
