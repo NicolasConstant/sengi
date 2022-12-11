@@ -154,6 +154,9 @@ $counter-width: 90px;
             }
 
             & span {
+                position: relative;
+                top: 1px;
+
                 margin: 0;
                 padding: 0;
             }
