@@ -16,7 +16,9 @@ jobs:
         node-version: 10
     - name: install dependencies
       run: npm install
-    - name: tests
-      run: npm run test-nowatch
-    - name: build
-      run: npm run dist
+#    - name: tests
+#      run: npm run test-nowatch
+#    - name: build
+#      run: npm run dist
+    - name: publish
+      run: electron-builder --publish onTagOrDraft
