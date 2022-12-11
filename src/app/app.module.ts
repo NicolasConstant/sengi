@@ -40,7 +40,6 @@ import { SettingsComponent } from './components/floating-column/settings/setting
 import { AddNewAccountComponent } from './components/floating-column/add-new-account/add-new-account.component';
 import { SearchComponent } from './components/floating-column/search/search.component';
 import { AddNewStatusComponent } from "./components/floating-column/add-new-status/add-new-status.component";
-import { EditStatusComponent } from "./components/floating-column/edit-status/edit-status.component";
 import { ManageAccountComponent } from "./components/floating-column/manage-account/manage-account.component";
 import { ActionBarComponent } from './components/stream/status/action-bar/action-bar.component';
 import { WaitingAnimationComponent } from './components/waiting-animation/waiting-animation.component';
@@ -112,7 +111,6 @@ const routes: Routes = [
         FloatingColumnComponent,
         ManageAccountComponent,
         AddNewStatusComponent,
-        EditStatusComponent,
         AttachementsComponent,
         SettingsComponent,
         AddNewAccountComponent,
