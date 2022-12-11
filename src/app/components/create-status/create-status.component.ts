@@ -320,7 +320,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         };
 
         const word = this.getWordByPos(currentSection, caretPosition - offset);
-        if (!lastCharIsSpace && word && word.length > 0 && (word.startsWith('@') || word.startsWith('#'))) {
+        if (!lastCharIsSpace && word && word.length > 1 && (word.startsWith('@') || word.startsWith('#'))) {
             this.autosuggestData = word;
             return;
         }
