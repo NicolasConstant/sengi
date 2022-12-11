@@ -41,6 +41,7 @@ export class ApiRoutes {
     getStatusRebloggedBy = '/api/v1/statuses/{0}/reblogged_by';
     getStatusFavouritedBy = '/api/v1/statuses/{0}/favourited_by';
     postNewStatus = '/api/v1/statuses';
+    editStatus = '/api/v1/statuses/{0}';
     deleteStatus = '/api/v1/statuses/{0}';
     reblogStatus = '/api/v1/statuses/{0}/reblog';
     unreblogStatus = '/api/v1/statuses/{0}/unreblog';

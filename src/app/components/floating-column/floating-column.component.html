@@ -1,9 +1,9 @@
 <div class="floating-column">
     <div class="floating-column__inner">
         <div class="sliding-column" [class.sliding-column__right-display]="overlayActive">
-            <app-stream-overlay class="stream-overlay" *ngIf="overlayActive" 
+            <app-stream-overlay class="stream-overlay" *ngIf="overlayActive"
                 (closeOverlay)="closeOverlay()"
-                [browseAccountData]="overlayAccountToBrowse" 
+                [browseAccountData]="overlayAccountToBrowse"
                 [browseHashtagData]="overlayHashtagToBrowse"
                 [browseThreadData]="overlayThreadToBrowse"></app-stream-overlay>
 
@@ -15,15 +15,17 @@
                 </div>
 
                 <app-manage-account *ngIf="openPanel === 'manageAccount'" [account]="userAccountUsed"
-                    (browseAccountEvent)="browseAccount($event)" 
+                    (browseAccountEvent)="browseAccount($event)"
                     (browseHashtagEvent)="browseHashtag($event)"
                     (browseThreadEvent)="browseThread($event)"></app-manage-account>
                 <app-add-new-status *ngIf="openPanel === 'createNewStatus'" [isDirectMention]="isDirectMention"
-                    [userHandle]="userHandle" [redraftedStatus]="redraftedStatus"></app-add-new-status>
+                    [userHandle]="userHandle" 
+                    [redraftedStatus]="redraftedStatus"
+                    [statusToEdit]="statusToEdit"></app-add-new-status>
                 <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
-                <app-search *ngIf="openPanel === 'search'" 
+                <app-search *ngIf="openPanel === 'search'"
                     (browseAccountEvent)="browseAccount($event)"
-                    (browseHashtagEvent)="browseHashtag($event)" 
+                    (browseHashtagEvent)="browseHashtag($event)"
                     (browseThreadEvent)="browseThread($event)">
                 </app-search>
                 <app-settings *ngIf="openPanel === 'settings'"></app-settings>

@@ -173,7 +173,7 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         PickerModule,
-        OwlDateTimeModule, 
+        OwlDateTimeModule,
         OwlNativeDateTimeModule,
         OverlayModule,
         RouterModule.forRoot(routes),

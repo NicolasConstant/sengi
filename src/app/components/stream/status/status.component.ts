@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import { Subscription } from "rxjs";
 
 import { Status, Account } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
@@ -7,7 +8,8 @@ import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { ContentWarningPolicyEnum } from '../../../states/settings.state';
-import { stat } from 'fs';
+import { StatusesStateService, StatusState } from "../../../services/statuses-state.service";
+
 
 @Component({
     selector: "app-status",
@@ -56,6 +58,8 @@ export class StatusComponent implements OnInit {
     private _statusWrapper: StatusWrapper;
     status: Status;
 
+    private statusesStateServiceSub: Subscription;
+
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
         this._statusWrapper = value;
@@ -97,9 +101,19 @@ export class StatusComponent implements OnInit {
 
     constructor(
         public elem: ElementRef,
-        private readonly toolsService: ToolsService) { }
+        private readonly toolsService: ToolsService,
+        private readonly statusesStateService: StatusesStateService) { }
 
     ngOnInit() {
+        this.statusesStateServiceSub = this.statusesStateService.stateNotification.subscribe(notification => {
+            if(this._statusWrapper.status.url === notification.statusId && notification.isEdited) {
+                this.statusWrapper = notification.editedStatus;
+            }
+        });
+    }
+
+    ngOnDestroy(){
+        if(this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
     }
     
     private ensureMentionAreDisplayed(data: string): string {

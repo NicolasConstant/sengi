@@ -124,6 +124,13 @@ export class MastodonWrapperService {
             });
     }
 
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.editStatus(refreshedAccount, statusId, status, visibility, spoiler, in_reply_to_id, mediaIds, poll, scheduled_at);
+            });
+    }
+
     getStatus(account: AccountInfo, statusId: string): Promise<Status> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {

@@ -1,4 +1,4 @@
-<a href class="context-menu-link" (click)="onContextMenu($event)" 
+<a href class="context-menu-link" (click)="onContextMenu($event)"
     [class.context-menu-link__status]="statusWrapper"
     [class.context-menu-link__profile]="displayedAccount"
     title="More">
@@ -39,6 +39,9 @@
     </ng-template>
     <ng-template contextMenuItem (execute)="unpinFromProfile()" *ngIf="statusWrapper && isOwnerSelected && displayedStatus.pinned && displayedStatus.visibility === 'public'">
         Unpin from profile
+    </ng-template>
+    <ng-template contextMenuItem (execute)="edit()" *ngIf="statusWrapper && isOwnerSelected && isEditingAvailable">
+        Edit
     </ng-template>
     <ng-template contextMenuItem (execute)="delete(false)" *ngIf="statusWrapper && isOwnerSelected">
         Delete

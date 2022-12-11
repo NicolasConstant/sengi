@@ -128,6 +128,50 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+        const url = `https://${account.instance}${this.apiRoutes.editStatus.replace('{0}', statusId)}`;
+
+        const statusData = new StatusData();
+        statusData.status = status;
+        statusData.media_ids = mediaIds;
+
+        if (poll) {
+            statusData['poll'] = poll;
+        }
+
+        if (scheduled_at) {
+            statusData['scheduled_at'] = scheduled_at;
+        }
+
+        if (in_reply_to_id) {
+            statusData.in_reply_to_id = in_reply_to_id;
+        }
+        if (spoiler) {
+            statusData.sensitive = true;
+            statusData.spoiler_text = spoiler;
+        }
+        switch (visibility) {
+            case VisibilityEnum.Public:
+                statusData.visibility = 'public';
+                break;
+            case VisibilityEnum.Unlisted:
+                statusData.visibility = 'unlisted';
+                break;
+            case VisibilityEnum.Private:
+                statusData.visibility = 'private';
+                break;
+            case VisibilityEnum.Direct:
+                statusData.visibility = 'direct';
+                break;
+            default:
+                statusData.visibility = 'private';
+                break;
+        }
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.put<Status>(url, statusData, { headers: headers }).toPromise();
+    }
+
     getStatus(account: AccountInfo, statusId: string): Promise<Status> {
         const route = `https://${account.instance}${this.apiRoutes.getStatus.replace('{0}', statusId)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });

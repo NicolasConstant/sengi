@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
 import { Status, Account, Results } from '../../../../../services/models/mastodon.interfaces';
-import { ToolsService, OpenThreadEvent } from '../../../../../services/tools.service';
+import { ToolsService, OpenThreadEvent, InstanceInfo } from '../../../../../services/tools.service';
 import { StatusWrapper } from '../../../../../models/common.model';
 import { NavigationService } from '../../../../../services/navigation.service';
 import { AccountInfo } from '../../../../../states/accounts.state';
@@ -26,6 +26,8 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
     displayedStatus: Status;
     username: string;
     isOwnerSelected: boolean;
+
+    isEditingAvailable: boolean;
 
     @Input() statusWrapper: StatusWrapper;
     @Input() displayedAccount: Account;
@@ -78,6 +80,14 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
         this.isOwnerSelected = selectedAccount.username.toLowerCase() === this.displayedStatus.account.username.toLowerCase()
             && selectedAccount.instance.toLowerCase() === this.displayedStatus.account.url.replace('https://', '').split('/')[0].toLowerCase();
+
+        this.toolsService.getInstanceInfo(selectedAccount).then((instanceInfo: InstanceInfo) => {
+            if (instanceInfo.major >= 4) {
+                this.isEditingAvailable = true;
+            } else {
+                this.isEditingAvailable = false;
+            }
+        });
     }
 
 
@@ -279,6 +289,18 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.notificationService.notifyHttpError(err, selectedAccount);
             });
 
+        return false;
+    }
+
+    edit(): boolean {
+        const selectedAccount = this.toolsService.getSelectedAccounts()[0];
+        this.getStatus(selectedAccount)
+            .then(() => {
+                this.navigationService.edit(this.statusWrapper);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, selectedAccount);
+            });
         return false;
     }
 
