@@ -1,0 +1,22 @@
+name: Build
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2       
+    - uses: actions/setup-node@master
+      with:
+        node-version: 10
+    - name: install dependencies
+      run: npm install
+    - name: tests
+      run: npm run test-nowatch
+    - name: build
+      run: npm run build
