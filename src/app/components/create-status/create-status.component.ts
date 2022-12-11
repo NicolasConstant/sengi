@@ -87,7 +87,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     set statusToEdit(value: StatusWrapper) {
         if (value) {
             this.isEditing = true;
-            this.editingId = value.status.id;
+            this.editingStatusId = value.status.id;
             this.redraftedStatus = value;
         }
     }
@@ -97,6 +97,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if (value) {
             this.isRedrafting = true;
             this.statusLoaded = false;
+            this.isEditing = false;
 
             if (value.status && value.status.media_attachments) {
                 for (const m of value.status.media_attachments) {
@@ -151,7 +152,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     instanceSupportsPoll = true;
     instanceSupportsScheduling = true;
     isEditing: boolean;
-    editingId: string;
+    editingStatusId: string;
     private statusLoaded: boolean;
     private hasSuggestions: boolean;
 
@@ -448,7 +449,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private setVisibility(defaultPrivacy: VisibilityEnum) {
-        if(this.selectedPrivacySetByRedraft) return;
+        if (this.selectedPrivacySetByRedraft) return;
 
         switch (defaultPrivacy) {
             case VisibilityEnum.Public:
@@ -506,14 +507,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private getMentions(status: Status): string[] {
         let acct = status.account.acct;
-        if(!acct.includes('@')) {
+        if (!acct.includes('@')) {
             acct += `@${status.account.url.replace('https://', '').split('/')[0]}`
         }
 
         const mentions = [acct];
         status.mentions.forEach(m => {
             let mentionAcct = m.acct;
-            if(!mentionAcct.includes('@')){
+            if (!mentionAcct.includes('@')) {
                 mentionAcct += `@${m.url.replace('https://', '').split('/')[0]}`;
             }
             mentions.push(mentionAcct);
@@ -584,11 +585,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         usableStatus
             .then((status: Status) => {
-                if (this.isEditing) {
-                    return this.editStatus(acc, this.editingId, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
-                } else {
-                    return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime);
-                }
+                return this.sendStatus(acc, this.status, visibility, this.title, status, mediaAttachments, poll, scheduledTime, this.editingStatusId);
             })
             .then((res: Status) => {
                 this.title = '';
@@ -615,7 +612,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
+    private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string, editingStatusId: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
 
@@ -629,13 +626,25 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     }
 
                     if (i === 0) {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt)
+                        let postPromise: Promise<Status>;
+
+                        if (this.isEditing) {
+                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
+                        } else {
+                            postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
+                        }
+
+                        return postPromise
                             .then((status: Status) => {
                                 this.mediaService.clearMedia();
                                 return status;
                             });
                     } else {
-                        return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                        if (this.isEditing) {
+                            return this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                        } else {
+                            return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                        }
                     }
                 })
                 .then((status: Status) => {
@@ -645,48 +654,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                     }
 
                     return status;
-                });
-        }
-
-        return resultPromise;
-    }
-
-    private editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string): Promise<Status> {
-        let parsedStatus = this.parseStatus(status);
-        let resultPromise = Promise.resolve(previousStatus);
-
-        for (let i = 0; i < parsedStatus.length; i++) {
-            let s = parsedStatus[i];
-            resultPromise = resultPromise
-                .then((pStatus: Status) => {
-                    let inReplyToId = null;
-                    if (pStatus) {
-                        inReplyToId = pStatus.id;
-                    }
-
-                    if (i === 0) {
-                        return this.mastodonService.editStatus(account, statusId, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt)
-                            .then((status: Status) => {
-                                this.mediaService.clearMedia();
-                                return status;
-                            });
-                    } else {
-                        return this.mastodonService.editStatus(account, statusId, s, visibility, title, inReplyToId, [], null, scheduledAt);
-                    }
                 })
                 .then((status: Status) => {
-                    if (this.statusReplyingToWrapper) {
+                    if (this.isEditing) {
                         let cwPolicy = this.toolsService.checkContentWarning(status);
-                        this.notificationService.newStatusPosted(this.statusReplyingToWrapper.status.id, new StatusWrapper(cwPolicy.status, account, cwPolicy.applyCw, cwPolicy.hide));
-                    }                   
+                        let statusWrapper = new StatusWrapper(status, account, cwPolicy.applyCw, cwPolicy.hide);
 
-                    return status;
-                })
-                .then((status: Status) => {
-                    let cwPolicy = this.toolsService.checkContentWarning(status);
-                    let statusWrapper = new StatusWrapper(status, account, cwPolicy.applyCw, cwPolicy.hide);
-                    
-                    this.statusesStateService.statusEditedStatusChanged(status.url, account.id, statusWrapper);
+                        this.statusesStateService.statusEditedStatusChanged(status.url, account.id, statusWrapper);
+                    }
 
                     return status;
                 });
@@ -696,8 +671,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     }
 
     private parseStatus(status: string): string[] {
-        //console.error(status.toString());
-
         let mentionExtraChars = this.getMentionExtraChars(status);
         let urlExtraChar = this.getLinksExtraChars(status);
         let trucatedStatus = `${status}`;
@@ -715,7 +688,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         while (trucatedStatus.length > currentMaxCharLength) {
             const nextIndex = trucatedStatus.lastIndexOf(' ', maxChars);
 
-            if(nextIndex === -1){
+            if (nextIndex === -1) {
                 break;
             }
 
@@ -816,7 +789,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 w++;
                 result += `${word}`;
 
-                if(w < wordCount || i === nberLines){
+                if (w < wordCount || i === nberLines) {
                     result += ' ';
                 }
             });
@@ -828,7 +801,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         result = result.replace('  ', ' ');
 
         let endRegex = new RegExp(`${autosuggest} $`, 'i');
-        if(!result.match(endRegex)){
+        if (!result.match(endRegex)) {
             result = result.substring(0, result.length - 1);
         }
 
