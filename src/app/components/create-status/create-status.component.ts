@@ -97,8 +97,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         if (value) {
             this.isRedrafting = true;
             this.statusLoaded = false;
-            this.isEditing = false;
-
+            
             if (value.status && value.status.media_attachments) {
                 for (const m of value.status.media_attachments) {
                     this.mediaService.addExistingMedia(new MediaWrapper(m.id, null, m));

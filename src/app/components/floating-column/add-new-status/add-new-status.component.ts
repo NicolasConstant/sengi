@@ -13,6 +13,7 @@ export class AddNewStatusComponent implements OnInit {
     @Input() isDirectMention: boolean;
     @Input() userHandle: string;
     @Input() redraftedStatus: StatusWrapper;
+    @Input() statusToEdit: StatusWrapper;
 
     constructor(private readonly navigationService: NavigationService) {
     }

@@ -19,9 +19,9 @@
                     (browseHashtagEvent)="browseHashtag($event)"
                     (browseThreadEvent)="browseThread($event)"></app-manage-account>
                 <app-add-new-status *ngIf="openPanel === 'createNewStatus'" [isDirectMention]="isDirectMention"
-                    [userHandle]="userHandle" [redraftedStatus]="redraftedStatus"></app-add-new-status>
-                <app-edit-status *ngIf="openPanel === 'editStatus'" [statusToEdit]="statusToEdit" [isDirectMention]="isDirectMention"
-                    [userHandle]="userHandle"></app-edit-status>
+                    [userHandle]="userHandle" 
+                    [redraftedStatus]="redraftedStatus"
+                    [statusToEdit]="statusToEdit"></app-add-new-status>
                 <app-add-new-account *ngIf="openPanel === 'addNewAccount'"></app-add-new-account>
                 <app-search *ngIf="openPanel === 'search'"
                     (browseAccountEvent)="browseAccount($event)"
