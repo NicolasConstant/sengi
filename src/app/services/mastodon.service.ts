@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
@@ -126,6 +126,50 @@ export class MastodonService {
 
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
+    }
+
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+        const url = `https://${account.instance}${this.apiRoutes.editStatus.replace('{0}', statusId)}`;
+
+        const statusData = new StatusData();
+        statusData.status = status;
+        statusData.media_ids = mediaIds;
+
+        if (poll) {
+            statusData['poll'] = poll;
+        }
+
+        if (scheduled_at) {
+            statusData['scheduled_at'] = scheduled_at;
+        }
+
+        if (in_reply_to_id) {
+            statusData.in_reply_to_id = in_reply_to_id;
+        }
+        if (spoiler) {
+            statusData.sensitive = true;
+            statusData.spoiler_text = spoiler;
+        }
+        switch (visibility) {
+            case VisibilityEnum.Public:
+                statusData.visibility = 'public';
+                break;
+            case VisibilityEnum.Unlisted:
+                statusData.visibility = 'unlisted';
+                break;
+            case VisibilityEnum.Private:
+                statusData.visibility = 'private';
+                break;
+            case VisibilityEnum.Direct:
+                statusData.visibility = 'direct';
+                break;
+            default:
+                statusData.visibility = 'private';
+                break;
+        }
+
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.put<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
     getStatus(account: AccountInfo, statusId: string): Promise<Status> {
@@ -289,6 +333,24 @@ export class MastodonService {
 
     }
 
+    followHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.followHashtag}`.replace('{0}', hashtag);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Tag>(route, null, { headers: headers }).toPromise();
+    }
+
+    unfollowHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.unfollowHashtag}`.replace('{0}', hashtag);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.post<Tag>(route, null, { headers: headers }).toPromise();
+    }
+
+    getHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.getHashtag}`.replace('{0}', hashtag);
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+        return this.httpClient.get<Tag>(route, { headers: headers }).toPromise();
+    }
+
     uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
         let input = new FormData();
         input.append('file', file);
@@ -382,10 +444,10 @@ export class MastodonService {
     addAccountToList(account: AccountInfo, listId: string, accountId: number): Promise<any> {
         let route = `https://${account.instance}${this.apiRoutes.addAccountToList}`.replace('{0}', listId);
         route += `?account_ids[]=${accountId}`;
-        
+
         let data = new ListAccountData();
         data.account_ids.push(accountId.toString());
-        
+
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post(route, data, { headers: headers }).toPromise();
     }

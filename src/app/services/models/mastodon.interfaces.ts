@@ -141,7 +141,7 @@ export interface Relationship {
     id: number;
     following: boolean;
     followed_by: boolean;
-    blocked_by: boolean;    
+    blocked_by: boolean;
     blocking: boolean;
     domain_blocking: boolean;
     muting: boolean;
@@ -172,6 +172,7 @@ export interface Status {
     reblog: Status;
     content: string;
     created_at: string;
+    edited_at: string;
     reblogs_count: number;
     replies_count: number;
     favourites_count: string;
@@ -190,7 +191,7 @@ export interface Status {
     muted: boolean;
     bookmarked: boolean;
     card: Card;
-    poll: Poll;    
+    poll: Poll;
 
     pleroma: PleromaStatusInfo;
 }
@@ -205,11 +206,6 @@ export interface Conversation {
 export interface PleromaStatusInfo {
     conversation_id: number;
     local: boolean;
-}
-
-export interface Tag {
-    name: string;
-    url: string;
 }
 
 export interface List {
@@ -249,4 +245,17 @@ export interface StatusParams {
     visibility: 'public' | 'unlisted' | 'private' | 'direct';
     scheduled_at: string;
     application_id: string;
+}
+
+export interface TagHistory {
+    day: string;
+    uses: number;
+    accounts: number;
+}
+
+export interface Tag {
+    name: string;
+    url: string;
+    history: TagHistory[];
+    following: boolean;
 }

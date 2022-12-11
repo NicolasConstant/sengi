@@ -41,6 +41,7 @@ export class ApiRoutes {
     getStatusRebloggedBy = '/api/v1/statuses/{0}/reblogged_by';
     getStatusFavouritedBy = '/api/v1/statuses/{0}/favourited_by';
     postNewStatus = '/api/v1/statuses';
+    editStatus = '/api/v1/statuses/{0}';
     deleteStatus = '/api/v1/statuses/{0}';
     reblogStatus = '/api/v1/statuses/{0}/reblog';
     unreblogStatus = '/api/v1/statuses/{0}/unreblog';
@@ -75,4 +76,7 @@ export class ApiRoutes {
     getBookmarks = '/api/v1/bookmarks';
     getFollowers = '/api/v1/accounts/{0}/followers';
     getFollowing = '/api/v1/accounts/{0}/following';
+    followHashtag = '/api/v1/tags/{0}/follow';
+    unfollowHashtag = '/api/v1/tags/{0}/unfollow';
+    getHashtag = '/api/v1/tags/{0}';
 }

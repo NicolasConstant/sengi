@@ -9,7 +9,7 @@ export class NavigationService {
     private accountToManage: AccountWrapper;
     activatedPanelSubject = new BehaviorSubject<OpenLeftPanelEvent>(new OpenLeftPanelEvent(LeftPanelType.Closed));
     activatedMediaSubject: Subject<OpenMediaEvent> = new Subject<OpenMediaEvent>();
-    columnSelectedSubject = new BehaviorSubject<number>(-1); 
+    columnSelectedSubject = new BehaviorSubject<number>(-1);
 
     constructor() { }
 
@@ -41,6 +41,11 @@ export class NavigationService {
         this.activatedPanelSubject.next(newEvent);
     }
 
+    edit(status: StatusWrapper){
+        const newEvent = new OpenLeftPanelEvent(LeftPanelType.EditStatus, LeftPanelAction.Edit, null, status);
+        this.activatedPanelSubject.next(newEvent);
+    }
+
     columnSelected(index: number): void {
         this.columnSelectedSubject.next(index);
     }
@@ -68,6 +73,7 @@ export enum LeftPanelAction {
     DM = 1,
     Mention = 2,
     Redraft = 3,
+    Edit = 4,
 }
 
 export enum LeftPanelType {
@@ -77,5 +83,6 @@ export enum LeftPanelType {
     Search = 3,
     AddNewAccount = 4,
     Settings = 5,
-    ScheduledStatuses = 6
+    ScheduledStatuses = 6,
+    EditStatus = 7,
 }
