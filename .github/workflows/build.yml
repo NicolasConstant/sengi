@@ -19,4 +19,4 @@ jobs:
     - name: tests
       run: npm run test-nowatch
     - name: build
-      run: npm run build
+      run: npm run dist
