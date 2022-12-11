@@ -15,7 +15,7 @@ jobs:
       with:
         node-version: 10
     - name: install dependencies
-      run: npm install
+      run: npm ci
 #    - name: tests
 #      run: npm run test-nowatch
 #    - name: build
