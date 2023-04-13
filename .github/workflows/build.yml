@@ -18,6 +18,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
+          
+      - name: Npm Install
+        run: |
+          npm i
+        shell: bash
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
