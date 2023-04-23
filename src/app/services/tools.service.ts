@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
-import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
+import { Account, Results, Status, Emoji, Instancev2, Instancev1 } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../states/settings.state';
 import { SettingsService } from './settings.service';
@@ -94,7 +94,19 @@ export class ToolsService {
                     const minor = +splittedVersion[1];
 
                     let streamingApi = "";
-                    if(instance.urls) streamingApi = instance.urls.streaming_api;
+
+                    if (major >= 4) {
+                        const instanceV2 = <Instancev2>instance;
+
+                        if (instanceV2
+                            && instanceV2.configuration
+                            && instanceV2.configuration.urls)
+                            streamingApi = instanceV2.configuration.urls.streaming;
+                    } else {
+                        const instanceV1 = <Instancev1>instance;
+                        if (instanceV1 && instanceV1.urls)
+                            streamingApi = instanceV1.urls.streaming_api;
+                    }
 
                     let instanceInfo = new InstanceInfo(type, major, minor, streamingApi);
                     this.instanceInfos[acc.instance] = instanceInfo;
