@@ -116,9 +116,13 @@ export interface Instance {
     description: string;
     email: string;
     version: string;
-    urls: string[];
+    urls: InstanceUrls;
     contact_account: Account;
     max_toot_chars: number;
+}
+
+export interface InstanceUrls {
+    streaming_api: string;
 }
 
 export interface Mention {
