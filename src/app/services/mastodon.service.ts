@@ -13,8 +13,12 @@ export class MastodonService {
     constructor(private readonly httpClient: HttpClient) { }
 
     getInstance(instance: string): Promise<Instance> {
-        const route = `https://${instance}${this.apiRoutes.getInstance}`;
-        return this.httpClient.get<Instance>(route).toPromise();
+        let route = `https://${instance}${this.apiRoutes.getInstancev2}`;
+        return this.httpClient.get<Instance>(route).toPromise()
+            .catch(err => {
+                route = `https://${instance}${this.apiRoutes.getInstance}`;
+                return this.httpClient.get<Instance>(route).toPromise();
+            });            
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
