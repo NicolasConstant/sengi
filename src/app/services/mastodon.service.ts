@@ -520,7 +520,8 @@ export class MastodonService {
 
     getCustomEmojis(account: AccountInfo): Promise<Emoji[]> {
         let route = `https://${account.instance}${this.apiRoutes.getCustomEmojis}`;
-        return this.httpClient.get<Emoji[]>(route).toPromise();
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.get<Emoji[]>(route, { headers: headers }).toPromise();
     }
 
     getScheduledStatuses(account: AccountInfo): Promise<ScheduledStatus[]> {
