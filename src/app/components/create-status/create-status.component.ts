@@ -537,7 +537,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    onSubmit(): boolean {
+    async onSubmit(): Promise<boolean> {
         if (this.isSending || this.mentionTooFarAwayError) return false;
 
         this.isSending = true;
@@ -558,9 +558,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 break;
         }
 
-        const mediaAttachments = this.mediaService.mediaSubject.value.map(x => x.attachment);
-
         const acc = this.toolsService.getSelectedAccounts()[0];
+
+        const mediaAttachments = (await this.mediaService.retrieveUpToDateMedia(acc)).map(x => x.attachment);
+        
         let usableStatus: Promise<Status>;
         if (this.statusReplyingToWrapper) {
             usableStatus = this.toolsService.getStatusUsableByAccount(acc, this.statusReplyingToWrapper);

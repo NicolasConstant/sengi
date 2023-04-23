@@ -51,10 +51,10 @@ export class MediaService {
             });
     }
 
-    update(account: AccountInfo, media: MediaWrapper) {
+    update(account: AccountInfo, media: MediaWrapper): Promise<void> {
         if (media.attachment.description === media.description) return;
 
-        this.mastodonService.updateMediaAttachment(account, media.attachment.id, media.description)
+        return this.mastodonService.updateMediaAttachment(account, media.attachment.id, media.description)
             .then((att: Attachment) => {
                 let medias = this.mediaSubject.value;
                 let updatedMedia = medias.filter(x => x.id === media.id)[0];
@@ -64,6 +64,20 @@ export class MediaService {
             .catch((err) => {
                 this.notificationService.notifyHttpError(err, account);
             });
+    }
+
+    async retrieveUpToDateMedia(account: AccountInfo): Promise<MediaWrapper[]> {
+        const allMedia = this.mediaSubject.value;
+        let allPromises: Promise<any>[] = [];
+        
+        for (const m of allMedia) {            
+            let t = this.update(account, m);
+            allPromises.push(t);
+        }
+
+        await Promise.all(allPromises);
+
+        return allMedia;
     }
 
     addExistingMedia(media: MediaWrapper){
