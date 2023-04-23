@@ -26,15 +26,15 @@ export class NotificationService {
     public notifyHttpError(err: HttpErrorResponse, account: AccountInfo) {
         let message = 'Oops, Unknown Error';
         let code: number;
-
+        
         try {
             code = err.status;
-            if(err.message){
-                message = err.message;
-            } else if(err.error && err.error.error) {
+            if(err.error && err.error.error) {
                 message = err.error.error; //Mastodon
             } else if(err.error && err.error.errors && err.error.errors.detail){
                 message = err.error.errors.detail; //Pleroma
+            } else if(err.message){
+                message = err.message;
             }
         } catch (err) { }
 
