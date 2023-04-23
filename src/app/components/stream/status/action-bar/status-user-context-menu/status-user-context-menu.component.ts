@@ -4,7 +4,7 @@ import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
-import { Status, Account, Results } from '../../../../../services/models/mastodon.interfaces';
+import { Status, Account, Results, Relationship } from '../../../../../services/models/mastodon.interfaces';
 import { ToolsService, OpenThreadEvent, InstanceInfo } from '../../../../../services/tools.service';
 import { StatusWrapper } from '../../../../../models/common.model';
 import { NavigationService } from '../../../../../services/navigation.service';
@@ -31,6 +31,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
 
     @Input() statusWrapper: StatusWrapper;
     @Input() displayedAccount: Account;
+    @Input() relationship: Relationship;
 
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
@@ -183,6 +184,21 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    unmuteAccount(): boolean {
+        this.loadedAccounts.forEach(acc => {
+            this.toolsService.findAccount(acc, this.fullHandle)
+                .then((target: Account) => {
+                    this.mastodonService.unmute(acc, target.id);
+                    return target;
+                })                
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err, acc);
+                });
+        });
+        
+        return false;
+    }
+
     blockAccount(): boolean {
         this.loadedAccounts.forEach(acc => {
             this.toolsService.findAccount(acc, this.fullHandle)
@@ -193,6 +209,21 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 .then((target: Account) => {
                     this.notificationService.hideAccount(target);
                 })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err, acc);
+                });
+        });
+
+        return false;
+    }
+
+    unblockAccount(): boolean {
+        this.loadedAccounts.forEach(acc => {
+            this.toolsService.findAccount(acc, this.fullHandle)
+                .then((target: Account) => {
+                    this.mastodonService.unblock(acc, target.id);
+                    return target;
+                })                
                 .catch(err => {
                     this.notificationService.notifyHttpError(err, acc);
                 });

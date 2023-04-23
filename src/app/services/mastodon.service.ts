@@ -486,8 +486,20 @@ export class MastodonService {
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
 
+    unmute(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.unmute}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
     block(account: AccountInfo, accounId: number): Promise<Relationship> {
         let route = `https://${account.instance}${this.apiRoutes.block}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    unblock(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.unblock}`.replace('{0}', accounId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
