@@ -20,13 +20,8 @@
         "test": "ng test",
         "test-nowatch": "ng test --watch=false",
         "lint": "ng lint",
-        "e2e": "ng e2e",
-        "electron": "electron .",
-        "electron-prod": "ng build --prod && electron .",
-        "electron-debug": "ng build && electron .",
-        "dist": "npm run build && electron-builder --publish onTagOrDraft",
-        "travis": "electron-builder --publish onTagOrDraft",
-        "release": "electron-builder --mac --windows --linux --publish always"
+        "e2e": "ng e2e",        
+        "dist": "npm run build"        
     },
     "private": true,
     "dependencies": {
