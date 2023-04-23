@@ -108,8 +108,8 @@
             </div>
 
             <app-status-user-context-menu class="profile-header__more" 
-                [displayedAccount]="displayedAccount"
-                [relationship]="relationship">
+                [displayedAccount]="displayedAccount" [relationship]="relationship"
+                (relationshipChanged)="relationshipChanged($event)">
             </app-status-user-context-menu>
         </div>
 

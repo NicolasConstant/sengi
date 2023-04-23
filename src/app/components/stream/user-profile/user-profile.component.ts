@@ -268,6 +268,10 @@ export class UserProfileComponent extends BrowseBase {
         this.showFloatingStatusMenu = false;
         this.load(this.lastAccountName);
     }
+    
+    relationshipChanged(relationship: Relationship){
+        this.relationship = relationship;
+    }
 
     browseAccount(accountName: string): void {
         if (accountName === this.toolsService.getAccountFullHandle(this.displayedAccount)) return;

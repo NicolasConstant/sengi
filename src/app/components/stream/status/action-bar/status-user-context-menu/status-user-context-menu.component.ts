@@ -34,6 +34,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
     @Input() relationship: Relationship;
 
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
+    @Output() relationshipChanged = new EventEmitter<Relationship>();
 
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
 
@@ -167,67 +168,75 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
     }
 
     muteAccount(): boolean {
-        this.loadedAccounts.forEach(acc => {
-            this.toolsService.findAccount(acc, this.fullHandle)
-                .then((target: Account) => {
-                    this.mastodonService.mute(acc, target.id);
-                    return target;
-                })
-                .then((target: Account) => {
-                    this.notificationService.hideAccount(target);
-                })
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err, acc);
-                });
-        });
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.toolsService.findAccount(acc, this.fullHandle)
+            .then(async (target: Account) => {
+                const relationship = await this.mastodonService.mute(acc, target.id);
+                this.relationship = relationship;
+                this.relationshipChanged.next(relationship);
+                return target;
+            })
+            .then((target: Account) => {
+                this.notificationService.hideAccount(target);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
 
         return false;
     }
 
     unmuteAccount(): boolean {
-        this.loadedAccounts.forEach(acc => {
-            this.toolsService.findAccount(acc, this.fullHandle)
-                .then((target: Account) => {
-                    this.mastodonService.unmute(acc, target.id);
-                    return target;
-                })                
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err, acc);
-                });
-        });
-        
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.toolsService.findAccount(acc, this.fullHandle)
+            .then(async (target: Account) => {
+                const relationship = await this.mastodonService.unmute(acc, target.id);
+                this.relationship = relationship;
+                this.relationshipChanged.next(relationship);
+                return target;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
+
         return false;
     }
 
     blockAccount(): boolean {
-        this.loadedAccounts.forEach(acc => {
-            this.toolsService.findAccount(acc, this.fullHandle)
-                .then((target: Account) => {
-                    this.mastodonService.block(acc, target.id);
-                    return target;
-                })
-                .then((target: Account) => {
-                    this.notificationService.hideAccount(target);
-                })
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err, acc);
-                });
-        });
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.toolsService.findAccount(acc, this.fullHandle)
+            .then(async (target: Account) => {
+                const relationship = await this.mastodonService.block(acc, target.id);
+                this.relationship = relationship;
+                this.relationshipChanged.next(relationship);
+                return target;
+            })
+            .then((target: Account) => {
+                this.notificationService.hideAccount(target);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
 
         return false;
     }
 
     unblockAccount(): boolean {
-        this.loadedAccounts.forEach(acc => {
-            this.toolsService.findAccount(acc, this.fullHandle)
-                .then((target: Account) => {
-                    this.mastodonService.unblock(acc, target.id);
-                    return target;
-                })                
-                .catch(err => {
-                    this.notificationService.notifyHttpError(err, acc);
-                });
-        });
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.toolsService.findAccount(acc, this.fullHandle)
+            .then(async (target: Account) => {
+                const relationship = await this.mastodonService.unblock(acc, target.id);
+                this.relationship = relationship;
+                this.relationshipChanged.next(relationship);
+                return target;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
 
         return false;
     }
