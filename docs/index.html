@@ -34,7 +34,7 @@
 
                     <div class="header__download-box--buttons">
                         <p>
-                            <h4 class="header__download-box--subtitle">Try it in your browser!</h4>
+                            <h4 class="header__download-box--subtitle">Use it in your browser!</h4>
                             <a href="#" class="download-button download-button__web"
                                 title="what are you waiting for? click!"
                                 onClick="window.open('https://sengi.nicolas-constant.com'+'?qt='+ (new Date()).getTime(),'Sengi','toolbar=no,location=no,status=no,menubar=no,scrollbars=no, resizable=yes,width=377,height=800'); return false;"
@@ -43,7 +43,7 @@
                             <br />
                             <br />
 
-                            <h4 class="header__download-box--subtitle">Or download the desktop client:</h4>
+                            <h4 class="header__download-box--subtitle">Or download the desktop client <span id="electron-version"></span>:</h4>
                             <div id="download-buttons" style="display: none;">
                                 <a id="windows" href class="download-button" title="download client for windows">
                                     <i class="fab fa-windows"></i>
@@ -75,7 +75,7 @@
 
                     </div>
                     <div>
-                        <a class="header__old-releases" href="https://github.com/NicolasConstant/sengi/releases/"
+                        <a class="header__old-releases" href="https://github.com/NicolasConstant/sengi-electron/releases/"
                             title="browse previous releases">browse previous releases</a>
                     </div>
                 </div>
@@ -215,6 +215,12 @@
             return myJson;
         }
 
+        const getLastElectronRelease = async () => {
+            const response = await fetch('https://api.github.com/repos/NicolasConstant/sengi-electron/releases/latest');
+            const myJson = await response.json();
+            return myJson;
+        }
+
         function getOS() {
             var userAgent = window.navigator.userAgent,
                 platform = window.navigator.platform,
@@ -242,6 +248,9 @@
             let lastRelease = await getLastRelease();
             let version = lastRelease.tag_name;
 
+            let lastElectronRelease = await getLastElectronRelease();
+            let electronVersion = lastElectronRelease.tag_name;
+
             var downloadButtons = document.getElementById('download-buttons');
             downloadButtons.style.display = 'block';
 
@@ -249,12 +258,15 @@
             downloadButtonsNojs.style.display = 'none';
 
             var sengiVersion = document.getElementById('sengi-version');
-            sengiVersion.textContent = `Current version: ${version}`;
+            sengiVersion.textContent = `Current version: v${version}`;
 
-            document.getElementById('windows').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-win.exe`;
-            document.getElementById('mac').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-mac.dmg`;
-            document.getElementById('deb').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.deb`;
-            document.getElementById('appimage').href = `https://github.com/NicolasConstant/sengi/releases/download/${version}/Sengi-${version}-linux.AppImage`;
+            var htmlElectronVersion = document.getElementById('electron-version');
+            htmlElectronVersion.textContent = `(${electronVersion})`;
+
+            document.getElementById('windows').href = `https://github.com/NicolasConstant/sengi-electron/releases/download/${electronVersion}/Sengi-${electronVersion.replace('v', '')}-win.exe`;
+            document.getElementById('mac').href = `https://github.com/NicolasConstant/sengi-electron/releases/download/${electronVersion}/Sengi-${electronVersion.replace('v', '')}-mac.dmg`;
+            document.getElementById('deb').href = `https://github.com/NicolasConstant/sengi-electron/releases/download/${electronVersion}/Sengi-${electronVersion.replace('v', '')}-linux.deb`;
+            document.getElementById('appimage').href = `https://github.com/NicolasConstant/sengi-electron/releases/download/${electronVersion}/Sengi-${electronVersion.replace('v', '')}-linux.AppImage`;
 
 
             let userOs = getOS();            
