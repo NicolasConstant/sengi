@@ -12,6 +12,8 @@ It is strongly focused on the following points:
 
 It is released as a **browser webapp** and also packaged as an **cross-platform desktop application** (Mac, Windows, and Linux).
 
+The Electron code isn't hosted here anymore, and you'll find it [here](https://github.com/NicolasConstant/sengi-electron).
+
 ## Official project page
 
 [Discover Sengi](https://nicolasconstant.github.io/sengi/)

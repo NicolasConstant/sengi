@@ -56,4 +56,13 @@ export class MediaComponent implements OnInit, OnDestroy {
         this.mediaService.update(account, media);
         return false;
     }
+
+    getName(media: MediaWrapper): string {
+        if(media && media.file && media.file.name){
+            return media.file.name;
+        }
+        if(media.attachment && media.attachment.description){
+            return media.attachment.description;
+        }
+    }
 }

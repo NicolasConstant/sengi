@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 
 import { AccountInfo } from '../states/accounts.state';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
-import { Account, Results, Status, Emoji } from "./models/mastodon.interfaces";
+import { Account, Results, Status, Emoji, Instancev2, Instancev1 } from "./models/mastodon.interfaces";
 import { StatusWrapper } from '../models/common.model';
 import { AccountSettings, SaveAccountSettings, GlobalSettings, SaveSettings, ContentWarningPolicy, SaveContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../states/settings.state';
 import { SettingsService } from './settings.service';
@@ -78,7 +78,7 @@ export class ToolsService {
         } else {
             return this.mastodonService.getInstance(acc.instance)
                 .then(instance => {
-                    var type = InstanceType.Mastodon;
+                    let type = InstanceType.Mastodon;
                     if (instance.version.toLowerCase().includes('pleroma')) {
                         type = InstanceType.Pleroma;
                     } else if (instance.version.toLowerCase().includes('+glitch')) {
@@ -89,11 +89,26 @@ export class ToolsService {
                         type = InstanceType.Pixelfed;
                     }
 
-                    var splittedVersion = instance.version.split('.');
-                    var major = +splittedVersion[0];
-                    var minor = +splittedVersion[1];
+                    const splittedVersion = instance.version.split('.');
+                    const major = +splittedVersion[0];
+                    const minor = +splittedVersion[1];
 
-                    var instanceInfo = new InstanceInfo(type, major, minor);
+                    let streamingApi = "";
+
+                    if (major >= 4) {
+                        const instanceV2 = <Instancev2>instance;
+
+                        if (instanceV2
+                            && instanceV2.configuration
+                            && instanceV2.configuration.urls)
+                            streamingApi = instanceV2.configuration.urls.streaming;
+                    } else {
+                        const instanceV1 = <Instancev1>instance;
+                        if (instanceV1 && instanceV1.urls)
+                            streamingApi = instanceV1.urls.streaming_api;
+                    }
+
+                    let instanceInfo = new InstanceInfo(type, major, minor, streamingApi);
                     this.instanceInfos[acc.instance] = instanceInfo;
 
                     return instanceInfo;
@@ -231,7 +246,8 @@ export class InstanceInfo {
     constructor(
         public readonly type: InstanceType,
         public readonly major: number,
-        public readonly minor: number) {
+        public readonly minor: number,
+        public readonly streamingApi: string) {
     }
 }
 

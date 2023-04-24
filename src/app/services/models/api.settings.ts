@@ -25,6 +25,7 @@ export class ApiRoutes {
     rejectFollowRequest = '/api/v1/follow_requests/{0}/reject';
     followRemote = '/api/v1/follows';
     getInstance = '/api/v1/instance';
+    getInstancev2 = '/api/v2/instance';
     uploadMediaAttachment = '/api/v1/media';
     updateMediaAttachment = '/api/v1/media/{0}';
     getMutes = '/api/v1/mutes';

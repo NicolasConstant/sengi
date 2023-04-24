@@ -89,6 +89,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.isEditing = true;
             this.editingStatusId = value.status.id;
             this.redraftedStatus = value;
+            this.mediaService.loadMedia(value.status.media_attachments);
         }
     }
 
@@ -537,7 +538,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    onSubmit(): boolean {
+    async onSubmit(): Promise<boolean> {
         if (this.isSending || this.mentionTooFarAwayError) return false;
 
         this.isSending = true;
@@ -558,9 +559,10 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                 break;
         }
 
-        const mediaAttachments = this.mediaService.mediaSubject.value.map(x => x.attachment);
-
         const acc = this.toolsService.getSelectedAccounts()[0];
+
+        const mediaAttachments = (await this.mediaService.retrieveUpToDateMedia(acc)).map(x => x.attachment);
+        
         let usableStatus: Promise<Status>;
         if (this.statusReplyingToWrapper) {
             usableStatus = this.toolsService.getStatusUsableByAccount(acc, this.statusReplyingToWrapper);
@@ -628,7 +630,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         let postPromise: Promise<Status>;
 
                         if (this.isEditing) {
-                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
+                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments, poll, scheduledAt);
                         } else {
                             postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
                         }
