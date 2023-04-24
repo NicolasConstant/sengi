@@ -156,7 +156,7 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move' | 'update';
     created_at: string;
     account: Account;
     status?: Status;

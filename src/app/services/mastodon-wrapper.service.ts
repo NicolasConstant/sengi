@@ -309,7 +309,7 @@ export class MastodonWrapperService {
             });
     }
 
-    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move' | 'update')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getNotifications(refreshedAccount, excludeTypes, maxId, sinceId, limit);
