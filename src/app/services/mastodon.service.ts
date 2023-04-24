@@ -132,12 +132,13 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
-    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.editStatus.replace('{0}', statusId)}`;
 
         const statusData = new StatusData();
         statusData.status = status;
-        statusData.media_ids = mediaIds;
+        statusData.media_ids = attachements.map(x => x.id);
+        statusData.media_attributes = attachements.map(x => new MediaAttributes(x.id, x.description));
 
         if (poll) {
             statusData['poll'] = poll;
@@ -643,11 +644,20 @@ class StatusData {
     status: string;
     in_reply_to_id: string;
     media_ids: string[];
+    media_attributes: MediaAttributes[];
+
     // poll: PollParameters;
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
     // scheduled_at: string;
+}
+
+class MediaAttributes {
+    constructor(
+        public id: string, 
+        public description: string){
+    }
 }
 
 export class PollParameters {

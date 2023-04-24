@@ -89,6 +89,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
             this.isEditing = true;
             this.editingStatusId = value.status.id;
             this.redraftedStatus = value;
+            this.mediaService.loadMedia(value.status.media_attachments);
         }
     }
 
@@ -629,7 +630,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         let postPromise: Promise<Status>;
 
                         if (this.isEditing) {
-                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
+                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments, poll, scheduledAt);
                         } else {
                             postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
                         }

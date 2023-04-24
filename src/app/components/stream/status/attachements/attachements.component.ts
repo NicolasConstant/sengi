@@ -30,6 +30,10 @@ export class AttachementsComponent implements OnInit {
 
     @Input('attachments')
     set attachments(value: Attachment[]) {
+        this.imageAttachments = [];
+        this.videoAttachments = [];
+        this.audioAttachments = [];
+
         this._attachments = value;
         this.setAttachments(value);
     }

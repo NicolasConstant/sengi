@@ -51,26 +51,51 @@ export class MediaService {
             });
     }
 
+    loadMedia(attachments: Attachment[]) {
+        const wrappers: MediaWrapper[] = [];
+
+        for (const att of attachments) {
+            const uniqueId = `${att.id}${Math.random()}`;
+            const wrapper = new MediaWrapper(uniqueId, null, att);
+            wrapper.description = att.description;
+            wrapper.isEdited = true;
+            wrappers.push(wrapper);
+        }
+
+        this.mediaSubject.next(wrappers);
+
+    }
+
     update(account: AccountInfo, media: MediaWrapper): Promise<void> {
         if (media.attachment.description === media.description) return;
 
-        return this.mastodonService.updateMediaAttachment(account, media.attachment.id, media.description)
-            .then((att: Attachment) => {
-                let medias = this.mediaSubject.value;
-                let updatedMedia = medias.filter(x => x.id === media.id)[0];
-                updatedMedia.attachment.description = att.description;
-                this.mediaSubject.next(medias);
-            })
-            .catch((err) => {
-                this.notificationService.notifyHttpError(err, account);
-            });
+        if (media.isEdited) {            
+            media.attachment.description = media.description;
+
+            let medias = this.mediaSubject.value;
+            let updatedMedia = medias.filter(x => x.id === media.id)[0];
+            updatedMedia.attachment.description = media.attachment.description;            
+            this.mediaSubject.next(medias);
+        } else {
+            return this.mastodonService.updateMediaAttachment(account, media.attachment.id, media.description)
+                .then((att: Attachment) => {
+                    let medias = this.mediaSubject.value;
+                    let updatedMedia = medias.filter(x => x.id === media.id)[0];
+                    updatedMedia.attachment.description = att.description;
+                    this.mediaSubject.next(medias);
+                })
+                .catch((err) => {
+                    console.warn('failing update');
+                    this.notificationService.notifyHttpError(err, account);
+                });
+        }
     }
 
     async retrieveUpToDateMedia(account: AccountInfo): Promise<MediaWrapper[]> {
         const allMedia = this.mediaSubject.value;
         let allPromises: Promise<any>[] = [];
-        
-        for (const m of allMedia) {            
+
+        for (const m of allMedia) {
             let t = this.update(account, m);
             allPromises.push(t);
         }
@@ -80,9 +105,9 @@ export class MediaService {
         return allMedia;
     }
 
-    addExistingMedia(media: MediaWrapper){
-        if(!this.fileCache[media.attachment.url]) return;
-        
+    addExistingMedia(media: MediaWrapper) {
+        if (!this.fileCache[media.attachment.url]) return;
+
         media.file = this.fileCache[media.attachment.url];
         let medias = this.mediaSubject.value;
         medias.push(media);
@@ -102,11 +127,15 @@ export class MediaService {
     migrateMedias(account: AccountInfo) {
         let medias = this.mediaSubject.value;
         medias.forEach(media => {
-            media.isMigrating = true;
+            if (!media.isEdited) {
+                media.isMigrating = true;
+            }
         });
         this.mediaSubject.next(medias);
 
         for (let media of medias) {
+            if (media.isEdited) continue;
+
             this.mastodonService.uploadMediaAttachment(account, media.file, media.description)
                 .then((attachment: Attachment) => {
                     this.fileCache[attachment.url] = media.file;
@@ -131,7 +160,7 @@ export class MediaWrapper {
         public id: string,
         public file: File,
         attachment: Attachment) {
-            this.attachment = attachment;       
+        this.attachment = attachment;
     }
 
     private _attachment: Attachment;
@@ -139,7 +168,7 @@ export class MediaWrapper {
         return this._attachment;
     }
 
-    public set attachment(value: Attachment){
+    public set attachment(value: Attachment) {
         if (value && value.meta && value.meta.audio_encode) {
             this.audioType = `audio/${value.meta.audio_encode}`;
         } else if (value && value.pleroma && value.pleroma.mime_type) {
@@ -152,4 +181,6 @@ export class MediaWrapper {
     public description: string;
     public isMigrating: boolean;
     public audioType: string;
+
+    public isEdited: boolean;
 }
