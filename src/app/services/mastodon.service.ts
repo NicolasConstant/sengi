@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag, Instancev2, Instancev1 } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
@@ -13,8 +13,12 @@ export class MastodonService {
     constructor(private readonly httpClient: HttpClient) { }
 
     getInstance(instance: string): Promise<Instance> {
-        const route = `https://${instance}${this.apiRoutes.getInstance}`;
-        return this.httpClient.get<Instance>(route).toPromise();
+        let route = `https://${instance}${this.apiRoutes.getInstancev2}`;
+        return this.httpClient.get<Instancev2>(route).toPromise()
+            .catch(err => {
+                route = `https://${instance}${this.apiRoutes.getInstance}`;
+                return this.httpClient.get<Instancev1>(route).toPromise();
+            });            
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
@@ -128,12 +132,13 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
-    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.editStatus.replace('{0}', statusId)}`;
 
         const statusData = new StatusData();
         statusData.status = status;
-        statusData.media_ids = mediaIds;
+        statusData.media_ids = attachements.map(x => x.id);
+        statusData.media_attributes = attachements.map(x => new MediaAttributes(x.id, x.description));
 
         if (poll) {
             statusData['poll'] = poll;
@@ -373,7 +378,7 @@ export class MastodonService {
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
     }
 
-    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move' | 'update')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         let route = `https://${account.instance}${this.apiRoutes.getNotifications}?limit=${limit}`;
 
         if (maxId) {
@@ -482,8 +487,20 @@ export class MastodonService {
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
 
+    unmute(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.unmute}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
     block(account: AccountInfo, accounId: number): Promise<Relationship> {
         let route = `https://${account.instance}${this.apiRoutes.block}`.replace('{0}', accounId.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    unblock(account: AccountInfo, accounId: number): Promise<Relationship> {
+        let route = `https://${account.instance}${this.apiRoutes.unblock}`.replace('{0}', accounId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
     }
@@ -627,11 +644,20 @@ class StatusData {
     status: string;
     in_reply_to_id: string;
     media_ids: string[];
+    media_attributes: MediaAttributes[];
+
     // poll: PollParameters;
     sensitive: boolean;
     spoiler_text: string;
     visibility: string;
     // scheduled_at: string;
+}
+
+class MediaAttributes {
+    constructor(
+        public id: string, 
+        public description: string){
+    }
 }
 
 export class PollParameters {

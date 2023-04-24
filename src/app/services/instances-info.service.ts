@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { VisibilityEnum } from './mastodon.service';
 import { MastodonWrapperService } from './mastodon-wrapper.service';
-import { Instance, Account } from './models/mastodon.interfaces';
+import { Instance, Instancev1, Instancev2, Account } from './models/mastodon.interfaces';
 import { AccountInfo } from '../states/accounts.state';
 
 @Injectable({
@@ -19,11 +19,20 @@ export class InstancesInfoService {
         if (!this.cachedMaxInstanceChar[instance]) {
             this.cachedMaxInstanceChar[instance] = this.mastodonService.getInstance(instance)
                 .then((instance: Instance) => {
-                    if (instance.max_toot_chars) {
-                        return instance.max_toot_chars;
+                    if (+instance.version.split('.')[0] >= 4) {
+                        const instanceV2 = <Instancev2>instance;
+                        if (instanceV2
+                            && instanceV2.configuration
+                            && instanceV2.configuration.statuses
+                            && instanceV2.configuration.statuses.max_characters)
+                            return instanceV2.configuration.statuses.max_characters;
                     } else {
-                        return this.defaultMaxChars;
+                        const instanceV1 = <Instancev1>instance;
+                        if (instanceV1 && instanceV1.max_toot_chars)
+                            return instanceV1.max_toot_chars;
                     }
+
+                    return this.defaultMaxChars;
                 })
                 .catch(() => {
                     return this.defaultMaxChars;

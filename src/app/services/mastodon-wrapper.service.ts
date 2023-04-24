@@ -124,10 +124,10 @@ export class MastodonWrapperService {
             });
     }
 
-    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
-                return this.mastodonService.editStatus(refreshedAccount, statusId, status, visibility, spoiler, in_reply_to_id, mediaIds, poll, scheduled_at);
+                return this.mastodonService.editStatus(refreshedAccount, statusId, status, visibility, spoiler, in_reply_to_id, attachements, poll, scheduled_at);
             });
     }
 
@@ -309,7 +309,7 @@ export class MastodonWrapperService {
             });
     }
 
-    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
+    getNotifications(account: AccountInfo, excludeTypes: ('follow' | 'favourite' | 'reblog' | 'mention' | 'poll' | 'follow_request' | 'move' | 'update')[] = null, maxId: string = null, sinceId: string = null, limit: number = 15): Promise<Notification[]> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getNotifications(refreshedAccount, excludeTypes, maxId, sinceId, limit);
@@ -379,10 +379,24 @@ export class MastodonWrapperService {
             });
     }
 
+    unmute(account: AccountInfo, accounId: number): Promise<Relationship> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unmute(refreshedAccount, accounId);
+            });
+    }
+
     block(account: AccountInfo, accounId: number): Promise<Relationship> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.block(refreshedAccount, accounId);
+            });
+    }
+
+    unblock(account: AccountInfo, accounId: number): Promise<Relationship> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unblock(refreshedAccount, accounId);
             });
     }
 

@@ -28,11 +28,17 @@
         Unmute conversation
     </ng-template>
     <ng-template contextMenuItem divider="true"></ng-template>
-    <ng-template contextMenuItem (execute)="muteAccount()" *ngIf="!isOwnerSelected">
+    <ng-template contextMenuItem (execute)="muteAccount()" *ngIf="!isOwnerSelected && this.relationship && !this.relationship.muting">
         Mute @{{ this.username }}
     </ng-template>
-    <ng-template contextMenuItem (execute)="blockAccount()" *ngIf="!isOwnerSelected">
+    <ng-template contextMenuItem (execute)="unmuteAccount()" *ngIf="!isOwnerSelected && this.relationship && this.relationship.muting">
+        Unmute @{{ this.username }}
+    </ng-template>
+    <ng-template contextMenuItem (execute)="blockAccount()" *ngIf="!isOwnerSelected && this.relationship && !this.relationship.blocking">
         Block @{{ this.username }}
+    </ng-template>   
+    <ng-template contextMenuItem (execute)="unblockAccount()" *ngIf="!isOwnerSelected && this.relationship && this.relationship.blocking">
+        Unblock @{{ this.username }}
     </ng-template>
     <ng-template contextMenuItem (execute)="pinOnProfile()" *ngIf="statusWrapper && isOwnerSelected && !displayedStatus.pinned && displayedStatus.visibility === 'public'">
         Pin on profile

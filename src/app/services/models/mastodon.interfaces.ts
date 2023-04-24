@@ -110,15 +110,41 @@ export interface Error {
     error: string;
 }
 
+
+
 export interface Instance {
-    uri: string;
     title: string;
-    description: string;
-    email: string;
     version: string;
-    urls: string[];
+    description: string;   
+}
+
+export interface Instancev1 extends Instance {
+    uri: string;
+    email: string;    
+    urls: InstanceUrls;
     contact_account: Account;
     max_toot_chars: number;
+}
+
+export interface Instancev2 extends Instance {
+    configuration: Instancev2Configuration
+}
+
+export interface Instancev2Configuration {
+    urls: Instancev2Urls;
+    statuses: Instancev2Statuses
+}
+
+export interface InstanceUrls {
+    streaming_api: string;
+}
+
+export interface Instancev2Urls {
+    streaming: string;    
+}
+
+export interface Instancev2Statuses {
+    max_characters: number;
 }
 
 export interface Mention {
@@ -130,7 +156,7 @@ export interface Mention {
 
 export interface Notification {
     id: string;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move' | 'update';
     created_at: string;
     account: Account;
     status?: Status;

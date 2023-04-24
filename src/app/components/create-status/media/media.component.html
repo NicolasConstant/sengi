@@ -1,8 +1,8 @@
 <div *ngFor="let m of media" class="media">
-    <div *ngIf="m.attachment === null" class="media__loading" title="{{m.file.name}}">
+    <div *ngIf="m.attachment === null" class="media__loading" title="{{getName(m)}}">
         <app-waiting-animation class="waiting-icon"></app-waiting-animation>
     </div>
-    <div *ngIf="m.attachment !== null && m.attachment.type !== 'audio'" class="media__loaded" title="{{m.file.name}}"
+    <div *ngIf="m.attachment !== null && m.attachment.type !== 'audio'" class="media__loaded" title="{{getName(m)}}"
         (mouseleave)="updateMedia(m)">
         <div class="media__loaded--migrating" *ngIf="m.isMigrating">
             <app-waiting-animation class="waiting-icon"></app-waiting-animation>

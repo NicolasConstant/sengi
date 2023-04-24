@@ -101,7 +101,7 @@ export class NotificationsComponent extends BrowseBase {
         this.isLoading = true;
         this.isProcessingInfiniteScroll = true;
 
-        this.mastodonService.getNotifications(this.account.info, ['mention'], this.lastId)
+        this.mastodonService.getNotifications(this.account.info, ['mention', 'update'], this.lastId)
             .then((notifications: Notification[]) => {
                 if (notifications.length === 0) {
                     this.maxReached = true;
@@ -168,5 +168,5 @@ export class NotificationWrapper {
     account: Account;
     target: Account;
     status: StatusWrapper;
-    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move';
+    type: 'mention' | 'reblog' | 'favourite' | 'follow' | 'poll' | 'follow_request' | 'move' | 'update';
 }
