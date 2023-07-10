@@ -58,6 +58,12 @@
         }
     }
 
+    &__count {
+        font-size: 12px;
+        margin-right: -4px;
+        vertical-align: top;
+    }
+
     &__lock {       
         color: $status-secondary-color;
         width: 22px;
