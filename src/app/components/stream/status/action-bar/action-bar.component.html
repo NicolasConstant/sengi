@@ -1,12 +1,14 @@
 <div class="action-bar">
     <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--reply" title="Reply" (click)="reply()">
         <fa-icon [icon]="faReply"></fa-icon>
+        <span class="action-bar__count">{{displayStatus.replies_count || ''}}</span>
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
     <a *ngIf="!(isBoostLocked || isLocked)" href class="action-bar__link action-bar__link--boost" title="Boost"
         [class.boosted]="isBoosted" [class.boosting]="boostIsLoading" (click)="boost()">
         <fa-icon [icon]="faRetweet"></fa-icon>
+        <span class="action-bar__count">{{displayStatus.reblogs_count || ''}}</span>
     </a>
     <fa-icon *ngIf="isBoostLocked && !isLocked && !isDM" class="action-bar__lock" title="This post cannot be boosted"
         [icon]="faLock"></fa-icon>
@@ -17,6 +19,7 @@
     <a *ngIf="!isLocked" href class="action-bar__link action-bar__link--fav" title="Favourite"
         [class.favorited]="isFavorited" [class.favoriting]="favoriteIsLoading" (click)="favorite()">
         <fa-icon [icon]="faStar"></fa-icon>
+        <span class="action-bar__count">{{displayStatus.favourites_count || ''}}</span>
     </a>
     <fa-icon *ngIf="isLocked" class="action-bar__lock" title="Account can't access this post" [icon]="faLock"></fa-icon>
 
