@@ -20,8 +20,8 @@
         "test": "ng test",
         "test-nowatch": "ng test --watch=false",
         "lint": "ng lint",
-        "e2e": "ng e2e",        
-        "dist": "npm run build"        
+        "e2e": "ng e2e",
+        "dist": "npm run build"
     },
     "private": true,
     "dependencies": {
@@ -48,7 +48,7 @@
         "angular2-hotkeys": "~2.1.5",
         "bootstrap": "^4.1.3",
         "core-js": "^2.5.4",
-        "emojione": "~4.5.0",
+        "emoji-toolkit": "^7.0.1",
         "howler": "^2.1.2",
         "ng-pick-datetime": "^7.0.0",
         "ngx-contextmenu": "^5.2.0",
