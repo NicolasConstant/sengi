@@ -7,11 +7,11 @@
         <!-- <div> -->
         <div class="stream-column__stream-header">
             <a class="stream-column__stream-selector" href title="return to top" (click)="goToTop()">
-                <img *ngIf="timelineHeader === 3 || timelineHeader === 4" class="stream-column__stream-selector--avatar" src="{{avatar}}" />
+                <img *ngIf="timelineHeader === 3 || timelineHeader === 4 || timelineHeader === 6" class="stream-column__stream-selector--avatar" src="{{avatar}}" />
                 <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
                 <span class="stream-column__stream-selector--text">
-                    <h1 class="stream-column__stream-selector--title" [class.stream-column__stream-selector--title--only]="timelineHeader === 4 || timelineHeader === 5">{{ streamElement.name.toUpperCase() }}</h1>
-                    <span class="stream-column__stream-selector--subtitle" *ngIf="streamElement.instance && timelineHeader !== 4 && timelineHeader !== 5"><span *ngIf="timelineHeader === 2">{{account.username}}@</span>{{ streamElement.instance.toLowerCase() }}</span>
+                    <h1 class="stream-column__stream-selector--title" [class.stream-column__stream-selector--title--only]="timelineHeader === 4 || timelineHeader === 5 || timelineHeader === 6">{{ streamElement.name.toUpperCase() }}</h1>
+                    <span class="stream-column__stream-selector--subtitle" *ngIf="streamElement.instance && timelineHeader !== 4 && timelineHeader !== 5"><span *ngIf="timelineHeader === 2 || timelineHeader === 6">{{account.username}}@</span>{{ streamElement.instance.toLowerCase() }}</span>
                 </span>
             </a>
             <a class="stream-column__open-menu" href title="edit column" (click)="openEditionMenu()">
