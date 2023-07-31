@@ -10,7 +10,8 @@
                 <img *ngIf="timelineHeader === 3 || timelineHeader === 4 || timelineHeader === 6" class="stream-column__stream-selector--avatar" src="{{avatar}}" />
                 <fa-icon class="stream-column__stream-selector--icon" [icon]="columnFaIcon"></fa-icon>
                 <span class="stream-column__stream-selector--text">
-                    <h1 class="stream-column__stream-selector--title" [class.stream-column__stream-selector--title--only]="timelineHeader === 4 || timelineHeader === 5 || timelineHeader === 6">{{ streamElement.name.toUpperCase() }}</h1>
+                    <h1 class="stream-column__stream-selector--title" [class.stream-column__stream-selector--title--only]="timelineHeader === 4 || timelineHeader === 5">{{ streamElement.name.toUpperCase() }}</h1>
+                    <span class="stream-column__stream-selector--subtitle" *ngIf="streamElement.instance && timelineHeader !== 4 && timelineHeader !== 5"><span *ngIf="timelineHeader === 2">{{account.username}}@</span>{{ streamElement.instance.toLowerCase() }}</span>
                     <span class="stream-column__stream-selector--subtitle" *ngIf="streamElement.instance && timelineHeader !== 4 && timelineHeader !== 5"><span *ngIf="timelineHeader === 2 || timelineHeader === 6">{{account.username}}@</span>{{ streamElement.instance.toLowerCase() }}</span>
                 </span>
             </a>
