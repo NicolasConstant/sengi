@@ -136,6 +136,11 @@
             <label class="noselect sub-section__label" for="timelineheader-5">Title</label>
             <br>
 
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 6" (change)="onTimeLineHeaderChange(6)"
+                type="radio" name="timelineheader-6" value="timelineheader-6" id="timelineheader-6">
+            <label class="noselect sub-section__label" for="timelineheader-6">Title - Account Icon - Username - Domain Name</label>
+            <br>
+
             <span class="sub-section__title">loading behavior:</span><br />
 
             <input class="sub-section__checkbox" [checked]="timeLineMode === 1" (change)="onTimeLineModeChange(1)"
