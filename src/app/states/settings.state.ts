@@ -51,7 +51,8 @@ export enum TimeLineHeaderEnum {
     Title_Username_DomainName = 2,
     Title_AccountIcon_DomainName = 3,
     Title_AccountIcon = 4,
-    Title = 5
+    Title = 5,
+    Title_AccountIcon_Username_DomainName = 6
 }
 
 export class ContentWarningPolicy {
