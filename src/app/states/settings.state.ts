@@ -80,7 +80,14 @@ export class GlobalSettings {
 
     columnSwitchingWinAlt = false;
 
-    accountSettings: AccountSettings[] = [];    
+    accountSettings: AccountSettings[] = [];
+
+    configuredLanguages: ILanguage[] = [];
+}
+
+export interface ILanguage {
+    iso639: string;
+    name: string;
 }
 
 export interface SettingsStateModel {

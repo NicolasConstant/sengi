@@ -33,6 +33,11 @@ export class SettingsService {
             this.saveSettings(settings);
         }
 
+        if(!settings.configuredLanguages){
+            settings.configuredLanguages = [];
+            this.saveSettings(settings);
+        }
+
         return settings;
     }
 
