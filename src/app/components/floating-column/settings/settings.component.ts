@@ -6,10 +6,11 @@ import { environment } from '../../../../environments/environment';
 import { ToolsService, InstanceType } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
-import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
+import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum, ILanguage } from '../../../states/settings.state';
 import { NotificationService } from '../../../services/notification.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { SettingsService } from '../../../services/settings.service';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
     selector: 'app-settings',
@@ -77,6 +78,7 @@ export class SettingsComponent implements OnInit {
     }
 
     constructor(
+        private readonly languageService: LanguageService,
         private readonly settingsService: SettingsService,
         private readonly navigationService: NavigationService,
         private formBuilder: FormBuilder,
@@ -129,6 +131,27 @@ export class SettingsComponent implements OnInit {
 
         this.twitterBridgeEnabled = settings.twitterBridgeEnabled;
         this.twitterBridgeInstance = settings.twitterBridgeInstance;
+
+        this.configuredLangs = this.languageService.getConfiguredLanguages();
+    }
+
+    configuredLangs: ILanguage[] = [];
+    searchedLangs: ILanguage[] = [];
+    onSearchLang(input: string) {
+        console.warn(input);
+        this.searchedLangs = this.languageService.searchLanguage(input);
+    }
+
+    onAddLang(lang: ILanguage): boolean {
+        this.configuredLangs.push(lang);
+        this.languageService.addLanguage(lang);
+        return false;
+    }
+
+    onRemoveLang(lang: ILanguage): boolean {
+        this.configuredLangs = this.configuredLangs.filter(x => x.iso639 !== lang.iso639);
+        this.languageService.removeLanguage(lang);
+        return false;
     }
 
     onShortcutChange(id: ColumnShortcut) {
