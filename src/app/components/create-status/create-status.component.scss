@@ -70,6 +70,32 @@ $counter-width: 90px;
         }
     }
 
+    &__lang {
+        position: absolute;
+        top: 64px;
+        right: 12px;
+
+        font-weight: bolder;
+        font-size: 12px;
+        color: #a5a5a5;
+        text-decoration: none;
+
+        display: block;
+        width: 20px;
+        height: 19px;
+        border-radius: 2px;
+        background-color: rgba(255, 255, 255, 0);
+
+        padding: 1px 0 0 2px;
+        text-transform: uppercase;
+
+        &:hover {
+            text-decoration: none;
+            color:black;
+            background-color: #e6e6e6;
+        }
+    }
+
     &__content {
         border-width: 0;
         background-color: $status-editor-background;

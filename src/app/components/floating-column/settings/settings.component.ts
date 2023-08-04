@@ -146,7 +146,7 @@ export class SettingsComponent implements OnInit {
     }
 
     onAddLang(lang: ILanguage): boolean {
-        if(this.configuredLangs.find(x => x.iso639 === lang.iso639)) return false;
+        if(this.configuredLangs.findIndex(x => x.iso639 === lang.iso639) >= 0) return false;
 
         this.configuredLangs.push(lang);
         this.languageService.addLanguage(lang);

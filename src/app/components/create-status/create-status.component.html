@@ -7,6 +7,10 @@
             <img class="status-editor__emoji--image" src="/assets/emoji/72x72/1f636.png">
         </a>
 
+        <a class="status-editor__lang" title="Change language" href >
+            EN
+        </a>
+
     <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"
         rows="5" required title="content" placeholder="What's on your mind?" 
         (keydown.control.enter)="onCtrlEnter()"

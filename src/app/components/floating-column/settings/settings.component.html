@@ -53,14 +53,14 @@
         
         <h4 class="panel__subtitle">Languages</h4>
         <div *ngFor="let l of configuredLangs">
-            {{ l.iso639 }}
+            {{ l.name }} ({{l.iso639}})
             <button (click)="onRemoveLang(l)">remove</button>
         </div>
         <div class="sub-section">
-            <input type="text" (input)="onSearchLang($event.target.value)" [(ngModel)]="searchLang" />
+            <input type="text" (input)="onSearchLang($event.target.value)" [(ngModel)]="searchLang" placeholder="Find Language" autocomplete="off"/>
         </div>
         <div *ngFor="let l of searchedLangs">
-            {{ l.iso639 }}
+            {{ l.name }} ({{l.iso639}})
             <button (click)="onAddLang(l)">add</button>
         </div>
 

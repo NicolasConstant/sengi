@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ILanguage } from '../states/settings.state';
 import { SettingsService } from './settings.service';
 
@@ -6,7 +7,11 @@ import { SettingsService } from './settings.service';
     providedIn: 'root'
 })
 export class LanguageService {
-    constructor(private settingsService: SettingsService) {        
+
+    loadedLanguages = new BehaviorSubject<ILanguage[]>([]);
+
+    constructor(private settingsService: SettingsService) {
+        this.loadedLanguages.next(this.getConfiguredLanguages());
     }
 
     getConfiguredLanguages(): ILanguage[] {
@@ -18,12 +23,16 @@ export class LanguageService {
         var settings = this.settingsService.getSettings();
         settings.configuredLanguages.push(lang);
         this.settingsService.saveSettings(settings);
+
+        this.loadedLanguages.next(settings.configuredLanguages);
     }
 
     removeLanguage(lang: ILanguage){
         var settings = this.settingsService.getSettings();
         settings.configuredLanguages = settings.configuredLanguages.filter(x => x.iso639 !== lang.iso639);
         this.settingsService.saveSettings(settings);
+
+        this.loadedLanguages.next(settings.configuredLanguages);
     }
 
     searchLanguage(input: string): ILanguage[] {
