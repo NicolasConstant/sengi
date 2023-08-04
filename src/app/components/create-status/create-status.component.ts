@@ -155,6 +155,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     instanceSupportsScheduling = true;
     isEditing: boolean;
     editingStatusId: string;
+    configuredLanguages: ILanguage[] = [];
+    selectedLanguage: ILanguage;
     private statusLoaded: boolean;
     private hasSuggestions: boolean;
 
@@ -221,9 +223,6 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
-
-    configuredLanguages: ILanguage[] = [];
-    selectedLanguage: ILanguage;
 
     private initLanguages(){
         this.configuredLanguages = this.languageService.getConfiguredLanguages();
@@ -652,6 +651,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    private currentLang(): string  {
+        if(this.selectedLanguage){
+            return this.selectedLanguage.iso639;
+        }
+        return null;
+    }
+
+
     private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string, editingStatusId: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
@@ -669,9 +676,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         let postPromise: Promise<Status>;
 
                         if (this.isEditing) {
-                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments, poll, scheduledAt);
+                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments, poll, scheduledAt, this.currentLang());
                         } else {
-                            postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
+                            postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt, this.currentLang());
                         }
 
                         return postPromise
@@ -681,9 +688,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                             });
                     } else {
                         if (this.isEditing) {
-                            return this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                            return this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, [], null, scheduledAt, this.currentLang());
                         } else {
-                            return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                            return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt, this.currentLang());
                         }
                     }
                 })
