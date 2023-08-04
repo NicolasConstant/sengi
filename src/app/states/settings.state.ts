@@ -178,6 +178,7 @@ export class SettingsState {
         newSettings.autoFollowOnListEnabled = oldSettings.autoFollowOnListEnabled;
         newSettings.twitterBridgeEnabled = oldSettings.twitterBridgeEnabled;
         newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
+        newSettings.configuredLanguages = oldSettings.configuredLanguages;
 
         return newSettings;
     }

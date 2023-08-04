@@ -10,7 +10,8 @@ export class LanguageService {
     }
 
     getConfiguredLanguages(): ILanguage[] {
-        return this.settingsService.getSettings().configuredLanguages;
+        const langs = this.settingsService.getSettings().configuredLanguages;
+        return langs;
     }
 
     addLanguage(lang: ILanguage){

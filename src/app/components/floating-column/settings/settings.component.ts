@@ -137,14 +137,23 @@ export class SettingsComponent implements OnInit {
 
     configuredLangs: ILanguage[] = [];
     searchedLangs: ILanguage[] = [];
+
+    searchLang: string;
+
     onSearchLang(input: string) {
         console.warn(input);
         this.searchedLangs = this.languageService.searchLanguage(input);
     }
 
     onAddLang(lang: ILanguage): boolean {
+        if(this.configuredLangs.find(x => x.iso639 === lang.iso639)) return false;
+
         this.configuredLangs.push(lang);
         this.languageService.addLanguage(lang);
+
+        this.searchLang = '';
+        this.searchedLangs.length = 0;
+
         return false;
     }
 
