@@ -7,11 +7,25 @@ import { SettingsService } from './settings.service';
     providedIn: 'root'
 })
 export class LanguageService {
-
-    loadedLanguages = new BehaviorSubject<ILanguage[]>([]);
+    configuredLanguagesChanged = new BehaviorSubject<ILanguage[]>([]);
+    selectedLanguageChanged = new BehaviorSubject<ILanguage>(null);
 
     constructor(private settingsService: SettingsService) {
-        this.loadedLanguages.next(this.getConfiguredLanguages());
+        this.configuredLanguagesChanged.next(this.getConfiguredLanguages());
+        this.selectedLanguageChanged.next(this.getSelectedLanguage());
+    }
+
+    getSelectedLanguage(): ILanguage {
+        const lang = this.settingsService.getSettings().selectedLanguage;
+        return lang;
+    }
+
+    setSelectedLanguage(lang: ILanguage): void {
+        var settings = this.settingsService.getSettings();
+        settings.selectedLanguage = lang;
+        this.settingsService.saveSettings(settings);
+
+        this.selectedLanguageChanged.next(lang);
     }
 
     getConfiguredLanguages(): ILanguage[] {
@@ -24,7 +38,7 @@ export class LanguageService {
         settings.configuredLanguages.push(lang);
         this.settingsService.saveSettings(settings);
 
-        this.loadedLanguages.next(settings.configuredLanguages);
+        this.configuredLanguagesChanged.next(settings.configuredLanguages);
     }
 
     removeLanguage(lang: ILanguage){
@@ -32,7 +46,7 @@ export class LanguageService {
         settings.configuredLanguages = settings.configuredLanguages.filter(x => x.iso639 !== lang.iso639);
         this.settingsService.saveSettings(settings);
 
-        this.loadedLanguages.next(settings.configuredLanguages);
+        this.configuredLanguagesChanged.next(settings.configuredLanguages);
     }
 
     searchLanguage(input: string): ILanguage[] {

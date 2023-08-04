@@ -25,6 +25,8 @@ import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.co
 import { ScheduledStatusService } from '../../services/scheduled-status.service';
 import { StatusesStateService } from '../../services/statuses-state.service';
 import { SettingsService } from '../../services/settings.service';
+import { LanguageService } from '../../services/language.service';
+import { ILanguage } from 'src/app/states/settings.state';
 
 @Component({
     selector: 'app-create-status',
@@ -196,11 +198,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+    private langSub: Subscription;
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly languageService: LanguageService,
         private readonly settingsService: SettingsService,
-        private statusStateService: StatusesStateService,
+        private readonly statusStateService: StatusesStateService,
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
@@ -216,7 +220,16 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
+    configuredLanguages: ILanguage[] = [];
+    selectedLanguage: ILanguage;
+
     ngOnInit() {
+        this.configuredLanguages = this.languageService.getConfiguredLanguages();
+        this.selectedLanguage = this.languageService.getSelectedLanguage();
+        this.langSub = this.languageService.configuredLanguagesChanged.subscribe(l => {
+            this.configuredLanguages = l;
+        });
+
         if (!this.isRedrafting) {
             this.status = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
         }
@@ -263,6 +276,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
 
         this.accountSub.unsubscribe();
+        this.langSub.unsubscribe();
     }
 
     onPaste(e: any) {

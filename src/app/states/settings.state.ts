@@ -83,6 +83,7 @@ export class GlobalSettings {
     accountSettings: AccountSettings[] = [];
 
     configuredLanguages: ILanguage[] = [];
+    selectedLanguage: ILanguage;
 }
 
 export interface ILanguage {
@@ -179,6 +180,7 @@ export class SettingsState {
         newSettings.twitterBridgeEnabled = oldSettings.twitterBridgeEnabled;
         newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
         newSettings.configuredLanguages = oldSettings.configuredLanguages;
+        newSettings.selectedLanguage = oldSettings.selectedLanguage;
 
         return newSettings;
     }

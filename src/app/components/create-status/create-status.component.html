@@ -7,7 +7,7 @@
             <img class="status-editor__emoji--image" src="/assets/emoji/72x72/1f636.png">
         </a>
 
-        <a class="status-editor__lang" title="Change language" href >
+        <a class="status-editor__lang" title="Change language" href *ngIf="configuredLanguages && configuredLanguages.length > 1">
             EN
         </a>
 
