@@ -26,7 +26,7 @@ import { ScheduledStatusService } from '../../services/scheduled-status.service'
 import { StatusesStateService } from '../../services/statuses-state.service';
 import { SettingsService } from '../../services/settings.service';
 import { LanguageService } from '../../services/language.service';
-import { ILanguage } from 'src/app/states/settings.state';
+import { ILanguage } from '../../states/settings.state';
 
 @Component({
     selector: 'app-create-status',
