@@ -164,6 +164,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @ViewChild('fileInput') fileInputElement: ElementRef;
     @ViewChild('footer') footerElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+    @ViewChild('langContextMenu') public langContextMenu: ContextMenuComponent;
     @ViewChild(PollEditorComponent) pollEditor: PollEditorComponent;
     @ViewChild(StatusSchedulerComponent) statusScheduler: StatusSchedulerComponent;
 
@@ -199,6 +200,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
     private langSub: Subscription;
+    private selectLangSub: Subscription;
     private selectedAccount: AccountInfo;
 
     constructor(
@@ -223,12 +225,34 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     configuredLanguages: ILanguage[] = [];
     selectedLanguage: ILanguage;
 
-    ngOnInit() {
+    private initLanguages(){
         this.configuredLanguages = this.languageService.getConfiguredLanguages();
         this.selectedLanguage = this.languageService.getSelectedLanguage();
         this.langSub = this.languageService.configuredLanguagesChanged.subscribe(l => {
             this.configuredLanguages = l;
+            // if(this.configuredLanguages.length > 0 
+            //     && this.selectedLanguage
+            //     && this.configuredLanguages.findIndex(x => x.iso639 === this.selectedLanguage.iso639)){
+            //         this.languageService.setSelectedLanguage(this.configuredLanguages[0]);
+            // }
         });
+        this.selectLangSub = this.languageService.selectedLanguageChanged.subscribe(l => {
+            this.selectedLanguage = l;
+        });
+        if(!this.selectedLanguage && this.configuredLanguages.length > 0){
+            this.languageService.setSelectedLanguage(this.configuredLanguages[0]);            
+        }
+    }
+
+    setLanguage(lang: ILanguage): boolean {
+        if(lang){
+            this.languageService.setSelectedLanguage(lang);
+        }
+        return false;
+    }
+
+    ngOnInit() {
+        this.initLanguages();
 
         if (!this.isRedrafting) {
             this.status = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
@@ -277,6 +301,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
         this.accountSub.unsubscribe();
         this.langSub.unsubscribe();
+        this.selectLangSub.unsubscribe();
     }
 
     onPaste(e: any) {
@@ -894,6 +919,17 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.contextMenuService.show.next({
             // Optional - if unspecified, all context menu components will open
             contextMenu: this.contextMenu,
+            event: $event,
+            item: null
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
+
+    public onLangContextMenu($event: MouseEvent): void {
+        this.contextMenuService.show.next({
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.langContextMenu,
             event: $event,
             item: null
         });

@@ -37,8 +37,12 @@ export class LanguageService {
         var settings = this.settingsService.getSettings();
         settings.configuredLanguages.push(lang);
         this.settingsService.saveSettings(settings);
-
+        
         this.configuredLanguagesChanged.next(settings.configuredLanguages);
+
+        if(settings.configuredLanguages.length === 1){
+            this.setSelectedLanguage(lang);
+        }
     }
 
     removeLanguage(lang: ILanguage){
@@ -47,6 +51,14 @@ export class LanguageService {
         this.settingsService.saveSettings(settings);
 
         this.configuredLanguagesChanged.next(settings.configuredLanguages);
+
+        if(this.getSelectedLanguage().iso639 === lang.iso639){
+            if(settings.configuredLanguages.length > 0){
+                this.setSelectedLanguage(settings.configuredLanguages[0]);
+            } else {
+                this.setSelectedLanguage(null);
+            }
+        }
     }
 
     searchLanguage(input: string): ILanguage[] {
