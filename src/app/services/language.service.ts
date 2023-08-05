@@ -36,6 +36,7 @@ export class LanguageService {
     addLanguage(lang: ILanguage){
         var settings = this.settingsService.getSettings();
         settings.configuredLanguages.push(lang);
+        settings.configuredLanguages.sort((a, b) => a.name.localeCompare(b.name));
         this.settingsService.saveSettings(settings);
         
         this.configuredLanguagesChanged.next(settings.configuredLanguages);
@@ -63,7 +64,9 @@ export class LanguageService {
 
     searchLanguage(input: string): ILanguage[] {
         const avLangs = this.getAllAvaialbleLaguages();
-        const found = avLangs.filter(x => x.iso639 === input || x.name.toLowerCase().includes(input.toLowerCase()));
+        let found = avLangs.filter(x => x.name.toLowerCase().includes(input.toLowerCase()) || x.iso639.toLowerCase().includes(input.toLowerCase()));
+        found.sort((a, b) => a.name.localeCompare(b.name));
+        found = found.slice(0, 5);
         return found;
     }
 
