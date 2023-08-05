@@ -24,4 +24,21 @@
         text-align: left;
         padding: 5px 0 0 0;
     }
+
+    &__display {
+        display: flex;
+        justify-content: space-between;
+
+        &__link {
+            padding: 5px 0 0 0;
+            font-size: 12px;
+            color: #656b8f;
+
+            transition: all .2s;
+            &:hover {
+                text-decoration: none;
+                color: #9fa5ca;
+            }
+        }
+    }
 }

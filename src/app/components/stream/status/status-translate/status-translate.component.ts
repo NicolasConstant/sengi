@@ -19,11 +19,13 @@ export class StatusTranslateComponent implements OnInit, OnDestroy {
 
     private languageSub: Subscription;
     private languagesSub: Subscription;
+    private loadedTranslation: Translation;
 
     selectedLanguage: ILanguage;
     configuredLanguages: ILanguage[] = [];
 
     isTranslationAvailable: boolean;
+    showTranslationButton: boolean = true;
     translatedBy: string;
 
     @Input() status: StatusWrapper;
@@ -79,16 +81,38 @@ export class StatusTranslateComponent implements OnInit, OnDestroy {
     }
 
     translate(): boolean {
+        if(this.loadedTranslation){
+            this.translation.next(this.loadedTranslation);
+            this.showTranslationButton = false;
+            return false;
+        }
+
         this.mastodonWrapperService.translate(this.status.provider, this.status.status.id, this.selectedLanguage.iso639)
-            .then(x => {                
+            .then(x => {
+                this.loadedTranslation = x;  
                 this.translation.next(x);
                 this.translatedBy = x.provider;
-                this.isTranslationAvailable = false;
+                this.showTranslationButton = false;
             })
             .catch((err: HttpErrorResponse) => {
                 console.error(err);
                 this.notificationService.notifyHttpError(err, this.status.provider);
             });
+        return false;
+    }
+
+    revertTranslation(): boolean {
+        let revertTranslate: Translation;
+        revertTranslate = {
+            content: this.status.status.content,
+            language: this.loadedTranslation.detected_source_language,
+            detected_source_language: this.loadedTranslation.language,
+            provider: this.loadedTranslation.provider,
+            spoiler_text: this.status.status.spoiler_text
+        };
+        this.translation.next(revertTranslate);
+
+        this.showTranslationButton = true;
         return false;
     }
 }
