@@ -233,6 +233,20 @@ $counter-width: 90px;
     border-bottom: 1px solid whitesmoke;
 }
 
+.language-warning {
+    padding: 5px 10px;
+    color: orange;
+
+    &__link {
+        text-decoration: underline;
+        color: #f0d124;
+
+        &:hover {
+            color: #d18800;
+        }
+    }
+}
+
 @import '~@angular/cdk/overlay-prebuilt.css';
 // ::ng-deep .cdk-overlay-backdrop  {
 //     // width: 100%;

@@ -27,6 +27,7 @@ import { StatusesStateService } from '../../services/statuses-state.service';
 import { SettingsService } from '../../services/settings.service';
 import { LanguageService } from '../../services/language.service';
 import { ILanguage } from '../../states/settings.state';
+import { LeftPanelType, NavigationService } from '../../services/navigation.service';
 
 @Component({
     selector: 'app-create-status',
@@ -206,6 +207,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly navigationService: NavigationService,
         private readonly languageService: LanguageService,
         private readonly settingsService: SettingsService,
         private readonly statusStateService: StatusesStateService,
@@ -301,6 +303,11 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
         this.langSub.unsubscribe();
         this.selectLangSub.unsubscribe();
+    }
+
+    onNavigateToSettings(): boolean {
+        this.navigationService.openPanel(LeftPanelType.Settings);
+        return false;
     }
 
     onPaste(e: any) {

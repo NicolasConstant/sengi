@@ -76,6 +76,10 @@
 }
 
 .language {
+    &__warning {
+        color: orange;
+    }
+
     &__entry {
         display: flex;
         flex-direction: row;

@@ -54,6 +54,9 @@
         <h4 class="panel__subtitle">Languages</h4>
         <div class="sub-section">
             <div class="sub-section__content">
+                <div *ngIf="!configuredLangs || configuredLangs.length === 0" class="language__warning">
+                    No language set.
+                </div>
                 <div *ngFor="let l of configuredLangs" class="language__entry">
                     <span class="language__entry__name">{{ l.name }} ({{l.iso639}})</span>
                     <a href (click)="onRemoveLang(l)" class="form-button language__entry__action sound__play">remove</a>

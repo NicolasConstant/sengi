@@ -72,6 +72,10 @@
             <fa-icon [icon]="faClock"></fa-icon>
         </a>
     </div>
+    
+    <div class="language-warning" *ngIf="!configuredLanguages || configuredLanguages.length === 0">
+        You haven't set your language(s) yet, please <a href class="language-warning__link" (click)="onNavigateToSettings()">go in the settings</a> to provide it.
+    </div>
 
     <context-menu #contextMenu>
         <ng-template contextMenuItem (execute)="changePrivacy('Public')">
