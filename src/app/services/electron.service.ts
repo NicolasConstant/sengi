@@ -10,7 +10,7 @@ export class MyElectronService {
     setLang(lang: string) {
         try {
             if ((<any>window).api) {
-                (<any>window).api.send("toMain", lang);
+                (<any>window).api.send("changeSpellchecker", lang);
             }
         }
         catch (err) {
