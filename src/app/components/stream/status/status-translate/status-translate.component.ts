@@ -7,6 +7,8 @@ import { LanguageService } from '../../../../services/language.service';
 import { InstancesInfoService } from '../../../../services/instances-info.service';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 import { Translation } from '../../../../services/models/mastodon.interfaces';
+import { NotificationService } from '../../../../services/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-status-translate',
@@ -31,6 +33,7 @@ export class StatusTranslateComponent implements OnInit, OnDestroy {
         private readonly mastodonWrapperService: MastodonWrapperService,
         private readonly languageService: LanguageService,
         private readonly instancesInfoService: InstancesInfoService,
+        private readonly notificationService: NotificationService
     ) { }
 
     ngOnInit() {
@@ -82,8 +85,9 @@ export class StatusTranslateComponent implements OnInit, OnDestroy {
                 this.translatedBy = x.provider;
                 this.isTranslationAvailable = false;
             })
-            .catch(err => {
+            .catch((err: HttpErrorResponse) => {
                 console.error(err);
+                this.notificationService.notifyHttpError(err, this.status.provider);
             });
         return false;
     }
