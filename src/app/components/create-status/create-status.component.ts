@@ -25,6 +25,9 @@ import { StatusSchedulerComponent } from './status-scheduler/status-scheduler.co
 import { ScheduledStatusService } from '../../services/scheduled-status.service';
 import { StatusesStateService } from '../../services/statuses-state.service';
 import { SettingsService } from '../../services/settings.service';
+import { LanguageService } from '../../services/language.service';
+import { ILanguage } from '../../states/settings.state';
+import { LeftPanelType, NavigationService } from '../../services/navigation.service';
 
 @Component({
     selector: 'app-create-status',
@@ -153,6 +156,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     instanceSupportsScheduling = true;
     isEditing: boolean;
     editingStatusId: string;
+    configuredLanguages: ILanguage[] = [];
+    selectedLanguage: ILanguage;
     private statusLoaded: boolean;
     private hasSuggestions: boolean;
 
@@ -162,6 +167,7 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
     @ViewChild('fileInput') fileInputElement: ElementRef;
     @ViewChild('footer') footerElement: ElementRef;
     @ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+    @ViewChild('langContextMenu') public langContextMenu: ContextMenuComponent;
     @ViewChild(PollEditorComponent) pollEditor: PollEditorComponent;
     @ViewChild(StatusSchedulerComponent) statusScheduler: StatusSchedulerComponent;
 
@@ -196,11 +202,15 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
     private accounts$: Observable<AccountInfo[]>;
     private accountSub: Subscription;
+    private langSub: Subscription;
+    private selectLangSub: Subscription;
     private selectedAccount: AccountInfo;
 
     constructor(
+        private readonly navigationService: NavigationService,
+        private readonly languageService: LanguageService,
         private readonly settingsService: SettingsService,
-        private statusStateService: StatusesStateService,
+        private readonly statusStateService: StatusesStateService,
         private readonly scheduledStatusService: ScheduledStatusService,
         private readonly contextMenuService: ContextMenuService,
         private readonly store: Store,
@@ -216,7 +226,35 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.accounts$ = this.store.select(state => state.registeredaccounts.accounts);
     }
 
+    private initLanguages(){
+        this.configuredLanguages = this.languageService.getConfiguredLanguages();
+        this.selectedLanguage = this.languageService.getSelectedLanguage();
+        this.langSub = this.languageService.configuredLanguagesChanged.subscribe(l => {
+            this.configuredLanguages = l;
+            // if(this.configuredLanguages.length > 0 
+            //     && this.selectedLanguage
+            //     && this.configuredLanguages.findIndex(x => x.iso639 === this.selectedLanguage.iso639)){
+            //         this.languageService.setSelectedLanguage(this.configuredLanguages[0]);
+            // }
+        });
+        this.selectLangSub = this.languageService.selectedLanguageChanged.subscribe(l => {
+            this.selectedLanguage = l;
+        });
+        if(!this.selectedLanguage && this.configuredLanguages.length > 0){
+            this.languageService.setSelectedLanguage(this.configuredLanguages[0]);            
+        }
+    }
+
+    setLanguage(lang: ILanguage): boolean {
+        if(lang){
+            this.languageService.setSelectedLanguage(lang);
+        }
+        return false;
+    }
+
     ngOnInit() {
+        this.initLanguages();
+
         if (!this.isRedrafting) {
             this.status = this.statusStateService.getStatusContent(this.statusReplyingToWrapper);
         }
@@ -263,6 +301,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         }
 
         this.accountSub.unsubscribe();
+        this.langSub.unsubscribe();
+        this.selectLangSub.unsubscribe();
+    }
+
+    onNavigateToSettings(): boolean {
+        this.navigationService.openPanel(LeftPanelType.Settings);
+        return false;
     }
 
     onPaste(e: any) {
@@ -613,6 +658,14 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    private currentLang(): string  {
+        if(this.selectedLanguage){
+            return this.selectedLanguage.iso639;
+        }
+        return null;
+    }
+
+
     private sendStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, title: string, previousStatus: Status, attachments: Attachment[], poll: PollParameters, scheduledAt: string, editingStatusId: string): Promise<Status> {
         let parsedStatus = this.parseStatus(status);
         let resultPromise = Promise.resolve(previousStatus);
@@ -630,9 +683,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         let postPromise: Promise<Status>;
 
                         if (this.isEditing) {
-                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments, poll, scheduledAt);
+                            postPromise = this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, attachments, poll, scheduledAt, this.currentLang());
                         } else {
-                            postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt);
+                            postPromise = this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, attachments.map(x => x.id), poll, scheduledAt, this.currentLang());
                         }
 
                         return postPromise
@@ -642,9 +695,9 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                             });
                     } else {
                         if (this.isEditing) {
-                            return this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                            return this.mastodonService.editStatus(account, editingStatusId, s, visibility, title, inReplyToId, [], null, scheduledAt, this.currentLang());
                         } else {
-                            return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt);
+                            return this.mastodonService.postNewStatus(account, s, visibility, title, inReplyToId, [], null, scheduledAt, this.currentLang());
                         }
                     }
                 })
@@ -880,6 +933,17 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.contextMenuService.show.next({
             // Optional - if unspecified, all context menu components will open
             contextMenu: this.contextMenu,
+            event: $event,
+            item: null
+        });
+        $event.preventDefault();
+        $event.stopPropagation();
+    }
+
+    public onLangContextMenu($event: MouseEvent): void {
+        this.contextMenuService.show.next({
+            // Optional - if unspecified, all context menu components will open
+            contextMenu: this.langContextMenu,
             event: $event,
             item: null
         });

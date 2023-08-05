@@ -7,6 +7,10 @@
             <img class="status-editor__emoji--image" src="/assets/emoji/72x72/1f636.png">
         </a>
 
+        <a class="status-editor__lang" title="Change language" href *ngIf="configuredLanguages && configuredLanguages.length > 1" (click)="onLangContextMenu($event)">
+            {{ selectedLanguage.iso639 }}
+        </a>
+
     <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"
         rows="5" required title="content" placeholder="What's on your mind?" 
         (keydown.control.enter)="onCtrlEnter()"
@@ -68,6 +72,10 @@
             <fa-icon [icon]="faClock"></fa-icon>
         </a>
     </div>
+    
+    <div class="language-warning" *ngIf="!configuredLanguages || configuredLanguages.length === 0">
+        You haven't set your language(s) yet, please <a href class="language-warning__link" (click)="onNavigateToSettings()">go in the settings</a> to provide it.
+    </div>
 
     <context-menu #contextMenu>
         <ng-template contextMenuItem (execute)="changePrivacy('Public')">
@@ -83,5 +91,12 @@
             <fa-icon [icon]="faEnvelope" class="context-menu-icon"></fa-icon> Direct
         </ng-template>
     </context-menu>
+
+    <context-menu #langContextMenu>
+        <ng-template contextMenuItem (execute)="setLanguage(l)" *ngFor="let l of configuredLanguages">
+            {{ l.name }}
+        </ng-template>        
+    </context-menu>
+    
     <app-media></app-media>
 </form>

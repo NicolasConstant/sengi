@@ -88,7 +88,7 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null, lang: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
         const statusData = new StatusData();
@@ -106,10 +106,16 @@ export class MastodonService {
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
         }
+        
         if (spoiler) {
             statusData.sensitive = true;
             statusData.spoiler_text = spoiler;
         }
+
+        if(lang) {
+            statusData.language = lang;
+        }
+
         switch (visibility) {
             case VisibilityEnum.Public:
                 statusData.visibility = 'public';
@@ -132,7 +138,7 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
-    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null, lang: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.editStatus.replace('{0}', statusId)}`;
 
         const statusData = new StatusData();
@@ -151,10 +157,16 @@ export class MastodonService {
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
         }
+        
         if (spoiler) {
             statusData.sensitive = true;
             statusData.spoiler_text = spoiler;
         }
+
+        if(lang) {
+            statusData.language = lang;
+        }
+
         switch (visibility) {
             case VisibilityEnum.Public:
                 statusData.visibility = 'public';
@@ -651,6 +663,8 @@ class StatusData {
     spoiler_text: string;
     visibility: string;
     // scheduled_at: string;
+
+    language: string;
 }
 
 class MediaAttributes {

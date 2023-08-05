@@ -80,7 +80,15 @@ export class GlobalSettings {
 
     columnSwitchingWinAlt = false;
 
-    accountSettings: AccountSettings[] = [];    
+    accountSettings: AccountSettings[] = [];
+
+    configuredLanguages: ILanguage[] = [];
+    selectedLanguage: ILanguage;
+}
+
+export interface ILanguage {
+    iso639: string;
+    name: string;
 }
 
 export interface SettingsStateModel {
@@ -171,6 +179,8 @@ export class SettingsState {
         newSettings.autoFollowOnListEnabled = oldSettings.autoFollowOnListEnabled;
         newSettings.twitterBridgeEnabled = oldSettings.twitterBridgeEnabled;
         newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
+        newSettings.configuredLanguages = oldSettings.configuredLanguages;
+        newSettings.selectedLanguage = oldSettings.selectedLanguage;
 
         return newSettings;
     }
