@@ -1,6 +1,9 @@
+import { T } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+
 import { ILanguage } from '../states/settings.state';
+import { MyElectronService } from './electron.service';
 import { SettingsService } from './settings.service';
 
 @Injectable({
@@ -10,7 +13,10 @@ export class LanguageService {
     configuredLanguagesChanged = new BehaviorSubject<ILanguage[]>([]);
     selectedLanguageChanged = new BehaviorSubject<ILanguage>(null);
 
-    constructor(private settingsService: SettingsService) {
+    constructor(
+            private settingsService: SettingsService,
+            private electronService: MyElectronService
+        ) {
         this.configuredLanguagesChanged.next(this.getConfiguredLanguages());
         this.selectedLanguageChanged.next(this.getSelectedLanguage());
     }
@@ -26,6 +32,8 @@ export class LanguageService {
         this.settingsService.saveSettings(settings);
 
         this.selectedLanguageChanged.next(lang);
+
+        this.electronService.setLang(lang.iso639);
     }
 
     getConfiguredLanguages(): ILanguage[] {
