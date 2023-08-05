@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag, Instancev2, Instancev1 } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag, Instancev2, Instancev1, Translation } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
@@ -19,6 +19,13 @@ export class MastodonService {
                 route = `https://${instance}${this.apiRoutes.getInstance}`;
                 return this.httpClient.get<Instancev1>(route).toPromise();
             });            
+    }
+
+    translate(account: AccountInfo, statusId: string, lang: string): Promise<Translation>{
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        let route = `https://${account.instance}${this.apiRoutes.translate.replace('{0}', statusId)}`;
+
+        return this.httpClient.post<Translation>(route, { 'lang': lang }, { headers: headers }).toPromise();
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {

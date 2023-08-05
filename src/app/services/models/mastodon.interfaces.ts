@@ -290,3 +290,11 @@ export interface Tag {
     history: TagHistory[];
     following: boolean;
 }
+
+export interface Translation {
+    content: string;
+    language: string;
+    detected_source_language: string;
+    provider: string;
+    spoiler_text: string;
+}
