@@ -31,6 +31,13 @@
     padding: 0 5px 15px 5px;
     position: relative;
 
+    &__content {
+        display: block;
+        padding: 0 0 0 5px;
+
+        // outline: 1px dotted greenyellow;
+    }
+
     &__checkbox {
         position: relative;
         top: 3px;
@@ -65,6 +72,37 @@
 
     &__cw-settings {
         padding: 0 0 10px 15px;
+    }
+}
+
+.language {
+    &__entry {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+
+        &:not(:last-child){
+            margin-bottom: 1px;
+        }
+
+        &__name {
+            display: block;
+            align-items: stretch;
+            padding-left: 5px;            
+        }
+        
+        &__action {
+            align-items: stretch;
+            min-width: 70px;
+            text-align: center;
+            padding: 0 10px;
+        }
+    }
+
+    &__search {
+        display: block;
+        margin: 5px 0 5px 0;
     }
 }
 
