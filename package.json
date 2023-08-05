@@ -20,8 +20,8 @@
         "test": "ng test",
         "test-nowatch": "ng test --watch=false",
         "lint": "ng lint",
-        "e2e": "ng e2e",        
-        "dist": "npm run build"        
+        "e2e": "ng e2e",
+        "dist": "npm run build"
     },
     "private": true,
     "dependencies": {
