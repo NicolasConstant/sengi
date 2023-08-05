@@ -1,0 +1,13 @@
+@import "variables";
+@import "commons";
+
+.translation {
+    margin: 0 10px 0 $avatar-column-space;
+    text-align: center;
+
+    &__link {
+        font-size: 12px;
+        color: #656b8f;
+        padding: 5px;
+    }
+}

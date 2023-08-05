@@ -11,6 +11,7 @@ import { AccountInfo } from '../states/accounts.state';
 export class InstancesInfoService {
     private defaultMaxChars = 500;
     private cachedMaxInstanceChar: { [id: string]: Promise<number>; } = {};
+    private cachedTranslationAvailability: { [id: string]: Promise<boolean>; } = {};
     private cachedDefaultPrivacy: { [id: string]: Promise<VisibilityEnum>; } = {};
 
     constructor(private mastodonService: MastodonWrapperService) { }
@@ -64,5 +65,31 @@ export class InstancesInfoService {
                 });
         }
         return this.cachedDefaultPrivacy[instance];
+    }
+
+    getTranslationAvailability(account: AccountInfo): Promise<boolean> {
+        const instance = account.instance;
+        if (!this.cachedTranslationAvailability[instance]) {
+            this.cachedTranslationAvailability[instance] = this.mastodonService.getInstance(instance)
+                .then((instance: Instance) => {
+                    if (+instance.version.split('.')[0] >= 4) {
+                        const instanceV2 = <Instancev2>instance;
+                        if (instanceV2
+                            && instanceV2.configuration
+                            && instanceV2.configuration.translation)
+                            return instanceV2.configuration.translation.enabled;
+                    } else {
+                        const instanceV1 = <Instancev1>instance;
+                        if (instanceV1 && instanceV1.max_toot_chars)
+                            return false;
+                    }
+
+                    return false;
+                })
+                .catch(() => {
+                    return false;
+                });
+        }
+        return this.cachedTranslationAvailability[instance];
     }
 }

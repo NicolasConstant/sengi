@@ -90,6 +90,7 @@ import { TutorialEnhancedComponent } from './components/tutorial-enhanced/tutori
 import { NotificationsTutorialComponent } from './components/tutorial-enhanced/notifications-tutorial/notifications-tutorial.component';
 import { LabelsTutorialComponent } from './components/tutorial-enhanced/labels-tutorial/labels-tutorial.component';
 import { ThankyouTutorialComponent } from './components/tutorial-enhanced/thankyou-tutorial/thankyou-tutorial.component';
+import { StatusTranslateComponent } from './components/stream/status/status-translate/status-translate.component';
 
 const routes: Routes = [
     { path: "", component: StreamsMainDisplayComponent },
@@ -159,7 +160,8 @@ const routes: Routes = [
         TutorialEnhancedComponent,
         NotificationsTutorialComponent,
         LabelsTutorialComponent,
-        ThankyouTutorialComponent
+        ThankyouTutorialComponent,
+        StatusTranslateComponent
     ],
     entryComponents: [
         EmojiPickerComponent

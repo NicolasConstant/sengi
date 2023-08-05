@@ -102,6 +102,8 @@
                 (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
                 (textSelected)="textSelected()"></app-databinded-text>
 
+            <app-status-translate [status]="displayedStatusWrapper"></app-status-translate>
+
             <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll"
                 [poll]="displayedStatus.poll" [statusWrapper]="displayedStatusWrapper"></app-poll>
 
