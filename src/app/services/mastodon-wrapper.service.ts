@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData, Tag } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData, Tag, Translation } from "./models/mastodon.interfaces";
 import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult, FollowingResult } from './mastodon.service';
@@ -94,6 +94,13 @@ export class MastodonWrapperService {
 
     getInstance(instance: string): Promise<Instance> {
         return this.mastodonService.getInstance(instance);
+    }
+
+    translate(account: AccountInfo, statusId: string, lang: string): Promise<Translation>{
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.translate(refreshedAccount, statusId, lang);
+            });
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {

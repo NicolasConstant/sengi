@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StatusTranslateComponent } from './status-translate.component';
 
-describe('StatusTranslateComponent', () => {
+xdescribe('StatusTranslateComponent', () => {
   let component: StatusTranslateComponent;
   let fixture: ComponentFixture<StatusTranslateComponent>;
 

@@ -3,11 +3,25 @@
 
 .translation {
     margin: 0 10px 0 $avatar-column-space;
-    text-align: center;
+    text-align: center;    
 
-    &__link {
+    &__link, &__by {
         font-size: 12px;
         color: #656b8f;
-        padding: 5px;
+        padding: 5px 5px 0 5px;
+    }
+
+    &__link {
+        transition: all .2s;
+        &:hover {
+            text-decoration: none;
+            color: #9fa5ca;
+        }
+    }
+
+    &__by {
+        display: block;
+        text-align: left;
+        padding: 5px 0 0 0;
     }
 }

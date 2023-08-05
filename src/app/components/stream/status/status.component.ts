@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { Subscription } from "rxjs";
 
-import { Status, Account } from "../../../services/models/mastodon.interfaces";
+import { Status, Account, Translation } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
@@ -155,6 +155,10 @@ export class StatusComponent implements OnInit {
 
     changeCw(cwIsActive: boolean) {
         this.isContentWarned = cwIsActive;
+    }
+
+    onTranslation(translation: Translation) {
+        this.statusContent = translation.content;
     }
 
     private checkLabels(status: Status) {

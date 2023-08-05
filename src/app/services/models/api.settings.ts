@@ -80,4 +80,5 @@ export class ApiRoutes {
     followHashtag = '/api/v1/tags/{0}/follow';
     unfollowHashtag = '/api/v1/tags/{0}/unfollow';
     getHashtag = '/api/v1/tags/{0}';
+    translate = '/api/v1/statuses/{0}/translate';
 }
