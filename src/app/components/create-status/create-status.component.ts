@@ -11,7 +11,7 @@ import { ContextMenuService, ContextMenuComponent } from 'ngx-contextmenu';
 
 import { VisibilityEnum, PollParameters } from '../../services/mastodon.service';
 import { MastodonWrapperService } from '../../services/mastodon-wrapper.service';
-import { Status, Attachment } from '../../services/models/mastodon.interfaces';
+import { Status, Attachment, Poll } from '../../services/models/mastodon.interfaces';
 import { ToolsService, InstanceInfo, InstanceType } from '../../services/tools.service';
 import { NotificationService } from '../../services/notification.service';
 import { StatusWrapper } from '../../models/common.model';
@@ -143,8 +143,18 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
                         this.isSending = false;
                     });
             }
+
+            if(value.status.poll){
+                this.pollIsActive = true;
+                this.oldPoll = value.status.poll;
+                // setTimeout(() => {
+                //     if(this.pollEditor) this.pollEditor.loadPollParameters(value.status.poll);
+                // }, 250);
+            }
         }
     }
+
+    oldPoll: Poll;
 
     private maxCharLength: number;
     charCountLeft: number;

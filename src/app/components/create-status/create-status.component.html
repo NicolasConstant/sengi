@@ -27,7 +27,7 @@
         (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
     </app-autosuggest>
 
-    <app-poll-editor *ngIf="instanceSupportsPoll && pollIsActive"></app-poll-editor>
+    <app-poll-editor *ngIf="instanceSupportsPoll && pollIsActive" [oldPoll]="oldPoll"></app-poll-editor>
 
     <app-status-scheduler class="scheduler" *ngIf="instanceSupportsScheduling && scheduleIsActive"></app-status-scheduler>
 
