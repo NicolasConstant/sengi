@@ -342,13 +342,9 @@ export class ActionBarComponent implements OnInit, OnDestroy {
     }
 
     private checkIfBookmarksAreAvailable(account: AccountInfo) {
-        this.toolsService.getInstanceInfo(account)
-            .then((instance: InstanceInfo) => {
-                if (instance.major == 3 && instance.minor >= 1 || instance.major > 3) {
-                    this.isBookmarksAvailable = true;
-                } else {
-                    this.isBookmarksAvailable = false;
-                }
+        this.toolsService.isBookmarksAreAvailable(account)
+            .then((isAvailable: boolean) => {
+                this.isBookmarksAvailable = isAvailable;
             })
             .catch(err => {
                 this.isBookmarksAvailable = false;

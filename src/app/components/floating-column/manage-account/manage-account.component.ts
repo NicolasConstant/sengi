@@ -60,8 +60,8 @@ export class ManageAccountComponent extends BrowseBase {
         private readonly mastodonService: MastodonWrapperService,
         private readonly notificationService: NotificationService,
         private readonly userNotificationService: UserNotificationService) {
-            super();
-        }
+        super();
+    }
 
     ngOnInit() {
     }
@@ -71,13 +71,9 @@ export class ManageAccountComponent extends BrowseBase {
     }
 
     private checkIfBookmarksAreAvailable() {
-        this.toolsService.getInstanceInfo(this.account.info)
-            .then((instance: InstanceInfo) => {
-                if (instance.major == 3 && instance.minor >= 1 || instance.major > 3) {
-                    this.isBookmarksAvailable = true;
-                } else {
-                    this.isBookmarksAvailable = false;
-                }
+        this.toolsService.isBookmarksAreAvailable(this.account.info)
+            .then((isAvailable: boolean) => {
+                this.isBookmarksAvailable = isAvailable;
             })
             .catch(err => {
                 this.isBookmarksAvailable = false;
@@ -128,15 +124,15 @@ export class ManageAccountComponent extends BrowseBase {
         }
     }
 
-    @ViewChild('bookmarks') bookmarksComp:BookmarksComponent;
-    @ViewChild('notifications') notificationsComp:NotificationsComponent;
-    @ViewChild('mentions') mentionsComp:MentionsComponent;
-    @ViewChild('dm') dmComp:DirectMessagesComponent;
-    @ViewChild('favorites') favoritesComp:FavoritesComponent;
+    @ViewChild('bookmarks') bookmarksComp: BookmarksComponent;
+    @ViewChild('notifications') notificationsComp: NotificationsComponent;
+    @ViewChild('mentions') mentionsComp: MentionsComponent;
+    @ViewChild('dm') dmComp: DirectMessagesComponent;
+    @ViewChild('favorites') favoritesComp: FavoritesComponent;
 
     loadSubPanel(subpanel: 'account' | 'notifications' | 'mentions' | 'dm' | 'favorites' | 'bookmarks'): boolean {
-        if(this.subPanel === subpanel){
-            switch(subpanel){
+        if (this.subPanel === subpanel) {
+            switch (subpanel) {
                 case 'bookmarks':
                     this.bookmarksComp.applyGoToTop();
                     break;
