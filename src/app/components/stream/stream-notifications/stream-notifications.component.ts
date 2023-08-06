@@ -126,7 +126,7 @@ export class StreamNotificationsComponent extends BrowseBase {
             this.loadMentions(userNotifications);
         });
 
-        this.mastodonService.getNotifications(this.account, ['update'], null, null, 10) //FIXME: disable edition update until supported
+        this.mastodonService.getNotifications(this.account, [], null, null, 10)
             .then((notifications: Notification[]) => {
                 this.isNotificationsLoading = false;
 

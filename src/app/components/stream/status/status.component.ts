@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
-import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faRetweet, faList, faThumbtack, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Subscription } from "rxjs";
 
 import { Status, Account, Translation } from "../../../services/models/mastodon.interfaces";
@@ -23,6 +23,7 @@ export class StatusComponent implements OnInit {
     faRetweet = faRetweet;
     faList = faList;
     faThumbtack = faThumbtack;
+    faEdit = faEdit;
 
     displayedStatus: Status;
     displayedStatusWrapper: StatusWrapper;
@@ -52,7 +53,7 @@ export class StatusComponent implements OnInit {
 
     @Input() isThreadDisplay: boolean;
 
-    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll';
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll' | 'update';
     @Input() notificationAccount: Account;
 
     private _statusWrapper: StatusWrapper;

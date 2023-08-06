@@ -66,7 +66,7 @@ export class UserNotificationService {
                 this.notificationService.notifyHttpError(err, account);
             });
 
-        let getNotificationPromise = this.mastodonService.getNotifications(account, ['mention', 'update'], null, null, 10)
+        let getNotificationPromise = this.mastodonService.getNotifications(account, ['mention'], null, null, 10)
             .then((notifications: Notification[]) => {
                 this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserNotification);
             })

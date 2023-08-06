@@ -34,6 +34,17 @@
             boosted your status
         </div>
     </div>
+    <div *ngIf="notificationType === 'update'">
+        <div class="notification--icon">
+            <fa-icon class="update" [icon]="faEdit"></fa-icon>
+        </div>
+        <div class="notification--label">
+            <a href class="notification--link" title="{{ notificationAccount.acct }}" 
+                (click)="openAccount(notificationAccount)"
+                (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount | accountEmoji }}"></a>
+            edited the status you boosted
+        </div>
+    </div>
     <div *ngIf="notificationType === 'poll'">
         <div class="notification--icon">
             <fa-icon class="boost" [icon]="faList"></fa-icon>
