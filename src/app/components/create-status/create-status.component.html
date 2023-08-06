@@ -1,6 +1,8 @@
 <form class="status-editor" (ngSubmit)="onSubmit()">
-    <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title" 
-        autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" dir="auto" />
+    <input #mytitle [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" 
+        name="title" autocomplete="off" placeholder="Title, Content Warning (optional)" 
+        title="title, content warning (optional)" dir="auto" 
+        (keydown.escape)="mytitle.blur()" />
 
         <a class="status-editor__emoji" title="Insert Emoji"
             #emojiButton href (click)="openEmojiPicker($event)">
@@ -11,10 +13,11 @@
             {{ selectedLanguage.iso639 }}
         </a>
 
-    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"
+    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"         
         rows="5" required title="content" placeholder="What's on your mind?" 
         (keydown.control.enter)="onCtrlEnter()"
         (keydown.meta.enter)="onCtrlEnter()"
+        (keydown.escape)="reply.blur()"
         (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()" dir="auto">
     </textarea>
 
