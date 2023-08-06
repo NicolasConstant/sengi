@@ -46,10 +46,6 @@ $expand-color: $column-color;
     }
 }
 
-.content {
-    white-space: pre-wrap;
-}
-
 
 //Mastodon styling
 :host ::ng-deep .content {
@@ -68,6 +64,7 @@ $expand-color: $column-color;
 
     & p {
         margin: 0px;
+        white-space: pre-wrap;
         //font-size: .9em;
         // font-size: 14px;
     }
