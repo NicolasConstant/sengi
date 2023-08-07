@@ -205,6 +205,10 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     ngAfterViewInit() {
+        this.processEventBindings();
+    }
+
+    processEventBindings(){
         for (const hashtag of this.hashtags) {
             let classname = this.getClassNameForHastag(hashtag);
             let els = <Element[]>this.contentElement.nativeElement.querySelectorAll(`.${classname}`);

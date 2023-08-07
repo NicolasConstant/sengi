@@ -109,7 +109,7 @@
                 <span class="status__content-warning--title">sensitive content</span>
                 <span innerHTML="{{ contentWarningText }}"></span>
             </a>
-            <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="statusContent" [selected]="isSelected"
+            <app-databinded-text #databindedtext class="status__content" *ngIf="!isContentWarned" [text]="statusContent" [selected]="isSelected"
                 (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
                 (textSelected)="textSelected()"></app-databinded-text>
 
