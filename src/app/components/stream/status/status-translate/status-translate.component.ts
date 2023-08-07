@@ -67,7 +67,6 @@ export class StatusTranslateComponent implements OnInit, OnDestroy {
                     && this.configuredLanguages.length > 0
                     && this.configuredLanguages.findIndex(x => x.iso639 === this.status.status.language) === -1) {
 
-                        console.warn('can translate');
                     this.isTranslationAvailable = true;
                 }
                 else {
