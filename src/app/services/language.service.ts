@@ -14,9 +14,9 @@ export class LanguageService {
     selectedLanguageChanged = new BehaviorSubject<ILanguage>(null);
 
     constructor(
-            private settingsService: SettingsService,
-            private electronService: MyElectronService
-        ) {
+        private settingsService: SettingsService,
+        private electronService: MyElectronService
+    ) {
         this.configuredLanguagesChanged.next(this.getConfiguredLanguages());
         this.selectedLanguageChanged.next(this.getSelectedLanguage());
     }
@@ -33,7 +33,9 @@ export class LanguageService {
 
         this.selectedLanguageChanged.next(lang);
 
-        this.electronService.setLang(lang.iso639);
+        if (lang) {
+            this.electronService.setLang(lang.iso639);
+        }
     }
 
     getConfiguredLanguages(): ILanguage[] {
@@ -71,7 +73,7 @@ export class LanguageService {
     }
 
     searchLanguage(input: string): ILanguage[] {
-        if(!input) return [];
+        if (!input) return [];
 
         const avLangs = this.getAllAvaialbleLaguages();
         let found = avLangs.filter(x => x.name.toLowerCase().includes(input.toLowerCase()) || x.iso639.toLowerCase().includes(input.toLowerCase()));
