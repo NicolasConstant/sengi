@@ -77,21 +77,47 @@ export class ToolsService {
             return Promise.resolve(this.instanceInfos[acc.instance]);
         } else {
             return this.mastodonService.getInstance(acc.instance)
-                .then(instance => {
-                    let type = InstanceType.Mastodon;
-                    if (instance.version.toLowerCase().includes('pleroma')) {
-                        type = InstanceType.Pleroma;
-                    } else if (instance.version.toLowerCase().includes('+glitch')) {
-                        type = InstanceType.GlitchSoc;
-                    } else if (instance.version.toLowerCase().includes('+florence')) {
-                        type = InstanceType.Florence;
-                    } else if (instance.version.toLowerCase().includes('pixelfed')) {
-                        type = InstanceType.Pixelfed;
-                    }
-
+                .then(instance => {                   
                     const splittedVersion = instance.version.split('.');
-                    const major = +splittedVersion[0];
-                    const minor = +splittedVersion[1];
+                    let major = +splittedVersion[0];
+                    let minor = +splittedVersion[1];
+
+                    let altMajor = 0;
+                    let altMinor = 0;
+
+                    let type = InstanceType.Mastodon;
+
+                    const version = instance.version.toLowerCase();
+
+                    if (version.includes('pleroma')) {
+                        type = InstanceType.Pleroma;
+
+                        const pleromaVersion = version.split('pleroma ')[1].split('.');
+                        altMajor = +pleromaVersion[0];
+                        altMinor = +pleromaVersion[1];
+
+                    } else if (version.includes('+glitch')) {
+                        type = InstanceType.GlitchSoc;
+                    } else if (version.includes('+florence')) {
+                        type = InstanceType.Florence;
+                    } else if (version.includes('pixelfed')) {
+                        type = InstanceType.Pixelfed;
+                    } else if (version.includes('takahe')) {
+                        type = InstanceType.Takahe;
+                        major = 1; //FIXME: when a clearer set of feature are available
+                        minor = 0; //FIXME: when a clearer set of feature are available
+
+                        const takaheVersion = version.split('takahe/')[1].split('.');
+                        altMajor = +takaheVersion[0];
+                        altMinor = +takaheVersion[1];
+
+                    } else if (version.includes('akkoma')) {
+                        type = InstanceType.Akkoma;
+
+                        const akkomaVersion = version.split('akkoma ')[1].split('.');
+                        altMajor = +akkomaVersion[0];
+                        altMinor = +akkomaVersion[1];
+                    }
 
                     let streamingApi = "";
 
@@ -108,12 +134,31 @@ export class ToolsService {
                             streamingApi = instanceV1.urls.streaming_api;
                     }
 
-                    let instanceInfo = new InstanceInfo(type, major, minor, streamingApi);
+                    let instanceInfo = new InstanceInfo(type, major, minor, streamingApi, altMajor, altMinor);
                     this.instanceInfos[acc.instance] = instanceInfo;
 
                     return instanceInfo;
                 });
         }
+    }
+
+    isBookmarksAreAvailable(account: AccountInfo): Promise<boolean> {
+        return this.getInstanceInfo(account)
+            .then((instance: InstanceInfo) => {
+                if (instance.major == 3 && instance.minor >= 1 
+                    || instance.major > 3
+                    || instance.type === InstanceType.Pleroma && instance.altMajor >= 2 && instance.altMinor >= 5
+                    || instance.type === InstanceType.Akkoma && instance.altMajor >= 3 && instance.altMinor >= 9
+                    || instance.type === InstanceType.Takahe && instance.altMajor >= 0 && instance.altMinor >= 9) {
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                return false;
+            });
     }
 
     getAvatar(acc: AccountInfo): Promise<string> {
@@ -247,16 +292,20 @@ export class InstanceInfo {
         public readonly type: InstanceType,
         public readonly major: number,
         public readonly minor: number,
-        public readonly streamingApi: string) {
+        public readonly streamingApi: string,
+        public readonly altMajor: number,
+        public readonly altMinor: number) {
     }
 }
 
 export enum InstanceType {
     Mastodon = 1,
-    Pleroma = 2,
-    GlitchSoc = 3,
+    Pleroma = 2, // "2.7.2 (compatible; Pleroma 2.5.1)"
+    GlitchSoc = 3, // "4.1.5+glitch_0801_3b49b5a"
     Florence = 4,
-    Pixelfed = 5
+    Pixelfed = 5,
+    Takahe = 6, // "takahe/0.9.0"
+    Akkoma = 7, // 	"2.7.2 (compatible; Akkoma 3.9.2-develop)"
 }
 
 export class StatusWithCwPolicyResult {

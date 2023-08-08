@@ -132,7 +132,8 @@ export interface Instancev2 extends Instance {
 
 export interface Instancev2Configuration {
     urls: Instancev2Urls;
-    statuses: Instancev2Statuses
+    statuses: Instancev2Statuses;
+    translation: Instancev2Translation;
 }
 
 export interface InstanceUrls {
@@ -145,6 +146,10 @@ export interface Instancev2Urls {
 
 export interface Instancev2Statuses {
     max_characters: number;
+}
+
+export interface Instancev2Translation {
+    enabled: boolean;
 }
 
 export interface Mention {
@@ -284,4 +289,12 @@ export interface Tag {
     url: string;
     history: TagHistory[];
     following: boolean;
+}
+
+export interface Translation {
+    content: string;
+    language: string;
+    detected_source_language: string;
+    provider: string;
+    spoiler_text: string;
 }

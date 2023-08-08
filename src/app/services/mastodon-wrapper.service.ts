@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData, Tag } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, TokenData, Tag, Translation } from "./models/mastodon.interfaces";
 import { AccountInfo, UpdateAccount } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 import { FavoriteResult, VisibilityEnum, PollParameters, MastodonService, BookmarkResult, FollowingResult } from './mastodon.service';
@@ -96,6 +96,13 @@ export class MastodonWrapperService {
         return this.mastodonService.getInstance(instance);
     }
 
+    translate(account: AccountInfo, statusId: string, lang: string): Promise<Translation>{
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.translate(refreshedAccount, statusId, lang);
+            });
+    }
+
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
@@ -117,17 +124,17 @@ export class MastodonWrapperService {
             });
     }
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null, lang: string = null): Promise<Status> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
-                return this.mastodonService.postNewStatus(refreshedAccount, status, visibility, spoiler, in_reply_to_id, mediaIds, poll, scheduled_at);
+                return this.mastodonService.postNewStatus(refreshedAccount, status, visibility, spoiler, in_reply_to_id, mediaIds, poll, scheduled_at, lang);
             });
     }
 
-    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null, lang: string = null): Promise<Status> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
-                return this.mastodonService.editStatus(refreshedAccount, statusId, status, visibility, spoiler, in_reply_to_id, attachements, poll, scheduled_at);
+                return this.mastodonService.editStatus(refreshedAccount, statusId, status, visibility, spoiler, in_reply_to_id, attachements, poll, scheduled_at, lang);
             });
     }
 

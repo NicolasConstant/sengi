@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import { PollEntry } from './poll-entry/poll-entry.component';
 import { PollParameters } from '../../../services/mastodon.service';
-import { retry } from 'rxjs/operators';
+import { Poll } from '../../../services/models/mastodon.interfaces';
 
 @Component({
     selector: 'app-poll-editor',
@@ -18,6 +18,8 @@ export class PollEditorComponent implements OnInit {
     delayChoice: Delay[] = [];
     selectedId: string;
     private multiSelected: boolean;
+
+    @Input() oldPoll: Poll;
 
     constructor() {
         this.entries.push(new PollEntry(this.getEntryUuid(), this.multiSelected));
@@ -40,6 +42,12 @@ export class PollEditorComponent implements OnInit {
 
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['oldPoll']) {
+            this.loadPollParameters(this.oldPoll);
+        }
+    }
+
     private getEntryUuid(): number {
         this.entryUuid++;
         return this.entryUuid;
@@ -50,7 +58,7 @@ export class PollEditorComponent implements OnInit {
         return false;
     }
 
-    removeElement(entry: PollEntry){
+    removeElement(entry: PollEntry) {
         this.entries = this.entries.filter(x => x.id != entry.id);
     }
 
@@ -68,6 +76,17 @@ export class PollEditorComponent implements OnInit {
         params.options = this.entries.map(x => x.label);
         params.hide_totals = false;
         return params;
+    }
+
+    private loadPollParameters(poll: Poll) {
+        const isMulti = poll.multiple;
+
+        this.entries.length = 0;
+        for (let o of poll.options) {
+            const entry = new PollEntry(this.getEntryUuid(), isMulti);
+            entry.label = o.title;
+            this.entries.push(entry);
+        }
     }
 }
 

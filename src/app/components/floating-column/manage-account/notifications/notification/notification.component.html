@@ -22,7 +22,7 @@
                 (click)="acceptFollowRequest()">
                 <fa-icon class="follow_request__icon" [icon]="faCheck"></fa-icon>
             </a>
-            <a href title="Reject"  class="follow_request__link follow_request__link--cross"
+            <a href title="Reject" class="follow_request__link follow_request__link--cross"
                 (click)="refuseFollowRequest()">
                 <fa-icon class="follow_request__icon" [icon]="faTimes"></fa-icon>
             </a>
@@ -69,12 +69,18 @@
         </a>
     </div>
 
-    <app-status *ngIf="notification.status && notification.type !== 'mention'" class="stream__status" [statusWrapper]="notification.status"
-        [notificationAccount]="notification.account" [notificationType]="notification.type"
-        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-status>
+    <app-status *ngIf="notification.status && notification.type === 'update'" class="stream__status"
+        [statusWrapper]="notification.status" [notificationAccount]="notification.account"
+        [notificationType]="notification.type" (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
 
-    <app-status *ngIf="notification.status && notification.type === 'mention'" class="stream__status" [statusWrapper]="notification.status"       
-        (browseAccountEvent)="browseAccount($event)" (browseHashtagEvent)="browseHashtag($event)"
-        (browseThreadEvent)="browseThread($event)"></app-status>
+    <app-status *ngIf="notification.status && notification.type === 'mention'" class="stream__status"
+        [statusWrapper]="notification.status" (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
+
+    <app-status *ngIf="notification.status && notification.type !== 'mention' && notification.type !== 'update'"
+        class="stream__status" [statusWrapper]="notification.status" [notificationAccount]="notification.account"
+        [notificationType]="notification.type" (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
+
 </div>

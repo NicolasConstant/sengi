@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
@@ -26,12 +26,15 @@ export class SearchComponent implements OnInit {
     @Output() browseHashtagEvent = new EventEmitter<string>();
     @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
+    @ViewChild('search') searchElement: ElementRef;
+
     constructor(
         private readonly notificationService: NotificationService,
         private readonly toolsService: ToolsService,
         private readonly mastodonService: MastodonWrapperService) { }
 
     ngOnInit() {
+        this.searchElement.nativeElement.focus();
     }
 
     onSubmit(): boolean {

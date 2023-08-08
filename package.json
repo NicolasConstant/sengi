@@ -1,6 +1,6 @@
 {
     "name": "sengi",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "license": "AGPL-3.0-or-later",
     "main": "main-electron.js",
     "description": "A multi-account desktop client for Mastodon and Pleroma",
@@ -20,8 +20,8 @@
         "test": "ng test",
         "test-nowatch": "ng test --watch=false",
         "lint": "ng lint",
-        "e2e": "ng e2e",        
-        "dist": "npm run build"        
+        "e2e": "ng e2e",
+        "dist": "npm run build"
     },
     "private": true,
     "dependencies": {

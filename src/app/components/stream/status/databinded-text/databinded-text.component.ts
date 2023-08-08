@@ -97,7 +97,7 @@ export class DatabindedTextComponent implements OnInit {
         let extractedUrl = extractedLinkAndNext[0].split('href="')[1].split('"')[0];
 
         let classname = this.getClassNameForHastag(extractedHashtag);
-        this.processedText += ` <a href="${extractedUrl}" class="${classname}" title="#${extractedHashtag}" target="_blank" rel="noopener noreferrer">#${extractedHashtag}</a>`;
+        this.processedText += `<a href="${extractedUrl}" class="${classname}" title="#${extractedHashtag}" target="_blank" rel="noopener noreferrer">#${extractedHashtag}</a>`;
         if (extractedLinkAndNext[1]) this.processedText += extractedLinkAndNext[1];
         this.hashtags.push(extractedHashtag);
     }
@@ -205,6 +205,10 @@ export class DatabindedTextComponent implements OnInit {
     }
 
     ngAfterViewInit() {
+        this.processEventBindings();
+    }
+
+    processEventBindings(){
         for (const hashtag of this.hashtags) {
             let classname = this.getClassNameForHastag(hashtag);
             let els = <Element[]>this.contentElement.nativeElement.querySelectorAll(`.${classname}`);

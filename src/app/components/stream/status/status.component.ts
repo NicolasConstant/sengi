@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
-import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faRetweet, faList, faThumbtack, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Subscription } from "rxjs";
 
-import { Status, Account } from "../../../services/models/mastodon.interfaces";
+import { Status, Account, Translation } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { ContentWarningPolicyEnum } from '../../../states/settings.state';
 import { StatusesStateService, StatusState } from "../../../services/statuses-state.service";
-
+import { DatabindedTextComponent } from "./databinded-text/databinded-text.component";
 
 @Component({
     selector: "app-status",
@@ -23,6 +23,7 @@ export class StatusComponent implements OnInit {
     faRetweet = faRetweet;
     faList = faList;
     faThumbtack = faThumbtack;
+    faEdit = faEdit;
 
     displayedStatus: Status;
     displayedStatusWrapper: StatusWrapper;
@@ -52,7 +53,7 @@ export class StatusComponent implements OnInit {
 
     @Input() isThreadDisplay: boolean;
 
-    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll';
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll' | 'update';
     @Input() notificationAccount: Account;
 
     private _statusWrapper: StatusWrapper;
@@ -106,27 +107,27 @@ export class StatusComponent implements OnInit {
 
     ngOnInit() {
         this.statusesStateServiceSub = this.statusesStateService.stateNotification.subscribe(notification => {
-            if(this._statusWrapper.status.url === notification.statusId && notification.isEdited) {
+            if (this._statusWrapper.status.url === notification.statusId && notification.isEdited) {
                 this.statusWrapper = notification.editedStatus;
             }
         });
     }
 
-    ngOnDestroy(){
-        if(this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
+    ngOnDestroy() {
+        if (this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
     }
-    
+
     private ensureMentionAreDisplayed(data: string): string {
         const mentions = this.displayedStatus.mentions;
-        if(!mentions || mentions.length === 0) return data;
-        
+        if (!mentions || mentions.length === 0) return data;
+
         let textMentions = '';
         for (const m of mentions) {
-            if(!data.includes(m.url)){
+            if (!data.includes(m.url)) {
                 textMentions += `<span class="h-card"><a class="u-url mention" data-user="${m.id}" href="${m.url}" rel="ugc">@<span>${m.username}</span></a></span> `
             }
         }
-        if(textMentions !== ''){
+        if (textMentions !== '') {
             data = textMentions + data;
         }
         return data;
@@ -155,6 +156,31 @@ export class StatusComponent implements OnInit {
 
     changeCw(cwIsActive: boolean) {
         this.isContentWarned = cwIsActive;
+    }
+   
+
+    @ViewChild('databindedtext') public databindedText: DatabindedTextComponent;
+
+    onTranslation(translation: Translation) {
+        let statusContent = translation.content;
+
+        // clean up a bit some issues (not reliable)
+        while (statusContent.includes('<span>@')) {
+            statusContent = statusContent.replace('<span>@', '@<span>');
+        }
+        while (statusContent.includes('h<span class="invisible">')){
+            statusContent = statusContent.replace('h<span class="invisible">', '<span class="invisible">h');
+        }
+        while (statusContent.includes('<span>#')){
+            statusContent = statusContent.replace('<span>#', '#<span>');
+        }
+
+        statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, statusContent, EmojiTypeEnum.medium);
+        this.statusContent = this.ensureMentionAreDisplayed(statusContent);
+
+        setTimeout(x => {
+            this.databindedText.processEventBindings();
+        }, 500);        
     }
 
     private checkLabels(status: Status) {

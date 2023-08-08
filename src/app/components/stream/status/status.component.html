@@ -34,6 +34,17 @@
             boosted your status
         </div>
     </div>
+    <div *ngIf="notificationType === 'update'">
+        <div class="notification--icon">
+            <fa-icon class="update" [icon]="faEdit"></fa-icon>
+        </div>
+        <div class="notification--label">
+            <a href class="notification--link" title="{{ notificationAccount.acct }}" 
+                (click)="openAccount(notificationAccount)"
+                (auxclick)="openUrl(notificationAccount.url)" innerHTML="{{ notificationAccount | accountEmoji }}"></a>
+            edited the status you boosted
+        </div>
+    </div>
     <div *ngIf="notificationType === 'poll'">
         <div class="notification--icon">
             <fa-icon class="boost" [icon]="faList"></fa-icon>
@@ -98,9 +109,11 @@
                 <span class="status__content-warning--title">sensitive content</span>
                 <span innerHTML="{{ contentWarningText }}"></span>
             </a>
-            <app-databinded-text class="status__content" *ngIf="!isContentWarned" [text]="statusContent" [selected]="isSelected"
+            <app-databinded-text #databindedtext class="status__content" *ngIf="!isContentWarned" [text]="statusContent" [selected]="isSelected"
                 (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
                 (textSelected)="textSelected()"></app-databinded-text>
+
+            <app-status-translate [status]="displayedStatusWrapper" (translation)="onTranslation($event)"></app-status-translate>
 
             <app-poll class="status__poll" *ngIf="!isContentWarned && displayedStatus.poll"
                 [poll]="displayedStatus.poll" [statusWrapper]="displayedStatusWrapper"></app-poll>

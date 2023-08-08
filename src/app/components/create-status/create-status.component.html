@@ -1,16 +1,23 @@
 <form class="status-editor" (ngSubmit)="onSubmit()">
-    <input [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" name="title" 
-        autocomplete="off" placeholder="Title, Content Warning (optional)" title="title, content warning (optional)" dir="auto" />
+    <input #mytitle [(ngModel)]="title" type="text" class="form-control form-control-sm status-editor__title" 
+        name="title" autocomplete="off" placeholder="Title, Content Warning (optional)" 
+        title="title, content warning (optional)" dir="auto" 
+        (keydown.escape)="mytitle.blur()" />
 
         <a class="status-editor__emoji" title="Insert Emoji"
             #emojiButton href (click)="openEmojiPicker($event)">
             <img class="status-editor__emoji--image" src="/assets/emoji/72x72/1f636.png">
         </a>
 
-    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"
+        <a class="status-editor__lang" title="Change language" href *ngIf="configuredLanguages && configuredLanguages.length > 1" (click)="onLangContextMenu($event)">
+            {{ selectedLanguage.iso639 }}
+        </a>
+
+    <textarea #reply [(ngModel)]="status" name="status" class="form-control form-control-sm status-editor__content" (paste)="onPaste($event)"         
         rows="5" required title="content" placeholder="What's on your mind?" 
         (keydown.control.enter)="onCtrlEnter()"
         (keydown.meta.enter)="onCtrlEnter()"
+        (keydown.escape)="reply.blur()"
         (keydown)="handleKeyDown($event)" (blur)="statusTextEditorLostFocus()" dir="auto">
     </textarea>
 
@@ -23,7 +30,7 @@
         (suggestionSelectedEvent)="suggestionSelected($event)" (hasSuggestionsEvent)="suggestionsChanged($event)">
     </app-autosuggest>
 
-    <app-poll-editor *ngIf="instanceSupportsPoll && pollIsActive"></app-poll-editor>
+    <app-poll-editor *ngIf="instanceSupportsPoll && pollIsActive" [oldPoll]="oldPoll"></app-poll-editor>
 
     <app-status-scheduler class="scheduler" *ngIf="instanceSupportsScheduling && scheduleIsActive"></app-status-scheduler>
 
@@ -68,6 +75,10 @@
             <fa-icon [icon]="faClock"></fa-icon>
         </a>
     </div>
+    
+    <div class="language-warning" *ngIf="!configuredLanguages || configuredLanguages.length === 0">
+        You haven't set your language(s) yet, please <a href class="language-warning__link" (click)="onNavigateToSettings()">go in the settings</a> to provide it.
+    </div>
 
     <context-menu #contextMenu>
         <ng-template contextMenuItem (execute)="changePrivacy('Public')">
@@ -83,5 +94,12 @@
             <fa-icon [icon]="faEnvelope" class="context-menu-icon"></fa-icon> Direct
         </ng-template>
     </context-menu>
+
+    <context-menu #langContextMenu>
+        <ng-template contextMenuItem (execute)="setLanguage(l)" *ngFor="let l of configuredLanguages">
+            {{ l.name }}
+        </ng-template>        
+    </context-menu>
+    
     <app-media></app-media>
 </form>

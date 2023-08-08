@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Howl } from 'howler';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { ToolsService, InstanceType } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
-import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
+import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum, ILanguage } from '../../../states/settings.state';
 import { NotificationService } from '../../../services/notification.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { SettingsService } from '../../../services/settings.service';
+import { LanguageService } from '../../../services/language.service';
 
 @Component({
     selector: 'app-settings',
@@ -17,7 +19,7 @@ import { SettingsService } from '../../../services/settings.service';
     styleUrls: ['./settings.component.scss']
 })
 
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
 
     notificationSounds: NotificationSoundDefinition[];
     notificationSoundId: string;
@@ -38,6 +40,10 @@ export class SettingsComponent implements OnInit {
     timeLineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
     timeLineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
     contentWarningPolicy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
+
+    configuredLangs: ILanguage[] = [];
+    searchedLangs: ILanguage[] = [];
+    searchLang: string;
 
     private addCwOnContent: string;
     set setAddCwOnContent(value: string) {
@@ -76,16 +82,25 @@ export class SettingsComponent implements OnInit {
         return this.twitterBridgeInstance;
     }
 
+    private languageSub: Subscription;
+
     constructor(
+        private readonly languageService: LanguageService,
         private readonly settingsService: SettingsService,
         private readonly navigationService: NavigationService,
         private formBuilder: FormBuilder,
         private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
-        private readonly userNotificationsService: UserNotificationService) { }
+        private readonly userNotificationsService: UserNotificationService) { }   
 
     ngOnInit() {
+        this.languageSub = this.languageService.configuredLanguagesChanged.subscribe(l => {
+            if(l){
+                this.configuredLangs = l;
+            }
+        });
+
         this.version = environment.VERSION;
 
         const settings = this.settingsService.getSettings();
@@ -129,6 +144,34 @@ export class SettingsComponent implements OnInit {
 
         this.twitterBridgeEnabled = settings.twitterBridgeEnabled;
         this.twitterBridgeInstance = settings.twitterBridgeInstance;
+
+        this.configuredLangs = this.languageService.getConfiguredLanguages();
+    }
+
+    ngOnDestroy(): void {
+        if(this.languageSub) this.languageSub.unsubscribe();
+    }   
+
+    onSearchLang(input: string) {
+        this.searchedLangs = this.languageService.searchLanguage(input);
+    }
+
+    onAddLang(lang: ILanguage): boolean {
+        if(this.configuredLangs.findIndex(x => x.iso639 === lang.iso639) >= 0) return false;
+
+        // this.configuredLangs.push(lang);
+        this.languageService.addLanguage(lang);
+
+        this.searchLang = '';
+        this.searchedLangs.length = 0;
+
+        return false;
+    }
+
+    onRemoveLang(lang: ILanguage): boolean {
+        // this.configuredLangs = this.configuredLangs.filter(x => x.iso639 !== lang.iso639);
+        this.languageService.removeLanguage(lang);
+        return false;
     }
 
     onShortcutChange(id: ColumnShortcut) {

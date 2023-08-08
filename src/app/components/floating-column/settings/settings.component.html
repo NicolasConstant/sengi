@@ -35,7 +35,7 @@
             </form>
             <a href class="form-button sound__play" type="submit" (click)="playNotificationSound()">play</a>
         </div>
-        
+
         <h4 class="panel__subtitle">Shortcuts</h4>
         <div class="sub-section">
             <span class="sub-section__title">switch column:</span><br />
@@ -51,21 +51,42 @@
             <br>
         </div>
 
+        <h4 class="panel__subtitle">Languages</h4>
+        <div class="sub-section">
+            <div class="sub-section__content">
+                <div *ngIf="!configuredLangs || configuredLangs.length === 0" class="language__warning">
+                    No language set.
+                </div>
+                <div *ngFor="let l of configuredLangs" class="language__entry">
+                    <span class="language__entry__name">{{ l.name }} ({{l.iso639}})</span>
+                    <a href (click)="onRemoveLang(l)" class="form-button language__entry__action sound__play">remove</a>
+                </div>
+                <input type="text" (input)="onSearchLang($event.target.value)" [(ngModel)]="searchLang"
+                    placeholder="Find Language" autocomplete="off" class="form-control form-control-sm language__search"/>
+                <div *ngFor="let l of searchedLangs" class="language__entry">
+                    <span class="language__entry__name">{{ l.name }} ({{l.iso639}})</span>
+                    <a href (click)="onAddLang(l)" class="form-button language__entry__action sound__play">add</a>
+                </div>
+            </div>
+        </div>
         <h4 class="panel__subtitle">Twitter Bridge</h4>
         <div class="sub-section">
             <input class="sub-section__checkbox" [(ngModel)]="twitterBridgeEnabled"
-            (change)="onTwitterBridgeEnabledChanged()" type="checkbox" name="onTwitterBridgeEnabled"
-            value="onTwitterBridgeEnabled" id="onTwitterBridgeEnabled">
+                (change)="onTwitterBridgeEnabledChanged()" type="checkbox" name="onTwitterBridgeEnabled"
+                value="onTwitterBridgeEnabled" id="onTwitterBridgeEnabled">
             <label class="noselect sub-section__label" for="onTwitterBridgeEnabled">enable bridge</label>
             <br>
             <div *ngIf="twitterBridgeEnabled">
                 <p>Please provide your bridge instance:
-                <input type="text" class="form-control form-control-sm sub_section__text-input"
-                [(ngModel)]="setTwitterBridgeInstance" placeholder="bridge.tld" />
-                If you don't know any, consider using <a href="https://github.com/NicolasConstant/BirdsiteLive" target="_blank" class="version__link">BirdsiteLIVE</a></p>
+                    <input type="text" class="form-control form-control-sm sub_section__text-input"
+                        [(ngModel)]="setTwitterBridgeInstance" placeholder="bridge.tld" />
+                    If you don't know any, consider using <a href="https://github.com/NicolasConstant/BirdsiteLive"
+                        target="_blank" class="version__link">BirdsiteLIVE</a>
+                </p>
             </div>
             <div>
-                <a href="https://github.com/NicolasConstant/sengi/wiki/BirdsiteLIVE-integration" target="_blank" class="version__link">What is this?</a>
+                <a href="https://github.com/NicolasConstant/sengi/wiki/BirdsiteLIVE-integration" target="_blank"
+                    class="version__link">What is this?</a>
             </div>
         </div>
 
@@ -79,7 +100,7 @@
 
             <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 2" (change)="onCwPolicyChange(2)"
                 type="radio" name="cw-hide-all" value="cw-hide-all" id="cw-hide-all">
-            <label class="noselect sub-section__label" for="cw-hide-all">Hide all CWs</label>
+            <label class="noselect sub-section__label" for="cw-hide-all">Expand all CWs</label>
             <br>
             <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 2">
                 <span class="sub-section__title">but add CW on content containing:</span><br />
