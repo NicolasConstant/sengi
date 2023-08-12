@@ -85,6 +85,8 @@ export class GlobalSettings {
     configuredLanguages: ILanguage[] = [];
     selectedLanguage: ILanguage;
     disableLangAutodetec: boolean;
+
+    enableAltLabel: boolean;
 }
 
 export interface ILanguage {
@@ -183,6 +185,7 @@ export class SettingsState {
         newSettings.configuredLanguages = oldSettings.configuredLanguages;
         newSettings.selectedLanguage = oldSettings.selectedLanguage;
         newSettings.disableLangAutodetec = oldSettings.disableLangAutodetec;
+        newSettings.enableAltLabel = oldSettings.enableAltLabel;
 
         return newSettings;
     }

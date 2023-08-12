@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     disableAvatarNotificationsEnabled: boolean;
     disableSoundsEnabled: boolean;
     disableLangAutodetectEnabled: boolean;
+    enableAltLabelEnabled: boolean;
     version: string;
 
     hasPleromaAccount: boolean;
@@ -148,6 +149,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         this.configuredLangs = this.languageService.getConfiguredLanguages();
         this.disableLangAutodetectEnabled = settings.disableLangAutodetec;
+        this.enableAltLabelEnabled = settings.enableAltLabel;
     }
 
     ngOnDestroy(): void {
@@ -273,6 +275,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
         sound.play();
 
         return false;
+    }
+
+
+    onEnableAltLabelChanged(){
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.enableAltLabel = this.enableAltLabelEnabled;
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableLangAutodetectChanged() {

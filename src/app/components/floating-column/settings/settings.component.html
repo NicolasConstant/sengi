@@ -69,13 +69,13 @@
                     <a href (click)="onAddLang(l)" class="form-button language__entry__action sound__play">add</a>
                 </div>
 
-                
+
             </div>
 
             <input class="sub-section__checkbox" [(ngModel)]="disableLangAutodetectEnabled"
-                    (change)="onDisableLangAutodetectChanged()" type="checkbox" name="disableLangAutodetec"
-                    value="disableLangAutodetec" id="disableLangAutodetec">
-                <label class="noselect sub-section__label" for="disableLangAutodetec">disable language autodetection</label>
+                (change)="onDisableLangAutodetectChanged()" type="checkbox" name="disableLangAutodetec"
+                value="disableLangAutodetec" id="disableLangAutodetec">
+            <label class="noselect sub-section__label" for="disableLangAutodetec">disable language autodetection</label>
         </div>
         <h4 class="panel__subtitle">Twitter Bridge</h4>
         <div class="sub-section">
@@ -167,7 +167,8 @@
 
             <input class="sub-section__checkbox" [checked]="timeLineHeader === 6" (change)="onTimeLineHeaderChange(6)"
                 type="radio" name="timelineheader-6" value="timelineheader-6" id="timelineheader-6">
-            <label class="noselect sub-section__label" for="timelineheader-6">Title - Account Icon - Username - Domain Name</label>
+            <label class="noselect sub-section__label" for="timelineheader-6">Title - Account Icon - Username - Domain
+                Name</label>
             <br>
 
             <span class="sub-section__title">loading behavior:</span><br />
@@ -194,7 +195,8 @@
                 <input class="sub-section__checkbox" [(ngModel)]="autoFollowOnListEnabled"
                     (change)="onAutoFollowOnListChanged()" type="checkbox" name="onAutoFollowOnListChanged"
                     value="onAutoFollowOnListChanged" id="onAutoFollowOnListChanged">
-                <label class="noselect sub-section__label" for="onAutoFollowOnListChanged">autofollow accounts when adding to list</label>
+                <label class="noselect sub-section__label" for="onAutoFollowOnListChanged">autofollow accounts when
+                    adding to list</label>
                 <br>
             </div>
         </div>
@@ -207,6 +209,11 @@
             <label class="noselect sub-section__label" for="disableRemoteFetching">disable remote status
                 fetching</label>
             <br>
+
+            <input class="sub-section__checkbox" [(ngModel)]="enableAltLabelEnabled"
+                (change)="onEnableAltLabelChanged()" type="checkbox" name="enableAltLabel"
+                value="enableAltLabel" id="enableAltLabel">
+            <label class="noselect sub-section__label" for="enableAltLabel">enable alt label</label>
         </div>
 
         <h4 class="panel__subtitle">About</h4>
