@@ -64,6 +64,7 @@ export class StatusTranslateComponent implements OnInit, OnDestroy {
             .then(canTranslate => {                
                 if (canTranslate
                     && !this.status.isRemote
+                    && this.status.status.language
                     && this.configuredLanguages.length > 0
                     && this.configuredLanguages.findIndex(x => x.iso639 === this.status.status.language) === -1) {
 
