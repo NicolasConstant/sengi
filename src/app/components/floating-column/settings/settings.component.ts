@@ -31,6 +31,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     disableSoundsEnabled: boolean;
     disableLangAutodetectEnabled: boolean;
     enableAltLabelEnabled: boolean;
+    enableFreezeAvatarEnabled: boolean;
     version: string;
 
     hasPleromaAccount: boolean;
@@ -150,6 +151,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.configuredLangs = this.languageService.getConfiguredLanguages();
         this.disableLangAutodetectEnabled = settings.disableLangAutodetec;
         this.enableAltLabelEnabled = settings.enableAltLabel;
+        this.enableFreezeAvatarEnabled = settings.enableFreezeAvatar;
     }
 
     ngOnDestroy(): void {
@@ -277,6 +279,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onEnableFreezeAvatarChanged(){
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.enableFreezeAvatar = this.enableFreezeAvatarEnabled;
+        this.settingsService.saveSettings(settings);
+    }
 
     onEnableAltLabelChanged(){
         this.notifyRestartNeeded();

@@ -214,6 +214,12 @@
                 (change)="onEnableAltLabelChanged()" type="checkbox" name="enableAltLabel"
                 value="enableAltLabel" id="enableAltLabel">
             <label class="noselect sub-section__label" for="enableAltLabel">enable alt label</label>
+            <br>
+
+            <input class="sub-section__checkbox" [(ngModel)]="enableFreezeAvatarEnabled"
+                (change)="onEnableFreezeAvatarChanged()" type="checkbox" name="enableFreezeAvatar"
+                value="enableFreezeAvatar" id="enableFreezeAvatar">
+            <label class="noselect sub-section__label" for="enableFreezeAvatar">freeze animated avatar</label>
         </div>
 
         <h4 class="panel__subtitle">About</h4>
