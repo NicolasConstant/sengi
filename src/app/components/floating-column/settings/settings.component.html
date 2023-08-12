@@ -62,12 +62,20 @@
                     <a href (click)="onRemoveLang(l)" class="form-button language__entry__action sound__play">remove</a>
                 </div>
                 <input type="text" (input)="onSearchLang($event.target.value)" [(ngModel)]="searchLang"
-                    placeholder="Find Language" autocomplete="off" class="form-control form-control-sm language__search"/>
+                    placeholder="Find Language" autocomplete="off"
+                    class="form-control form-control-sm language__search" />
                 <div *ngFor="let l of searchedLangs" class="language__entry">
                     <span class="language__entry__name">{{ l.name }} ({{l.iso639}})</span>
                     <a href (click)="onAddLang(l)" class="form-button language__entry__action sound__play">add</a>
                 </div>
+
+                
             </div>
+
+            <input class="sub-section__checkbox" [(ngModel)]="disableLangAutodetectEnabled"
+                    (change)="onDisableLangAutodetectChanged()" type="checkbox" name="disableLangAutodetec"
+                    value="disableLangAutodetec" id="disableLangAutodetec">
+                <label class="noselect sub-section__label" for="disableLangAutodetec">disable language autodetection</label>
         </div>
         <h4 class="panel__subtitle">Twitter Bridge</h4>
         <div class="sub-section">

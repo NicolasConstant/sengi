@@ -29,6 +29,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     disableRemoteStatusFetchingEnabled: boolean;
     disableAvatarNotificationsEnabled: boolean;
     disableSoundsEnabled: boolean;
+    disableLangAutodetectEnabled: boolean;
     version: string;
 
     hasPleromaAccount: boolean;
@@ -146,6 +147,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.twitterBridgeInstance = settings.twitterBridgeInstance;
 
         this.configuredLangs = this.languageService.getConfiguredLanguages();
+        this.disableLangAutodetectEnabled = settings.disableLangAutodetec;
     }
 
     ngOnDestroy(): void {
@@ -271,6 +273,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
         sound.play();
 
         return false;
+    }
+
+    onDisableLangAutodetectChanged() {
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.disableLangAutodetec = this.disableLangAutodetectEnabled;
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableAutofocusChanged() {

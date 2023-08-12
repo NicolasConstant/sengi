@@ -84,6 +84,7 @@ export class GlobalSettings {
 
     configuredLanguages: ILanguage[] = [];
     selectedLanguage: ILanguage;
+    disableLangAutodetec: boolean;
 }
 
 export interface ILanguage {
@@ -181,6 +182,7 @@ export class SettingsState {
         newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
         newSettings.configuredLanguages = oldSettings.configuredLanguages;
         newSettings.selectedLanguage = oldSettings.selectedLanguage;
+        newSettings.disableLangAutodetec = oldSettings.disableLangAutodetec;
 
         return newSettings;
     }

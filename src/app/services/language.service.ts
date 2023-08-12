@@ -24,26 +24,24 @@ export class LanguageService {
             this.detectedLanguage(l);
         });
     }
-    
+
     private detectedLanguage(lang: DetectedLang[]) {
-        if(!lang) return;
+        if (!lang) return;
 
-        console.warn(lang);
-
-        if(lang.length >= 1){
+        if (lang.length >= 1) {
             const languages = this.getConfiguredLanguages();
 
             let firstLang = lang[0].lang;
             let firstLocalLang = languages.find(x => x.iso639 == firstLang);
-            if(firstLocalLang){
+            if (firstLocalLang) {
                 this.setSelectedLanguage(firstLocalLang);
                 return;
             }
 
-            if(lang.length > 1){
+            if (lang.length > 1) {
                 firstLang = lang[1].lang;
                 firstLocalLang = languages.find(x => x.iso639 == firstLang);
-                if(firstLocalLang){
+                if (firstLocalLang) {
                     this.setSelectedLanguage(firstLocalLang);
                     return;
                 }
@@ -52,14 +50,11 @@ export class LanguageService {
     }
 
     autoDetectLang(text: string): void {
-        if(!text || text.length < 6) return;
+        if (!text || text.length < 5) return;
 
-        console.warn('autodetect');
-        console.warn(text);
-
-        //TODO: add settings to disable
-
-        this.electronService.detectLang(text);
+        if (!this.settingsService.getSettings().disableLangAutodetec) {
+            this.electronService.detectLang(text);
+        }
     }
 
     getSelectedLanguage(): ILanguage {
