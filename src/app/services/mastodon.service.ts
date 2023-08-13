@@ -390,13 +390,16 @@ export class MastodonService {
             this.httpClient.post<Attachment>(route, input, { headers: headers, observe: 'response' })
                 .subscribe(response => {
                     if (response.status === 202) {
+                        let tryCount = 1;
                         const checkMediaStatus = () => {
                             this.httpClient.get<Attachment>(`https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', response.body.id)}`, { headers: headers })
                                 .subscribe(mediaStatus => {
                                     if (mediaStatus.url) {
                                         resolve(mediaStatus);
                                     } else {
-                                        setTimeout(checkMediaStatus, 1000);
+                                        const retryAfter = (Math.log2(tryCount) || 1) * 1000;
+                                        tryCount += 1;
+                                        setTimeout(checkMediaStatus, retryAfter);
                                     }
                                 }, error => {
                                     reject(error);
