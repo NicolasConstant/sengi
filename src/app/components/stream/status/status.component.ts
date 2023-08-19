@@ -10,6 +10,7 @@ import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { ContentWarningPolicyEnum } from '../../../states/settings.state';
 import { StatusesStateService, StatusState } from "../../../services/statuses-state.service";
 import { DatabindedTextComponent } from "./databinded-text/databinded-text.component";
+import { SettingsService } from "../../../services/settings.service";
 
 @Component({
     selector: "app-status",
@@ -43,6 +44,8 @@ export class StatusComponent implements OnInit {
     isDirectMessage: boolean;
     isSelected: boolean;
     isRemote: boolean;
+
+    private freezeAvatarEnabled: boolean;
 
     hideStatus: boolean = false;
 
@@ -103,6 +106,7 @@ export class StatusComponent implements OnInit {
     constructor(
         public elem: ElementRef,
         private readonly toolsService: ToolsService,
+        private readonly settingsService: SettingsService,
         private readonly statusesStateService: StatusesStateService) { }
 
     ngOnInit() {
@@ -111,10 +115,20 @@ export class StatusComponent implements OnInit {
                 this.statusWrapper = notification.editedStatus;
             }
         });
+
+        this.freezeAvatarEnabled = this.settingsService.getSettings().enableFreezeAvatar;
     }
 
     ngOnDestroy() {
         if (this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
+    }
+
+    getAvatar(acc: Account): string {
+        if(this.freezeAvatarEnabled){
+            return acc.avatar_static;
+        } else {
+            return acc.avatar;
+        }
     }
 
     private ensureMentionAreDisplayed(data: string): string {

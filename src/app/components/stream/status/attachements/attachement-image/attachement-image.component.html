@@ -1,4 +1,5 @@
-<div class="image">
+<div class="image">    
+    <div class="image__alt" *ngIf="displayAltLabel">ALT</div>
     <a href class="image__link" (click)="openExternal()" (auxclick)="openExternal()" title="open image">
         <fa-icon class="image__link--icon" [icon]="faLink"></fa-icon>
     </a>

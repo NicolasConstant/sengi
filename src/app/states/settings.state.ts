@@ -84,6 +84,10 @@ export class GlobalSettings {
 
     configuredLanguages: ILanguage[] = [];
     selectedLanguage: ILanguage;
+    disableLangAutodetec: boolean;
+
+    enableAltLabel: boolean;
+    enableFreezeAvatar: boolean;
 }
 
 export interface ILanguage {
@@ -181,6 +185,9 @@ export class SettingsState {
         newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
         newSettings.configuredLanguages = oldSettings.configuredLanguages;
         newSettings.selectedLanguage = oldSettings.selectedLanguage;
+        newSettings.disableLangAutodetec = oldSettings.disableLangAutodetec;
+        newSettings.enableAltLabel = oldSettings.enableAltLabel;
+        newSettings.enableFreezeAvatar = oldSettings.enableFreezeAvatar;
 
         return newSettings;
     }
