@@ -18,6 +18,7 @@
         [cdkDropListData]="accounts"        
         (cdkDropListDropped)="onDrop($event)">
         <div *ngFor="let account of accounts" cdkDrag class="draggable">
+            <fa-icon class="draggable__icon" [icon]="faArrowsAltV"></fa-icon>
             <img class="draggable__avatar" src="{{ account.avatar }}" />
         </div>
     </div>

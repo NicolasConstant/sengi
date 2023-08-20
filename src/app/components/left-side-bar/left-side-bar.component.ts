@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
-import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faCog, faSearch, faArrowsAltV } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
@@ -25,6 +25,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     faPlus = faPlus;
     faCog = faCog;
     faCalendarAlt = faCalendarAlt;
+    faArrowsAltV = faArrowsAltV;
 
     accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;
