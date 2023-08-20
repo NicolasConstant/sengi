@@ -8,15 +8,15 @@
         <fa-icon [icon]="faSearch"></fa-icon>
     </a>
 
-    <div *ngFor="let account of accounts">
-        <app-account-icon [account]="account" (toogleAccountNotify)="onToogleAccountNotify($event)"
-            (openMenuNotify)="onOpenMenuNotify($event)">
-        </app-account-icon>
+    <div *ngIf="!iconMenuIsDraggable">
+        <div *ngFor="let account of accounts">
+            <app-account-icon [account]="account" (toogleAccountNotify)="onToogleAccountNotify($event)"
+                (openMenuNotify)="onOpenMenuNotify($event)">
+            </app-account-icon>
+        </div>
     </div>
 
-    <div cdkDropList
-        [cdkDropListData]="accounts"        
-        (cdkDropListDropped)="onDrop($event)">
+    <div *ngIf="iconMenuIsDraggable" cdkDropList [cdkDropListData]="accounts" (cdkDropListDropped)="onDrop($event)">
         <div *ngFor="let account of accounts" cdkDrag class="draggable">
             <fa-icon class="draggable__icon" [icon]="faArrowsAltV"></fa-icon>
             <img class="draggable__avatar" src="{{ account.avatar }}" />

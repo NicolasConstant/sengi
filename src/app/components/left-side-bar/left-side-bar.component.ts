@@ -35,6 +35,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private accountSub: Subscription;
     private scheduledSub: Subscription;
     private notificationSub: Subscription;
+    private draggableIconMenuSub: Subscription;
 
     constructor(
         private readonly settingsService: SettingsService,
@@ -105,7 +106,13 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         }
     }
 
+    iconMenuIsDraggable = false;
+
     ngOnInit() {
+        this.draggableIconMenuSub = this.navigationService.enableDraggableIconMenu.subscribe(x => {
+            this.iconMenuIsDraggable = x;
+        });
+
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
                 //Update and Add
@@ -166,6 +173,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
         this.notificationSub.unsubscribe();
         this.scheduledSub.unsubscribe();
+        this.draggableIconMenuSub.unsubscribe();
     }
 
     onDrop(event: CdkDragDrop<AccountWithNotificationWrapper[]>) {
