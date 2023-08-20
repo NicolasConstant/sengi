@@ -7,7 +7,7 @@ import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { AccountWrapper } from "../../models/account.models";
-import { AccountInfo, SelectAccount } from "../../states/accounts.state";
+import { AccountInfo, ReorderAccounts, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
 import { ToolsService } from '../../services/tools.service';
@@ -169,14 +169,12 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     }
 
     onDrop(event: CdkDragDrop<AccountWithNotificationWrapper[]>) {
-        console.warn(event);
-
         if (event.previousContainer === event.container) {
             moveItemInArray(event.container.data,
                 event.previousIndex,
                 event.currentIndex);
 
-            console.warn(this.accounts);
+            this.store.dispatch([new ReorderAccounts(this.accounts.map(x => x.info))])
         }
     }
 
