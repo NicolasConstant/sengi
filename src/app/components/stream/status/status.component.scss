@@ -172,6 +172,26 @@
         border: 3px solid  $status-secondary-color;
         color: whitesmoke;
 
+        &__closed {
+            //margin: 0 5px 0 $avatar-column-space;
+            margin: 0 5px 0 calc(#{$avatar-column-space} - 1px);
+            padding: 3px 5px 3px 5px;
+            margin-bottom: 5px;
+            overflow-wrap: break-word;
+            
+            font-size: 12px;
+
+            border-radius: 4px;
+
+            // color: #6d8fd3;
+            // color: #7282a1;
+            // color: #838da1;
+            color: #919bb1;
+            // background-color: #273149;
+            // background-color: #1f273a;
+            background-color: #171d2b;
+        }
+
         &--title {
             color:  $content-warning-font-color;
             font-size: 11px;
