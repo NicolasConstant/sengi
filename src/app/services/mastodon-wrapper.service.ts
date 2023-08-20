@@ -22,14 +22,14 @@ export class MastodonWrapperService {
         private readonly mastodonService: MastodonService) { }
 
     refreshAccountIfNeeded(accountInfo: AccountInfo): Promise<AccountInfo> {
-        if(this.refreshingToken[accountInfo.id]){
+        if (this.refreshingToken[accountInfo.id]) {
             return this.refreshingToken[accountInfo.id];
         }
 
         let isExpired = false;
         let storedAccountInfo = this.getStoreAccountInfo(accountInfo.id);
 
-        if(!storedAccountInfo || !(storedAccountInfo.token))
+        if (!storedAccountInfo || !(storedAccountInfo.token))
             return Promise.resolve(accountInfo);
 
         try {
@@ -96,7 +96,7 @@ export class MastodonWrapperService {
         return this.mastodonService.getInstance(instance);
     }
 
-    translate(account: AccountInfo, statusId: string, lang: string): Promise<Translation>{
+    translate(account: AccountInfo, statusId: string, lang: string): Promise<Translation> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.translate(refreshedAccount, statusId, lang);
@@ -146,7 +146,7 @@ export class MastodonWrapperService {
     }
 
     search(account: AccountInfo, query: string, version: 'v1' | 'v2', resolve: boolean = false): Promise<Results> {
-        if(query.includes('twitter.com')){
+        if (query.includes('twitter.com')) {
             query = this.processTwitterQuery(query);
         }
 
@@ -158,17 +158,17 @@ export class MastodonWrapperService {
 
     private processTwitterQuery(query: string): string {
         const settings = this.settingsService.getSettings();
-        if(!settings.twitterBridgeInstance) return query;
+        if (!settings.twitterBridgeInstance) return query;
 
         let name;
-        if(query.includes('twitter.com/')){
+        if (query.includes('twitter.com/')) {
             console.log(query.replace('https://', '').replace('http://', '').split('/'));
             name = query.replace('https://', '').replace('http://', '').split('/')[1];
         }
-        if(query.includes('@twitter.com')){
+        if (query.includes('@twitter.com')) {
             console.log(query.split('@'));
             name = query.split('@')[0];
-            if(name === '' || name == null){
+            if (name === '' || name == null) {
                 name = query.split('@')[1];
             }
         }
@@ -208,7 +208,7 @@ export class MastodonWrapperService {
     }
 
     searchAccount(account: AccountInfo, query: string, limit: number = 40, following: boolean = false, resolve = true): Promise<Account[]> {
-        if(query.includes('twitter.com')){
+        if (query.includes('twitter.com')) {
             query = this.processTwitterQuery(query);
         }
 
@@ -278,6 +278,20 @@ export class MastodonWrapperService {
         return this.refreshAccountIfNeeded(currentlyUsedAccount)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.unfollow(refreshedAccount, account);
+            });
+    }
+
+    hideBoosts(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        return this.refreshAccountIfNeeded(currentlyUsedAccount)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.hideBoosts(refreshedAccount, account);
+            });
+    }
+
+    unhideBoosts(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        return this.refreshAccountIfNeeded(currentlyUsedAccount)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unhideBoosts(refreshedAccount, account);
             });
     }
 
@@ -407,6 +421,20 @@ export class MastodonWrapperService {
             });
     }
 
+    blockDomain(account: AccountInfo, domain: string): Promise<void> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.blockDomain(refreshedAccount, domain);
+            });
+    }
+
+    unblockDomain(account: AccountInfo, domain: string): Promise<void> {
+        return this.refreshAccountIfNeeded(account)
+            .then((refreshedAccount: AccountInfo) => {
+                return this.mastodonService.unblockDomain(refreshedAccount, domain);
+            });
+    }
+
     pinOnProfile(account: AccountInfo, statusId: string): Promise<Status> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
@@ -470,14 +498,14 @@ export class MastodonWrapperService {
             });
     }
 
-    getFollowing(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40):  Promise<FollowingResult> {
+    getFollowing(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<FollowingResult> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getFollowing(refreshedAccount, accountId, maxId, sinceId, limit);
             });
     }
 
-    getFollowers(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40):  Promise<FollowingResult> {
+    getFollowers(account: AccountInfo, accountId: number, maxId: string, sinceId: string, limit: number = 40): Promise<FollowingResult> {
         return this.refreshAccountIfNeeded(account)
             .then((refreshedAccount: AccountInfo) => {
                 return this.mastodonService.getFollowers(refreshedAccount, accountId, maxId, sinceId, limit);

@@ -357,6 +357,26 @@ export class MastodonService {
 
     }
 
+    hideBoosts(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+
+        let input = new FormData();
+        input.append('reblogs', 'false');
+
+        return this.httpClient.post<Relationship>(route, input, { headers: headers }).toPromise();
+    }
+
+    unhideBoosts(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+
+        let input = new FormData();
+        input.append('reblogs', 'true');
+
+        return this.httpClient.post<Relationship>(route, input, { headers: headers }).toPromise();
+    }
+
     followHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
         const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.followHashtag}`.replace('{0}', hashtag);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
@@ -522,6 +542,23 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.unblock}`.replace('{0}', accounId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    blockDomain(account: AccountInfo, domain: string): Promise<void> {
+        let route = `https://${account.instance}${this.apiRoutes.blockDomain}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+
+        let input = new FormData();
+        input.append('domain', domain);
+
+        return this.httpClient.post<void>(route, input, { headers: headers }).toPromise();
+    }
+
+    unblockDomain(account: AccountInfo, domain: string): Promise<void> {
+        let route = `https://${account.instance}${this.apiRoutes.blockDomain}?domain=${domain}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}`});
+
+        return this.httpClient.delete<void>(route, { headers: headers }).toPromise();
     }
 
     pinOnProfile(account: AccountInfo, statusId: string): Promise<Status> {
