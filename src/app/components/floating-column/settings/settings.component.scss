@@ -154,3 +154,21 @@
         }
     }
 }
+
+.toogle-lock-icon-menu {
+    display: block;
+    padding: 3px 40px;
+    width: 170px;
+    
+    float: right;
+    
+    text-align: center;
+
+    color: white;
+    background-color: #1f2330;
+
+    &:hover {
+        text-decoration: none;
+        background-color: #32384d;
+    }
+}

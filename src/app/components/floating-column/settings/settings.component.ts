@@ -156,7 +156,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         if(this.languageSub) this.languageSub.unsubscribe();
-    }   
+    }
+
+    iconMenuLocked = true;
+    toogleLockIconMenu(): boolean {
+        this.navigationService.changeIconMenuState(this.iconMenuLocked);
+        this.iconMenuLocked = ! this.iconMenuLocked;
+        return false;
+    }
 
     onSearchLang(input: string) {
         this.searchedLangs = this.languageService.searchLanguage(input);

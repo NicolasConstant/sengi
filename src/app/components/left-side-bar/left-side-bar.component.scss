@@ -83,3 +83,37 @@ $height-button: 40px;
     padding-top: 10px;
     // color: cornflowerblue;   
 }
+
+
+$draggable-accent-color: #47e927;
+// $draggable-accent-color: #a8ff97;
+.draggable {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    margin-bottom: 5px;
+
+    border: 2px solid #df0adf;
+    border: 2px solid $draggable-accent-color;
+    border-radius: 2px;
+
+    position: relative;
+
+    &__avatar {
+        width: calc(100%);
+        opacity: .8;
+    }
+
+    &__icon {
+        position: absolute;
+
+        float: left;        
+        z-index: 5;
+        color:$draggable-accent-color;
+
+        top: 6px;
+        left: 12px;
+
+        font-size: 18px;
+    }
+}

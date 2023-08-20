@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
-import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faCog, faSearch, faArrowsAltV } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt, faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 import { AccountWrapper } from "../../models/account.models";
-import { AccountInfo, SelectAccount } from "../../states/accounts.state";
+import { AccountInfo, ReorderAccounts, SelectAccount } from "../../states/accounts.state";
 import { NavigationService, LeftPanelType } from "../../services/navigation.service";
 import { UserNotificationService, UserNotification } from '../../services/user-notification.service';
 import { ToolsService } from '../../services/tools.service';
@@ -24,6 +25,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     faPlus = faPlus;
     faCog = faCog;
     faCalendarAlt = faCalendarAlt;
+    faArrowsAltV = faArrowsAltV;
 
     accounts: AccountWithNotificationWrapper[] = [];
     hasAccounts: boolean;
@@ -33,6 +35,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
     private accountSub: Subscription;
     private scheduledSub: Subscription;
     private notificationSub: Subscription;
+    private draggableIconMenuSub: Subscription;
 
     constructor(
         private readonly settingsService: SettingsService,
@@ -103,7 +106,13 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         }
     }
 
+    iconMenuIsDraggable = false;
+
     ngOnInit() {
+        this.draggableIconMenuSub = this.navigationService.enableDraggableIconMenu.subscribe(x => {
+            this.iconMenuIsDraggable = x;
+        });
+
         this.accountSub = this.accounts$.subscribe((accounts: AccountInfo[]) => {
             if (accounts) {
                 //Update and Add
@@ -164,6 +173,17 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
         this.notificationSub.unsubscribe();
         this.scheduledSub.unsubscribe();
+        this.draggableIconMenuSub.unsubscribe();
+    }
+
+    onDrop(event: CdkDragDrop<AccountWithNotificationWrapper[]>) {
+        if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data,
+                event.previousIndex,
+                event.currentIndex);
+
+            this.store.dispatch([new ReorderAccounts(this.accounts.map(x => x.info))])
+        }
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {
