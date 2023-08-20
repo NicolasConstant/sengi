@@ -220,6 +220,9 @@
                 (change)="onEnableFreezeAvatarChanged()" type="checkbox" name="enableFreezeAvatar"
                 value="enableFreezeAvatar" id="enableFreezeAvatar">
             <label class="noselect sub-section__label" for="enableFreezeAvatar">freeze animated avatar</label>
+            <br>
+            
+            reorder account's icons: <a href class="toogle-lock-icon-menu" (click)="toogleLockIconMenu()"><span *ngIf="iconMenuLocked">Unlock Icons</span><span *ngIf="!iconMenuLocked">Lock Icons</span></a>
         </div>
 
         <h4 class="panel__subtitle">About</h4>
