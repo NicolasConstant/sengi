@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Subscription, Observable } from "rxjs";
 import { Store } from "@ngxs/store";
 import { faPlus, faCog, faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -164,6 +165,18 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
         this.accountSub.unsubscribe();
         this.notificationSub.unsubscribe();
         this.scheduledSub.unsubscribe();
+    }
+
+    onDrop(event: CdkDragDrop<AccountWithNotificationWrapper[]>) {
+        console.warn(event);
+
+        if (event.previousContainer === event.container) {
+            moveItemInArray(event.container.data,
+                event.previousIndex,
+                event.currentIndex);
+
+            console.warn(this.accounts);
+        }
     }
 
     onToogleAccountNotify(acc: AccountWrapper) {

@@ -14,21 +14,29 @@
         </app-account-icon>
     </div>
 
+    <div cdkDropList
+        [cdkDropListData]="accounts"        
+        (cdkDropListDropped)="onDrop($event)">
+        <div *ngFor="let account of accounts" cdkDrag class="draggable">
+            <img class="draggable__avatar" src="{{ account.avatar }}" />
+        </div>
+    </div>
+
+
     <a class="left-bar-button left-bar-button--add left-bar-link" [ngClass]="{'no-accounts': hasAccounts === false }"
         href title="add new account" (click)="addNewAccount()" (contextmenu)="addNewAccount()">
         <fa-icon [icon]="faPlus"></fa-icon>
     </a>
 
 
-    <a class="left-bar-button left-bar-button--scheduled left-bar-button--bottom left-bar-link" href title="scheduled statuses" 
-        *ngIf="hasAccounts && hasScheduledStatuses"
-        (click)="openScheduledStatuses()"
+    <a class="left-bar-button left-bar-button--scheduled left-bar-button--bottom left-bar-link" href
+        title="scheduled statuses" *ngIf="hasAccounts && hasScheduledStatuses" (click)="openScheduledStatuses()"
         (contextmenu)="openScheduledStatuses()">
         <fa-icon [icon]="faCalendarAlt"></fa-icon>
     </a>
 
-    <a class="left-bar-button left-bar-button--cog left-bar-button--bottom left-bar-link" href title="settings" (click)="openSettings()"
-        (contextmenu)="openSettings()">
+    <a class="left-bar-button left-bar-button--cog left-bar-button--bottom left-bar-link" href title="settings"
+        (click)="openSettings()" (contextmenu)="openSettings()">
         <fa-icon [icon]="faCog"></fa-icon>
     </a>
 </div>
