@@ -110,3 +110,20 @@ $comrade_red:  #a50000;
         background-position: 0 0;
     }
 }
+
+.faq {
+    margin: 20px 0 0 0;
+    
+    & a {
+        color: #ffcc00;
+        text-decoration: underline;
+
+        &:hover {
+            color: #ffe88a;
+        }
+    }
+
+    &__warning {
+        color: #ffdc52;
+    }
+}

@@ -27,7 +27,13 @@
     <ng-template contextMenuItem (execute)="unmuteConversation()" *ngIf="statusWrapper && isOwnerSelected && displayedStatus.muted">
         Unmute conversation
     </ng-template>
-    <ng-template contextMenuItem divider="true"></ng-template>
+    <ng-template contextMenuItem (execute)="hideBoosts()" *ngIf="!isOwnerSelected && this.relationship && this.relationship.following && this.relationship.showing_reblogs">
+        Hide boosts from @{{ this.username }}
+    </ng-template>   
+    <ng-template contextMenuItem (execute)="unhideBoosts()" *ngIf="!isOwnerSelected && this.relationship && this.relationship.following && !this.relationship.showing_reblogs">
+        Unhide boosts from @{{ this.username }}
+    </ng-template>
+    <ng-template contextMenuItem divider="true" *ngIf="!isOwnerSelected"></ng-template>
     <ng-template contextMenuItem (execute)="muteAccount()" *ngIf="!isOwnerSelected && this.relationship && !this.relationship.muting">
         Mute @{{ this.username }}
     </ng-template>
@@ -40,6 +46,14 @@
     <ng-template contextMenuItem (execute)="unblockAccount()" *ngIf="!isOwnerSelected && this.relationship && this.relationship.blocking">
         Unblock @{{ this.username }}
     </ng-template>
+    <ng-template contextMenuItem divider="true" *ngIf="!isOwnerSelected"></ng-template>
+    <ng-template contextMenuItem (execute)="blockDomain()" *ngIf="!isOwnerSelected && this.relationship && !this.relationship.domain_blocking">
+        Block domain {{ this.domain }}
+    </ng-template>
+    <ng-template contextMenuItem (execute)="unblockDomain()" *ngIf="!isOwnerSelected && this.relationship && this.relationship.domain_blocking">
+        Unblock domain {{ this.domain }}
+    </ng-template>
+    <ng-template contextMenuItem divider="true" *ngIf="isOwnerSelected"></ng-template>
     <ng-template contextMenuItem (execute)="pinOnProfile()" *ngIf="statusWrapper && isOwnerSelected && !displayedStatus.pinned && displayedStatus.visibility === 'public'">
         Pin on profile
     </ng-template>
