@@ -2,7 +2,7 @@
     <div class="reblog" *ngIf="reblog">
         <a class="reblog__profile-link" href title="{{ status.account.acct }}" 
             (click)="openAccount(status.account)"
-            (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img *ngIf="reblog" class="reblog__avatar" src="{{ status.account.avatar | ensureHttps }}" /></a> boosted
+            (auxclick)="openUrl(status.account.url)"><span innerHTML="{{ status.account | accountEmoji }}"></span> <img *ngIf="reblog" class="reblog__avatar" src="{{ getAvatar(status.account) | ensureHttps }}" /></a> boosted
     </div>
     <div *ngIf="statusWrapper.status.pinned && !notificationType" class="pinned">
         <div class="notification--icon">
@@ -60,9 +60,9 @@
         <div [ngClass]="{'notification--status': notificationAccount }">
             <a href class="status__profile-link" title="{{displayedStatus.account.acct}}"
                 (click)="openAccount(displayedStatus.account)" (auxclick)="openUrl(displayedStatus.account.url)">
-                <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar" src="{{ displayedStatus.account.avatar | ensureHttps }}" />
+                <img [class.status__avatar--boosted]="reblog || notificationAccount" class="status__avatar" src="{{ getAvatar(displayedStatus.account) | ensureHttps }}" />
                 <!-- <img *ngIf="reblog" class="status__avatar--reblog" src="{{ status.account.avatar }}" /> -->
-                <img *ngIf="notificationAccount" class="notification--avatar" src="{{ notificationAccount.avatar | ensureHttps }}" />
+                <img *ngIf="notificationAccount" class="notification--avatar" src="{{ getAvatar(notificationAccount) | ensureHttps }}" />
                 <span class="status__name">
                     <span class="status__name--displayname"
                         innerHTML="{{displayedStatus.account | accountEmoji}}"></span><span
@@ -109,6 +109,11 @@
                 <span class="status__content-warning--title">sensitive content</span>
                 <span innerHTML="{{ contentWarningText }}"></span>
             </a>
+
+            <div class="status__content-warning__closed" *ngIf="!isContentWarned && contentWarningText" title="content warning">
+                <span innerHTML="{{ contentWarningText }}"></span>
+            </div>
+
             <app-databinded-text #databindedtext class="status__content" *ngIf="!isContentWarned" [text]="statusContent" [selected]="isSelected"
                 (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
                 (textSelected)="textSelected()"></app-databinded-text>

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { ILanguage } from '../states/settings.state';
-import { MyElectronService } from './electron.service';
+import { DetectedLang, MyElectronService } from './electron.service';
 import { SettingsService } from './settings.service';
 
 @Injectable({
@@ -19,6 +19,42 @@ export class LanguageService {
     ) {
         this.configuredLanguagesChanged.next(this.getConfiguredLanguages());
         this.selectedLanguageChanged.next(this.getSelectedLanguage());
+
+        this.electronService.detectedLangSubject.subscribe(l => {
+            this.detectedLanguage(l);
+        });
+    }
+
+    private detectedLanguage(lang: DetectedLang[]) {
+        if (!lang) return;
+
+        if (lang.length >= 1) {
+            const languages = this.getConfiguredLanguages();
+
+            let firstLang = lang[0].lang;
+            let firstLocalLang = languages.find(x => x.iso639 == firstLang);
+            if (firstLocalLang) {
+                this.setSelectedLanguage(firstLocalLang);
+                return;
+            }
+
+            if (lang.length > 1) {
+                firstLang = lang[1].lang;
+                firstLocalLang = languages.find(x => x.iso639 == firstLang);
+                if (firstLocalLang) {
+                    this.setSelectedLanguage(firstLocalLang);
+                    return;
+                }
+            }
+        }
+    }
+
+    autoDetectLang(text: string): void {
+        if (!text || text.length < 5) return;
+
+        if (!this.settingsService.getSettings().disableLangAutodetec) {
+            this.electronService.detectLang(text);
+        }
     }
 
     getSelectedLanguage(): ILanguage {

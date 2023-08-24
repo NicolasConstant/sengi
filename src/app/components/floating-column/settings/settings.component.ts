@@ -29,6 +29,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     disableRemoteStatusFetchingEnabled: boolean;
     disableAvatarNotificationsEnabled: boolean;
     disableSoundsEnabled: boolean;
+    disableLangAutodetectEnabled: boolean;
+    enableAltLabelEnabled: boolean;
+    enableFreezeAvatarEnabled: boolean;
     version: string;
 
     hasPleromaAccount: boolean;
@@ -146,11 +149,21 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.twitterBridgeInstance = settings.twitterBridgeInstance;
 
         this.configuredLangs = this.languageService.getConfiguredLanguages();
+        this.disableLangAutodetectEnabled = settings.disableLangAutodetec;
+        this.enableAltLabelEnabled = settings.enableAltLabel;
+        this.enableFreezeAvatarEnabled = settings.enableFreezeAvatar;
     }
 
     ngOnDestroy(): void {
         if(this.languageSub) this.languageSub.unsubscribe();
-    }   
+    }
+
+    iconMenuLocked = true;
+    toogleLockIconMenu(): boolean {
+        this.navigationService.changeIconMenuState(this.iconMenuLocked);
+        this.iconMenuLocked = ! this.iconMenuLocked;
+        return false;
+    }
 
     onSearchLang(input: string) {
         this.searchedLangs = this.languageService.searchLanguage(input);
@@ -271,6 +284,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
         sound.play();
 
         return false;
+    }
+
+    onEnableFreezeAvatarChanged(){
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.enableFreezeAvatar = this.enableFreezeAvatarEnabled;
+        this.settingsService.saveSettings(settings);
+    }
+
+    onEnableAltLabelChanged(){
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.enableAltLabel = this.enableAltLabelEnabled;
+        this.settingsService.saveSettings(settings);
+    }
+
+    onDisableLangAutodetectChanged() {
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.disableLangAutodetec = this.disableLangAutodetectEnabled;
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableAutofocusChanged() {

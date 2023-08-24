@@ -6,13 +6,14 @@ import { RegisteredAppsStateModel, AppInfo, AddRegisteredApp } from '../../../st
 import { AuthService, CurrentAuthProcess } from '../../../services/auth.service';
 import { AppData } from '../../../services/models/mastodon.interfaces';
 import { NotificationService } from '../../../services/notification.service';
+import { ToolsService } from '../../../services/tools.service';
 
 @Component({
     selector: 'app-add-new-account',
     templateUrl: './add-new-account.component.html',
     styleUrls: ['./add-new-account.component.scss']
 })
-export class AddNewAccountComponent implements OnInit {
+export class AddNewAccountComponent implements OnInit {    
     private blockList = ['gab.com', 'gab.ai', 'cyzed.com'];
     private comradeList = ['juche.town'];
 
@@ -24,12 +25,14 @@ export class AddNewAccountComponent implements OnInit {
     set setInstance(value: string) {
         this.instance = value.replace('http://', '').replace('https://', '').replace('/', '').toLowerCase().trim();
         this.checkComrad();
+        this.checkInstanceMultiAccount(value);
     }
     get setInstance(): string {
         return this.instance;
     }
 
     constructor(
+        private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
         private readonly authService: AuthService,
         private readonly store: Store) { }
@@ -51,8 +54,27 @@ export class AddNewAccountComponent implements OnInit {
         this.isComrade = false;
     }
 
+    isInstanceMultiAccount: boolean;
+    isInstanceMultiAccountLoading: boolean;
+    checkInstanceMultiAccount(value: string) {
+        if(value) {
+            const instances: string[] = this.toolsService.getAllAccounts().map(x => x.instance);
+            if(instances && instances.indexOf(value) > -1){
+                this.isInstanceMultiAccount = true;
+                this.isInstanceMultiAccountLoading = true;
+
+                setTimeout(() => {
+                    this.isInstanceMultiAccountLoading = false;
+                }, 2000);
+            } else {
+                this.isInstanceMultiAccount = false;
+                this.isInstanceMultiAccountLoading = false;
+            }
+        }
+    }
+
     onSubmit(): boolean {
-        if(this.isLoading || !this.instance) return false;
+        if(this.isLoading || !this.instance || this.isInstanceMultiAccountLoading) return false;
 
         this.isLoading = true;       
 

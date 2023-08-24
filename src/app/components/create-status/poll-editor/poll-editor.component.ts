@@ -79,6 +79,8 @@ export class PollEditorComponent implements OnInit {
     }
 
     private loadPollParameters(poll: Poll) {
+        if(!this.oldPoll) return;
+
         const isMulti = poll.multiple;
 
         this.entries.length = 0;

@@ -5,6 +5,7 @@ import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { DragDropModule } from '@angular/cdk/drag-drop';
 // import { NgxElectronModule } from 'ngx-electron';
 
 import { NgxsModule } from '@ngxs/store';
@@ -177,6 +178,7 @@ const routes: Routes = [
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
         OverlayModule,
+        DragDropModule,
         // NgxElectronModule,
         RouterModule.forRoot(routes),
 

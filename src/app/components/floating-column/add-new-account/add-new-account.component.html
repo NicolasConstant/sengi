@@ -15,7 +15,9 @@
                 <button type="submit" class="form-button"
                     title="add account"
                     [class.comrade__button]="isComrade">
-                    <span *ngIf="!isLoading">Submit</span>
+                    
+                    <span *ngIf="!isLoading && !this.isInstanceMultiAccountLoading">Submit</span>
+                    <span *ngIf="!isLoading && this.isInstanceMultiAccountLoading" class="faq__warning">See FAQ</span>
                     <app-waiting-animation *ngIf="isLoading" class="waiting-icon"></app-waiting-animation>
                 </button>
                
@@ -27,6 +29,13 @@
                 src="https://www.youtube.com/embed/NzBjnoRG7Mo?feature=oembed&autoplay=1&auto_play=1" frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
+        </div>
+
+        <div class="faq" *ngIf="isInstanceMultiAccount">
+            <p>
+                FAQ<br/>
+                <a href="https://github.com/NicolasConstant/sengi/wiki/How-to-add-multiple-accounts-from-the-same-instance" target="_blank">How to add multiple accounts from the same instance?</a>
+            </p>
         </div>
 
     </div>

@@ -68,6 +68,8 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
         this.detectAutosuggestion(value);
         this._status = value;
 
+        this.languageService.autoDetectLang(value);
+
         setTimeout(() => {
             this.autoGrow();
         }, 0);
