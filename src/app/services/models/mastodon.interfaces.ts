@@ -124,6 +124,7 @@ export interface Instancev1 extends Instance {
     urls: InstanceUrls;
     contact_account: Account;
     max_toot_chars: number;
+    configuration: Instancev2Configuration;
 }
 
 export interface Instancev2 extends Instance {
