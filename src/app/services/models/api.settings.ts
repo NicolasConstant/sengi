@@ -27,7 +27,7 @@ export class ApiRoutes {
     followRemote = '/api/v1/follows';
     getInstance = '/api/v1/instance';
     getInstancev2 = '/api/v2/instance';
-    uploadMediaAttachment = '/api/v1/media';
+    uploadMediaAttachment = '/api/v2/media';
     updateMediaAttachment = '/api/v1/media/{0}';
     getMutes = '/api/v1/mutes';
     getNotifications = '/api/v1/notifications';

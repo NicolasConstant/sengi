@@ -396,16 +396,43 @@ export class MastodonService {
     }
 
     uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
-        let input = new FormData();
-        input.append('file', file);
-        if (description !== null && description !== undefined) {
-            input.append('description', description);
-        } else {
-            input.append('description', '');
-        }
-        const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
-        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
-        return this.httpClient.post<Attachment>(route, input, { headers: headers }).toPromise();
+        return new Promise((resolve, reject) => {
+            let input = new FormData();
+            input.append('file', file);
+            if (description !== null && description !== undefined) {
+                input.append('description', description);
+            } else {
+                input.append('description', '');
+            }
+            const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
+            const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+            
+            this.httpClient.post<Attachment>(route, input, { headers: headers, observe: 'response' })
+                .subscribe(response => {
+                    if (response.status === 202) {
+                        let tryCount = 1;
+                        const checkMediaStatus = () => {
+                            this.httpClient.get<Attachment>(`https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', response.body.id)}`, { headers: headers })
+                                .subscribe(mediaStatus => {
+                                    if (mediaStatus.url) {
+                                        resolve(mediaStatus);
+                                    } else {
+                                        const retryAfter = (Math.log2(tryCount) || 1) * 1000;
+                                        tryCount += 1;
+                                        setTimeout(checkMediaStatus, retryAfter);
+                                    }
+                                }, error => {
+                                    reject(error);
+                                });
+                        };
+                        checkMediaStatus();
+                    } else {
+                        resolve(response.body);
+                    }
+                }, error => {
+                    reject(error);
+                });
+        });
     }
 
     //TODO: add focus support
