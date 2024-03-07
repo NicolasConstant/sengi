@@ -398,11 +398,13 @@ export class MastodonService {
     uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
         let input = new FormData();
         input.append('file', file);
+
         if (description !== null && description !== undefined) {
             input.append('description', description);
         } else {
             input.append('description', '');
         }
+
         const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Attachment>(route, input, { headers: headers }).toPromise();
@@ -411,7 +413,13 @@ export class MastodonService {
     //TODO: add focus support
     updateMediaAttachment(account: AccountInfo, mediaId: string, description: string): Promise<Attachment> {
         let input = new FormData();
-        input.append('description', description);
+        
+        if (description !== null && description !== undefined) {
+            input.append('description', description);
+        } else {
+            input.append('description', '');
+        }
+
         const route = `https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', mediaId)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();

@@ -166,39 +166,27 @@
 
             <div class="profile__extra-info profile__extra-info__preparefloating" *ngIf="!isLoading"
                 [class.profile__extra-info__floating]="showFloatingStatusMenu">
-                <div class="profile__extra-info__section">
-                    <a href class="profile__extra-info__links" (click)="switchStatusSection('status')" title="Status"
+                    <a href class="profile__extra-info__section profile__extra-info__links" (click)="switchStatusSection('status')" title="Status"
                         [class.profile__extra-info__links--selected]="statusSection === 'status'">Status</a>
-                </div>
-                <div class="profile__extra-info__section">
-                    <a href class="profile__extra-info__links" (click)="switchStatusSection('replies')"
+                    <a href class="profile__extra-info__section profile__extra-info__links" (click)="switchStatusSection('replies')"
                         title="Status & Replies"
                         [class.profile__extra-info__links--selected]="statusSection === 'replies'">Status &
                         Replies</a>
-                </div>
-                <div class="profile__extra-info__section">
-                    <a href class="profile__extra-info__links" (click)="switchStatusSection('media')" title="Media"
+                    <a href class="profile__extra-info__section profile__extra-info__links" (click)="switchStatusSection('media')" title="Media"
                         [class.profile__extra-info__links--selected]="statusSection === 'media'">Media</a>
-                </div>
             </div>
 
             <div class="profile-statuses" #profilestatuses>
                 <div class="profile__extra-info" *ngIf="!isLoading">
-                    <div class="profile__extra-info__section">
-                        <a href class="profile__extra-info__links" (click)="switchStatusSection('status')"
+                        <a href class="profile__extra-info__section profile__extra-info__links" (click)="switchStatusSection('status')"
                             title="Status"
                             [class.profile__extra-info__links--selected]="statusSection === 'status'">Status</a>
-                    </div>
-                    <div class="profile__extra-info__section">
-                        <a href class="profile__extra-info__links" (click)="switchStatusSection('replies')"
+                        <a href class="profile__extra-info__section profile__extra-info__links" (click)="switchStatusSection('replies')"
                             title="Status & Replies"
                             [class.profile__extra-info__links--selected]="statusSection === 'replies'">Status &
                             Replies</a>
-                    </div>
-                    <div class="profile__extra-info__section">
-                        <a href class="profile__extra-info__links" (click)="switchStatusSection('media')" title="Media"
+                        <a href class="profile__extra-info__section profile__extra-info__links" (click)="switchStatusSection('media')" title="Media"
                             [class.profile__extra-info__links--selected]="statusSection === 'media'">Media</a>
-                    </div>
                 </div>
 
                 <div [class.profile__status-switching-section]="isSwitchingSection">
@@ -222,7 +210,7 @@
                         </div>
                         <div *ngIf="statusSection === 'media'" class="status-media">
                             <div *ngFor="let media of statusWrapper.status.media_attachments">
-                                <app-attachement-image *ngIf="media.type === 'image' || media.type === 'gifv'" class="status-media__image" [attachment]="media" (openEvent)="openAttachment(media)"></app-attachement-image>
+                                <app-attachement-image *ngIf="media.type === 'image' || media.type === 'gifv'" class="status-media__image" [attachment]="media" [status]="statusWrapper" (openEvent)="openAttachment(media)" (browseThreadEvent)="browseThread($event)"></app-attachement-image>
                             </div>
                         </div>
                     </div>
