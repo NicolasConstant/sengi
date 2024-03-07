@@ -210,7 +210,7 @@
                         </div>
                         <div *ngIf="statusSection === 'media'" class="status-media">
                             <div *ngFor="let media of statusWrapper.status.media_attachments">
-                                <app-attachement-image *ngIf="media.type === 'image' || media.type === 'gifv'" class="status-media__image" [attachment]="media" (openEvent)="openAttachment(media)"></app-attachement-image>
+                                <app-attachement-image *ngIf="media.type === 'image' || media.type === 'gifv'" class="status-media__image" [attachment]="media" [status]="statusWrapper" (openEvent)="openAttachment(media)" (browseThreadEvent)="browseThread($event)"></app-attachement-image>
                             </div>
                         </div>
                     </div>
