@@ -127,6 +127,13 @@ export class CreateStatusComponent implements OnInit, OnDestroy {
 
             // this.statusStateService.setStatusContent(this.status, this.statusReplyingToWrapper);
 
+            // Retrieve mentions
+            for(let mention of value.status.mentions){
+                if(this.status){
+                    this.status = this.status.replace(`@${mention.username}`, `@${mention.acct}`);
+                }
+            }
+
             this.setVisibilityFromStatus(value.status);
             this.title = value.status.spoiler_text;
             this.statusLoaded = true;
