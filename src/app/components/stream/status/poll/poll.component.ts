@@ -45,7 +45,15 @@ export class PollComponent implements OnInit {
         }
 
         this.options.length = 0;
-        const maxVotes = Math.max(...this.poll.options.map(x => x.votes_count));
+
+        let maxVotes = Math.max(...this.poll.options.map(x => x.votes_count));       
+
+        if(!this.poll.multiple){ //Fix for absurd values in pleroma            
+            this.poll.voters_count = this.poll.votes_count;
+        } else if(this.poll.voters_count * this.poll.options.length < this.poll.votes_count){
+            this.poll.voters_count = this.poll.votes_count;
+        }
+
         let i = 0;
         for (let opt of this.poll.options) {
             let optWrapper = new PollOptionWrapper(i, opt, this.poll.votes_count, this.poll.voters_count, opt.votes_count === maxVotes);
@@ -195,7 +203,7 @@ class PollOptionWrapper implements PollOption {
         if (totalVotes === 0) {
             this.percentage = '0';
         } else {
-            this.percentage = ((this.votes_count / votesDivider) * 100).toFixed(0);
+            this.percentage = ((this.votes_count / votesDivider) * 100).toFixed(0);            
         }
         this.isMax = isMax;
     }
