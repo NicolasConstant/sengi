@@ -129,6 +129,7 @@ export class StatusComponent implements OnInit {
 
     private validateFilteringStatus(){
         const filterStatus = this.displayedStatus.filtered;
+
         if(!filterStatus || filterStatus.length === 0) return;
 
         // if(!this.context){
@@ -145,7 +146,7 @@ export class StatusComponent implements OnInit {
                 this.isContentWarned = true;
 
                 let filterTxt = `FILTERED:`;
-                for(let w of filter.filter.keywords){
+                for(let w of filter.keyword_matches){
                     filterTxt += ` ${w}`;
                 }
 
