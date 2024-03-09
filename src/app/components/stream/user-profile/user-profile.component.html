@@ -196,8 +196,12 @@
 
                     <div *ngIf="statusSection === 'status' && !statusLoading">
                         <div *ngFor="let statusWrapper of pinnedStatuses">
-                            <app-status [statusWrapper]="statusWrapper" (browseHashtagEvent)="browseHashtag($event)"
-                                (browseAccountEvent)="browseAccount($event)" (browseThreadEvent)="browseThread($event)">
+                            <app-status 
+                                [statusWrapper]="statusWrapper" 
+                                [context]="'account'"
+                                (browseHashtagEvent)="browseHashtag($event)"
+                                (browseAccountEvent)="browseAccount($event)" 
+                                (browseThreadEvent)="browseThread($event)">
                             </app-status>
                         </div>
                     </div>
@@ -206,7 +210,7 @@
                         <div *ngIf="statusSection !== 'media'">
                             <app-status 
                                 [statusWrapper]="statusWrapper" 
-                                [context]="account"
+                                [context]="'account'"
                                 (browseHashtagEvent)="browseHashtag($event)"
                                 (browseAccountEvent)="browseAccount($event)" 
                                 (browseThreadEvent)="browseThread($event)">

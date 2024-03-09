@@ -128,15 +128,13 @@ export class StatusComponent implements OnInit {
     }
 
     private validateFilteringStatus(){
-        // console.warn(this.displayedStatus);
-
-        //TODO: finish this
-           
         const filterStatus = this.displayedStatus.filtered;
         if(!filterStatus || filterStatus.length === 0) return;
 
-        console.warn(filterStatus);
-        console.warn(this.context);
+        // if(!this.context){
+        //     console.warn('this.context not found');
+        //     console.warn(this.context);
+        // }
 
         for (let filter of filterStatus) {
             if(this.context && filter.filter.context && filter.filter.context.length > 0){
@@ -144,7 +142,14 @@ export class StatusComponent implements OnInit {
             } 
             
             if(filter.filter.filter_action === 'warn'){
+                this.isContentWarned = true;
 
+                let filterTxt = `FILTERED:`;
+                for(let w of filter.filter.keywords){
+                    filterTxt += ` ${w}`;
+                }
+
+                this.contentWarningText = filterTxt;
             } else if (filter.filter.filter_action === 'hide'){
                 this.hideStatus = true;
             }
