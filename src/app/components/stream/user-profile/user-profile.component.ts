@@ -7,7 +7,7 @@ import { Store } from '@ngxs/store';
 
 import { Account, Status, Relationship, Attachment } from "../../../services/models/mastodon.interfaces";
 import { MastodonWrapperService } from '../../../services/mastodon-wrapper.service';
-import { ToolsService, OpenThreadEvent } from '../../../services/tools.service';
+import { ToolsService, OpenThreadEvent, InstanceType } from '../../../services/tools.service';
 import { NotificationService } from '../../../services/notification.service';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StatusWrapper, OpenMediaEvent } from '../../../models/common.model';
@@ -286,21 +286,44 @@ export class UserProfileComponent extends BrowseBase {
     }
 
     follow(): boolean {
+        this.loadingRelationShip = true;
+
         const userAccount = this.toolsService.getSelectedAccounts()[0];
+
+        let foundAccountToFollow: Account;
         this.toolsService.findAccount(userAccount, this.lastAccountName)
             .then((account: Account) => {
+                foundAccountToFollow = account;
                 return this.mastodonService.follow(userAccount, account);
             })
             .then((relationship: Relationship) => {
-                this.relationship = relationship;
+                this.relationship = relationship;                
+            })
+            .then(async () => {
+                // Double check for pleroma users
+                const instanceInfo = await this.toolsService.getInstanceInfo(userAccount);
+                if(instanceInfo.type === InstanceType.Pleroma || instanceInfo.type === InstanceType.Akkoma){
+                    await new Promise(resolve => setTimeout(resolve, 1000))
+
+                    const relationships = await this.mastodonService.getRelationships(userAccount, [foundAccountToFollow]);
+                    const relationship = relationships.find(x => x.id === foundAccountToFollow.id);
+                    if(relationship){
+                        this.relationship = relationship;
+                    }
+                }                
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err, userAccount);
+            })
+            .then(() => {
+                this.loadingRelationShip = false;
             });
         return false;
     }
 
     unfollow(): boolean {
+        this.loadingRelationShip = true;
+
         const userAccount = this.toolsService.getSelectedAccounts()[0];
         this.toolsService.findAccount(userAccount, this.lastAccountName)
             .then((account: Account) => {
@@ -311,6 +334,9 @@ export class UserProfileComponent extends BrowseBase {
             })
             .catch((err: HttpErrorResponse) => {
                 this.notificationService.notifyHttpError(err, userAccount);
+            })
+            .then(() => {
+                this.loadingRelationShip = false;
             });
         return false;
     }

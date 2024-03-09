@@ -60,6 +60,8 @@ export class UserNotificationService {
     private startFetchingNotifications(account: AccountInfo) {
         let getMentionsPromise = this.mastodonService.getNotifications(account, ['favourite', 'follow', 'reblog', 'poll', 'follow_request', 'move', 'update'], null, null, 10)
             .then((notifications: Notification[]) => {
+                notifications = notifications.filter(x => x.status !== null);
+
                 this.processMentionsAndNotifications(account, notifications, NotificationTypeEnum.UserMention);
             })
             .catch(err => {

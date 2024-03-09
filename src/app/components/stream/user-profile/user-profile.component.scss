@@ -275,14 +275,15 @@ $floating-header-height: 60px;
     &-follows {
         width: calc(100%);  
         font-size: 13px;
-        border-bottom: 1px solid #0f111a;;
+        border-bottom: 1px solid #0f111a;
+
+        display: flex;
 
         &__link {
             color: white;
-            width: calc(50%);
+            flex-grow: 1;
             padding: 5px;
             text-align: center;
-            display: inline-block;
             background-color: #1a1f2e;
             transition: all .2s;
 
@@ -311,15 +312,15 @@ $floating-header-height: 60px;
         font-size: 13px;
         transition: all .4s;
 
-        &__section {
-            text-align: center;
-            display: inline-block;
-            width: calc(33.333% - 5px);
-            padding: 5px 0 7px 0;
+        display: flex;
 
-            &:not(:last-child) {
-                margin-right: 5px;
-            }
+        &__section {
+            // outline: 1px dotted orange;
+
+            flex-grow: 1;
+
+            text-align: center;
+            padding: 5px 0 7px 0;
         }
 
         &__preparefloating {

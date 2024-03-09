@@ -31,6 +31,8 @@ export class InstancesInfoService {
                         const instanceV1 = <Instancev1>instance;
                         if (instanceV1 && instanceV1.max_toot_chars)
                             return instanceV1.max_toot_chars;
+                        if(instanceV1 && instanceV1.configuration && instanceV1.configuration.statuses && instanceV1.configuration.statuses.max_characters)
+                            return instanceV1.configuration.statuses.max_characters;
                     }
 
                     return this.defaultMaxChars;

@@ -124,6 +124,7 @@ export interface Instancev1 extends Instance {
     urls: InstanceUrls;
     contact_account: Account;
     max_toot_chars: number;
+    configuration: Instancev2Configuration;
 }
 
 export interface Instancev2 extends Instance {
@@ -193,6 +194,33 @@ export interface Results {
     hashtags: string[];
 }
 
+export interface FilterKeyword {
+    id: string;
+    keyword: string;
+    whole_word: boolean;
+}
+
+export interface FilterStatus {
+    id: string;
+    status_id: string;
+}
+
+export interface Filter {
+    id: string;
+    title: string;
+    context: string[]; //home notifications public thread account 
+    expires_at: string;
+    filter_action: string; //warn hide
+    keywords: FilterKeyword[];
+    statuses: FilterStatus[];
+}
+
+export interface FilterResult {
+    filter: Filter;
+    keyword_matches: string[];
+    status_matches: string[];
+}
+
 export interface Status {
     id: string;
     uri: string;
@@ -223,6 +251,7 @@ export interface Status {
     bookmarked: boolean;
     card: Card;
     poll: Poll;
+    filtered: FilterResult[];
 
     pleroma: PleromaStatusInfo;
 }

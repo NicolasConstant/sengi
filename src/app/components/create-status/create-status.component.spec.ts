@@ -15,7 +15,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { NotificationService } from '../../services/notification.service';
 import { MastodonService } from '../../services/mastodon.service';
 import { AuthService } from '../../services/auth.service';
-
+import { SettingsState } from '../../states/settings.state';
 
 describe('CreateStatusComponent', () => {
     let component: CreateStatusComponent;
@@ -33,7 +33,8 @@ describe('CreateStatusComponent', () => {
                 NgxsModule.forRoot([
                     RegisteredAppsState,
                     AccountsState,
-                    StreamsState
+                    StreamsState,
+                    SettingsState
                   ]),                  
            ],
            providers: [NavigationService, NotificationService, MastodonService, AuthService], 
