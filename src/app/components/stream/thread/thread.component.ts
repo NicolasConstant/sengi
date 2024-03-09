@@ -28,6 +28,8 @@ export class ThreadComponent extends BrowseBase {
     hasContentWarnings = false;
     private remoteStatusFetchingDisabled = false;
 
+    context = 'thread';
+
     numNewItems: number; //html compatibility only
     bufferStream: Status[] = []; //html compatibility only
     streamPositionnedAtTop: boolean = true; //html compatibility only

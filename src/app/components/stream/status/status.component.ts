@@ -59,6 +59,8 @@ export class StatusComponent implements OnInit {
     @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll' | 'update';
     @Input() notificationAccount: Account;
 
+    @Input() context: 'home' | 'notifications' | 'public' | 'thread' | 'account';
+
     private _statusWrapper: StatusWrapper;
     status: Status;
 
@@ -98,6 +100,8 @@ export class StatusComponent implements OnInit {
         // this.statusAccountName = this.emojiConverter.applyEmojis(this.displayedStatus.account.emojis, this.displayedStatus.account.display_name, EmojiTypeEnum.small);
         let statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, this.displayedStatus.content, EmojiTypeEnum.medium);
         this.statusContent = this.ensureMentionAreDisplayed(statusContent);
+
+        this.validateFilteringStatus();
     }
     get statusWrapper(): StatusWrapper {
         return this._statusWrapper;
@@ -121,6 +125,36 @@ export class StatusComponent implements OnInit {
 
     ngOnDestroy() {
         if (this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
+    }
+
+    private validateFilteringStatus(){
+        const filterStatus = this.displayedStatus.filtered;
+
+        if(!filterStatus || filterStatus.length === 0) return;
+
+        // if(!this.context){
+        //     console.warn('this.context not found');
+        //     console.warn(this.context);
+        // }
+
+        for (let filter of filterStatus) {
+            if(this.context && filter.filter.context && filter.filter.context.length > 0){
+                if(!filter.filter.context.includes(this.context)) continue;
+            } 
+            
+            if(filter.filter.filter_action === 'warn'){
+                this.isContentWarned = true;
+
+                let filterTxt = `FILTERED:`;
+                for(let w of filter.keyword_matches){
+                    filterTxt += ` ${w}`;
+                }
+
+                this.contentWarningText = filterTxt;
+            } else if (filter.filter.filter_action === 'hide'){
+                this.hideStatus = true;
+            }
+        }
     }
 
     getAvatar(acc: Account): string {

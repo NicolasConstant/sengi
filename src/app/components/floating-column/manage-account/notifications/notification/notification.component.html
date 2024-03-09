@@ -70,17 +70,29 @@
     </div>
 
     <app-status *ngIf="notification.status && notification.type === 'update'" class="stream__status"
-        [statusWrapper]="notification.status" [notificationAccount]="notification.account"
-        [notificationType]="notification.type" (browseAccountEvent)="browseAccount($event)"
-        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
+        [statusWrapper]="notification.status" 
+        [notificationAccount]="notification.account"
+        [notificationType]="notification.type" 
+        [context]="'notifications'"
+        (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" 
+        (browseThreadEvent)="browseThread($event)"></app-status>
 
     <app-status *ngIf="notification.status && notification.type === 'mention'" class="stream__status"
-        [statusWrapper]="notification.status" (browseAccountEvent)="browseAccount($event)"
-        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
+        [statusWrapper]="notification.status" 
+        [context]="'notifications'"
+        (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" 
+        (browseThreadEvent)="browseThread($event)"></app-status>
 
     <app-status *ngIf="notification.status && notification.type !== 'mention' && notification.type !== 'update'"
-        class="stream__status" [statusWrapper]="notification.status" [notificationAccount]="notification.account"
-        [notificationType]="notification.type" (browseAccountEvent)="browseAccount($event)"
-        (browseHashtagEvent)="browseHashtag($event)" (browseThreadEvent)="browseThread($event)"></app-status>
+        class="stream__status" 
+        [statusWrapper]="notification.status" 
+        [notificationAccount]="notification.account"
+        [notificationType]="notification.type" 
+        [context]="'notifications'"
+        (browseAccountEvent)="browseAccount($event)"
+        (browseHashtagEvent)="browseHashtag($event)" 
+        (browseThreadEvent)="browseThread($event)"></app-status>
 
 </div>
