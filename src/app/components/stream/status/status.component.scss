@@ -15,7 +15,7 @@
         // display: block;
         text-decoration: none; // overflow: hidden;
         &:hover {
-            color: lighten($status-secondary-color, 20);
+            color: var(--status-secondary-color-lighten-20);
         }
     }
     &__avatar {
@@ -139,7 +139,7 @@
         text-decoration: none;
         overflow: hidden;
         &:hover {
-            color: lighten($status-secondary-color, 20);
+            color: var(--status-secondary-color-lighten-20);
         }
     }
     &__content {
@@ -212,7 +212,7 @@
             color: $status-secondary-color;
             text-decoration: none;
             &:hover {
-                color: lighten($status-secondary-color, 20);
+                color: var(--status-secondary-color-lighten-20);
             }
         }
     }

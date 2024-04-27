@@ -9,7 +9,7 @@
     overflow: hidden;    
 
     &:hover {
-        background-color: lighten($column-background, 5);
+        background-color: var(--column-background-lighter-5);
     }
 
     &__link {
@@ -32,7 +32,7 @@
             &--logo {
                 display: block;
                 font-size: 24px;
-                color: lighten($card-border-color, 5);
+                color: var(--card-border-color-lighter-5);
                 margin: 9px 0 0 18px;
             }
         }

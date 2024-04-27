@@ -170,13 +170,12 @@ $counter-width: 90px;
             background-color: $status-editor-footer-background;
 
             &:hover {
-                background-color: lighten($status-editor-footer-background, 20%);
-                background-color: darken($status-editor-footer-background, 20%);
+                background-color: var(--status-editor-footer-background--darker-20);
             }
 
             outline: inherit;
             &:focus {
-                background-color: darken($status-editor-footer-background, 20%);
+                background-color: var(--status-editor-footer-background--darker-20);
             }
 
             & span {

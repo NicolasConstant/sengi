@@ -7,6 +7,71 @@
     --color-primary: #141824;
     --color-secondary: #090b10;
 
+    --column-color: #0f111a;
+    --column-header-background-color: #0c0c10;
+    --content-warning-background-color: #0a0c13;
+    --content-warning-background-color: black;
+
+    --btn-primary-color: #444f74;
+    --btn-primary-font-color: white;
+    --status-primary-color: #fff;
+    --status-secondary-color: #4e5572;
+    --status-links-color: #d9e1e8;
+    --boost-color : #5098eb;
+    --update-color : #95e470;
+    --favorite-color: #ffc16f;
+    --bookmarked-color: #ff5050;
+
+    --button-color: darken(white, 30);
+    --button-color-hover: white;
+    --button-border-color: #303957;
+
+    --column-background: #0f111a;
+
+    --card-border-color: #2b344d;
+
+    --context-menu-background: #ffffff;
+    --context-menu-background-hover: #d7dfeb;
+    --context-menu-font-color: #000000;
+    --context-menu-border-color: #cbd3df;
+
+    --direct-message-background: #090a0f;
+
+    --status-editor-title-background: #ebebeb;
+    --status-editor-background: #ffffff;
+    --status-editor-color: #14151a;
+    --status-editor-footer-background: #3e455f;
+    --status-editor-footer-link-color: #e2e2e2;
+    --selected-status: #1e2734;
+
+    --autosuggest-background: #ffffff;
+    --autosuggest-entry-background: #0f111a;
+    --autosuggest-entry-color: #62667a;
+    --autosuggest-entry-handle-color: #e2e2e2;
+    --autosuggest-entry-background-hover: #2e3346;
+    --autosuggest-entry-color-hover: #e2e2e2;
+    --autosuggest-entry-handle-color-hover: #ffffff;
+
+    --scrollbar-color: #08090d;
+
+    --poll-editor-background: #fff;
+
+    --poll-editor-separator: #e7e7e7;
+    --poll-editor-input-border: #b9b9b9;
+    --poll-editor-input-border-focus: #007be0;
+
+    --scheduler-background: #3e455f;
+
+    --notification-column-selector-background: #171c29;
+    --notification-column-selector-color: #999fb1;
+    --notification-column-selector-color-hover: white;
+
+    --settings-text-input-background: #242836;
+    --settings-text-input-foreground: white;
+    --settings-text-input-border: #32384d;
+
+
+
     --font-color-secondary: hsl(from var(--font-color-secondary-value) h s calc(l - 25%));
 
     --color-primary-lighter-5: hsl(from var(var(--color-primary)) h s calc(l + 5%));
@@ -16,38 +81,48 @@
     
     --font-color-primary-darker-20: hsl(from var(--font-color-primary) h s calc(l - 20%));
 
-    --font-link-primary-lighter-40: hsl(from var(--font-link-primary-lighter-40) h s calc(l + 40%));
+    --font-link-primary-lighter-40: hsl(from var(--font-link-primary) h s calc(l + 40%));
+
+    --btn-primary-color-darker-10: hsl(from var(--btn-primary-color) h s calc(l - 10%));
+
+    --status-secondary-color-lighten-20: hsl(from var(--status-secondary-color) h s calc(l + 20%));
+
+    --boost-color-darker-10: hsl(from var(--boost-color) h s calc(l - 10%));    
+    --favorite-color-darker-10: hsl(from var(--favorite-color) h s calc(l - 10%));    
+    --bookmarked-color-darker-10: hsl(from var(--bookmarked-color) h s calc(l - 10%));
+
+    --status-editor-footer-background--darker-20: hsl(from var(--status-editor-footer-background) h s calc(l - 20%));
+
+    --column-background-lighter-5: hsl(from var(--column-background) h s calc(l + 5%));
+
+    --card-border-color-lighter-5: hsl(from var(--card-border-color) h s calc(l + 5%));
 }
 
-$font-color-primary: var(--font-color-primary); // #e8eaf3;
-//$font-color-secondary: darken(var(--font-color-secondary), 25) ;// darken(#fff, 25);
-//$font-color-secondary: hsl(from var(--font-color-secondary) h s calc(l - 25%));
+$font-color-primary: var(--font-color-primary);
 $font-color-secondary: var(--font-color-secondary); 
 
-$font-link-primary: var(--font-link-primary); // #595c67;
-$font-link-primary-hover: var(--font-link-primary-hover);// #8f93a2;
-//$color-primary: var(var(--color-primary)); // #141824;
-//$color-secondary: var(--color-secondary); // #090b10;
+$font-link-primary: var(--font-link-primary);
+$font-link-primary-hover: var(--font-link-primary-hover);
 
-$column-color: #0f111a;
-$column-header-background-color: #0c0c10;
+$column-color: var(--column-color);
+$column-header-background-color: var(--column-header-background-color);
+$content-warning-background-color: var(--content-warning-background-color);
+$content-warning-background-color: var(--content-warning-background-color);
 
-$content-warning-background-color: #0a0c13;
-$content-warning-background-color: black;
 $content-warning-font-color: $font-link-primary-hover;
 
 $default-font-size: 15px;
 $small-font-size: 12px;
-$btn-primary-color: #444f74;
-$btn-primary-color-hover: darken($btn-primary-color, 10);
-$btn-primary-font-color: white;
-$status-primary-color: #fff;
-$status-secondary-color: #4e5572;
-$status-links-color: #d9e1e8;
-$boost-color : #5098eb;
-$update-color : #95e470;
-$favorite-color: #ffc16f;
-$bookmarked-color: #ff5050;
+$btn-primary-color: var(--btn-primary-color);
+$btn-primary-color-hover: var(--btn-primary-color-darker-10);
+$btn-primary-font-color: var(--btn-primary-font-color);
+$status-primary-color: var(--status-primary-color);
+$status-secondary-color: var(--status-secondary-color);
+$status-links-color: var(--status-links-color);
+$boost-color : var(--boost-color);
+$update-color : var(--update-color);
+$favorite-color: var(--favorite-color);
+$bookmarked-color: var(--bookmarked-color);
 
 // Block dispositions
 $scroll-bar-width: 8px;
@@ -65,68 +140,56 @@ $enable-rounded: false;
 
 $separator-color: var(--color-primary);
 $button-size: 30px;
-$button-color: darken(white, 30);
-$button-color-hover: white;
+$button-color: var(--button-color);
+$button-color-hover: var(--button-color);
 $button-background-color: var(--color-primary);
 //$button-background-color-hover: lighten($color-primary, 20);
 $button-background-color-hover: var(--color-primary-lighter-20);
-$button-border-color: #303957;
+$button-border-color: var(--button-border-color);
 
 
-$column-background: #0f111a;
+$column-background: var(--column-background);
 
-$card-border-color: #2b344d;
+$card-border-color: var(--card-border-color);
 
-$context-menu-background: #d9e1e8;
-$context-menu-background: #ffffff;
-$context-menu-background-hover: #a9c9e6;
-$context-menu-background-hover: #d7dfeb;
-$context-menu-font-color: #000000;
-$context-menu-border-color: #c0cdd9;
-$context-menu-border-color: #cbd3df;
+$context-menu-background: var(--context-menu-background);
+$context-menu-background-hover: var(--context-menu-background-hover);
+$context-menu-font-color: var(--context-menu-font-color);
+$context-menu-border-color: var(--context-menu-border-color);
 
-$direct-message-background: #090a0f;
+$direct-message-background: var(--direct-message-background);
 
 
-$status-editor-title-background: #a9c9e6;
-$status-editor-title-background: #ebebeb;
-$status-editor-background: #d9e1e8;
-$status-editor-background: #ffffff;
-$status-editor-color: #23252c;
-$status-editor-color: #14151a;
-$status-editor-footer-background: #535c7e;
-$status-editor-footer-background: #3e455f;
-$status-editor-footer-link-color: #e2e2e2;
-$selected-status: #1e2734;
+$status-editor-title-background: var(--status-editor-title-background);
+$status-editor-background: var(--status-editor-background);
+$status-editor-color: var(--status-editor-color);
+$status-editor-footer-background: var(--status-editor-footer-background);
+$status-editor-footer-link-color: var(--status-editor-footer-link-color);
+$selected-status: var(--selected-status);
 
-$autosuggest-background: #ffffff;
-$autosuggest-entry-background: #3e455f;
-$autosuggest-entry-background: #0f111a;
-$autosuggest-entry-color: #62667a;
-$autosuggest-entry-handle-color: #e2e2e2;
-$autosuggest-entry-background-hover: #3e455f;
-$autosuggest-entry-background-hover: rgb(37, 41, 56);
-$autosuggest-entry-background-hover: rgb(46, 51, 70);
-$autosuggest-entry-color-hover: #e2e2e2;
-$autosuggest-entry-handle-color-hover: #ffffff;
+$autosuggest-background: var(--autosuggest-background);
+$autosuggest-entry-background: var(--autosuggest-entry-background);
+$autosuggest-entry-color: var(--autosuggest-entry-color);
+$autosuggest-entry-handle-color: var(--autosuggest-entry-handle-color);
+$autosuggest-entry-background-hover: var(--autosuggest-entry-background-hover);
+$autosuggest-entry-color-hover: var(--autosuggest-entry-color-hover);
+$autosuggest-entry-handle-color-hover: var(--autosuggest-entry-handle-color-hover);
 
-$scrollbar-color: #08090d;
+$scrollbar-color: var(--scrollbar-color);
 $scrollbar-color-thumb: var(--color-primary-lighter-5);
 
-$poll-editor-background: #3e455f;
-$poll-editor-background: #32384d;
-$poll-editor-background: #fff;
+$poll-editor-background: var(--poll-editor-background);
 
-$poll-editor-separator: #e7e7e7;
-$poll-editor-input-border: #b9b9b9;
-$poll-editor-input-border-focus: #007be0;
+$poll-editor-separator: var(--poll-editor-separator);
+$poll-editor-input-border: var(--poll-editor-input-border);
+$poll-editor-input-border-focus: var(--poll-editor-input-border-focus);
 
-$scheduler-background: #3e455f;
+$scheduler-background: var(--scheduler-background);
 
-$notification-column-selector-background: #171c29;
-$notification-column-selector-color: #999fb1;
-$notification-column-selector-color-hover: white;
+$notification-column-selector-background: var(--notification-column-selector-background);
+$notification-column-selector-color: var(--notification-column-selector-color);
+$notification-column-selector-color-hover: var(--notification-column-selector-color-hover);
 
-$settings-text-input-background: #242836;
-$settings-text-input-foreground: white;
-$settings-text-input-border: #32384d;
+$settings-text-input-background: var(--settings-text-input-background);
+$settings-text-input-foreground: var(--settings-text-input-foreground);
+$settings-text-input-border: var(--settings-text-input-border);
