@@ -3,7 +3,7 @@
 @import "panel";
 
 .floating-column {    
-    background-color: $color-secondary;
+    background-color: var(--color-secondary);
     overflow: hidden;
     z-index: 200;
     position: fixed;

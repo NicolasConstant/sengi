@@ -26,7 +26,7 @@ $button-width: $list-width/2;
     }
 
     &__blue {
-        background-color: $color-primary;
+        background-color: var(--color-primary);
         color: #fff;
 
         &:hover {
@@ -106,7 +106,7 @@ $button-width: $list-width/2;
             width: calc(#{$list-width}/2);
             float: right;
             padding: 5px 10px;
-            background-color: $color-primary;
+            background-color: var(--color-primary);
             color: #fff;
             color: $font-color-secondary;
 
@@ -119,7 +119,7 @@ $button-width: $list-width/2;
         &--new-list-title {
             color: #fff;
             background-color: color(color-primary-darker-4);
-            border: 2px solid $color-primary;
+            border: 2px solid var(--color-primary);
             width: calc(100% - #{$list-width}/2 - 1px);
             padding: 3px 5px;
 

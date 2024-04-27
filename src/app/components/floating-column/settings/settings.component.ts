@@ -13,7 +13,7 @@ import { NavigationService } from '../../../services/navigation.service';
 import { SettingsService } from '../../../services/settings.service';
 import { LanguageService } from '../../../services/language.service';
 import { ThemeService } from '../../../themes/theme.service';
-import { Theme } from '../../../themes/theme';
+import { Theme, ThemeTypeEnum } from '../../../themes/theme';
 
 @Component({
     selector: 'app-settings',
@@ -122,9 +122,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.themeList = this.themeService.getAvailableThemes();
-        this.themeId = this.themeService.getActiveTheme().type;
+        this.themeId = this.themeService.getActiveTheme().theme_type;
         this.themeForm = this.formBuilder.group({
-            themeControl: [this.themeList[this.themeId].type]
+            themeControl: [this.themeList.find(x => x.theme_type == this.themeId).theme_type]
         });
 
         this.disableAutofocusEnabled = settings.disableAutofocus;
@@ -288,8 +288,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.settingsService.saveSettings(settings);
     }
 
-    onThemeChange(themeId: number) {        
-        this.themeService.setTheme(this.themeList[this.themeId]);
+    onThemeChange(themeId: number) {
+        const castedType = <ThemeTypeEnum>themeId;
+        console.warn(themeId);
+        console.warn(this.themeList);
+
+        const newTheme = this.themeList.find(x => x.theme_type == castedType);
+        console.warn(newTheme);
+
+        if(newTheme) this.themeService.setTheme(newTheme);
     }
 
     playNotificationSound(): boolean {

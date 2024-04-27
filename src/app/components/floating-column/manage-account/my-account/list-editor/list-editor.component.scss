@@ -2,7 +2,7 @@
 @import "commons";
 
 .list-editor {
-    background-color: $color-primary;
+    background-color: var(--color-primary);
     min-height: 20px;    
     margin-top: 1px;
     position: relative;
@@ -10,7 +10,7 @@
     &__search {
         color: #fff;
         background-color: color(color-primary-darker-4);
-        border: 2px solid $color-primary;
+        border: 2px solid var(--color-primary);
         width: calc(100%);
         padding: 3px 5px;
 

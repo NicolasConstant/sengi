@@ -5,13 +5,13 @@ export enum ThemeTypeEnum {
 
 export interface Theme {
     name: string;
-    type: ThemeTypeEnum;
+    theme_type: ThemeTypeEnum;
     properties: any;
 }
 
 export const defaultTheme: Theme = {
     name: "default",
-    type: ThemeTypeEnum.default,
+    theme_type: ThemeTypeEnum.default,
     properties: {
         "--font-color-primary": "#e8eaf3",
         "--font-color-secondary-value": "#fff",
@@ -24,7 +24,7 @@ export const defaultTheme: Theme = {
 
 export const lightTheme: Theme = {
     name: "light",
-    type: ThemeTypeEnum.light,
+    theme_type: ThemeTypeEnum.light,
     properties: {
         "--font-color-primary": "#000",
         "--font-color-secondary-value": "#000",

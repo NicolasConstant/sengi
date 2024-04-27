@@ -11,7 +11,7 @@
             <span class="sub-section__title">theme:</span><br />
             <form [formGroup]="themeForm">
                 <select formControlName="themeControl" (change)="onThemeChange($event.target.value)" class="sound__select">
-                    <option [value]="s.type" *ngFor="let s of themeList"> {{s.name}}</option>
+                    <option [value]="s.theme_type" *ngFor="let s of themeList"> {{s.name}}</option>
                 </select>
             </form>            
         </div>

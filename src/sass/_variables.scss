@@ -8,10 +8,10 @@
     --color-primary: #141824;
     --color-secondary: #090b10;
 
-    --color-primary-lighter-5: hsl(from var(--color-primary) h s calc(l + 5%));
-    --color-primary-lighter-15: hsl(from var(--color-primary) h s calc(l + 15%));
-    --color-primary-lighter-20: hsl(from var(--color-primary) h s calc(l + 20%));
-    --color-primary-darker-4: hsl(from var(--color-primary) h s calc(l - 4%));
+    --color-primary-lighter-5: hsl(from var(var(--color-primary)) h s calc(l + 5%));
+    --color-primary-lighter-15: hsl(from var(var(--color-primary)) h s calc(l + 15%));
+    --color-primary-lighter-20: hsl(from var(var(--color-primary)) h s calc(l + 20%));
+    --color-primary-darker-4: hsl(from var(var(--color-primary)) h s calc(l - 4%));
     
     --font-color-primary-darker-20: hsl(from var(--font-color-primary) h s calc(l - 20%));
 
@@ -29,8 +29,8 @@ $font-color-secondary: color(font-color-secondary);
 
 $font-link-primary: color(font-link-primary); // #595c67;
 $font-link-primary-hover: color(font-link-primary-hover);// #8f93a2;
-$color-primary: var(--color-primary); // #141824;
-$color-secondary: var(--color-secondary); // #090b10;
+//$color-primary: var(var(--color-primary)); // #141824;
+//$color-secondary: var(--color-secondary); // #090b10;
 
 $column-color: #0f111a;
 $column-header-background-color: #0c0c10;
@@ -66,11 +66,11 @@ $stream-header-height: 40px;
 //Bootstrap cuistomization
 $enable-rounded: false;
 
-$separator-color:$color-primary;
+$separator-color: var(--color-primary);
 $button-size: 30px;
 $button-color: darken(white, 30);
 $button-color-hover: white;
-$button-background-color: --color-primary;
+$button-background-color: var(--color-primary);
 //$button-background-color-hover: lighten($color-primary, 20);
 $button-background-color-hover: color(color-primary-lighter-20);
 $button-border-color: #303957;

@@ -5,7 +5,7 @@ $height-button: 40px;
 .left-bar {
     width: $width-button;
     height: calc(100%);
-    background: $color-secondary;
+    background: var(--color-secondary);
     position: relative;    
 }
 

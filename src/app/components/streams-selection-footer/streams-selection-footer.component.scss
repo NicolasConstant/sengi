@@ -5,7 +5,7 @@
     height: $stream-selector-height;
     text-align: center;
 
-    background-color: $color-secondary;
+    background-color: var(--color-secondary);
 }
 
 .stream-selection {
