@@ -34,7 +34,7 @@
             &--remove {
                 color: $font-link-primary;
                 &:hover{
-                    color: lighten($font-link-primary, 40);
+                    color: color(font-link-primary-lighter-40);
                 }
             }
         }

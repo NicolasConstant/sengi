@@ -9,7 +9,7 @@
 
     &__search {
         color: #fff;
-        background-color: darken($color-primary, 4);
+        background-color: color(color-primary-darker-4);
         border: 2px solid $color-primary;
         width: calc(100%);
         padding: 3px 5px;

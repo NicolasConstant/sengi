@@ -51,7 +51,7 @@
         }
 
         &:hover {
-            color: darken($font-color-primary, 20);
+            color: color(font-color-primary-darker-20);
         }
     }
 }

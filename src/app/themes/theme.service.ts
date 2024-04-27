@@ -12,6 +12,10 @@ export class ThemeService {
 
     activeTheme = new BehaviorSubject<ThemeTypeEnum>(ThemeTypeEnum.default);
 
+    constructor() {
+        this.setTheme(this.active);
+    }
+
     getAvailableThemes(): Theme[] {
         return this.availableThemes;
     }
