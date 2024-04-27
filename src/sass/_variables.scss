@@ -1,7 +1,6 @@
 :root {
     --font-color-primary: #e8eaf3;
-    //--font-color-secondary: #fff;
-    --font-color-secondary-value: #fff;    
+    --font-color-secondary: #bfbfbf;
     --font-link-primary: #595c67;
     --font-link-primary-hover: #8f93a2;
     --color-primary: #141824;
@@ -9,7 +8,6 @@
 
     --column-color: #0f111a;
     --column-header-background-color: #0c0c10;
-    --content-warning-background-color: #0a0c13;
     --content-warning-background-color: black;
 
     --btn-primary-color: #444f74;
@@ -22,7 +20,7 @@
     --favorite-color: #ffc16f;
     --bookmarked-color: #ff5050;
 
-    --button-color: darken(white, 30);
+    --button-color: #b3b3b3;
     --button-color-hover: white;
     --button-border-color: #303957;
 
@@ -72,7 +70,6 @@
 
 
 
-    --font-color-secondary: hsl(from var(--font-color-secondary-value) h s calc(l - 25%));
 
     --color-primary-lighter-5: hsl(from var(var(--color-primary)) h s calc(l + 5%));
     --color-primary-lighter-15: hsl(from var(var(--color-primary)) h s calc(l + 15%));
