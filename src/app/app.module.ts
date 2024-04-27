@@ -91,6 +91,7 @@ import { NotificationsTutorialComponent } from './components/tutorial-enhanced/n
 import { LabelsTutorialComponent } from './components/tutorial-enhanced/labels-tutorial/labels-tutorial.component';
 import { ThankyouTutorialComponent } from './components/tutorial-enhanced/thankyou-tutorial/thankyou-tutorial.component';
 import { StatusTranslateComponent } from './components/stream/status/status-translate/status-translate.component';
+import { ThemeModule } from "./themes/theme.module";
 
 const routes: Routes = [
     { path: "", component: StreamsMainDisplayComponent },
@@ -179,6 +180,7 @@ const routes: Routes = [
         OwlNativeDateTimeModule,
         OverlayModule,
         DragDropModule,
+        ThemeModule,
         // NgxElectronModule,
         RouterModule.forRoot(routes),
 

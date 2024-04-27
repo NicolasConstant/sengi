@@ -12,6 +12,8 @@ import { NotificationService } from '../../../services/notification.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { SettingsService } from '../../../services/settings.service';
 import { LanguageService } from '../../../services/language.service';
+import { ThemeService } from '../../../themes/theme.service';
+import { Theme } from '../../../themes/theme';
 
 @Component({
     selector: 'app-settings',
@@ -24,6 +26,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     notificationSounds: NotificationSoundDefinition[];
     notificationSoundId: string;
     notificationForm: FormGroup;
+
+    themeList: Theme[] = [];
+    themeId: number;
+    themeForm: FormGroup;
 
     disableAutofocusEnabled: boolean;
     disableRemoteStatusFetchingEnabled: boolean;
@@ -95,7 +101,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
-        private readonly userNotificationsService: UserNotificationService) { }   
+        private readonly userNotificationsService: UserNotificationService,
+        private readonly themeService: ThemeService) { }   
 
     ngOnInit() {
         this.languageSub = this.languageService.configuredLanguagesChanged.subscribe(l => {
@@ -112,6 +119,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.notificationSoundId = settings.notificationSoundFileId;
         this.notificationForm = this.formBuilder.group({
             countryControl: [this.notificationSounds[this.notificationSoundId].id]
+        });
+
+        this.themeList = this.themeService.getAvailableThemes();
+        this.themeId = this.themeService.getActiveTheme().type;
+        this.themeForm = this.formBuilder.group({
+            themeControl: [this.themeList[this.themeId].type]
         });
 
         this.disableAutofocusEnabled = settings.disableAutofocus;
@@ -273,6 +286,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         let settings = this.settingsService.getSettings()
         settings.notificationSoundFileId = soundId;
         this.settingsService.saveSettings(settings);
+    }
+
+    onThemeChange(themeId: number) {        
+        this.themeService.setTheme(this.themeList[this.themeId]);
     }
 
     playNotificationSound(): boolean {

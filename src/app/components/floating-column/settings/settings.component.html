@@ -6,6 +6,17 @@
     </select> -->
 
     <div class="content flexcroll">
+        <h4 class="panel__subtitle">DESIGN</h4>
+        <div class="sub-section">
+            <span class="sub-section__title">theme:</span><br />
+            <form [formGroup]="themeForm">
+                <select formControlName="themeControl" (change)="onThemeChange($event.target.value)" class="sound__select">
+                    <option [value]="s.type" *ngFor="let s of themeList"> {{s.name}}</option>
+                </select>
+            </form>            
+        </div>
+        <br/>
+
         <h4 class="panel__subtitle">Notifications</h4>
         <div class="sub-section">
             <input class="sub-section__checkbox" [(ngModel)]="disableAutofocusEnabled"
