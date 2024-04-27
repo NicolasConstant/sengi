@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { Theme, lightTheme, defaultTheme, ThemeTypeEnum } from "./theme";
+import { Theme, ThemeTypeEnum } from "./theme-common";
 import { SettingsService } from '../services/settings.service';
+
+import { defaultTheme } from './implementations/default';
+import { lightTheme } from './implementations/light';
 
 @Injectable({
     providedIn: 'root'

@@ -13,7 +13,7 @@ import { NavigationService } from '../../../services/navigation.service';
 import { SettingsService } from '../../../services/settings.service';
 import { LanguageService } from '../../../services/language.service';
 import { ThemeService } from '../../../themes/theme.service';
-import { Theme, ThemeTypeEnum } from '../../../themes/theme';
+import { Theme, ThemeTypeEnum } from '../../../themes/theme-common';
 
 @Component({
     selector: 'app-settings',
