@@ -26,7 +26,7 @@ export class ThemeService {
 
     setTheme(theme: Theme){
         this.setActiveTheme(theme);
-        this.activeTheme.next(theme.type);
+        this.activeTheme.next(theme.theme_type);
     }
 
     // isDarkTheme(): boolean {

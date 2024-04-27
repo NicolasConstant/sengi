@@ -30,7 +30,7 @@ $button-width: $list-width/2;
         color: #fff;
 
         &:hover {
-            background-color: color(color-primary-lighter-15);
+            background-color: var(--color-primary-lighter-15);
         }
     }
 
@@ -62,13 +62,13 @@ $button-width: $list-width/2;
 
         &--disabled {
             cursor: default;
-            background-color: color(color-primary-darker-4);
+            background-color: var(--color-primary-darker-4);
 
             width: calc(100% - #{$button-width} - 1px);
             //outline: 1px solid greenyellow;
 
             &:hover {
-                background-color: color(color-primary-darker-4);
+                background-color: var(--color-primary-darker-4);
             }
         }
 
@@ -91,13 +91,13 @@ $button-width: $list-width/2;
 
         &--disabled {
             cursor: default;
-            background-color: color(color-primary-darker-4);
+            background-color: var(--color-primary-darker-4);
 
             width: calc(100% - #{$button-width} * 3 - 3px);
             //outline: 1px solid greenyellow;
 
             &:hover {
-                background-color: color(color-primary-darker-4);
+                background-color: var(--color-primary-darker-4);
             }
         }
 
@@ -112,13 +112,13 @@ $button-width: $list-width/2;
 
             &:hover {
                 color: #fff;
-                background-color: color(color-primary-lighter-15);
+                background-color: var(--color-primary-lighter-15);
             }
         }
 
         &--new-list-title {
             color: #fff;
-            background-color: color(color-primary-darker-4);
+            background-color: var(--color-primary-darker-4);
             border: 2px solid var(--color-primary);
             width: calc(100% - #{$list-width}/2 - 1px);
             padding: 3px 5px;

@@ -1,12 +1,13 @@
 :root {
     --font-color-primary: #e8eaf3;
     //--font-color-secondary: #fff;
-    --font-color-secondary-value: #fff;
-    --font-color-secondary: hsl(from var(--font-color-secondary-value) h s calc(l - 25%));
+    --font-color-secondary-value: #fff;    
     --font-link-primary: #595c67;
     --font-link-primary-hover: #8f93a2;
     --color-primary: #141824;
     --color-secondary: #090b10;
+
+    --font-color-secondary: hsl(from var(--font-color-secondary-value) h s calc(l - 25%));
 
     --color-primary-lighter-5: hsl(from var(var(--color-primary)) h s calc(l + 5%));
     --color-primary-lighter-15: hsl(from var(var(--color-primary)) h s calc(l + 15%));
@@ -18,17 +19,13 @@
     --font-link-primary-lighter-40: hsl(from var(--font-link-primary-lighter-40) h s calc(l + 40%));
 }
 
-@function color($color-name) {
-    @return var(--#{$color-name});
-}
-
 $font-color-primary: var(--font-color-primary); // #e8eaf3;
 //$font-color-secondary: darken(var(--font-color-secondary), 25) ;// darken(#fff, 25);
 //$font-color-secondary: hsl(from var(--font-color-secondary) h s calc(l - 25%));
-$font-color-secondary: color(font-color-secondary); 
+$font-color-secondary: var(--font-color-secondary); 
 
-$font-link-primary: color(font-link-primary); // #595c67;
-$font-link-primary-hover: color(font-link-primary-hover);// #8f93a2;
+$font-link-primary: var(--font-link-primary); // #595c67;
+$font-link-primary-hover: var(--font-link-primary-hover);// #8f93a2;
 //$color-primary: var(var(--color-primary)); // #141824;
 //$color-secondary: var(--color-secondary); // #090b10;
 
@@ -72,7 +69,7 @@ $button-color: darken(white, 30);
 $button-color-hover: white;
 $button-background-color: var(--color-primary);
 //$button-background-color-hover: lighten($color-primary, 20);
-$button-background-color-hover: color(color-primary-lighter-20);
+$button-background-color-hover: var(--color-primary-lighter-20);
 $button-border-color: #303957;
 
 
@@ -114,7 +111,7 @@ $autosuggest-entry-color-hover: #e2e2e2;
 $autosuggest-entry-handle-color-hover: #ffffff;
 
 $scrollbar-color: #08090d;
-$scrollbar-color-thumb: color(color-primary-lighter-5);
+$scrollbar-color-thumb: var(--color-primary-lighter-5);
 
 $poll-editor-background: #3e455f;
 $poll-editor-background: #32384d;

@@ -63,10 +63,10 @@
 
     &--disabled {
         cursor: default;
-        background-color: color(color-primary-darker-4);
+        background-color: var(--color-primary-darker-4);
 
         &:hover {
-            background-color: color(color-primary-darker-4);
+            background-color: var(--color-primary-darker-4);
         }
     }
 
@@ -81,7 +81,7 @@
         color: #fff;
 
         &:hover {
-            background-color: color(color-primary-lighter-15);
+            background-color: var(--color-primary-lighter-15);
         }
     }
 

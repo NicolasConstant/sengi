@@ -51,7 +51,7 @@
         }
 
         &:hover {
-            color: color(font-color-primary-darker-20);
+            color: var(--font-color-primary-darker-20);
         }
     }
 }
