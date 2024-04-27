@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { Theme, lightTheme, defaultTheme, ThemeTypeEnum } from "./theme";
+import { SettingsService } from '../services/settings.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +13,16 @@ export class ThemeService {
 
     activeTheme = new BehaviorSubject<ThemeTypeEnum>(ThemeTypeEnum.default);
 
-    constructor() {
-        this.setTheme(this.active);
+    constructor(private readonly settingsService: SettingsService) {
+        let settings = settingsService.getSettings();
+
+        if(!settings.selectedTheme){
+            settings.selectedTheme = 0;
+            settingsService.saveSettings(settings);
+        }
+
+        const selectedTheme = this.availableThemes.find(x => x.theme_type == settings.selectedTheme);
+        this.setTheme(selectedTheme);
     }
 
     getAvailableThemes(): Theme[] {
@@ -52,5 +61,10 @@ export class ThemeService {
                 this.active.properties[property]
             );
         });
+
+        // Save
+        let settings = this.settingsService.getSettings();
+        settings.selectedTheme = theme.theme_type;
+        this.settingsService.saveSettings(settings);
     }
 }

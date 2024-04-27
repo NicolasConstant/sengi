@@ -20,6 +20,7 @@ import { TokenData, Account } from './services/models/mastodon.interfaces';
 import { NotificationService } from './services/notification.service';
 import { AppInfo, RegisteredAppsStateModel } from './states/registered-apps.state';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ThemeService } from './themes/theme.service';
 
 @Component({
     selector: 'app-root',
@@ -58,7 +59,8 @@ export class AppComponent implements OnInit, OnDestroy {
         private readonly serviceWorkerService: ServiceWorkerService, // Ensure update checks
         private readonly toolsService: ToolsService,
         private readonly mediaService: MediaService,
-        private readonly navigationService: NavigationService) {
+        private readonly navigationService: NavigationService,
+        private readonly themeService: ThemeService) {
     }
 
     ngOnInit(): void {
