@@ -20,7 +20,7 @@
     &__stream-header {
         position: relative;
         width: $stream-column-width;
-        border-bottom: 1px solid #222736;
+        border-bottom: 1px solid var(--stream-column-border);
     }
     &__open-menu {
         width: $stream-header-height - 10px;
@@ -31,11 +31,10 @@
         right: 5px;
 
         &:hover &--icon {
-            color: darken(whitesmoke, 30);
+            color: var(--stream-column-icon-hover);
         }
         &--icon {
-            color: whitesmoke; // float: left;
-            // position: relative;
+            color: var(--stream-column-icon);
             position: absolute;
             top: 4px;
             left: 8px;

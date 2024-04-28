@@ -68,7 +68,35 @@
     --settings-text-input-foreground: white;
     --settings-text-input-border: #32384d;
 
+    --stream-column-icon: whitesmoke;
+    --stream-column-icon-hover: #acacac; //darken(whitesmoke, 30);
+    --stream-column-border: #222736;
 
+    --label-bot: #007281;
+    --label-xpost: #9c5e00;
+    --label-thread: #007233;
+    --label-discuss: #5a008f;
+    --label-old: #960000;
+    --label-remote: #264d94;
+    --label-edited: #5f5f5f;
+
+    --status-content-warning-closed-color: #919bb1;
+    --status-content-warning-closed-background: #171d2b;
+
+    --stream-new-notification-1: #96c0ff83;
+    --stream-new-notification-2: #ffffff00;
+    --stream-new-notification-3: #ffffff00;
+    
+    --stream-remove-cw-background-hover: #eeeeee;
+    --stream-remove-cw-color-hover: black;
+    --stream-remove-cw-color: white;
+
+    --stream-toot-error: #ff7171;
+
+    --stream-toot-load-buffer-color-hover: white;
+    --stream-toot-load-buffer-border: black;
+
+    --stream-toot-status-not-last-child-border: #06070b;
 
 
     --color-primary-lighter-5: hsl(from var(var(--color-primary)) h s calc(l + 5%));

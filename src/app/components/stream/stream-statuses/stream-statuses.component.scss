@@ -12,7 +12,7 @@
         position: relative;
         z-index: 1;
         display:  inline-block;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--stream-toot-load-buffer-border);
         padding: 10px;
         margin: 0;
         text-align: center;
@@ -22,14 +22,14 @@
         color: $status-secondary-color;
 
         &:hover {
-            color: white;
+            color: var(--stream-toot-load-buffer-color-hover);
             text-decoration: none;
         }
     }
 
     &__error {
         padding: 20px 20px 0 20px;
-        color: rgb(255, 113, 113);
+        color: var(--stream-toot-error);
     }
 
     &__content {
@@ -47,8 +47,7 @@
         height: 25px;
         position: absolute;
         top: -15px;
-        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
-        background: radial-gradient(ellipse at center, rgba(150, 192, 255, 0.514), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+        background: radial-gradient(ellipse at center, var(--stream-new-notification-1), var(--stream-new-notification-2), var(--stream-new-notification-3));
         transition: all .5s;
         opacity: 0;
 
@@ -60,7 +59,7 @@
    
 
     &__status:not(:last-child) {
-        border: solid #06070b;
+        border: solid var(--stream-toot-status-not-last-child-border);
         border-width: 0 0 1px 0;
     }
     &__remove-cw {   
@@ -72,13 +71,7 @@
         padding: 5px;
         height: 45px;
 
-        &--button {          
-
-          
-            // width: calc(80%);
-            // margin-left: 40%;
-            // transform: translateX(-40%);
-            
+        &--button {            
             transition: all .2s;
             text-decoration: none;            
             padding: 5px 5px;   
@@ -88,17 +81,13 @@
             border: 3px $status-secondary-color double;    
             border: 0;           
             
-            background-color: var(--color-secondary);
             background-color: $status-secondary-color;
             // background-color: rgb(238, 238, 238);
-            color: white;
+            color: var(--stream-remove-cw-color);
 
             &:hover{
-                background-color: $status-secondary-color;
-                background-color: rgb(238, 238, 238);
-                color: black;
-                
-                //border: 3px $hover-color double;                
+                background-color: var(--stream-remove-cw-background-hover);
+                color: var(--stream-remove-cw-color-hover);
             }
         }
     }
