@@ -25,9 +25,10 @@
 }
 
 .flexcroll {
-    scrollbar-color:  $scrollbar-color-thumb #0f111a;
-    scrollbar-color: #090b10 #0f111a;
+    //scrollbar-color:  $scrollbar-color-thumb #0f111a;
+    scrollbar-color: var(--scrollbar-color-2) var(--scrollbar-color-3);
     scrollbar-width: thin;
+    
 
     scrollbar-face-color: $scrollbar-color;
     scrollbar-shadow-color: $scrollbar-color;
@@ -43,7 +44,7 @@
 
     &::-webkit-scrollbar-thumb {
         -webkit-border-radius: 0px;
-        border-radius: 0px;
+        border-radius: 0px;        
         background: $scrollbar-color-thumb;
     }
 }

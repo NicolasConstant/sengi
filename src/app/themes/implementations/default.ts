@@ -56,6 +56,10 @@ export const defaultTheme: Theme = {
         "--autosuggest-entry-handle-color-hover": "#ffffff",
 
         "--scrollbar-color": "#08090d",
+        "--scrollbar-color-2": "#090b10",
+        "--scrollbar-color-3": "#0f111a",
+        "--scrollbar-color-second-2": "#090b10",
+        "--scrollbar-color-second-3": "#0f111a",
 
         "--poll-editor-background": "#fff",
 
@@ -100,10 +104,19 @@ export const defaultTheme: Theme = {
         "--stream-remove-cw-color": "white",
     
         "--stream-toot-error": "#ff7171",
+
+        "--stream-navigation-button": "#354060",
+        "--stream-navigation-button-hover": "#7a8dc7",
+        "--stream-navigation-button-focus": "#f5f5f5",
+        "--stream-navigation-button-focus-hover": "#f5f5f5",
+        "--stream-navigation-close": "#ffffff",
     
         "--stream-toot-load-buffer-color-hover": "white",
         "--stream-toot-load-buffer-border": "black",
     
         "--stream-toot-status-not-last-child-border": "#06070b",
+
+        "--left-bar-link": "#cbcbcb",
+        "--left-bar-link-hover": "#8f93a2",
     }
 };

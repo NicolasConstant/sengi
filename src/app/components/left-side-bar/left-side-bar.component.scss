@@ -10,11 +10,11 @@ $height-button: 40px;
 }
 
 .left-bar-link {
-    color: $font-link-primary;
-    color: darken(whitesmoke, 17);
+    color: var(--left-bar-link);
     text-decoration: none;
     &:hover {
         color: $font-link-primary-hover;
+        color: var(--left-bar-link-hover);
     }
 }
 

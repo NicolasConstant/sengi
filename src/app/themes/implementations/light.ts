@@ -1,5 +1,9 @@
 import { Theme, ThemeTypeEnum } from "../theme-common";
 
+// Color contour:           #bfcad5
+// Color header font:       #2d3134
+// Bottom Separator color:   #9ca7b3
+
 export const lightTheme: Theme = {
     name: "light",
     theme_type: ThemeTypeEnum.light,
@@ -18,7 +22,7 @@ export const lightTheme: Theme = {
 
         "--btn-primary-color": "#444f74",
         "--btn-primary-font-color": "white",
-        "--status-primary-color": "#fff",
+        "--status-primary-color": "#2d3134",
         "--status-secondary-color": "#292c37",
         "--status-links-color": "#d9e1e8",
         "--boost-color": "#5098eb",
@@ -46,7 +50,7 @@ export const lightTheme: Theme = {
         "--status-editor-color": "#14151a",
         "--status-editor-footer-background": "#3e455f",
         "--status-editor-footer-link-color": "#e2e2e2",
-        "--selected-status": "#1e2734",
+        "--selected-status": "#f2f5f8",        
 
         "--autosuggest-background": "#ffffff",
         "--autosuggest-entry-background": "#0f111a",
@@ -56,7 +60,12 @@ export const lightTheme: Theme = {
         "--autosuggest-entry-color-hover": "#e2e2e2",
         "--autosuggest-entry-handle-color-hover": "#ffffff",
 
-        "--scrollbar-color": "#08090d",
+        //"--scrollbar-color": "#08090d",
+        "--scrollbar-color": "#0f0",
+        "--scrollbar-color-2": "#e3eaef",
+        "--scrollbar-color-3": "#ffffff00",
+        "--scrollbar-color-second-2": "#e3eaef",
+        "--scrollbar-color-second-3": "#bfcad5",
 
         "--poll-editor-background": "#fff",
 
@@ -74,9 +83,9 @@ export const lightTheme: Theme = {
         "--settings-text-input-foreground": "white",
         "--settings-text-input-border": "#32384d",
         
-        "--stream-column-icon": "whitesmoke",
-        "--stream-column-icon-hover": "#acacac",
-        "--stream-column-border": "#222736",
+        "--stream-column-icon": "#2d3134",
+        "--stream-column-icon-hover": "#646b72",
+        "--stream-column-border": "#9ca7b3",
     
         "--label-bot": "#007281",
         "--label-xpost": "#9c5e00",
@@ -89,8 +98,8 @@ export const lightTheme: Theme = {
         "--status-content-warning-closed-color": "#919bb1",
         "--status-content-warning-closed-background": "#171d2b",
     
-        "--stream-edition-background": "#222736",
-        "--stream-column-selector-color": "whitesmoke",
+        "--stream-edition-background": "#bfcad5",
+        "--stream-column-selector-color": "#2d3134",
 
         "--stream-new-notification-1": "#96c0ff83",
         "--stream-new-notification-2": "#ffffff00",
@@ -101,10 +110,19 @@ export const lightTheme: Theme = {
         "--stream-remove-cw-color": "white",
     
         "--stream-toot-error": "#ff7171",
+
+        "--stream-navigation-button": "#98a6b3",
+        "--stream-navigation-button-hover": "#5d6268",
+        "--stream-navigation-button-focus": "#2d3134",
+        "--stream-navigation-button-focus-hover": "#2d3134",
+        "--stream-navigation-close": "#2d3134",
     
         "--stream-toot-load-buffer-color-hover": "white",
         "--stream-toot-load-buffer-border": "black",
     
-        "--stream-toot-status-not-last-child-border": "#06070b",
+        "--stream-toot-status-not-last-child-border": "#cedbe7",
+
+        "--left-bar-link": "#2d3134",
+        "--left-bar-link-hover": "#8e9092",
     }
 };

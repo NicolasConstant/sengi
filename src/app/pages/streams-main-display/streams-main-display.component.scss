@@ -19,8 +19,10 @@
 
 
 .flexcroll {
-    scrollbar-color: $scrollbar-color-thumb #0f111a;
-    scrollbar-color: #090b10 #0f111a;
+    // scrollbar-color: $scrollbar-color-thumb #0f111a;
+    // scrollbar-color: #090b10 #0f111a;
+    //scrollbar-color: var(--scrollbar-color-2) var(--scrollbar-color-3);
+    scrollbar-color: var(--scrollbar-color-second-2) var(--scrollbar-color-second-3);
     scrollbar-width: thin;
 
     scrollbar-face-color: $scrollbar-color;
@@ -37,7 +39,9 @@
     &::-webkit-scrollbar-thumb {
         -webkit-border-radius: 0px;
         border-radius: 0px;
-        background: #08090d;
+        //background: #08090d;
+        background: $scrollbar-color-thumb;
+
         -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
     }
 }

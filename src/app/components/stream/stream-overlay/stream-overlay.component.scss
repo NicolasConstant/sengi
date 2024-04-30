@@ -11,7 +11,8 @@ $header-content-height: 40px;
         width: calc(100%);
         height: $header-content-height;
         background-color: $column-header-background-color; 
-        border-bottom: 1px solid #222736;
+        //border-bottom: 1px solid #222736;
+        border-bottom: 1px solid var(--stream-column-border);
         
         display: flex;
     }
@@ -54,18 +55,17 @@ $header-content-height: 40px;
         width: $header-content-height;
         height: $header-content-height;
 
-        color: #354060;
+        color: var(--stream-navigation-button);
         transition: all .2s;
         
         &:hover {
-            color: #536599;
-            color: #7a8dc7;
+            color: var(--stream-navigation-button-hover);
         }
         &--focus {
-            color: whitesmoke;
+            color: var(--stream-navigation-button-focus);
 
             &:hover {
-                color: whitesmoke;
+                color: var(--stream-navigation-button-focus-hover);
             }
         }
     }
@@ -113,7 +113,7 @@ $header-content-height: 40px;
     &-close {
         display: block;
         font-size: 13px;
-        color: white;
+        color: var(--stream-navigation-close);
 
         &__icon {
             position: relative;
