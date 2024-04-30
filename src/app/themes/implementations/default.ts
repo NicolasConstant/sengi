@@ -88,6 +88,9 @@ export const defaultTheme: Theme = {
         "--status-content-warning-closed-color": "#919bb1",
         "--status-content-warning-closed-background": "#171d2b",
     
+        "--stream-edition-background": "#222736",
+        "--stream-column-selector-color": "whitesmoke",
+
         "--stream-new-notification-1": "#96c0ff83",
         "--stream-new-notification-2": "#ffffff00",
         "--stream-new-notification-3": "#ffffff00",

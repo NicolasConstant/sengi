@@ -6,7 +6,7 @@
     width: calc(100%);
     width: $stream-column-width;
     // min-height: 50px;
-    background-color: #222736;
+    background-color: var(--stream-edition-background);
     border-bottom: 1px solid var(--color-secondary);
 
     &__settings{

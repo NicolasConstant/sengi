@@ -44,9 +44,9 @@
         display: block;
         width: $stream-column-width;
         height: calc(#{$stream-header-height} - 1px);
-        background-color: $column-header-background-color;
+        background-color: $column-header-background-color;        
         text-decoration: none; 
-        color: whitesmoke;
+        color: var(--stream-column-selector-color);
         position: relative;
         &--avatar {
             width: 20px;

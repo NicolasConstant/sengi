@@ -4,16 +4,16 @@ export const lightTheme: Theme = {
     name: "light",
     theme_type: ThemeTypeEnum.light,
     properties: {
-        "--font-color-primary": "#e8eaf3",
-        "--font-color-secondary": "#bfbfbf",
-        "--font-link-primary": "#595c67",
-        "--font-link-primary-hover": "#8f93a2",
+        "--font-color-primary": "#080b1b",
+        "--font-color-secondary": "#0f1f36",
+        "--font-link-primary": "white", //3e4048
+        "--font-link-primary-hover": "#gray",
 
-        "--color-primary": "#ffffff",
-        "--color-secondary": "#e6ebf0",
+        "--color-primary": "#e6ebf0",
+        "--color-secondary": "#bfcad5",
 
-        "--column-color": "#0f111a",
-        "--column-header-background-color": "#0c0c10",        
+        "--column-color": "white",
+        "--column-header-background-color": "#bfcad5",        
         "--content-warning-background-color": "black",
 
         "--btn-primary-color": "#444f74",
@@ -89,6 +89,9 @@ export const lightTheme: Theme = {
         "--status-content-warning-closed-color": "#919bb1",
         "--status-content-warning-closed-background": "#171d2b",
     
+        "--stream-edition-background": "#222736",
+        "--stream-column-selector-color": "whitesmoke",
+
         "--stream-new-notification-1": "#96c0ff83",
         "--stream-new-notification-2": "#ffffff00",
         "--stream-new-notification-3": "#ffffff00",
