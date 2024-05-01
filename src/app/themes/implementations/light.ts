@@ -2,7 +2,8 @@ import { Theme, ThemeTypeEnum } from "../theme-common";
 
 // Color contour:           #bfcad5
 // Color header font:       #2d3134
-// Bottom Separator color:   #9ca7b3
+// Bottom Separator color:  #9ca7b3
+// header selectod color:   #e9edf1
 
 export const lightTheme: Theme = {
     name: "light",
@@ -75,9 +76,9 @@ export const lightTheme: Theme = {
 
         "--scheduler-background": "#3e455f",
 
-        "--notification-column-selector-background": "#171c29",
+        "--notification-column-selector-background": "#e9edf1",
         "--notification-column-selector-color": "#999fb1",
-        "--notification-column-selector-color-hover": "white",
+        "--notification-column-selector-color-hover": "#2d3134",
 
         "--settings-text-input-background": "#242836",
         "--settings-text-input-foreground": "white",
@@ -124,5 +125,34 @@ export const lightTheme: Theme = {
 
         "--left-bar-link": "#2d3134",
         "--left-bar-link-hover": "#8e9092",
+
+        "--loading-icon-background": "#2d3134",
+
+        "--profile-validated-font-color": "#4fde23",
+        "--profile-validated-background": "#164109",
+        "--profile-full-alias-color": "#c9c9c9",
+        "--profile-full-alias-color-hover": "#ffffff",
+        "--profile-floating-header-box-shadow": "#00000040",
+        "--profile-floating-header-inner-background": "#00000073",
+        "--profile-floating-header-name-display-name": "#ffffff",
+        "--profile-moved-link": "#ffffff",
+        "--profile-moved-link-hover": "#ffbe47",
+        "--profile-disabled-filter": "#808080",
+        "--profile-header-inner-background": "#00000073",
+        "--profile-follow-button": "#ffffff",
+        "--profile-follow-button-hover": "#d8d8d8",
+        "--profile-followed": "#85ccff",
+        "--profile-followed-hover": "#38abff",
+        "--profile-header-state-data-background": "#00000099",
+        "--profile-name-display-name": "#ffffff",
+        "--profile-follows-background": "#0f111a",
+        "--profile-follows-link": "#ffffff",
+        "--profile-follows-link-background": "#1a1f2e",
+        "--profile-follows-link-background-hover": "#131722",
+        "--profile-extra-info-background": "#1a1f2e",
+        "--profile-extra-info-floating-boxshadow": "#00000073",
+        "--profile-extra-info-links": "#ffffff",
+        "--profile-fields-border": "#000000",
+        "--profile-lock": "#808080",
     }
 };

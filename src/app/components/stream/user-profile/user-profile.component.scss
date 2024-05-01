@@ -1,11 +1,11 @@
 @import "variables";
 @import "mixins";
 @import "commons";
-$validated-font-color: #4fde23;
-$validated-background: #164109;
+$validated-font-color: var(--profile-validated-font-color);
+$validated-background: var(--profile-validated-background);
 $header-height: 140px;
-$full-alias-color: rgb(201, 201, 201);
-$full-alias-color-hover: white;
+$full-alias-color: var(--profile-full-alias-color);
+$full-alias-color-hover: var(--profile-full-alias-color-hover);
 $floating-header-height: 60px;
 
 .outer-profile {
@@ -42,14 +42,14 @@ $floating-header-height: 60px;
         z-index: 100;
 
         // border-bottom: 1px solid #222736;
-        box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .25);
+        box-shadow: 0 6px 4px -4px var(--profile-floating-header-box-shadow);
 
         // opacity: 0;
 
         &__inner {
             overflow: hidden;
             height: $floating-header-height;
-            background-color: rgba(0, 0, 0, .45);
+            background-color: var(--profile-floating-header-inner-background);
         }
 
         &__activated {
@@ -81,7 +81,7 @@ $floating-header-height: 60px;
 
             &__display-name {
                 font-size: 15px;
-                color: white;
+                color: var(--profile-floating-header-name-display-name);
                 margin: 0 0 2px 0;
             }
 
@@ -114,20 +114,20 @@ $floating-header-height: 60px;
 
         &--link {
             transition: .2s;
-            color: white;
+            color: var(--profile-moved-link);
             display: inline-block;
             max-width: calc(100%);
             text-overflow: ellipsis;
             overflow: hidden;
 
             &:hover {
-                color: rgb(255, 190, 71);
+                color: var(--profile-moved-link-hover);
             }
         }
     }
 
     &__disabled {
-        filter: gray;
+        filter: var(--profile-disabled-filter);
         -webkit-filter: grayscale(100%);
         -moz-filter: grayscale(100%);
         -ms-filter: grayscale(100%);
@@ -150,7 +150,7 @@ $floating-header-height: 60px;
         &__inner {
             overflow: auto;
             height: $header-height;
-            background-color: rgba(0, 0, 0, .45);
+            background-color: var(--profile-header-inner-background);
         }
 
         &__avatar {
@@ -174,10 +174,10 @@ $floating-header-height: 60px;
             &--button {
                 display: inline-block;
                 transition: all .2s;
-                color: white;
+                color: var(--profile-follow-button);
 
                 &:hover {
-                    color: rgb(216, 216, 216);
+                    color: var(--profile-follow-button-hover);
                 }
             }
 
@@ -185,13 +185,10 @@ $floating-header-height: 60px;
 
             &--followed {
                 transition: all .2s;
-                color: #38abff;
-                color: #5fbcff;
-                color: #85ccff;
+                color: var(--profile-followed);
 
                 &:hover {
-                    color: #85ccff;
-                    color: #38abff;
+                    color: var(--profile-followed-hover);
                 }
             }
 
@@ -218,7 +215,7 @@ $floating-header-height: 60px;
 
             &--data {
                 display: inline-block;
-                background-color: rgba(0, 0, 0, .60);
+                background-color: var(--profile-header-state-data-background);
                 padding: 4px 10px;
                 border-radius: 4px;
                 text-align: center;
@@ -259,7 +256,7 @@ $floating-header-height: 60px;
         }
 
         &__display-name {
-            color: white;
+            color: var(--profile-name-display-name);
         }
 
         &__fullhandle a {
@@ -275,21 +272,21 @@ $floating-header-height: 60px;
     &-follows {
         width: calc(100%);  
         font-size: 13px;
-        border-bottom: 1px solid #0f111a;
+        border-bottom: 1px solid var(--profile-follows-background);
 
         display: flex;
 
         &__link {
-            color: white;
+            color: var(--profile-follows-link);
             flex-grow: 1;
             padding: 5px;
             text-align: center;
-            background-color: #1a1f2e;
+            background-color: var(--profile-follows-link-background);
             transition: all .2s;
 
             &:hover {
                 text-decoration: none;
-                background-color: #131722;
+                background-color: var(--profile-follows-link-background-hover);
             }
         }
     }
@@ -306,9 +303,7 @@ $floating-header-height: 60px;
     }
 
     &__extra-info {
-        background-color: #20273a;
-        background-color: #141824;
-        background-color: #1a1f2e;
+        background-color: var(--profile-extra-info-background);
         font-size: 13px;
         transition: all .4s;
 
@@ -332,11 +327,11 @@ $floating-header-height: 60px;
 
         &__floating {
             top: 60px;
-            box-shadow: 0 6px 4px -4px rgba(0, 0, 0, .45);
+            box-shadow: 0 6px 4px -4px var(--profile-extra-info-floating-boxshadow);
         }
 
         &__links {
-            color: white;
+            color: var(--profile-extra-info-links);
 
             &--selected {
                 text-decoration: underline;
@@ -346,16 +341,16 @@ $floating-header-height: 60px;
 
     &-fields {
         font-size: 13px;
-        border-bottom: 1px solid black;
+        border-bottom: 1px solid var(--profile-fields-border);
 
         &__field {
             &:not(:last-child) {
-                border-bottom: 1px solid black;
+                border-bottom: 1px solid var(--profile-fields-border);
             }
 
             &--name {
                 padding: 10px;
-                border-right: 1px solid black;
+                border-right: 1px solid var(--profile-fields-border);
                 text-align: center;
                 width: calc(33%);
                 background-color: #0b0d13;
@@ -405,7 +400,7 @@ $floating-header-height: 60px;
 
 .fa-lock {
     margin-left: 5px;
-    color: gray;
+    color: var(--profile-lock);
     font-size: 14px;
 }
 
