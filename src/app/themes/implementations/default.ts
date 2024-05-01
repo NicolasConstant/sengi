@@ -138,7 +138,7 @@ export const defaultTheme: Theme = {
         "--profile-followed-hover": "#38abff",
         "--profile-header-state-data-background": "#00000099",
         "--profile-name-display-name": "#ffffff",
-        "--profile-follows-background": "#0f111a",
+        "--profile-follows-border": "#0f111a",
         "--profile-follows-link": "#ffffff",
         "--profile-follows-link-background": "#1a1f2e",
         "--profile-follows-link-background-hover": "#131722",
@@ -147,5 +147,6 @@ export const defaultTheme: Theme = {
         "--profile-extra-info-links": "#ffffff",
         "--profile-fields-border": "#000000",
         "--profile-lock": "#808080",
+        "--profile-fields-background": "#0b0d13",
     }
 };

@@ -272,7 +272,7 @@ $floating-header-height: 60px;
     &-follows {
         width: calc(100%);  
         font-size: 13px;
-        border-bottom: 1px solid var(--profile-follows-background);
+        border-bottom: 1px solid var(--profile-follows-border);
 
         display: flex;
 
@@ -353,7 +353,7 @@ $floating-header-height: 60px;
                 border-right: 1px solid var(--profile-fields-border);
                 text-align: center;
                 width: calc(33%);
-                background-color: #0b0d13;
+                background-color: var(--profile-fields-background);
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
