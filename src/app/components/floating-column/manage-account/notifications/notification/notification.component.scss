@@ -27,7 +27,7 @@
 
 
         &:not(:last-child) {
-            border: solid #06070b;
+            border: solid var(--floating-column-manage-account-notification-border);
             border-width: 0 0 1px 0;
         }
     }
@@ -68,7 +68,7 @@ $acccount-info-left: 70px;
         position: absolute;
         top: 7px;
         left:  $acccount-info-left;
-        color: whitesmoke;      
+        color: var(--floating-column-manage-account-notification-follow-account-display-name);      
     }
 
     &:hover &__display-name {
@@ -100,20 +100,20 @@ $acccount-info-left: 70px;
         padding: 2px;
 
         text-align: center;
-        color: rgb(182, 182, 182);
+        color: var(--floating-column-manage-account-notification-follow-request-link);
         transition: all .2s;
 
         // outline: 1px dotted greenyellow;
 
         &--check {
             &:hover {
-                color: greenyellow;
+                color: var(--floating-column-manage-account-notification-follow-request-link-validate);
             }
         }
 
         &--cross {
             &:hover {
-                color: orangered;
+                color: var(--floating-column-manage-account-notification-follow-request-link-refuse);
             }
         }
     }

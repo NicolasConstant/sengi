@@ -114,15 +114,15 @@ $comrade_red:  #a50000;
     margin: 20px 0 0 0;
     
     & a {
-        color: #ffcc00;
+        color: var(--floating-column-add-account-faq);
         text-decoration: underline;
 
         &:hover {
-            color: #ffe88a;
+            color: var(--floating-column-add-account-faq-hover);
         }
     }
 
     &__warning {
-        color: #ffdc52;
+        color: var(--floating-column-add-account-faq-warning);
     }
 }

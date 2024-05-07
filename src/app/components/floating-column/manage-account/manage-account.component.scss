@@ -14,7 +14,7 @@ $account-header-height: 60px;
         padding-right: 10px;
         padding-bottom: 5px;
         height: $account-header-height; //border-top: 1px solid #222736;
-        border-bottom: 1px solid #222736;
+        border-bottom: 1px solid var(--floating-column-manage-account-header-border);
         &--button {
             // outline: 1px greenyellow solid;
             margin-top: 20px;
@@ -34,15 +34,15 @@ $account-header-height: 60px;
                 color: $font-link-primary-hover;
             }
             &--selected {
-                color: whitesmoke;
+                color: var(--floating-column-manage-account-header-selected);
                 &:hover {
-                    color: whitesmoke;
+                    color: var(--floating-column-manage-account-header-selected-hover);
                 }
             }
             &--notification {
-                color: rgb(250, 152, 41);
+                color: var(--floating-column-manage-account-header-notification);
                 &:hover {
-                    color: rgb(255, 185, 106);
+                    color: var(--floating-column-manage-account-header-notification-hover);
                 }
             }
         }

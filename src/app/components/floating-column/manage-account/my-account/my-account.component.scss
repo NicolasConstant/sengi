@@ -15,7 +15,7 @@ $button-width: $list-width/2;
         padding-right: 10px;
         font-size: $small-font-size;
         padding-bottom: 20px;
-        outline: 1px dotted greenyellow;
+        //outline: 1px dotted greenyellow;
     }
 
     &__label {
@@ -27,7 +27,7 @@ $button-width: $list-width/2;
 
     &__blue {
         background-color: var(--color-primary);
-        color: #fff;
+        color: var(--floating-column-manage-account-myaccount-blue);
 
         &:hover {
             background-color: var(--color-primary-lighter-15);
@@ -35,12 +35,12 @@ $button-width: $list-width/2;
     }
 
     &__red {
-        $red-button-color: rgb(65, 3, 3);
+        $red-button-color: var(--floating-column-manage-account-myaccount-red-background);
         background-color: $red-button-color !important;
-        color: #fff;
+        color: var(--floating-column-manage-account-myaccount-red);
 
         &:hover {
-            background-color: lighten($red-button-color, 15) !important;
+            background-color: var(--floating-column-manage-account-myaccount-red-background-hover) !important;
         }
     }
 
@@ -107,17 +107,16 @@ $button-width: $list-width/2;
             float: right;
             padding: 5px 10px;
             background-color: var(--color-primary);
-            color: #fff;
             color: $font-color-secondary;
 
             &:hover {
-                color: #fff;
+                color: var(--floating-column-manage-account-myaccount-list-button-hover);
                 background-color: var(--color-primary-lighter-15);
             }
         }
 
         &--new-list-title {
-            color: #fff;
+            color: var(--floating-column-manage-account-myaccount-list-new);
             background-color: var(--color-primary-darker-4);
             border: 2px solid var(--color-primary);
             width: calc(100% - #{$list-width}/2 - 1px);
@@ -153,7 +152,7 @@ $button-width: $list-width/2;
     &__text {
         display: block;
         margin: 0 6px 9px 6px;
-        color: rgb(140, 152, 173);
+        color: var(--floating-column-manage-account-myaccount-advanced-text);
     }
 
     &__input {

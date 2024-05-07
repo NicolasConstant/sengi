@@ -19,10 +19,10 @@
     padding: 0 5px;
 
     &__link {
-        color: rgb(161, 161, 161);
+        color: var(--floating-column-settings-version);
 
         &:hover {
-            color: #fff;
+            color: var(--floating-column-settings-version-hover);
         }
     }
 }
@@ -48,7 +48,7 @@
     &__text {
         display: block;
         margin: 0 6px 9px 6px;
-        color: rgb(140, 152, 173);
+        color: var(--floating-column-settings-subsection-text);
     }
 
     &__input {
@@ -60,7 +60,7 @@
         margin: 0 0 5px 5px;
 
         & a {
-            color: white;
+            color: var(--floating-column-settings-subsection-title);
             font-weight: bold;
             text-decoration: underline;
         }
@@ -77,7 +77,7 @@
 
 .language {
     &__warning {
-        color: orange;
+        color: var(--floating-column-settings-language-warning);
     }
 
     &__entry {
@@ -132,9 +132,9 @@
         padding: 3px 0;
         margin-left: 5px;
 
-        background-color: #32384d;
-        color: white;
-        border: 1px solid #32384d;
+        background-color: var(--floating-column-settings-sound-select-background);
+        color: var(--floating-column-settings-sound-select-color);
+        border: 1px solid var(--floating-column-settings-sound-select-border);
     }
 
     &__play {
@@ -145,12 +145,12 @@
         text-align: center;
         text-decoration: none;
 
-        background-color: #1f2330;
-        color: white;
+        background-color: var(--floating-column-settings-sound-play-background);
+        color: var(--floating-column-settings-sound-play-color);
         -webkit-appearance: none;
 
         &:hover {
-            background-color: #32384d;
+            background-color: var(--floating-column-settings-sound-play-background-hover);
         }
     }
 }
@@ -164,11 +164,11 @@
     
     text-align: center;
 
-    color: white;
-    background-color: #1f2330;
+    color: var(--floating-column-settings-toggle-lock);
+    background-color: var(--floating-column-settings-toggle-lock-background);
 
     &:hover {
         text-decoration: none;
-        background-color: #32384d;
+        background-color: var(--floating-column-settings-toggle-lock-background-hover);
     }
 }
