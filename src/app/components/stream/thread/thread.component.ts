@@ -167,8 +167,8 @@ export class ThreadComponent extends BrowseBase {
                         return this.mastodonService.search(currentAccount, status.uri, version, true);
                     })
                     .then((result: Results) => {
-                        if (result.statuses.length === 1) {
-                            const retrievedStatus = result.statuses[0];
+                        const retrievedStatus = result.statuses.find(({ uri }) => uri === status.uri);
+                        if (retrievedStatus) {
                             return retrievedStatus;
                         }
                         throw new Error('could not find status');
