@@ -7,7 +7,7 @@
 
     <!-- data-simplebar  -->
     <div class="stream-toots__status" *ngFor="let conversationWrapper of conversations">
-        <div class="conversation__participants" title="participants">
+        <div class="conversation__participants" title="participants" *ngIf="conversationWrapper.lastStatus && conversationWrapper.lastStatus.status">
             <fa-icon [icon]="faUserFriends" class="conversation__icon"></fa-icon>
             <img class="conversation__avatar" src="{{ conversationWrapper.userAvatar }}" title="me" />
             <div *ngFor="let acc of conversationWrapper.conversation.accounts">
