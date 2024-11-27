@@ -68,6 +68,12 @@ export class StatusComponent implements OnInit {
 
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
+        if(!value || !value.status) {
+            console.error('null status provided');
+            this.hideStatus = true;
+            return;
+        }
+
         this._statusWrapper = value;
         this.status = value.status;
         this.isSelected = value.isSelected;
