@@ -158,8 +158,6 @@ export class ThreadComponent extends BrowseBase {
         const sourceAccount = openThreadEvent.sourceAccount;
 
         if (status.visibility === 'public' || status.visibility === 'unlisted') {
-            // var statusPromise: Promise<Status> = Promise.resolve(status);
-            // if (!sourceAccount || sourceAccount.id !== currentAccount.id) {
             var statusPromise = this.toolsService.getInstanceInfo(currentAccount)
                     .then(instance => {
                         let version: 'v1' | 'v2' = 'v1';
@@ -178,7 +176,6 @@ export class ThreadComponent extends BrowseBase {
                         }
                         throw new Error('could not find status');
                     });
-            // }
 
             this.retrieveThread(currentAccount, statusPromise);
 
@@ -207,7 +204,6 @@ export class ThreadComponent extends BrowseBase {
 
                             if (i == position) wrapper.isSelected = true;
 
-                            // this.statuses.push(wrapper);
                             localStatuses.push(wrapper);
                         }
                         return localStatuses;
