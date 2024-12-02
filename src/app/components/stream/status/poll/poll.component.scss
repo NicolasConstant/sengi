@@ -4,9 +4,7 @@
 @import "buttons";
 
 .poll {
-
-    color: white;
-    color: rgb(228, 228, 228);
+    color: var(--poll-color);
 
     &__btn-vote {
         margin: 0 10px 0 0;
@@ -16,7 +14,7 @@
     &__statistics {
         display: inline-block;
         font-size: 0.8em;
-        color: rgb(101, 121, 160);
+        color: var(--poll-color-statistics-color);
     }
 
     &__label {
@@ -29,12 +27,12 @@
 
     &__error {
         font-size: 12px;
-        color: red;
+        color: var(--poll-error-color);
     }
 
     &__refresh {
         font-size: 0.8em;
-        color: rgb(101, 121, 160);
+        color: var(--poll-refresh-color);
     }
 
     &__container {
@@ -55,11 +53,11 @@
         }
 
         &:hover &__input~&__checkmark {
-            background-color: #ccc;
+            background-color: var(--poll-hover-checkmark-background);
         }
 
         & &__input:checked~&__checkmark {
-            background-color: rgb(62, 75, 100);
+            background-color: var(--poll-checked-checkmark-background);
         }
 
         &__input {
@@ -82,7 +80,7 @@
             left: 0;
             height: 20px;
             width: 20px;
-            background-color: #eee;
+            background-color: var(--poll-checkmark-box-background);
 
             &:after {
                 content: "";
@@ -97,7 +95,7 @@
             left: 0;
             height: 20px;
             width: 20px;
-            background-color: #eee;
+            background-color: var(--poll-checkmark-round-background);
             border-radius: 50%;
         }
 
@@ -110,7 +108,7 @@
             top: 5px;
             width: 5px;
             height: 10px;
-            border: solid white;
+            border: solid var(--poll-checkmark-border);
             border-width: 0 3px 3px 0;
             -webkit-transform: rotate(45deg);
             -ms-transform: rotate(45deg);
@@ -129,7 +127,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: white;
+            background: var(--poll-checkmark-round-after-background);
         }
     }
 
@@ -147,8 +145,7 @@
         }
 
         &--percentage {
-            color: rgb(228, 228, 228);
-            color: white;
+            color: var(--poll-result-percentage-color);
             display: inline;
             margin-right: 10px;
 
@@ -156,8 +153,7 @@
 
         &--progress-bar {
             position: absolute;
-            background-color: rgb(47, 68, 100);
-            // background-color: rgb(43, 62, 92);
+            background-color: var(--poll-result-progress-bar);
             top: 0;
             left: 0;
             width: calc(100%);
@@ -167,7 +163,7 @@
             border-radius: 2px;
 
             &--most-votes {
-                background-color: rgb(18, 118, 158);
+                background-color: var(--poll-result-progress-bar-most-votes);
             }
         }
     }

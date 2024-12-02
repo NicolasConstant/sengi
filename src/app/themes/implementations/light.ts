@@ -44,7 +44,7 @@ export const lightTheme: Theme = {
         "--context-menu-font-color": "#000000",
         "--context-menu-border-color": "#cbd3df",
 
-        "--direct-message-background": "#090a0f",
+        "--direct-message-background": "#bfcad5",
 
         "--status-editor-title-background": "#ebebeb",
         "--status-editor-background": "#ffffff",
@@ -73,6 +73,20 @@ export const lightTheme: Theme = {
         "--poll-editor-separator": "#e7e7e7",
         "--poll-editor-input-border": "#b9b9b9",
         "--poll-editor-input-border-focus": "#007be0",
+
+        "--poll-color": "#e4e4e4",
+        "--poll-error-color": "#ff0000",
+        "--poll-refresh-color": "#6579a0",
+        "--poll-color-statistics-color": "#6579a0",
+        "--poll-hover-checkmark-background": "#ccc",
+        "--poll-checked-checkmark-background": "#3e4b64",
+        "--poll-checkmark-box-background": "#eee",
+        "--poll-checkmark-round-background": "#eee",
+        "--poll-checkmark-round-after-background": "#ffffff",
+        "--poll-checkmark-border": "#ffffff",
+        "--poll-result-percentage-color": "#ffffff",
+        "--poll-result-progress-bar": "#2f4464",
+        "--poll-result-progress-bar-most-votes": "#12769e",
 
         "--scheduler-background": "#3e455f",
 
@@ -175,7 +189,8 @@ export const lightTheme: Theme = {
         "--floating-column-settings-toggle-lock": "#ffffff",
         "--floating-column-settings-toggle-lock-background": "#1f2330",
         "--floating-column-settings-toggle-lock-background-hover": "#32384d",
-        "--floating-column-manage-account-header-border": "#222736",
+        //"--floating-column-manage-account-header-border": "#222736",
+        "--floating-column-manage-account-header-border": "#9ca7b3",
         "--floating-column-manage-account-header-selected": "#f5f5f5",
         "--floating-column-manage-account-header-selected-hover": "#f5f5f5",
         "--floating-column-manage-account-header-notification": "#fa9829",

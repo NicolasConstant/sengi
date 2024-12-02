@@ -67,6 +67,20 @@ export const defaultTheme: Theme = {
         "--poll-editor-input-border": "#b9b9b9",
         "--poll-editor-input-border-focus": "#007be0",
 
+        "--poll-color": "#e4e4e4",
+        "--poll-error-color": "#ff0000",
+        "--poll-refresh-color": "#6579a0",
+        "--poll-color-statistics-color": "#6579a0",
+        "--poll-hover-checkmark-background": "#ccc",
+        "--poll-checked-checkmark-background": "#3e4b64",
+        "--poll-checkmark-box-background": "#eee",
+        "--poll-checkmark-round-background": "#eee",
+        "--poll-checkmark-round-after-background": "#ffffff",
+        "--poll-checkmark-border": "#ffffff",
+        "--poll-result-percentage-color": "#ffffff",
+        "--poll-result-progress-bar": "#2f4464",
+        "--poll-result-progress-bar-most-votes": "#12769e",
+
         "--scheduler-background": "#3e455f",
 
         "--notification-column-selector-background": "#171c29",
