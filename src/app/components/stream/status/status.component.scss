@@ -149,8 +149,8 @@
         text-align: left;
         position: relative;
         
-        border: 3px solid  $status-secondary-color;
-        color: whitesmoke;
+        border: 3px solid var(--status-content-warning-border);
+        color: var(--status-content-warning-color);
 
         &__closed {
             //margin: 0 5px 0 $avatar-column-space;

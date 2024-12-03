@@ -37,6 +37,8 @@ export const defaultTheme: Theme = {
         "--context-menu-background-hover": "#d7dfeb",
         "--context-menu-font-color": "#000000",
         "--context-menu-border-color": "#cbd3df",
+        "--context-menu-link-profile-color": "whitesmoke",
+        "--context-menu-link-profile-color-hover":"#c0c0c0",
 
         "--direct-message-background": "#090a0f",
 
@@ -46,6 +48,8 @@ export const defaultTheme: Theme = {
         "--status-editor-footer-background": "#3e455f",
         "--status-editor-footer-link-color": "#e2e2e2",
         "--selected-status": "#1e2734",
+        "--status-content-warning-border": "#4e5572",
+        "--status-content-warning-color": "whitesmoke",
 
         "--autosuggest-background": "#ffffff",
         "--autosuggest-entry-background": "#0f111a",

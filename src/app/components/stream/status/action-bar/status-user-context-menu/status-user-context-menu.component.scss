@@ -13,10 +13,10 @@
     }
 
     &__profile {
-        color: whitesmoke;
+        color: var(--context-menu-link-profile-color);
 
         &:hover {
-            color: rgb(192, 192, 192);
+            color: var(--context-menu-link-profile-color-hover);
         }
     }
 }
