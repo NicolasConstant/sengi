@@ -136,6 +136,8 @@ export const defaultTheme: Theme = {
 
         "--left-bar-link": "#cbcbcb",
         "--left-bar-link-hover": "#8f93a2",
+        "--left-icon-cog-color": "#cbcbcb",
+        "--left-icon-cog-opacity": ".3",
 
         "--loading-icon-background": "#fff",
 
@@ -211,5 +213,7 @@ export const defaultTheme: Theme = {
         "--stream-selection-representation-hover-background": "#8f93a2",
         "--stream-selection-representation-selected-background": "#a8a8a8",
         "--stream-selection-representation-selected-hover-background": "#ffffff",
+
+        
     }
 };

@@ -143,6 +143,8 @@ export const lightTheme: Theme = {
 
         "--left-bar-link": "#2d3134",
         "--left-bar-link-hover": "#8e9092",
+        "--left-icon-cog-color": "#ffffff",
+        "--left-icon-cog-opacity": ".6",
 
         "--loading-icon-background": "#2d3134",
 

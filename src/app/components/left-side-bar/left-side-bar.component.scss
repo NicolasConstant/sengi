@@ -13,7 +13,7 @@ $height-button: 40px;
     color: var(--left-bar-link);
     text-decoration: none;
     &:hover {
-        color: $font-link-primary-hover;
+        //color: $font-link-primary-hover;
         color: var(--left-bar-link-hover);
     }
 }
@@ -53,11 +53,16 @@ $height-button: 40px;
         padding: 5px 0 0 12px;
         position: absolute;
         bottom: 7px;
-       
+
+        color: var(--left-icon-cog-color);
+
+        &:hover {
+            color: var(--left-icon-cog-color);
+        }
     }
 
     &--bottom {
-        opacity: .3;        
+        opacity: var(--left-icon-cog-opacity);
         transition: all .3s;
         filter: alpha(opacity=30);
         &:hover{
