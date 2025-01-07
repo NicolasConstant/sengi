@@ -50,9 +50,16 @@ export const lightTheme: Theme = {
 
         "--status-editor-title-background": "#ebebeb",
         "--status-editor-background": "#ffffff",
-        "--status-editor-color": "#14151a",
-        "--status-editor-footer-background": "#3e455f",
-        "--status-editor-footer-link-color": "#e2e2e2",
+        "--status-editor-color": "#14151a",        
+        "--status-editor-footer-background": "#97acca", //8ea1bf 3e455f
+        "--status-editor-footer-link-color": "#f1f1f1", //e2e2e2
+        "--status-editor-lang-color": "#a5a5a5",
+        "--status-editor-lang-background": "#ffffff00",
+        "--status-editor-lang-color-hover": "#000000",
+        "--status-editor-lang-background-hover": "#e6e6e6",
+        "--status-editor-mention-error-color": "#ff2222",
+        "--status-editor-footer-counter-color": "#ffffff", //e8eaf3
+        "--status-editor-footer-send-button-color": "#ffffff", //e8eaf3
         "--selected-status": "#f2f5f8",   
         "--status-content-warning-border": "#c0cad4",
         "--status-content-warning-color": "#080b1b",     
