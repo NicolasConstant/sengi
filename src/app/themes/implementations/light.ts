@@ -183,7 +183,7 @@ export const lightTheme: Theme = {
         "--profile-lock": "#808080",
         "--profile-fields-background": "#e9edf1",
 
-        "--floating-column-close-button": "#ffffff",
+        "--floating-column-close-button": "#080b1b",
         "--floating-column-add-account-faq": "#ffcc00",
         "--floating-column-add-account-faq-hover": "#ffe88a",
         "--floating-column-add-account-faq-warning": "#ffdc52",
