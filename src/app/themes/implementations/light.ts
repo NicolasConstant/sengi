@@ -214,5 +214,10 @@ export const lightTheme: Theme = {
         "--floating-column-manage-account-notification-follow-request-link": "#b6b6b6",
         "--floating-column-manage-account-notification-follow-request-link-validate": "#adff2f",
         "--floating-column-manage-account-notification-follow-request-link-refuse": "#ff4500",
+
+        "--stream-selection-representation-background": "#e6ebf0", //595c67
+        "--stream-selection-representation-hover-background": "#ffffff", //8f93a2
+        "--stream-selection-representation-selected-background": "#ffffff",
+        "--stream-selection-representation-selected-hover-background": "#ffffff",
     }
 };

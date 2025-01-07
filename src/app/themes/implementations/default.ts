@@ -206,5 +206,10 @@ export const defaultTheme: Theme = {
         "--floating-column-manage-account-notification-follow-request-link": "#b6b6b6",
         "--floating-column-manage-account-notification-follow-request-link-validate": "#adff2f",
         "--floating-column-manage-account-notification-follow-request-link-refuse": "#ff4500",
+
+        "--stream-selection-representation-background": "#595c67",
+        "--stream-selection-representation-hover-background": "#8f93a2",
+        "--stream-selection-representation-selected-background": "#a8a8a8",
+        "--stream-selection-representation-selected-hover-background": "#ffffff",
     }
 };
