@@ -106,13 +106,13 @@ export const lightTheme: Theme = {
         "--stream-column-icon-hover": "#646b72",
         "--stream-column-border": "#9ca7b3",
     
-        "--label-bot": "#007281",
-        "--label-xpost": "#9c5e00",
-        "--label-thread": "#007233",
-        "--label-discuss": "#5a008f",
-        "--label-old": "#960000",
-        "--label-remote": "#264d94",
-        "--label-edited": "#5f5f5f",
+        "--label-bot": "#91d9e3",
+        "--label-xpost": "#e9d0ab", //9c5e00
+        "--label-thread": "#9bebbf", //007233
+        "--label-discuss": "#d5a8ef", //5a008f
+        "--label-old": "#f0abab", //960000
+        "--label-remote": "#a5beeb", //264d94
+        "--label-edited": "#c6c6c6", //5f5f5f
     
         "--status-content-warning-closed-color": "#080b1b",
         "--status-content-warning-closed-background": "#c0cad4",
