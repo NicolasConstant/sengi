@@ -221,6 +221,103 @@ export const defaultTheme: Theme = {
         "--stream-selection-representation-selected-background": "#a8a8a8",
         "--stream-selection-representation-selected-hover-background": "#ffffff",
 
-        
+        "--tutorial-bg-primary": "#1d2335",
+        "--tutorial-bg-secondary": "#0075ac",
+        "--tutorial-bg-tertiary": "#00547a",
+        "--tutorial-bg-quaternary": "#004a6d",
+        "--tutorial-text-primary": "#ffffff",
+        "--tutorial-text-secondary": "#4e5672",
+        "--tutorial-text-muted": "#dadada",
+        "--tutorial-border": "#00547a",
+        "--tutorial-button-hover": "#e6e6e6",
+        "--tutorial-close": "#808080",
+
+        "--notification-success-bg": "#22b90e",
+        "--notification-success-fg": "#000000",
+        "--notification-error-bg": "#be0a0a",
+        "--notification-error-fg": "#f5f5f5",
+        "--notification-text-muted": "rgba(255, 255, 255, 0.6)",
+
+        "--draggable-accent": "#47e927",
+        "--language-warning": "#ffa500",
+        "--language-warning-link": "#f0d124",
+        "--language-warning-link-hover": "#d18800",
+        "--context-menu-icon": "#1f1f1f",
+
+        "--card-provider": "#f5f5f5",
+        "--card-image-overlay": "rgba(0, 0, 0, 0.85)",
+        "--card-error-bg": "#000000",
+        "--attachment-outline-warning": "#ffa500",
+        "--attachment-bg": "#000000",
+        "--attachment-icon": "#d3d3d3",
+        "--attachment-icon-alt": "#ffffff",
+        "--attachment-gradient-start": "rgba(0, 0, 0, 0.5)",
+        "--attachment-gradient-end": "rgba(0, 0, 0, 0)",
+
+        "--link-primary": "#a9b5d8",
+        "--link-secondary": "#c0c8e0",
+        "--link-hover": "#ffffff",
+        "--mention": "#a0d1ff",
+        "--code-bg": "#000000",
+        "--code-block-bg": "#384958",
+
+        "--hashtag-border": "#000000",
+        "--hashtag-text": "#ffffff",
+
+        "--media-viewer-icon": "#f5f5f5",
+        "--media-viewer-overlay": "rgba(0, 0, 0, 0.8)",
+
+        "--account-icon-warning-border": "#ffa500",
+        "--account-icon-warning": "#ffa500",
+        "--account-icon-overlay": "rgba(0, 0, 0, 0.55)",
+
+        "--list-editor-text-primary": "#ffffff",
+        "--list-editor-text-secondary": "#ffffff",
+        "--list-editor-text-muted": "#a0a0a0",
+        "--list-editor-border": "#000000",
+        "--list-account-text": "#ffffff",
+        "--list-account-text-dimmed": "#cccccc",
+        "--list-account-text-secondary": "#ffffff",
+
+        "--scheduled-status-muted": "#808080",
+        "--scheduled-status-delete-bg-1": "#5f0505",
+        "--scheduled-status-delete-bg-2": "#a30404",
+
+        "--scheduler-text": "#f5f5f5",
+        "--scheduler-text-secondary": "#cccccc",
+
+        "--poll-editor-text-primary": "#313131",
+        "--poll-editor-text-secondary": "#7a7a7a",
+        "--poll-entry-text-muted": "#8b8b8b",
+        "--poll-entry-text-primary": "#000000",
+        "--poll-entry-border": "#646464",
+
+        "--stream-overlay-border": "#f5f5f5",
+        "--stream-overlay-text-muted": "#808080",
+
+        "--app-overlay-bg": "rgba(0, 0, 0, 0.8)",
+        "--app-drag-border": "#000000",
+        "--app-notification-text": "#000418",
+        "--app-notification-shadow": "#000000",
+        "--app-button-primary": "#ffffff",
+        "--app-button-primary-bg": "#3e455f",
+        "--app-button-secondary-bg": "#1d202c",
+        "--app-media-overlay": "rgba(0, 0, 0, 0.9)",
+
+        "--streams-shadow": "rgba(0, 0, 0, 0.5)",
+
+        "--button-danger-bg": "#410303",
+        "--button-danger-bg-hover": "#721515",
+        "--button-danger-color": "#ffffff",
+
+        "--context-menu-shadow": "rgba(0, 0, 0, 0.5)",
+
+        "--media-overlay-bg": "rgba(0, 0, 0, 0.5)",
+        "--media-overlay-bg-hover": "rgba(0, 0, 0, 0.7)",
+        "--media-icon": "#ffffff",
+
+        "--attachment-icon-overlay": "#ffffff",
+        "--attachment-icon-shadow": "#4e4e4e",
+        "--attachment-icon-shadow-hover": "#4e4e4e"
     }
 };

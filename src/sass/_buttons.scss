@@ -78,7 +78,7 @@
 
     &__blue {
         background-color: var(--color-primary);
-        color: #fff;
+        color: var(--button-danger-color);
 
         &:hover {
             background-color: var(--color-primary-lighter-15);
@@ -86,12 +86,11 @@
     }
 
     &__red {
-        $red-button-color: rgb(65, 3, 3);
-        background-color: $red-button-color !important;
-        color: #fff;
+        background-color: var(--button-danger-bg) !important;
+        color: var(--button-danger-color);
 
         &:hover {
-            background-color: lighten($red-button-color, 15) !important;
+            background-color: var(--button-danger-bg-hover) !important;
         }
     }
 

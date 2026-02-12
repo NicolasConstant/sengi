@@ -4,7 +4,7 @@
     background-color: $scheduler-background;
 
     &__input {
-        color: whitesmoke;
+        color: var(--scheduler-text);
         padding: 3px;
         width: calc(100% - 25px);
         border: 1px solid $scheduler-background;
@@ -17,9 +17,9 @@
     }
 
     &__icon {
-        color: whitesmoke;
+        color: var(--scheduler-text);
         &:hover {
-            color:rgb(204, 204, 204);
+            color: var(--scheduler-text-secondary);
         }
         margin-left: 5px;        
     }

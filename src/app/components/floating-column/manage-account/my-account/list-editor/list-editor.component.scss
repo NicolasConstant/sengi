@@ -8,7 +8,7 @@
     position: relative;
 
     &__search {
-        color: #fff;
+        color: var(--list-editor-text-primary);
         background-color: var(--color-primary-darker-4);
         border: 2px solid var(--color-primary);
         width: calc(100%);
@@ -24,23 +24,23 @@
         position: absolute;
         top: 0px;
         right: 5px;
-        color: white;
+        color: var(--list-editor-text-secondary);
         padding: 5px;
         &:hover {
-            color: rgb(160, 160, 160);
+            color: var(--list-editor-text-muted);
         }
     }
 
     &__list {
         max-height: 300px;
         overflow-y: auto;
-        border-top: 1px solid #000;
+        border-top: 1px solid var(--list-editor-border);
     }
 
     &__account {
         display: block;
         &:not(:last-child){
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid var(--list-editor-border);
         }
     }
 }

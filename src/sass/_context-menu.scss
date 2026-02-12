@@ -1,11 +1,10 @@
 @import "variables";
 
 ::ng-deep .ngx-contextmenu {
-    $shadow: 0.4;
-    box-shadow: 0 0 10px rgba(0, 0, 0, $shadow);
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, $shadow);
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, $shadow);
-    -o-box-shadow: 0 0 10px rgba(0, 0, 0, $shadow);
+    box-shadow: 0 0 10px var(--context-menu-shadow);
+    -moz-box-shadow: 0 0 10px var(--context-menu-shadow);
+    -webkit-box-shadow: 0 0 10px var(--context-menu-shadow);
+    -o-box-shadow: 0 0 10px var(--context-menu-shadow);
 
     padding: 0;
 

@@ -28,7 +28,7 @@ $avatar-size: 40px;
         }
 
         &--spoiler {
-            color: gray;
+            color: var(--scheduled-status-muted);
             min-height: 0px;
         }
     }
@@ -43,20 +43,18 @@ $avatar-size: 40px;
             margin: 5px 0 5px 5px;
             padding: 5px 10px;
 
-            background-color: #273047;
             background-color: $scheduler-background;
 
             &:hover {
-                background-color: #3b4769;
-                background-color: #3d4b7c;
+                background-color: var(--scheduler-background);
             }
         }
 
         &--delete {
-            background-color: rgb(95, 5, 5);
+            background-color: var(--scheduled-status-delete-bg-1);
 
             &:hover {
-                background-color: rgb(163, 4, 4);
+                background-color: var(--scheduled-status-delete-bg-2);
             }
         }
 

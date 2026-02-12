@@ -51,7 +51,7 @@
     right: 0;
     bottom: 0;
     z-index: 99999999;
-    background: rgba(black, .8);
+    background: var(--app-overlay-bg);
     // opacity: 0.2;
     &__on-drag {
         opacity: 1;
@@ -76,7 +76,7 @@
         // transform: translateY(50px);
     }
     &__border {
-        border: 3px black dashed;
+        border: 3px var(--app-drag-border) dashed;
         // margin: 50px 50px 0 50px;
         height: calc(100%);
     }
@@ -127,10 +127,10 @@ app-streams-selection-footer {
         // margin: 0 auto 30px auto;
         margin: auto;
         border-radius: 2px;
-        color: rgba(rgb(0, 4, 24), 1);
+        color: var(--app-notification-text);
         background: #ffffff;
 
-        box-shadow: 0px 0px 10px rgb(0, 0, 0);
+        box-shadow: 0px 0px 10px var(--app-notification-shadow);
 
         &--text {
             display: inline-block;
@@ -144,11 +144,11 @@ app-streams-selection-footer {
 
             padding: 5px 10px;
             text-decoration: none;
-            color: #ffffff;
-            background-color: #3e455f;
+            color: var(--app-button-primary);
+            background-color: var(--app-button-primary-bg);
 
             &:hover {
-                background-color: #1d202c;
+                background-color: var(--app-button-secondary-bg);
             }
         }
 
@@ -163,11 +163,11 @@ app-streams-selection-footer {
             border-top-right-radius: 2px;
             border-bottom-right-radius: 2px;
 
-            color: #ffffff;
-            background-color: #3e455f;
+            color: var(--app-button-primary);
+            background-color: var(--app-button-primary-bg);
 
             &:hover {
-                background-color: #1d202c;
+                background-color: var(--app-button-secondary-bg);
             }
         }
     }
@@ -179,7 +179,7 @@ app-streams-selection-footer {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.9);
+    background-color: var(--app-media-overlay);
     z-index: 9999999;
     opacity: 0;
     transition: all .4s;

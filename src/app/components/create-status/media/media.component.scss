@@ -28,7 +28,7 @@
             right:0;
             z-index: 10;
             opacity: 0;
-            background: rgba(black, .5); 
+            background: var(--media-overlay-bg);
         }
 
         &--migrating{
@@ -39,7 +39,7 @@
             right:0;
             z-index: 20;
             opacity: 100;
-            background: rgba(black, .7); 
+            background: var(--media-overlay-bg-hover);
         }
         
         &:hover &--hover {
@@ -52,7 +52,7 @@
             position: absolute;
             top:0px;
             right:8px;
-            color: white;
+            color: var(--media-icon);
         }
 
         &--description {
@@ -85,7 +85,7 @@
         display: block;
         width: 10px;
         height: 10px;
-        color: white;
+        color: var(--media-icon);
         float: right;
         margin-top: 0px;
         margin-right: 5px;            

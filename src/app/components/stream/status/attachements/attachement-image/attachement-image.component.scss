@@ -14,10 +14,10 @@
         padding: 5px 5px 8px 8px;
         transition: all .2s;
         opacity: 0;
-        color: white;
+        color: var(--attachment-icon-overlay);
 
         &--icon {  
-            filter: drop-shadow(0 0 3px rgb(78, 78, 78));        
+            filter: drop-shadow(0 0 3px var(--attachment-icon-shadow));        
         }
 
         // &:hover {
@@ -33,10 +33,10 @@
         padding: 5px 5px 8px 8px;
         transition: all .2s;
         opacity: 0;
-        color: white;
+        color: var(--attachment-icon-overlay);
 
         &--icon {  
-            filter: drop-shadow(0 0 3px rgb(78, 78, 78));        
+            filter: drop-shadow(0 0 3px var(--attachment-icon-shadow-hover));        
         }
     }
 
@@ -52,7 +52,7 @@
 
     &__alt {
         display: inline;
-        color: white;
+        color: var(--attachment-icon-overlay);
 
         z-index: 10;
 
@@ -63,7 +63,7 @@
         font-size: 10px;
         font-weight: bolder;
 
-        background-color: rgba($color: #000000, $alpha: 0.5);
+        background-color: var(--media-overlay-bg);
         border-radius: 3px;
         padding: 2px 5px;
     }

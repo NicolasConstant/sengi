@@ -83,16 +83,16 @@
     width: 40px;
     height: 40px;
     position: absolute;
-    border: 2px solid orange;
+    border: 2px solid var(--account-icon-warning-border);
     z-index: 20;
-    color: orange;
+    color: var(--account-icon-warning);
     font-size: 10px;
     font-style: italic;
     padding: 23px 0 0 3px;
 
-    background: rgba(0,0,0, .55);
+    background: var(--account-icon-overlay);
 
     &:hover {
-        color: orange;
+        color: var(--account-icon-warning);
     }
 }
