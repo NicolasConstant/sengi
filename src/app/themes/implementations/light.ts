@@ -99,7 +99,7 @@ export const lightTheme: Theme = {
         "--poll-result-progress-bar": "#949cab",
         "--poll-result-progress-bar-most-votes": "#80c1db",
 
-        "--scheduler-background": "#3e455f",
+        "--scheduler-background": "#ecedf3",
 
         "--notification-column-selector-background": "#e9edf1",
         "--notification-column-selector-color": "#999fb1",
@@ -210,10 +210,10 @@ export const lightTheme: Theme = {
         "--floating-column-manage-account-header-notification-hover": "#ffb96a",
         "--floating-column-manage-account-dm-icon": "#5098eb",
         "--floating-column-manage-account-dm-stream-border": "#232733",
-        "--floating-column-manage-account-myaccount-blue": "#ffffff",
+        "--floating-column-manage-account-myaccount-blue": "#2a2a2b", //ffffff
         "--floating-column-manage-account-myaccount-red": "#ffffff",
-        "--floating-column-manage-account-myaccount-red-background": "#410303",
-        "--floating-column-manage-account-myaccount-red-background-hover": "#4a0303",
+        "--floating-column-manage-account-myaccount-red-background": "#e67575",
+        "--floating-column-manage-account-myaccount-red-background-hover": "#e73030",
         "--floating-column-manage-account-myaccount-list-button-hover": "#ffffff",
         "--floating-column-manage-account-myaccount-list-new": "#ffffff",
         "--floating-column-manage-account-myaccount-advanced-text": "#8c98ad",
@@ -247,7 +247,7 @@ export const lightTheme: Theme = {
         "--notification-text-muted": "rgba(0, 0, 0, 0.5)",
 
         "--draggable-accent": "#22b90e",
-        "--language-warning": "#d97706",
+        "--language-warning": "#d17000",
         "--language-warning-link": "#b45309",
         "--language-warning-link-hover": "#92400e",
         "--context-menu-icon": "#4b5563",
