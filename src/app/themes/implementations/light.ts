@@ -268,9 +268,10 @@ export const lightTheme: Theme = {
         "--post-expander-background-25-opacity": "#ffffff3a",
         "--post-expander-background-50-opacity": "#ffffff83",
 
-        "--mention": "#0284c7",
-        "--code-bg": "#f1f5f9",
-        "--code-block-bg": "#e2e8f0",
+        "--code-post-color": "#0284c7",
+
+        "--post-scrollbar-background": "#f1f5f9",
+        "--post-scrollbar-thumb-background": "#e2e8f0",
 
         "--hashtag-border": "#bfcad5",
         "--hashtag-text": "#080b1b",

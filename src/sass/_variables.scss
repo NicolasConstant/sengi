@@ -226,10 +226,10 @@
     --post-expander-background-25-opacity: #0f111a3a;
     --post-expander-background-50-opacity: #0f111a83;
 
-    //--link-hover: #ffffff;
-    --mention: #a0d1ff;
-    --code-bg: #000000;
-    --code-block-bg: #384958;
+    --code-post-color: #a0d1ff;
+
+    --post-scrollbar-background: #000000;
+    --post-scrollbar-thumb-background: #384958;
 
     --hashtag-border: #000000;
     --hashtag-text: #ffffff;
@@ -449,8 +449,8 @@ $post-expander-link: var(--post-expander-link);
 $post-expander-link-hover: var(--post-expander-link-hover);
 //$link-hover: var(--link-hover);
 $mention: var(--mention);
-$code-bg: var(--code-bg);
-$code-block-bg: var(--code-block-bg);
+$post-scrollbar-background: var(--post-scrollbar-background);
+$post-scrollbar-thumb-background: var(--post-scrollbar-thumb-background);
 
 $hashtag-border: var(--hashtag-border);
 $hashtag-text: var(--hashtag-text);

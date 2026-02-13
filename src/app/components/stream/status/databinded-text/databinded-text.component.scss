@@ -74,12 +74,12 @@ $expand-color: $column-color;
     }
 
     & code {
-        color: var(--mention);
+        color: var(--code-post-color);
     }
 
     & pre {
         padding: 0 5px 5px 5px;
-        background-color: var(--code-bg);
+        background-color: var(--post-scrollbar-background);
 
         scrollbar-width: thin;
         border-radius: 5px 5px 0 0;
@@ -92,7 +92,7 @@ $expand-color: $column-color;
         &::-webkit-scrollbar-thumb {
             -webkit-border-radius: 0px;
             border-radius: 0px;
-            background: var(--code-block-bg);
+            background: var(--post-scrollbar-thumb-background);
         }
     }
 

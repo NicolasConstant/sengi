@@ -260,9 +260,10 @@ export const defaultTheme: Theme = {
         "--post-expander-background-25-opacity": "#0f111a3a",
         "--post-expander-background-50-opacity": "#0f111a83",
         
-        "--mention": "#a0d1ff",
-        "--code-bg": "#000000",
-        "--code-block-bg": "#384958",
+        "--code-post-color": "#a0d1ff",
+        
+        "--post-scrollbar-background": "#000000",
+        "--post-scrollbar-thumb-background": "#384958",
 
         "--hashtag-border": "#000000",
         "--hashtag-text": "#ffffff",
