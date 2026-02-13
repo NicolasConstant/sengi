@@ -35,7 +35,7 @@ export const lightTheme: Theme = {
         "--button-color-hover": "white",
         "--button-border-color": "#303957",
 
-        "--column-background": "#f6f7f9",
+        "--column-background": "#ffffff", //f6f7f9
 
         "--card-border-color": "#b5c2d1",
 
@@ -264,7 +264,10 @@ export const lightTheme: Theme = {
 
         "--post-expander-link": "#2563eb",
         "--post-expander-link-hover": "#1e40af", //1d4ed8
-        //"--link-hover": "#1e40af",
+        "--post-expander-background": "#ffffff",
+        "--post-expander-background-25-opacity": "#ffffff3a",
+        "--post-expander-background-50-opacity": "#ffffff83",
+
         "--mention": "#0284c7",
         "--code-bg": "#f1f5f9",
         "--code-block-bg": "#e2e8f0",

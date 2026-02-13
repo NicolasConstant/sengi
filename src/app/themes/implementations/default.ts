@@ -255,8 +255,11 @@ export const defaultTheme: Theme = {
         "--attachment-gradient-end": "rgba(0, 0, 0, 0)",
 
         "--post-expander-link": "#a9b5d8",
-        "--post-expander-link-hover": "#ffffff", //c0c8e0
-        //"--link-hover": "#ffffff",
+        "--post-expander-link-hover": "#ffffff",
+        "--post-expander-background": "#0f111a",
+        "--post-expander-background-25-opacity": "#0f111a3a",
+        "--post-expander-background-50-opacity": "#0f111a83",
+        
         "--mention": "#a0d1ff",
         "--code-bg": "#000000",
         "--code-block-bg": "#384958",
