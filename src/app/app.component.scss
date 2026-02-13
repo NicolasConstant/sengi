@@ -144,11 +144,11 @@ app-streams-selection-footer {
 
             padding: 5px 10px;
             text-decoration: none;
-            color: var(--app-button-primary);
-            background-color: var(--app-button-primary-bg);
+            color: var(--reload-button-color);
+            background-color: var(--reload-button-color-bg);
 
             &:hover {
-                background-color: var(--app-button-secondary-bg);
+                background-color: var(--reload-button-bg-hover);
             }
         }
 
@@ -163,11 +163,11 @@ app-streams-selection-footer {
             border-top-right-radius: 2px;
             border-bottom-right-radius: 2px;
 
-            color: var(--app-button-primary);
-            background-color: var(--app-button-primary-bg);
+            color: var(--reload-button-color);
+            background-color: var(--reload-button-color-bg);
 
             &:hover {
-                background-color: var(--app-button-secondary-bg);
+                background-color: var(--reload-button-bg-hover);
             }
         }
     }

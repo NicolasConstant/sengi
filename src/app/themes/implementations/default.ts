@@ -303,9 +303,9 @@ export const defaultTheme: Theme = {
         "--app-drag-border": "#000000",
         "--app-notification-text": "#000418",
         "--app-notification-shadow": "#000000",
-        "--app-button-primary": "#ffffff",
-        "--app-button-primary-bg": "#3e455f",
-        "--app-button-secondary-bg": "#1d202c",
+        "--reload-button-color": "#ffffff",
+        "--reload-button-color-bg": "#3e455f",
+        "--reload-button-bg-hover": "#1d202c",
         "--app-media-overlay": "rgba(0, 0, 0, 0.9)",
 
         "--streams-shadow": "rgba(0, 0, 0, 0.5)",

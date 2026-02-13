@@ -311,9 +311,9 @@ export const lightTheme: Theme = {
         "--app-drag-border": "#bfcad5",
         "--app-notification-text": "#080b1b",
         "--app-notification-shadow": "rgba(0, 0, 0, 0.1)",
-        "--app-button-primary": "#ffffff",
-        "--app-button-primary-bg": "#3b82f6",
-        "--app-button-secondary-bg": "#e2e8f0",
+        "--reload-button-color": "#ffffff",
+        "--reload-button-color-bg": "#3b82f6",
+        "--reload-button-bg-hover": "#649cf7",
         "--app-media-overlay": "rgba(0, 0, 0, 0.6)",
         
         "--streams-shadow": "rgba(0, 0, 0, 0.1)",

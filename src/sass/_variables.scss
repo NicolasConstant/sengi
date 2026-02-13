@@ -269,9 +269,9 @@
     --app-drag-border: #000000;
     --app-notification-text: #000418;
     --app-notification-shadow: #000000;
-    --app-button-primary: #ffffff;
-    --app-button-primary-bg: #3e455f;
-    --app-button-secondary-bg: #1d202c;
+    --reload-button-color: #ffffff;
+    --reload-button-color-bg: #3e455f;
+    --reload-button-bg-hover: #1d202c;
     --app-media-overlay: rgba(0, 0, 0, 0.9);
 
     --streams-shadow: rgba(0, 0, 0, 0.5);
@@ -490,9 +490,9 @@ $app-overlay-bg: var(--app-overlay-bg);
 $app-drag-border: var(--app-drag-border);
 $app-notification-text: var(--app-notification-text);
 $app-notification-shadow: var(--app-notification-shadow);
-$app-button-primary: var(--app-button-primary);
-$app-button-primary-bg: var(--app-button-primary-bg);
-$app-button-secondary-bg: var(--app-button-secondary-bg);
+$reload-button-color: var(--reload-button-color);
+$reload-button-color-bg: var(--reload-button-color-bg);
+$reload-button-bg-hover: var(--reload-button-bg-hover);
 $app-media-overlay: var(--app-media-overlay);
 
 $streams-shadow: var(--streams-shadow);
