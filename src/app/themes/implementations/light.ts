@@ -228,5 +228,104 @@ export const lightTheme: Theme = {
         "--stream-selection-representation-hover-background": "#ffffff", //8f93a2
         "--stream-selection-representation-selected-background": "#ffffff",
         "--stream-selection-representation-selected-hover-background": "#ffffff",
+
+        "--tutorial-bg-primary": "#e6ebf0",
+        "--tutorial-bg-secondary": "#6bcbf8", //0075ac
+        "--tutorial-bg-tertiary": "#6bcbf8", //00547a
+        "--tutorial-bg-quaternary": "#2ab1f0", //004a6d
+        "--tutorial-text-primary": "#080b1b",
+        "--tutorial-text-secondary": "#5f6a76",
+        "--tutorial-text-muted": "#88909c",
+        "--tutorial-border": "#bfcad5",
+        "--tutorial-button-hover": "#d9e2e8",
+        "--tutorial-close": "#88909c",
+
+        "--notification-success-bg": "#22b90e",
+        "--notification-success-fg": "#ffffff",
+        "--notification-error-bg": "#dc2626",
+        "--notification-error-fg": "#ffffff",
+        "--notification-text-muted": "rgba(0, 0, 0, 0.5)",
+
+        "--draggable-accent": "#22b90e",
+        "--language-warning": "#d97706",
+        "--language-warning-link": "#b45309",
+        "--language-warning-link-hover": "#92400e",
+        "--context-menu-icon": "#4b5563",
+
+        "--card-provider": "#2d3134",
+        "--card-image-overlay": "rgba(255, 255, 255, 0.9)",
+        "--card-error-bg": "#ffffff",
+        "--attachment-outline-warning": "#d97706",
+        "--attachment-bg": "#ffffff",
+        "--attachment-icon": "#4b5563",
+        "--attachment-icon-alt": "#2d3134",
+        "--attachment-gradient-start": "rgba(255, 255, 255, 0.5)",
+        "--attachment-gradient-end": "rgba(255, 255, 255, 0)",
+
+        "--link-primary": "#2563eb",
+        "--link-secondary": "#1d4ed8",
+        "--link-hover": "#1e40af",
+        "--mention": "#0284c7",
+        "--code-bg": "#f1f5f9",
+        "--code-block-bg": "#e2e8f0",
+
+        "--hashtag-border": "#bfcad5",
+        "--hashtag-text": "#080b1b",
+        
+        "--media-viewer-icon": "#2d3134",
+        "--media-viewer-overlay": "rgba(255, 255, 255, 0.9)",
+
+        "--account-icon-warning-border": "#d97706",
+        "--account-icon-warning": "#d97706",
+        "--account-icon-overlay": "rgba(255, 255, 255, 0.7)",
+        
+        "--list-editor-text-primary": "#080b1b",
+        "--list-editor-text-secondary": "#2d3134",
+        "--list-editor-text-muted": "#6b7280",
+        "--list-editor-border": "#bfcad5",
+        "--list-account-text": "#080b1b",
+        "--list-account-text-dimmed": "#6b7280",
+        "--list-account-text-secondary": "#4b5563",
+
+        "--scheduled-status-muted": "#6b7280",
+        "--scheduled-status-delete-bg-1": "#dc2626",
+        "--scheduled-status-delete-bg-2": "#b91c1c",
+        
+        "--scheduler-text": "#080b1b",
+        "--scheduler-text-secondary": "#4b5563",
+
+        "--poll-editor-text-primary": "#080b1b",
+        "--poll-editor-text-secondary": "#4b5563",
+        "--poll-entry-text-muted": "#6b7280",
+        "--poll-entry-text-primary": "#080b1b",
+        "--poll-entry-border": "#bfcad5",
+
+        "--stream-overlay-border": "#bfcad5",
+        "--stream-overlay-text-muted": "#6b7280",
+        
+        "--app-overlay-bg": "rgba(255, 255, 255, 0.9)",
+        "--app-drag-border": "#bfcad5",
+        "--app-notification-text": "#080b1b",
+        "--app-notification-shadow": "rgba(0, 0, 0, 0.1)",
+        "--app-button-primary": "#ffffff",
+        "--app-button-primary-bg": "#3b82f6",
+        "--app-button-secondary-bg": "#e2e8f0",
+        "--app-media-overlay": "rgba(0, 0, 0, 0.6)",
+        
+        "--streams-shadow": "rgba(0, 0, 0, 0.1)",
+
+        "--button-danger-bg": "#dc2626",
+        "--button-danger-bg-hover": "#b91c1c",
+        "--button-danger-color": "#ffffff",
+        
+        "--context-menu-shadow": "rgba(0, 0, 0, 0.1)",
+        
+        "--media-overlay-bg": "rgba(0, 0, 0, 0.3)",
+        "--media-overlay-bg-hover": "rgba(0, 0, 0, 0.5)",
+        "--media-icon": "#ffffff",
+
+        "--attachment-icon-overlay": "#2d3134",
+        "--attachment-icon-shadow": "#9ca3af",
+        "--attachment-icon-shadow-hover": "#6b7280"
     }
 };
