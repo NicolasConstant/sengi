@@ -24,13 +24,17 @@ $expand-color: $column-color;
         padding-left: 15px;
         background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba($expand-color, 0.25), rgba($expand-color, 0.5), $expand-color, $expand-color);
 
+        // background-image: linear-gradient(to bottom, red, red);
+
+        // background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(var(--column-color), 0.25), rgba(var(--column-color), 0.5), var(--column-color), var(--column-color));
+
         &--link {
             transition: all .2s;
-            color: var(--link-secondary);
+            color: var(--post-expander-link);
             // text-decoration: underline;
 
             &:hover {
-                color: var(--link-hover);
+                color: var(--post-expander-link-hover);
             }
 
             &--icon {

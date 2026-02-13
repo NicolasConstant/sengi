@@ -262,9 +262,9 @@ export const lightTheme: Theme = {
         "--attachment-gradient-start": "rgba(255, 255, 255, 0.5)",
         "--attachment-gradient-end": "rgba(255, 255, 255, 0)",
 
-        "--link-primary": "#2563eb",
-        "--link-secondary": "#1d4ed8",
-        "--link-hover": "#1e40af",
+        "--post-expander-link": "#2563eb",
+        "--post-expander-link-hover": "#1e40af", //1d4ed8
+        //"--link-hover": "#1e40af",
         "--mention": "#0284c7",
         "--code-bg": "#f1f5f9",
         "--code-block-bg": "#e2e8f0",

@@ -254,9 +254,9 @@ export const defaultTheme: Theme = {
         "--attachment-gradient-start": "rgba(0, 0, 0, 0.5)",
         "--attachment-gradient-end": "rgba(0, 0, 0, 0)",
 
-        "--link-primary": "#a9b5d8",
-        "--link-secondary": "#c0c8e0",
-        "--link-hover": "#ffffff",
+        "--post-expander-link": "#a9b5d8",
+        "--post-expander-link-hover": "#ffffff", //c0c8e0
+        //"--link-hover": "#ffffff",
         "--mention": "#a0d1ff",
         "--code-bg": "#000000",
         "--code-block-bg": "#384958",
