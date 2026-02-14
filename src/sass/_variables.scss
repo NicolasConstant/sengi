@@ -241,34 +241,34 @@
     --account-icon-warning: #ffa500;
     --account-icon-overlay: rgba(0, 0, 0, 0.55);
 
-    --list-editor-text-primary: #ffffff;
-    --list-editor-text-secondary: #ffffff;
-    --list-editor-text-muted: #a0a0a0;
+    --list-editor-text-search: #ffffff;
+    --list-editor-close-search: #ffffff;
+    --list-editor-close-search-hover: #a0a0a0;
     --list-editor-border: #000000;
     --list-account-text: #ffffff;
-    --list-account-text-dimmed: #cccccc;
+    --list-account-text-hover: #cccccc;
     --list-account-text-secondary: #ffffff;
 
-    --scheduled-status-muted: #808080;
-    --scheduled-status-delete-bg-1: #5f0505;
-    --scheduled-status-delete-bg-2: #a30404;
+    --scheduled-status-content-spoiler: #808080;
+    --scheduled-status-delete-bg: #5f0505;
+    --scheduled-status-delete-bg-hover: #a30404;
 
     --scheduler-text: #f5f5f5;
-    --scheduler-text-secondary: #cccccc;
+    --scheduler-text-hover: #cccccc;
 
-    --poll-editor-text-primary: #313131;
-    --poll-editor-text-secondary: #7a7a7a;
-    --poll-entry-text-muted: #8b8b8b;
+    --poll-editor-add-choice-color: #313131;
+    --poll-editor-add-choice-color-hover: #7a7a7a;
+    --poll-entry-remove-link: #8b8b8b;
     --poll-entry-text-primary: #000000;
     --poll-entry-border: #646464;
 
     --stream-overlay-border: #f5f5f5;
     --stream-overlay-text-muted: #808080;
 
-    --app-overlay-bg: rgba(0, 0, 0, 0.8);
-    --app-drag-border: #000000;
-    --app-notification-text: #000418;
-    --app-notification-shadow: #000000;
+    --app-drag-and-drop-bg: rgba(0, 0, 0, 0.8);
+    --app-drag-and-drop-border: #000000;
+    --app-auto-update-color: #000418;
+    --app-auto-update-shadow: #000000;
     --reload-button-color: #ffffff;
     --reload-button-color-bg: #3e455f;
     --reload-button-bg-hover: #1d202c;
@@ -284,7 +284,7 @@
 
     --media-overlay-bg: rgba(0, 0, 0, 0.5);
     --media-overlay-bg-hover: rgba(0, 0, 0, 0.7);
-    --media-icon: #ffffff;
+    --media-button-color: #ffffff;
 
     --attachment-icon-overlay: #ffffff;
     --attachment-icon-shadow: #4e4e4e;
@@ -462,34 +462,34 @@ $account-icon-warning-border: var(--account-icon-warning-border);
 $account-icon-warning: var(--account-icon-warning);
 $account-icon-overlay: var(--account-icon-overlay);
 
-$list-editor-text-primary: var(--list-editor-text-primary);
-$list-editor-text-secondary: var(--list-editor-text-secondary);
-$list-editor-text-muted: var(--list-editor-text-muted);
+$list-editor-text-primary: var(--list-editor-text-search);
+$list-editor-text-secondary: var(--list-editor-close-search);
+$list-editor-text-muted: var(--list-editor-close-search-hover);
 $list-editor-border: var(--list-editor-border);
 $list-account-text: var(--list-account-text);
-$list-account-text-dimmed: var(--list-account-text-dimmed);
+$list-account-text-dimmed: var(--list-account-text-hover);
 $list-account-text-secondary: var(--list-account-text-secondary);
 
-$scheduled-status-muted: var(--scheduled-status-muted);
-$scheduled-status-delete-bg-1: var(--scheduled-status-delete-bg-1);
-$scheduled-status-delete-bg-2: var(--scheduled-status-delete-bg-2);
+$scheduled-status-muted: var(--scheduled-status-content-spoiler);
+$scheduled-status-delete-bg-1: var(--scheduled-status-delete-bg);
+$scheduled-status-delete-bg-2: var(--scheduled-status-delete-bg-hover);
 
 $scheduler-text: var(--scheduler-text);
-$scheduler-text-secondary: var(--scheduler-text-secondary);
+$scheduler-text-secondary: var(--scheduler-text-hover);
 
-$poll-editor-text-primary: var(--poll-editor-text-primary);
-$poll-editor-text-secondary: var(--poll-editor-text-secondary);
-$poll-entry-text-muted: var(--poll-entry-text-muted);
+$poll-editor-text-primary: var(--poll-editor-add-choice-color);
+$poll-editor-text-secondary: var(--poll-editor-add-choice-color-hover);
+$poll-entry-text-muted: var(--poll-entry-remove-link);
 $poll-entry-text-primary: var(--poll-entry-text-primary);
 $poll-entry-border: var(--poll-entry-border);
 
 $stream-overlay-border: var(--stream-overlay-border);
 $stream-overlay-text-muted: var(--stream-overlay-text-muted);
 
-$app-overlay-bg: var(--app-overlay-bg);
-$app-drag-border: var(--app-drag-border);
-$app-notification-text: var(--app-notification-text);
-$app-notification-shadow: var(--app-notification-shadow);
+$app-overlay-bg: var(--app-drag-and-drop-bg);
+$app-drag-border: var(--app-drag-and-drop-border);
+$app-notification-text: var(--app-auto-update-color);
+$app-notification-shadow: var(--app-auto-update-shadow);
 $reload-button-color: var(--reload-button-color);
 $reload-button-color-bg: var(--reload-button-color-bg);
 $reload-button-bg-hover: var(--reload-button-bg-hover);
@@ -505,7 +505,7 @@ $context-menu-shadow: var(--context-menu-shadow);
 
 $media-overlay-bg: var(--media-overlay-bg);
 $media-overlay-bg-hover: var(--media-overlay-bg-hover);
-$media-icon: var(--media-icon);
+$media-icon: var(--media-button-color);
 
 $attachment-icon-overlay: var(--attachment-icon-overlay);
 $attachment-icon-shadow: var(--attachment-icon-shadow);

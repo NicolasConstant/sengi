@@ -52,7 +52,7 @@
             position: absolute;
             top:0px;
             right:8px;
-            color: var(--media-icon);
+            color: var(--media-button-color);
         }
 
         &--description {
@@ -85,7 +85,7 @@
         display: block;
         width: 10px;
         height: 10px;
-        color: var(--media-icon);
+        color: var(--media-button-color);
         float: right;
         margin-top: 0px;
         margin-right: 5px;            

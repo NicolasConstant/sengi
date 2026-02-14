@@ -28,7 +28,7 @@ $avatar-size: 40px;
         }
 
         &--spoiler {
-            color: var(--scheduled-status-muted);
+            color: var(--scheduled-status-content-spoiler);
             min-height: 0px;
         }
     }
@@ -51,10 +51,10 @@ $avatar-size: 40px;
         }
 
         &--delete {
-            background-color: var(--scheduled-status-delete-bg-1);
+            background-color: var(--scheduled-status-delete-bg);
 
             &:hover {
-                background-color: var(--scheduled-status-delete-bg-2);
+                background-color: var(--scheduled-status-delete-bg-hover);
             }
         }
 

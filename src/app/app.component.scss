@@ -51,7 +51,7 @@
     right: 0;
     bottom: 0;
     z-index: 99999999;
-    background: var(--app-overlay-bg);
+    background: var(--app-drag-and-drop-bg);
     // opacity: 0.2;
     &__on-drag {
         opacity: 1;
@@ -76,7 +76,7 @@
         // transform: translateY(50px);
     }
     &__border {
-        border: 3px var(--app-drag-border) dashed;
+        border: 3px var(--app-drag-and-drop-border) dashed;
         // margin: 50px 50px 0 50px;
         height: calc(100%);
     }
@@ -127,10 +127,10 @@ app-streams-selection-footer {
         // margin: 0 auto 30px auto;
         margin: auto;
         border-radius: 2px;
-        color: var(--app-notification-text);
+        color: var(--app-auto-update-color);
         background: #ffffff;
 
-        box-shadow: 0px 0px 10px var(--app-notification-shadow);
+        box-shadow: 0px 0px 10px var(--app-auto-update-shadow);
 
         &--text {
             display: inline-block;
