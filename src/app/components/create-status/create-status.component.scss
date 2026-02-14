@@ -222,7 +222,7 @@ $counter-width: 90px;
     position: relative;
     left: -3px;
     font-size: 12px;
-    color: #1f1f1f;
+    color: var(--context-menu-icon);
 }
 
 .emojipicker {
@@ -232,19 +232,19 @@ $counter-width: 90px;
 .scheduler {
     display: block;
     margin: 0 5px; 
-    border-bottom: 1px solid whitesmoke;
+    border-bottom: 1px solid var(--stream-overlay-border);
 }
 
 .language-warning {
     padding: 5px 10px;
-    color: orange;
+    color: var(--language-warning);
 
     &__link {
         text-decoration: underline;
-        color: #f0d124;
+        color: var(--language-warning-link);
 
         &:hover {
-            color: #d18800;
+            color: var(--language-warning-link-hover);
         }
     }
 }

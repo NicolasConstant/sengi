@@ -42,11 +42,11 @@
         }        
       
         font-size: $browsing-icon-size;
-        color: whitesmoke;
+        color: var(--media-viewer-icon);
         padding: 10px;
     }
 
-    &__next {    
+    &__next {
         @media screen and (min-width: 800px) {
             top: $browsing-icon-top-position;
             right: 5px;
@@ -57,7 +57,7 @@
         }       
         
         font-size: $browsing-icon-size;
-        color: whitesmoke;
+        color: var(--media-viewer-icon);
         padding: 10px;
     }
 
@@ -99,7 +99,7 @@
     left: 0;
     right: 0;
     z-index: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--media-viewer-overlay);
 }
 
 .collapsed {

@@ -221,6 +221,107 @@ export const defaultTheme: Theme = {
         "--stream-selection-representation-selected-background": "#a8a8a8",
         "--stream-selection-representation-selected-hover-background": "#ffffff",
 
+        "--tutorial-bg-primary": "#1d2335",
+        "--tutorial-bg-secondary": "#0075ac",
+        "--tutorial-bg-tertiary": "#00547a",
+        "--tutorial-bg-quaternary": "#004a6d",
+        "--tutorial-text-primary": "#ffffff",
+        "--tutorial-text-secondary": "#4e5672",
+        "--tutorial-text-muted": "#dadada",
+        "--tutorial-border": "#00547a",
+        "--tutorial-button-hover": "#e6e6e6",
+        "--tutorial-close": "#808080",
+
+        "--notification-success-bg": "#22b90e",
+        "--notification-success-fg": "#000000",
+        "--notification-error-bg": "#be0a0a",
+        "--notification-error-fg": "#f5f5f5",
+        "--notification-text-muted": "rgba(255, 255, 255, 0.6)",
+
+        "--draggable-accent": "#47e927",
+        "--language-warning": "#ffa500",
+        "--language-warning-link": "#f0d124",
+        "--language-warning-link-hover": "#d18800",
+        "--context-menu-icon": "#1f1f1f",
+
+        "--card-provider": "#f5f5f5",
+        "--card-image-overlay": "rgba(0, 0, 0, 0.85)",
+        "--card-error-bg": "#000000",
+        "--attachment-outline-warning": "#ffa500",
+        "--attachment-bg": "#000000",
+        "--attachment-icon": "#d3d3d3",
+        "--attachment-icon-alt": "#ffffff",
+        "--attachment-gradient-start": "rgba(0, 0, 0, 0.5)",
+        "--attachment-gradient-end": "rgba(0, 0, 0, 0)",
+
+        "--post-expander-link": "#a9b5d8",
+        "--post-expander-link-hover": "#ffffff",
+        "--post-expander-background": "#0f111a",
+        "--post-expander-background-25-opacity": "#0f111a3a",
+        "--post-expander-background-50-opacity": "#0f111a83",
         
+        "--code-post-color": "#a0d1ff",
+        
+        "--post-scrollbar-background": "#000000",
+        "--post-scrollbar-thumb-background": "#384958",
+
+        "--hashtag-border": "#000000",
+        "--hashtag-text": "#ffffff",
+
+        "--media-viewer-icon": "#f5f5f5",
+        "--media-viewer-overlay": "rgba(0, 0, 0, 0.8)",
+
+        "--account-icon-warning-border": "#ffa500",
+        "--account-icon-warning": "#ffa500",
+        "--account-icon-overlay": "rgba(0, 0, 0, 0.55)",
+
+        "--list-editor-text-search": "#ffffff",
+        "--list-editor-close-search": "#ffffff",
+        "--list-editor-close-search-hover": "#a0a0a0",
+        "--list-editor-border": "#000000",
+        "--list-account-text": "#ffffff",
+        "--list-account-text-hover": "#cccccc",
+        "--list-account-text-secondary": "#ffffff",
+
+        "--scheduled-status-content-spoiler": "#808080",
+        "--scheduled-status-delete-bg": "#5f0505",
+        "--scheduled-status-delete-bg-hover": "#a30404",
+
+        "--scheduler-text": "#f5f5f5",
+        "--scheduler-text-hover": "#cccccc",
+
+        "--poll-editor-add-choice-color": "#313131",
+        "--poll-editor-add-choice-color-hover": "#7a7a7a",
+        "--poll-entry-remove-link": "#8b8b8b",
+        "--poll-entry-text-primary": "#000000",
+        "--poll-entry-border": "#646464",
+
+        "--stream-overlay-border": "#f5f5f5",
+        "--stream-overlay-text-muted": "#808080",
+
+        "--app-drag-and-drop-bg": "rgba(0, 0, 0, 0.8)",
+        "--app-drag-and-drop-border": "#000000",
+        "--app-auto-update-color": "#000418",
+        "--app-auto-update-shadow": "#000000",
+        "--reload-button-color": "#ffffff",
+        "--reload-button-color-bg": "#3e455f",
+        "--reload-button-bg-hover": "#1d202c",
+        "--app-media-overlay": "rgba(0, 0, 0, 0.9)",
+
+        "--streams-shadow": "rgba(0, 0, 0, 0.5)",
+
+        "--button-danger-bg": "#410303",
+        "--button-danger-bg-hover": "#721515",
+        "--button-danger-color": "#ffffff",
+
+        "--context-menu-shadow": "rgba(0, 0, 0, 0.5)",
+
+        "--media-overlay-bg": "rgba(0, 0, 0, 0.5)",
+        "--media-overlay-bg-hover": "rgba(0, 0, 0, 0.7)",
+        "--media-button-color": "#ffffff",
+
+        "--attachment-icon-overlay": "#ffffff",
+        "--attachment-icon-shadow": "#4e4e4e",
+        "--attachment-icon-shadow-hover": "#4e4e4e"
     }
 };

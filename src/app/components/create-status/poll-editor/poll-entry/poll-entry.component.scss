@@ -40,11 +40,11 @@ $selector-padding: 5px;
             position: absolute;
             top: -2px;
             right: 5px;
-            color: rgb(139, 139, 139);
+            color: var(--poll-entry-remove-link);
             padding: 5px;
 
             &:hover {
-                color: rgb(0, 0, 0);
+                color: var(--poll-entry-text-primary);
             }
         }
     }
@@ -52,7 +52,7 @@ $selector-padding: 5px;
 
 .check-mark {
     display: block;
-    border: 1px solid rgb(100, 100, 100);
+    border: 1px solid var(--poll-entry-border);
     width: $selector-size;
     height: $selector-size;
 

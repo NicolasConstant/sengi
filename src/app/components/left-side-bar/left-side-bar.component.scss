@@ -90,7 +90,7 @@ $height-button: 40px;
 }
 
 
-$draggable-accent-color: #47e927;
+$draggable-accent-color: var(--draggable-accent);
 // $draggable-accent-color: #a8ff97;
 .draggable {
     width: 40px;
@@ -98,7 +98,7 @@ $draggable-accent-color: #47e927;
     margin: auto;
     margin-bottom: 5px;
 
-    border: 2px solid #df0adf;
+    border: 2px solid var(--draggable-accent);
     border: 2px solid $draggable-accent-color;
     border-radius: 2px;
 

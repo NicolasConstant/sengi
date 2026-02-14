@@ -35,7 +35,7 @@ export const lightTheme: Theme = {
         "--button-color-hover": "white",
         "--button-border-color": "#303957",
 
-        "--column-background": "#f6f7f9",
+        "--column-background": "#ffffff", //f6f7f9
 
         "--card-border-color": "#b5c2d1",
 
@@ -99,15 +99,15 @@ export const lightTheme: Theme = {
         "--poll-result-progress-bar": "#949cab",
         "--poll-result-progress-bar-most-votes": "#80c1db",
 
-        "--scheduler-background": "#3e455f",
+        "--scheduler-background": "#ecedf3",
 
         "--notification-column-selector-background": "#e9edf1",
         "--notification-column-selector-color": "#999fb1",
         "--notification-column-selector-color-hover": "#2d3134",
 
-        "--settings-text-input-background": "#242836",
-        "--settings-text-input-foreground": "white",
-        "--settings-text-input-border": "#32384d",
+        "--settings-text-input-background": "#97acca",
+        "--settings-text-input-foreground": "#04050e",
+        "--settings-text-input-border": "#97acca",
         
         "--stream-column-icon": "#2d3134",
         "--stream-column-icon-hover": "#646b72",
@@ -188,20 +188,20 @@ export const lightTheme: Theme = {
         "--floating-column-add-account-faq-hover": "#ffe88a",
         "--floating-column-add-account-faq-warning": "#ffdc52",
         "--floating-column-search-result-hashtag": "#ffffff",
-        "--floating-column-settings-version": "#a1a1a1",
-        "--floating-column-settings-version-hover": "#ffffff",
+        "--floating-column-settings-version": "#5a5a5a",
+        "--floating-column-settings-version-hover": "#919191",
         "--floating-column-settings-subsection-text": "#8c98ad",
         "--floating-column-settings-subsection-title": "#ffffff",
-        "--floating-column-settings-language-warning": "#ffa500",
-        "--floating-column-settings-sound-select-background": "#32384d",
-        "--floating-column-settings-sound-select-color": "#ffffff",
-        "--floating-column-settings-sound-select-border": "#32384d",
-        "--floating-column-settings-sound-play-background": "#1f2330",
-        "--floating-column-settings-sound-play-color": "#ffffff",
-        "--floating-column-settings-sound-play-background-hover": "#32384d",
-        "--floating-column-settings-toggle-lock": "#ffffff",
-        "--floating-column-settings-toggle-lock-background": "#1f2330",
-        "--floating-column-settings-toggle-lock-background-hover": "#32384d",
+        "--floating-column-settings-language-warning": "#e42e00",
+        "--floating-column-settings-sound-select-background": "#97acca",
+        "--floating-column-settings-sound-select-color": "#080b1b",
+        "--floating-column-settings-sound-select-border": "#97acca",
+        "--floating-column-settings-sound-play-background": "#97acca",
+        "--floating-column-settings-sound-play-color": "#080b1b",
+        "--floating-column-settings-sound-play-background-hover": "#8294ad",
+        "--floating-column-settings-toggle-lock": "#080b1b",
+        "--floating-column-settings-toggle-lock-background": "#97acca",
+        "--floating-column-settings-toggle-lock-background-hover": "#8294ad",
         //"--floating-column-manage-account-header-border": "#222736",
         "--floating-column-manage-account-header-border": "#9ca7b3",
         "--floating-column-manage-account-header-selected": "black",
@@ -210,10 +210,10 @@ export const lightTheme: Theme = {
         "--floating-column-manage-account-header-notification-hover": "#ffb96a",
         "--floating-column-manage-account-dm-icon": "#5098eb",
         "--floating-column-manage-account-dm-stream-border": "#232733",
-        "--floating-column-manage-account-myaccount-blue": "#ffffff",
+        "--floating-column-manage-account-myaccount-blue": "#2a2a2b", //ffffff
         "--floating-column-manage-account-myaccount-red": "#ffffff",
-        "--floating-column-manage-account-myaccount-red-background": "#410303",
-        "--floating-column-manage-account-myaccount-red-background-hover": "#4a0303",
+        "--floating-column-manage-account-myaccount-red-background": "#e67575",
+        "--floating-column-manage-account-myaccount-red-background-hover": "#e73030",
         "--floating-column-manage-account-myaccount-list-button-hover": "#ffffff",
         "--floating-column-manage-account-myaccount-list-new": "#ffffff",
         "--floating-column-manage-account-myaccount-advanced-text": "#8c98ad",
@@ -228,5 +228,108 @@ export const lightTheme: Theme = {
         "--stream-selection-representation-hover-background": "#ffffff", //8f93a2
         "--stream-selection-representation-selected-background": "#ffffff",
         "--stream-selection-representation-selected-hover-background": "#ffffff",
+
+        "--tutorial-bg-primary": "#e6ebf0",
+        "--tutorial-bg-secondary": "#6bcbf8", //0075ac
+        "--tutorial-bg-tertiary": "#6bcbf8", //00547a
+        "--tutorial-bg-quaternary": "#2ab1f0", //004a6d
+        "--tutorial-text-primary": "#080b1b",
+        "--tutorial-text-secondary": "#5f6a76",
+        "--tutorial-text-muted": "#88909c",
+        "--tutorial-border": "#bfcad5",
+        "--tutorial-button-hover": "#d9e2e8",
+        "--tutorial-close": "#88909c",
+
+        "--notification-success-bg": "#22b90e",
+        "--notification-success-fg": "#ffffff",
+        "--notification-error-bg": "#dc2626",
+        "--notification-error-fg": "#ffffff",
+        "--notification-text-muted": "rgba(0, 0, 0, 0.5)",
+
+        "--draggable-accent": "#22b90e",
+        "--language-warning": "#d17000",
+        "--language-warning-link": "#b45309",
+        "--language-warning-link-hover": "#92400e",
+        "--context-menu-icon": "#4b5563",
+
+        "--card-provider": "#2d3134",
+        "--card-image-overlay": "rgba(255, 255, 255, 0.9)",
+        "--card-error-bg": "#ffffff",
+        "--attachment-outline-warning": "#d97706",
+        "--attachment-bg": "#ffffff",
+        "--attachment-icon": "#4b5563",
+        "--attachment-icon-alt": "#2d3134",
+        "--attachment-gradient-start": "rgba(255, 255, 255, 0.5)",
+        "--attachment-gradient-end": "rgba(255, 255, 255, 0)",
+
+        "--post-expander-link": "#2563eb",
+        "--post-expander-link-hover": "#1e40af", //1d4ed8
+        "--post-expander-background": "#ffffff",
+        "--post-expander-background-25-opacity": "#ffffff3a",
+        "--post-expander-background-50-opacity": "#ffffff83",
+
+        "--code-post-color": "#0284c7",
+
+        "--post-scrollbar-background": "#f1f5f9",
+        "--post-scrollbar-thumb-background": "#e2e8f0",
+
+        "--hashtag-border": "#bfcad5",
+        "--hashtag-text": "#080b1b",
+        
+        "--media-viewer-icon": "#2d3134",
+        "--media-viewer-overlay": "rgba(255, 255, 255, 0.9)",
+
+        "--account-icon-warning-border": "#d97706",
+        "--account-icon-warning": "#d97706",
+        "--account-icon-overlay": "rgba(255, 255, 255, 0.7)",
+        
+        "--list-editor-text-search": "#080b1b",
+        "--list-editor-close-search": "#2d3134",
+        "--list-editor-close-search-hover": "#6b7280",
+        "--list-editor-border": "#bfcad5",
+        "--list-account-text": "#080b1b",
+        "--list-account-text-hover": "#6b7280",
+        "--list-account-text-secondary": "#4b5563",
+
+        "--scheduled-status-content-spoiler": "#6b7280",
+        "--scheduled-status-delete-bg": "#dc2626",
+        "--scheduled-status-delete-bg-hover": "#b91c1c",
+        
+        "--scheduler-text": "#080b1b",
+        "--scheduler-text-hover": "#4b5563",
+
+        "--poll-editor-add-choice-color": "#080b1b",
+        "--poll-editor-add-choice-color-hover": "#4b5563",
+        "--poll-entry-remove-link": "#6b7280",
+        "--poll-entry-text-primary": "#080b1b",
+        "--poll-entry-border": "#bfcad5",
+
+        "--stream-overlay-border": "#bfcad5",
+        "--stream-overlay-text-muted": "#6b7280",
+        
+        "--app-drag-and-drop-bg": "rgba(255, 255, 255, 0.9)",
+        "--app-drag-and-drop-border": "#bfcad5",
+        "--app-auto-update-color": "#080b1b",
+        "--app-auto-update-shadow": "rgba(0, 0, 0, 0.1)",
+        "--reload-button-color": "#ffffff",
+        "--reload-button-color-bg": "#3b82f6",
+        "--reload-button-bg-hover": "#649cf7",
+        "--app-media-overlay": "rgba(0, 0, 0, 0.6)",
+        
+        "--streams-shadow": "rgba(0, 0, 0, 0.1)",
+
+        "--button-danger-bg": "#dc2626",
+        "--button-danger-bg-hover": "#b91c1c",
+        "--button-danger-color": "#ffffff",
+        
+        "--context-menu-shadow": "rgba(0, 0, 0, 0.1)",
+        
+        "--media-overlay-bg": "rgba(0, 0, 0, 0.3)",
+        "--media-overlay-bg-hover": "rgba(0, 0, 0, 0.5)",
+        "--media-button-color": "#ffffff",
+
+        "--attachment-icon-overlay": "#2d3134",
+        "--attachment-icon-shadow": "#9ca3af",
+        "--attachment-icon-shadow-hover": "#6b7280"
     }
 };

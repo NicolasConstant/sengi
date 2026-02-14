@@ -15,7 +15,7 @@
     &__link {
         display: block;
         text-decoration: none;
-        color: whitesmoke;
+                color: var(--card-provider);
         overflow: hidden;
         text-overflow: ellipsis;
 
@@ -73,14 +73,14 @@
                 height: 40px;
                 z-index: 10;
                 border-radius: 4px;
-                background-color: rgba($color: #000000, $alpha: .85);
+                background-color: var(--card-image-overlay);
                 padding-left: 12px;
             }
 
             &--link {
                 transition: all .2s;
                 display: block;
-                color: whitesmoke;
+        color: var(--card-provider);
                 font-size: 16px;
                 margin: 8px 5px 0 5px;
                 float: left;
@@ -100,7 +100,7 @@
         &--content {
             width: 100%;
             height: $height-content;
-            background-color: #000;
+            background-color: var(--card-error-bg);
         }
     }
 
