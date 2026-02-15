@@ -40,6 +40,7 @@ jobs:
         local_path: './dist/'
         remote_path: './'
         port: 22
+        sftp_only: true
 
 
 #    - name: Web Deploy
