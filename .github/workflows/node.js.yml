@@ -30,12 +30,23 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm test -- --watch=false --browsers=ChromeHeadless
-
+    
     - name: Web Deploy
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.6
       with: 
         server: ${{ secrets.ftpserver }}
         username: ${{ secrets.ftpusername }}
         password: ${{ secrets.ftppassword }}
-        protocol: ftps
-        port: 990
+        local_path: './dist/'
+        remote_path: './'
+        port: 22
+
+
+#    - name: Web Deploy
+#      uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+#      with: 
+#        server: ${{ secrets.ftpserver }}
+#        username: ${{ secrets.ftpusername }}
+#        password: ${{ secrets.ftppassword }}
+#        protocol: ftps
+#        port: 990
