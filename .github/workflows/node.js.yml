@@ -38,4 +38,4 @@ jobs:
         username: ${{ secrets.ftpusername }}
         password: ${{ secrets.ftppassword }}
         protocol: ftps
-        port: 22
+        port: 990
