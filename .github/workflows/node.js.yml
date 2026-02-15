@@ -30,6 +30,9 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm test -- --watch=false --browsers=ChromeHeadless
+
+    - name: Pre-publication clean-up
+      run: rm -rf ./dist/assets/emoji
     
     - name: Web Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.6
@@ -37,7 +40,7 @@ jobs:
         server: ${{ secrets.ftpserver }}
         username: ${{ secrets.ftpusername }}
         password: ${{ secrets.ftppassword }}
-        local_path: './dist/'
+        local_path: './dist/*'
         remote_path: './'
         port: 22
         sftp_only: true
