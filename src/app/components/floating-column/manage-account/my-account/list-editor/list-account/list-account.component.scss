@@ -13,13 +13,13 @@
             position: absolute;     
             top: 4px;
             right: 12px;
-            color: #fff;
+            color: var(--list-account-text);
             font-size: 14px;
             padding: 10px;
             // outline: 1px solid greenyellow;
             
             &:hover{
-                color: darken(#fff, 20);
+                color: var(--list-account-text-hover);
             }
 
             // $add-color: rgb(167, 220, 255);            
@@ -34,7 +34,7 @@
             &--remove {
                 color: $font-link-primary;
                 &:hover{
-                    color: lighten($font-link-primary, 40);
+                    color: var(--font-link-primary-lighter-40);
                 }
             }
         }
@@ -59,7 +59,7 @@
             position: absolute;
             top: 8px;
             left: 60px;
-            color: white;
+            color: var(--list-account-text-secondary);
 
             max-width: $max-name-width;
             text-overflow: ellipsis;

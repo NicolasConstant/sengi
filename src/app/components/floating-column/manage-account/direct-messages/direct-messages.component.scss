@@ -10,7 +10,7 @@
         margin-left: 31px;
         padding-top: 3px;
         float: left;
-        color: #5098eb;
+        color: var(--floating-column-manage-account-dm-icon);
     }
 
     &__avatar {
@@ -24,8 +24,6 @@
 
 .stream-toots__status {
     &:not(:last-child) {
-        border-bottom: 1px solid #4e5572;
-        border-bottom: 1px solid #2f3444;
-        border-bottom: 1px solid #232733;
+        border-bottom: 1px solid var(--floating-column-manage-account-dm-stream-border);
     }
 }

@@ -88,6 +88,8 @@ export class GlobalSettings {
 
     enableAltLabel: boolean;
     enableFreezeAvatar: boolean;
+    
+    selectedTheme: number = 0;
 }
 
 export interface ILanguage {
@@ -188,6 +190,7 @@ export class SettingsState {
         newSettings.disableLangAutodetec = oldSettings.disableLangAutodetec;
         newSettings.enableAltLabel = oldSettings.enableAltLabel;
         newSettings.enableFreezeAvatar = oldSettings.enableFreezeAvatar;
+        newSettings.selectedTheme = oldSettings.selectedTheme;
 
         return newSettings;
     }
