@@ -7,9 +7,7 @@ name: Docker Image CI
 on:
   workflow_dispatch:
   push:
-    branches: [ "master", "docker-cicd" ]
-  pull_request:
-    branches: [ "master", "docker-cicd" ]
+    branches: [ "develop", "docker-cicd" ]
 
 jobs:
   build:
