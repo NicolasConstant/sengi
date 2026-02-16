@@ -4,4 +4,3 @@
 appveyor.yml
 .vscode
 node_modules
-#dist
