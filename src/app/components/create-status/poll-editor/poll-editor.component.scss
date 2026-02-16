@@ -21,12 +21,12 @@
         padding: 5px;
 
         &--add-choice {
-            color: rgb(49, 49, 49);
+            color: var(--poll-editor-add-choice-color);
             padding: 0 5px 0 5px;
 
             &:hover {
                 text-decoration: none;
-                color: rgb(122, 122, 122);
+                color: var(--poll-editor-add-choice-color-hover);
             }
         }
 

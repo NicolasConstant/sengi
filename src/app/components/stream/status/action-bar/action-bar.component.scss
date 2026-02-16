@@ -83,7 +83,7 @@
     color: $boost-color;
 
     &:hover {
-        color: darken($boost-color, 10);
+        color: var(--boost-color-darker-10);
     }
 }
 
@@ -91,7 +91,7 @@
     color: $favorite-color;
 
     &:hover {
-        color: darken($favorite-color, 10);
+        color: var(--favorite-color-darker-10);
     }
 }
 
@@ -99,7 +99,7 @@
     color: $bookmarked-color;
 
     &:hover {
-        color: darken($bookmarked-color, 10);
+        color: var(--bookmarked-color-darker-10);
     }
 }
 

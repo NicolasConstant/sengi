@@ -22,16 +22,16 @@ $expand-color: $column-color;
         right: 0;
         padding-top: 60px;
         padding-left: 15px;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba($expand-color, 0.25), rgba($expand-color, 0.5), $expand-color, $expand-color);
+        
+        background-image: linear-gradient(to bottom, #00000000, var(--post-expander-background-25-opacity), var(--post-expander-background-50-opacity), var(--post-expander-background), var(--post-expander-background));
 
         &--link {
             transition: all .2s;
-            color: #a9b5d8;
-            color: #c0c8e0;
+            color: var(--post-expander-link);
             // text-decoration: underline;
 
             &:hover {
-                color: white;
+                color: var(--post-expander-link-hover);
             }
 
             &--icon {
@@ -74,12 +74,12 @@ $expand-color: $column-color;
     }
 
     & code {
-        color: #a0d1ff;
+        color: var(--code-post-color);
     }
 
     & pre {
         padding: 0 5px 5px 5px;
-        background-color: #000000;
+        background-color: var(--post-scrollbar-background);
 
         scrollbar-width: thin;
         border-radius: 5px 5px 0 0;
@@ -92,8 +92,7 @@ $expand-color: $column-color;
         &::-webkit-scrollbar-thumb {
             -webkit-border-radius: 0px;
             border-radius: 0px;
-            background: $scrollbar-color-thumb;
-            background: #384958;
+            background: var(--post-scrollbar-thumb-background);
         }
     }
 

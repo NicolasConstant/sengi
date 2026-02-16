@@ -13,27 +13,27 @@
     float: left;
 
     &__bot {
-        background-color: #017282;
+        background-color: var(--label-bot);
     }
 
     &__replies {
-        background-color: #59028f;
+        background-color: var(--label-discuss);
     }
 
     &__thread {
-        background-color: #007233;
+        background-color: var(--label-thread);
     }
 
     &__xpost {
-        background-color: #9f5d00;
+        background-color: var(--label-xpost);
     }
 
     &__old {
-        background-color: #960000;
+        background-color: var(--label-old);
     }
 
     &__remote {
-        background-color: #264d94;
+        background-color: var(--label-remote);
     }
 }
 
@@ -43,11 +43,11 @@
     // top: -1px;
 
     & a {
-        color: white;
+        color: var(--tutorial-text-primary);
         text-decoration: underline;
 
         &:hover, &:active, &:focus {
-            color: rgb(218, 218, 218);
+            color: var(--tutorial-text-muted);
         }
     }
 
@@ -55,6 +55,6 @@
         display: inline-block;
         margin-top: 5px;
         color: #0f111a;
-        color: #9497a5;
+        color: var(--tutorial-text-secondary);
     }
 }

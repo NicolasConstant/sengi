@@ -2,12 +2,12 @@
 @import "commons";
 @import "panel";
 
-$border-color: #1d2335;
+$border-color: var(--tutorial-bg-primary);
 $footer-height: 30px;
 
 .tutorial {
     border: 1px solid $border-color;
-    background-color: $color-primary;
+    background-color: var(--color-primary);
     height: calc(100%);
     border-radius: 2px;
 
@@ -26,7 +26,7 @@ $footer-height: 30px;
             display: inline-block;
             height: $footer-height;
             width: calc(33.33333% - 1px);
-            color: white;
+            color: var(--tutorial-text-primary);
             padding-top: 4px;
             transition: all .2s;
 
@@ -37,33 +37,30 @@ $footer-height: 30px;
             &--close {
                 &:hover {
                     text-decoration: none;
-                    background-color: rgb(95, 0, 0);
+                    background-color: var(--tutorial-bg-secondary);
                 }
             }
 
             &--navigate {
                 &:hover {
                     text-decoration: none;
-                    background-color: rgb(0, 117, 172);
+                    background-color: var(--tutorial-bg-secondary);
                 }
             }
 
             &--next {
-                background-color: rgb(230, 230, 230);
-                background-color: rgb(0, 74, 109);
-                background-color: rgb(0, 84, 122);
-                color: white;
+                background-color: var(--tutorial-bg-tertiary);
+                color: var(--tutorial-text-primary);
 
                 // font-weight: bold;
                 &:hover {
                     text-decoration: none;
-                    background-color: rgb(0, 74, 109);
-                    background-color: rgb(0, 117, 172);
+                    background-color: var(--tutorial-bg-quaternary);
                 }
             }
 
             &--disabled {
-                color: #4e5672;
+                color: var(--tutorial-text-secondary);
 
                 &:hover {
                     cursor: default;
@@ -118,13 +115,13 @@ $footer-height: 30px;
 }
 
 .link {
-    color: white;
+    color: var(--tutorial-text-primary);
     text-decoration: underline;
 
     &:hover,
     &:active,
     &:focus {
-        color: rgb(218, 218, 218);
+        color: var(--tutorial-text-muted);
     }
 
     &__tab {

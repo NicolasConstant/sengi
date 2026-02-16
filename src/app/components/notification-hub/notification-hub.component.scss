@@ -5,8 +5,8 @@
     margin: 0 0 10px 0;
     
     &__notification{
-        background-color: #22b90e;
-        color: black;
+        background-color: var(--notification-success-bg);
+        color: var(--notification-success-fg);
         padding: 5px 10px 5px 5px;
         border-radius: 2px;
         margin: 0 0 5px 15px;
@@ -17,8 +17,8 @@
         cursor: pointer;
 
         &--error{
-            background-color: #be0a0a;
-            color: whitesmoke;
+            background-color: var(--notification-error-bg);
+            color: var(--notification-error-fg);
         }
 
         &--avatar {
@@ -37,7 +37,7 @@
         }
 
         &--count {
-            color: rgba(255, 255, 255, .6);
+            color: var(--notification-text-muted);
         }
     }
 }

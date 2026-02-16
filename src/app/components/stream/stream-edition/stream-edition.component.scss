@@ -6,12 +6,12 @@
     width: calc(100%);
     width: $stream-column-width;
     // min-height: 50px;
-    background-color: #222736;
-    border-bottom: 1px solid $color-secondary;
+    background-color: var(--stream-edition-background);
+    border-bottom: 1px solid var(--color-secondary);
 
     &__settings{
         padding: 5px 5px 0 5px;
-        border-bottom: 1px solid $color-secondary;
+        border-bottom: 1px solid var(--color-secondary);
     }
 
     &__setting{
@@ -51,7 +51,7 @@
         }
 
         &:hover {
-            color: darken($font-color-primary, 20);
+            color: var(--font-color-primary-darker-20);
         }
     }
 }
