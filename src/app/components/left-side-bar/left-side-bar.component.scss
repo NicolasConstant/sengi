@@ -47,6 +47,10 @@ $height-button: 40px;
         position: absolute;
         left: 14px;
         bottom: 37px;
+        color: var(--left-icon-scheduled-color);
+        &:hover {
+            color: var(--left-icon-scheduled-color);
+        }
     }
     &--cog {
         font-size: 24px;

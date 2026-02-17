@@ -145,6 +145,7 @@ export const defaultTheme: Theme = {
         "--left-bar-link-hover": "#8f93a2",
         "--left-icon-cog-color": "#cbcbcb",
         "--left-icon-cog-opacity": ".3",
+        "--left-icon-scheduled-color": "#cbcbcb",
 
         "--loading-icon-background": "#fff",
 
