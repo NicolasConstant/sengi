@@ -2,6 +2,12 @@
 
 Sengi is a multi-account Mastodon/Pleroma desktop client built with Angular 7, TypeScript 3.2, and NGXS state management.
 
+## Colors and Themes
+
+When editing colors, use css variables following the current themes implementation.
+The themes colors are stored in the *.ts files in the `/src/app/themes/implementations` folder, they MUST be updated accordingly.
+And don't forget to update the `/src/sass/_variables.scss` file when doing so.
+
 ## Commands
 
 ```bash

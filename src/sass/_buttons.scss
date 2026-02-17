@@ -78,7 +78,7 @@
 
     &__blue {
         background-color: var(--color-primary);
-        color: var(--button-danger-color);
+        color: var(--button-contrast-color);
 
         &:hover {
             background-color: var(--color-primary-lighter-15);
@@ -87,7 +87,7 @@
 
     &__red {
         background-color: var(--button-danger-bg) !important;
-        color: var(--button-danger-color);
+        color: var(--button-contrast-color);
 
         &:hover {
             background-color: var(--button-danger-bg-hover) !important;

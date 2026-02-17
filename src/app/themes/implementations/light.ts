@@ -323,7 +323,7 @@ export const lightTheme: Theme = {
 
         "--button-danger-bg": "#dc2626",
         "--button-danger-bg-hover": "#b91c1c",
-        "--button-danger-color": "#ffffff",
+        "--button-contrast-color": "#ffffff",
         
         "--context-menu-shadow": "rgba(0, 0, 0, 0.1)",
         

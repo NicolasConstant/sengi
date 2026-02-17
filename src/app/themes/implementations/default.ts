@@ -315,7 +315,7 @@ export const defaultTheme: Theme = {
 
         "--button-danger-bg": "#410303",
         "--button-danger-bg-hover": "#721515",
-        "--button-danger-color": "#ffffff",
+        "--button-contrast-color": "#ffffff",
 
         "--context-menu-shadow": "rgba(0, 0, 0, 0.5)",
 
