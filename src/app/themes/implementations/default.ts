@@ -231,6 +231,8 @@ export const defaultTheme: Theme = {
         "--tutorial-border": "#00547a",
         "--tutorial-button-hover": "#e6e6e6",
         "--tutorial-close": "#808080",
+        "--tutorial-arrow-1": "url('assets/img/arrow_1.png')",
+        "--tutorial-arrow-2": "url('assets/img/arrow_2.png')",
 
         "--notification-success-bg": "#22b90e",
         "--notification-success-fg": "#000000",

@@ -239,6 +239,8 @@ export const lightTheme: Theme = {
         "--tutorial-border": "#bfcad5",
         "--tutorial-button-hover": "#d9e2e8",
         "--tutorial-close": "#88909c",
+        "--tutorial-arrow-1": "url('assets/img/arrow_1_dark.png')",
+        "--tutorial-arrow-2": "url('assets/img/arrow_2_dark.png')",
 
         "--notification-success-bg": "#22b90e",
         "--notification-success-fg": "#ffffff",

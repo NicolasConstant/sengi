@@ -197,6 +197,8 @@
     --tutorial-border: #00547a;
     --tutorial-button-hover: #e6e6e6;
     --tutorial-close: #808080;
+    --tutorial-arrow-1: url('assets/img/arrow_1.png');
+    --tutorial-arrow-2: url('assets/img/arrow_2.png');
 
     --notification-success-bg: #22b90e;
     --notification-success-fg: #000000;
@@ -422,6 +424,8 @@ $tutorial-text-muted: var(--tutorial-text-muted);
 $tutorial-border: var(--tutorial-border);
 $tutorial-button-hover: var(--tutorial-button-hover);
 $tutorial-close: var(--tutorial-close);
+$tutorial-arrow-1: var(--tutorial-arrow-1);
+$tutorial-arrow-2: var(--tutorial-arrow-2);
 
 $notification-success-bg: var(--notification-success-bg);
 $notification-success-fg: var(--notification-success-fg);
