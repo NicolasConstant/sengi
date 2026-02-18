@@ -6,13 +6,14 @@ import { SettingsService } from '../services/settings.service';
 
 import { defaultTheme } from './implementations/default';
 import { lightTheme } from './implementations/light';
+import { tokyoNightTheme } from './implementations/tokyo-night';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ThemeService {
     private active: Theme = defaultTheme;
-    private availableThemes: Theme[] = [defaultTheme, lightTheme];
+    private availableThemes: Theme[] = [defaultTheme, lightTheme, tokyoNightTheme];
 
     activeTheme = new BehaviorSubject<ThemeTypeEnum>(ThemeTypeEnum.default);
 
