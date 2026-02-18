@@ -126,9 +126,18 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
                         this.accounts.push(accWrapper);
 
+                        const avatarNotFoundImage = 'assets/img/avatar-not-found.png';
                         this.toolsService.getAvatar(acc)
                             .then((avatar: string) => {
-                                accWrapper.avatar = avatar;
+                                if(avatar){
+                                    accWrapper.avatar = avatar;
+                                } else {
+                                    accWrapper.avatar = avatarNotFoundImage;
+                                }                                
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                accWrapper.avatar = avatarNotFoundImage;
                             });
                     }
                 }

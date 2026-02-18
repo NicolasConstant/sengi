@@ -29,7 +29,7 @@ html, body {
     font-size: $default-font-size; 
     
     color: $font-color-primary; 
-    background-color: $color-primary;
+    background-color: var(--color-primary);
     overflow: hidden;
   }
 
