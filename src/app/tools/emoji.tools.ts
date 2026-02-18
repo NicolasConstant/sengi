@@ -35,19 +35,17 @@ export class EmojiConverter {
 
         while (text.includes('class="joypixels"')) {
           text = text.replace('class="joypixels"', `class="joypixels ${className}"`);
-        }
+        }        
 
-        /* Static asset copy of emojis need to be updated to joypixels 7.0, use CDN for now
         while (
-          text.includes("https://cdn.jsdelivr.net/joypixels/assets/7.0/png/")
+          text.includes("https://cdn.jsdelivr.net/joypixels/assets/10.0/png/unicode/")
         ) {
           text = text.replace(
-            "https://cdn.jsdelivr.net/joypixels/assets/7.0/png/",
-            "assets/emoji/72x72/"
+            "https://cdn.jsdelivr.net/joypixels/assets/10.0/png/unicode/",
+            "assets/emoji/"
           );
           // text = text.replace('.png', '.svg');
-        }
-        */
+        }        
 
         return text;
     }
