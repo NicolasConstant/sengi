@@ -1,15 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
-import { faStar, faRetweet, faList, faThumbtack } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faRetweet, faList, faThumbtack, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Subscription } from "rxjs";
 
-import { Status, Account } from "../../../services/models/mastodon.interfaces";
+import { Status, Account, Translation } from "../../../services/models/mastodon.interfaces";
 import { OpenThreadEvent, ToolsService } from "../../../services/tools.service";
 import { ActionBarComponent } from "./action-bar/action-bar.component";
 import { StatusWrapper } from '../../../models/common.model';
 import { EmojiConverter, EmojiTypeEnum } from '../../../tools/emoji.tools';
 import { ContentWarningPolicyEnum } from '../../../states/settings.state';
 import { StatusesStateService, StatusState } from "../../../services/statuses-state.service";
-
+import { DatabindedTextComponent } from "./databinded-text/databinded-text.component";
+import { SettingsService } from "../../../services/settings.service";
 
 @Component({
     selector: "app-status",
@@ -23,6 +24,7 @@ export class StatusComponent implements OnInit {
     faRetweet = faRetweet;
     faList = faList;
     faThumbtack = faThumbtack;
+    faEdit = faEdit;
 
     displayedStatus: Status;
     displayedStatusWrapper: StatusWrapper;
@@ -43,6 +45,8 @@ export class StatusComponent implements OnInit {
     isSelected: boolean;
     isRemote: boolean;
 
+    private freezeAvatarEnabled: boolean;
+
     hideStatus: boolean = false;
 
     @Output() browseAccountEvent = new EventEmitter<string>();
@@ -52,8 +56,10 @@ export class StatusComponent implements OnInit {
 
     @Input() isThreadDisplay: boolean;
 
-    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll';
+    @Input() notificationType: 'mention' | 'reblog' | 'favourite' | 'poll' | 'update';
     @Input() notificationAccount: Account;
+
+    @Input() context: 'home' | 'notifications' | 'public' | 'thread' | 'account';
 
     private _statusWrapper: StatusWrapper;
     status: Status;
@@ -62,6 +68,12 @@ export class StatusComponent implements OnInit {
 
     @Input('statusWrapper')
     set statusWrapper(value: StatusWrapper) {
+        if(!value || !value.status) {
+            console.error('null status provided');
+            this.hideStatus = true;
+            return;
+        }
+
         this._statusWrapper = value;
         this.status = value.status;
         this.isSelected = value.isSelected;
@@ -94,6 +106,8 @@ export class StatusComponent implements OnInit {
         // this.statusAccountName = this.emojiConverter.applyEmojis(this.displayedStatus.account.emojis, this.displayedStatus.account.display_name, EmojiTypeEnum.small);
         let statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, this.displayedStatus.content, EmojiTypeEnum.medium);
         this.statusContent = this.ensureMentionAreDisplayed(statusContent);
+
+        this.validateFilteringStatus();
     }
     get statusWrapper(): StatusWrapper {
         return this._statusWrapper;
@@ -102,31 +116,72 @@ export class StatusComponent implements OnInit {
     constructor(
         public elem: ElementRef,
         private readonly toolsService: ToolsService,
+        private readonly settingsService: SettingsService,
         private readonly statusesStateService: StatusesStateService) { }
 
     ngOnInit() {
         this.statusesStateServiceSub = this.statusesStateService.stateNotification.subscribe(notification => {
-            if(this._statusWrapper.status.url === notification.statusId && notification.isEdited) {
+            if (this._statusWrapper.status.url === notification.statusId && notification.isEdited) {
                 this.statusWrapper = notification.editedStatus;
             }
         });
+
+        this.freezeAvatarEnabled = this.settingsService.getSettings().enableFreezeAvatar;
     }
 
-    ngOnDestroy(){
-        if(this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
+    ngOnDestroy() {
+        if (this.statusesStateServiceSub) this.statusesStateServiceSub.unsubscribe();
     }
-    
+
+    private validateFilteringStatus(){
+        const filterStatus = this.displayedStatus.filtered;
+
+        if(!filterStatus || filterStatus.length === 0) return;
+
+        // if(!this.context){
+        //     console.warn('this.context not found');
+        //     console.warn(this.context);
+        // }
+
+        for (let filter of filterStatus) {
+            if(this.context && filter.filter.context && filter.filter.context.length > 0){
+                if(!filter.filter.context.includes(this.context)) continue;
+            } 
+            
+            if(filter.filter.filter_action === 'warn'){
+                this.isContentWarned = true;
+
+                let filterTxt = `FILTERED:`;
+                for(let w of filter.keyword_matches){
+                    filterTxt += ` ${w}`;
+                }
+
+                this.contentWarningText = filterTxt;
+            } else if (filter.filter.filter_action === 'hide'){
+                this.hideStatus = true;
+            }
+        }
+    }
+
+    getAvatar(acc: Account): string {
+        if(this.freezeAvatarEnabled){
+            return acc.avatar_static;
+        } else {
+            return acc.avatar;
+        }
+    }
+
     private ensureMentionAreDisplayed(data: string): string {
         const mentions = this.displayedStatus.mentions;
-        if(!mentions || mentions.length === 0) return data;
-        
+        if (!mentions || mentions.length === 0) return data;
+
         let textMentions = '';
         for (const m of mentions) {
-            if(!data.includes(m.url)){
+            if (!data.includes(m.url)) {
                 textMentions += `<span class="h-card"><a class="u-url mention" data-user="${m.id}" href="${m.url}" rel="ugc">@<span>${m.username}</span></a></span> `
             }
         }
-        if(textMentions !== ''){
+        if (textMentions !== '') {
             data = textMentions + data;
         }
         return data;
@@ -155,6 +210,31 @@ export class StatusComponent implements OnInit {
 
     changeCw(cwIsActive: boolean) {
         this.isContentWarned = cwIsActive;
+    }
+   
+
+    @ViewChild('databindedtext') public databindedText: DatabindedTextComponent;
+
+    onTranslation(translation: Translation) {
+        let statusContent = translation.content;
+
+        // clean up a bit some issues (not reliable)
+        while (statusContent.includes('<span>@')) {
+            statusContent = statusContent.replace('<span>@', '@<span>');
+        }
+        while (statusContent.includes('h<span class="invisible">')){
+            statusContent = statusContent.replace('h<span class="invisible">', '<span class="invisible">h');
+        }
+        while (statusContent.includes('<span>#')){
+            statusContent = statusContent.replace('<span>#', '#<span>');
+        }
+
+        statusContent = this.emojiConverter.applyEmojis(this.displayedStatus.emojis, statusContent, EmojiTypeEnum.medium);
+        this.statusContent = this.ensureMentionAreDisplayed(statusContent);
+
+        setTimeout(x => {
+            this.databindedText.processEventBindings();
+        }, 500);        
     }
 
     private checkLabels(status: Status) {

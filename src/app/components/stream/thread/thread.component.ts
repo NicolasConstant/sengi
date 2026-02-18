@@ -28,6 +28,8 @@ export class ThreadComponent extends BrowseBase {
     hasContentWarnings = false;
     private remoteStatusFetchingDisabled = false;
 
+    context = 'thread';
+
     numNewItems: number; //html compatibility only
     bufferStream: Status[] = []; //html compatibility only
     streamPositionnedAtTop: boolean = true; //html compatibility only
@@ -156,8 +158,6 @@ export class ThreadComponent extends BrowseBase {
         const sourceAccount = openThreadEvent.sourceAccount;
 
         if (status.visibility === 'public' || status.visibility === 'unlisted') {
-            // var statusPromise: Promise<Status> = Promise.resolve(status);
-            // if (!sourceAccount || sourceAccount.id !== currentAccount.id) {
             var statusPromise = this.toolsService.getInstanceInfo(currentAccount)
                     .then(instance => {
                         let version: 'v1' | 'v2' = 'v1';
@@ -165,13 +165,17 @@ export class ThreadComponent extends BrowseBase {
                         return this.mastodonService.search(currentAccount, status.uri, version, true);
                     })
                     .then((result: Results) => {
+                        let retrievedStatus: Status = null;
                         if (result.statuses.length === 1) {
-                            const retrievedStatus = result.statuses[0];
+                            retrievedStatus = result.statuses[0];                            
+                        } else if(result.statuses.length > 1){
+                            retrievedStatus = result.statuses.find(({ uri }) => uri === status.uri);
+                        }                                                
+                        if (retrievedStatus) {
                             return retrievedStatus;
                         }
                         throw new Error('could not find status');
                     });
-            // }
 
             this.retrieveThread(currentAccount, statusPromise);
 
@@ -200,7 +204,6 @@ export class ThreadComponent extends BrowseBase {
 
                             if (i == position) wrapper.isSelected = true;
 
-                            // this.statuses.push(wrapper);
                             localStatuses.push(wrapper);
                         }
                         return localStatuses;

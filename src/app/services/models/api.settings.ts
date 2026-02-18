@@ -12,6 +12,7 @@ export class ApiRoutes {
     unfollow = '/api/v1/accounts/{0}/unfollow';
     block = '/api/v1/accounts/{0}/block';
     unblock = '/api/v1/accounts/{0}/unblock';
+    blockDomain = '/api/v1/domain_blocks';
     mute = '/api/v1/accounts/{0}/mute';
     unmute = '/api/v1/accounts/{0}/unmute';
     muteStatus = '/api/v1/statuses/{0}/mute';
@@ -80,4 +81,5 @@ export class ApiRoutes {
     followHashtag = '/api/v1/tags/{0}/follow';
     unfollowHashtag = '/api/v1/tags/{0}/unfollow';
     getHashtag = '/api/v1/tags/{0}';
+    translate = '/api/v1/statuses/{0}/translate';
 }

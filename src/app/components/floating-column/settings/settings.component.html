@@ -6,6 +6,17 @@
     </select> -->
 
     <div class="content flexcroll">
+        <h4 class="panel__subtitle">DESIGN</h4>
+        <div class="sub-section">
+            <span class="sub-section__title">theme:</span><br />
+            <form [formGroup]="themeForm">
+                <select formControlName="themeControl" (change)="onThemeChange($event.target.value)" class="sound__select">
+                    <option [value]="s.theme_type" *ngFor="let s of themeList"> {{s.name}}</option>
+                </select>
+            </form>            
+        </div>
+        <br/>
+
         <h4 class="panel__subtitle">Notifications</h4>
         <div class="sub-section">
             <input class="sub-section__checkbox" [(ngModel)]="disableAutofocusEnabled"
@@ -35,7 +46,7 @@
             </form>
             <a href class="form-button sound__play" type="submit" (click)="playNotificationSound()">play</a>
         </div>
-        
+
         <h4 class="panel__subtitle">Shortcuts</h4>
         <div class="sub-section">
             <span class="sub-section__title">switch column:</span><br />
@@ -51,21 +62,50 @@
             <br>
         </div>
 
+        <h4 class="panel__subtitle">Languages</h4>
+        <div class="sub-section">
+            <div class="sub-section__content">
+                <div *ngIf="!configuredLangs || configuredLangs.length === 0" class="language__warning">
+                    No language set.
+                </div>
+                <div *ngFor="let l of configuredLangs" class="language__entry">
+                    <span class="language__entry__name">{{ l.name }} ({{l.iso639}})</span>
+                    <a href (click)="onRemoveLang(l)" class="form-button language__entry__action sound__play">remove</a>
+                </div>
+                <input type="text" (input)="onSearchLang($event.target.value)" [(ngModel)]="searchLang"
+                    placeholder="Find Language" autocomplete="off"
+                    class="form-control form-control-sm language__search" />
+                <div *ngFor="let l of searchedLangs" class="language__entry">
+                    <span class="language__entry__name">{{ l.name }} ({{l.iso639}})</span>
+                    <a href (click)="onAddLang(l)" class="form-button language__entry__action sound__play">add</a>
+                </div>
+
+
+            </div>
+
+            <input class="sub-section__checkbox" [(ngModel)]="disableLangAutodetectEnabled"
+                (change)="onDisableLangAutodetectChanged()" type="checkbox" name="disableLangAutodetec"
+                value="disableLangAutodetec" id="disableLangAutodetec">
+            <label class="noselect sub-section__label" for="disableLangAutodetec">disable language autodetection</label>
+        </div>
         <h4 class="panel__subtitle">Twitter Bridge</h4>
         <div class="sub-section">
             <input class="sub-section__checkbox" [(ngModel)]="twitterBridgeEnabled"
-            (change)="onTwitterBridgeEnabledChanged()" type="checkbox" name="onTwitterBridgeEnabled"
-            value="onTwitterBridgeEnabled" id="onTwitterBridgeEnabled">
+                (change)="onTwitterBridgeEnabledChanged()" type="checkbox" name="onTwitterBridgeEnabled"
+                value="onTwitterBridgeEnabled" id="onTwitterBridgeEnabled">
             <label class="noselect sub-section__label" for="onTwitterBridgeEnabled">enable bridge</label>
             <br>
             <div *ngIf="twitterBridgeEnabled">
                 <p>Please provide your bridge instance:
-                <input type="text" class="form-control form-control-sm sub_section__text-input"
-                [(ngModel)]="setTwitterBridgeInstance" placeholder="bridge.tld" />
-                If you don't know any, consider using <a href="https://github.com/NicolasConstant/BirdsiteLive" target="_blank" class="version__link">BirdsiteLIVE</a></p>
+                    <input type="text" class="form-control form-control-sm sub_section__text-input"
+                        [(ngModel)]="setTwitterBridgeInstance" placeholder="bridge.tld" />
+                    If you don't know any, consider using <a href="https://github.com/NicolasConstant/BirdsiteLive"
+                        target="_blank" class="version__link">BirdsiteLIVE</a>
+                </p>
             </div>
             <div>
-                <a href="https://github.com/NicolasConstant/sengi/wiki/BirdsiteLIVE-integration" target="_blank" class="version__link">What is this?</a>
+                <a href="https://github.com/NicolasConstant/sengi/wiki/BirdsiteLIVE-integration" target="_blank"
+                    class="version__link">What is this?</a>
             </div>
         </div>
 
@@ -79,7 +119,7 @@
 
             <input class="sub-section__checkbox" [checked]="contentWarningPolicy === 2" (change)="onCwPolicyChange(2)"
                 type="radio" name="cw-hide-all" value="cw-hide-all" id="cw-hide-all">
-            <label class="noselect sub-section__label" for="cw-hide-all">Hide all CWs</label>
+            <label class="noselect sub-section__label" for="cw-hide-all">Expand all CWs</label>
             <br>
             <div class="sub-section__cw-settings" *ngIf="contentWarningPolicy === 2">
                 <span class="sub-section__title">but add CW on content containing:</span><br />
@@ -136,6 +176,12 @@
             <label class="noselect sub-section__label" for="timelineheader-5">Title</label>
             <br>
 
+            <input class="sub-section__checkbox" [checked]="timeLineHeader === 6" (change)="onTimeLineHeaderChange(6)"
+                type="radio" name="timelineheader-6" value="timelineheader-6" id="timelineheader-6">
+            <label class="noselect sub-section__label" for="timelineheader-6">Title - Account Icon - Username - Domain
+                Name</label>
+            <br>
+
             <span class="sub-section__title">loading behavior:</span><br />
 
             <input class="sub-section__checkbox" [checked]="timeLineMode === 1" (change)="onTimeLineModeChange(1)"
@@ -160,7 +206,8 @@
                 <input class="sub-section__checkbox" [(ngModel)]="autoFollowOnListEnabled"
                     (change)="onAutoFollowOnListChanged()" type="checkbox" name="onAutoFollowOnListChanged"
                     value="onAutoFollowOnListChanged" id="onAutoFollowOnListChanged">
-                <label class="noselect sub-section__label" for="onAutoFollowOnListChanged">autofollow accounts when adding to list</label>
+                <label class="noselect sub-section__label" for="onAutoFollowOnListChanged">autofollow accounts when
+                    adding to list</label>
                 <br>
             </div>
         </div>
@@ -173,6 +220,20 @@
             <label class="noselect sub-section__label" for="disableRemoteFetching">disable remote status
                 fetching</label>
             <br>
+
+            <input class="sub-section__checkbox" [(ngModel)]="enableAltLabelEnabled"
+                (change)="onEnableAltLabelChanged()" type="checkbox" name="enableAltLabel"
+                value="enableAltLabel" id="enableAltLabel">
+            <label class="noselect sub-section__label" for="enableAltLabel">enable alt label</label>
+            <br>
+
+            <input class="sub-section__checkbox" [(ngModel)]="enableFreezeAvatarEnabled"
+                (change)="onEnableFreezeAvatarChanged()" type="checkbox" name="enableFreezeAvatar"
+                value="enableFreezeAvatar" id="enableFreezeAvatar">
+            <label class="noselect sub-section__label" for="enableFreezeAvatar">freeze animated avatar</label>
+            <br>
+            
+            reorder account's icons: <a href class="toogle-lock-icon-menu" (click)="toogleLockIconMenu()"><span *ngIf="iconMenuLocked">Unlock Icons</span><span *ngIf="!iconMenuLocked">Lock Icons</span></a>
         </div>
 
         <h4 class="panel__subtitle">About</h4>

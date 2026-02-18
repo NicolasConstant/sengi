@@ -25,6 +25,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
     private loadedAccounts: AccountInfo[];
     displayedStatus: Status;
     username: string;
+    domain: string;
     isOwnerSelected: boolean;
 
     isEditingAvailable: boolean;
@@ -74,6 +75,7 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         }
 
         this.username = account.acct.split('@')[0];
+        this.domain = account.acct.split('@')[1];
         this.fullHandle = this.toolsService.getAccountFullHandle(account);
     }
 
@@ -167,6 +169,38 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    hideBoosts(): boolean {
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.toolsService.findAccount(acc, this.fullHandle)
+            .then(async (target: Account) => {
+                const relationship = await this.mastodonService.hideBoosts(acc, target);
+                this.relationship = relationship;
+                this.relationshipChanged.next(relationship);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
+
+        return false;
+    }
+
+    unhideBoosts(): boolean {
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.toolsService.findAccount(acc, this.fullHandle)
+            .then(async (target: Account) => {
+                const relationship = await this.mastodonService.unhideBoosts(acc, target);
+                this.relationship = relationship;
+                this.relationshipChanged.next(relationship);
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
+
+        return false;
+    }
+
     muteAccount(): boolean {
         const acc = this.toolsService.getSelectedAccounts()[0];
 
@@ -233,6 +267,37 @@ export class StatusUserContextMenuComponent implements OnInit, OnDestroy {
                 this.relationship = relationship;
                 this.relationshipChanged.next(relationship);
                 return target;
+            })
+            .catch(err => {
+                this.notificationService.notifyHttpError(err, acc);
+            });
+
+        return false;
+    }
+
+    blockDomain(): boolean {
+        const response = confirm(`Are you really sure you want to block the entire ${this.domain} domain? You will not see content from that domain in any public timelines or your notifications. Your followers from that domain will be removed.`);
+
+        if (response) {
+            const acc = this.toolsService.getSelectedAccounts()[0];
+
+            this.mastodonService.blockDomain(acc, this.domain)
+                .then(_ => {
+                    this.relationship.domain_blocking = true;
+                })
+                .catch(err => {
+                    this.notificationService.notifyHttpError(err, acc);
+                });
+        }
+        return false;
+    }
+
+    unblockDomain(): boolean {
+        const acc = this.toolsService.getSelectedAccounts()[0];
+
+        this.mastodonService.blockDomain(acc, this.domain)
+            .then(_ => {
+                this.relationship.domain_blocking = false;
             })
             .catch(err => {
                 this.notificationService.notifyHttpError(err, acc);

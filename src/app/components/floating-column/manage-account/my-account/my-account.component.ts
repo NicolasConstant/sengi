@@ -122,6 +122,17 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                     }                    
                 }                
             })
+            .then(_ => {
+                this.availableLists.sort((a,b) => {
+                    if (a.name < b.name) {
+                        return -1;
+                      }
+                      if (a.name > b.name) {
+                        return 1;
+                      }
+                      return 0;
+                });
+            })
             .catch(err => {
                 this.notificationService.notifyHttpError(err, this.account.info);
             });

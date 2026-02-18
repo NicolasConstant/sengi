@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngxs/store';
 
-import { StreamElement } from '../../../states/streams.state';
+import { StreamElement, StreamTypeEnum } from '../../../states/streams.state';
 import { AccountInfo } from '../../../states/accounts.state';
 import { StreamingService, EventEnum, StatusUpdate } from '../../../services/streaming.service';
 import { Status } from '../../../services/models/mastodon.interfaces';
@@ -20,8 +20,10 @@ import { SettingsService } from '../../../services/settings.service';
     templateUrl: './stream-statuses.component.html',
     styleUrls: ['./stream-statuses.component.scss']
 })
-export class StreamStatusesComponent extends TimelineBase {
+export class StreamStatusesComponent extends TimelineBase {   
     protected _streamElement: StreamElement;
+
+    context: 'home' | 'notifications' | 'public' | 'thread' | 'account';
 
     @Input()
     set streamElement(streamElement: StreamElement) {
@@ -32,6 +34,8 @@ export class StreamStatusesComponent extends TimelineBase {
         this.hideReplies = streamElement.hideReplies;
 
         this.load(this._streamElement);
+
+        this.setContext(this._streamElement);
     }
     get streamElement(): StreamElement {
         return this._streamElement;
@@ -110,6 +114,24 @@ export class StreamStatusesComponent extends TimelineBase {
         if (this.streamsSubscription) this.streamsSubscription.unsubscribe();
         if (this.hideAccountSubscription) this.hideAccountSubscription.unsubscribe();
         if (this.deleteStatusSubscription) this.deleteStatusSubscription.unsubscribe();
+    }
+
+    private setContext(streamElement: StreamElement) {
+        switch(streamElement.type){
+            case StreamTypeEnum.global:
+            case StreamTypeEnum.local:
+            case StreamTypeEnum.tag:
+                this.context = 'public';
+                break;
+            case StreamTypeEnum.personnal:
+            case StreamTypeEnum.list:            
+                this.context = 'home';
+                break;
+            case StreamTypeEnum.activity:
+            case StreamTypeEnum.directmessages:
+                this.context = 'notifications';
+                break;
+        }
     }
 
     refresh(): any {

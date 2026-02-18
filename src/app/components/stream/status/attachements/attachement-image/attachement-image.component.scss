@@ -14,10 +14,10 @@
         padding: 5px 5px 8px 8px;
         transition: all .2s;
         opacity: 0;
-        color: white;
+        color: var(--attachment-icon-overlay);
 
         &--icon {  
-            filter: drop-shadow(0 0 3px rgb(78, 78, 78));        
+            filter: drop-shadow(0 0 3px var(--attachment-icon-shadow));        
         }
 
         // &:hover {
@@ -25,9 +25,47 @@
         // }
     }
 
+    &__status {
+        z-index: 10;
+        position: absolute;
+        top: 0;
+        right: 25px;
+        padding: 5px 5px 8px 8px;
+        transition: all .2s;
+        opacity: 0;
+        color: var(--attachment-icon-overlay);
+
+        &--icon {  
+            filter: drop-shadow(0 0 3px var(--attachment-icon-shadow-hover));        
+        }
+    }
+
     &:hover &__link {
         opacity: 1;
         cursor: pointer;
+    }
+
+    &:hover &__status {
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    &__alt {
+        display: inline;
+        color: var(--attachment-icon-overlay);
+
+        z-index: 10;
+
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+
+        font-size: 10px;
+        font-weight: bolder;
+
+        background-color: var(--media-overlay-bg);
+        border-radius: 3px;
+        padding: 2px 5px;
     }
 }
 

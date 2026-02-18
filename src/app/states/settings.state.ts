@@ -51,7 +51,8 @@ export enum TimeLineHeaderEnum {
     Title_Username_DomainName = 2,
     Title_AccountIcon_DomainName = 3,
     Title_AccountIcon = 4,
-    Title = 5
+    Title = 5,
+    Title_AccountIcon_Username_DomainName = 6
 }
 
 export class ContentWarningPolicy {
@@ -79,7 +80,21 @@ export class GlobalSettings {
 
     columnSwitchingWinAlt = false;
 
-    accountSettings: AccountSettings[] = [];    
+    accountSettings: AccountSettings[] = [];
+
+    configuredLanguages: ILanguage[] = [];
+    selectedLanguage: ILanguage;
+    disableLangAutodetec: boolean;
+
+    enableAltLabel: boolean;
+    enableFreezeAvatar: boolean;
+    
+    selectedTheme: number = 0;
+}
+
+export interface ILanguage {
+    iso639: string;
+    name: string;
 }
 
 export interface SettingsStateModel {
@@ -170,6 +185,12 @@ export class SettingsState {
         newSettings.autoFollowOnListEnabled = oldSettings.autoFollowOnListEnabled;
         newSettings.twitterBridgeEnabled = oldSettings.twitterBridgeEnabled;
         newSettings.twitterBridgeInstance = oldSettings.twitterBridgeInstance;
+        newSettings.configuredLanguages = oldSettings.configuredLanguages;
+        newSettings.selectedLanguage = oldSettings.selectedLanguage;
+        newSettings.disableLangAutodetec = oldSettings.disableLangAutodetec;
+        newSettings.enableAltLabel = oldSettings.enableAltLabel;
+        newSettings.enableFreezeAvatar = oldSettings.enableFreezeAvatar;
+        newSettings.selectedTheme = oldSettings.selectedTheme;
 
         return newSettings;
     }

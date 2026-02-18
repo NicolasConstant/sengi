@@ -27,6 +27,11 @@
         position: fixed;
         top: 20px;
         left: 60px;
+        width: 61px;
+        height: 111px;
+        background-image: $tutorial-arrow-1;
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 
     &__title{
@@ -58,6 +63,11 @@
         position: fixed;
         top: 85px;
         left: 65px;
+        width: 61px;
+        height: 33px;
+        background-image: $tutorial-arrow-2;
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 
     &__title{

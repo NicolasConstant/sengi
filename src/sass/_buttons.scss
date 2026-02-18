@@ -63,10 +63,10 @@
 
     &--disabled {
         cursor: default;
-        background-color: darken($color-primary, 4);
+        background-color: var(--color-primary-darker-4);
 
         &:hover {
-            background-color: darken($color-primary, 4);
+            background-color: var(--color-primary-darker-4);
         }
     }
 
@@ -77,21 +77,20 @@
     }
 
     &__blue {
-        background-color: $color-primary;
-        color: #fff;
+        background-color: var(--color-primary);
+        color: var(--button-contrast-color);
 
         &:hover {
-            background-color: lighten($color-primary, 15);
+            background-color: var(--color-primary-lighter-15);
         }
     }
 
     &__red {
-        $red-button-color: rgb(65, 3, 3);
-        background-color: $red-button-color !important;
-        color: #fff;
+        background-color: var(--button-danger-bg) !important;
+        color: var(--button-contrast-color);
 
         &:hover {
-            background-color: lighten($red-button-color, 15) !important;
+            background-color: var(--button-danger-bg-hover) !important;
         }
     }
 

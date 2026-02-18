@@ -202,7 +202,7 @@ describe('DatabindedTextComponent', () => {
         const sample = `<p>Bla <a href="https://ubuntu.social/tags/kubecon" rel="tag">#<span>KubeCon</span></a> Bla</p>`;
 
         component.text = sample;
-        expect(component.processedText).toContain('<p>Bla  <a href="https://ubuntu.social/tags/kubecon" class="hashtag-KubeCon" title="#KubeCon" target="_blank" rel="noopener noreferrer">#KubeCon</a> Bla</p>'); 
+        expect(component.processedText).toContain('<p>Bla <a href="https://ubuntu.social/tags/kubecon" class="hashtag-KubeCon" title="#KubeCon" target="_blank" rel="noopener noreferrer">#KubeCon</a> Bla</p>'); 
     });
 
     it('should parse link - Pleroma', () => {

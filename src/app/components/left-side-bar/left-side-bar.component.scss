@@ -5,16 +5,16 @@ $height-button: 40px;
 .left-bar {
     width: $width-button;
     height: calc(100%);
-    background: $color-secondary;
+    background: var(--color-secondary);
     position: relative;    
 }
 
 .left-bar-link {
-    color: $font-link-primary;
-    color: darken(whitesmoke, 17);
+    color: var(--left-bar-link);
     text-decoration: none;
     &:hover {
-        color: $font-link-primary-hover;
+        //color: $font-link-primary-hover;
+        color: var(--left-bar-link-hover);
     }
 }
 
@@ -47,17 +47,26 @@ $height-button: 40px;
         position: absolute;
         left: 14px;
         bottom: 37px;
+        color: var(--left-icon-scheduled-color);
+        &:hover {
+            color: var(--left-icon-scheduled-color);
+        }
     }
     &--cog {
         font-size: 24px;
         padding: 5px 0 0 12px;
         position: absolute;
         bottom: 7px;
-       
+
+        color: var(--left-icon-cog-color);
+
+        &:hover {
+            color: var(--left-icon-cog-color);
+        }
     }
 
     &--bottom {
-        opacity: .3;        
+        opacity: var(--left-icon-cog-opacity);
         transition: all .3s;
         filter: alpha(opacity=30);
         &:hover{
@@ -82,4 +91,38 @@ $height-button: 40px;
 .no-accounts {
     padding-top: 10px;
     // color: cornflowerblue;   
+}
+
+
+$draggable-accent-color: var(--draggable-accent);
+// $draggable-accent-color: #a8ff97;
+.draggable {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    margin-bottom: 5px;
+
+    border: 2px solid var(--draggable-accent);
+    border: 2px solid $draggable-accent-color;
+    border-radius: 2px;
+
+    position: relative;
+
+    &__avatar {
+        width: calc(100%);
+        opacity: .8;
+    }
+
+    &__icon {
+        position: absolute;
+
+        float: left;        
+        z-index: 5;
+        color:$draggable-accent-color;
+
+        top: 6px;
+        left: 12px;
+
+        font-size: 18px;
+    }
 }

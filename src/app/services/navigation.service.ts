@@ -10,6 +10,7 @@ export class NavigationService {
     activatedPanelSubject = new BehaviorSubject<OpenLeftPanelEvent>(new OpenLeftPanelEvent(LeftPanelType.Closed));
     activatedMediaSubject: Subject<OpenMediaEvent> = new Subject<OpenMediaEvent>();
     columnSelectedSubject = new BehaviorSubject<number>(-1);
+    enableDraggableIconMenu = new BehaviorSubject<boolean>(false);
 
     constructor() { }
 
@@ -17,6 +18,10 @@ export class NavigationService {
         this.accountToManage = acc;
         const newEvent = new OpenLeftPanelEvent(LeftPanelType.ManageAccount);
         this.activatedPanelSubject.next(newEvent);
+    }
+
+    changeIconMenuState(draggable: boolean) {
+        this.enableDraggableIconMenu.next(draggable);
     }
 
     openPanel(type: LeftPanelType){

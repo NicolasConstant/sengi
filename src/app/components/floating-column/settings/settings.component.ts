@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Howl } from 'howler';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { ToolsService, InstanceType } from '../../../services/tools.service';
 import { UserNotificationService, NotificationSoundDefinition } from '../../../services/user-notification.service';
 import { ServiceWorkerService } from '../../../services/service-worker.service';
-import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum } from '../../../states/settings.state';
+import { ContentWarningPolicy, ContentWarningPolicyEnum, TimeLineModeEnum, TimeLineHeaderEnum, ILanguage } from '../../../states/settings.state';
 import { NotificationService } from '../../../services/notification.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { SettingsService } from '../../../services/settings.service';
+import { LanguageService } from '../../../services/language.service';
+import { ThemeService } from '../../../themes/theme.service';
+import { Theme, ThemeTypeEnum } from '../../../themes/theme-common';
 
 @Component({
     selector: 'app-settings',
@@ -17,16 +21,23 @@ import { SettingsService } from '../../../services/settings.service';
     styleUrls: ['./settings.component.scss']
 })
 
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
 
     notificationSounds: NotificationSoundDefinition[];
     notificationSoundId: string;
     notificationForm: FormGroup;
 
+    themeList: Theme[] = [];
+    themeId: number;
+    themeForm: FormGroup;
+
     disableAutofocusEnabled: boolean;
     disableRemoteStatusFetchingEnabled: boolean;
     disableAvatarNotificationsEnabled: boolean;
     disableSoundsEnabled: boolean;
+    disableLangAutodetectEnabled: boolean;
+    enableAltLabelEnabled: boolean;
+    enableFreezeAvatarEnabled: boolean;
     version: string;
 
     hasPleromaAccount: boolean;
@@ -38,6 +49,10 @@ export class SettingsComponent implements OnInit {
     timeLineHeader: TimeLineHeaderEnum = TimeLineHeaderEnum.Title_DomainName;
     timeLineMode: TimeLineModeEnum = TimeLineModeEnum.OnTop;
     contentWarningPolicy: ContentWarningPolicyEnum = ContentWarningPolicyEnum.None;
+
+    configuredLangs: ILanguage[] = [];
+    searchedLangs: ILanguage[] = [];
+    searchLang: string;
 
     private addCwOnContent: string;
     set setAddCwOnContent(value: string) {
@@ -76,16 +91,26 @@ export class SettingsComponent implements OnInit {
         return this.twitterBridgeInstance;
     }
 
+    private languageSub: Subscription;
+
     constructor(
+        private readonly languageService: LanguageService,
         private readonly settingsService: SettingsService,
         private readonly navigationService: NavigationService,
         private formBuilder: FormBuilder,
         private serviceWorkersService: ServiceWorkerService,
         private readonly toolsService: ToolsService,
         private readonly notificationService: NotificationService,
-        private readonly userNotificationsService: UserNotificationService) { }
+        private readonly userNotificationsService: UserNotificationService,
+        private readonly themeService: ThemeService) { }   
 
     ngOnInit() {
+        this.languageSub = this.languageService.configuredLanguagesChanged.subscribe(l => {
+            if(l){
+                this.configuredLangs = l;
+            }
+        });
+
         this.version = environment.VERSION;
 
         const settings = this.settingsService.getSettings();
@@ -94,6 +119,12 @@ export class SettingsComponent implements OnInit {
         this.notificationSoundId = settings.notificationSoundFileId;
         this.notificationForm = this.formBuilder.group({
             countryControl: [this.notificationSounds[this.notificationSoundId].id]
+        });
+
+        this.themeList = this.themeService.getAvailableThemes();
+        this.themeId = this.themeService.getActiveTheme().theme_type;
+        this.themeForm = this.formBuilder.group({
+            themeControl: [this.themeList.find(x => x.theme_type == this.themeId).theme_type]
         });
 
         this.disableAutofocusEnabled = settings.disableAutofocus;
@@ -129,6 +160,44 @@ export class SettingsComponent implements OnInit {
 
         this.twitterBridgeEnabled = settings.twitterBridgeEnabled;
         this.twitterBridgeInstance = settings.twitterBridgeInstance;
+
+        this.configuredLangs = this.languageService.getConfiguredLanguages();
+        this.disableLangAutodetectEnabled = settings.disableLangAutodetec;
+        this.enableAltLabelEnabled = settings.enableAltLabel;
+        this.enableFreezeAvatarEnabled = settings.enableFreezeAvatar;
+    }
+
+    ngOnDestroy(): void {
+        if(this.languageSub) this.languageSub.unsubscribe();
+    }
+
+    iconMenuLocked = true;
+    toogleLockIconMenu(): boolean {
+        this.navigationService.changeIconMenuState(this.iconMenuLocked);
+        this.iconMenuLocked = ! this.iconMenuLocked;
+        return false;
+    }
+
+    onSearchLang(input: string) {
+        this.searchedLangs = this.languageService.searchLanguage(input);
+    }
+
+    onAddLang(lang: ILanguage): boolean {
+        if(this.configuredLangs.findIndex(x => x.iso639 === lang.iso639) >= 0) return false;
+
+        // this.configuredLangs.push(lang);
+        this.languageService.addLanguage(lang);
+
+        this.searchLang = '';
+        this.searchedLangs.length = 0;
+
+        return false;
+    }
+
+    onRemoveLang(lang: ILanguage): boolean {
+        // this.configuredLangs = this.configuredLangs.filter(x => x.iso639 !== lang.iso639);
+        this.languageService.removeLanguage(lang);
+        return false;
     }
 
     onShortcutChange(id: ColumnShortcut) {
@@ -219,6 +288,17 @@ export class SettingsComponent implements OnInit {
         this.settingsService.saveSettings(settings);
     }
 
+    onThemeChange(themeId: number) {
+        const castedType = <ThemeTypeEnum>themeId;
+        console.warn(themeId);
+        console.warn(this.themeList);
+
+        const newTheme = this.themeList.find(x => x.theme_type == castedType);
+        console.warn(newTheme);
+
+        if(newTheme) this.themeService.setTheme(newTheme);
+    }
+
     playNotificationSound(): boolean {
         let soundData = this.notificationSounds.find(x => x.id === this.notificationSoundId);
 
@@ -228,6 +308,27 @@ export class SettingsComponent implements OnInit {
         sound.play();
 
         return false;
+    }
+
+    onEnableFreezeAvatarChanged(){
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.enableFreezeAvatar = this.enableFreezeAvatarEnabled;
+        this.settingsService.saveSettings(settings);
+    }
+
+    onEnableAltLabelChanged(){
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.enableAltLabel = this.enableAltLabelEnabled;
+        this.settingsService.saveSettings(settings);
+    }
+
+    onDisableLangAutodetectChanged() {
+        this.notifyRestartNeeded();
+        let settings = this.settingsService.getSettings();
+        settings.disableLangAutodetec = this.disableLangAutodetectEnabled;
+        this.settingsService.saveSettings(settings);
     }
 
     onDisableAutofocusChanged() {

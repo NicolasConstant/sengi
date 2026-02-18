@@ -1,0 +1,6 @@
+<div class="translation translation__button-display" *ngIf="isTranslationAvailable && showTranslationButton">
+    <a href class="translation__link translation__button-display__link" (click)="translate()">Translate</a>
+</div>
+<div class="translation translation__display" *ngIf="isTranslationAvailable && !showTranslationButton">
+    <span class="translation__by">Translated by {{translatedBy}}</span> <a href (click)="revertTranslation()" class="translation__link translation__display__link">revert</a>
+</div>

@@ -122,18 +122,21 @@ export class StreamNotificationsComponent extends BrowseBase {
     loadNotifications(): any {
         this.account = this.toolsService.getAccountById(this.streamElement.accountId);
 
-        this.mentionsSubscription = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {            
+        this.mentionsSubscription = this.userNotificationService.userNotifications.subscribe((userNotifications: UserNotification[]) => {
             this.loadMentions(userNotifications);
         });
 
-        this.mastodonService.getNotifications(this.account, ['update'], null, null, 10) //FIXME: disable edition update until supported
+        this.mastodonService.getNotifications(this.account, [], null, null, 10)
             .then((notifications: Notification[]) => {
                 this.isNotificationsLoading = false;
 
-                this.notifications = notifications.map(x => { 
+                let wrappedNotification= notifications.map(x => { 
                     let cwPolicy = this.toolsService.checkContentWarning(x.status);
                     return new NotificationWrapper(x, this.account, cwPolicy.applyCw, cwPolicy.hide);
                 });
+
+                this.notifications = wrappedNotification.filter(x => x.type !== 'mention' || (x.type === 'mention' && x.status.status !== null));
+
                 this.lastNotificationId = this.notifications[this.notifications.length - 1].notification.id;
             })
             .catch(err => {

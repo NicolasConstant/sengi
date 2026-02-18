@@ -11,7 +11,10 @@ $header-content-height: 40px;
         width: calc(100%);
         height: $header-content-height;
         background-color: $column-header-background-color; 
-        border-bottom: 1px solid #222736;        
+        //border-bottom: 1px solid #222736;
+        border-bottom: 1px solid var(--stream-column-border);
+        
+        display: flex;
     }
     &__content-wrapper  {
         transition: all .2s;
@@ -38,26 +41,31 @@ $header-content-height: 40px;
         width: calc(100%);
         height: 30px;
         background-color: $column-header-background-color;
-        border-top: 1px solid whitesmoke;
-        border-bottom: 1px solid whitesmoke;
+        border-top: 1px solid var(--stream-overlay-border);
+        border-bottom: 1px solid var(--stream-overlay-border);
         padding: 3px 10px 0 10px;
     }
 
     &__button {
+        // outline: 1px dotted orange;
+
         width: 25px;
         height: 25px;
-        color: #354060;
+
+        width: $header-content-height;
+        height: $header-content-height;
+
+        color: var(--stream-navigation-button);
         transition: all .2s;
-        margin: 8px 0 0 8px;
+        
         &:hover {
-            color: #536599;
-            color: #7a8dc7;
+            color: var(--stream-navigation-button-hover);
         }
         &--focus {
-            color: whitesmoke;
+            color: var(--stream-navigation-button-focus);
 
             &:hover {
-                color: whitesmoke;
+                color: var(--stream-navigation-button-focus-hover);
             }
         }
     }
@@ -68,19 +76,8 @@ $header-content-height: 40px;
 
         &__icon {
             position: relative;
-            left: 7px;
-            top: -1px
-        }
-    }
-    &-next {
-        display: block;
-        float: left;
-        font-size: 18px;
-
-        &__icon {
-            position: relative;
-            left: 8px;
-            top: -1px
+            left: 17px;
+            top: 7px
         }
     }
     &-refresh {
@@ -90,29 +87,38 @@ $header-content-height: 40px;
 
         &__icon {
             position: relative;
-            left: 5px;
-            top: 1px
+            left: 13px;
+            top: 9px
+        }
+    }   
+    &-next {
+        display: block;
+        float: left;
+        font-size: 18px;
+
+        &__icon {
+            position: relative;
+            left: 13px;
+            top: 7px
         }
     }   
     &-gototop {
-        position: absolute;
-        top: 0;
-        left: 110px;
-        right: 40px;
+        // outline: 1px dotted orange;
+
+        flex-grow: 1;
+
         display: block;
         height: $header-content-height;
     }
     &-close {
         display: block;
-        float: right;
         font-size: 13px;
-        color: white;
-        margin-right: 8px;
+        color: var(--stream-navigation-close);
 
         &__icon {
             position: relative;
-            left: 7px;
-            top: 1px
+            left: 15px;
+            top: 9px
         }
     }    
 }
@@ -121,5 +127,5 @@ $header-content-height: 40px;
     pointer-events: none;
     cursor: default;
     text-decoration: none;
-    color: gray !important;
+    color: var(--stream-overlay-text-muted) !important;
 }

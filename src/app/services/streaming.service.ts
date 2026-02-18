@@ -96,7 +96,7 @@ export class StreamingWrapper {
     }
 
     private pullNewNotifications() {
-        this.mastodonService.getNotifications(this.account, ['update'], null, this.since_id_notifications, 10)
+        this.mastodonService.getNotifications(this.account, [], null, this.since_id_notifications, 10)
             .then((notifications: Notification[]) => {
                 //notifications = notifications.sort((a, b) => a.id.localeCompare(b.id));
                 let soundMuted = !this.since_id_notifications;
@@ -168,9 +168,6 @@ export class StreamingWrapper {
                 newUpdate.type = EventEnum.unknow;
         }
 
-        if(newUpdate.notification && newUpdate.notification.type === 'update') { //FIXME: disabling edition update until supported
-            return;
-        }
         
         this.statusUpdateSubjet.next(newUpdate);
     }

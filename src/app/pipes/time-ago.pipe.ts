@@ -30,7 +30,7 @@ export class TimeAgoPipe implements PipeTransform {
         const hours = minutes / 60;
         const days = hours / 24;
         // const months = days / 30.416;
-        // const years = days / 365;
+        const years = days / 365;
 
         if (seconds <= 59) {
             text = Math.round(seconds) + 's';
@@ -38,8 +38,10 @@ export class TimeAgoPipe implements PipeTransform {
             text = Math.round(minutes) + 'm';
         } else if (hours <= 23) {
             text = Math.round(hours) + 'h';
-        } else {
+        } else if (days < 365) {
             text = Math.round(days) + 'd';
+        } else {
+            text = Math.round(years) + 'y';
         }
 
         if (minutes < 1) {

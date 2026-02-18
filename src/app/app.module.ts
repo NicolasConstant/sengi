@@ -5,8 +5,8 @@ import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-
-// import { NgxElectronModule } from "ngx-electron";
+import { DragDropModule } from '@angular/cdk/drag-drop';
+// import { NgxElectronModule } from 'ngx-electron';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -90,6 +90,8 @@ import { TutorialEnhancedComponent } from './components/tutorial-enhanced/tutori
 import { NotificationsTutorialComponent } from './components/tutorial-enhanced/notifications-tutorial/notifications-tutorial.component';
 import { LabelsTutorialComponent } from './components/tutorial-enhanced/labels-tutorial/labels-tutorial.component';
 import { ThankyouTutorialComponent } from './components/tutorial-enhanced/thankyou-tutorial/thankyou-tutorial.component';
+import { StatusTranslateComponent } from './components/stream/status/status-translate/status-translate.component';
+import { ThemeModule } from "./themes/theme.module";
 
 const routes: Routes = [
     { path: "", component: StreamsMainDisplayComponent },
@@ -159,7 +161,8 @@ const routes: Routes = [
         TutorialEnhancedComponent,
         NotificationsTutorialComponent,
         LabelsTutorialComponent,
-        ThankyouTutorialComponent
+        ThankyouTutorialComponent,
+        StatusTranslateComponent
     ],
     entryComponents: [
         EmojiPickerComponent
@@ -176,6 +179,9 @@ const routes: Routes = [
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
         OverlayModule,
+        DragDropModule,
+        ThemeModule,
+        // NgxElectronModule,
         RouterModule.forRoot(routes),
 
         NgxsModule.forRoot([

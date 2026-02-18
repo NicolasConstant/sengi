@@ -6,6 +6,11 @@ export class AddAccount {
     constructor(public account: AccountInfo) {}
 }
 
+export class ReorderAccounts {
+    static readonly type = '[Accounts] Reorder';
+    constructor(public accounts: AccountInfo[]) {}
+}
+
 export class SelectAccount {
     static readonly type = '[Accounts] Select account';
     constructor(public account: AccountInfo, public multiselection: boolean = false) {}
@@ -43,6 +48,16 @@ export class AccountsState {
 
         ctx.patchState({
             accounts: [...state.accounts, newAcc]
+        });
+    }
+
+    @Action(ReorderAccounts)
+    ReorderAccounts(ctx: StateContext<AccountsStateModel>, action: ReorderAccounts){
+        // const state = ctx.getState();
+        const reorderedAccounts = action.accounts;
+
+        ctx.patchState({
+            accounts: [...reorderedAccounts]
         });
     }
 

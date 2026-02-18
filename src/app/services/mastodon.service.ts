@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 
 import { ApiRoutes } from './models/api.settings';
-import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag, Instancev2, Instancev1 } from "./models/mastodon.interfaces";
+import { Account, Status, Results, Context, Relationship, Instance, Attachment, Notification, List, Poll, Emoji, Conversation, ScheduledStatus, Tag, Instancev2, Instancev1, Translation } from "./models/mastodon.interfaces";
 import { AccountInfo } from '../states/accounts.state';
 import { StreamTypeEnum, StreamElement } from '../states/streams.state';
 
@@ -19,6 +19,13 @@ export class MastodonService {
                 route = `https://${instance}${this.apiRoutes.getInstance}`;
                 return this.httpClient.get<Instancev1>(route).toPromise();
             });            
+    }
+
+    translate(account: AccountInfo, statusId: string, lang: string): Promise<Translation>{
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+        let route = `https://${account.instance}${this.apiRoutes.translate.replace('{0}', statusId)}`;
+
+        return this.httpClient.post<Translation>(route, { 'lang': lang }, { headers: headers }).toPromise();
     }
 
     retrieveAccountDetails(account: AccountInfo): Promise<Account> {
@@ -88,7 +95,7 @@ export class MastodonService {
         return origString.replace(regEx, "");
     };
 
-    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    postNewStatus(account: AccountInfo, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, mediaIds: string[], poll: PollParameters = null, scheduled_at: string = null, lang: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.postNewStatus}`;
 
         const statusData = new StatusData();
@@ -106,10 +113,16 @@ export class MastodonService {
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
         }
+        
         if (spoiler) {
             statusData.sensitive = true;
             statusData.spoiler_text = spoiler;
         }
+
+        if(lang) {
+            statusData.language = lang;
+        }
+
         switch (visibility) {
             case VisibilityEnum.Public:
                 statusData.visibility = 'public';
@@ -132,7 +145,7 @@ export class MastodonService {
         return this.httpClient.post<Status>(url, statusData, { headers: headers }).toPromise();
     }
 
-    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null): Promise<Status> {
+    editStatus(account: AccountInfo, statusId: string, status: string, visibility: VisibilityEnum, spoiler: string = null, in_reply_to_id: string = null, attachements: Attachment[], poll: PollParameters = null, scheduled_at: string = null, lang: string = null): Promise<Status> {
         const url = `https://${account.instance}${this.apiRoutes.editStatus.replace('{0}', statusId)}`;
 
         const statusData = new StatusData();
@@ -151,10 +164,16 @@ export class MastodonService {
         if (in_reply_to_id) {
             statusData.in_reply_to_id = in_reply_to_id;
         }
+        
         if (spoiler) {
             statusData.sensitive = true;
             statusData.spoiler_text = spoiler;
         }
+
+        if(lang) {
+            statusData.language = lang;
+        }
+
         switch (visibility) {
             case VisibilityEnum.Public:
                 statusData.visibility = 'public';
@@ -338,6 +357,26 @@ export class MastodonService {
 
     }
 
+    hideBoosts(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+
+        let input = new FormData();
+        input.append('reblogs', 'false');
+
+        return this.httpClient.post<Relationship>(route, input, { headers: headers }).toPromise();
+    }
+
+    unhideBoosts(currentlyUsedAccount: AccountInfo, account: Account): Promise<Relationship> {
+        const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.follow}`.replace('{0}', account.id.toString());
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
+
+        let input = new FormData();
+        input.append('reblogs', 'true');
+
+        return this.httpClient.post<Relationship>(route, input, { headers: headers }).toPromise();
+    }
+
     followHashtag(currentlyUsedAccount: AccountInfo, hashtag: string): Promise<Tag> {
         const route = `https://${currentlyUsedAccount.instance}${this.apiRoutes.followHashtag}`.replace('{0}', hashtag);
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${currentlyUsedAccount.token.access_token}` });
@@ -359,11 +398,13 @@ export class MastodonService {
     uploadMediaAttachment(account: AccountInfo, file: File, description: string): Promise<Attachment> {
         let input = new FormData();
         input.append('file', file);
+
         if (description !== null && description !== undefined) {
             input.append('description', description);
         } else {
             input.append('description', '');
         }
+
         const route = `https://${account.instance}${this.apiRoutes.uploadMediaAttachment}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Attachment>(route, input, { headers: headers }).toPromise();
@@ -372,7 +413,13 @@ export class MastodonService {
     //TODO: add focus support
     updateMediaAttachment(account: AccountInfo, mediaId: string, description: string): Promise<Attachment> {
         let input = new FormData();
-        input.append('description', description);
+        
+        if (description !== null && description !== undefined) {
+            input.append('description', description);
+        } else {
+            input.append('description', '');
+        }
+
         const route = `https://${account.instance}${this.apiRoutes.updateMediaAttachment.replace('{0}', mediaId)}`;
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.put<Attachment>(route, input, { headers: headers }).toPromise();
@@ -503,6 +550,23 @@ export class MastodonService {
         let route = `https://${account.instance}${this.apiRoutes.unblock}`.replace('{0}', accounId.toString());
         const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
         return this.httpClient.post<Relationship>(route, null, { headers: headers }).toPromise();
+    }
+
+    blockDomain(account: AccountInfo, domain: string): Promise<void> {
+        let route = `https://${account.instance}${this.apiRoutes.blockDomain}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}` });
+
+        let input = new FormData();
+        input.append('domain', domain);
+
+        return this.httpClient.post<void>(route, input, { headers: headers }).toPromise();
+    }
+
+    unblockDomain(account: AccountInfo, domain: string): Promise<void> {
+        let route = `https://${account.instance}${this.apiRoutes.blockDomain}?domain=${domain}`;
+        const headers = new HttpHeaders({ 'Authorization': `Bearer ${account.token.access_token}`});
+
+        return this.httpClient.delete<void>(route, { headers: headers }).toPromise();
     }
 
     pinOnProfile(account: AccountInfo, statusId: string): Promise<Status> {
@@ -651,6 +715,8 @@ class StatusData {
     spoiler_text: string;
     visibility: string;
     // scheduled_at: string;
+
+    language: string;
 }
 
 class MediaAttributes {

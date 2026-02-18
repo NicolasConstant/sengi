@@ -1,0 +1,44 @@
+@import "variables";
+@import "commons";
+
+$translation-color: #656b8f;
+$translation-color-hover: #9fa5ca;
+
+.translation {
+    margin: 0 10px 0 $avatar-column-space;
+    color: $translation-color;
+    font-size: 12px;
+    
+    &__button-display {
+        text-align: center;
+
+        &__link {
+            display: block;
+            padding: 5px 5px 0 5px;
+        }
+    }
+
+    &__display {
+        display: flex;
+        justify-content: space-between;
+
+        &__link {
+            padding: 5px 0 0 0;       
+        }
+    }
+
+    &__link {
+        color: $translation-color;
+        transition: all .2s;
+        &:hover {
+            text-decoration: none;
+            color: $translation-color-hover;
+        }
+    }
+
+    &__by {
+        display: block;
+        text-align: left;
+        padding: 5px 0 0 0;
+    }   
+}

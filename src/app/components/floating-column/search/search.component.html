@@ -4,8 +4,8 @@
         <h3 class="panel__title">search</h3>
 
         <form class="form-section" (ngSubmit)="onSubmit()">
-            <input type="text" class="form-control form-control-sm form-with-button" [(ngModel)]="searchHandle"
-                name="searchHandle" placeholder="Search" autocomplete="off" />
+            <input #search type="text" class="form-control form-control-sm form-with-button" [(ngModel)]="searchHandle"
+                name="searchHandle" placeholder="Search" autocomplete="off" (keydown.escape)="search.blur()"/>
             <button class="form-button" type="submit" title="search">GO</button>
         </form>
     </div>

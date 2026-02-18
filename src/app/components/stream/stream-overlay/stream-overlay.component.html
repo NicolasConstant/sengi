@@ -1,9 +1,5 @@
 <div class="overlay">
     <div class="overlay__header">
-        <a href class="overlay__button overlay-close" title="close" (click)="close()">
-            <fa-icon class="overlay-close__icon" [icon]="faTimes"></fa-icon>
-        </a>
-
         <a href class="overlay__button overlay-previous"
             [ngClass]="{'overlay__button--focus': hasPreviousElements }" title="previous" (click)="previous()">
             <fa-icon class="overlay-previous__icon" [icon]="faAngleLeft"></fa-icon>
@@ -12,13 +8,17 @@
             title="refresh" (click)="refresh()">
             <fa-icon class="overlay-refresh__icon" [icon]="faRedoAlt"></fa-icon>
         </a>
+        
+        <a href class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements }"
+            title="next" (click)="next()">
+            <fa-icon class="overlay-next__icon" [icon]="faAngleRight"></fa-icon>
+        </a>
 
         <a href title="return to top" class="overlay-gototop" (click)="goToTop()">            
         </a>
 
-        <a href class="overlay__button overlay-next" [ngClass]="{'overlay__button--focus': hasNextElements }"
-            title="next" (click)="next()">
-            <fa-icon class="overlay-next__icon" [icon]="faAngleRight"></fa-icon>
+        <a href class="overlay__button overlay-close" title="close" (click)="close()">
+            <fa-icon class="overlay-close__icon" [icon]="faTimes"></fa-icon>
         </a>
     </div>
 
