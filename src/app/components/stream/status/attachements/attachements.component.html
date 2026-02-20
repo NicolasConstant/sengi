@@ -26,18 +26,10 @@
         </app-attachement-image>
     </div>
 
-    <div class="galery__image" *ngIf="imageAttachments.length === 4">
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[0]"
-            (openEvent)="attachmentSelected('image', 0)">
-        </app-attachement-image>
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[1]"
-            (openEvent)="attachmentSelected('image', 1)">
-        </app-attachement-image>
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[2]"
-            (openEvent)="attachmentSelected('image', 2)">
-        </app-attachement-image>
-        <app-attachement-image class="galery__img--4" [attachment]="imageAttachments[3]"
-            (openEvent)="attachmentSelected('image', 3)">
+    <div class="galery__image" *ngIf="imageAttachments.length > 3">        
+        <app-attachement-image *ngFor="let image of imageAttachments; index as i" class="galery__img--4" 
+            [attachment]="imageAttachments[i]"
+            (openEvent)="attachmentSelected('image', i)">
         </app-attachement-image>
     </div>
 </div>
