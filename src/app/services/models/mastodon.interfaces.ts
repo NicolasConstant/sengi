@@ -221,6 +221,17 @@ export interface FilterResult {
     status_matches: string[];
 }
 
+export interface Quote {
+    state: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account';
+    quoted_status: Status;
+}
+
+export interface QuoteApproval {
+    automatic: 'public' | 'followers' | 'following' | 'unsupported_policy' [];
+    manual: 'public' | 'followers' | 'following' | 'unsupported_policy' [];
+    current_user: 'manual' | 'denied' | 'unknown';
+}
+
 export interface Status {
     id: string;
     uri: string;
@@ -234,7 +245,10 @@ export interface Status {
     edited_at: string;
     reblogs_count: number;
     replies_count: number;
-    favourites_count: string;
+    favourites_count: number;
+    quotes_count: number;
+    quote: Quote;
+    quote_approval: QuoteApproval;
     reblogged: boolean;
     favourited: boolean;
     sensitive: boolean;
