@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Status } from '../../../../services/models/mastodon.interfaces';
+import { Status, Account } from '../../../../services/models/mastodon.interfaces';
 import { EmojiConverter, EmojiTypeEnum } from '../../../../tools/emoji.tools';
 import { OpenThreadEvent } from '../../../../services/tools.service';
+import { SettingsService } from '../../../../services/settings.service';
 
 @Component({
   selector: 'app-quote',
@@ -22,6 +23,10 @@ export class QuoteComponent implements OnInit {
   set status(value: Status){
     this.displayStatus = value;
 
+    if (!this.displayStatus.account.display_name) {
+      this.displayStatus.account.display_name = this.displayStatus.account.username;
+    }
+
     let statusContent = this.emojiConverter.applyEmojis(this.displayStatus.emojis, this.displayStatus.content, EmojiTypeEnum.medium);
     this.statusContent = this.ensureMentionAreDisplayed(statusContent);
 
@@ -34,10 +39,11 @@ export class QuoteComponent implements OnInit {
   }
 
   statusContent: string;
+  private freezeAvatarEnabled: boolean;
 
-  constructor() {
-  
-   }
+  constructor(private readonly settingsService: SettingsService) {
+    this.freezeAvatarEnabled = this.settingsService.getSettings().enableFreezeAvatar;
+  }
 
   ngOnInit() {
   }
@@ -81,6 +87,19 @@ export class QuoteComponent implements OnInit {
           // }
   
           // this.browseThreadEvent.next(openThread);
+          return false;
+      }
+
+      getAvatar(acc: Account): string {
+          if (this.freezeAvatarEnabled) {
+              return acc.avatar_static;
+          } else {
+              return acc.avatar;
+          }
+      }
+  
+      openAccount(account: Account): boolean {
+          this.browseAccountEvent.emit(account.acct);
           return false;
       }
 

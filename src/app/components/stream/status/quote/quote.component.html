@@ -1,4 +1,11 @@
 <div class="quote">
+    <a href class="quote__profile-link" title="{{status.account.acct}}" (click)="openAccount(status.account)">
+        <img class="quote__avatar" src="{{ getAvatar(status.account) | ensureHttps }}" />
+        <span class="quote__name">
+            <span class="quote__name--displayname" innerHTML="{{status.account | accountEmoji}}"></span>
+            <span class="quote__name--username">{{status.account.acct}}</span>
+        </span>
+    </a>
     <app-databinded-text #databindedtext class="status__content" 
       [text]="statusContent"      
       (accountSelected)="accountSelected($event)" 

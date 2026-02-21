@@ -58,7 +58,7 @@ $expand-color: $column-color;
         color: $status-links-color;
     }
 
-    & .invisible {
+    & .invisible, & .quote-inline {
         display: none;
     }
 

@@ -6,4 +6,42 @@
     border-radius: 3px;
     padding: 3px;
     margin: 15px 2px 0 $avatar-column-space;
+
+    &__profile-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        margin-bottom: 5px;
+
+        color: $status-secondary-color;
+        overflow: hidden;
+        
+        &:hover {
+            color: var(--status-secondary-color-lighten-20);
+        }
+    }
+
+    &__avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+        margin-right: 4px;
+        flex-shrink: 0;
+    }
+
+    &__name {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        overflow: hidden;
+
+        &--displayname {
+            line-height: 1;
+            color: $status-primary-color;
+        }
+
+        &--username {
+            line-height: 1;
+        }
+    }
 }
