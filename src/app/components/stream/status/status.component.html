@@ -130,10 +130,12 @@
                 [attachments]="displayedStatus.media_attachments">
             </app-attachements>
 
+            <app-quote *ngIf="displayedStatus.quote" [status]="displayedStatus.quote.quoted_status"></app-quote>
+
             <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper"
                 (browseThreadEvent)="browseThread($event)" (cwIsActiveEvent)="changeCw($event)"
                 (replyEvent)="openReply()"></app-action-bar>
-        </div>
+        </div>        
         <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper"
             (onClose)="closeReply()">
         </app-create-status>

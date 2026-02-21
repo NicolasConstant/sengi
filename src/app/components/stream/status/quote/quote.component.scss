@@ -1,0 +1,9 @@
+@import "variables";
+@import "commons";
+
+.quote {
+    border: 1px solid orange;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 15px 2px 0 $avatar-column-space;
+}

@@ -1,0 +1,10 @@
+<div class="quote">
+    <app-databinded-text #databindedtext class="status__content" 
+      [text]="statusContent"      
+      (accountSelected)="accountSelected($event)" 
+      (hashtagSelected)="hashtagSelected($event)"
+      (textSelected)="textSelected()"></app-databinded-text>
+    <app-attachements *ngIf="status.media_attachments" class="attachments"
+      [attachments]="status.media_attachments">
+    </app-attachements>
+</div>
