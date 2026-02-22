@@ -6,12 +6,29 @@
     border-radius: 3px;
     padding: 3px;
     margin: 15px 2px 0 $avatar-column-space;
+    position: relative;
+
+    &__open-quote-btn {
+        position: absolute;
+        top: 0px;
+        right: 1px;
+        color: $status-secondary-color;
+        text-decoration: none;
+        padding: 7px 7px;
+        font-size: 7px;
+        z-index: 10;
+
+        &:hover {
+            color: var(--status-secondary-color-lighten-20);
+        }
+    }
 
     &__profile-link {
         display: flex;
         align-items: center;
         text-decoration: none;
         margin-bottom: 5px;
+        padding-right: 18px;
 
         color: $status-secondary-color;
         overflow: hidden;
@@ -39,10 +56,16 @@
         &--displayname {
             line-height: 1;
             color: $status-primary-color;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 100%;
         }
 
         &--username {
             line-height: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 100%;
         }
     }
 

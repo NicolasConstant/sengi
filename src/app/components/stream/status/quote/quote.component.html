@@ -1,4 +1,7 @@
 <div class="quote">
+    <a href class="quote__open-quote-btn" title="Open Status">
+        <fa-icon [icon]="faCircle"></fa-icon>
+    </a>
     <a href class="quote__profile-link" title="{{status.account.acct}}" (click)="openAccount(status.account)">
         <img class="quote__avatar" src="{{ getAvatar(status.account) | ensureHttps }}" />
         <span class="quote__name">
