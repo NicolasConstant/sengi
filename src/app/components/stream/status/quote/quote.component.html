@@ -1,23 +1,25 @@
-<div class="quote">
-    <a href class="quote__open-quote-btn" title="Open Status">
-        <fa-icon [icon]="faCircle"></fa-icon>
-    </a>
-    <a href class="quote__profile-link" title="{{status.account.acct}}" (click)="openAccount(status.account)">
-        <img class="quote__avatar" src="{{ getAvatar(status.account) | ensureHttps }}" />
-        <span class="quote__name">
-            <span class="quote__name--displayname" innerHTML="{{status.account | accountEmoji}}"></span>
-            <span class="quote__name--username">{{status.account.acct}}</span>
-        </span>
-    </a>
-    <app-databinded-text #databindedtext class="status__content" 
-      [text]="statusContent"      
-      (accountSelected)="accountSelected($event)" 
-      (hashtagSelected)="hashtagSelected($event)"
-      (textSelected)="textSelected()"></app-databinded-text>
-    <app-attachements *ngIf="status.media_attachments" class="attachments"
-      [attachments]="status.media_attachments">
-    </app-attachements>
-    <div *ngIf="status.quote" class="quote__sub-quote">
-      Quoted another post
-    </div>
+<div class="quote" *ngIf="quoteState == 'accepted'">
+  <a href class="quote__open-quote-btn" title="Open Status">
+    <fa-icon [icon]="faCircle"></fa-icon>
+  </a>
+  <a href class="quote__profile-link" title="{{displayStatus.account.acct}}"
+    (click)="openAccount(displayStatus.account)">
+    <img class="quote__avatar" src="{{ getAvatar(displayStatus.account) | ensureHttps }}" />
+    <span class="quote__name">
+      <span class="quote__name--displayname" innerHTML="{{displayStatus.account | accountEmoji}}"></span>
+      <span class="quote__name--username">{{displayStatus.account.acct}}</span>
+    </span>
+  </a>
+  <app-databinded-text #databindedtext class="quote__content" [text]="statusContent"
+    (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
+    (textSelected)="textSelected()"></app-databinded-text>
+  <app-attachements *ngIf="displayStatus.media_attachments" class="quote__attachments"
+    [attachments]="displayStatus.media_attachments">
+  </app-attachements>
+  <div *ngIf="displayStatus.quote" class="quote__sub-quote">
+    Quoted another post
+  </div>
+</div>
+<div class="quote quote__unaccepted" *ngIf="quoteState != 'accepted'">
+  {{ getReadableStatus(quoteState) }}
 </div>

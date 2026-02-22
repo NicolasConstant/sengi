@@ -8,6 +8,13 @@
     margin: 15px 2px 0 $avatar-column-space;
     position: relative;
 
+    &__unaccepted {
+        color: orangered;
+        text-align: center;
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
     &__open-quote-btn {
         position: absolute;
         top: 0px;
@@ -69,6 +76,11 @@
         }
     }
 
+    &__attachments {
+        display: block;
+        margin-top: 5px;
+    }
+
     &__sub-quote {
         margin: 5px 0 0 0;
         padding: 2px 0 2px 5px;
@@ -77,3 +89,4 @@
         border-radius: 3px;
     }
 }
+

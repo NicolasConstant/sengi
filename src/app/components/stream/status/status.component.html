@@ -130,7 +130,7 @@
                 [attachments]="displayedStatus.media_attachments">
             </app-attachements>
 
-            <app-quote *ngIf="displayedStatus.quote" [status]="displayedStatus.quote.quoted_status"></app-quote>
+            <app-quote *ngIf="displayedStatus.quote" [quote]="displayedStatus.quote"></app-quote>
 
             <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper"
                 (browseThreadEvent)="browseThread($event)" (cwIsActiveEvent)="changeCw($event)"

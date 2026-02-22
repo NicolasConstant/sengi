@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { Status, Account } from '../../../../services/models/mastodon.interfaces';
+import { Status, Account, Quote, ShallowQuote } from '../../../../services/models/mastodon.interfaces';
 import { EmojiConverter, EmojiTypeEnum } from '../../../../tools/emoji.tools';
 import { OpenThreadEvent } from '../../../../services/tools.service';
 import { SettingsService } from '../../../../services/settings.service';
@@ -15,30 +15,45 @@ export class QuoteComponent implements OnInit {
   private emojiConverter = new EmojiConverter();
   faCircle = faCircle;
 
-  private displayStatus: Status;
+  displayStatus: Status;
+  quoteState: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account';
+
+  private quote: Quote;
+  private shallowQuote: ShallowQuote;
 
   @Output() browseAccountEvent = new EventEmitter<string>();
   @Output() browseHashtagEvent = new EventEmitter<string>();
   @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
-  @Input('status')
-  set status(value: Status) {
-    this.displayStatus = value;
+  @Input('quote')
+  set status(value: Quote | ShallowQuote) {    
+    
+    this.quoteState = value.state;
+    //this.quoteState = "revoked";
 
-    if (!this.displayStatus.account.display_name) {
-      this.displayStatus.account.display_name = this.displayStatus.account.username;
-    }
+    let quoteValue = <Quote>value;
+    
+    if(quoteValue.quoted_status){ // Quote
 
-    const statusContent = this.emojiConverter.applyEmojis(this.displayStatus.emojis, this.displayStatus.content, EmojiTypeEnum.medium);
-    this.statusContent = this.ensureMentionAreDisplayed(statusContent);
+      this.quote = quoteValue;
+      this.displayStatus = quoteValue.quoted_status;
 
-    console.warn('statucontent');
-    console.warn(this.statusContent);
-    console.warn(value);
-  }
-  get status(): Status {
-    return this.displayStatus;
-  }
+      if (!this.displayStatus.account.display_name) {
+        this.displayStatus.account.display_name = this.displayStatus.account.username;
+      }
+
+      const statusContent = this.emojiConverter.applyEmojis(this.displayStatus.emojis, this.displayStatus.content, EmojiTypeEnum.medium);
+      this.statusContent = this.ensureMentionAreDisplayed(statusContent);
+
+    } else { // ShallowQuote
+
+      this.shallowQuote = <ShallowQuote>value;
+    
+    }    
+
+    console.warn(this.displayStatus);
+    console.warn(this.quoteState);
+  }  
 
   statusContent: string;
   private freezeAvatarEnabled: boolean;
@@ -52,7 +67,7 @@ export class QuoteComponent implements OnInit {
 
   // TODO: refactorise this
   private ensureMentionAreDisplayed(data: string): string {
-    const mentions = this.status.mentions;
+    const mentions = this.displayStatus.mentions;
     if (!mentions || mentions.length === 0) {
         return data;
     }
@@ -71,6 +86,20 @@ export class QuoteComponent implements OnInit {
         data = textMentions + data;
     }
     return data;
+  }
+
+  getReadableStatus(state: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account'): string{
+    switch(state){
+      case "pending": return "Waiting for author authorization."
+      case "rejected": return "Author rejected quote, can't be displayed."
+      case "revoked": return "Author revoked quote, can't be displayed.";
+      case "deleted": return "Post deleted.";
+      case "unauthorized": return "Not authorized.";
+      case "blocked_account": return "Blocked account.";
+      case "blocked_domain": return "Blocked domain.";
+      case "muted_account": return "Muted account.";
+    }
+    return "";
   }
 
   accountSelected(accountName: string): void {
