@@ -226,6 +226,11 @@ export interface Quote {
     quoted_status: Status;
 }
 
+export interface ShallowQuote {
+    state: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account';
+    quoted_status_id: string;
+}
+
 export interface QuoteApproval {
     automatic: 'public' | 'followers' | 'following' | 'unsupported_policy' [];
     manual: 'public' | 'followers' | 'following' | 'unsupported_policy' [];
@@ -247,7 +252,7 @@ export interface Status {
     replies_count: number;
     favourites_count: number;
     quotes_count: number;
-    quote: Quote;
+    quote: Quote | ShallowQuote;
     quote_approval: QuoteApproval;
     reblogged: boolean;
     favourited: boolean;

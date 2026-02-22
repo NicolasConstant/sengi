@@ -14,4 +14,7 @@
     <app-attachements *ngIf="status.media_attachments" class="attachments"
       [attachments]="status.media_attachments">
     </app-attachements>
+    <div *ngIf="status.quote" class="quote__sub-quote">
+      Quoted another post
+    </div>
 </div>

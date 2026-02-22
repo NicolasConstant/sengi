@@ -34,6 +34,7 @@
         flex-direction: column;
         align-items: flex-start;
         overflow: hidden;
+        white-space: nowrap;
 
         &--displayname {
             line-height: 1;
@@ -43,5 +44,13 @@
         &--username {
             line-height: 1;
         }
+    }
+
+    &__sub-quote {
+        margin: 5px 0 0 0;
+        padding: 2px 0 2px 5px;
+        color: purple;
+        background-color: aqua;
+        border-radius: 3px;
     }
 }
