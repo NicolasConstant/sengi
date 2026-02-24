@@ -1,5 +1,6 @@
-<div class="quote" *ngIf="quoteState == 'accepted'">
-  <a href class="quote__open-quote-btn" title="Open Status">
+<div class="quote" *ngIf="quoteState == 'accepted' && displayStatus">
+  <a href class="quote__open-quote-btn" title="Open Status"
+    (click)="textSelected()">
     <fa-icon [icon]="faCircle"></fa-icon>
   </a>
   <a href class="quote__profile-link" title="{{displayStatus.account.acct}}"
@@ -11,7 +12,8 @@
     </span>
   </a>
   <app-databinded-text #databindedtext class="quote__content" [text]="statusContent"
-    (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
+    (accountSelected)="accountSelected($event)" 
+    (hashtagSelected)="hashtagSelected($event)"
     (textSelected)="textSelected()"></app-databinded-text>
   <app-attachements *ngIf="displayStatus.media_attachments" class="quote__attachments"
     [attachments]="displayStatus.media_attachments">

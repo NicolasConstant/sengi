@@ -1,10 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ApplicationRef } from '@angular/core';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { Status, Account, Quote, ShallowQuote } from '../../../../services/models/mastodon.interfaces';
 import { EmojiConverter, EmojiTypeEnum } from '../../../../tools/emoji.tools';
-import { OpenThreadEvent } from '../../../../services/tools.service';
+import { OpenThreadEvent, ToolsService } from '../../../../services/tools.service';
 import { SettingsService } from '../../../../services/settings.service';
+import { AccountInfo } from '../../../../states/accounts.state';
+import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
 
 @Component({
   selector: 'app-quote',
@@ -25,15 +27,21 @@ export class QuoteComponent implements OnInit {
   @Output() browseHashtagEvent = new EventEmitter<string>();
   @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
 
+  // @Output() accountSelected = new EventEmitter<string>();
+  // @Output() hashtagSelected = new EventEmitter<string>();
+  // @Output() textSelected = new EventEmitter();
+
+  @Input() accountInfo: AccountInfo;
+
   @Input('quote')
-  set status(value: Quote | ShallowQuote) {    
-    
+  set setQuote(value: Quote | ShallowQuote) {
+
     this.quoteState = value.state;
     //this.quoteState = "revoked";
 
     let quoteValue = <Quote>value;
-    
-    if(quoteValue.quoted_status){ // Quote
+
+    if (quoteValue.quoted_status) { // Quote
 
       this.quote = quoteValue;
       this.displayStatus = quoteValue.quoted_status;
@@ -46,19 +54,27 @@ export class QuoteComponent implements OnInit {
       this.statusContent = this.ensureMentionAreDisplayed(statusContent);
 
     } else { // ShallowQuote
-
       this.shallowQuote = <ShallowQuote>value;
-    
-    }    
+      this.mastodonService.getStatus(this.accountInfo, this.shallowQuote.quoted_status_id)
+        .then(status => {
 
-    console.warn(this.displayStatus);
-    console.warn(this.quoteState);
-  }  
+          console.warn('accountInfo');
+          console.warn(this.accountInfo);
+          this.displayStatus = status;
+          this.appRef.tick();
+        })
+        .catch(err => console.error(err));
+    }
+  }
 
   statusContent: string;
   private freezeAvatarEnabled: boolean;
 
-  constructor(private readonly settingsService: SettingsService) {
+  constructor(
+    private appRef: ApplicationRef,
+    private readonly settingsService: SettingsService,
+    private readonly toolsService: ToolsService,
+    private readonly mastodonService: MastodonWrapperService) {
     this.freezeAvatarEnabled = this.settingsService.getSettings().enableFreezeAvatar;
   }
 
@@ -69,27 +85,27 @@ export class QuoteComponent implements OnInit {
   private ensureMentionAreDisplayed(data: string): string {
     const mentions = this.displayStatus.mentions;
     if (!mentions || mentions.length === 0) {
-        return data;
+      return data;
     }
 
     let textMentions = '';
     for (const m of mentions) {
-        if (!data.includes(m.url)) {
-            textMentions += `<span class="h-card">
+      if (!data.includes(m.url)) {
+        textMentions += `<span class="h-card">
                 <a class="u-url mention" data-user="${m.id}" href="${m.url}" rel="ugc">@
                     <span>${m.username}</span>
                 </a>
             </span> `;
-        }
+      }
     }
     if (textMentions !== '') {
-        data = textMentions + data;
+      data = textMentions + data;
     }
     return data;
   }
 
-  getReadableStatus(state: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account'): string{
-    switch(state){
+  getReadableStatus(state: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account'): string {
+    switch (state) {
       case "pending": return "Waiting for author authorization."
       case "rejected": return "Author rejected quote, can't be displayed."
       case "revoked": return "Author revoked quote, can't be displayed.";
@@ -103,42 +119,42 @@ export class QuoteComponent implements OnInit {
   }
 
   accountSelected(accountName: string): void {
-      this.browseAccountEvent.next(accountName);
+    this.browseAccountEvent.next(accountName);
   }
 
   hashtagSelected(hashtag: string): void {
-      this.browseHashtagEvent.next(hashtag);
+    this.browseHashtagEvent.next(hashtag);
   }
 
   textSelected(): boolean {
-          // if (this.isSelected) return false;
-  
-          // const status = this._statusWrapper.status;
-          // const accountInfo = this._statusWrapper.provider;
-  
-          // let openThread: OpenThreadEvent;
-          // if (status.reblog) {
-          //     openThread = new OpenThreadEvent(status.reblog, accountInfo);
-          // } else {
-          //     openThread = new OpenThreadEvent(status, accountInfo);
-          // }
-  
-          // this.browseThreadEvent.next(openThread);
+    let status = this.displayStatus;
+    const accountInfo = this.accountInfo;
 
-      return false;
+    if (status.reblog) {
+      status = status.reblog;
+    }
+
+    const openThread = new OpenThreadEvent(status, accountInfo);
+
+    console.warn('openThread');
+    console.warn(openThread);
+
+    this.browseThreadEvent.next(openThread);
+    return false;
   }
 
   getAvatar(acc: Account): string {
-      if (this.freezeAvatarEnabled) {
-          return acc.avatar_static;
-      } else {
-          return acc.avatar;
-      }
+    if (this.freezeAvatarEnabled) {
+      return acc.avatar_static;
+    } else {
+      return acc.avatar;
+    }
   }
 
   openAccount(account: Account): boolean {
-      this.browseAccountEvent.emit(account.acct);
-      return false;
+    let accountName = this.toolsService.getAccountFullHandle(account);
+    this.browseAccountEvent.emit(account.acct);
+    return false;
   }
 
 }

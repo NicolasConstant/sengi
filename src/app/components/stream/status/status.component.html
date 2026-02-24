@@ -130,7 +130,12 @@
                 [attachments]="displayedStatus.media_attachments">
             </app-attachements>
 
-            <app-quote *ngIf="displayedStatus.quote" [quote]="displayedStatus.quote"></app-quote>
+            <app-quote *ngIf="displayedStatus.quote" 
+                [quote]="displayedStatus.quote"
+                [accountInfo]="displayedStatusWrapper.provider"
+                (browseAccountEvent)="accountSelected($event)" 
+                (browseHashtagEvent)="hashtagSelected($event)"
+                (browseThreadEvent)="browseThread($event)"></app-quote>
 
             <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper"
                 (browseThreadEvent)="browseThread($event)" (cwIsActiveEvent)="changeCw($event)"
