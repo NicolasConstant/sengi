@@ -2,14 +2,14 @@
 @import "commons";
 
 .quote {
-    border: 1px solid orange;
+    border: 1px solid $quote-border-color;
     border-radius: 3px;
     padding: 3px;
     margin: 15px 2px 0 $avatar-column-space;
     position: relative;
 
     &__unaccepted {
-        color: orangered;
+        color: $quote-unaccepted-color;
         text-align: center;
         font-size: 12px;
         padding: 5px 10px;
@@ -84,9 +84,14 @@
     &__sub-quote {
         margin: 5px 0 0 0;
         padding: 2px 0 2px 5px;
-        color: purple;
-        background-color: aqua;
+        color: $quote-sub-quote-color;
+        background-color: $quote-sub-quote-background;
         border-radius: 3px;
+    }
+
+    &__poll {
+        display: block;
+        margin-top: 5px;
     }
 }
 

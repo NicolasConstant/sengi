@@ -333,6 +333,11 @@ export const lightTheme: Theme = {
 
         "--attachment-icon-overlay": "#2d3134",
         "--attachment-icon-shadow": "#9ca3af",
-        "--attachment-icon-shadow-hover": "#6b7280"
+        "--attachment-icon-shadow-hover": "#6b7280",
+
+        "--quote-border-color": "#9ca7b3",
+        "--quote-unaccepted-color": "#e00b0b",
+        "--quote-sub-quote-color": "#ffffff",
+        "--quote-sub-quote-background": "#bdc1ca"
     }
 };

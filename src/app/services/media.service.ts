@@ -85,7 +85,7 @@ export class MediaService {
                     this.mediaSubject.next(medias);
                 })
                 .catch((err) => {
-                    console.warn('failing update');
+                    console.error('failing update');
                     this.notificationService.notifyHttpError(err, account);
                 });
         }

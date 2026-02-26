@@ -7,6 +7,7 @@ import { OpenThreadEvent, ToolsService } from '../../../../services/tools.servic
 import { SettingsService } from '../../../../services/settings.service';
 import { AccountInfo } from '../../../../states/accounts.state';
 import { MastodonWrapperService } from '../../../../services/mastodon-wrapper.service';
+import { StatusWrapper } from '../../../../models/common.model';
 
 @Component({
   selector: 'app-quote',
@@ -18,7 +19,9 @@ export class QuoteComponent implements OnInit {
   faCircle = faCircle;
 
   displayStatus: Status;
+  displayStatusWrapper: StatusWrapper;
   quoteState: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account';
+  error: string;
 
   private quote: Quote;
   private shallowQuote: ShallowQuote;
@@ -26,10 +29,6 @@ export class QuoteComponent implements OnInit {
   @Output() browseAccountEvent = new EventEmitter<string>();
   @Output() browseHashtagEvent = new EventEmitter<string>();
   @Output() browseThreadEvent = new EventEmitter<OpenThreadEvent>();
-
-  // @Output() accountSelected = new EventEmitter<string>();
-  // @Output() hashtagSelected = new EventEmitter<string>();
-  // @Output() textSelected = new EventEmitter();
 
   @Input() accountInfo: AccountInfo;
 
@@ -57,14 +56,17 @@ export class QuoteComponent implements OnInit {
       this.shallowQuote = <ShallowQuote>value;
       this.mastodonService.getStatus(this.accountInfo, this.shallowQuote.quoted_status_id)
         .then(status => {
-
-          console.warn('accountInfo');
-          console.warn(this.accountInfo);
           this.displayStatus = status;
           this.appRef.tick();
         })
-        .catch(err => console.error(err));
+        .catch(err => {
+          console.error(err);
+          this.error = "Error retrieving status.";
+          this.appRef.tick();
+        });
     }
+
+    this.displayStatusWrapper = new StatusWrapper(this.displayStatus, this.accountInfo, false, false);
   }
 
   statusContent: string;
@@ -135,10 +137,6 @@ export class QuoteComponent implements OnInit {
     }
 
     const openThread = new OpenThreadEvent(status, accountInfo);
-
-    console.warn('openThread');
-    console.warn(openThread);
-
     this.browseThreadEvent.next(openThread);
     return false;
   }
@@ -153,7 +151,7 @@ export class QuoteComponent implements OnInit {
 
   openAccount(account: Account): boolean {
     let accountName = this.toolsService.getAccountFullHandle(account);
-    this.browseAccountEvent.emit(account.acct);
+    this.browseAccountEvent.emit(accountName);
     return false;
   }
 

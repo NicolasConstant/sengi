@@ -290,11 +290,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     onThemeChange(themeId: number) {
         const castedType = <ThemeTypeEnum>themeId;
-        console.warn(themeId);
-        console.warn(this.themeList);
-
         const newTheme = this.themeList.find(x => x.theme_type == castedType);
-        console.warn(newTheme);
 
         if(newTheme) this.themeService.setTheme(newTheme);
     }
