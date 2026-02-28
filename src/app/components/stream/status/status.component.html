@@ -130,10 +130,17 @@
                 [attachments]="displayedStatus.media_attachments">
             </app-attachements>
 
+            <app-quote *ngIf="!isContentWarned && displayedStatus.quote" 
+                [quote]="displayedStatus.quote"
+                [accountInfo]="displayedStatusWrapper.provider"
+                (browseAccountEvent)="accountSelected($event)" 
+                (browseHashtagEvent)="hashtagSelected($event)"
+                (browseThreadEvent)="browseThread($event)"></app-quote>
+
             <app-action-bar #appActionBar [statusWrapper]="displayedStatusWrapper"
                 (browseThreadEvent)="browseThread($event)" (cwIsActiveEvent)="changeCw($event)"
                 (replyEvent)="openReply()"></app-action-bar>
-        </div>
+        </div>        
         <app-create-status *ngIf="replyingToStatus" [statusReplyingToWrapper]="displayedStatusWrapper"
             (onClose)="closeReply()">
         </app-create-status>
