@@ -3,7 +3,6 @@
 
 .galery {
     width: 100%;
-    height: 150px;
     overflow: hidden;
     border-radius: 2px;
     position: relative;
@@ -11,13 +10,13 @@
     &__img {
         &--1 {
             width: 100%;
-            height: 100%;
+            height: 150px;
             display: inline-block;
         }
 
         &--2 {
             width: 49%;
-            height: 100%;
+            height: 150px;
             display: inline-block;
 
             &:last-child {
@@ -27,25 +26,25 @@
 
         &--3-1 {
             width: 49%;
-            height: 100%;
+            height: 150px;
             float: left;
         }
 
         &--3-2 {
             width: 49%;
-            height: 49%;
+            height: 73px;
             margin-left: 2%;
             float: left;
 
             &:nth-child(even) {
-                margin-bottom: 2%;
+                margin-bottom: 3px;
             }
         }
 
         &--4 {
             width: 49%;
-            height: 49%;            
-            margin-bottom: 2%;
+            height: 75px;
+            margin-bottom: 3px;
             float: left;
 
             &:nth-child(even) {

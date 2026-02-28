@@ -1,0 +1,32 @@
+<div class="quote" *ngIf="quoteState == 'accepted' && displayStatus">
+  <a href class="quote__open-quote-btn" title="Open Status" (click)="textSelected()">
+    <fa-icon [icon]="faCircle"></fa-icon>
+  </a>
+  <a href class="quote__profile-link" title="{{displayStatus.account.acct}}"
+    (click)="openAccount(displayStatus.account)">
+    <img class="quote__avatar" src="{{ getAvatar(displayStatus.account) | ensureHttps }}" />
+    <span class="quote__name">
+      <span class="quote__name--displayname" innerHTML="{{displayStatus.account | accountEmoji}}"></span>
+      <span class="quote__name--username">{{displayStatus.account.acct}}</span>
+    </span>
+  </a>
+  <app-databinded-text #databindedtext class="quote__content" [text]="statusContent"
+    (accountSelected)="accountSelected($event)" (hashtagSelected)="hashtagSelected($event)"
+    (textSelected)="textSelected()"></app-databinded-text>
+
+  <app-poll class="quote__poll" *ngIf="displayStatus.poll" [poll]="displayStatus.poll"
+    [statusWrapper]="displayStatusWrapper"></app-poll>
+
+  <app-attachements *ngIf="displayStatus.media_attachments && displayStatus.media_attachments.length > 0" class="quote__attachments"
+    [attachments]="displayStatus.media_attachments">
+  </app-attachements>
+  <div *ngIf="displayStatus.quote" class="quote__sub-quote">
+    Quoted another post
+  </div>
+</div>
+<div class="quote quote__unaccepted" *ngIf="quoteState != 'accepted'">
+  {{ getReadableStatus(quoteState) }}
+</div>
+<div class="quote quote__unaccepted" *ngIf="error">
+  {{ error }}
+</div>

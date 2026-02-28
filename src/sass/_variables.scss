@@ -294,6 +294,10 @@
     --attachment-icon-shadow: #4e4e4e;
     --attachment-icon-shadow-hover: #4e4e4e;
 
+    --quote-border-color: orange;
+    --quote-unaccepted-color: orangered;
+    --quote-sub-quote-color: purple;
+    --quote-sub-quote-background: aqua;
 
     --color-primary-lighter-5: hsl(from var(var(--color-primary)) h s calc(l + 5%));
     --color-primary-lighter-15: hsl(from var(var(--color-primary)) h s calc(l + 15%));
@@ -516,3 +520,8 @@ $media-icon: var(--media-button-color);
 $attachment-icon-overlay: var(--attachment-icon-overlay);
 $attachment-icon-shadow: var(--attachment-icon-shadow);
 $attachment-icon-shadow-hover: var(--attachment-icon-shadow-hover);
+
+$quote-border-color: var(--quote-border-color);
+$quote-unaccepted-color: var(--quote-unaccepted-color);
+$quote-sub-quote-color: var(--quote-sub-quote-color);
+$quote-sub-quote-background: var(--quote-sub-quote-background);

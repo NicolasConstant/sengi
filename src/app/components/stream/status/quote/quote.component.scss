@@ -1,0 +1,97 @@
+@import "variables";
+@import "commons";
+
+.quote {
+    border: 1px solid $quote-border-color;
+    border-radius: 3px;
+    padding: 3px;
+    margin: 15px 2px 0 $avatar-column-space;
+    position: relative;
+
+    &__unaccepted {
+        color: $quote-unaccepted-color;
+        text-align: center;
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    &__open-quote-btn {
+        position: absolute;
+        top: 0px;
+        right: 1px;
+        color: $status-secondary-color;
+        text-decoration: none;
+        padding: 7px 7px;
+        font-size: 7px;
+        z-index: 10;
+
+        &:hover {
+            color: var(--status-secondary-color-lighten-20);
+        }
+    }
+
+    &__profile-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        margin-bottom: 5px;
+        padding-right: 18px;
+
+        color: $status-secondary-color;
+        overflow: hidden;
+        
+        &:hover {
+            color: var(--status-secondary-color-lighten-20);
+        }
+    }
+
+    &__avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+        margin-right: 4px;
+        flex-shrink: 0;
+    }
+
+    &__name {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        overflow: hidden;
+        white-space: nowrap;
+
+        &--displayname {
+            line-height: 1;
+            color: $status-primary-color;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        &--username {
+            line-height: 1;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 100%;
+        }
+    }
+
+    &__attachments {
+        display: block;
+        margin-top: 5px;
+    }
+
+    &__sub-quote {
+        margin: 5px 0 0 0;
+        padding: 2px 0 2px 5px;
+        color: $quote-sub-quote-color;
+        background-color: $quote-sub-quote-background;
+        border-radius: 3px;
+    }
+
+    &__poll {
+        display: block;
+        margin-top: 5px;
+    }
+}
+

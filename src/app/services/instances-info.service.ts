@@ -31,7 +31,7 @@ export class InstancesInfoService {
                         const instanceV1 = <Instancev1>instance;
                         if (instanceV1 && instanceV1.max_toot_chars)
                             return instanceV1.max_toot_chars;
-                        if(instanceV1 && instanceV1.configuration && instanceV1.configuration.statuses && instanceV1.configuration.statuses.max_characters)
+                        if (instanceV1 && instanceV1.configuration && instanceV1.configuration.statuses && instanceV1.configuration.statuses.max_characters)
                             return instanceV1.configuration.statuses.max_characters;
                     }
 
@@ -74,16 +74,18 @@ export class InstancesInfoService {
         if (!this.cachedTranslationAvailability[instance]) {
             this.cachedTranslationAvailability[instance] = this.mastodonService.getInstance(instance)
                 .then((instance: Instance) => {
-                    if (+instance.version.split('.')[0] >= 4) {
-                        const instanceV2 = <Instancev2>instance;
-                        if (instanceV2
-                            && instanceV2.configuration
-                            && instanceV2.configuration.translation)
-                            return instanceV2.configuration.translation.enabled;
-                    } else {
-                        const instanceV1 = <Instancev1>instance;
-                        if (instanceV1 && instanceV1.max_toot_chars)
-                            return false;
+                    if (instance) {
+                        if (+instance.version.split('.')[0] >= 4) {
+                            const instanceV2 = <Instancev2>instance;
+                            if (instanceV2
+                                && instanceV2.configuration
+                                && instanceV2.configuration.translation)
+                                return instanceV2.configuration.translation.enabled;
+                        } else {
+                            const instanceV1 = <Instancev1>instance;
+                            if (instanceV1 && instanceV1.max_toot_chars)
+                                return false;
+                        }
                     }
 
                     return false;

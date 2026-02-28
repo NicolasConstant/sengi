@@ -12,7 +12,7 @@
         <img class="galery__image--1" src="{{ attachment.preview_url | ensureHttps }}" />
     </a>
     <video *ngIf="attachment.type === 'gifv'" class="galery__image--link galery__image--1" role="application" loop
-        autoplay (click)="attachmentSelected()">
+        autoplay (click)="attachmentSelected()" title="{{ attachment.description }}">
         <source src="{{ attachment.url | ensureHttps }}" type="video/mp4">
     </video>
 </div>

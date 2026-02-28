@@ -1,4 +1,4 @@
-![GitHub release](https://img.shields.io/github/release/nicolasconstant/sengi.svg?style=flat-square) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nicolasconstant/sengi/build-and-test.yaml?style=flat-square) ![GitHub branch status](https://img.shields.io/github/checks-status/nicolasconstant/sengi/master?style=flat-square)
+![GitHub release](https://img.shields.io/github/release/nicolasconstant/sengi.svg?style=flat-square) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nicolasconstant/sengi/build-and-test.yaml?style=flat-square)
 
 
  
