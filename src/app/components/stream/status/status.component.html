@@ -130,7 +130,7 @@
                 [attachments]="displayedStatus.media_attachments">
             </app-attachements>
 
-            <app-quote *ngIf="displayedStatus.quote" 
+            <app-quote *ngIf="!isContentWarned && displayedStatus.quote" 
                 [quote]="displayedStatus.quote"
                 [accountInfo]="displayedStatusWrapper.provider"
                 (browseAccountEvent)="accountSelected($event)" 
