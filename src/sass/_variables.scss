@@ -295,7 +295,8 @@
     --attachment-icon-shadow-hover: #4e4e4e;
 
     --quote-border-color: orange;
-    --quote-unaccepted-color: orangered;
+    --quote-unaccepted-color: #ffffff;
+    --quote-error-color: orangered;
     --quote-sub-quote-color: purple;
     --quote-sub-quote-background: aqua;
 
@@ -523,5 +524,6 @@ $attachment-icon-shadow-hover: var(--attachment-icon-shadow-hover);
 
 $quote-border-color: var(--quote-border-color);
 $quote-unaccepted-color: var(--quote-unaccepted-color);
+$quote-error-color: var(--quote-error-color);
 $quote-sub-quote-color: var(--quote-sub-quote-color);
 $quote-sub-quote-background: var(--quote-sub-quote-background);

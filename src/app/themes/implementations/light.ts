@@ -336,7 +336,8 @@ export const lightTheme: Theme = {
         "--attachment-icon-shadow-hover": "#6b7280",
 
         "--quote-border-color": "#9ca7b3",
-        "--quote-unaccepted-color": "#e00b0b",
+        "--quote-unaccepted-color": "#080b1b",
+        "--quote-error-color": "#e00b0b",
         "--quote-sub-quote-color": "#ffffff",
         "--quote-sub-quote-background": "#bdc1ca"
     }

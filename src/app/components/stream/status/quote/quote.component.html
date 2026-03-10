@@ -24,9 +24,9 @@
     Quoted another post
   </div>
 </div>
-<div class="quote quote__unaccepted" *ngIf="quoteState != 'accepted'">
+<div class="quote quote__unaccepted" *ngIf="quoteState != 'accepted' && !error">
   {{ getReadableStatus(quoteState) }}
 </div>
-<div class="quote quote__unaccepted" *ngIf="error">
+<div class="quote quote__error" *ngIf="error">
   {{ error }}
 </div>

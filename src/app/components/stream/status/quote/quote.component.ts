@@ -23,8 +23,8 @@ export class QuoteComponent implements OnInit {
   quoteState: 'pending' | 'accepted' | 'rejected' | 'revoked' | 'deleted' | 'unauthorized' | 'blocked_account' | 'blocked_domain' | 'muted_account';
   error: string;
 
-  private quote: Quote;
-  private shallowQuote: ShallowQuote;
+  quote: Quote;
+  shallowQuote: ShallowQuote;
 
   @Output() browseAccountEvent = new EventEmitter<string>();
   @Output() browseHashtagEvent = new EventEmitter<string>();
@@ -54,7 +54,9 @@ export class QuoteComponent implements OnInit {
 
     } else { // ShallowQuote
       this.shallowQuote = <ShallowQuote>value;
-      this.mastodonService.getStatus(this.accountInfo, this.shallowQuote.quoted_status_id)
+
+      if(this.shallowQuote.quoted_status_id){
+        this.mastodonService.getStatus(this.accountInfo, this.shallowQuote.quoted_status_id)
         .then(status => {
           this.displayStatus = status;
           this.appRef.tick();
@@ -64,6 +66,7 @@ export class QuoteComponent implements OnInit {
           this.error = "Error retrieving status.";
           this.appRef.tick();
         });
+      }     
     }
 
     this.displayStatusWrapper = new StatusWrapper(this.displayStatus, this.accountInfo, false, false);
