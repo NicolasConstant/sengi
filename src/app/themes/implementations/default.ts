@@ -328,7 +328,8 @@ export const defaultTheme: Theme = {
         "--attachment-icon-shadow-hover": "#4e4e4e",
 
         "--quote-border-color": "#222736",
-        "--quote-unaccepted-color": "#e46161",
+        "--quote-unaccepted-color": "#ffffff",
+        "--quote-error-color": "#e46161",
         "--quote-sub-quote-color": "#4e5572",
         "--quote-sub-quote-background": "#0c0c10"
     }
