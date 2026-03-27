@@ -183,8 +183,16 @@ export class StreamStatusesComponent extends TimelineBase {
                         }
                     }
                 } else if (update.type === EventEnum.delete) {
-                    this.statuses = this.statuses.filter(x => !(x.status.id === update.messageId && this.account.id === update.account.id));
-                    this.bufferStream = this.bufferStream.filter(x => !(x.id === update.messageId && x.url.replace('https://', '').split('/')[0] === update.account.instance));
+                    try {
+                        this.statuses = this.statuses.filter(x => !(x.status.id === update.messageId && this.account.id === update.account.id));
+                        this.bufferStream = this.bufferStream.filter(x => !(x.id === update.messageId && x.url.replace('https://', '').split('/')[0] === update.account.instance));
+                    }
+                    catch(err) {
+                        console.group('Delete Error');
+                        console.error(err);
+                        console.error(this.bufferStream);
+                        console.groupEnd();
+                    }                    
                 }
             }
 
