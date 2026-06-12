@@ -68,7 +68,12 @@ $acccount-info-left: 70px;
         position: absolute;
         top: 7px;
         left:  $acccount-info-left;
-        color: var(--floating-column-manage-account-notification-follow-account-display-name);      
+        color: var(--floating-column-manage-account-notification-follow-account-display-name);
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: calc(100% - #{$acccount-info-left});
     }
 
     &:hover &__display-name {
